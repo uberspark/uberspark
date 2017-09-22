@@ -11,7 +11,7 @@ include ../../uberspark-common.mk
 .PHONY: all
 all: 
 	cd uslog && $(MAKE) -w all
-	$(OCAMLC) -package uslog -package unix -package yojson -package core -thread -linkpkg -o test test.ml
+	$(OCAMLC) -package uslog -package unix -package str -package yojson -package core -thread -linkpkg -o test test.ml
 	
 
 .PHONY: clean
