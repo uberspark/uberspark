@@ -7,9 +7,8 @@ open Uslog
 
 let main () =
 	begin
-		Uslog.uslog_testnum := !Uslog.uslog_testnum + 1; 
-		print_newline ();
-		Uslog.uslog_log ();
+		Uslog.current_level := Uslog.ord Uslog.Info;
+		Uslog.logf "test" Uslog.Info "Amazing stuff!";
 	end
 	;;
 		
