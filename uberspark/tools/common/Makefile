@@ -10,8 +10,8 @@ include ../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o uslog unix.cma uslog.ml
-
+	$(OCAMLC) -o uslog.o unix.cma uslog.ml
+	ocamlfind install uslog META uslog.cmi uslog.cmo uslog.o 
 	
 
 .PHONY: clean
