@@ -10,6 +10,7 @@ include ../../uberspark-common.mk
 
 .PHONY: all
 all: 
+	$(OCAMLC) -o uslog unix.cma uslog.ml
 
 	
 
