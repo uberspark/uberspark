@@ -43,7 +43,7 @@ let parse_json filename =
 			  Uslog.logf "test" Uslog.Info "Namespace (ns): %s" ns;
 			  Uslog.logf "test" Uslog.Info "c-files: %s" cfiles;
 
-				g_cfiles_list := (Str.split (Str.regexp "[ \t]+") cfiles);
+				g_cfiles_list := (Str.split (Str.regexp "[ \r\n\t]+") cfiles);
 				List.iter do_action_on_cfile !g_cfiles_list;
 			
 				Uslog.logf "test" Uslog.Info "Done!";

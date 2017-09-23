@@ -1,4 +1,7 @@
 {
 	"ns": "uobj",
-	"c-files":	"a1.c	 a2.c    a3.c       a4.c		"	
+	"c-files":	"a1.c
+				 a2.c
+				 a3.c
+				 a4.c		"	
 }
