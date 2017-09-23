@@ -44,6 +44,8 @@ let rec myMap ~f l = match l with
 let parse_json filename = 
 	Uslog.logf "test" Uslog.Info "Manifest file: %s" filename;
 
+try
+	
   (* read the manifest JSON *)
   let json = Yojson.Basic.from_file filename in
 
@@ -68,6 +70,10 @@ let parse_json filename =
 			
 				Uslog.logf "test" Uslog.Info "Done!";
 
+with Yojson.Json_error s -> 
+				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
+
+	;
 		
 	;;
 
