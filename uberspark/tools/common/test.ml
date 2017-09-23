@@ -5,10 +5,10 @@
 
 open Uslog
 open Sys
-open Core.Std
 open Yojson
 open Str
 
+	
 (*
 let main () =
 	begin
@@ -20,24 +20,13 @@ let main () =
 main ();;
 *)
 
-(* let	list_of_cfiles = ref [];;
-*)
+
+let g_cfiles_list = ref [""];;
 
 let do_action_on_cfile cfilename =
   Uslog.logf "test" Uslog.Info "c-file name: %s" cfilename;
-	;;
+			;;
 
-let rec print_list_string myList = match myList with
-| [] ->
-	begin
-	(* print_endline "This is the end of the string list!" *)
-	end
-| head::body -> 
-	begin
-		do_action_on_cfile head;
-		print_list_string body
-	end
-;;
 
 let parse_json filename = 
 	Uslog.logf "test" Uslog.Info "Manifest file: %s" filename;
@@ -50,15 +39,14 @@ let parse_json filename =
 	  	let ns = json |> member "ns" |> to_string in
 	  	let cfiles = json |> member "c-files" |> to_string in
 
-								(* Print the results of the parsing *)
+				(* Print the results of the parsing *)
 			  Uslog.logf "test" Uslog.Info "Namespace (ns): %s" ns;
 			  Uslog.logf "test" Uslog.Info "c-files: %s" cfiles;
 
-				let list_of_cfiles = (Str.split (Str.regexp "[ \t]+") cfiles) in
-			  	(* List.iter dump_cfile list_of_cfiles; *)
-					print_list_string list_of_cfiles;					
-					Uslog.logf "test" Uslog.Info "Done!";
-
+				g_cfiles_list := (Str.split (Str.regexp "[ \t]+") cfiles);
+				List.iter do_action_on_cfile !g_cfiles_list;
+			
+				Uslog.logf "test" Uslog.Info "Done!";
 
 		
 	;;
