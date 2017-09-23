@@ -99,8 +99,11 @@ main ();;
 *)
 
 
+(*
+ 
 let ccomp_program = ref "ccomp";;
 let ccomp_program_options = ref "-help";;
+
 
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
@@ -122,7 +125,41 @@ let main () =
 		
 main ();;
 
+*)
 
 
 
+
+ 
+(* let cmd = ref "ccomp -c sample.c";; *)
+let cmd = ref "frama-c -wp -wp-prover alt-ergo,cvc3,z3 sample.c";;
+let tfile = ref "";;
+
+let main () =
+	Uslog.current_level := Uslog.ord Uslog.Info;
+
+	tfile := Filename.temp_file ~temp_dir:"." "us_" ".output";
+	Uslog.logf "test" Uslog.Info "tfile=%s" !tfile;
+
+	cmd := !cmd ^ " 1>" ^ !tfile ^ " 2>&1"; 
+	Uslog.logf "test" Uslog.Info "Proceeding to execute command: %s..." !cmd;
+
+(*
+	let ph = Unix.open_process_in (!cmd ^ " 2>&1") in
+  	while true do
+    	let line = input_line ph in
+    	(* ... *)
+    	()
+  	done
+*)
+
+	let status = Sys.command (!cmd) in
+		Uslog.logf "test" Uslog.Info "return status=%d" status;
+
+	(*Sys.remove !tfile;*)
+
+
+	;;
+		
+main ();;
 
