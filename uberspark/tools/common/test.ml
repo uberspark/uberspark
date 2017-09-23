@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+open Unix
 open Uslog
 open Sys
 open Yojson
@@ -20,7 +21,7 @@ let main () =
 main ();;
 *)
 
-
+(*
 let g_cfiles_list = ref [""];;
 
 let do_action_on_cfile cfilename =
@@ -95,6 +96,32 @@ let main () =
 	;;
 		
 main ();;
+*)
+
+
+let ccomp_program = ref "ccomp";;
+let ccomp_program_options = ref "-help";;
+
+let main () =
+	Uslog.current_level := Uslog.ord Uslog.Info;
+
+	Uslog.logf "test" Uslog.Info "Proceeding to execute program (%s) with options (%s)..." !ccomp_program !ccomp_program_options;
+	let inp = Unix.open_process_in (!ccomp_program ^ " " ^ !ccomp_program_options) in
+  		try
+				while true do
+      				let program_line = input_line inp in
+								Uslog.logf "test" Uslog.Info "[progout] %s" program_line;
+				done;	
+			with End_of_file -> 
+    			close_in inp;
+    	;		
+		
+	Uslog.logf "test" Uslog.Info "All done!";
+
+	;;
+		
+main ();;
+
 
 
 
