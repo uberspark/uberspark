@@ -128,36 +128,61 @@ main ();;
 *)
 
 
-
-
+let us_exec_cmd do_output = 
+	if do_output then
+		begin
+		end
+	else
+		begin
+		end
+	;	
+	
+;;
  
-(* let cmd = ref "ccomp -c sample.c";; *)
-let cmd = ref "frama-c -wp -wp-prover alt-ergo,cvc3,z3 sample.c";;
+(* let cmd = ref "ccomp -c sample1.c";; *) 
+let cmd = ref "frama-c -wp -wp-prover alt-ergo,cvc3,z3 sample.c";;  
 let tfile = ref "";;
+let status = ref 0;;
 
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
+	(*
 	tfile := Filename.temp_file ~temp_dir:"." "us_" ".output";
 	Uslog.logf "test" Uslog.Info "tfile=%s" !tfile;
-
-	cmd := !cmd ^ " 1>" ^ !tfile ^ " 2>&1"; 
+	*)
+	
+	(* cmd := !cmd ^ " 1>" ^ !tfile ^ " 2>&1"; 
 	Uslog.logf "test" Uslog.Info "Proceeding to execute command: %s..." !cmd;
-
-(*
-	let ph = Unix.open_process_in (!cmd ^ " 2>&1") in
-  	while true do
-    	let line = input_line ph in
-    	(* ... *)
-    	()
-  	done
-*)
-
-	let status = Sys.command (!cmd) in
-		Uslog.logf "test" Uslog.Info "return status=%d" status;
-
+	*)
+	
+	(*
+	status := Sys.command (!cmd);
+	Uslog.logf "test" Uslog.Info "return status=%d" !status;
+	*)
+	
 	(*Sys.remove !tfile;*)
 
+  let proc = Unix.open_process_in (!cmd ^ " 2>&1") in
+		try
+    	while true do
+      	let line = input_line proc in
+					Uslog.logf "test" Uslog.Info "| %s" line;
+			done
+			;
+		with End_of_file ->
+    	begin
+				let pstatus = Unix.close_process_in proc in
+					match pstatus with
+    				| Unix.WEXITED st ->
+        				status := st;
+    				| _ -> 
+								status := 1; (*program killed or stopped by signal*)
+					;			
+			end
+		;	
+
+	Uslog.logf "test" Uslog.Info "return status=%d" !status;
 
 	;;
 		
