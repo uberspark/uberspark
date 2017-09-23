@@ -27,7 +27,20 @@ let do_action_on_cfile cfilename =
   Uslog.logf "test" Uslog.Info "c-file name: %s" cfilename;
 			;;
 
+let do_action_on_vharness_file filename =
+  Uslog.logf "test" Uslog.Info "v-harness(file): %s" filename;
+			;;
 
+let do_action_on_vharness_options optionstring =
+  Uslog.logf "test" Uslog.Info "v-harness(options): %s" optionstring;
+			;;
+
+
+let rec myMap ~f l = match l with
+ | [] -> []
+ | h::t -> (f h) :: (myMap ~f t);;
+
+ 
 let parse_json filename = 
 	Uslog.logf "test" Uslog.Info "Manifest file: %s" filename;
 
@@ -38,6 +51,9 @@ let parse_json filename =
 	  let open Yojson.Basic.Util in
 	  	let ns = json |> member "ns" |> to_string in
 	  	let cfiles = json |> member "c-files" |> to_string in
+  		let vharness = json |> member "v-harness" |> to_list in
+  		let vfiles = myMap vharness ~f:(fun json -> member "file" json |> to_string) in 
+  		let voptions = myMap vharness ~f:(fun json -> member "options" json |> to_string) in
 
 				(* Print the results of the parsing *)
 			  Uslog.logf "test" Uslog.Info "Namespace (ns): %s" ns;
@@ -45,6 +61,10 @@ let parse_json filename =
 
 				g_cfiles_list := (Str.split (Str.regexp "[ \r\n\t]+") cfiles);
 				List.iter do_action_on_cfile !g_cfiles_list;
+
+				List.iter do_action_on_vharness_file vfiles;
+				List.iter do_action_on_vharness_options voptions;
+			
 			
 				Uslog.logf "test" Uslog.Info "Done!";
 
