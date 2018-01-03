@@ -8,7 +8,27 @@ open Sys
 open Yojson
 open Str
 
+(*
+	**************************************************************************
+	global variables
+	**************************************************************************
+*)
+
+let usmf_fnametoverifopts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+
+
+(*
+	**************************************************************************
+	debug helpers
+	**************************************************************************
+*)
+
+let dbg_dump_hashtbl key value = 
+	Uslog.logf "test" Uslog.Info "key=%s, value=%s" key value;
+	;;
 	
+			
+			
 (*
 let main () =
 	begin
@@ -73,9 +93,16 @@ try
 							while (!elemcnt < numelems_vfiles) do
 								let vfile_name = List.nth vfiles !elemcnt in
 								let voptions_str = List.nth voptions !elemcnt in
+									(*
 									Uslog.logf "test" Uslog.Info "vfile=%s voptions=%s" vfile_name voptions_str;
+					       	*)
+									 Hashtbl.add usmf_fnametoverifopts vfile_name voptions_str;
 									elemcnt := !elemcnt + 1;
 							done;
+							
+							(*debug dump*)
+							Hashtbl.iter dbg_dump_hashtbl usmf_fnametoverifopts;
+							
 							Uslog.logf "test" Uslog.Info "Parsed Manifest!";
 						end
 					else
