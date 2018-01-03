@@ -139,8 +139,8 @@ let us_exec_cmd do_output =
 	
 ;;
  
-(* let cmd = ref "ccomp -c sample1.c";; *) 
-let cmd = ref "frama-c -wp -wp-prover alt-ergo,cvc3,z3 sample.c";;  
+let cmd = ref "ccomp -c sample1.c";;  
+(* let cmd = ref "frama-c -wp -wp-prover alt-ergo,cvc3,z3 sample.c";; *)  
 let tfile = ref "";;
 let status = ref 0;;
 
