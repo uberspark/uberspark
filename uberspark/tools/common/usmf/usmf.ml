@@ -15,6 +15,7 @@ open Str
 *)
 
 let usmf_fnametoverifopts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let g_cfiles_list = ref [""];;
 
 
 (*
@@ -26,22 +27,6 @@ let usmf_fnametoverifopts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t))
 let dbg_dump_hashtbl key value = 
 	Uslog.logf "test" Uslog.Info "key=%s, value=%s" key value;
 	;;
-	
-			
-			
-(*
-let main () =
-	begin
-		Uslog.current_level := Uslog.ord Uslog.Info;
-		Uslog.logf "test" Uslog.Info "Amazing stuff!";
-	end
-	;;
-		
-main ();;
-*)
-
-
-let g_cfiles_list = ref [""];;
 
 let do_action_on_cfile cfilename =
   Uslog.logf "test" Uslog.Info "c-file name: %s" cfilename;
@@ -54,7 +39,13 @@ let do_action_on_vharness_file filename =
 let do_action_on_vharness_options optionstring =
   Uslog.logf "test" Uslog.Info "v-harness(options): %s" optionstring;
 			;;
-
+	
+			
+(*
+	**************************************************************************
+	interfaces
+	**************************************************************************
+*)
 
 let rec myMap ~f l = match l with
  | [] -> []
@@ -122,26 +113,5 @@ with Yojson.Json_error s ->
 	;
 		
 	;;
-
-
-(*
-let main () =
-	Uslog.current_level := Uslog.ord Uslog.Info;
-
-	let len = Array.length Sys.argv in
-		if len = 2 then
-	    	begin
-					parse_json Sys.argv.(1);
-				end
-		else
-				begin
-					Uslog.logf "test" Uslog.Info "Insufficient Parameters!";
-				end
-
-	;;
-		
-main ();;
-*)
-
 
 
