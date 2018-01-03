@@ -4,6 +4,7 @@
 *)
 
 open Uslog
+open Usmf
 open Sys
 open Yojson
 open Str
@@ -20,7 +21,7 @@ let main () =
 main ();;
 *)
 
-
+(*
 let g_cfiles_list = ref [""];;
 
 let do_action_on_cfile cfilename =
@@ -77,7 +78,7 @@ with Yojson.Json_error s ->
 		
 	;;
 
-
+*)
 
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
