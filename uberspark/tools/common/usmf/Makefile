@@ -3,22 +3,22 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
-include ../../uberspark-common.mk
+include ../../../uberspark-common.mk
 
 
 ###### targets
 
 .PHONY: all
 all: 
-	cd uslog && $(MAKE) -w all
-	$(OCAMLC) -package uslog -package unix -package str -package yojson -linkpkg -o test test.ml
-	
+	$(OCAMLC) -package uslog -package unix -package str -package yojson -linkpkg -o usmf.o usmf.ml
+	ocamlfind remove usmf 
+	ocamlfind install usmf META usmf.cmi usmf.cmo usmf.o 
+
 
 .PHONY: clean
 clean:
-	cd uslog && $(MAKE) -w clean
-	$(RM) -f test.cmi
-	$(RM) -f test.cmo
-	$(RM) -f test
+	$(RM) -f usmf.cmi
+	$(RM) -f usmf.cmo
+	$(RM) -f usmf.o
 	
 	
