@@ -64,11 +64,30 @@ try
 				g_cfiles_list := (Str.split (Str.regexp "[ \r\n\t]+") cfiles);
 				List.iter do_action_on_cfile !g_cfiles_list;
 
-				List.iter do_action_on_vharness_file vfiles;
+				let numelems_vfiles = List.length vfiles in
+				let numelems_voptions = List.length voptions in
+				let elemcnt = ref 0 in 
+					if numelems_vfiles = numelems_voptions then
+						begin
+							elemcnt := 0;
+							while (!elemcnt < numelems_vfiles) do
+								let vfile_name = List.nth vfiles !elemcnt in
+								let voptions_str = List.nth voptions !elemcnt in
+									Uslog.logf "test" Uslog.Info "vfile=%s voptions=%s" vfile_name voptions_str;
+									elemcnt := !elemcnt + 1;
+							done;
+							Uslog.logf "test" Uslog.Info "Parsed Manifest!";
+						end
+					else
+						begin
+							Uslog.logf "test" Uslog.Info "ERROR in parsing manifest: numelems_vfiles != numelems_voptions";
+						end
+					;
+
+				(*List.iter do_action_on_vharness_file vfiles;
 				List.iter do_action_on_vharness_options voptions;
+				*)
 			
-			
-				Uslog.logf "test" Uslog.Info "Done!";
 
 with Yojson.Json_error s -> 
 				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
