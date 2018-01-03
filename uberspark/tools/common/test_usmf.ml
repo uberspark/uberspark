@@ -86,7 +86,7 @@ let main () =
 	let len = Array.length Sys.argv in
 		if len = 2 then
 	    	begin
-					parse_manifest Sys.argv.(1);
+					parse_manifest Sys.argv.(1) 0 1 0;
 				end
 		else
 				begin
