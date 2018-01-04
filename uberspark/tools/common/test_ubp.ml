@@ -15,12 +15,8 @@ open Str
 	global variables
 	**************************************************************************
 *)
-(*
-	g_memoffsets = 0 or 1; 0 signifies no memoffsets and 1 says memoffsets
-	g_rootdir = rootdirectory of the uobjects; where .usbp resides
-*)
-let g_memoffsets = ref 0;;
-let g_rootdir = ref "";;
+let g_memoffsets = ref 0;; (* 0 or 1; 0 signifies no memoffsets and 1 implies memoffsets *)
+let g_rootdir = ref "";; (*	rootdirectory of the uobjects; where .usbp resides *)
 let g_totalslabs = ref 0;; (*total number of uobjs*)
 
 let slab_idtodir = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -33,37 +29,22 @@ let slab_nametoid = ((Hashtbl.create 32) : ((string,int)  Hashtbl.t));;
 
 
 	
+
 (*
-let main () =
-	begin
-		Uslog.current_level := Uslog.ord Uslog.Info;
-		Uslog.logf "test" Uslog.Info "Amazing stuff!";
-	end
-	;;
-		
-main ();;
+	**************************************************************************
+	debugging related
+	**************************************************************************
 *)
-
-
-let g_cfiles_list = ref [""];;
-
 let dbg_dump_string string_value =
   Uslog.logf "test" Uslog.Info "string value: %s" string_value;
 			;;
 
 
-let do_action_on_cfile cfilename =
-  Uslog.logf "test" Uslog.Info "c-file name: %s" cfilename;
-			;;
-
-let do_action_on_vharness_file filename =
-  Uslog.logf "test" Uslog.Info "v-harness(file): %s" filename;
-			;;
-
-let do_action_on_vharness_options optionstring =
-  Uslog.logf "test" Uslog.Info "v-harness(options): %s" optionstring;
-			;;
-
+(*
+	**************************************************************************
+	helper interfaces
+	**************************************************************************
+*)
 
 let rec myMap ~f l = match l with
  | [] -> []
@@ -109,16 +90,9 @@ let parse_ubp_entry entry =
 
 
 (*
-
-
-
-
-*)
-
-
-
-(*
-	filename (g_slabsfile) = blueprint .usbp
+	**************************************************************************
+	main interfaces
+	**************************************************************************
 *)
 
 let parse_ubp filename = 
@@ -139,49 +113,13 @@ let parse_ubp filename =
 	;
 ;;
 
+
+
 (*
-let usbp_init g_slabsfile g_memoffsets g_rootdir = 
-			
-		try
-		Format.printf "total slabs=%d\n" !g_totalslabs;      			
-
-		(* now iterate through all the slab id's and populate callmask and uapimasks *)
-		i := 0;
-		while (!i < !g_totalslabs) do
-	    	begin
-				Format.printf "  slabdir=%s\n" (Hashtbl.find slab_idtodir !i);      			
-				Format.printf "  slabname=%s\n" (Hashtbl.find slab_idtoname !i);      			
-				Format.printf "  slabtype=%s\n" (Hashtbl.find slab_idtotype !i);      			
-				Format.printf "  slabsubtype=%s\n" (Hashtbl.find slab_idtosubtype !i);      			
-				Format.printf "  slabgsmfile=%s\n" (Hashtbl.find slab_idtogsm !i);      			
-				Format.printf "  slabmmapfile=%s\n" (Hashtbl.find slab_idtommapfile !i);      			
-			
-				if (g_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
-					begin
-						umfcommon_parse_mmap (Hashtbl.find slab_idtommapfile !i) !i !g_totalslabs;
-						Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs true);
-					end
-				else
-					begin
-						Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs false);
-					end
-				;				    	
-
-	    		i := !i + 1;
-			end
-		done;
-
-
-
-		
-	()
-
+	**************************************************************************
+	test rig
+	**************************************************************************
 *)
-
-
-
-
-
 
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
