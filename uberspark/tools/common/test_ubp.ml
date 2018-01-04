@@ -9,6 +9,29 @@ open Sys
 open Yojson
 open Str
 
+
+(*
+	**************************************************************************
+	global variables
+	**************************************************************************
+*)
+(*
+	g_memoffsets = 0 or 1; 0 signifies no memoffsets and 1 says memoffsets
+	g_rootdir = rootdirectory of the uobjects; where .usbp resides
+*)
+let g_memoffsets = ref 0;;
+let g_rootdir = ref "";;
+let g_totalslabs = ref 0;; (*total number of uobjs*)
+
+let slab_idtodir = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtogsm = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtommapfile = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtotype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtosubtype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_nametoid = ((Hashtbl.create 32) : ((string,int)  Hashtbl.t));;
+
+
 	
 (*
 let main () =
@@ -49,28 +72,56 @@ let rec myMap ~f l = match l with
 
 let parse_ubp_entry entry = 
 	try
-	  	let open Yojson.Basic.Util in
+		 	let open Yojson.Basic.Util in
 			let uobj_0 = entry in 
-			let uobj_0_name = uobj_0 |> member "name" |> to_string in
-  		let uobj_0_uapifn = uobj_0 |> member "uobj-uapifn" |> to_list in
-
+			
+			let slabname = uobj_0 |> member "name" |> to_string in
+  		let slabdir = uobj_0 |> member "dir" |> to_string in
+  		let slabtype = uobj_0 |> member "type" |> to_string in
+  		let slabsubtype = uobj_0 |> member "subtype" |> to_string in
+  		let slabgsmfile = !g_rootdir ^ slabdir ^ "/" ^ slabname ^ ".gsm.pp" in
+	    let slabmmapfile = !g_rootdir ^ "_objects/_objs_slab_" ^ slabname ^ "/" ^ slabname ^ ".mmap" in
+	
+			let uobj_0_uapifn = uobj_0 |> member "uobj-uapifn" |> to_list in
 			let uobj_0_uapifn_name = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "name" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "id" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt1 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt2 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt2" uobj_0 |> to_string) in 
 
-			(* Print the results of the parsing *)
-		  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" uobj_0_name;
-			List.iter dbg_dump_string uobj_0_uapifn_name;
-	
+		  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" slabname;
+			(*List.iter dbg_dump_string uobj_0_uapifn_name;*)
+
+			Hashtbl.add slab_idtodir !g_totalslabs slabdir;
+			Hashtbl.add slab_idtoname !g_totalslabs slabname;
+			Hashtbl.add slab_idtotype !g_totalslabs slabtype;
+			Hashtbl.add slab_idtosubtype !g_totalslabs slabsubtype;
+			Hashtbl.add slab_idtogsm !g_totalslabs slabgsmfile;
+			Hashtbl.add slab_idtommapfile !g_totalslabs slabmmapfile;
+			Hashtbl.add slab_nametoid slabname !g_totalslabs;
+
+			g_totalslabs := !g_totalslabs + 1;
+			
+					
 	with Yojson.Json_error s -> 
 			Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
 ;;
 
- 
+
+(*
+
+
+
+
+*)
+
+
+
+(*
+	filename (g_slabsfile) = blueprint .usbp
+*)
+
 let parse_ubp filename = 
-	Uslog.logf "test" Uslog.Info "Manifest file: %s" filename;
 
 	try
 
@@ -80,6 +131,7 @@ let parse_ubp filename =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobjs = json |> member "uobjs" |> to_list in
+				(* g_totalslabs := List.length uobjs; *)
 				List.iter parse_ubp_entry uobjs;
 				
 	with Yojson.Json_error s -> 
@@ -87,14 +139,61 @@ let parse_ubp filename =
 	;
 ;;
 
+(*
+let usbp_init g_slabsfile g_memoffsets g_rootdir = 
+			
+		try
+		Format.printf "total slabs=%d\n" !g_totalslabs;      			
+
+		(* now iterate through all the slab id's and populate callmask and uapimasks *)
+		i := 0;
+		while (!i < !g_totalslabs) do
+	    	begin
+				Format.printf "  slabdir=%s\n" (Hashtbl.find slab_idtodir !i);      			
+				Format.printf "  slabname=%s\n" (Hashtbl.find slab_idtoname !i);      			
+				Format.printf "  slabtype=%s\n" (Hashtbl.find slab_idtotype !i);      			
+				Format.printf "  slabsubtype=%s\n" (Hashtbl.find slab_idtosubtype !i);      			
+				Format.printf "  slabgsmfile=%s\n" (Hashtbl.find slab_idtogsm !i);      			
+				Format.printf "  slabmmapfile=%s\n" (Hashtbl.find slab_idtommapfile !i);      			
+			
+				if (g_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
+					begin
+						umfcommon_parse_mmap (Hashtbl.find slab_idtommapfile !i) !i !g_totalslabs;
+						Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs true);
+					end
+				else
+					begin
+						Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs false);
+					end
+				;				    	
+
+	    		i := !i + 1;
+			end
+		done;
+
+
+
+		
+	()
+
+*)
+
+
+
+
 
 
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
 	let len = Array.length Sys.argv in
-		if len = 2 then
+		if len = 4 then
 	    	begin
+					g_memoffsets := int_of_string(Sys.argv.(2));
+					g_rootdir := Sys.argv.(3);
+					Uslog.logf "test" Uslog.Info "Manifest file: %s" Sys.argv.(1);
+					Uslog.logf "test" Uslog.Info "g_memoffsets=%u\n" !g_memoffsets;
+					Uslog.logf "test" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
 					parse_ubp Sys.argv.(1);
 				end
 		else
