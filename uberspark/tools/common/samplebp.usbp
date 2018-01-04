@@ -1,0 +1,18 @@
+{
+	"uobjs": [
+		{	
+			"name": "uobj1", 
+			"dir": "../uobj1"
+			"uobj-callees": "
+				uobj1
+				uobj2
+				",
+			"uobj-calleefn":[
+	    		{ 
+	    			"fnid": "0", 
+	    			"fnopts" : "void {}" 
+	    		}
+			]	
+		}
+	]
+}
