@@ -24,6 +24,11 @@ main ();;
 
 let g_cfiles_list = ref [""];;
 
+let dbg_dump_string string_value =
+  Uslog.logf "test" Uslog.Info "string value: %s" string_value;
+			;;
+
+
 let do_action_on_cfile cfilename =
   Uslog.logf "test" Uslog.Info "c-file name: %s" cfilename;
 			;;
@@ -47,55 +52,40 @@ let parse_ubp_entry entry =
 	  	let open Yojson.Basic.Util in
 			let uobj_0 = entry in 
 			let uobj_0_name = uobj_0 |> member "name" |> to_string in
-  		let uobj_0_calleefn = uobj_0 |> member "uobj-calleefn" |> to_list in
-  		let uobj_0_calleefn_fnid = myMap uobj_0_calleefn ~f:(fun uobj_0 -> member "fnid" uobj_0 |> to_string) in 
-  		let uobj_0_calleefn_fnopts = myMap uobj_0_calleefn ~f:(fun uobj_0 -> member "fnopts" uobj_0 |> to_string) in
+  		let uobj_0_uapifn = uobj_0 |> member "uobj-uapifn" |> to_list in
 
-				(* Print the results of the parsing *)
-			  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" uobj_0_name;
-				List.iter do_action_on_vharness_file uobj_0_calleefn_fnid;
-				List.iter do_action_on_vharness_options uobj_0_calleefn_fnopts;
+			let uobj_0_uapifn_name = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "name" uobj_0 |> to_string) in 
+  		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "id" uobj_0 |> to_string) in 
+  		let uobj_0_uapifn_opt1 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
+  		let uobj_0_uapifn_opt2 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt2" uobj_0 |> to_string) in 
+
+			(* Print the results of the parsing *)
+		  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" uobj_0_name;
+			List.iter dbg_dump_string uobj_0_uapifn_name;
 	
 	with Yojson.Json_error s -> 
-				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
-
+			Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
-	
-	;;
+;;
+
  
 let parse_ubp filename = 
 	Uslog.logf "test" Uslog.Info "Manifest file: %s" filename;
 
-try
-	
-  (* read the manifest JSON *)
+	try
+
+	(* read the manifest JSON *)
   let json = Yojson.Basic.from_file filename in
 
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobjs = json |> member "uobjs" |> to_list in
-			(*
-						let uobj_0 = (List.nth uobjs 0) in 
-			let uobj_0_name = uobj_0 |> member "name" |> to_string in
-  		let uobj_0_calleefn = uobj_0 |> member "uobj-calleefn" |> to_list in
-  		let uobj_0_calleefn_fnid = myMap uobj_0_calleefn ~f:(fun uobj_0 -> member "fnid" uobj_0 |> to_string) in 
-  		let uobj_0_calleefn_fnopts = myMap uobj_0_calleefn ~f:(fun uobj_0 -> member "fnopts" uobj_0 |> to_string) in
-
-				(* Print the results of the parsing *)
-			  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" uobj_0_name;
-				List.iter do_action_on_vharness_file uobj_0_calleefn_fnid;
-				List.iter do_action_on_vharness_options uobj_0_calleefn_fnopts;
-				Uslog.logf "test" Uslog.Info "Done!";
-				*)
 				List.iter parse_ubp_entry uobjs;
 				
-				
-with Yojson.Json_error s -> 
-				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
-
+	with Yojson.Json_error s -> 
+		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
-		
-	;;
+;;
 
 
 

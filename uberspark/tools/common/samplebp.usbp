@@ -7,13 +7,20 @@
 				uobj1
 				uobj2
 				",
-			"uobj-calleefn":[
+			"uobj-uapifn":[
 	    		{ 
-	    			"fnid": "0", 
-	    			"fnopts" : "void {}" 
+	    			"name": "uobj3",
+	    			"id": "0xa", 
+	    			"opt1" : "void {}",
+	    			"opt2" : "(1)" 
+	    		},
+	    		{ 
+	    			"name": "uobj4",
+	    			"id": "0xb", 
+	    			"opt1" : "void {}",
+	    			"opt2" : "(1)" 
 	    		}
 			]	
-			
 		},
 		
 		{	
@@ -22,11 +29,7 @@
 			"uobj-callees": "
 				uobj1
 				",
-			"uobj-calleefn":[
-	    		{ 
-	    			"fnid": "1", 
-	    			"fnopts" : "int {}" 
-	    		}
+			"uobj-uapifn":[
 			]	
 			
 		}
