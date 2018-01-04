@@ -2,7 +2,7 @@
 	"uobjs": [
 		{	
 			"name": "uobj1", 
-			"dir": "../uobj1"
+			"dir": "../uobj1",
 			"uobj-callees": "
 				uobj1
 				uobj2
@@ -13,6 +13,23 @@
 	    			"fnopts" : "void {}" 
 	    		}
 			]	
+			
+		},
+		
+		{	
+			"name": "uobj2", 
+			"dir": "../uobj2",
+			"uobj-callees": "
+				uobj1
+				",
+			"uobj-calleefn":[
+	    		{ 
+	    			"fnid": "1", 
+	    			"fnopts" : "int {}" 
+	    		}
+			]	
+			
 		}
+		
 	]
 }
