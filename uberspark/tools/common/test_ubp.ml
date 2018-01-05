@@ -51,12 +51,43 @@ let rec myMap ~f l = match l with
  | h::t -> (f h) :: (myMap ~f t);;
 
 
-let parse_ubp_entry entry = 
+let populate_uobj_characteristics uobj_entry = 
 	try
 		 	let open Yojson.Basic.Util in
-			let uobj_0 = entry in 
+			let uobj_0 = uobj_entry in 
 			
-			let slabname = uobj_0 |> member "name" |> to_string in
+				let slabname = uobj_0 |> member "name" |> to_string in
+  			let slabdir = uobj_0 |> member "dir" |> to_string in
+  			let slabtype = uobj_0 |> member "type" |> to_string in
+  			let slabsubtype = uobj_0 |> member "subtype" |> to_string in
+  			let slabgsmfile = !g_rootdir ^ slabdir ^ "/" ^ slabname ^ ".gsm.pp" in
+	    	let slabmmapfile = !g_rootdir ^ "_objects/_objs_slab_" ^ slabname ^ "/" ^ slabname ^ ".mmap" in
+
+				  Uslog.logf "test" Uslog.Info "uobj_0: name: %s" slabname;
+
+					Hashtbl.add slab_idtodir !g_totalslabs slabdir;
+					Hashtbl.add slab_idtoname !g_totalslabs slabname;
+					Hashtbl.add slab_idtotype !g_totalslabs slabtype;
+					Hashtbl.add slab_idtosubtype !g_totalslabs slabsubtype;
+					Hashtbl.add slab_idtogsm !g_totalslabs slabgsmfile;
+					Hashtbl.add slab_idtommapfile !g_totalslabs slabmmapfile;
+					Hashtbl.add slab_nametoid slabname !g_totalslabs;
+	
+		
+				
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
+	;
+
+;;
+
+
+let parse_ubp_entry entry = 
+(*	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = entry in 
+*)			
+			(*let slabname = uobj_0 |> member "name" |> to_string in
   		let slabdir = uobj_0 |> member "dir" |> to_string in
   		let slabtype = uobj_0 |> member "type" |> to_string in
   		let slabsubtype = uobj_0 |> member "subtype" |> to_string in
@@ -79,13 +110,16 @@ let parse_ubp_entry entry =
 			Hashtbl.add slab_idtogsm !g_totalslabs slabgsmfile;
 			Hashtbl.add slab_idtommapfile !g_totalslabs slabmmapfile;
 			Hashtbl.add slab_nametoid slabname !g_totalslabs;
+			*)
 
+			populate_uobj_characteristics entry;						
 			g_totalslabs := !g_totalslabs + 1;
 			
-					
+(*					
 	with Yojson.Json_error s -> 
 			Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
+*)
 ;;
 
 
@@ -130,6 +164,8 @@ let compute_uapiandcallmasks totalslabs =
 					end
 				;	
 				*)			    	
+
+
 
 	    	i := !i + 1;
 				end
