@@ -257,7 +257,7 @@ let compute_uapiandcallmasks totalslabs =
 
 
 let parse_ubp filename = 
-
+	
 	try
 
 	(* read the manifest JSON *)
@@ -266,9 +266,17 @@ let parse_ubp filename =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobjs = json |> member "uobjs" |> to_list in
-				(* List.iter parse_ubp_entry uobjs; *)
+			let i = ref 0 in
+					(* List.iter parse_ubp_entry uobjs; *)
 				List.iter populate_uobj_characteristics uobjs;
-				
+
+				while (!i < (List.length uobjs)) do
+					begin
+					populate_uobj_callmasks (List.nth uobjs !i) !i;
+					i := !i + 1;
+					end
+				done;
+												
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
