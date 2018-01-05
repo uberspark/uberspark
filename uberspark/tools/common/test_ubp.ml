@@ -95,7 +95,7 @@ let parse_ubp_entry entry =
 	**************************************************************************
 *)
 
-let compute_uapiandcallmasks =
+let compute_uapiandcallmasks totalslabs =
 	let i = ref 0 in
 	
 		(* now iterate through all the slab id's and populate callmask and uapimasks *)
@@ -134,7 +134,6 @@ let compute_uapiandcallmasks =
 	    	i := !i + 1;
 				end
 		done;
-
 ;;
 
 
@@ -176,6 +175,8 @@ let main () =
 					Uslog.logf "test" Uslog.Info "g_memoffsets=%u\n" !g_memoffsets;
 					Uslog.logf "test" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
 					parse_ubp Sys.argv.(1);
+					Uslog.logf "test" Uslog.Info "g_totalslabs=%u\n" !g_totalslabs;
+					compute_uapiandcallmasks !g_totalslabs;
 				end
 		else
 				begin
