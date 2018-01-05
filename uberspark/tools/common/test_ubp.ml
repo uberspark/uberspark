@@ -30,7 +30,12 @@ let slab_nametoid = ((Hashtbl.create 32) : ((string,int)  Hashtbl.t));;
 let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
-	
+let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let uapi_fnccomppre = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let uapi_fnccompasserts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let uapi_fndef  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let uapi_fndrvcode  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+
 
 (*
 	**************************************************************************
@@ -180,8 +185,61 @@ let populate_uobj_uapicallmasks uobj_entry uobj_id =
 				begin
 					while (!i < (List.length uobj_0_uapifn)) do
 						begin
-							
-							i := !i + 1;
+
+									let tag_u_destslabname = (trim (List.nth uobj_0_uapifn_uobjname !i)) in
+									let tag_u_destslabid = (Hashtbl.find slab_nametoid tag_u_destslabname) in
+									let tag_u_uapifn = int_of_string (trim (List.nth uobj_0_uapifn_id !i)) in
+									let tag_u_uapifnpre = (trim (List.nth uobj_0_uapifn_opt1 !i)) in
+									let tag_u_uapifncheckassert = (trim (List.nth uobj_0_uapifn_opt2 !i)) in
+									let tag_u_mask = ref 0 in
+									let tag_u_uapikey = ref "" in
+									let tag_u_tempstr = ref "" in
+
+										Uslog.logf "test" Uslog.Info "populate_uobj_uapicallmasks: processing entry %u" !i;
+
+										if (Hashtbl.mem slab_idtouapifnmask tag_u_destslabid) then
+											begin
+											tag_u_mask := Hashtbl.find slab_idtouapifnmask tag_u_destslabid; 
+											tag_u_mask := !tag_u_mask lor (1 lsl tag_u_uapifn);
+											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											end
+										else
+											begin
+											tag_u_mask := (1 lsl tag_u_uapifn);
+											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											end
+										;
+
+										(* make key *)
+										tag_u_uapikey := tag_u_destslabname ^ "_" ^ (trim (List.nth uobj_0_uapifn_id !i));
+										Uslog.logf "test" Uslog.Info "uapi key = %s\n" !tag_u_uapikey;
+										if (Hashtbl.mem uapi_fnccomppre !tag_u_uapikey) then
+											begin
+											tag_u_tempstr := (Hashtbl.find uapi_fnccomppre !tag_u_uapikey);
+											Hashtbl.add uapi_fnccomppre !tag_u_uapikey (!tag_u_tempstr ^ (Printf.sprintf "/* %s:*/\r\n" (Hashtbl.find slab_idtoname uobj_id)) ^ tag_u_uapifnpre ^ "\r\n");
+											end
+										else
+											begin
+											Hashtbl.add uapi_fnccomppre !tag_u_uapikey ( (Printf.sprintf "/* %s:*/\r\n" (Hashtbl.find slab_idtoname uobj_id)) ^ tag_u_uapifnpre ^ "\r\n");
+											end
+										;
+
+										Uslog.logf "test" Uslog.Info "uapi fnccomppre =%s\n" (Hashtbl.find uapi_fnccomppre !tag_u_uapikey);
+
+										if (Hashtbl.mem uapi_fnccompasserts !tag_u_uapikey) then
+											begin
+											tag_u_tempstr := (Hashtbl.find uapi_fnccompasserts !tag_u_uapikey);
+											Hashtbl.add uapi_fnccompasserts !tag_u_uapikey (!tag_u_tempstr ^ (Printf.sprintf "/*@assert %s: " (Hashtbl.find slab_idtoname uobj_id)) ^ tag_u_uapifncheckassert ^ ";*/\r\n");
+											end
+										else
+											begin
+											Hashtbl.add uapi_fnccompasserts !tag_u_uapikey ((Printf.sprintf "/*@assert %s: " (Hashtbl.find slab_idtoname uobj_id)) ^ tag_u_uapifncheckassert ^ ";*/\r\n");
+											end
+										;
+
+										Uslog.logf "test" Uslog.Info "uapi fnccompasserts =%s\n" (Hashtbl.find uapi_fnccompasserts !tag_u_uapikey);
+
+								i := !i + 1;
 						end
 					done;
 				end

@@ -11,13 +11,13 @@
 				",
 			"uobj-uapifn":[
 	    		{ 
-	    			"uobj-name": "uobj3",
+	    			"uobj-name": "uobj2",
 	    			"fnid": "0xa", 
 	    			"opt1" : "void {}",
 	    			"opt2" : "(1)" 
 	    		},
 	    		{ 
-	    			"uobj-name": "uobj4",
+	    			"uobj-name": "uobj2",
 	    			"fnid": "0xb", 
 	    			"opt1" : "void {}",
 	    			"opt2" : "(1)" 
