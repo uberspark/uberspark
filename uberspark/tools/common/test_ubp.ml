@@ -27,6 +27,8 @@ let slab_idtotype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtosubtype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_nametoid = ((Hashtbl.create 32) : ((string,int)  Hashtbl.t));;
 
+let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 	
 
@@ -45,6 +47,30 @@ let dbg_dump_string string_value =
 	helper interfaces
 	**************************************************************************
 *)
+let left_pos s len =
+  let rec aux i =
+    if i >= len then None
+    else match s.[i] with
+    | ' ' | '\n' | '\t' | '\r' -> aux (succ i)
+    | _ -> Some i
+  in
+  aux 0
+ 
+let right_pos s len =
+  let rec aux i =
+    if i < 0 then None
+    else match s.[i] with
+    | ' ' | '\n' | '\t' | '\r' -> aux (pred i)
+    | _ -> Some i
+  in
+  aux (pred len)
+  
+let trim s =
+  let len = String.length s in
+  match left_pos s len, right_pos s len with
+  | Some i, Some j -> String.sub s i (j - i + 1)
+  | None, None -> ""
+  | _ -> assert false
 
 let rec myMap ~f l = match l with
  | [] -> []
@@ -83,15 +109,52 @@ let populate_uobj_characteristics uobj_entry =
 
 
 
-let populate_uobj_callmasks uobj_entry = 
+let populate_uobj_callmasks uobj_entry uobj_id = 
 	try
 		 	let open Yojson.Basic.Util in
 			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
 			
 			let uobj_0_callees = uobj_0 |> member "uobj-callees" |> to_string in
 			let uobj_0_callees_list = (Str.split (Str.regexp "[ \r\n\t]+") uobj_0_callees) in
-				List.iter dbg_dump_string uobj_0_callees_list;
-			(* g_cfiles_list = ref [""];; *)
+				begin
+					while (!i < (List.length uobj_0_callees_list)) do
+						begin
+		            let tag_s_destslabname = (trim (List.nth uobj_0_callees_list !i)) in
+		            let tag_s_mask = ref 0 in
+									Uslog.logf "test" Uslog.Info "destslabname=%s, id=%d\n" tag_s_destslabname (Hashtbl.find slab_nametoid tag_s_destslabname);
+		            	
+		            	if (Hashtbl.mem slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname)) then
+		            		begin
+		            			tag_s_mask := Hashtbl.find slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname);
+		            			tag_s_mask := !tag_s_mask lor (1 lsl uobj_id);
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            		end
+		            	else
+		            		begin
+		            			tag_s_mask := (1 lsl uobj_id);
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            		end
+		            	;
+		            
+		            	if (Hashtbl.mem slab_idtocalleemask uobj_id) then
+		            		begin
+		            			tag_s_mask := Hashtbl.find slab_idtocalleemask uobj_id;
+		            			tag_s_mask := !tag_s_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
+		            		end
+		            	else
+		            		begin
+		            			tag_s_mask := (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
+		            		end
+		            	;
+							
+							i := !i + 1;
+						end
+					done;
+				end
+
 	
 	with Yojson.Json_error s -> 
 			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
@@ -131,7 +194,7 @@ let parse_ubp_entry entry =
 			*)
 
 			populate_uobj_characteristics entry;
-			populate_uobj_callmasks entry;						
+			populate_uobj_callmasks entry !g_totalslabs;						
 			g_totalslabs := !g_totalslabs + 1;
 			
 (*					
