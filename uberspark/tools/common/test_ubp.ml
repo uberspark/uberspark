@@ -163,12 +163,37 @@ let populate_uobj_callmasks uobj_entry uobj_id =
 
 ;;
 
-(*
+
+let populate_uobj_uapicallmasks uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			
+			Uslog.logf "test" Uslog.Info "populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
+
 			let uobj_0_uapifn = uobj_0 |> member "uobj-uapifn" |> to_list in
-			let uobj_0_uapifn_name = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "name" uobj_0 |> to_string) in 
-  		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "id" uobj_0 |> to_string) in 
+			let uobj_0_uapifn_uobjname = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "uobj-name" uobj_0 |> to_string) in 
+  		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "fnid" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt1 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt2 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt2" uobj_0 |> to_string) in 
+				begin
+					while (!i < (List.length uobj_0_uapifn)) do
+						begin
+							
+							i := !i + 1;
+						end
+					done;
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
+	;
+
+;;
+
+(*
 *) 
 
 
@@ -196,6 +221,7 @@ let parse_ubp filename =
 				while (!i < (List.length uobjs)) do
 					begin
 					populate_uobj_callmasks (List.nth uobjs !i) !i;
+					populate_uobj_uapicallmasks (List.nth uobjs !i) !i;
 					i := !i + 1;
 					end
 				done;
