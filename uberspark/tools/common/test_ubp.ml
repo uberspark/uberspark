@@ -15,7 +15,6 @@ open Str
 	global variables
 	**************************************************************************
 *)
-let g_memoffsets = ref 0;; (* 0 or 1; 0 signifies no memoffsets and 1 implies memoffsets *)
 let g_rootdir = ref "";; (*	rootdirectory of the uobjects; where .usbp resides *)
 let g_totalslabs = ref 0;; (*total number of uobjs*)
 
@@ -301,12 +300,10 @@ let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
 	let len = Array.length Sys.argv in
-		if len = 4 then
+		if len = 3 then
 	    	begin
-					g_memoffsets := int_of_string(Sys.argv.(2));
-					g_rootdir := Sys.argv.(3);
+					g_rootdir := Sys.argv.(2);
 					Uslog.logf "test" Uslog.Info "Manifest file: %s" Sys.argv.(1);
-					Uslog.logf "test" Uslog.Info "g_memoffsets=%u\n" !g_memoffsets;
 					Uslog.logf "test" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
 					parse_ubp Sys.argv.(1);
 					Uslog.logf "test" Uslog.Info "All done!\n";
