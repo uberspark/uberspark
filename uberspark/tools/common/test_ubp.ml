@@ -98,9 +98,10 @@ let populate_uobj_characteristics uobj_entry =
 					Hashtbl.add slab_idtogsm !g_totalslabs slabgsmfile;
 					Hashtbl.add slab_idtommapfile !g_totalslabs slabmmapfile;
 					Hashtbl.add slab_nametoid slabname !g_totalslabs;
-	
-		
-				
+
+					(* compute next uobj id *)
+					g_totalslabs := !g_totalslabs + 1;
+
 	with Yojson.Json_error s -> 
 			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
 	;
@@ -265,8 +266,8 @@ let parse_ubp filename =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobjs = json |> member "uobjs" |> to_list in
-				(* g_totalslabs := List.length uobjs; *)
-				List.iter parse_ubp_entry uobjs;
+				(* List.iter parse_ubp_entry uobjs; *)
+				List.iter populate_uobj_characteristics uobjs;
 				
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
