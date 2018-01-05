@@ -130,7 +130,8 @@ let parse_ubp_entry entry =
 			Hashtbl.add slab_nametoid slabname !g_totalslabs;
 			*)
 
-			populate_uobj_characteristics entry;						
+			populate_uobj_characteristics entry;
+			populate_uobj_callmasks entry;						
 			g_totalslabs := !g_totalslabs + 1;
 			
 (*					
