@@ -95,6 +95,49 @@ let parse_ubp_entry entry =
 	**************************************************************************
 *)
 
+let compute_uapiandcallmasks =
+	let i = ref 0 in
+	
+		(* now iterate through all the slab id's and populate callmask and uapimasks *)
+		i := 0;
+		while (!i < !g_totalslabs) do
+	    	begin
+			  Uslog.logf "test" Uslog.Info "  slabdir=%s\n" (Hashtbl.find slab_idtodir !i);      			
+				Uslog.logf "test" Uslog.Info "  slabname=%s\n" (Hashtbl.find slab_idtoname !i);      			
+			  Uslog.logf "test" Uslog.Info "  slabtype=%s\n" (Hashtbl.find slab_idtotype !i);      			
+			  Uslog.logf "test" Uslog.Info "  slabsubtype=%s\n" (Hashtbl.find slab_idtosubtype !i);      			
+			  Uslog.logf "test" Uslog.Info "  slabgsmfile=%s\n" (Hashtbl.find slab_idtogsm !i);      			
+			  Uslog.logf "test" Uslog.Info "  slabmmapfile=%s\n" (Hashtbl.find slab_idtommapfile !i);      			
+
+				(*
+					umfcommon_parse_mmap should be a standalone function not here
+					it should just populate mmap structure for all uobjs that are not richguest 
+					type
+				*) 
+			
+				(* if (g_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
+					begin
+						umfcommon_parse_mmap (Hashtbl.find slab_idtommapfile !i) !i !g_totalslabs;
+						Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs true);
+					end
+				else
+					begin
+				*)
+				
+				(* Hashtbl.add slab_idtouapifnmask !i (umfcommon_parse_gsm (Hashtbl.find slab_idtogsm !i) !i !g_totalslabs false); *)
+				
+				(*
+					end
+				;	
+				*)			    	
+
+	    	i := !i + 1;
+				end
+		done;
+
+;;
+
+
 let parse_ubp filename = 
 
 	try
