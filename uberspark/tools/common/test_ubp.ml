@@ -82,6 +82,24 @@ let populate_uobj_characteristics uobj_entry =
 ;;
 
 
+
+let populate_uobj_callmasks uobj_entry = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			
+			let uobj_0_callees = uobj_0 |> member "uobj-callees" |> to_string in
+			let uobj_0_callees_list = (Str.split (Str.regexp "[ \r\n\t]+") uobj_0_callees) in
+				List.iter dbg_dump_string uobj_0_callees_list;
+			(* g_cfiles_list = ref [""];; *)
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
+	;
+
+;;
+
+
 let parse_ubp_entry entry = 
 (*	try
 		 	let open Yojson.Basic.Util in
