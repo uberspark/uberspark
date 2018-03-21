@@ -1,0 +1,20 @@
+{
+	"ns": "uobj",
+	"c-files":	"a1.c
+				 a2.c
+				 a3.c
+				 a4.c		",
+	
+	"uobj-callees": "uobj1
+					 uobj2
+					 uobj3
+					",
+	
+	"v-harness": [
+	    { "file": "a1.c", "options" : "--option1" },
+	    { "file": "a2.c", "options" : "--option2" },
+	    { "file": "a3.c", "options" : "--option3" }
+	  ]
+		
+	
+}

@@ -23,17 +23,7 @@ all: build-tools
 
 .PHONY: build-tools
 build-tools:
-	cd $(USPARK_TOOLSDIR) && $(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
-	cd $(USPARK_TOOLSDIR) && $(CP) -f umfcommon.ml umf/.	
-	cd $(USPARK_TOOLSDIR)/umf && $(MAKE) -w all
-	cd $(USPARK_TOOLSDIR) && $(CP) -f umfcommon.ml ubp/.	
-	cd $(USPARK_TOOLSDIR)/ubp && $(MAKE) -w all
-	cd $(USPARK_TOOLSDIR) && $(CP) -f umfcommon.ml ucasm/.	
-	cd $(USPARK_TOOLSDIR)/ucasm && $(MAKE) -w all
-	cd $(USPARK_TOOLSDIR) && $(CP) -f umfcommon.ml uhwm/.
-	cd $(USPARK_TOOLSDIR)/uhwm && $(MAKE) -w all
-	cd $(USPARK_TOOLSDIR) && $(CP) -f umfcommon.ml uccomp/.
-	cd $(USPARK_TOOLSDIR)/uccomp && $(MAKE) -w all
+	cd $(USPARK_TOOLSDIR) && $(MAKE) -w all
 	
 
 .PHONY: install-tools
@@ -65,13 +55,7 @@ install: install-tools install-hdrs install-hwm
 
 .PHONY: clean
 clean:
-	cd $(USPARK_TOOLSDIR) && $(MAKE) -f umf.mk -w clean
-	cd $(USPARK_TOOLSDIR) && $(MAKE) -f ubp.mk -w clean
-	cd $(USPARK_TOOLSDIR) && $(MAKE) -f uccomp.mk -w clean
-	cd $(USPARK_TOOLSDIR) && $(MAKE) -f ucasm.mk -w clean
-	cd $(USPARK_TOOLSDIR) && $(MAKE) -f uhwm.mk -w clean
-	cd $(USPARK_TOOLSDIR) && $(RM) *_DEP
-	cd $(USPARK_TOOLSDIR) && $(RM) ubersparkconfig ubersparkconfig.cmi ubersparkconfig.cmo
+	cd $(USPARK_TOOLSDIR) && $(MAKE) -w clean
 	
 
 # http://www.gnu.org/software/automake/manual/automake.html#Clean
