@@ -191,6 +191,9 @@ source-tree (where this README.md resides):
 
 ## Releases and Changelog
 
+* Version 4.0 (Alpha Prime)
+	* first stand-alone uberspark release
+
 * Version 3.1 (Flak)
 	* fixed uxmhf build errors
 
