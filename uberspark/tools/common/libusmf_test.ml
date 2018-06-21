@@ -15,12 +15,13 @@ let main () =
 		if len = 3 then
 	    	begin
 					let uobj_mf_filename = ref "" in
-					let uobj_id = ref 0 in
+					let uobj_id = ref "" in
 						uobj_mf_filename := Sys.argv.(1);
-						uobj_id := int_of_string(Sys.argv(2));
+						uobj_id := Sys.argv.(2);
 						Uslog.logf "libusmf_test" Uslog.Info "uobj manifest file: %s" !uobj_mf_filename;
-						Uslog.logf "libusmf_test" Uslog.Info "uobj id=%u\n" !uobj_id;
+						Uslog.logf "libusmf_test" Uslog.Info "uobj id=%s\n" !uobj_id;
 						(* parse manifest *)
+						Libusmf.dbg_dump_string !uobj_mf_filename;
 						Uslog.logf "libusmf_test" Uslog.Info "All done!\n";
 				end
 		else
