@@ -21,6 +21,9 @@ let slab_idtodir = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtogsm = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtommapfile = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
+let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+
 
 (*
 	**************************************************************************
@@ -100,6 +103,60 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 ;;
 
 
+let usmf_populate_uobj_callmasks uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			
+			let uobj_0_callees = uobj_0 |> member "uobj-callees" |> to_string in
+			let uobj_0_callees_list = (Str.split (Str.regexp "[ \r\n\t]+") uobj_0_callees) in
+				begin
+					while (!i < (List.length uobj_0_callees_list)) do
+						begin
+		            let tag_s_destslabname = (trim (List.nth uobj_0_callees_list !i)) in
+		            let tag_s_mask = ref 0 in
+									Uslog.logf "libusmf" Uslog.Info "destslabname=%s, id=%d\n" tag_s_destslabname (Hashtbl.find slab_nametoid tag_s_destslabname);
+		            	
+		            	if (Hashtbl.mem slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname)) then
+		            		begin
+		            			tag_s_mask := Hashtbl.find slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname);
+		            			tag_s_mask := !tag_s_mask lor (1 lsl uobj_id);
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            		end
+		            	else
+		            		begin
+		            			tag_s_mask := (1 lsl uobj_id);
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            		end
+		            	;
+		            
+		            	if (Hashtbl.mem slab_idtocalleemask uobj_id) then
+		            		begin
+		            			tag_s_mask := Hashtbl.find slab_idtocalleemask uobj_id;
+		            			tag_s_mask := !tag_s_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
+		            		end
+		            	else
+		            		begin
+		            			tag_s_mask := (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
+		            		end
+		            	;
+							
+							i := !i + 1;
+						end
+					done;
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "usmf_populate_uobj_callmasks: ERROR in parsing manifest!";
+	;
+
+;;
+
+
 
 (*
 	**************************************************************************
@@ -117,7 +174,8 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_id =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 			usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
-	
+			usmf_populate_uobj_callmasks uobj_entry uobj_id;
+
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
