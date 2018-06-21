@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -package unix -package str -package yojson -package uslog	-o libusmf.o unix.cma libusmf.ml
+	$(OCAMLC) -package unix -package str -package yojson -package uslog	-linkpkg -o libusmf.o libusmf.ml
 	ocamlfind remove libusmf 
 	ocamlfind install libusmf META libusmf.cmi libusmf.cmo libusmf.o 
 

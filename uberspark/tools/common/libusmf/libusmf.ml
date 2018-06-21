@@ -19,9 +19,8 @@ module Libusmf =
 	debugging related
 	**************************************************************************
 *)
-	let dbg_dump_string string_value =
-  	(* Uslog.logf "test" Uslog.Info "string value: %s" string_value *)
-		print_string "["
+let dbg_dump_string string_value =
+  	Uslog.logf "test" Uslog.Info "string value: %s" string_value
 		
 (*
 (*
