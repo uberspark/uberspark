@@ -22,7 +22,7 @@ module Libusmf =
 let dbg_dump_string string_value =
   	Uslog.logf "test" Uslog.Info "string value: %s" string_value
 		
-(*
+
 (*
 	**************************************************************************
 	helper interfaces
@@ -88,7 +88,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_id =
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
 	;
-*)
+
 
 end
 

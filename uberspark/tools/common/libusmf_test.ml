@@ -21,7 +21,7 @@ let main () =
 						Uslog.logf "libusmf_test" Uslog.Info "uobj manifest file: %s" !uobj_mf_filename;
 						Uslog.logf "libusmf_test" Uslog.Info "uobj id=%s\n" !uobj_id;
 						(* parse manifest *)
-						Libusmf.dbg_dump_string !uobj_mf_filename;
+						Libusmf.usmf_parse_uobj_mf !uobj_mf_filename 0;
 						Uslog.logf "libusmf_test" Uslog.Info "All done!\n";
 				end
 		else
