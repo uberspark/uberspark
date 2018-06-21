@@ -83,7 +83,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_id =
 
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
-			Uslog.logf "libusmf" Uslog.Info "wip!";
+			Uslog.logf "libusmf" Uslog.Info "name=%s, id=%u" uobj_mf_filename uobj_id;
 												
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
