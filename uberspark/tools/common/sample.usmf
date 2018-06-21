@@ -1,5 +1,8 @@
 {
-	"ns": "uobj",
+	"uobj-name": "test",
+	"uobj-type": "1",
+	"uobj-subtype": "1",
+	
 	"c-files":	"a1.c
 				 a2.c
 				 a3.c
