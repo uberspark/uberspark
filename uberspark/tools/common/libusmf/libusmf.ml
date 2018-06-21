@@ -164,6 +164,25 @@ let usmf_populate_uobj_callmasks uobj_entry uobj_id =
 	**************************************************************************
 *)
 
+(* parse uobj list file specified by uobj_list_filename and generate the *)
+(* required mappings from uobj name to uobj id and vice versa *)
+let usmf_parse_uobj_list uobj_list_filename = 
+	try
+
+	(* read the uobj list JSON *)
+  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
+	  (* Locally open the JSON manipulation functions *)
+	  let open Yojson.Basic.Util in
+			usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
+			usmf_populate_uobj_callmasks uobj_entry uobj_id;
+
+	with Yojson.Json_error s -> 
+		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
+	;
+
+
+
+
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
 let usmf_parse_uobj_mf uobj_mf_filename uobj_id = 
