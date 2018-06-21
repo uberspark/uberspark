@@ -72,27 +72,12 @@ let rec myMap ~f l = match l with
 	**************************************************************************
 *)
 
-
-
-(*
-	**************************************************************************
-	main interfaces
-	**************************************************************************
-*)
-
-(* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
-(* indexed by uobj_id*)
-let usmf_parse_uobj_mf uobj_mf_filename uobj_id = 
+let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id = 
 	try
-
-		(* read the manifest JSON *)
-  let json = Yojson.Basic.from_file uobj_mf_filename in
-
-	  (* Locally open the JSON manipulation functions *)
-	  let open Yojson.Basic.Util in
-		 	let uobj_name = json |> member "uobj-name" |> to_string in
-		 	let uobj_type = json |> member "uobj-type" |> to_string in
-		 	let uobj_subtype = json |> member "uobj-subtype" |> to_string in
+		 	let open Yojson.Basic.Util in
+		 	let uobj_name = uobj_entry |> member "uobj-name" |> to_string in
+		 	let uobj_type = uobj_entry |> member "uobj-type" |> to_string in
+		 	let uobj_subtype = uobj_entry |> member "uobj-subtype" |> to_string in
 			let uobj_dir = (Filename.dirname uobj_mf_filename) in
     	let uobj_mmapfile = uobj_dir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap" in
 
@@ -106,6 +91,32 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_id =
 				Hashtbl.add slab_idtodir uobj_id uobj_dir;
 				Hashtbl.add slab_idtogsm uobj_id uobj_mf_filename;
 				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;
+
+
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "usmf_populate_uobj_base_characteristics: ERROR in parsing manifest!";
+	;
+
+;;
+
+
+
+(*
+	**************************************************************************
+	main interfaces
+	**************************************************************************
+*)
+
+(* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
+(* indexed by uobj_id*)
+let usmf_parse_uobj_mf uobj_mf_filename uobj_id = 
+	try
+
+	(* read the manifest JSON *)
+  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
+	  (* Locally open the JSON manipulation functions *)
+	  let open Yojson.Basic.Util in
+			usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
 	
 	with Yojson.Json_error s -> 
 		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
