@@ -1,10 +1,9 @@
 {
-	"uobj-name": "test",
+	"uobj-name": "uobj1",
 	"uobj-type": "1",
 	"uobj-subtype": "1",
 
-	"uobj-callees": "uobj1
-					 uobj2
+	"uobj-callees": "uobj2
 					 uobj3
 					",
 	
