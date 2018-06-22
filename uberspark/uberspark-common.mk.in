@@ -35,9 +35,9 @@ export CAT = @CAT@
 
 
 ###### release variables
-export USPARK_RELEASE_VERSION_MAJOR	:= 3
-export USPARK_RELEASE_VERSION_MINOR := 1
-export USPARK_RELEASE_CODENAME := Flak
+export USPARK_RELEASE_VERSION_MAJOR	:= 4
+export USPARK_RELEASE_VERSION_MINOR := 0
+export USPARK_RELEASE_CODENAME := Alpha Prime
 
 
 ###### install paths
