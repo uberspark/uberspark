@@ -1,42 +1,6 @@
 {
-	"uobjs": [
-		{	
-			"name": "uobj1", 
-			"dir": "../uobj1",
-			"type": "1",
-			"subtype": "1",
-			"uobj-callees": "
-				uobj1
-				uobj2
-				",
-			"uobj-uapifn":[
-	    		{ 
-	    			"uobj-name": "uobj2",
-	    			"fnid": "0xa", 
-	    			"opt1" : "void {}",
-	    			"opt2" : "(1)" 
-	    		},
-	    		{ 
-	    			"uobj-name": "uobj2",
-	    			"fnid": "0xb", 
-	    			"opt1" : "void {}",
-	    			"opt2" : "(1)" 
-	    		}
-			]	
-		},
-		
-		{	
-			"name": "uobj2", 
-			"dir": "../uobj2",
-			"type": "1",
-			"subtype": "1",
-			"uobj-callees": "
-				uobj1
-				",
-			"uobj-uapifn":[
-			]	
-			
-		}
-		
-	]
+	"uobj-list": 	"	uobj1
+				 		uobj2
+						uobj3
+					"
 }

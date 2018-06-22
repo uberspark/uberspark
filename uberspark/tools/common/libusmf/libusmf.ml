@@ -12,6 +12,9 @@ module Libusmf =
 	global variables
 	**************************************************************************
 *)
+let g_totalslabs = ref 0;;
+
+
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtotype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtosubtype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -156,6 +159,13 @@ let usmf_populate_uobj_callmasks uobj_entry uobj_id =
 
 ;;
 
+let do_action_on_uobj_list uobj_name =
+  Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
+	Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
+	Uslog.logf "libusmf" Uslog.Info "Added uobj:%s with index=%u" uobj_name !g_totalslabs;
+	g_totalslabs := !g_totalslabs + 1;
+
+;;
 
 
 (*
@@ -170,34 +180,41 @@ let usmf_parse_uobj_list uobj_list_filename =
 	try
 
 	(* read the uobj list JSON *)
-  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
+  let json = Yojson.Basic.from_file uobj_list_filename in
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
-			usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
-			usmf_populate_uobj_callmasks uobj_entry uobj_id;
-
+	  	let uobj_list = json |> member "uobj-list" |> to_string in
+			let uobj_list_trimmed = ref [""] in
+				uobj_list_trimmed := (Str.split (Str.regexp "[ \r\n\t]+") uobj_list);
+				List.iter do_action_on_uobj_list !uobj_list_trimmed;
+			
 	with Yojson.Json_error s -> 
-		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
+		Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 	;
 
-
+;;
 
 
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
 let usmf_parse_uobj_mf uobj_mf_filename uobj_id = 
-	try
-
-	(* read the manifest JSON *)
-  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
-	  (* Locally open the JSON manipulation functions *)
-	  let open Yojson.Basic.Util in
-			usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
-			usmf_populate_uobj_callmasks uobj_entry uobj_id;
-
-	with Yojson.Json_error s -> 
-		Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
-	;
+	if !g_totalslabs > 0 then
+		begin
+			try
+		
+			(* read the manifest JSON *)
+		  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
+			  (* Locally open the JSON manipulation functions *)
+			  let open Yojson.Basic.Util in
+					usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
+					usmf_populate_uobj_callmasks uobj_entry uobj_id;
+		
+			with Yojson.Json_error s -> 
+				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
+			;
+		end
+		;
+;;
 
 
 end
