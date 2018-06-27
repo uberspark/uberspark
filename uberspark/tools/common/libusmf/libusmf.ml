@@ -42,6 +42,9 @@ let slab_idtordexclentries = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtordinclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtordexclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
+let slab_idtomemgrantreadcaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtomemgrantwritecaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+
 
 (*
 	**************************************************************************
@@ -389,6 +392,79 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 
 
 
+let usmf_populate_uobj_resource_memory uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: uobj_id=%u" uobj_id;
+
+			let uobj_0_mem = uobj_0 |> member "uobj-resource-memory" |> to_list in
+			let uobj_0_mem_accesstype = myMap uobj_0_mem ~f:(fun uobj_0 -> member "access-type" uobj_0 |> to_string) in 
+  		let uobj_0_mem_uobj_name = myMap uobj_0_mem ~f:(fun uobj_0 -> member "uobj-name" uobj_0 |> to_string) in 
+				begin
+					while (!i < (List.length uobj_0_mem)) do
+						begin
+		            let tag_rm_qual =  (trim (List.nth uobj_0_mem_accesstype !i)) in
+		            let tag_rm_slabname =  (trim (List.nth uobj_0_mem_uobj_name !i)) in
+    						let tag_rm_mask = ref 0 in
+    
+    						if (compare tag_rm_qual "read") = 0 then 
+    							begin
+					                if (Hashtbl.mem slab_idtomemgrantreadcaps uobj_id) then
+					                	begin
+						                    tag_rm_mask := Hashtbl.find slab_idtomemgrantreadcaps uobj_id; 
+						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    Hashtbl.add slab_idtomemgrantreadcaps uobj_id !tag_rm_mask;
+					                	end
+					                else
+					                	begin
+						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    Hashtbl.add slab_idtomemgrantreadcaps uobj_id !tag_rm_mask;
+					                	end
+					                ;
+    							end
+    						else if (compare tag_rm_qual "write") = 0 then
+    							begin
+					                if (Hashtbl.mem slab_idtomemgrantwritecaps uobj_id) then
+					                	begin
+						                    tag_rm_mask := Hashtbl.find slab_idtomemgrantwritecaps uobj_id; 
+						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    Hashtbl.add slab_idtomemgrantwritecaps uobj_id !tag_rm_mask;
+					                	end
+					                else
+					                	begin
+						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    Hashtbl.add slab_idtomemgrantwritecaps uobj_id !tag_rm_mask;
+					                	end
+					                ;
+    							end
+    						else 
+       							begin
+					            	Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory:Error: Illegal RM entry qualifier: %s\n" tag_rm_qual;
+				                ignore(exit 1);
+    							end
+    						;
+			            
+								i := !i + 1;
+						end
+					done;
+					
+          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: readcaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantreadcaps uobj_id);
+          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: writecaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantwritecaps uobj_id);
+
+					
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: ERROR in parsing manifest!";
+	;
+
+;;
+
+
 (*
 	**************************************************************************
 	main interfaces
@@ -447,6 +523,7 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
+						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
 						
 		with Yojson.Json_error s -> 
 				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";

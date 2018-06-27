@@ -36,6 +36,20 @@
 		}
 	],	
 
+	"uobj-resource-memory":[
+		{ 
+			"access-type": "read",
+			"uobj-name": "uobj2"
+		},
+		{ 
+			"access-type": "write",
+			"uobj-name": "uobj2"
+		},
+		{ 
+			"access-type": "read",
+			"uobj-name": "uobj3"
+		}
+	],	
 
 	
 	"c-files":	"a1.c
