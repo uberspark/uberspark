@@ -37,6 +37,12 @@ let uapi_fndef  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 let uapi_fndrvcode  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
 
+let slab_idtordinclentries = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtordexclentries = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtordinclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtordexclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+
+
 (*
 	**************************************************************************
 	debugging related
@@ -340,6 +346,33 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 								i := !i + 1;
 						end
 					done;
+					
+		    	if !slab_rdinclcount = 0 then
+    				begin
+        			slab_rdinclentriesstring := !slab_rdinclentriesstring ^ "0 \n}, \n";
+    				end
+    			else
+    				begin
+        			slab_rdinclentriesstring := !slab_rdinclentriesstring ^ "}, \n";
+    				end
+    			;
+    	
+    			if !slab_rdexclcount = 0 then
+    				begin
+        			slab_rdexclentriesstring := !slab_rdexclentriesstring ^ "0 \n}, \n";
+    				end
+    			else	
+    				begin
+        			slab_rdexclentriesstring := !slab_rdexclentriesstring ^ "}, \n";
+    				end
+    			;
+
+    			Hashtbl.add slab_idtordinclentries uobj_id !slab_rdinclentriesstring;
+    			Hashtbl.add slab_idtordexclentries uobj_id !slab_rdexclentriesstring;
+    			Hashtbl.add slab_idtordinclcount uobj_id !slab_rdinclcount;
+    			Hashtbl.add slab_idtordexclcount uobj_id !slab_rdexclcount;
+
+					
 				end
 
 	
