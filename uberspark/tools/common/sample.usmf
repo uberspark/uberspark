@@ -51,6 +51,25 @@
 		}
 	],	
 
+	"uobj-binary-sections":[
+		{ 
+			"section-name": "code",
+			"section-size": "4096"
+		},
+		{ 
+			"section-name": "data",
+			"section-size": "4096"
+		},
+		{ 
+			"section-name": "stack",
+			"section-size": "4096"
+		},
+		{ 
+			"section-name": "dmadata",
+			"section-size": "4096"
+		}
+	],	
+
 	
 	"c-files":	"a1.c
 				 a2.c

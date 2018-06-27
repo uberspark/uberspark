@@ -45,6 +45,11 @@ let slab_idtordexclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtomemgrantreadcaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtomemgrantwritecaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
+let slab_idtodatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtocodesize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtostacksize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtodmadatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+
 
 (*
 	**************************************************************************
@@ -465,6 +470,65 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 ;;
 
 
+let usmf_populate_uobj_binary_sections uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%u" uobj_id;
+
+			let uobj_0_bs = uobj_0 |> member "uobj-binary-sections" |> to_list in
+			let uobj_0_bs_section_name = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-name" uobj_0 |> to_string) in 
+  		let uobj_0_bs_section_size = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-size" uobj_0 |> to_string) in 
+				begin
+					while (!i < (List.length uobj_0_bs)) do
+						begin
+		            let tag_ms_qual =  (trim (List.nth uobj_0_bs_section_name !i)) in
+		            let tag_ms_size =  int_of_string (trim (List.nth uobj_0_bs_section_size !i)) in
+            
+     						if (compare tag_ms_qual "data") = 0 then 
+    							begin
+					                Hashtbl.add slab_idtodatasize uobj_id tag_ms_size;
+    							end
+    						else if (compare tag_ms_qual "code") = 0 then
+    							begin
+            						Hashtbl.add slab_idtocodesize uobj_id tag_ms_size;
+    							end
+    						else if (compare tag_ms_qual "stack") = 0 then
+    							begin
+        							Hashtbl.add slab_idtostacksize uobj_id tag_ms_size;
+    							end
+    						else if (compare tag_ms_qual "dmadata") = 0 then
+    							begin
+        							Hashtbl.add slab_idtodmadatasize uobj_id tag_ms_size;
+    							end
+    						else
+    							begin
+										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: Error: Illegal MS entry qualifier: %s\n" tag_ms_qual;
+					          ignore(exit 1);
+    							end
+    						;
+  
+								i := !i + 1;
+						end
+					done;
+					
+        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d code size:=%u\n" uobj_id (Hashtbl.find slab_idtocodesize uobj_id);
+        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d data size:=%u\n" uobj_id (Hashtbl.find slab_idtodatasize uobj_id);
+        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d stack size:=%u\n" uobj_id (Hashtbl.find slab_idtostacksize uobj_id);
+        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d dmadata size:=%u\n" uobj_id (Hashtbl.find slab_idtodmadatasize uobj_id);
+					
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: ERROR in parsing manifest!";
+	;
+
+;;
+
+
 (*
 	**************************************************************************
 	main interfaces
@@ -524,7 +588,8 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
-						
+						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
+												
 		with Yojson.Json_error s -> 
 				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 			;
