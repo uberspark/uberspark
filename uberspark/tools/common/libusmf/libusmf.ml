@@ -168,6 +168,22 @@ let do_action_on_uobj_list uobj_name =
 ;;
 
 
+let usmf_get_uobj_id uobj_name =
+	let uobj_id = ref 0 in
+		if (Hashtbl.mem slab_nametoid uobj_name) then
+			begin
+				uobj_id := Hashtbl.find slab_nametoid uobj_name;
+			end
+		else
+			begin
+				uobj_id := -1;
+			end
+		;
+		
+		!uobj_id;
+;;
+
+
 (*
 	**************************************************************************
 	main interfaces
@@ -197,7 +213,7 @@ let usmf_parse_uobj_list uobj_list_filename =
 
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
-let usmf_parse_uobj_mf uobj_mf_filename uobj_id = 
+let usmf_parse_uobj_mf uobj_mf_filename = 
 	if !g_totalslabs > 0 then
 		begin
 			try
@@ -206,11 +222,22 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_id =
 		  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
 			  (* Locally open the JSON manipulation functions *)
 			  let open Yojson.Basic.Util in
-					usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename uobj_id;
-					usmf_populate_uobj_callmasks uobj_entry uobj_id;
+			  	let uobj_name = uobj_entry |> member "uobj-name" |> to_string in
+					let uobj_id = ref 0 in
+						uobj_id := (usmf_get_uobj_id uobj_name);
+						if(!uobj_id = -1) then
+							begin
+								Uslog.logf "libusmf" Uslog.Info "ERROR in obtaining uobj id";
+								ignore(exit 1);
+							end
+						;
+						Uslog.logf "libusmf" Uslog.Info "uobj-name=%s" uobj_name;
+						Uslog.logf "libusmf" Uslog.Info "uobj-id=%d" !uobj_id;
+						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
+						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
 		
 			with Yojson.Json_error s -> 
-				Uslog.logf "test" Uslog.Info "ERROR in parsing manifest!";
+				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 			;
 		end
 		;
