@@ -367,6 +367,11 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
     				end
     			;
 
+					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d; inclentries=%s\n" uobj_id !slab_rdinclentriesstring;
+					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d; exclentries=%s\n" uobj_id !slab_rdexclentriesstring;
+					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d; inclcount=%d\n" uobj_id !slab_rdinclcount;
+					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d; exclcount=%d\n" uobj_id !slab_rdexclcount;
+
     			Hashtbl.add slab_idtordinclentries uobj_id !slab_rdinclentriesstring;
     			Hashtbl.add slab_idtordexclentries uobj_id !slab_rdexclentriesstring;
     			Hashtbl.add slab_idtordinclcount uobj_id !slab_rdinclcount;
@@ -441,7 +446,8 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
-
+						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
+						
 		with Yojson.Json_error s -> 
 				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 			;
