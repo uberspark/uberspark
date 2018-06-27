@@ -7,7 +7,7 @@
 					 uobj3
 					",
 
-	"uobj-uapifunctions":[
+	"uobj-uapicallees":[
 		{ 
 			"uobj-name": "uobj2",
 			"uobj-uapifunctionid": "0xa", 

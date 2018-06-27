@@ -215,7 +215,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 			
 			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
 
-			let uobj_0_uapifn = uobj_0 |> member "uobj-uapifunctions" |> to_list in
+			let uobj_0_uapifn = uobj_0 |> member "uobj-uapicallees" |> to_list in
 			let uobj_0_uapifn_uobjname = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "uobj-name" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "uobj-uapifunctionid" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt1 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
