@@ -197,11 +197,11 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 			let uobj_0 = uobj_entry in 
 			let i = ref 0 in
 			
-			Uslog.logf "test" Uslog.Info "populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
 
-			let uobj_0_uapifn = uobj_0 |> member "uobj-uapifn" |> to_list in
+			let uobj_0_uapifn = uobj_0 |> member "uobj-uapifunctions" |> to_list in
 			let uobj_0_uapifn_uobjname = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "uobj-name" uobj_0 |> to_string) in 
-  		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "fnid" uobj_0 |> to_string) in 
+  		let uobj_0_uapifn_id = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "uobj-uapifunctionid" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt1 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
   		let uobj_0_uapifn_opt2 = myMap uobj_0_uapifn ~f:(fun uobj_0 -> member "opt2" uobj_0 |> to_string) in 
 				begin
@@ -217,7 +217,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 									let tag_u_uapikey = ref "" in
 									let tag_u_tempstr = ref "" in
 
-										Uslog.logf "test" Uslog.Info "populate_uobj_uapicallmasks: processing entry %u" !i;
+										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: processing entry %u" !i;
 
 										if (Hashtbl.mem slab_idtouapifnmask tag_u_destslabid) then
 											begin
@@ -234,7 +234,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 
 										(* make key *)
 										tag_u_uapikey := tag_u_destslabname ^ "_" ^ (trim (List.nth uobj_0_uapifn_id !i));
-										Uslog.logf "test" Uslog.Info "uapi key = %s\n" !tag_u_uapikey;
+										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks:uapi key = %s\n" !tag_u_uapikey;
 										if (Hashtbl.mem uapi_fnccomppre !tag_u_uapikey) then
 											begin
 											tag_u_tempstr := (Hashtbl.find uapi_fnccomppre !tag_u_uapikey);
@@ -246,7 +246,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 											end
 										;
 
-										Uslog.logf "test" Uslog.Info "uapi fnccomppre =%s\n" (Hashtbl.find uapi_fnccomppre !tag_u_uapikey);
+										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks:uapi fnccomppre =%s\n" (Hashtbl.find uapi_fnccomppre !tag_u_uapikey);
 
 										if (Hashtbl.mem uapi_fnccompasserts !tag_u_uapikey) then
 											begin
@@ -259,7 +259,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 											end
 										;
 
-										Uslog.logf "test" Uslog.Info "uapi fnccompasserts =%s\n" (Hashtbl.find uapi_fnccompasserts !tag_u_uapikey);
+										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks:uapi fnccompasserts =%s\n" (Hashtbl.find uapi_fnccompasserts !tag_u_uapikey);
 
 								i := !i + 1;
 						end
@@ -268,7 +268,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 
 	
 	with Yojson.Json_error s -> 
-			Uslog.logf "test" Uslog.Info "populate_uobj_characteristics: ERROR in parsing manifest!";
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: ERROR in parsing manifest!";
 	;
 
 ;;
@@ -326,8 +326,9 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						Uslog.logf "libusmf" Uslog.Info "uobj-id=%d" !uobj_id;
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
-		
-			with Yojson.Json_error s -> 
+						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
+
+		with Yojson.Json_error s -> 
 				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 			;
 		end

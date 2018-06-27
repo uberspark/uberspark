@@ -6,6 +6,22 @@
 	"uobj-callees": "uobj2
 					 uobj3
 					",
+
+	"uobj-uapifunctions":[
+		{ 
+			"uobj-name": "uobj2",
+			"uobj-uapifunctionid": "0xa", 
+			"opt1" : "void {}",
+			"opt2" : "(1)" 
+		},
+		{ 
+			"uobj-name": "uobj2",
+			"uobj-uapifunctionid": "0xb", 
+			"opt1" : "void {}",
+			"opt2" : "(1)" 
+		}
+	],	
+
 	
 	"c-files":	"a1.c
 				 a2.c
