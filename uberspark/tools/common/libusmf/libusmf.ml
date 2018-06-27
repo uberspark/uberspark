@@ -26,6 +26,11 @@ let slab_idtodir = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtogsm = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtommapfile = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
+
+let uapi_fndef  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let uapi_fndrvcode  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+
+
 let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
@@ -33,8 +38,6 @@ let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let uapi_fnccomppre = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 let uapi_fnccompasserts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
-let uapi_fndef  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
-let uapi_fndrvcode  = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
 
 let slab_idtordinclentries = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -124,6 +127,62 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 
 	with Yojson.Json_error s -> 
 			Uslog.logf "test" Uslog.Info "usmf_populate_uobj_base_characteristics: ERROR in parsing manifest!";
+	;
+
+;;
+
+
+let usmf_populate_uobj_uapifunctions uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: uobj_id=%u" uobj_id;
+
+			let uobj_0_uapifunctions = uobj_0 |> member "uobj-uapifunctions" |> to_list in
+			let uobj_0_uapifn_id = myMap uobj_0_uapifunctions ~f:(fun uobj_0 -> member "uapifunction-id" uobj_0 |> to_string) in 
+			let uobj_0_uapifn_def = myMap uobj_0_uapifunctions ~f:(fun uobj_0 -> member "uapifunction-definition" uobj_0 |> to_string) in 
+			let uobj_0_uapifn_drivercode = myMap uobj_0_uapifunctions ~f:(fun uobj_0 -> member "uapifunction-drivercode" uobj_0 |> to_string) in 
+				begin
+					while (!i < (List.length uobj_0_uapifunctions)) do
+						begin
+							let tag_ufn_uapifnid =  (trim (List.nth uobj_0_uapifn_id !i)) in
+							let tag_ufn_uapifndef =  (trim (List.nth uobj_0_uapifn_def !i)) in
+							let tag_ufn_uapifndrvcode =  (trim (List.nth uobj_0_uapifn_drivercode !i)) in
+							let tag_ufn_uapikey = ref "" in
+									
+							(* uapi function definition tag, should only appear in uapi slabs *)
+							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "uapi") = 0 then
+								begin
+									
+									(* make key *)
+									tag_ufn_uapikey := (Hashtbl.find slab_idtoname uobj_id) ^ "_" ^ tag_ufn_uapifnid;
+									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: uapi key = %s \n" !tag_ufn_uapikey;
+									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: uapi fndef = %s \n" tag_ufn_uapifndef;
+									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: uapi fndrvcode = %s \n" tag_ufn_uapifndrvcode;
+						
+			            Hashtbl.add uapi_fndef !tag_ufn_uapikey tag_ufn_uapifndef; (* store uapi function definition indexed by uapi_key *)
+			            Hashtbl.add uapi_fndrvcode !tag_ufn_uapikey tag_ufn_uapifndrvcode; (* store uapi function driver code by uapi_key *)
+
+								end
+							else
+								begin
+									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: Error: Illegal UFN tag; slab is not a uapi slab!\n";
+       						ignore(exit 1);
+								end
+							;
+
+							i := !i + 1;
+						end
+					done;
+					
+					
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapifunctions: ERROR in parsing manifest!";
 	;
 
 ;;
@@ -584,6 +643,7 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						g_maxexcldevlistentries := 64;
 
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
+						usmf_populate_uobj_uapifunctions uobj_entry !uobj_id;
 						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
