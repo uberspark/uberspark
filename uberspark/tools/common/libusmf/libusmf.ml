@@ -13,6 +13,8 @@ module Libusmf =
 	**************************************************************************
 *)
 let g_totalslabs = ref 0;;
+let g_maxincldevlistentries = ref 0;; 
+let g_maxexcldevlistentries = ref 0;; 
 
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -275,6 +277,80 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 
 
 
+let usmf_populate_uobj_resource_devices uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+			let slab_rdinclcount = ref 0 in
+			let slab_rdexclcount = ref 0 in
+			let slab_rdinclentriesstring = ref "" in
+			let slab_rdexclentriesstring = ref "" in
+			
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_devices: uobj_id=%u" uobj_id;
+			slab_rdinclentriesstring := !slab_rdinclentriesstring ^ "{ \n";
+    	slab_rdexclentriesstring := !slab_rdexclentriesstring ^ "{ \n";
+
+			let uobj_0_devices = uobj_0 |> member "uobj-resource-devices" |> to_list in
+			let uobj_0_device_type = myMap uobj_0_devices ~f:(fun uobj_0 -> member "type" uobj_0 |> to_string) in 
+  		let uobj_0_device_opt1 = myMap uobj_0_devices ~f:(fun uobj_0 -> member "opt1" uobj_0 |> to_string) in 
+  		let uobj_0_device_opt2 = myMap uobj_0_devices ~f:(fun uobj_0 -> member "opt2" uobj_0 |> to_string) in 
+				begin
+					while (!i < (List.length uobj_0_devices)) do
+						begin
+			            let tag_rd_qual =  (trim (List.nth uobj_0_device_type !i)) in
+									let tag_rd_vid =  (trim (List.nth uobj_0_device_opt1 !i)) in
+			            let tag_rd_did =  (trim (List.nth uobj_0_device_opt2 !i)) in 
+	    
+		    						if (compare tag_rd_qual "include") = 0 then 
+		    							begin
+		
+							                if (!slab_rdinclcount >= !g_maxincldevlistentries) then 
+							                	begin
+							                		Uslog.logf "libusmf" Uslog.Info "Error: Too many RD INCL entries (max=%d)\n" !g_maxincldevlistentries;
+								                  ignore(exit 1);
+							                	end
+							                ;
+							                
+							                slab_rdinclentriesstring := !slab_rdinclentriesstring ^ "\t{ .vendor_id= " ^ tag_rd_vid ^ ", .device_id= " ^ tag_rd_did ^ " },\n";
+							                slab_rdinclcount := !slab_rdinclcount + 1;
+											            							
+		    							end
+		    						else if (compare tag_rd_qual "exclude") = 0  then
+		    							begin
+		
+							                if (!slab_rdexclcount >= !g_maxexcldevlistentries) then
+							                	begin
+							                    	Uslog.logf "libusmf" Uslog.Info "Error: Too many RD EXCL entries (max=%d)\n" !g_maxexcldevlistentries;
+							                    	ignore (exit 1);
+							                    end
+							                ;
+		
+							                slab_rdexclentriesstring := !slab_rdexclentriesstring ^ "\t{ .vendor_id= " ^ tag_rd_vid ^ ", .device_id= " ^ tag_rd_did ^ " },\n";
+							                slab_rdexclcount := !slab_rdexclcount + 1;
+											            							
+		    							end
+		    						else
+		    							begin
+		    								Uslog.logf "libusmf" Uslog.Info "Error: Illegal RD entry qualifier: %s\n" tag_rd_qual;
+		    								ignore(exit 1);
+		    							end
+		    						;
+
+								i := !i + 1;
+						end
+					done;
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_devices: ERROR in parsing manifest!";
+	;
+
+;;
+
+
+
 (*
 	**************************************************************************
 	main interfaces
@@ -324,6 +400,11 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						;
 						Uslog.logf "libusmf" Uslog.Info "uobj-name=%s" uobj_name;
 						Uslog.logf "libusmf" Uslog.Info "uobj-id=%d" !uobj_id;
+						(* g_maxincldevlistentries := int_of_string (Cmdopt_maxincldevlistentries.get()); *)
+						(* g_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
+						g_maxincldevlistentries := 64;
+						g_maxexcldevlistentries := 64;
+
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_callmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;

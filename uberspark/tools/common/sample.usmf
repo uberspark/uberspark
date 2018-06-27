@@ -22,6 +22,21 @@
 		}
 	],	
 
+
+	"uobj-resource-devices":[
+		{ 
+			"type": "include",
+			"opt1" : "0xdead",
+			"opt2" : "0xbeef" 
+		},
+		{ 
+			"type": "include",
+			"opt1" : "0xf00d",
+			"opt2" : "0xdead" 
+		}
+	],	
+
+
 	
 	"c-files":	"a1.c
 				 a2.c
