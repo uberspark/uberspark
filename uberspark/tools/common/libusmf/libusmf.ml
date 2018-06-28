@@ -118,8 +118,11 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 		 	let uobj_name = uobj_entry |> member "uobj-name" |> to_string in
 		 	let uobj_type = uobj_entry |> member "uobj-type" |> to_string in
 		 	let uobj_subtype = uobj_entry |> member "uobj-subtype" |> to_string in
-			let uobj_dir = (Filename.dirname uobj_mf_filename) in
-    	let uobj_mmapfile = uobj_dir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap" in
+			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
+			let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
+			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
+			let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+
 
 				Uslog.logf "libusmf" Uslog.Info "uobj-name:%s" uobj_name;
 				Uslog.logf "libusmf" Uslog.Info "uobj-type:%s" uobj_type;
@@ -129,7 +132,7 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 				Hashtbl.add slab_idtosubtype uobj_id uobj_subtype;
 				Hashtbl.add slab_nametoid uobj_name uobj_id;
 				Hashtbl.add slab_idtodir uobj_id uobj_dir;
-				Hashtbl.add slab_idtogsm uobj_id uobj_mf_filename;
+				Hashtbl.add slab_idtogsm uobj_id uobj_gsmfile;
 				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;
 
 
@@ -779,7 +782,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
-	          if (!usmf_memoffsets) then 
+	          if (!usmf_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !uobj_id) "XRICHGUEST") <> 0) ) then
 							begin
 								usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
 								usmf_populate_uobj_export_functions uobj_entry !uobj_id;
@@ -799,9 +802,29 @@ let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
 	usmf_memoffsets := g_memoffsets;
 	usmf_rootdir := g_rootdir;	 
 	usmf_parse_uobj_list uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B\n" !usmf_memoffsets;
-	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s\n" uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s\n" !usmf_rootdir;
+	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B" !usmf_memoffsets;
+	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" !usmf_rootdir;
+
+	let i = ref 0 in
+		(* now iterate through all the slab id's and populate callmask and uapimasks *)
+		i := 0;
+		while (!i < !g_totalslabs) do
+	    	begin
+					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d" !i;      			
+					Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabname=%s" (Hashtbl.find slab_idtoname !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabtype=%s" (Hashtbl.find slab_idtotype !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabgsmfile=%s" (Hashtbl.find slab_idtogsm !i);      			
+					Uslog.logf "libusmf" Uslog.Info "  slabmmapfile=%s" (Hashtbl.find slab_idtommapfile !i);      			
+			
+				usmf_parse_uobj_mf (Hashtbl.find slab_idtogsm !i) (Hashtbl.find slab_idtommapfile !i);
+
+    		i := !i + 1;
+			end
+		done;
 
 ;;
 
