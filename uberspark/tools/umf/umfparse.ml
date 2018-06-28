@@ -184,7 +184,9 @@ let umf_process_cmdline () =
 
 let umf_process_cmdline () =
 	let len = Array.length Sys.argv in
-		if len = 11 then
+		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u\n" len;
+
+		if len = 12 then
 	    	begin
 					g_slabsfile := Sys.argv.(1);
 					g_uobjconfigurescript := Sys.argv.(2);
@@ -652,17 +654,10 @@ let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...";
+	umf_process_cmdline ();
 
-	let len = Array.length Sys.argv in
-		if len = 4 then
-	    	begin
-				end
-		else
-				begin
-					Uslog.logf "umfparse" Uslog.Info "Insufficient Parameters!";
-				end
+;;
 
-	;;
 		
 main ();;
 
