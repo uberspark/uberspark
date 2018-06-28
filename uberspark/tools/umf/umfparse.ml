@@ -180,6 +180,48 @@ let umf_process_cmdline () =
 	()
 *)
 
+
+
+let umf_process_cmdline () =
+	let len = Array.length Sys.argv in
+		if len = 11 then
+	    	begin
+					g_slabsfile := Sys.argv.(1);
+					g_uobjconfigurescript := Sys.argv.(2);
+					g_outputfile_slabinfotable := Sys.argv.(3);
+					g_outputfile_linkerscript := Sys.argv.(4);
+					g_loadaddr := int_of_string (Sys.argv.(5));
+					g_loadmaxsize := int_of_string (Sys.argv.(6));
+					g_totaluhslabs := int_of_string (Sys.argv.(7));
+					g_maxincldevlistentries := int_of_string (Sys.argv.(8));
+					g_maxexcldevlistentries := int_of_string (Sys.argv.(9));
+					g_maxmemoffsetentries := int_of_string (Sys.argv.(10));
+					if int_of_string (Sys.argv.(11)) = 1 then g_memoffsets := true else g_memoffsets := false;
+
+					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s\n" !g_slabsfile;
+					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s\n" !g_uobjconfigurescript;
+					Uslog.logf "umfparse" Uslog.Info "g_outputfile_slabinfotable=%s\n" !g_outputfile_slabinfotable;
+					Uslog.logf "umfparse" Uslog.Info "g_outputfile_linkerscript=%s\n" !g_outputfile_linkerscript;
+					Uslog.logf "umfparse" Uslog.Info "g_loadaddr=0x%x\n" !g_loadaddr;
+					Uslog.logf "umfparse" Uslog.Info "g_loadmaxsize=0x%x\n" !g_loadmaxsize;
+					Uslog.logf "umfparse" Uslog.Info "g_totaluhslabs=%d\n" !g_totaluhslabs;
+					Uslog.logf "umfparse" Uslog.Info "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
+					Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
+					Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
+					Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b\n" !g_memoffsets;
+
+				end
+		else
+				begin
+					Uslog.logf "umfparse" Uslog.Info "umf_process_cmdline: Insufficient Parameters!";
+					ignore(exit 1);
+				end
+		;
+
+()
+
+
+
 let umf_compute_memory_map () =
 	i := 0;
 	g_memmapaddr := !g_loadaddr;
