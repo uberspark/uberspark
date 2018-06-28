@@ -17,6 +17,9 @@ let g_maxincldevlistentries = ref 0;;
 let g_maxexcldevlistentries = ref 0;; 
 let g_maxmemoffsetentries = ref 0;;
 
+let usmf_memoffsets = ref false;;
+let usmf_rootdir = ref "";;
+
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtotype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -674,6 +677,7 @@ let usmf_populate_uobj_binary_sections uobj_entry uobj_id =
 	**************************************************************************
 *)
 
+
 (* parse uobj list file specified by uobj_list_filename and generate the *)
 (* required mappings from uobj name to uobj id and vice versa *)
 let usmf_parse_uobj_list uobj_list_filename = 
@@ -770,6 +774,17 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 			;
 		end
 		;
+;;
+
+(* module initialization function *)
+let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
+	usmf_memoffsets := g_memoffsets;
+	usmf_rootdir := g_rootdir;	 
+	usmf_parse_uobj_list uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B\n" !usmf_memoffsets;
+	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s\n" uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s\n" !usmf_rootdir;
+
 ;;
 
 
