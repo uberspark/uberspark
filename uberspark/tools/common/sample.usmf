@@ -66,9 +66,9 @@
 		}
 	],	
 
-	"uobj-exportfunctions": "expfn1
-							 expfn2
-							 expfn3",
+	"uobj-exportfunctions": "__xmhf_exception_handler_0
+							 __xmhf_exception_handler_1
+							 __xmhf_exception_handler_2",
 
 
 	"uobj-binary-sections":[
