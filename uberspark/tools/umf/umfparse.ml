@@ -184,7 +184,7 @@ let umf_process_cmdline () =
 
 let umf_process_cmdline () =
 	let len = Array.length Sys.argv in
-		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u\n" len;
+		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u" len;
 
 		if len = 12 then
 	    	begin
@@ -200,17 +200,17 @@ let umf_process_cmdline () =
 					g_maxmemoffsetentries := int_of_string (Sys.argv.(10));
 					if int_of_string (Sys.argv.(11)) = 1 then g_memoffsets := true else g_memoffsets := false;
 
-					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s\n" !g_slabsfile;
-					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s\n" !g_uobjconfigurescript;
-					Uslog.logf "umfparse" Uslog.Info "g_outputfile_slabinfotable=%s\n" !g_outputfile_slabinfotable;
-					Uslog.logf "umfparse" Uslog.Info "g_outputfile_linkerscript=%s\n" !g_outputfile_linkerscript;
-					Uslog.logf "umfparse" Uslog.Info "g_loadaddr=0x%x\n" !g_loadaddr;
-					Uslog.logf "umfparse" Uslog.Info "g_loadmaxsize=0x%x\n" !g_loadmaxsize;
-					Uslog.logf "umfparse" Uslog.Info "g_totaluhslabs=%d\n" !g_totaluhslabs;
-					Uslog.logf "umfparse" Uslog.Info "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
-					Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
-					Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
-					Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b\n" !g_memoffsets;
+					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s" !g_slabsfile;
+					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s" !g_uobjconfigurescript;
+					Uslog.logf "umfparse" Uslog.Info "g_outputfile_slabinfotable=%s" !g_outputfile_slabinfotable;
+					Uslog.logf "umfparse" Uslog.Info "g_outputfile_linkerscript=%s" !g_outputfile_linkerscript;
+					Uslog.logf "umfparse" Uslog.Info "g_loadaddr=0x%x" !g_loadaddr;
+					Uslog.logf "umfparse" Uslog.Info "g_loadmaxsize=0x%x" !g_loadmaxsize;
+					Uslog.logf "umfparse" Uslog.Info "g_totaluhslabs=%d" !g_totaluhslabs;
+					Uslog.logf "umfparse" Uslog.Info "g_maxincldevlistentries=%d" !g_maxincldevlistentries;
+					Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d" !g_maxexcldevlistentries;
+					Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d" !g_maxmemoffsetentries;
+					Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b" !g_memoffsets;
 
 				end
 		else
