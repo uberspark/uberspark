@@ -765,8 +765,12 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
-						usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
-						usmf_populate_uobj_export_functions uobj_entry !uobj_id;
+	          if (!usmf_memoffsets) then 
+							begin
+								usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
+								usmf_populate_uobj_export_functions uobj_entry !uobj_id;
+							end
+						;
 						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
 																		
 		with Yojson.Json_error s -> 
