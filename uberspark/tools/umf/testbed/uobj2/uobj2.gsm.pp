@@ -1,7 +1,7 @@
 {
-	"uobj-name": "uobj1",
-	"uobj-type": "1",
-	"uobj-subtype": "uapi",
+	"uobj-name": "uobj2",
+	"uobj-type": "VfT_SLAB",
+	"uobj-subtype": "UAPI",
 
 	"uobj-uapifunctions":[
 		{ 
@@ -18,58 +18,21 @@
 		}
 	],	
 
-	"uobj-callees": "uobj2
-					 uobj3
-					",
+	"uobj-callees": "",
 
-	"uobj-uapicallees":[
-		{ 
-			"uobj-name": "uobj2",
-			"uobj-uapifunctionid": "0xa", 
-			"opt1" : "void {}",
-			"opt2" : "(1)" 
-		},
-		{ 
-			"uobj-name": "uobj2",
-			"uobj-uapifunctionid": "0xb", 
-			"opt1" : "void {}",
-			"opt2" : "(1)" 
-		}
-	],	
-
+	"uobj-uapicallees":[],
 
 	"uobj-resource-devices":[
 		{ 
 			"type": "include",
 			"opt1" : "0xdead",
 			"opt2" : "0xbeef" 
-		},
-		{ 
-			"type": "include",
-			"opt1" : "0xf00d",
-			"opt2" : "0xdead" 
 		}
 	],	
 
-	"uobj-resource-memory":[
-		{ 
-			"access-type": "read",
-			"uobj-name": "uobj2"
-		},
-		{ 
-			"access-type": "write",
-			"uobj-name": "uobj2"
-		},
-		{ 
-			"access-type": "read",
-			"uobj-name": "uobj3"
-		}
-	],	
+	"uobj-resource-memory":[],
 
-	"uobj-exportfunctions": "__xmhf_exception_handler_0
-							 __xmhf_exception_handler_1
-							 __xmhf_exception_handler_2",
-
+	"uobj-exportfunctions": "",
 
 	"uobj-binary-sections":[
 		{ 
