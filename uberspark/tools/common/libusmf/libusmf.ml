@@ -36,6 +36,7 @@ let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 
 let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+let slab_idtouapifnmaskstring = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let uapi_fnccomppre = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 let uapi_fnccompasserts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
@@ -271,6 +272,9 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 		 	let open Yojson.Basic.Util in
 			let uobj_0 = uobj_entry in 
 			let i = ref 0 in
+	    let j = ref 0 in
+	    let slab_uapifnmaskstring = ref "" in
+
 			
 			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
 
@@ -339,7 +343,27 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 								i := !i + 1;
 						end
 					done;
-				end
+
+					j := 0;
+    			while !j < !g_totalslabs do
+    				begin
+        			if (Hashtbl.mem slab_idtouapifnmask !j) then
+        				begin
+        					slab_uapifnmaskstring := !slab_uapifnmaskstring ^ (Printf.sprintf "\t0x%08x,\n" (Hashtbl.find slab_idtouapifnmask !j));
+        				end
+        			else
+        				begin
+									slab_uapifnmaskstring := !slab_uapifnmaskstring ^ "\t0x00000000,\n";
+        				end
+        			;
+        			j := !j + 1;
+    				end
+    			done;
+				
+					Hashtbl.add slab_idtouapifnmaskstring uobj_id !slab_uapifnmaskstring;
+					Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%d, uapifnmaskstr=%s\n" uobj_id (Hashtbl.find slab_idtouapifnmaskstring uobj_id);
+			
+	end
 
 	
 	with Yojson.Json_error s -> 
