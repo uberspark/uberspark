@@ -1,0 +1,6 @@
+name="libusmf"
+description="uberspark uobj manifest parsing library"
+version="1.0"
+requires=""
+archive(byte)="libusmf.cmo"
+archive(native)="libusmf.cmx"
