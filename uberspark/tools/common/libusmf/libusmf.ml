@@ -13,10 +13,10 @@ module Libusmf =
 	**************************************************************************
 *)
 let g_totalslabs = ref 0;;
-let g_maxincldevlistentries = ref 0;; 
-let g_maxexcldevlistentries = ref 0;; 
-let g_maxmemoffsetentries = ref 0;;
 
+let usmf_maxincldevlistentries = ref 0;; 
+let usmf_maxexcldevlistentries = ref 0;; 
+let usmf_maxmemoffsetentries = ref 0;;
 let usmf_memoffsets = ref false;;
 let usmf_rootdir = ref "";;
 
@@ -409,9 +409,9 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 		    						if (compare tag_rd_qual "include") = 0 then 
 		    							begin
 		
-							                if (!slab_rdinclcount >= !g_maxincldevlistentries) then 
+							                if (!slab_rdinclcount >= !usmf_maxincldevlistentries) then 
 							                	begin
-							                		Uslog.logf "libusmf" Uslog.Info "Error: Too many RD INCL entries (max=%d)\n" !g_maxincldevlistentries;
+							                		Uslog.logf "libusmf" Uslog.Info "Error: Too many RD INCL entries (max=%d)\n" !usmf_maxincldevlistentries;
 								                  ignore(exit 1);
 							                	end
 							                ;
@@ -423,9 +423,9 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 		    						else if (compare tag_rd_qual "exclude") = 0  then
 		    							begin
 		
-							                if (!slab_rdexclcount >= !g_maxexcldevlistentries) then
+							                if (!slab_rdexclcount >= !usmf_maxexcldevlistentries) then
 							                	begin
-							                    	Uslog.logf "libusmf" Uslog.Info "Error: Too many RD EXCL entries (max=%d)\n" !g_maxexcldevlistentries;
+							                    	Uslog.logf "libusmf" Uslog.Info "Error: Too many RD EXCL entries (max=%d)\n" !usmf_maxexcldevlistentries;
 							                    	ignore (exit 1);
 							                    end
 							                ;
@@ -578,7 +578,7 @@ let usmf_populate_uobj_export_functions uobj_entry uobj_id =
 
                 if (Hashtbl.mem slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname) ) then
 	            	begin
-	                    if (!slab_memoffsetcount < !g_maxmemoffsetentries) then
+	                    if (!slab_memoffsetcount < !usmf_maxmemoffsetentries) then
 	                    	begin
 	                        	slab_memoffsetsstring := !slab_memoffsetsstring ^ "\t0x" ^ (Hashtbl.find slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname)) ^ ",\n";
 	                        	slab_memoffsetcount := !slab_memoffsetcount + 1;
@@ -767,11 +767,11 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						;
 						Uslog.logf "libusmf" Uslog.Info "uobj-name=%s" uobj_name;
 						Uslog.logf "libusmf" Uslog.Info "uobj-id=%d" !uobj_id;
-						(* g_maxincldevlistentries := int_of_string (Cmdopt_maxincldevlistentries.get()); *)
-						(* g_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
-						g_maxincldevlistentries := 64;
-						g_maxexcldevlistentries := 64;
-						g_maxmemoffsetentries := 64;
+						(* usmf_maxincldevlistentries := int_of_string (Cmdopt_maxincldevlistentries.get()); *)
+						(* usmf_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
+						usmf_maxincldevlistentries := 64;
+						usmf_maxexcldevlistentries := 64;
+						usmf_maxmemoffsetentries := 64;
 
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_uapifunctions uobj_entry !uobj_id;
