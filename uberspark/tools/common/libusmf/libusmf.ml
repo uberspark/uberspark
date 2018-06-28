@@ -695,9 +695,41 @@ let usmf_parse_uobj_list uobj_list_filename =
 ;;
 
 
+(* parse uobj mmap file to aid in export function parsing *)
+let usmf_parse_uobj_mmap uobj_mmap_filename uobj_id =
+	let i = ref 0 in
+	let trimfilename = trim uobj_mmap_filename in
+	let trimline = ref "" in
+	let sfh = open_in trimfilename in
+	let varname = ref "" in
+	let varaddr = ref "" in
+	
+		Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mmap: uobj_id=%d\n" uobj_id;
+		Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mmap: g_totalslabs:%d\n" !g_totalslabs;
+		Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mmap: filename:%s\n" trimfilename;
+
+		try
+    		while true do
+	  			trimline := trim (input_line sfh);
+					let lineentry = Str.split (Str.regexp ":") !trimline in
+					varname := (trim (List.nth lineentry 0));
+					varaddr := (trim (List.nth lineentry 1));
+					
+	        Hashtbl.add slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ !varname) !varaddr;
+					(* Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mmap: %s-->%s\n" ((string_of_int uobj_id) ^ "_" ^ !varname) !varaddr; *)
+
+					i := !i + 1;
+		    done;
+		with End_of_file -> 
+    			close_in sfh;
+    	;		
+
+	()
+;;
+
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
-let usmf_parse_uobj_mf uobj_mf_filename = 
+let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename = 
 	if !g_totalslabs > 0 then
 		begin
 			try
@@ -729,6 +761,7 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
+						usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
 						usmf_populate_uobj_export_functions uobj_entry !uobj_id;
 						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
 																		
