@@ -54,6 +54,7 @@ let slab_idtomemgrantreadcaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));
 let slab_idtomemgrantwritecaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 let slab_idtomemoffsets = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let slab_idtomemoffsetstring = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
 let slab_idtodatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocodesize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
@@ -601,6 +602,19 @@ let usmf_populate_uobj_export_functions uobj_entry uobj_id =
 							i := !i + 1;
 						end
 					done;
+
+					(* store memoffsets string indexed by slabid *)
+       		if (compare !slab_memoffsetsstring "") = 0 then 
+	    			begin
+		    			Hashtbl.add slab_idtomemoffsetstring uobj_id "0";
+        		end
+        	else
+        		begin
+        			Hashtbl.add slab_idtomemoffsetstring uobj_id !slab_memoffsetsstring;
+    				end
+    			;    	
+      
+
 				end
 
 	
