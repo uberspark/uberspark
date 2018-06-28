@@ -1,9 +1,14 @@
 (*
-	frama-c plugin for manifest parsing (main module)
+	uberspark tool for manifest parsing
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
-open Umfcommon
 
+open Uslog
+open Libusmf
+open Sys
+open Str
+
+(*
 module Self = Plugin.Register
 	(struct
 		let name = "US manifest parser"
@@ -101,6 +106,7 @@ module Cmdopt_memoffsets = Self.False
 		let help = "when on (off by default), include absolute memory offsets in MEMOFFSETS list"
 	end)
 
+*)
 
 (*
 	**************************************************************************
@@ -116,9 +122,9 @@ let g_outputfile_linkerscript = ref "";; (* argv 2 *)
 let g_loadaddr = ref 0x0;; (* argv 3 *)
 let g_loadmaxsize = ref 0x0;; (* argv 4 *)
 let g_totaluhslabs = ref 0;; (* argv 5 *)
-(* let g_maxincldevlistentries = ref 0;; *) (* argv 6 *)
-(* let g_maxexcldevlistentries = ref 0;; *) (* argv 7 *)
-(* let g_maxmemoffsetentries = ref 0;; *) (* argv 8 *)
+let g_maxincldevlistentries = ref 0;;  (* argv 6 *)
+let g_maxexcldevlistentries = ref 0;;  (* argv 7 *)
+let g_maxmemoffsetentries = ref 0;;  (* argv 8 *)
 let g_memoffsets = ref false;; (*argv 9 *)
 
 (* other global variables *)
@@ -145,7 +151,7 @@ let slab_idtodmadata_addrstart = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t
 let slab_idtodmadata_addrend = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
 
-
+(*
 let umf_process_cmdline () =
 	g_slabsfile := Cmdopt_slabsfile.get();
 	g_uobjconfigurescript := Cmdopt_uobjconfigurescript.get();
@@ -160,51 +166,52 @@ let umf_process_cmdline () =
 	if Cmdopt_memoffsets.get() then g_memoffsets := true else g_memoffsets := false;
 
 	
-	Self.result "g_slabsfile=%s\n" !g_slabsfile;
-	Self.result "g_uobjconfigscript=%s\n" !g_uobjconfigurescript;
-	Self.result "g_outputfile_slabinfotable=%s\n" !g_outputfile_slabinfotable;
-	Self.result "g_outputfile_linkerscript=%s\n" !g_outputfile_linkerscript;
-	Self.result "g_loadaddr=0x%x\n" !g_loadaddr;
-	Self.result "g_loadmaxsize=0x%x\n" !g_loadmaxsize;
-	Self.result "g_totaluhslabs=%d\n" !g_totaluhslabs;
-	Self.result "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
-	Self.result "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
-	Self.result "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
-	Self.result "g_memoffsets=%b\n" !g_memoffsets;
+	Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s\n" !g_slabsfile;
+	Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s\n" !g_uobjconfigurescript;
+	Uslog.logf "umfparse" Uslog.Info "g_outputfile_slabinfotable=%s\n" !g_outputfile_slabinfotable;
+	Uslog.logf "umfparse" Uslog.Info "g_outputfile_linkerscript=%s\n" !g_outputfile_linkerscript;
+	Uslog.logf "umfparse" Uslog.Info "g_loadaddr=0x%x\n" !g_loadaddr;
+	Uslog.logf "umfparse" Uslog.Info "g_loadmaxsize=0x%x\n" !g_loadmaxsize;
+	Uslog.logf "umfparse" Uslog.Info "g_totaluhslabs=%d\n" !g_totaluhslabs;
+	Uslog.logf "umfparse" Uslog.Info "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
+	Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
+	Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
+	Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b\n" !g_memoffsets;
 	()
+*)
 
 let umf_compute_memory_map () =
 	i := 0;
 	g_memmapaddr := !g_loadaddr;
 
-	Self.result "Proceeding to compute memory map...\n";
+	Uslog.logf "umfparse" Uslog.Info "Proceeding to compute memory map...\n";
 	
-	while (!i < !g_totalslabs) do
-	    if ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) then
+	while (!i < !Libusmf.g_totalslabs) do
+	    if ((compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XRICHGUEST") <> 0) then
 	    	begin
 			    Hashtbl.add slab_idtocode_addrstart !i  (Printf.sprintf "0x%08x" !g_memmapaddr);
-		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find slab_idtocodesize !i);
+		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find Libusmf.slab_idtocodesize !i);
 		    	Hashtbl.add slab_idtocode_addrend !i (Printf.sprintf "0x%08x" !g_memmapaddr);
 		
 			    Hashtbl.add slab_idtodata_addrstart !i (Printf.sprintf "0x%08x" !g_memmapaddr);
-		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find slab_idtodatasize !i);
+		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find Libusmf.slab_idtodatasize !i);
 		    	Hashtbl.add slab_idtodata_addrend !i (Printf.sprintf "0x%08x" !g_memmapaddr);
 		
 			    Hashtbl.add slab_idtostack_addrstart !i (Printf.sprintf "0x%08x" !g_memmapaddr);
-		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find slab_idtostacksize !i);
+		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find Libusmf.slab_idtostacksize !i);
 		    	Hashtbl.add slab_idtostack_addrend !i (Printf.sprintf "0x%08x" !g_memmapaddr);
 		
 		    	Hashtbl.add slab_idtodmadata_addrstart !i (Printf.sprintf "0x%08x" !g_memmapaddr);
-		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find slab_idtodmadatasize !i);
+		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find Libusmf.slab_idtodmadatasize !i);
 		    	Hashtbl.add slab_idtodmadata_addrend !i (Printf.sprintf "0x%08x" !g_memmapaddr);	
 			end	
 	    else
 	    	begin
-			    Hashtbl.add slab_idtocode_addrstart !i (Printf.sprintf "0x%08x" (Hashtbl.find slab_idtocodesize !i));
-			    Hashtbl.add slab_idtocode_addrend !i (Printf.sprintf "0x%08x" (Hashtbl.find slab_idtodatasize !i));
+			    Hashtbl.add slab_idtocode_addrstart !i (Printf.sprintf "0x%08x" (Hashtbl.find Libusmf.slab_idtocodesize !i));
+			    Hashtbl.add slab_idtocode_addrend !i (Printf.sprintf "0x%08x" (Hashtbl.find Libusmf.slab_idtodatasize !i));
 			
-			    Hashtbl.add slab_idtodata_addrstart !i (Printf.sprintf "0x%08x" (Hashtbl.find slab_idtostacksize !i));
-			    Hashtbl.add slab_idtodata_addrend !i (Printf.sprintf "0x%08x" (Hashtbl.find slab_idtodmadatasize !i));
+			    Hashtbl.add slab_idtodata_addrstart !i (Printf.sprintf "0x%08x" (Hashtbl.find Libusmf.slab_idtostacksize !i));
+			    Hashtbl.add slab_idtodata_addrend !i (Printf.sprintf "0x%08x" (Hashtbl.find Libusmf.slab_idtodmadatasize !i));
 			
 			    Hashtbl.add slab_idtostack_addrstart !i (Printf.sprintf "0x%08x" 0);
 			    Hashtbl.add slab_idtostack_addrend !i (Printf.sprintf "0x%08x" 0);
@@ -218,15 +225,15 @@ let umf_compute_memory_map () =
     	i := !i + 1;
 	done;
 
-	Self.result "Computed memory map\n";
+	Uslog.logf "umfparse" Uslog.Info "Computed memory map\n";
 
 	i := 0;
-	while (!i < !g_totalslabs) do
-	    Self.result "slabname: %s \n" (Hashtbl.find slab_idtoname !i);
-	    Self.result "code    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtocode_addrstart !i) (Hashtbl.find slab_idtocode_addrend !i);
-	    Self.result "data    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtodata_addrstart !i) (Hashtbl.find slab_idtodata_addrend !i);
-	    Self.result "stack   - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtostack_addrstart !i) (Hashtbl.find slab_idtostack_addrend !i);
-	    Self.result "dmadata - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtodmadata_addrstart !i) (Hashtbl.find slab_idtodmadata_addrend !i);
+	while (!i < !Libusmf.g_totalslabs) do
+	    Uslog.logf "umfparse" Uslog.Info "slabname: %s \n" (Hashtbl.find Libusmf.slab_idtoname !i);
+	    Uslog.logf "umfparse" Uslog.Info "code    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtocode_addrstart !i) (Hashtbl.find slab_idtocode_addrend !i);
+	    Uslog.logf "umfparse" Uslog.Info "data    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtodata_addrstart !i) (Hashtbl.find slab_idtodata_addrend !i);
+	    Uslog.logf "umfparse" Uslog.Info "stack   - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtostack_addrstart !i) (Hashtbl.find slab_idtostack_addrend !i);
+	    Uslog.logf "umfparse" Uslog.Info "dmadata - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtodmadata_addrstart !i) (Hashtbl.find slab_idtodmadata_addrend !i);
 		i := !i + 1;
 	done;
 
@@ -238,7 +245,7 @@ let umf_compute_memory_map () =
 let umf_configure_slabs () =
 	let l_cmdline = ref "" in
 	
-	Self.result "Proceeding to configure slabs...\n";
+	Uslog.logf "umfparse" Uslog.Info "Proceeding to configure slabs...\n";
 
 	if (!g_memoffsets) then
 		begin
@@ -247,11 +254,11 @@ let umf_configure_slabs () =
 	else
 		begin
 		    i := 0;
-		    while (!i < !g_totalslabs) do
-		        Self.result "Configuring slab: %s with type: %s:%s ...\n" (Hashtbl.find slab_idtodir !i) (Hashtbl.find slab_idtotype !i) (Hashtbl.find slab_idtosubtype !i);
-		        l_cmdline := 	(Printf.sprintf "cd %s%s && %s " !g_rootdir (Hashtbl.find slab_idtodir !i) !g_uobjconfigurescript) ^
-		                	 	(Printf.sprintf " --with-slabtype=%s" (Hashtbl.find slab_idtotype !i)) ^
-		                		(Printf.sprintf " --with-slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i)) ^
+		    while (!i < !Libusmf.g_totalslabs) do
+		        Uslog.logf "umfparse" Uslog.Info "Configuring slab: %s with type: %s:%s ...\n" (Hashtbl.find Libusmf.slab_idtodir !i) (Hashtbl.find Libusmf.slab_idtotype !i) (Hashtbl.find Libusmf.slab_idtosubtype !i);
+		        l_cmdline := 	(Printf.sprintf "cd %s%s && %s " !g_rootdir (Hashtbl.find Libusmf.slab_idtodir !i) !g_uobjconfigurescript) ^
+		                	 	(Printf.sprintf " --with-slabtype=%s" (Hashtbl.find Libusmf.slab_idtotype !i)) ^
+		                		(Printf.sprintf " --with-slabsubtype=%s" (Hashtbl.find Libusmf.slab_idtosubtype !i)) ^
 		                		(Printf.sprintf " --with-slabcodestart=%s" (Hashtbl.find slab_idtocode_addrstart !i)) ^
 		                		(Printf.sprintf " --with-slabcodeend=%s" (Hashtbl.find slab_idtocode_addrend !i)) ^
 		                		(Printf.sprintf " --with-slabdatastart=%s" (Hashtbl.find slab_idtodata_addrstart !i)) ^
@@ -268,7 +275,7 @@ let umf_configure_slabs () =
 		end
 	;
 
-	Self.result "Slabs configured.\n";
+	Uslog.logf "umfparse" Uslog.Info "Slabs configured.\n";
 	()
 	
 
@@ -288,98 +295,98 @@ let umf_output_infotable () =
 	Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) xmhfgeec_slab_info_t xmhfgeec_slab_info_table[] = {";
 
 	i := 0;
-	while (!i < !g_totalslabs ) do
+	while (!i < !Libusmf.g_totalslabs ) do
 		(* slab name *)
-		(* Self.result "Looping for slab %d..." !i; *)
+		(* Uslog.logf "umfparse" Uslog.Info "Looping for slab %d..." !i; *)
 		Printf.fprintf oc "\n";
-	    Printf.fprintf oc "\n	//%s" (Hashtbl.find slab_idtoname !i);
+	    Printf.fprintf oc "\n	//%s" (Hashtbl.find Libusmf.slab_idtoname !i);
 	    Printf.fprintf oc "\n	{";
 	
 	    (* slab_inuse *)
 	    Printf.fprintf oc "\n	    true,";
 
 		(* slab type *)
-	    if ( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	 (compare (Hashtbl.find slab_idtosubtype !i) "PRIME") = 0 ) then 
+	    if ( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    	 (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "PRIME") = 0 ) then 
         	Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "SENTINEL") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "SENTINEL") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_SENTINEL,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "INIT") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "INIT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "UAPI") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    		 (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "UAPI") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0  && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "EXCEPTION") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0  && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "EXCEPTION") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "INTERCEPT") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	    		 (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "INTERCEPT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "INIT") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "INIT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	             (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVT_SLAB") = 0 && 
+	             (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && 
+	    		 (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XGUEST") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG_GUEST,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVT_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XGUEST") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG_GUEST,"
-	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") = 0 ) then
+	    else if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && 
+	    	     (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XRICHGUEST") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG_RICHGUEST,"
 	    else
 	    	begin
-	        	Self.result "Error: Unknown slab type!\n";
+	        	Uslog.logf "umfparse" Uslog.Info "Error: Unknown slab type!\n";
 	        	ignore(exit 1);
 	    	end
 	    ;
 
 
 	    (* mempgtbl_cr3 and iotbl_base *)
-    	if ( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0) then
+    	if ( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0) then
     		begin
 				(* mempgtbl_cr3 for VfT_SLAB points to verified hypervisor slab page table base *)
 				(* iotbl_base for VfT_SLAB is not-used *)
-		        Printf.fprintf oc "\n        %s  + (2 * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find slab_nametoid "geec_prime") );
+		        Printf.fprintf oc "\n        %s  + (2 * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find Libusmf.slab_nametoid "geec_prime") );
 	    	    Printf.fprintf oc "\n        0x00000000UL,";
 			end
 		
-	    else if ( ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) ||
-				  ((compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) ||
-				  ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") = 0) ) then
+	    else if ( ((compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XGUEST") = 0) ||
+				  ((compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVT_SLAB") = 0 && (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XGUEST") = 0) ||
+				  ((compare (Hashtbl.find Libusmf.slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XRICHGUEST") = 0) ) then
 			begin
 				(* mempgtbl_cr3 for unverified guest slabs point to their corresponding page table base within uapi_slabmempgtbl *)
 				(* iotbl_base for unverified guest slabs point to their corresponding io table base within uapi_slabiotbl *)
 		        if (!g_ugslabcounter > 1) then
 		        	begin 
 		        		(* TODO: need to bring this in via a conf. variable when we support multiple guest slabs *)
-						Self.result "Error: Too many unverified guest slabs (max=1)!\n";
+						Uslog.logf "umfparse" Uslog.Info "Error: Too many unverified guest slabs (max=1)!\n";
 						ignore(exit 1);
 					end
 				else
 					begin
-						Printf.fprintf oc "\n        %s  + (%d * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find slab_nametoid "uapi_slabmempgtbl"))  !g_ugslabcounter;
-						Printf.fprintf oc "\n        %s  + (3*4096) + (%d * 4096) + (%d *(3*4096)) + (%d * (3*4096))," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find slab_nametoid "geec_prime")) !g_totaluhslabs !g_totaluhslabs !g_ugslabcounter;
+						Printf.fprintf oc "\n        %s  + (%d * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find Libusmf.slab_nametoid "uapi_slabmempgtbl"))  !g_ugslabcounter;
+						Printf.fprintf oc "\n        %s  + (3*4096) + (%d * 4096) + (%d *(3*4096)) + (%d * (3*4096))," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find Libusmf.slab_nametoid "geec_prime")) !g_totaluhslabs !g_totaluhslabs !g_ugslabcounter;
 						g_ugslabcounter := !g_ugslabcounter + 1;
 					end
 				;
@@ -391,13 +398,13 @@ let umf_output_infotable () =
 				(* iotbl_base *)
 		        if(!g_uhslabcounter >=  !g_totaluhslabmempgtblsets) then
 		        	begin
-						Self.result "Error: Too many unverified hypervisor slabs (max=%d)!\n" !g_totaluhslabmempgtblsets;
+						Uslog.logf "umfparse" Uslog.Info "Error: Too many unverified hypervisor slabs (max=%d)!\n" !g_totaluhslabmempgtblsets;
 						ignore(exit 1);
 					end
 		        else
 		        	begin
-						Printf.fprintf oc "\n        %s + (3*4096) + (%d * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find slab_nametoid "geec_prime")) !g_uhslabcounter;
-						Printf.fprintf oc "\n        %s + (3*4096) + (%d *4096) + (%d * (3*4096)), " (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find slab_nametoid "geec_prime")) !g_totaluhslabs !g_uhslabcounter;
+						Printf.fprintf oc "\n        %s + (3*4096) + (%d * 4096)," (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find Libusmf.slab_nametoid "geec_prime")) !g_uhslabcounter;
+						Printf.fprintf oc "\n        %s + (3*4096) + (%d *4096) + (%d * (3*4096)), " (Hashtbl.find slab_idtodata_addrstart (Hashtbl.find Libusmf.slab_nametoid "geec_prime")) !g_totaluhslabs !g_uhslabcounter;
 						g_uhslabcounter := !g_uhslabcounter + 1;
 		        	end
 		        ;
@@ -418,20 +425,20 @@ let umf_output_infotable () =
 	    Printf.fprintf oc "\n	        },";
 
 	    (* slab_callcaps *)
-	    if (Hashtbl.mem slab_idtocallmask !i) then
+	    if (Hashtbl.mem Libusmf.slab_idtocallmask !i) then
 	    	begin
-	    	    Printf.fprintf oc "\n\t0x%08xUL, " (Hashtbl.find slab_idtocallmask !i);
+	    	    Printf.fprintf oc "\n\t0x%08xUL, " (Hashtbl.find Libusmf.slab_idtocallmask !i);
 	    	end
 	    else
 	    	begin
-	    		Self.result "No callcaps for slab id %d, using 0\n" !i;
+	    		Uslog.logf "umfparse" Uslog.Info "No callcaps for slab id %d, using 0\n" !i;
 	    		Printf.fprintf oc "\n\t0x00000000UL, ";
 	    	end
 	    ;
 	
 	    (* slab_uapisupported *)
-	    if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	        (compare (Hashtbl.find slab_idtosubtype !i) "UAPI") = 0) then
+	    if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
+	        (compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "UAPI") = 0) then
 	        Printf.fprintf oc "\n       true,"
 	    else
 	        Printf.fprintf oc "\n       false,"
@@ -439,34 +446,34 @@ let umf_output_infotable () =
 	
 	    (* slab_uapicaps *)
 	    Printf.fprintf oc "\n       {\n";
-	    Printf.fprintf oc "%s" (Hashtbl.find slab_idtouapifnmask !i);
+	    Printf.fprintf oc "%s" (Hashtbl.find Libusmf.slab_idtouapifnmaskstring !i);
 	    Printf.fprintf oc "\n       },";
 
 	    (* slab_memgrantreadcaps *)
-	    if(Hashtbl.mem slab_idtomemgrantreadcaps !i) then
-	        Printf.fprintf oc "\n       0x%08x," (Hashtbl.find slab_idtomemgrantreadcaps !i)
+	    if(Hashtbl.mem Libusmf.slab_idtomemgrantreadcaps !i) then
+	        Printf.fprintf oc "\n       0x%08x," (Hashtbl.find Libusmf.slab_idtomemgrantreadcaps !i)
 	    else
 	        Printf.fprintf oc "\n       0x00000000UL,"
 	    ;
 
 	    (* slab_memgrantwritecaps *)
-	    if(Hashtbl.mem slab_idtomemgrantwritecaps !i) then
-	        Printf.fprintf oc "\n       0x%08x," (Hashtbl.find slab_idtomemgrantreadcaps !i)
+	    if(Hashtbl.mem Libusmf.slab_idtomemgrantwritecaps !i) then
+	        Printf.fprintf oc "\n       0x%08x," (Hashtbl.find Libusmf.slab_idtomemgrantreadcaps !i)
 	    else
 	        Printf.fprintf oc "\n       0x00000000UL,"
 	    ;
 
     	(* incl_devices *)
-    	Printf.fprintf oc "\n\n%s" (Hashtbl.find slab_idtordinclentries !i);
+    	Printf.fprintf oc "\n\n%s" (Hashtbl.find Libusmf.slab_idtordinclentries !i);
 
     	(* incl_devices_count *)
-    	Printf.fprintf oc "\n0x%08x," (Hashtbl.find slab_idtordinclcount !i);
+    	Printf.fprintf oc "\n0x%08x," (Hashtbl.find Libusmf.slab_idtordinclcount !i);
 
     	(* excl_devices *)
-    	Printf.fprintf oc "\n\n%s" (Hashtbl.find slab_idtordexclentries !i);
+    	Printf.fprintf oc "\n\n%s" (Hashtbl.find Libusmf.slab_idtordexclentries !i);
 
     	(* excl_devices_count *)
-    	Printf.fprintf oc "\n0x%08x," (Hashtbl.find slab_idtordexclcount !i);
+    	Printf.fprintf oc "\n0x%08x," (Hashtbl.find Libusmf.slab_idtordexclcount !i);
 
 	    (* slab_physmem_extents *)
 	    Printf.fprintf oc "\n	    {";
@@ -478,8 +485,8 @@ let umf_output_infotable () =
 
 	    (* slab memoffset entries *)
 	    Printf.fprintf oc "\n	    {";
-	    if (!g_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
-	        Printf.fprintf oc "%s" (Hashtbl.find slab_idtomemoffsetstring !i)
+	    if (!g_memoffsets && ((compare (Hashtbl.find Libusmf.slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
+	        Printf.fprintf oc "%s" (Hashtbl.find Libusmf.slab_idtomemoffsetstring !i)
 	    else
 	        Printf.fprintf oc "0"
 	    ;
@@ -566,13 +573,13 @@ let umf_output_linkerscript () =
 	()
 
 
-	
+(*	
 let run () =
-	Self.result "Parsing manifest...\n";
+	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...\n";
 	umf_process_cmdline ();
 
 	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
-	Self.result "g_rootdir=%s\n" !g_rootdir;
+	Uslog.logf "umfparse" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
 
 	g_totaluhslabmempgtblsets := !g_totaluhslabs;
 	g_totaluvslabiotblsets := !g_totaluhslabs;
@@ -582,7 +589,7 @@ let run () =
 	g_ugslabcounter := 0;
 
 	umfcommon_init !g_slabsfile !g_memoffsets !g_rootdir;
-	Self.result "g_totalslabs=%d \n" !g_totalslabs;
+	Uslog.logf "umfparse" Uslog.Info "g_totalslabs=%d \n" !g_totalslabs;
 	
 	umf_compute_memory_map ();
 
@@ -592,9 +599,29 @@ let run () =
 	
 	umf_output_linkerscript ();
 	
-	Self.result "Done.\n";
+	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 	()
 
 
 let () = Db.Main.extend run
+*)
+
+let main () =
+	Uslog.current_level := Uslog.ord Uslog.Info;
+
+	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...";
+
+	let len = Array.length Sys.argv in
+		if len = 4 then
+	    	begin
+				end
+		else
+				begin
+					Uslog.logf "umfparse" Uslog.Info "Insufficient Parameters!";
+				end
+
+	;;
+		
+main ();;
+
 
