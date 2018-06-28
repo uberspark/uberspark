@@ -666,6 +666,10 @@ let main () =
 	g_uhslabcounter := 0;
 	g_ugslabcounter := 0;
 
+	Libusmf.usmf_maxincldevlistentries := !g_maxincldevlistentries;  
+	Libusmf.usmf_maxexcldevlistentries := !g_maxexcldevlistentries; 
+	Libusmf.usmf_maxmemoffsetentries := !g_maxmemoffsetentries;
+
 	(* umfcommon_init !g_slabsfile !g_memoffsets !g_rootdir; *)
 	Uslog.logf "umfparse" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
 	
