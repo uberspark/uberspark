@@ -66,6 +66,11 @@
 		}
 	],	
 
+	"uobj-exportfunctions": "expfn1
+							 expfn2
+							 expfn3",
+
+
 	"uobj-binary-sections":[
 		{ 
 			"section-name": "code",

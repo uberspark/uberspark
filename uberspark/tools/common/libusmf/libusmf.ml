@@ -15,6 +15,7 @@ module Libusmf =
 let g_totalslabs = ref 0;;
 let g_maxincldevlistentries = ref 0;; 
 let g_maxexcldevlistentries = ref 0;; 
+let g_maxmemoffsetentries = ref 0;;
 
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -48,6 +49,8 @@ let slab_idtordexclcount = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 let slab_idtomemgrantreadcaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtomemgrantwritecaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+
+let slab_idtomemoffsets = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
 let slab_idtodatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocodesize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
@@ -553,6 +556,59 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 ;;
 
 
+let usmf_populate_uobj_export_functions uobj_entry uobj_id = 
+	try
+		 	let open Yojson.Basic.Util in
+			let uobj_0 = uobj_entry in 
+			let i = ref 0 in
+    	let slab_memoffsetsstring = ref "" in
+    	let slab_memoffsetcount = ref 0 in
+			
+			let uobj_0_exportfunctions = uobj_0 |> member "uobj-exportfunctions" |> to_string in
+			let uobj_0_exportfunctions_list = (Str.split (Str.regexp "[ \r\n\t]+") uobj_0_exportfunctions) in
+				begin
+					while (!i < (List.length uobj_0_exportfunctions_list)) do
+						begin
+		          let tag_ex_varname = (trim (List.nth uobj_0_exportfunctions_list !i)) in
+								Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_export_functions: uobj_id=%d exportfunction name=%s\n" uobj_id tag_ex_varname;
+
+                if (Hashtbl.mem slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname) ) then
+	            	begin
+	                    if (!slab_memoffsetcount < !g_maxmemoffsetentries) then
+	                    	begin
+	                        	slab_memoffsetsstring := !slab_memoffsetsstring ^ "\t0x" ^ (Hashtbl.find slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname)) ^ ",\n";
+	                        	slab_memoffsetcount := !slab_memoffsetcount + 1;
+	                        end
+	                    else
+	                    	begin
+           									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_export_functions: Error: Max. EX entries exceeded!\n";
+	                        	ignore(exit 1);
+	                        end
+	                    ;
+	                    
+	            	end
+	            else
+	            	begin
+   									Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_export_functions: Error: No entry found for slab: %s, EX entry: %s!" (Hashtbl.find slab_idtoname uobj_id) tag_ex_varname;
+	                	ignore (exit 1);
+	            	end
+	            ;
+		            	
+							
+							i := !i + 1;
+						end
+					done;
+				end
+
+	
+	with Yojson.Json_error s -> 
+			Uslog.logf "test" Uslog.Info "usmf_populate_uobj_export_functions: ERROR in parsing manifest!";
+	;
+
+;;
+
+
+
 let usmf_populate_uobj_binary_sections uobj_entry uobj_id = 
 	try
 		 	let open Yojson.Basic.Util in
@@ -665,6 +721,7 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						(* g_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
 						g_maxincldevlistentries := 64;
 						g_maxexcldevlistentries := 64;
+						g_maxmemoffsetentries := 64;
 
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_uapifunctions uobj_entry !uobj_id;
@@ -672,8 +729,9 @@ let usmf_parse_uobj_mf uobj_mf_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
+						usmf_populate_uobj_export_functions uobj_entry !uobj_id;
 						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
-												
+																		
 		with Yojson.Json_error s -> 
 				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
 			;
