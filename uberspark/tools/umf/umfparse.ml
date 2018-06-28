@@ -656,6 +656,28 @@ let main () =
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...";
 	umf_process_cmdline ();
 
+	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
+	Uslog.logf "umfparse" Uslog.Info "g_rootdir=%s" !g_rootdir;
+
+	g_totaluhslabmempgtblsets := !g_totaluhslabs;
+	g_totaluvslabiotblsets := !g_totaluhslabs;
+	g_totalslabmempgtblsets := !g_totaluhslabmempgtblsets + 2;
+	g_totalslabiotblsets := !g_totaluvslabiotblsets + 2;
+	g_uhslabcounter := 0;
+	g_ugslabcounter := 0;
+
+	(* umfcommon_init !g_slabsfile !g_memoffsets !g_rootdir; *)
+	Uslog.logf "umfparse" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+	
+	umf_compute_memory_map ();
+
+	umf_configure_slabs ();
+
+	umf_output_infotable ();
+	
+	umf_output_linkerscript ();
+	
+	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 
 		
