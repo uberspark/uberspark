@@ -1,0 +1,6 @@
+name="uslog"
+description="loggin functinality"
+version="1.0"
+requires=""
+archive(byte)="uslog.cmo"
+archive(native)="uslog.cmx"
