@@ -119,21 +119,21 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 		 	let uobj_type = uobj_entry |> member "uobj-type" |> to_string in
 		 	let uobj_subtype = uobj_entry |> member "uobj-subtype" |> to_string in
 			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
-			let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
+			(*let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
 			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
 			let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
-
+			*)
 
 				Uslog.logf "libusmf" Uslog.Info "uobj-name:%s" uobj_name;
 				Uslog.logf "libusmf" Uslog.Info "uobj-type:%s" uobj_type;
 				Uslog.logf "libusmf" Uslog.Info "uobj-subtype:%s" uobj_subtype;
-				Hashtbl.add slab_idtoname uobj_id uobj_name;
+				(*Hashtbl.add slab_idtoname uobj_id uobj_name;*)
 				Hashtbl.add slab_idtotype uobj_id uobj_type;
 				Hashtbl.add slab_idtosubtype uobj_id uobj_subtype;
-				Hashtbl.add slab_nametoid uobj_name uobj_id;
+				(*Hashtbl.add slab_nametoid uobj_name uobj_id;
 				Hashtbl.add slab_idtodir uobj_id uobj_dir;
 				Hashtbl.add slab_idtogsm uobj_id uobj_gsmfile;
-				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;
+				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;*)
 
 
 	with Yojson.Json_error s -> 
@@ -164,7 +164,7 @@ let usmf_populate_uobj_uapifunctions uobj_entry uobj_id =
 							let tag_ufn_uapikey = ref "" in
 									
 							(* uapi function definition tag, should only appear in uapi slabs *)
-							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "uapi") = 0 then
+							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "UAPI") = 0 then
 								begin
 									
 									(* make key *)
@@ -252,6 +252,7 @@ let usmf_populate_uobj_callmasks uobj_entry uobj_id =
 
 ;;
 
+(*
 let do_action_on_uobj_list uobj_name =
   Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
 	Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
@@ -259,7 +260,7 @@ let do_action_on_uobj_list uobj_name =
 	g_totalslabs := !g_totalslabs + 1;
 
 ;;
-
+*)
 
 let usmf_get_uobj_id uobj_name =
 	let uobj_id = ref 0 in
@@ -549,9 +550,10 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 						end
 					done;
 					
-          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: readcaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantreadcaps uobj_id);
+          (*Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: readcaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantreadcaps uobj_id);
           Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: writecaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantwritecaps uobj_id);
-
+					*)
+          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: done";
 					
 				end
 
@@ -705,9 +707,30 @@ let usmf_parse_uobj_list uobj_list_filename =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobj_list = json |> member "uobj-list" |> to_string in
-			let uobj_list_trimmed = ref [""] in
-				uobj_list_trimmed := (Str.split (Str.regexp "[ \r\n\t]+") uobj_list);
-				List.iter do_action_on_uobj_list !uobj_list_trimmed;
+			let uobj_list_trimmed = (Str.split (Str.regexp "[ \r\n\t]+") uobj_list) in
+			let i = ref 0 in
+					g_totalslabs := 0;
+					while (!i < (List.length uobj_list_trimmed)) do
+						begin
+							let uobj_name = (trim (List.nth uobj_list_trimmed !i)) in								
+							let uobj_dir = (!usmf_rootdir ^ uobj_name) in 
+							let uobj_gsmfile = (uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
+							let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+
+								Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
+								Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
+								Hashtbl.add slab_idtodir !i uobj_dir;
+								Hashtbl.add slab_idtogsm !i uobj_gsmfile;
+								Hashtbl.add slab_idtommapfile !i uobj_mmapfile;
+
+							
+								Uslog.logf "libusmf" Uslog.Info "Added uobj:%s with index=%u" uobj_name !g_totalslabs;
+								g_totalslabs := !g_totalslabs + 1;
+							
+							i := !i + 1;	
+						end
+					done;			
+					(* List.iter do_action_on_uobj_list !uobj_list_trimmed; *)
 			
 	with Yojson.Json_error s -> 
 		Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
@@ -811,16 +834,17 @@ let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
 		i := 0;
 		while (!i < !g_totalslabs) do
 	    	begin
-					Uslog.logf "libusmf" Uslog.Info "uobj_id=%d" !i;      			
-					Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabname=%s" (Hashtbl.find slab_idtoname !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabtype=%s" (Hashtbl.find slab_idtotype !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabgsmfile=%s" (Hashtbl.find slab_idtogsm !i);      			
-					Uslog.logf "libusmf" Uslog.Info "  slabmmapfile=%s" (Hashtbl.find slab_idtommapfile !i);      			
 			
 				usmf_parse_uobj_mf (Hashtbl.find slab_idtogsm !i) (Hashtbl.find slab_idtommapfile !i);
+
+				Uslog.logf "libusmf" Uslog.Info "Finished uobj_id=%d" !i;      			
+				Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabname=%s" (Hashtbl.find slab_idtoname !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabtype=%s" (Hashtbl.find slab_idtotype !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabgsmfile=%s" (Hashtbl.find slab_idtogsm !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabmmapfile=%s" (Hashtbl.find slab_idtommapfile !i);      			
 
     		i := !i + 1;
 			end

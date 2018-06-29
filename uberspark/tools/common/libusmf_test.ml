@@ -25,7 +25,7 @@ let main () =
 						Uslog.logf "libusmf_test" Uslog.Info "uobj mmap file: %s" !uobj_mmap_filename;
 						(* Libusmf.usmf_parse_uobj_list !uobj_list_filename; *)
 						Libusmf.usmf_initialize !uobj_list_filename true ((Filename.dirname !uobj_list_filename) ^ "/"); 
-						Libusmf.usmf_parse_uobj_mf !uobj_mf_filename !uobj_mmap_filename;
+						(* Libusmf.usmf_parse_uobj_mf !uobj_mf_filename !uobj_mmap_filename; *)
 						Uslog.logf "libusmf_test" Uslog.Info "All done!\n";
 				end
 		else
