@@ -699,8 +699,9 @@ let main () =
 	umf_output_infotable ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated uobj info table!";
 
-		
-(*	umf_output_linkerscript ();*)
+  Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
+	umf_output_linkerscript ();
+  Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
 	
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
