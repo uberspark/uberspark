@@ -342,6 +342,8 @@ let umf_output_infotable () =
 	i := 0;
 	while (!i < !Libusmf.g_totalslabs ) do
 		(* slab name *)
+	  Uslog.logf "umfparse" Uslog.Info "doing uobj %d..." !i;
+
 		(* Uslog.logf "umfparse" Uslog.Info "Looping for slab %d..." !i; *)
 		Printf.fprintf oc "\n";
 	    Printf.fprintf oc "\n	//%s" (Hashtbl.find Libusmf.slab_idtoname !i);
@@ -406,6 +408,8 @@ let umf_output_infotable () =
 	    	end
 	    ;
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
 
 	    (* mempgtbl_cr3 and iotbl_base *)
     	if ( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0) then
@@ -457,6 +461,8 @@ let umf_output_infotable () =
 	    ;
 
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
 	    (* slab_tos *)
 	    Printf.fprintf oc "\n	        {";
 	    Printf.fprintf oc "\n	            %s + (1*XMHF_SLAB_STACKSIZE)," (Hashtbl.find slab_idtostack_addrstart !i);
@@ -469,6 +475,8 @@ let umf_output_infotable () =
 	    Printf.fprintf oc "\n	            %s + (8*XMHF_SLAB_STACKSIZE)," (Hashtbl.find slab_idtostack_addrstart !i);
 	    Printf.fprintf oc "\n	        },";
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
 	    (* slab_callcaps *)
 	    if (Hashtbl.mem Libusmf.slab_idtocallmask !i) then
 	    	begin
@@ -480,6 +488,8 @@ let umf_output_infotable () =
 	    		Printf.fprintf oc "\n\t0x00000000UL, ";
 	    	end
 	    ;
+
+		  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 	
 	    (* slab_uapisupported *)
 	    if( (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 && 
@@ -488,11 +498,15 @@ let umf_output_infotable () =
 	    else
 	        Printf.fprintf oc "\n       false,"
 	    ;
+
+		  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 	
 	    (* slab_uapicaps *)
 	    Printf.fprintf oc "\n       {\n";
 	    Printf.fprintf oc "%s" (Hashtbl.find Libusmf.slab_idtouapifnmaskstring !i);
 	    Printf.fprintf oc "\n       },";
+
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 
 	    (* slab_memgrantreadcaps *)
 	    if(Hashtbl.mem Libusmf.slab_idtomemgrantreadcaps !i) then
@@ -501,6 +515,8 @@ let umf_output_infotable () =
 	        Printf.fprintf oc "\n       0x00000000UL,"
 	    ;
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
 	    (* slab_memgrantwritecaps *)
 	    if(Hashtbl.mem Libusmf.slab_idtomemgrantwritecaps !i) then
 	        Printf.fprintf oc "\n       0x%08x," (Hashtbl.find Libusmf.slab_idtomemgrantreadcaps !i)
@@ -508,17 +524,27 @@ let umf_output_infotable () =
 	        Printf.fprintf oc "\n       0x00000000UL,"
 	    ;
 
+				  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
     	(* incl_devices *)
     	Printf.fprintf oc "\n\n%s" (Hashtbl.find Libusmf.slab_idtordinclentries !i);
+
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 
     	(* incl_devices_count *)
     	Printf.fprintf oc "\n0x%08x," (Hashtbl.find Libusmf.slab_idtordinclcount !i);
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
     	(* excl_devices *)
     	Printf.fprintf oc "\n\n%s" (Hashtbl.find Libusmf.slab_idtordexclentries !i);
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
     	(* excl_devices_count *)
     	Printf.fprintf oc "\n0x%08x," (Hashtbl.find Libusmf.slab_idtordexclcount !i);
+
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 
 	    (* slab_physmem_extents *)
 	    Printf.fprintf oc "\n	    {";
@@ -527,6 +553,8 @@ let umf_output_infotable () =
 	    Printf.fprintf oc "\n	        {.addr_start = %s, .addr_end = %s, .protection = 0}," (Hashtbl.find slab_idtostack_addrstart !i) (Hashtbl.find slab_idtostack_addrend !i);
 	    Printf.fprintf oc "\n	        {.addr_start = %s, .addr_end = %s, .protection = 0}," (Hashtbl.find slab_idtodmadata_addrstart !i) (Hashtbl.find slab_idtodmadata_addrend !i);
 	    Printf.fprintf oc "\n	    },";
+
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 
 	    (* slab memoffset entries *)
 	    Printf.fprintf oc "\n	    {";
@@ -537,9 +565,13 @@ let umf_output_infotable () =
 	    ;
 	    Printf.fprintf oc "\n	    },";
 
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
+
 
 	    (* slab_entrystub *)
 	    Printf.fprintf oc "\n	    %s" (Hashtbl.find slab_idtocode_addrstart !i);
+
+	  	Uslog.logf "umfparse" Uslog.Info "umf_output_infotable (line:%d)" __LINE__;
 
 	    Printf.fprintf oc "\n	},";
 		Printf.fprintf oc "\n";
