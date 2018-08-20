@@ -4,7 +4,7 @@
 	"uobj-subtype": "UAPI",
 
 	"uobj-uapifunctions":[
-			{ 
+		{ 
 			"uapifunction-id": "0",
 			"uapifunction-definition" : 
 				"void _slabmempgtbl_initmempgtbl(xmhfgeec_uapi_slabmempgtbl_initmempgtbl_params_t *initmempgtblp)", 
@@ -20,11 +20,10 @@
 			"uapifunction-id": "2",
 			"uapifunction-definition" : "void _slabmempgtbl_getentryforpaddr(xmhfgeec_uapi_slabmempgtbl_getentryforpaddr_params_t *getentryforpaddrp)", 
 			"uapifunction-drivercode" : "{xmhfgeec_uapi_slabmempgtbl_getentryforpaddr_params_t getentryforpaddrp; getentryforpaddrp.dst_slabid = framac_nondetu32(); getentryforpaddrp.gpa = framac_nondetu32(); _slabmempgtbl_getentryforpaddr(&getentryforpaddrp);}"
-		},
+		}
 	],
 
-	"uobj-callees": "	geec_sentinel
-						",
+	"uobj-callees": " ",
 
 	"uobj-uapicallees":[],
 

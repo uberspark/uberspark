@@ -733,7 +733,7 @@ let usmf_parse_uobj_list uobj_list_filename =
 					(* List.iter do_action_on_uobj_list !uobj_list_trimmed; *)
 			
 	with Yojson.Json_error s -> 
-		Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
+		Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_list: ERROR in parsing manifest!";
 	;
 
 ;;
@@ -777,6 +777,9 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 	if !g_totalslabs > 0 then
 		begin
 			try
+
+			Uslog.logf "libusmf" Uslog.Info "uobj_mf_filename=%s" uobj_mf_filename;
+			Uslog.logf "libusmf" Uslog.Info "uobj_mmap_filename=%s" uobj_mmap_filename;
 		
 			(* read the manifest JSON *)
 		  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
@@ -814,7 +817,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
 																		
 		with Yojson.Json_error s -> 
-				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
+				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf: ERROR in parsing manifest!";
 			;
 		end
 		;

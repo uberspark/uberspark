@@ -5,10 +5,7 @@
 
 	"uobj-uapifunctions":[],
 
-	"uobj-callees": "	geec_sentinel
-						uapi_slabmempgtbl
-						xc_init				
-						uapi_sysdata
+	"uobj-callees": "	uapi_slabmempgtbl
 						",
 
 	"uobj-uapicallees":[
@@ -21,12 +18,6 @@
 		{ 
 			"uobj-name": "uapi_slabmempgtbl",
 			"uobj-uapifunctionid": "0", 
-			"opt1" : "(void)0;",
-			"opt2" : "(1)" 
-		},
-		{ 
-			"uobj-name": "uapi_sysdata",
-			"uobj-uapifunctionid": "1", 
 			"opt1" : "(void)0;",
 			"opt2" : "(1)" 
 		}
