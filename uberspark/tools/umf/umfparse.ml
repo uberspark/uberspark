@@ -290,6 +290,7 @@ let umf_configure_slabs () =
 	let l_cmdline = ref "" in
 	
 	Uslog.logf "umfparse" Uslog.Info "Proceeding to configure slabs...\n";
+	Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b" !g_memoffsets;
 
 	if (!g_memoffsets) then
 		begin
@@ -300,7 +301,7 @@ let umf_configure_slabs () =
 		    i := 0;
 		    while (!i < !Libusmf.g_totalslabs) do
 		        Uslog.logf "umfparse" Uslog.Info "Configuring slab: %s with type: %s:%s ...\n" (Hashtbl.find Libusmf.slab_idtodir !i) (Hashtbl.find Libusmf.slab_idtotype !i) (Hashtbl.find Libusmf.slab_idtosubtype !i);
-		        l_cmdline := 	(Printf.sprintf "cd %s%s && %s " !g_rootdir (Hashtbl.find Libusmf.slab_idtodir !i) !g_uobjconfigurescript) ^
+		        l_cmdline := 	(Printf.sprintf "cd %s && %s " (Hashtbl.find Libusmf.slab_idtodir !i) !g_uobjconfigurescript) ^
 		                	 	(Printf.sprintf " --with-slabtype=%s" (Hashtbl.find Libusmf.slab_idtotype !i)) ^
 		                		(Printf.sprintf " --with-slabsubtype=%s" (Hashtbl.find Libusmf.slab_idtosubtype !i)) ^
 		                		(Printf.sprintf " --with-slabcodestart=%s" (Hashtbl.find slab_idtocode_addrstart !i)) ^
@@ -675,11 +676,12 @@ let main () =
 	
 	umf_compute_memory_map ();
 
+  Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b" !g_memoffsets;
 	umf_configure_slabs ();
 
 	umf_output_infotable ();
 	
-	umf_output_linkerscript ();
+(*	umf_output_linkerscript ();*)
 	
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
