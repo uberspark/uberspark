@@ -28,7 +28,8 @@
 		}
 	],
 
-	"uobj-callees": " ",
+	"uobj-callees": "	geec_sentinel
+					",
 
 	"uobj-uapicallees":[],
 

@@ -13,8 +13,11 @@
 
 	"uobj-uapifunctions":[],
 
-	"uobj-callees": "	uapi_slabmempgtbl
-						",
+	"uobj-callees": " 	geec_sentinel
+						uapi_slabmempgtbl
+						xc_init
+						uapi_sysdata
+					",
 
 	"uobj-uapicallees":[
 		{ 
@@ -26,6 +29,12 @@
 		{ 
 			"uobj-name": "uapi_slabmempgtbl",
 			"uobj-uapifunctionid": USMF_STR(XMHFGEEC_UAPI_SLABMEMPGTBL_INITMEMPGTBL), 
+			"opt1" : "(void)0;",
+			"opt2" : "(1)" 
+		},
+		{ 
+			"uobj-name": "uapi_sysdata",
+			"uobj-uapifunctionid": USMF_STR(UXMHF_UAPI_SYSDATA_E820ADDENTRY), 
 			"opt1" : "(void)0;",
 			"opt2" : "(1)" 
 		}

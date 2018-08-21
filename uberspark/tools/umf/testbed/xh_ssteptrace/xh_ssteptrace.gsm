@@ -7,7 +7,7 @@
 
 {
 	"uobj-name": "xh_ssteptrace",
-	"uobj-type": "VfT_SLAB",
+	"uobj-type": "uVU_SLAB",
 	"uobj-subtype": "XHYPAPP",
 
 	"uobj-uapifunctions":[],

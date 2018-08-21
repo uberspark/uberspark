@@ -21,7 +21,8 @@
    "uapifunction-drivercode" : "{xmhfgeec_uapi_slabmempgtbl_getentryforpaddr_params_t getentryforpaddrp; getentryforpaddrp.dst_slabid = framac_nondetu32(); getentryforpaddrp.gpa = framac_nondetu32(); _slabmempgtbl_getentryforpaddr(&getentryforpaddrp);}"
   }
  ],
- "uobj-callees": " ",
+ "uobj-callees": "	geec_sentinel
+     ",
  "uobj-uapicallees":[],
  "uobj-resource-devices":[],
  "uobj-resource-memory":[],

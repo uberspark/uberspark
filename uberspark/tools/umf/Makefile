@@ -11,19 +11,9 @@ export UOBJ_OBJDIR := ./testbed/_objects
 
 ###### targets
 
-.PHONY: _uobjs_preprocessmanifests
-_uobjs_preprocessmanifests:
-	@echo $(CCERT_FLAGS)
-	mkdir -p $(UOBJ_OBJDIR)
-	@for i in $(UOBJ_NAMES); \
-	do \
-		(cd $(UOBJ_OBJDIR) && echo "Prepping uobj manifest for $$i..." && cp -f ../$$i/$$i.gsm $$i.gsm.c && ccomp -P -E $(CCERT_CFLAGS) -D__ASSEMBLY__ $$i.gsm.c >../$$i/$$i.gsm.pp) || exit 1; \
-	done;
-	@echo uobj manifests prepped
-
 
 .PHONY: all
-all: _uobjs_preprocessmanifests 
+all:  
 	#cd uslog && $(MAKE) -w all
 	#cd usmf && $(MAKE) -w all
 	#$(OCAMLC) -package unix -package str -package yojson -package uslog -package usmf -linkpkg -o test_usmf test_usmf.ml
@@ -36,3 +26,14 @@ clean:
 	$(RM) -f libusmf_test.cmi
 	$(RM) -f libusmf_test.cmo
 	$(RM) -f libusmf_test
+
+.PHONY: _uobjs_preprocessmanifests
+_uobjs_preprocessmanifests:
+	@echo $(CCERT_FLAGS)
+	mkdir -p $(UOBJ_OBJDIR)
+	@for i in $(UOBJ_NAMES); \
+	do \
+		(cd $(UOBJ_OBJDIR) && echo "Prepping uobj manifest for $$i..." && cp -f ../$$i/$$i.gsm $$i.gsm.c && ccomp -P -E $(CCERT_CFLAGS) -D__ASSEMBLY__ $$i.gsm.c >../$$i/$$i.gsm.pp) || exit 1; \
+	done;
+	@echo uobj manifests prepped
+	

@@ -39,7 +39,7 @@ let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 
-let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+(* let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));; *)
 let slab_idtouapifnmaskstring = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let uapi_fnccomppre = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 let uapi_fnccompasserts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
@@ -285,7 +285,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 			let i = ref 0 in
 	    let j = ref 0 in
 	    let slab_uapifnmaskstring = ref "" in
-
+    	let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t)) in
 			
 			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
 
@@ -314,11 +314,13 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 											tag_u_mask := Hashtbl.find slab_idtouapifnmask tag_u_destslabid; 
 											tag_u_mask := !tag_u_mask lor (1 lsl tag_u_uapifn);
 											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: already present for destslabid=%u, added=%u" tag_u_destslabid !tag_u_mask;
 											end
 										else
 											begin
 											tag_u_mask := (1 lsl tag_u_uapifn);
 											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: new for destslabid=%u, added=%u" tag_u_destslabid !tag_u_mask;
 											end
 										;
 
