@@ -1,0 +1,29 @@
+//slab manifest
+#include <xmhf.h>
+#include <xmhfgeec.h>
+#include <xg_richguest.h>
+
+//slab memory sections
+MS:CODE:0:void:void
+MS:DATA:__TARGET_BASE_XMHF:void:void
+MS:STACK:__TARGET_MAX_XMHF:void:void
+MS:DMADATA:__TARGET_MAX_SYS:void:void
+
+RD:INCL:0xffff:0xffff:void
+RD:EXCL:PCI_VENDOR_ID_LOGNIC:PCI_DEVICE_ID_LOGNIC:void
+//RD:EXCL:PCI_VENDOR_ID_XMHFGEEC:PCI_DEVICE_ID_XMHFGEEC_TXT:void
+//RD:EXCL:PCI_VENDOR_ID_XMHFGEEC:PCI_DEVICE_ID_XMHFGEEC_IOMMU:void
+
+RM:READ:xc_init:void:void
+RM:READ:xc_ihub:void:void
+RM:WRITE:xc_init:void:void
+RM:WRITE:xc_ihub:void:void
+//RM:READ:xh_aprvexec:void:void
+RM:READ:xh_syscalllog:void:void
+RM:READ:xh_ssteptrace:void:void
+
+
+
+
+
+
