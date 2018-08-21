@@ -61,6 +61,11 @@
 #include <xmhf-hwm.h>
 #endif //__ASSEMBLY__
 
+
+#define USMF_STR(s) _USMF_STR(s)
+#define _USMF_STR(s) #s
+
+
 #if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
 //////
 // frama-c non-determinism functions

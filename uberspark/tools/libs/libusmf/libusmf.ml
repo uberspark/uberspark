@@ -13,10 +13,10 @@ module Libusmf =
 	**************************************************************************
 *)
 let g_totalslabs = ref 0;;
-let g_maxincldevlistentries = ref 0;; 
-let g_maxexcldevlistentries = ref 0;; 
-let g_maxmemoffsetentries = ref 0;;
 
+let usmf_maxincldevlistentries = ref 0;; 
+let usmf_maxexcldevlistentries = ref 0;; 
+let usmf_maxmemoffsetentries = ref 0;;
 let usmf_memoffsets = ref false;;
 let usmf_rootdir = ref "";;
 
@@ -39,7 +39,7 @@ let slab_idtocallmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocalleemask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 
-let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
+(* let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));; *)
 let slab_idtouapifnmaskstring = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let uapi_fnccomppre = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 let uapi_fnccompasserts = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
@@ -54,6 +54,7 @@ let slab_idtomemgrantreadcaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));
 let slab_idtomemgrantwritecaps =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 let slab_idtomemoffsets = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
+let slab_idtomemoffsetstring = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
 let slab_idtodatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtocodesize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
@@ -117,19 +118,22 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 		 	let uobj_name = uobj_entry |> member "uobj-name" |> to_string in
 		 	let uobj_type = uobj_entry |> member "uobj-type" |> to_string in
 		 	let uobj_subtype = uobj_entry |> member "uobj-subtype" |> to_string in
-			let uobj_dir = (Filename.dirname uobj_mf_filename) in
-    	let uobj_mmapfile = uobj_dir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap" in
+			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
+			(*let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
+			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
+			let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+			*)
 
 				Uslog.logf "libusmf" Uslog.Info "uobj-name:%s" uobj_name;
 				Uslog.logf "libusmf" Uslog.Info "uobj-type:%s" uobj_type;
 				Uslog.logf "libusmf" Uslog.Info "uobj-subtype:%s" uobj_subtype;
-				Hashtbl.add slab_idtoname uobj_id uobj_name;
+				(*Hashtbl.add slab_idtoname uobj_id uobj_name;*)
 				Hashtbl.add slab_idtotype uobj_id uobj_type;
 				Hashtbl.add slab_idtosubtype uobj_id uobj_subtype;
-				Hashtbl.add slab_nametoid uobj_name uobj_id;
+				(*Hashtbl.add slab_nametoid uobj_name uobj_id;
 				Hashtbl.add slab_idtodir uobj_id uobj_dir;
-				Hashtbl.add slab_idtogsm uobj_id uobj_mf_filename;
-				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;
+				Hashtbl.add slab_idtogsm uobj_id uobj_gsmfile;
+				Hashtbl.add slab_idtommapfile uobj_id uobj_mmapfile;*)
 
 
 	with Yojson.Json_error s -> 
@@ -160,7 +164,7 @@ let usmf_populate_uobj_uapifunctions uobj_entry uobj_id =
 							let tag_ufn_uapikey = ref "" in
 									
 							(* uapi function definition tag, should only appear in uapi slabs *)
-							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "uapi") = 0 then
+							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "UAPI") = 0 then
 								begin
 									
 									(* make key *)
@@ -248,6 +252,7 @@ let usmf_populate_uobj_callmasks uobj_entry uobj_id =
 
 ;;
 
+(*
 let do_action_on_uobj_list uobj_name =
   Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
 	Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
@@ -255,7 +260,7 @@ let do_action_on_uobj_list uobj_name =
 	g_totalslabs := !g_totalslabs + 1;
 
 ;;
-
+*)
 
 let usmf_get_uobj_id uobj_name =
 	let uobj_id = ref 0 in
@@ -280,7 +285,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 			let i = ref 0 in
 	    let j = ref 0 in
 	    let slab_uapifnmaskstring = ref "" in
-
+    	let slab_idtouapifnmask = ((Hashtbl.create 32) : ((int,int)  Hashtbl.t)) in
 			
 			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: uobj_id=%u" uobj_id;
 
@@ -309,11 +314,13 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 											tag_u_mask := Hashtbl.find slab_idtouapifnmask tag_u_destslabid; 
 											tag_u_mask := !tag_u_mask lor (1 lsl tag_u_uapifn);
 											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: already present for destslabid=%u, added=%u" tag_u_destslabid !tag_u_mask;
 											end
 										else
 											begin
 											tag_u_mask := (1 lsl tag_u_uapifn);
 											Hashtbl.add slab_idtouapifnmask tag_u_destslabid !tag_u_mask;
+											Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_uapicallmasks: new for destslabid=%u, added=%u" tag_u_destslabid !tag_u_mask;
 											end
 										;
 
@@ -408,9 +415,9 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 		    						if (compare tag_rd_qual "include") = 0 then 
 		    							begin
 		
-							                if (!slab_rdinclcount >= !g_maxincldevlistentries) then 
+							                if (!slab_rdinclcount >= !usmf_maxincldevlistentries) then 
 							                	begin
-							                		Uslog.logf "libusmf" Uslog.Info "Error: Too many RD INCL entries (max=%d)\n" !g_maxincldevlistentries;
+							                		Uslog.logf "libusmf" Uslog.Info "Error: Too many RD INCL entries (max=%d)\n" !usmf_maxincldevlistentries;
 								                  ignore(exit 1);
 							                	end
 							                ;
@@ -422,9 +429,9 @@ let usmf_populate_uobj_resource_devices uobj_entry uobj_id =
 		    						else if (compare tag_rd_qual "exclude") = 0  then
 		    							begin
 		
-							                if (!slab_rdexclcount >= !g_maxexcldevlistentries) then
+							                if (!slab_rdexclcount >= !usmf_maxexcldevlistentries) then
 							                	begin
-							                    	Uslog.logf "libusmf" Uslog.Info "Error: Too many RD EXCL entries (max=%d)\n" !g_maxexcldevlistentries;
+							                    	Uslog.logf "libusmf" Uslog.Info "Error: Too many RD EXCL entries (max=%d)\n" !usmf_maxexcldevlistentries;
 							                    	ignore (exit 1);
 							                    end
 							                ;
@@ -545,9 +552,10 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 						end
 					done;
 					
-          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: readcaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantreadcaps uobj_id);
+          (*Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: readcaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantreadcaps uobj_id);
           Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: writecaps for uobj_id=%d caps=%u\n" uobj_id (Hashtbl.find slab_idtomemgrantwritecaps uobj_id);
-
+					*)
+          Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_resource_memory: done";
 					
 				end
 
@@ -577,7 +585,7 @@ let usmf_populate_uobj_export_functions uobj_entry uobj_id =
 
                 if (Hashtbl.mem slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname) ) then
 	            	begin
-	                    if (!slab_memoffsetcount < !g_maxmemoffsetentries) then
+	                    if (!slab_memoffsetcount < !usmf_maxmemoffsetentries) then
 	                    	begin
 	                        	slab_memoffsetsstring := !slab_memoffsetsstring ^ "\t0x" ^ (Hashtbl.find slab_idtomemoffsets ((string_of_int uobj_id) ^ "_" ^ tag_ex_varname)) ^ ",\n";
 	                        	slab_memoffsetcount := !slab_memoffsetcount + 1;
@@ -601,6 +609,19 @@ let usmf_populate_uobj_export_functions uobj_entry uobj_id =
 							i := !i + 1;
 						end
 					done;
+
+					(* store memoffsets string indexed by slabid *)
+       		if (compare !slab_memoffsetsstring "") = 0 then 
+	    			begin
+		    			Hashtbl.add slab_idtomemoffsetstring uobj_id "0";
+        		end
+        	else
+        		begin
+        			Hashtbl.add slab_idtomemoffsetstring uobj_id !slab_memoffsetsstring;
+    				end
+    			;    	
+      
+
 				end
 
 	
@@ -688,12 +709,33 @@ let usmf_parse_uobj_list uobj_list_filename =
 	  (* Locally open the JSON manipulation functions *)
 	  let open Yojson.Basic.Util in
 	  	let uobj_list = json |> member "uobj-list" |> to_string in
-			let uobj_list_trimmed = ref [""] in
-				uobj_list_trimmed := (Str.split (Str.regexp "[ \r\n\t]+") uobj_list);
-				List.iter do_action_on_uobj_list !uobj_list_trimmed;
+			let uobj_list_trimmed = (Str.split (Str.regexp "[ \r\n\t]+") uobj_list) in
+			let i = ref 0 in
+					g_totalslabs := 0;
+					while (!i < (List.length uobj_list_trimmed)) do
+						begin
+							let uobj_name = (trim (List.nth uobj_list_trimmed !i)) in								
+							let uobj_dir = (!usmf_rootdir ^ uobj_name) in 
+							let uobj_gsmfile = (uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
+							let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+
+								Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
+								Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
+								Hashtbl.add slab_idtodir !i uobj_dir;
+								Hashtbl.add slab_idtogsm !i uobj_gsmfile;
+								Hashtbl.add slab_idtommapfile !i uobj_mmapfile;
+
+							
+								Uslog.logf "libusmf" Uslog.Info "Added uobj:%s with index=%u" uobj_name !g_totalslabs;
+								g_totalslabs := !g_totalslabs + 1;
+							
+							i := !i + 1;	
+						end
+					done;			
+					(* List.iter do_action_on_uobj_list !uobj_list_trimmed; *)
 			
 	with Yojson.Json_error s -> 
-		Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
+		Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_list: ERROR in parsing manifest!";
 	;
 
 ;;
@@ -737,6 +779,9 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 	if !g_totalslabs > 0 then
 		begin
 			try
+
+			Uslog.logf "libusmf" Uslog.Info "uobj_mf_filename=%s" uobj_mf_filename;
+			Uslog.logf "libusmf" Uslog.Info "uobj_mmap_filename=%s" uobj_mmap_filename;
 		
 			(* read the manifest JSON *)
 		  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
@@ -753,11 +798,11 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						;
 						Uslog.logf "libusmf" Uslog.Info "uobj-name=%s" uobj_name;
 						Uslog.logf "libusmf" Uslog.Info "uobj-id=%d" !uobj_id;
-						(* g_maxincldevlistentries := int_of_string (Cmdopt_maxincldevlistentries.get()); *)
-						(* g_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
-						g_maxincldevlistentries := 64;
-						g_maxexcldevlistentries := 64;
-						g_maxmemoffsetentries := 64;
+						(* usmf_maxincldevlistentries := int_of_string (Cmdopt_maxincldevlistentries.get()); *)
+						(* usmf_maxexcldevlistentries := int_of_string (Cmdopt_maxexcldevlistentries.get()); *)
+						usmf_maxincldevlistentries := 64;
+						usmf_maxexcldevlistentries := 64;
+						usmf_maxmemoffsetentries := 64;
 
 						usmf_populate_uobj_base_characteristics	uobj_entry uobj_mf_filename !uobj_id;
 						usmf_populate_uobj_uapifunctions uobj_entry !uobj_id;
@@ -765,7 +810,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
-	          if (!usmf_memoffsets) then 
+	          if (!usmf_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !uobj_id) "XRICHGUEST") <> 0) ) then
 							begin
 								usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
 								usmf_populate_uobj_export_functions uobj_entry !uobj_id;
@@ -774,7 +819,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_binary_sections uobj_entry !uobj_id;
 																		
 		with Yojson.Json_error s -> 
-				Uslog.logf "libusmf" Uslog.Info "ERROR in parsing manifest!";
+				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf: ERROR in parsing manifest!";
 			;
 		end
 		;
@@ -785,9 +830,30 @@ let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
 	usmf_memoffsets := g_memoffsets;
 	usmf_rootdir := g_rootdir;	 
 	usmf_parse_uobj_list uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B\n" !usmf_memoffsets;
-	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s\n" uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s\n" !usmf_rootdir;
+	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B" !usmf_memoffsets;
+	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" !usmf_rootdir;
+
+	let i = ref 0 in
+		(* now iterate through all the slab id's and populate callmask and uapimasks *)
+		i := 0;
+		while (!i < !g_totalslabs) do
+	    	begin
+			
+				usmf_parse_uobj_mf (Hashtbl.find slab_idtogsm !i) (Hashtbl.find slab_idtommapfile !i);
+
+				Uslog.logf "libusmf" Uslog.Info "Finished uobj_id=%d" !i;      			
+				Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabname=%s" (Hashtbl.find slab_idtoname !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabtype=%s" (Hashtbl.find slab_idtotype !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabgsmfile=%s" (Hashtbl.find slab_idtogsm !i);      			
+				Uslog.logf "libusmf" Uslog.Info "  slabmmapfile=%s" (Hashtbl.find slab_idtommapfile !i);      			
+
+    		i := !i + 1;
+			end
+		done;
 
 ;;
 

@@ -50,13 +50,6 @@
 #ifndef __XMHFHWM_E1000_H__
 #define __XMHFHWM_E1000_H__
 
-
-#ifndef __ASSEMBLY__
-
-
-//////
-// e1000e framework glue and configuration
-
 #define PCI_DEVICE_ID_LOGNIC 0x10b9
 #define PCI_VENDOR_ID_LOGNIC 0x8086
 
@@ -65,6 +58,14 @@
 #define BAR_5		5
 #define E1000_HWADDR_BASE		0xF7C40000UL	//TODO: remove hard-coding
 #define E1000_HWADDR_SIZE		0x9000UL
+
+
+#ifndef __ASSEMBLY__
+
+
+//////
+// e1000e framework glue and configuration
+
 
 //#define e1000_readl(addr)		*(volatile unsigned int *)(addr)
 //#define e1000_writel(value, addr)	*(volatile unsigned int *)(addr) = (u32)(value)
