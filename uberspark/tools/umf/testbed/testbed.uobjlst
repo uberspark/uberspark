@@ -1,5 +1,7 @@
 {
-	"uobj-list": 	"	geec_prime
+	"uobj-list": 	"	
+						geec_sentinel
+						geec_prime
 				 		uapi_slabmempgtbl
 					"
 }
