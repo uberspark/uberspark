@@ -20,8 +20,8 @@
 	"uobj-resource-devices":[
 		{ 
 			"type": "include",
-			"opt1" : 0xffff,
-			"opt2" : 0xffff 
+			"opt1" : USMF_STR(0xffff),
+			"opt2" : USMF_STR(0xffff) 
 		},
 		{ 
 			"type": "exclude",
