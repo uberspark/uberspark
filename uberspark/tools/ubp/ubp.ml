@@ -4,6 +4,7 @@
 *)
 open Umfcommon
 
+(*
 module Self = Plugin.Register
 	(struct
 		let name = "US blueprint conformance"
@@ -60,7 +61,7 @@ module Cmdopt_memoffsets = Self.False
 		(* let default = false *)
 		let help = "when on (off by default), include absolute memory offsets in MEMOFFSETS list"
 	end)
-
+*)
 
 (*
 	**************************************************************************
@@ -71,16 +72,16 @@ module Cmdopt_memoffsets = Self.False
 (*	command line inputs *)
 let g_slabsfile = ref "";;	(* argv 0 *)
 let g_outputdir_sentinelstubs = ref "";; (* argv 1 *)
-(* let g_maxincldevlistentries = ref 0;; *) (* argv 2 *)
-(* let g_maxexcldevlistentries = ref 0;; *) (* argv 3 *)
-(* let g_maxmemoffsetentries = ref 0;; *) (* argv 4 *)
+let g_maxincldevlistentries = ref 0;;  (* argv 2 *)
+let g_maxexcldevlistentries = ref 0;;  (* argv 3 *)
+let g_maxmemoffsetentries = ref 0;; (* argv 4 *)
 let g_memoffsets = ref false;; (*argv 5 *)
 
 (* other global variables *)
 let g_rootdir = ref "";;
 
 
-
+(*
 let ubp_process_cmdline () =
 	g_slabsfile := Cmdopt_slabsfile.get();
 	g_outputdir_sentinelstubs := Cmdopt_outputdir_sentinelstubs.get();
@@ -97,6 +98,38 @@ let ubp_process_cmdline () =
 	Self.result "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
 	Self.result "g_memoffsets=%b\n" !g_memoffsets;
 	()
+*)
+
+
+let ubp_process_cmdline () =
+	let len = Array.length Sys.argv in
+		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u" len;
+
+		if len = 7 then
+	    	begin
+					g_slabsfile := Sys.argv.(1);
+					g_outputdir_sentinelstubs := Sys.argv.(2);
+					g_maxincldevlistentries := int_of_string (Sys.argv.(3));
+					g_maxexcldevlistentries := int_of_string (Sys.argv.(4));
+					g_maxmemoffsetentries := int_of_string (Sys.argv.(5));
+					if int_of_string (Sys.argv.(6)) = 1 then g_memoffsets := true else g_memoffsets := false;
+
+					Uslog.logf "ubp" Uslog.Info "g_slabsfile=%s\n" !g_slabsfile;
+					Uslog.logf "ubp" Uslog.Info "g_outputdir_sentinelstubs=%s\n" !g_outputdir_sentinelstubs;
+					Uslog.logf "ubp" Uslog.Info "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
+					Uslog.logf "ubp" Uslog.Info "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
+					Uslog.logf "ubp" Uslog.Info "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
+					Uslog.logf "ubp" Uslog.Info "g_memoffsets=%b\n" !g_memoffsets;
+
+				end
+		else
+				begin
+					Uslog.logf "ubp" Uslog.Info "ubp_process_cmdline: Insufficient Parameters!";
+					ignore(exit 1);
+				end
+		;
+
+()
 
 
 let ubp_outputsentinelstubforslab sentinelstubsdir slabname slabid =
@@ -146,7 +179,7 @@ let ubp_outputsentinelstubs () =
 	()
 
 
-	
+(*	
 let run () =
 	Self.result "Generating blueprint conformance sentinel stubs...\n";
 	ubp_process_cmdline ();
@@ -161,6 +194,35 @@ let run () =
 	
 	Self.result "Done.\n";
 	()
+*)
+
+let main () =
+	Uslog.current_level := Uslog.ord Uslog.Info;
+
+	Uslog.logf "ubp" Uslog.Info "Generating blueprint conformance sentinel stubs...\n";
+	ubp_process_cmdline ();
+
+	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
+	Uslog.logf "ubp" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
+
+	Libusmf.usmf_maxincldevlistentries := !g_maxincldevlistentries;  
+	Libusmf.usmf_maxexcldevlistentries := !g_maxexcldevlistentries; 
+	Libusmf.usmf_maxmemoffsetentries := !g_maxmemoffsetentries;
+
+	Libusmf.usmf_initialize !g_slabsfile !g_memoffsets !g_rootdir;
+	Uslog.logf "ubp" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+	
+	ubp_outputsentinelstubs ();
+	
+	Uslog.logf "ubp" Uslog.Info "Done.\n";
+
+;;
+
+		
+main ();;
+
+
+
 
 
 let () = Db.Main.extend run
