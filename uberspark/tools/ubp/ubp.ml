@@ -2,7 +2,12 @@
 	frama-c plugin for blueprint conformance
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
-open Umfcommon
+(* open Umfcommon *)
+open Uslog
+open Libusmf
+open Sys
+open Str
+
 
 (*
 module Self = Plugin.Register
@@ -138,8 +143,8 @@ let ubp_outputsentinelstubforslab sentinelstubsdir slabname slabid =
 	let oc = open_out sstubfilename in
 	
 	(* compute assert string *) 
-	if (Hashtbl.mem slab_idtocalleemask slabid) then
-		assertstring := "(sp->src_slabid == " ^ (string_of_int slabid) ^ " && ( " ^ (Printf.sprintf "0x%08xUL " (Hashtbl.find slab_idtocalleemask slabid)) ^ " & (1UL << sp->dst_slabid)))"
+	if (Hashtbl.mem Libusmf.slab_idtocalleemask slabid) then
+		assertstring := "(sp->src_slabid == " ^ (string_of_int slabid) ^ " && ( " ^ (Printf.sprintf "0x%08xUL " (Hashtbl.find Libusmf.slab_idtocalleemask slabid)) ^ " & (1UL << sp->dst_slabid)))"
 	else
 		assertstring := "1"
 	;				
@@ -170,9 +175,9 @@ let ubp_outputsentinelstubforslab sentinelstubsdir slabname slabid =
 let ubp_outputsentinelstubs () =
 	let i = ref 0 in
 	
-	while (!i < !g_totalslabs) do
-		if (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 then
-			ubp_outputsentinelstubforslab !g_outputdir_sentinelstubs (Hashtbl.find slab_idtoname !i) !i
+	while (!i < !Libusmf.g_totalslabs) do
+		if (compare (Hashtbl.find Libusmf.slab_idtotype !i) "VfT_SLAB") = 0 then
+			ubp_outputsentinelstubforslab !g_outputdir_sentinelstubs (Hashtbl.find Libusmf.slab_idtoname !i) !i
 		;
 	    i := !i + 1;
 	done;
@@ -194,6 +199,10 @@ let run () =
 	
 	Self.result "Done.\n";
 	()
+
+
+let () = Db.Main.extend run
+
 *)
 
 let main () =
@@ -224,6 +233,4 @@ main ();;
 
 
 
-
-let () = Db.Main.extend run
 
