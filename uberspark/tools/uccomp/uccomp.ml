@@ -2,6 +2,13 @@
 	frama-c plugin for composition check
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
+
+open Uslog
+open Libusmf
+open Sys
+open Str
+
+(*
 open Umfcommon
 
 module Self = Plugin.Register
@@ -68,6 +75,7 @@ module Cmdopt_memoffsets = Self.False
 		(* let default = false *)
 		let help = "when on (off by default), include absolute memory offsets in MEMOFFSETS list"
 	end)
+*)
 
 
 (*
@@ -76,6 +84,7 @@ module Cmdopt_memoffsets = Self.False
 	**************************************************************************
 *)
 
+(*
 (*	command line inputs *)
 let g_slabsfile = ref "";;	(* argv 0 *)
 let g_outputfile_ccompdriverfile = ref "";; (* argv 1 *)
@@ -84,12 +93,22 @@ let g_outputfile_ccompcheckfile = ref "";; (* argv 2 *)
 (* let g_maxexcldevlistentries = ref 0;; *) (* argv 4 *)
 (* let g_maxmemoffsetentries = ref 0;; *) (* argv 5 *)
 let g_memoffsets = ref false;; (*argv 6 *)
+*)
+
+(*	command line inputs *)
+let g_slabsfile = ref "";;	(* argv 0 *)
+let g_outputfile_ccompdriverfile = ref "";; (* argv 1 *)
+let g_outputfile_ccompcheckfile = ref "";; (* argv 2 *)
+let g_maxincldevlistentries = ref 0;;  (* argv 3 *)
+let g_maxexcldevlistentries = ref 0;;  (* argv 4 *)
+let g_maxmemoffsetentries = ref 0;;  (* argv 5 *)
+let g_memoffsets = ref false;; (*argv 6 *)
 
 (* other global variables *)
 let g_rootdir = ref "";;
 
 
-
+(*
 let uccomp_process_cmdline () =
 	g_slabsfile := Cmdopt_slabsfile.get();
 	g_outputfile_ccompdriverfile := Cmdopt_outputfile_ccompdriverfile.get();
@@ -109,11 +128,47 @@ let uccomp_process_cmdline () =
 	Self.result "g_memoffsets=%b\n" !g_memoffsets;
 	()
 
+*)
+
+
+let uccomp_process_cmdline () =
+	let len = Array.length Sys.argv in
+		Uslog.logf "uccomp" Uslog.Info "cmdline len=%u" len;
+
+		if len = 8 then
+	    	begin
+					g_slabsfile := Sys.argv.(1);
+					g_outputfile_ccompdriverfile := Sys.argv.(2);
+					g_outputfile_ccompcheckfile := Sys.argv.(3);
+					g_maxincldevlistentries := int_of_string (Sys.argv.(4));
+					g_maxexcldevlistentries := int_of_string (Sys.argv.(5));
+					g_maxmemoffsetentries := int_of_string (Sys.argv.(6));
+					if int_of_string (Sys.argv.(7)) = 1 then g_memoffsets := true else g_memoffsets := false;
+
+					Uslog.logf "uccomp" Uslog.Info "g_slabsfile=%s\n" !g_slabsfile;
+					Uslog.logf "uccomp" Uslog.Info "g_outputfile_ccompdriverfile=%s\n" !g_outputfile_ccompdriverfile;
+					Uslog.logf "uccomp" Uslog.Info "g_outputfile_ccompcheckfile=%s\n" !g_outputfile_ccompcheckfile;
+					Uslog.logf "uccomp" Uslog.Info "g_maxincldevlistentries=%d\n" !g_maxincldevlistentries;
+					Uslog.logf "uccomp" Uslog.Info "g_maxexcldevlistentries=%d\n" !g_maxexcldevlistentries;
+					Uslog.logf "uccomp" Uslog.Info "g_maxmemoffsetentries=%d\n" !g_maxmemoffsetentries;
+					Uslog.logf "uccomp" Uslog.Info "g_memoffsets=%b\n" !g_memoffsets;
+
+				end
+		else
+				begin
+					Uslog.logf "uccomp" Uslog.Info "uccomp_process_cmdline: Insufficient Parameters!";
+					ignore(exit 1);
+				end
+		;
+
+()
+
 
 
 let uccomp_outputccompdriverfile () =
-	let l_uapi_key = ref "" in
+(*	let l_uapi_key = ref "" in
 	let l_uapi_fndef = ref "" in
+*)
 	let i = ref 0 in
 	let oc = open_out !g_outputfile_ccompdriverfile in
 
@@ -128,13 +183,13 @@ let uccomp_outputccompdriverfile () =
 	Printf.fprintf oc "#include <xc.h>\r\n";
 
 	(* plug in header files *)
-	while (!i < !g_totalslabs) do
-	    if (compare "geec_sentinel" (Hashtbl.find slab_idtoname !i)) = 0 then
+	while (!i < !Libusmf.g_totalslabs) do
+	    if (compare "geec_sentinel" (Hashtbl.find Libusmf.slab_idtoname !i)) = 0 then
 	    	begin
 	    	end
 	    else
 	    	begin
-	    		Printf.fprintf oc "#include <%s.h>\r\n" (Hashtbl.find slab_idtoname !i);
+	    		Printf.fprintf oc "#include <%s.h>\r\n" (Hashtbl.find Libusmf.slab_idtoname !i);
 	    	end
 	    ;
 	    i := !i + 1;
@@ -180,9 +235,9 @@ let uccomp_outputccompdriverfile () =
 	Hashtbl.iter
   		(fun key value ->
     		Printf.fprintf oc "/* %s */\r\n" key;
-    		Printf.fprintf oc "%s \r\n\r\n" (Hashtbl.find uapi_fndrvcode key);
+    		Printf.fprintf oc "%s \r\n\r\n" (Hashtbl.find Libusmf.uapi_fndrvcode key);
   		)
-  	uapi_fndef
+  	Libusmf.uapi_fndef
 	;
 
 	Printf.fprintf oc "}\r\n";
@@ -193,8 +248,9 @@ let uccomp_outputccompdriverfile () =
 
 
 let uccomp_outputccompcheckfile () =
-	let l_uapi_key = ref "" in
+	(*let l_uapi_key = ref "" in
 	let l_uapi_fndef = ref "" in
+	*)
 	let i = ref 0 in
 	let oc = open_out !g_outputfile_ccompcheckfile in
 
@@ -208,13 +264,13 @@ let uccomp_outputccompcheckfile () =
 	Printf.fprintf oc "#include <xc.h>\r\n";
 
 	(* plug in header files *)
-	while(!i < !g_totalslabs) do
-	    if (compare "geec_sentinel" (Hashtbl.find slab_idtoname !i)) = 0 then
+	while(!i < !Libusmf.g_totalslabs) do
+	    if (compare "geec_sentinel" (Hashtbl.find Libusmf.slab_idtoname !i)) = 0 then
 	    	begin
 	    	end
 	    else
 	    	begin
-	    		Printf.fprintf oc "#include <%s.h>\r\n" (Hashtbl.find slab_idtoname !i);
+	    		Printf.fprintf oc "#include <%s.h>\r\n" (Hashtbl.find Libusmf.slab_idtoname !i);
 	    	end
 	    ;
 	    i := !i + 1;
@@ -226,19 +282,19 @@ let uccomp_outputccompcheckfile () =
 	(* iterate over the uapi_fndef hashtable *)
 	Hashtbl.iter
   		(fun key value ->
-			Printf.fprintf oc "%s { \r\n" (Hashtbl.find uapi_fndef key);
-			Printf.fprintf oc "%s \r\n" (Hashtbl.find uapi_fnccomppre key);
-			Printf.fprintf oc "%s \r\n" (Hashtbl.find uapi_fnccompasserts key);
+			Printf.fprintf oc "%s { \r\n" (Hashtbl.find Libusmf.uapi_fndef key);
+			Printf.fprintf oc "%s \r\n" (Hashtbl.find Libusmf.uapi_fnccomppre key);
+			Printf.fprintf oc "%s \r\n" (Hashtbl.find Libusmf.uapi_fnccompasserts key);
 			Printf.fprintf oc "} \r\n\r\n";
   		)
-  	uapi_fndef
+  	Libusmf.uapi_fndef
 	;
 
 	close_out oc;
 	()
 	
 	
-	
+(*	
 let run () =
 	Self.result "Generating composition check files...\n";
 	uccomp_process_cmdline ();
@@ -258,4 +314,29 @@ let run () =
 
 
 let () = Db.Main.extend run
+*)
 
+let main () =
+	Uslog.current_level := Uslog.ord Uslog.Info;
+
+	Uslog.logf "uccomp" Uslog.Info "Generating composition check files...\n";
+	uccomp_process_cmdline ();
+
+	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
+	Uslog.logf "uccomp" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
+
+(*	umfcommon_init !g_slabsfile !g_memoffsets !g_rootdir;*)
+	Libusmf.usmf_initialize !g_slabsfile !g_memoffsets !g_rootdir;
+	Uslog.logf "uccomp" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+	
+	uccomp_outputccompdriverfile ();
+
+	uccomp_outputccompcheckfile ();
+		
+	Uslog.logf "uccomp" Uslog.Info "Done.\n";
+
+
+;;
+
+		
+main ();;
