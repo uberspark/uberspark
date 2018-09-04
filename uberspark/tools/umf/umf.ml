@@ -203,7 +203,7 @@ let umf_process_cmdline () =
 					g_maxexcldevlistentries := int_of_string (Sys.argv.(9));
 					g_maxmemoffsetentries := int_of_string (Sys.argv.(10));
 					if int_of_string (Sys.argv.(11)) = 1 then g_memoffsets := true else g_memoffsets := false;
-					g_ppflags := Sys.argv.(12) ^ "-D__ASSEMBLY__";
+					g_ppflags := Sys.argv.(12) ^ " -D__ASSEMBLY__";
 
 					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s" !g_slabsfile;
 					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s" !g_uobjconfigurescript;
@@ -667,7 +667,7 @@ let umf_preprocess_uobjs uobj_rootdir ppflags =
 	let uobj_temp_mf_file = ref "" in
 	let uobj_temp_mf_pp_file = ref "" in
 		
-		pp_cmdline_base := "ccomp -E " ^ ppflags;
+		pp_cmdline_base := "ccomp -E -P " ^ ppflags;
 		
 		(* now iterate through all the uobjs *)
 		i := 0;
@@ -760,7 +760,6 @@ let main () =
 	umf_preprocess_uobjs !g_rootdir !g_ppflags;
 	Uslog.logf "umf" Uslog.Info "Preprocessed all uobjs\n";
 
-(*		
 	Libusmf.usmf_parse_uobjs !g_memoffsets;
 	Uslog.logf "umf" Uslog.Info "Parsed all uobjs\n";
 	
@@ -776,7 +775,7 @@ let main () =
   Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
 	umf_output_linkerscript ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
-	*)
+
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 
