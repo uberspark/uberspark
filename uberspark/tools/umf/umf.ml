@@ -117,15 +117,18 @@ module Cmdopt_memoffsets = Self.False
 (*	command line inputs *)
 let g_slabsfile = ref "";;	(* argv 0 *)
 let g_uobjconfigurescript = ref "";; (* argv 1 *)
-let g_outputfile_slabinfotable = ref "";; (* argv 1 *)
-let g_outputfile_linkerscript = ref "";; (* argv 2 *)
-let g_loadaddr = ref 0x0;; (* argv 3 *)
-let g_loadmaxsize = ref 0x0;; (* argv 4 *)
-let g_totaluhslabs = ref 0;; (* argv 5 *)
-let g_maxincldevlistentries = ref 0;;  (* argv 6 *)
-let g_maxexcldevlistentries = ref 0;;  (* argv 7 *)
-let g_maxmemoffsetentries = ref 0;;  (* argv 8 *)
-let g_memoffsets = ref false;; (*argv 9 *)
+let g_outputfile_slabinfotable = ref "";; (* argv 2 *)
+let g_outputfile_linkerscript = ref "";; (* argv 3 *)
+let g_loadaddr = ref 0x0;; (* argv 4 *)
+let g_loadmaxsize = ref 0x0;; (* argv 5 *)
+let g_totaluhslabs = ref 0;; (* argv 6 *)
+let g_maxincldevlistentries = ref 0;;  (* argv 7 *)
+let g_maxexcldevlistentries = ref 0;;  (* argv 8 *)
+let g_maxmemoffsetentries = ref 0;;  (* argv 9 *)
+let g_memoffsets = ref false;; (*argv 10 *)
+let g_ppflags = ref "";; (*argv 11 *)
+
+
 
 (* other global variables *)
 let g_totalslabmempgtblsets = ref 0;;
@@ -186,7 +189,7 @@ let umf_process_cmdline () =
 	let len = Array.length Sys.argv in
 		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u" len;
 
-		if len = 12 then
+		if len = 13 then
 	    	begin
 					g_slabsfile := Sys.argv.(1);
 					g_uobjconfigurescript := Sys.argv.(2);
@@ -199,6 +202,7 @@ let umf_process_cmdline () =
 					g_maxexcldevlistentries := int_of_string (Sys.argv.(9));
 					g_maxmemoffsetentries := int_of_string (Sys.argv.(10));
 					if int_of_string (Sys.argv.(11)) = 1 then g_memoffsets := true else g_memoffsets := false;
+					g_ppflags := Sys.argv.(12) ^ "-D__ASSEMBLY__";
 
 					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s" !g_slabsfile;
 					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s" !g_uobjconfigurescript;
@@ -211,7 +215,8 @@ let umf_process_cmdline () =
 					Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d" !g_maxexcldevlistentries;
 					Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d" !g_maxmemoffsetentries;
 					Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b" !g_memoffsets;
-
+					Uslog.logf "umfparse" Uslog.Info "g_ppflags=%s" !g_ppflags;
+					
 				end
 		else
 				begin
@@ -673,7 +678,7 @@ let main () =
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...";
 	umf_process_cmdline ();
 
-	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
+(*	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
 	Uslog.logf "umfparse" Uslog.Info "g_rootdir=%s" !g_rootdir;
 
 	g_totaluhslabmempgtblsets := !g_totaluhslabs;
@@ -702,7 +707,7 @@ let main () =
   Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
 	umf_output_linkerscript ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
-	
+	*)
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 
