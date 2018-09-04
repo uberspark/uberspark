@@ -326,8 +326,11 @@ let main () =
 	Uslog.logf "uccomp" Uslog.Info "g_rootdir=%s\n" !g_rootdir;
 
 (*	umfcommon_init !g_slabsfile !g_memoffsets !g_rootdir;*)
-	Libusmf.usmf_initialize !g_slabsfile !g_memoffsets !g_rootdir;
-	Uslog.logf "uccomp" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+(*	Libusmf.usmf_initialize !g_slabsfile !g_memoffsets !g_rootdir;*)
+	Libusmf.usmf_parse_uobj_list !g_slabsfile !g_rootdir;
+	Libusmf.usmf_parse_uobjs !g_memoffsets;
+
+		Uslog.logf "uccomp" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
 	
 	uccomp_outputccompdriverfile ();
 
