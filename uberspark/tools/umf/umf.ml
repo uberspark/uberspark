@@ -678,7 +678,7 @@ let main () =
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...";
 	umf_process_cmdline ();
 
-(*	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
+	g_rootdir := (Filename.dirname !g_slabsfile) ^ "/";
 	Uslog.logf "umfparse" Uslog.Info "g_rootdir=%s" !g_rootdir;
 
 	g_totaluhslabmempgtblsets := !g_totaluhslabs;
@@ -707,7 +707,7 @@ let main () =
   Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
 	umf_output_linkerscript ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
-	*)
+	
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 
