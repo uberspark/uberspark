@@ -639,6 +639,43 @@ let umf_output_linkerscript () =
 	()
 
 
+
+(* preprocess all uobj manifests *)
+let umf_preprocess_uobjs uobj_rootdir ppflags =
+	let i = ref 0 in
+	let pp_cmdline_base = ref "" in
+	let pp_cmdline = ref "" in
+	let uobj_dir = ref "" in
+	let uobj_temp_mf_file = ref "" in
+	let uobj_temp_mf_pp_file = ref "" in
+		
+		pp_cmdline_base := "ccomp -E " ^ ppflags;
+		
+		(* now iterate through all the uobjs *)
+		i := 0;
+		while (!i < !Libusmf.g_totalslabs) do
+	    	begin
+					uobj_dir := uobj_rootdir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ "/";
+					uobj_temp_mf_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.c";
+					uobj_temp_mf_pp_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.pp";
+
+					pp_cmdline := !pp_cmdline_base ^ " ";
+					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_file;
+					pp_cmdline := !pp_cmdline ^ " > ";
+					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_pp_file;
+					
+					
+					Uslog.logf "umf" Uslog.Info "uobj(%s): %s\n" (Hashtbl.find Libusmf.slab_idtoname !i) !pp_cmdline;      			
+
+	    		i := !i + 1;
+			end
+		done;
+
+()
+
+
+
+
 (*	
 let run () =
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...\n";
@@ -672,6 +709,8 @@ let run () =
 let () = Db.Main.extend run
 *)
 
+
+
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
@@ -694,8 +733,14 @@ let main () =
 
 
 	Libusmf.usmf_parse_uobj_list !g_slabsfile !g_rootdir;
+	Uslog.logf "umf" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+
+	umf_preprocess_uobjs !g_rootdir !g_ppflags;
+	Uslog.logf "umf" Uslog.Info "Preprocessed all uobjs\n";
+
+(*		
 	Libusmf.usmf_parse_uobjs !g_memoffsets;
-	Uslog.logf "umfparse" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+	Uslog.logf "umf" Uslog.Info "Parsed all uobjs\n";
 	
 	umf_compute_memory_map ();
 
@@ -709,7 +754,7 @@ let main () =
   Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
 	umf_output_linkerscript ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
-	
+	*)
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 
