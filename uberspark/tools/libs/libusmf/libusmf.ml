@@ -701,7 +701,7 @@ let usmf_populate_uobj_binary_sections uobj_entry uobj_id =
 
 (* parse uobj list file specified by uobj_list_filename and generate the *)
 (* required mappings from uobj name to uobj id and vice versa *)
-let usmf_parse_uobj_list uobj_list_filename = 
+let usmf_parse_uobj_list uobj_list_filename uobj_rootdir = 
 	try
 
 	(* read the uobj list JSON *)
@@ -715,9 +715,9 @@ let usmf_parse_uobj_list uobj_list_filename =
 					while (!i < (List.length uobj_list_trimmed)) do
 						begin
 							let uobj_name = (trim (List.nth uobj_list_trimmed !i)) in								
-							let uobj_dir = (!usmf_rootdir ^ uobj_name) in 
+							let uobj_dir = (uobj_rootdir ^ uobj_name) in 
 							let uobj_gsmfile = (uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
-							let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+							let uobj_mmapfile = (uobj_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
 
 								Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
 								Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
