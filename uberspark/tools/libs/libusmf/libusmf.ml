@@ -18,7 +18,7 @@ let usmf_maxincldevlistentries = ref 0;;
 let usmf_maxexcldevlistentries = ref 0;; 
 let usmf_maxmemoffsetentries = ref 0;;
 let usmf_memoffsets = ref false;;
-let usmf_rootdir = ref "";;
+(* let usmf_rootdir = ref "";; *)
 
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -704,6 +704,9 @@ let usmf_populate_uobj_binary_sections uobj_entry uobj_id =
 let usmf_parse_uobj_list uobj_list_filename uobj_rootdir = 
 	try
 
+	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" uobj_rootdir;
+
 	(* read the uobj list JSON *)
   let json = Yojson.Basic.from_file uobj_list_filename in
 	  (* Locally open the JSON manipulation functions *)
@@ -826,13 +829,12 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 ;;
 
 (* module initialization function *)
-let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
+(*let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =*)
+let usmf_parse_uobjs g_memoffsets =
 	usmf_memoffsets := g_memoffsets;
-	usmf_rootdir := g_rootdir;	 
-	usmf_parse_uobj_list uobj_list_filename;
+(*	usmf_rootdir := g_rootdir;*)	 
+(*	usmf_parse_uobj_list uobj_list_filename;*)
 	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B" !usmf_memoffsets;
-	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" !usmf_rootdir;
 
 	let i = ref 0 in
 		(* now iterate through all the slab id's and populate callmask and uapimasks *)
