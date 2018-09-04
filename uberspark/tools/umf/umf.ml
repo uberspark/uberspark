@@ -7,6 +7,7 @@ open Uslog
 open Libusmf
 open Sys
 open Str
+open Unix
 
 (*
 module Self = Plugin.Register
@@ -640,12 +641,29 @@ let umf_output_linkerscript () =
 
 
 
+let file_copy input_name output_name =
+	let buffer_size = 8192 in
+	let buffer = Bytes.create buffer_size in
+  let fd_in = openfile input_name [O_RDONLY] 0 in
+  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
+    |  0 -> ()
+    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
+  in
+  copy_loop ();
+  close fd_in;
+  close fd_out;
+
+()
+
+
 (* preprocess all uobj manifests *)
 let umf_preprocess_uobjs uobj_rootdir ppflags =
 	let i = ref 0 in
 	let pp_cmdline_base = ref "" in
 	let pp_cmdline = ref "" in
 	let uobj_dir = ref "" in
+	let uobj_mf_file = ref "" in
 	let uobj_temp_mf_file = ref "" in
 	let uobj_temp_mf_pp_file = ref "" in
 		
@@ -656,17 +674,21 @@ let umf_preprocess_uobjs uobj_rootdir ppflags =
 		while (!i < !Libusmf.g_totalslabs) do
 	    	begin
 					uobj_dir := uobj_rootdir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ "/";
+					uobj_mf_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm";
 					uobj_temp_mf_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.c";
 					uobj_temp_mf_pp_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.pp";
 
+					file_copy !uobj_mf_file !uobj_temp_mf_file;
+					
 					pp_cmdline := !pp_cmdline_base ^ " ";
 					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_file;
 					pp_cmdline := !pp_cmdline ^ " > ";
 					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_pp_file;
 					
 					
-					Uslog.logf "umf" Uslog.Info "uobj(%s): %s\n" (Hashtbl.find Libusmf.slab_idtoname !i) !pp_cmdline;      			
-
+					Uslog.logf "umf" Uslog.Info "Pre-processing uobj: %s\n" (Hashtbl.find Libusmf.slab_idtoname !i);      			
+					Sys.command !pp_cmdline;
+					
 	    		i := !i + 1;
 			end
 		done;
