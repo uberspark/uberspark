@@ -689,6 +689,8 @@ let umf_preprocess_uobjs uobj_rootdir ppflags =
 					Uslog.logf "umf" Uslog.Info "Pre-processing uobj: %s\n" (Hashtbl.find Libusmf.slab_idtoname !i);      			
 					Sys.command !pp_cmdline;
 					
+					Sys.remove !uobj_temp_mf_file;
+					
 	    		i := !i + 1;
 			end
 		done;
