@@ -13,7 +13,28 @@ let g_uberspark_install_hwmincludedir = "/usr/local/uberspark/hwm/include";;
 let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
+
+
+let copt_builduobj = ref false;;
  
+let set_max_files nbr_of_files = max_files_to_list := nbr_of_files
+ 
+let set_directory dir = dir_to_list := dir
+ 
+let main () =
+	begin
+		let speclist = [
+			("--builduobj", Arg.Set verbose, "Build uobj binary by compiling and linking");
+			("-b", Arg.Set verbose, "Build uobj binary by compiling and linking");
+		] in
+		let usage_msg = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
+			Arg.parse speclist print_endline usage_msg;
+			print_endline ("copt_builduobj: " ^ string_of_bool !copt_builduobj);
+	end
+	;;
+ 
+
+(* 
 let main () =
 	let len = Array.length Sys.argv in
 		if len = 2 then
@@ -70,6 +91,8 @@ let main () =
 				print_newline ();
 			end
 		;;
+*)
 		
 main ();;
+
 
