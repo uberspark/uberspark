@@ -17,15 +17,12 @@ let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
 let copt_builduobj = ref false;;
  
-let set_max_files nbr_of_files = max_files_to_list := nbr_of_files
- 
-let set_directory dir = dir_to_list := dir
  
 let main () =
 	begin
 		let speclist = [
-			("--builduobj", Arg.Set verbose, "Build uobj binary by compiling and linking");
-			("-b", Arg.Set verbose, "Build uobj binary by compiling and linking");
+			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 		] in
 		let usage_msg = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
 			Arg.parse speclist print_endline usage_msg;
