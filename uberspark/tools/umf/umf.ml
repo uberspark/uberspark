@@ -7,6 +7,7 @@ open Uslog
 open Libusmf
 open Sys
 open Str
+open Unix
 
 (*
 module Self = Plugin.Register
@@ -117,15 +118,18 @@ module Cmdopt_memoffsets = Self.False
 (*	command line inputs *)
 let g_slabsfile = ref "";;	(* argv 0 *)
 let g_uobjconfigurescript = ref "";; (* argv 1 *)
-let g_outputfile_slabinfotable = ref "";; (* argv 1 *)
-let g_outputfile_linkerscript = ref "";; (* argv 2 *)
-let g_loadaddr = ref 0x0;; (* argv 3 *)
-let g_loadmaxsize = ref 0x0;; (* argv 4 *)
-let g_totaluhslabs = ref 0;; (* argv 5 *)
-let g_maxincldevlistentries = ref 0;;  (* argv 6 *)
-let g_maxexcldevlistentries = ref 0;;  (* argv 7 *)
-let g_maxmemoffsetentries = ref 0;;  (* argv 8 *)
-let g_memoffsets = ref false;; (*argv 9 *)
+let g_outputfile_slabinfotable = ref "";; (* argv 2 *)
+let g_outputfile_linkerscript = ref "";; (* argv 3 *)
+let g_loadaddr = ref 0x0;; (* argv 4 *)
+let g_loadmaxsize = ref 0x0;; (* argv 5 *)
+let g_totaluhslabs = ref 0;; (* argv 6 *)
+let g_maxincldevlistentries = ref 0;;  (* argv 7 *)
+let g_maxexcldevlistentries = ref 0;;  (* argv 8 *)
+let g_maxmemoffsetentries = ref 0;;  (* argv 9 *)
+let g_memoffsets = ref false;; (*argv 10 *)
+let g_ppflags = ref "";; (*argv 11 *)
+
+
 
 (* other global variables *)
 let g_totalslabmempgtblsets = ref 0;;
@@ -186,7 +190,7 @@ let umf_process_cmdline () =
 	let len = Array.length Sys.argv in
 		Uslog.logf "umfparse" Uslog.Info "cmdline len=%u" len;
 
-		if len = 12 then
+		if len = 13 then
 	    	begin
 					g_slabsfile := Sys.argv.(1);
 					g_uobjconfigurescript := Sys.argv.(2);
@@ -199,6 +203,7 @@ let umf_process_cmdline () =
 					g_maxexcldevlistentries := int_of_string (Sys.argv.(9));
 					g_maxmemoffsetentries := int_of_string (Sys.argv.(10));
 					if int_of_string (Sys.argv.(11)) = 1 then g_memoffsets := true else g_memoffsets := false;
+					g_ppflags := Sys.argv.(12) ^ " -D__ASSEMBLY__";
 
 					Uslog.logf "umfparse" Uslog.Info "g_slabsfile=%s" !g_slabsfile;
 					Uslog.logf "umfparse" Uslog.Info "g_uobjconfigscript=%s" !g_uobjconfigurescript;
@@ -211,7 +216,8 @@ let umf_process_cmdline () =
 					Uslog.logf "umfparse" Uslog.Info "g_maxexcldevlistentries=%d" !g_maxexcldevlistentries;
 					Uslog.logf "umfparse" Uslog.Info "g_maxmemoffsetentries=%d" !g_maxmemoffsetentries;
 					Uslog.logf "umfparse" Uslog.Info "g_memoffsets=%b" !g_memoffsets;
-
+					Uslog.logf "umfparse" Uslog.Info "g_ppflags=%s" !g_ppflags;
+					
 				end
 		else
 				begin
@@ -634,6 +640,66 @@ let umf_output_linkerscript () =
 	()
 
 
+
+let file_copy input_name output_name =
+	let buffer_size = 8192 in
+	let buffer = Bytes.create buffer_size in
+  let fd_in = openfile input_name [O_RDONLY] 0 in
+  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
+    |  0 -> ()
+    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
+  in
+  copy_loop ();
+  close fd_in;
+  close fd_out;
+
+()
+
+
+(* preprocess all uobj manifests *)
+let umf_preprocess_uobjs uobj_rootdir ppflags =
+	let i = ref 0 in
+	let pp_cmdline_base = ref "" in
+	let pp_cmdline = ref "" in
+	let uobj_dir = ref "" in
+	let uobj_mf_file = ref "" in
+	let uobj_temp_mf_file = ref "" in
+	let uobj_temp_mf_pp_file = ref "" in
+		
+		pp_cmdline_base := "ccomp -E -P " ^ ppflags;
+		
+		(* now iterate through all the uobjs *)
+		i := 0;
+		while (!i < !Libusmf.g_totalslabs) do
+	    	begin
+					uobj_dir := uobj_rootdir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ "/";
+					uobj_mf_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm";
+					uobj_temp_mf_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.c";
+					uobj_temp_mf_pp_file := !uobj_dir ^ (Hashtbl.find Libusmf.slab_idtoname !i) ^ ".gsm.pp";
+
+					file_copy !uobj_mf_file !uobj_temp_mf_file;
+					
+					pp_cmdline := !pp_cmdline_base ^ " ";
+					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_file;
+					pp_cmdline := !pp_cmdline ^ " > ";
+					pp_cmdline := !pp_cmdline ^ !uobj_temp_mf_pp_file;
+					
+					
+					Uslog.logf "umf" Uslog.Info "Pre-processing uobj: %s\n" (Hashtbl.find Libusmf.slab_idtoname !i);      			
+					Sys.command !pp_cmdline;
+					
+					Sys.remove !uobj_temp_mf_file;
+					
+	    		i := !i + 1;
+			end
+		done;
+
+()
+
+
+
+
 (*	
 let run () =
 	Uslog.logf "umfparse" Uslog.Info "Parsing manifest...\n";
@@ -667,6 +733,8 @@ let run () =
 let () = Db.Main.extend run
 *)
 
+
+
 let main () =
 	Uslog.current_level := Uslog.ord Uslog.Info;
 
@@ -687,8 +755,15 @@ let main () =
 	Libusmf.usmf_maxexcldevlistentries := !g_maxexcldevlistentries; 
 	Libusmf.usmf_maxmemoffsetentries := !g_maxmemoffsetentries;
 
-	Libusmf.usmf_initialize !g_slabsfile !g_memoffsets !g_rootdir;
-	Uslog.logf "umfparse" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+
+	Libusmf.usmf_parse_uobj_list !g_slabsfile !g_rootdir;
+	Uslog.logf "umf" Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+
+	umf_preprocess_uobjs !g_rootdir !g_ppflags;
+	Uslog.logf "umf" Uslog.Info "Preprocessed all uobjs\n";
+
+	Libusmf.usmf_parse_uobjs !g_memoffsets;
+	Uslog.logf "umf" Uslog.Info "Parsed all uobjs\n";
 	
 	umf_compute_memory_map ();
 
@@ -702,7 +777,7 @@ let main () =
   Uslog.logf "umfparse" Uslog.Info "proceeding to output linker script...";
 	umf_output_linkerscript ();
   Uslog.logf "umfparse" Uslog.Info "successfully generated linker script";
-	
+
 	Uslog.logf "umfparse" Uslog.Info "Done.\n";
 ;;
 

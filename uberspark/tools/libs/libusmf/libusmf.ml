@@ -18,7 +18,7 @@ let usmf_maxincldevlistentries = ref 0;;
 let usmf_maxexcldevlistentries = ref 0;; 
 let usmf_maxmemoffsetentries = ref 0;;
 let usmf_memoffsets = ref false;;
-let usmf_rootdir = ref "";;
+(* let usmf_rootdir = ref "";; *)
 
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -121,7 +121,7 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
 			(*let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
 			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
-			let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+			let uobj_mmapfile = (!usmf_rootdir ^ "../_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
 			*)
 
 				Uslog.logf "libusmf" Uslog.Info "uobj-name:%s" uobj_name;
@@ -701,8 +701,11 @@ let usmf_populate_uobj_binary_sections uobj_entry uobj_id =
 
 (* parse uobj list file specified by uobj_list_filename and generate the *)
 (* required mappings from uobj name to uobj id and vice versa *)
-let usmf_parse_uobj_list uobj_list_filename = 
+let usmf_parse_uobj_list uobj_list_filename uobj_rootdir = 
 	try
+
+	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
+	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" uobj_rootdir;
 
 	(* read the uobj list JSON *)
   let json = Yojson.Basic.from_file uobj_list_filename in
@@ -715,9 +718,9 @@ let usmf_parse_uobj_list uobj_list_filename =
 					while (!i < (List.length uobj_list_trimmed)) do
 						begin
 							let uobj_name = (trim (List.nth uobj_list_trimmed !i)) in								
-							let uobj_dir = (!usmf_rootdir ^ uobj_name) in 
+							let uobj_dir = (uobj_rootdir ^ uobj_name) in 
 							let uobj_gsmfile = (uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
-							let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+							let uobj_mmapfile = (uobj_rootdir ^ "../_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
 
 								Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
 								Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
@@ -826,13 +829,12 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 ;;
 
 (* module initialization function *)
-let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =
+(*let usmf_initialize uobj_list_filename g_memoffsets g_rootdir =*)
+let usmf_parse_uobjs g_memoffsets =
 	usmf_memoffsets := g_memoffsets;
-	usmf_rootdir := g_rootdir;	 
-	usmf_parse_uobj_list uobj_list_filename;
+(*	usmf_rootdir := g_rootdir;*)	 
+(*	usmf_parse_uobj_list uobj_list_filename;*)
 	Uslog.logf "libusmf" Uslog.Info "gmemoffsets=%B" !usmf_memoffsets;
-	Uslog.logf "libusmf" Uslog.Info "uobj_list_filename=%s" uobj_list_filename;
-	Uslog.logf "libusmf" Uslog.Info "usmf_rootdir=%s" !usmf_rootdir;
 
 	let i = ref 0 in
 		(* now iterate through all the slab id's and populate callmask and uapimasks *)
