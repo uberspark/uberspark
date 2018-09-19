@@ -121,7 +121,7 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
 			(*let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
 			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
-			let uobj_mmapfile = (!usmf_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+			let uobj_mmapfile = (!usmf_rootdir ^ "../_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
 			*)
 
 				Uslog.logf "libusmf" Uslog.Info "uobj-name:%s" uobj_name;
@@ -720,7 +720,7 @@ let usmf_parse_uobj_list uobj_list_filename uobj_rootdir =
 							let uobj_name = (trim (List.nth uobj_list_trimmed !i)) in								
 							let uobj_dir = (uobj_rootdir ^ uobj_name) in 
 							let uobj_gsmfile = (uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
-							let uobj_mmapfile = (uobj_rootdir ^ "_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
+							let uobj_mmapfile = (uobj_rootdir ^ "../_objects/_objs_slab_" ^ uobj_name ^ "/" ^ uobj_name ^ ".mmap") in
 
 								Hashtbl.add slab_idtoname !g_totalslabs uobj_name;
 								Hashtbl.add slab_nametoid uobj_name !g_totalslabs;
