@@ -39,65 +39,6 @@ let main () =
 	end
 	;;
  
-
-(* 
-let main () =
-	let len = Array.length Sys.argv in
-		if len = 2 then
-	    	begin
-	      		if (compare "--print-uberspark-bindir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_bindir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-homedir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_homedir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-includedir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_includedir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-hwmdir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_hwmdir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-hwmincludedir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_hwmincludedir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-libsdir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_libsdir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-libsincludesdir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_libsincludesdir;
-	      				print_newline ();
-	      			end
-	      		else if (compare "--print-uberspark-toolsdir" Sys.argv.(1)) = 0 then
-	      			begin
-						print_string g_uberspark_install_toolsdir;
-	      				print_newline ();
-	      			end
-	      		else
-	      			begin
-						print_string "Invalid argument!";
-						print_newline ();
-	      			end
-	    	end
-	    else
-	    	begin
-				print_string "Too many arguments!";
-				print_newline ();
-			end
-		;;
-*)
 		
 main ();;
 
