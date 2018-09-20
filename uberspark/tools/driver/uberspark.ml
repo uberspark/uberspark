@@ -45,8 +45,9 @@ let main () =
  			Uslog.logf log_mpf Uslog.Info "copt_builduobj: %b" !copt_builduobj;
 
  			Uslog.logf log_mpf Uslog.Info "cmdopt_uobjlist: %s" !cmdopt_uobjlist;
+ 			(* Uslog.logf log_mpf Uslog.Info "dirname: %s" (Filename.dirname !cmdopt_uobjlist); *)
 
-			Libusmf.usmf_parse_uobj_list "./testbed/testbed.uobjlst" "./testbed";
+			Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) (Filename.dirname !cmdopt_uobjlist);
 			Uslog.logf log_mpf Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
 
 		end
