@@ -82,13 +82,13 @@ let main () =
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
 			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
 
-(*
+
 			file_copy !cmdopt_uobjmanifest (!uobj_name ^ ".gsm.pp");
 
 			Uslog.logf log_mpf Uslog.Info "uobj_name=%s, uobj_id=%u\n"  !uobj_name !uobj_id;
 			Libusmf.usmf_memoffsets := false;
 			Libusmf.usmf_parse_uobj_mf (Hashtbl.find Libusmf.slab_idtogsm !uobj_id) (Hashtbl.find Libusmf.slab_idtommapfile !uobj_id);
-*)
+
 
 		end
 	;;
