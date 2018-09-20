@@ -4,6 +4,10 @@
 open Sys
 open Unix
 
+open Uslog
+
+let log_mpf = "uberSpark";;
+
 let g_install_prefix = "/usr/local";;
 let g_uberspark_install_bindir = "/usr/local/bin";;
 let g_uberspark_install_homedir = "/usr/local/uberspark";;
@@ -18,7 +22,7 @@ let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 let copt_builduobj = ref false;;
 
 let cmdopt_invalid opt = 
- 	print_endline ("invalid option: " ^ opt);
+	Uslog.logf log_mpf Uslog.Info "invalid option: %s" opt;
 	ignore(exit 1);
 	;;
 
@@ -29,8 +33,9 @@ let main () =
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 		] in
 		let usage_msg = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
+			Uslog.current_level := Uslog.ord Uslog.Info;
 			Arg.parse speclist cmdopt_invalid usage_msg;
-			print_endline ("copt_builduobj: " ^ string_of_bool !copt_builduobj);
+ 			Uslog.logf log_mpf Uslog.Info "copt_builduobj: %b" !copt_builduobj;
 	end
 	;;
  
