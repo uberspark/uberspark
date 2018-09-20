@@ -86,7 +86,7 @@ let exec_process_withlog verbose =
   end;
 
 	Unix.close readme;
-	(!p_exitstatus, (List.rev !p_output))
+	(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
 ;;
 
 
@@ -142,11 +142,11 @@ let main () =
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
 
-			let result = (exec_process_withlog true) in
-				let exit_status = fst result  in
-				let process_output = snd result in
-						Uslog.logf log_mpf Uslog.Info "Done: exit_status=%d\n" exit_status;
-	
+			let (exit_status, exit_signal, process_output) = (exec_process_withlog true) in
+				(* let exit_status = fst result  in
+				let process_output = snd result in*)
+						Uslog.logf log_mpf Uslog.Info "Done: exit_signal=%b exit_status=%d\n" exit_signal exit_status;
+							
 												 
 			(* read_process_lines "gcc -P -E dat.c -o dat.i";*)
 			(* redirect_process (); *)
