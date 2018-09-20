@@ -642,45 +642,53 @@ let usmf_populate_uobj_binary_sections uobj_entry uobj_id =
 			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%u" uobj_id;
 
 			let uobj_0_bs = uobj_0 |> member "uobj-binary-sections" |> to_list in
-			let uobj_0_bs_section_name = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-name" uobj_0 |> to_string) in 
-  		let uobj_0_bs_section_size = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-size" uobj_0 |> to_string) in 
 				begin
-					while (!i < (List.length uobj_0_bs)) do
+				
+					if ((List.length uobj_0_bs) > 0) then
 						begin
-		            let tag_ms_qual =  (trim (List.nth uobj_0_bs_section_name !i)) in
-		            let tag_ms_size =  int_of_string (trim (List.nth uobj_0_bs_section_size !i)) in
-            
-     						if (compare tag_ms_qual "data") = 0 then 
-    							begin
-					                Hashtbl.add slab_idtodatasize uobj_id tag_ms_size;
-    							end
-    						else if (compare tag_ms_qual "code") = 0 then
-    							begin
-            						Hashtbl.add slab_idtocodesize uobj_id tag_ms_size;
-    							end
-    						else if (compare tag_ms_qual "stack") = 0 then
-    							begin
-        							Hashtbl.add slab_idtostacksize uobj_id tag_ms_size;
-    							end
-    						else if (compare tag_ms_qual "dmadata") = 0 then
-    							begin
-        							Hashtbl.add slab_idtodmadatasize uobj_id tag_ms_size;
-    							end
-    						else
-    							begin
-										Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: Error: Illegal MS entry qualifier: %s\n" tag_ms_qual;
-					          ignore(exit 1);
-    							end
-    						;
-  
-								i := !i + 1;
-						end
-					done;
+							let uobj_0_bs_section_name = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-name" uobj_0 |> to_string) in 
+  						let uobj_0_bs_section_size = myMap uobj_0_bs ~f:(fun uobj_0 -> member "section-size" uobj_0 |> to_string) in 
 					
-        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d code size:=%u\n" uobj_id (Hashtbl.find slab_idtocodesize uobj_id);
-        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d data size:=%u\n" uobj_id (Hashtbl.find slab_idtodatasize uobj_id);
-        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d stack size:=%u\n" uobj_id (Hashtbl.find slab_idtostacksize uobj_id);
-        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d dmadata size:=%u\n" uobj_id (Hashtbl.find slab_idtodmadatasize uobj_id);
+							while (!i < (List.length uobj_0_bs)) do
+								begin
+				            let tag_ms_qual =  (trim (List.nth uobj_0_bs_section_name !i)) in
+				            let tag_ms_size =  int_of_string (trim (List.nth uobj_0_bs_section_size !i)) in
+		            
+		     						if (compare tag_ms_qual "data") = 0 then 
+		    							begin
+							                Hashtbl.add slab_idtodatasize uobj_id tag_ms_size;
+		    							end
+		    						else if (compare tag_ms_qual "code") = 0 then
+		    							begin
+		            						Hashtbl.add slab_idtocodesize uobj_id tag_ms_size;
+		    							end
+		    						else if (compare tag_ms_qual "stack") = 0 then
+		    							begin
+		        							Hashtbl.add slab_idtostacksize uobj_id tag_ms_size;
+		    							end
+		    						else if (compare tag_ms_qual "dmadata") = 0 then
+		    							begin
+		        							Hashtbl.add slab_idtodmadatasize uobj_id tag_ms_size;
+		    							end
+		    						else
+		    							begin
+												Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: Error: Illegal MS entry qualifier: %s\n" tag_ms_qual;
+							          ignore(exit 1);
+		    							end
+		    						;
+		  
+										i := !i + 1;
+								end
+							done; (* end while *)
+
+			        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d code size:=%u\n" uobj_id (Hashtbl.find slab_idtocodesize uobj_id);
+			        Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d data size:=%u\n" uobj_id (Hashtbl.find slab_idtodatasize uobj_id);
+      			  Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d stack size:=%u\n" uobj_id (Hashtbl.find slab_idtostacksize uobj_id);
+        			Uslog.logf "libusmf" Uslog.Info "usmf_populate_uobj_binary_sections: uobj_id=%d dmadata size:=%u\n" uobj_id (Hashtbl.find slab_idtodmadatasize uobj_id);
+
+						end
+					; (* end if *)
+										
 					
 				end
 
