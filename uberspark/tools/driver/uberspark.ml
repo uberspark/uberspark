@@ -46,13 +46,78 @@ let file_copy input_name output_name =
   copy_loop ();
   close fd_in;
   close fd_out;
+	()
+;;
 
-()
 
-		
+(* Create a pipe for the subprocess output. *)
+let readme, writeme = Unix.pipe ();;
+
+
+(* execute a process and print its output if verbose is set to true *)
+(* return the error code of the process *)
+let exec_process_withlog () =
+	(* Launch the program, redirecting its stdout to the pipe.
+   By calling Unix.create_process, we can avoid running the
+   command through the shell. *)
+  let pid = Unix.create_process
+    "gcc" [| "gcc" ; "-P"; "-E"; "../../dat.c"; "-o" ; "dat.i" |]
+    Unix.stdin writeme writeme in
+  Unix.close writeme;
+  let in_channel = Unix.in_channel_of_descr readme in
+  let lines = ref [] in
+  begin
+    try
+      while true do
+        lines := input_line in_channel :: !lines
+      done
+    with End_of_file -> 
+			match	(Unix.waitpid [] pid) with
+    	| (wpid, Unix.WEXITED status) ->
+        	Printf.printf "program exited with status %d\n" status;
+    	| (wpid, Unix.WSIGNALED signal) ->
+        	Printf.printf "program killed by signal %d\n" signal;
+    	| (wpid, Unix.WSTOPPED signal) ->
+        	Printf.printf "program stopped by signal %d\n" signal;
+			;
+			()
+  end;
+  Unix.close readme;
+  List.iter print_endline (List.rev !lines);
+	()
+;;
+
+
+				
+let read_process_lines command =
+  let lines = ref [] in
+  let in_channel = Unix.open_process_in command in
+  begin
+    try
+      while true do
+        lines := input_line in_channel :: !lines
+      done;
+    with End_of_file ->
+      ignore (Unix.close_process_in in_channel)
+  end;
+  List.rev !lines;
+;;
+
+let redirect_process () =
+  let ph = Unix.open_process_in "gcc 2>&1" in
+	try
+	  while true do
+	    let line = input_line ph in
+				Uslog.logf log_mpf Uslog.Info "%s" line; 
+    	()
+  	done
+		with End_of_file -> ()
+;;
+    						
+								
 let main () =
 	begin
-		let i = ref 0 in
+(*		let i = ref 0 in
 		let speclist = [
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
@@ -95,7 +160,11 @@ let main () =
 						end
 					done;
 				end
+*)
 
+			 exec_process_withlog (); 
+			(* read_process_lines "gcc -P -E dat.c -o dat.i";*)
+			(* redirect_process (); *)
 (*
 			file_copy !cmdopt_uobjmanifest (!uobj_name ^ ".gsm.pp");
 
