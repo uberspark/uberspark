@@ -22,7 +22,7 @@ let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 let copt_builduobj = ref false;;
 
 let cmdopt_invalid opt = 
-	Uslog.logf log_mpf Uslog.Info "invalid option: %s" opt;
+	Uslog.logf log_mpf Uslog.Info "invalid option: '%s'; use -help to see available options" opt;
 	ignore(exit 1);
 	;;
 
