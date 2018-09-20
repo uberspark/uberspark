@@ -1,0 +1,31 @@
+{
+	"uobj-name": "uobj_test",
+	"uobj-type": "na",
+	"uobj-subtype": "na",
+
+	"uobj-uapifunctions":[],
+
+	"uobj-callees": "",
+
+	"uobj-uapicallees":[],
+
+
+	"uobj-resource-devices":[],
+
+	"uobj-resource-memory":[],	
+
+	"uobj-exportfunctions": "",
+
+
+	"uobj-binary-sections":[],
+
+
+	"c-files":	"",
+		
+	"v-harness": []
+	
+	
+}
+
+
+
