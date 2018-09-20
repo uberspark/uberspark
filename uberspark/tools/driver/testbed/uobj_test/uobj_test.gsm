@@ -5,12 +5,16 @@ author: amit vasudevan (amitvasudevan@acm.org)
 */
 
 {
-	"uobj-includedirs": [ 
-		".",
-		"../.",
-		"/usr/local/include"
-	],
+	
+	"uobj-sources" : {
 
+		"uobj-includedirs": [ 
+			".",
+			"../.",
+			"/usr/local/include"
+		]
+	},
+	
 
 	/* name of the uoberobject */
 		

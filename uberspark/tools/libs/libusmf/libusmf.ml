@@ -3,6 +3,9 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 open Uslog
+open Yojson.Basic.Util
+open Yojson.Basic
+open Yojson
 
 module Libusmf = 
 	struct
@@ -822,6 +825,41 @@ let usmf_parse_uobj_mf_includedirs uobj_id uobj_mf_filename =
 ;;
 
 
+(* parse uobj manifest "uobj-sources" *)
+let usmf_parse_uobj_mf_uobj_sources uobj_id uobj_mf_filename = 
+	let retval = ref false in
+	if !g_totalslabs > 0 then
+		begin
+			try
+		
+			(* read the JSON manifest file *)
+		  let uobj_mf_json = Yojson.Basic.from_file uobj_mf_filename in
+			   let open Yojson.Basic.Util in
+			  	let uobj_sources_json = uobj_mf_json |> member "uobj-sources" in
+						if uobj_sources_json != `Null then
+							begin
+								let uobj_includedirs = uobj_sources_json |> member "uobj-includedirs" |> to_list in
+									List.iter (fun x -> Hashtbl.add slab_idtoincludedirs uobj_id (x |> to_string)) uobj_includedirs;
+
+								retval := true;
+							end
+						else
+							begin
+								retval := false;
+							end
+						;							
+		with Yojson.Basic.Util.Type_error _ -> 
+				Uslog.logf "libusmf" Uslog.Info "%s: invalid uobj-sources definition. skipping parsing" __LOC__;
+				retval := false;
+			;
+		end
+	else
+		begin
+			retval := false;
+		end
+		;
+	(!retval)
+;;
 
 
 

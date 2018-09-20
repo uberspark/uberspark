@@ -94,7 +94,7 @@ let exec_process_withlog p_name cmdline verbose =
 								
 let main () =
 	begin
-(*		let i = ref 0 in
+		let i = ref 0 in
 		let speclist = [
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
@@ -122,6 +122,7 @@ let main () =
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
 			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
 
+(*
 		Uslog.logf log_mpf Uslog.Info "proceeding to parse includes...";
 			Libusmf.usmf_parse_uobj_mf_includedirs !uobj_id !cmdopt_uobjmanifest;
 			Uslog.logf log_mpf Uslog.Info "includes parsed.";
@@ -139,6 +140,24 @@ let main () =
 				end
 *)
 
+		Uslog.logf log_mpf Uslog.Info "proceeding to parse uobj-sources...";
+		Libusmf.usmf_parse_uobj_mf_uobj_sources !uobj_id !cmdopt_uobjmanifest;
+		Uslog.logf log_mpf Uslog.Info "done parsing uobj-sources...";
+
+					let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludedirs !uobj_id) in
+				begin
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+					while (!i < (List.length str_list)) do
+						begin
+							let include_dir_str = (List.nth str_list !i) in
+							Uslog.logf log_mpf Uslog.Info "i=%u --> %s" !i include_dir_str; 
+							i := !i + 1;
+						end
+					done;
+				end
+		
+
+(*
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
 
@@ -152,6 +171,7 @@ let main () =
 				
 			let (exit_status, exit_signal, process_output) = (exec_process_withlog "gcc" !p_cmdline true) in
 						Uslog.logf log_mpf Uslog.Info "Done: exit_signal=%b exit_status=%d\n" exit_signal exit_status;
+*)
 							
 												 
 (*
