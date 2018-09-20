@@ -1,6 +1,18 @@
+/*
+sample json file
+author: amit vasudevan (amitvasudevan@acm.org)
+
+*/
+
 {
-	"uobj-includedirs" : [],
-	
+	"uobj-includedirs": [
+		".",
+		"../.",
+		"/usr/local/include"
+	],
+
+	/* name of the uoberobject */
+		
 	"uobj-name": "uobj_test",
 	"uobj-type": "na",
 	"uobj-subtype": "na",

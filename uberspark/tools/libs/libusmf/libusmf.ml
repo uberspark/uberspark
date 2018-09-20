@@ -808,8 +808,8 @@ let usmf_parse_uobj_mf_includes uobj_mf_filename =
 					done;
 
 																																				
-		with Yojson.Json_error s -> 
-				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includes: skipping include parsing";
+		with Yojson.Basic.Util.Type_error _ -> 
+				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includes: no valid include tags. skipping include parsing";
 			;
 		end
 		;
