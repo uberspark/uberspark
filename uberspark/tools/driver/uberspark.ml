@@ -52,10 +52,10 @@ let file_copy input_name output_name =
 
 (* execute a process and print its output if verbose is set to true *)
 (* return the error code of the process and the output as a list of lines *)
-let exec_process_withlog verbose =
+let exec_process_withlog p_name cmdline verbose =
 	let readme, writeme = Unix.pipe () in
 	let pid = Unix.create_process
-    "gcc" [| "gcc" ; "-P"; "-E"; "../../dat.c"; "-o" ; "dat.i" |]
+		p_name (Array.of_list cmdline)
     Unix.stdin writeme writeme in
   Unix.close writeme;
   let in_channel = Unix.in_channel_of_descr readme in
@@ -142,7 +142,15 @@ let main () =
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
 
-			let (exit_status, exit_signal, process_output) = (exec_process_withlog true) in
+			let p_cmdline = ref [] in
+				p_cmdline := !p_cmdline @ [ "gcc" ];
+				p_cmdline := !p_cmdline @ [ "-P" ];
+				p_cmdline := !p_cmdline @ [ "-E" ];
+				p_cmdline := !p_cmdline @ [ "../../dat.c" ];
+				p_cmdline := !p_cmdline @ [ "-o" ];
+				p_cmdline := !p_cmdline @ [ "dat.i" ];
+				
+			let (exit_status, exit_signal, process_output) = (exec_process_withlog "gcc" !p_cmdline true) in
 						Uslog.logf log_mpf Uslog.Info "Done: exit_signal=%b exit_status=%d\n" exit_signal exit_status;
 							
 												 
