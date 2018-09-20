@@ -62,6 +62,9 @@ let slab_idtostacksize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 let slab_idtodmadatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 
+let slab_idtoincludedirs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+
+
 (*
 	**************************************************************************
 	debugging related
@@ -787,8 +790,7 @@ let usmf_parse_uobj_mmap uobj_mmap_filename uobj_id =
 
 
 (* parse uobj manifest specified by uobj_mf_filename and store includedirs *)
-(* and includes *)
-let usmf_parse_uobj_mf_includes uobj_mf_filename = 
+let usmf_parse_uobj_mf_includedirs uobj_id uobj_mf_filename = 
 	let i = ref 0 in
 
 	if !g_totalslabs > 0 then
@@ -803,13 +805,17 @@ let usmf_parse_uobj_mf_includes uobj_mf_filename =
 
 					while (!i < (List.length uobj_includedirs)) do
 						begin
+	            let include_dir_json = (List.nth uobj_includedirs !i) in 
+							let include_dir_str =  include_dir_json |> to_string in
+							Hashtbl.add slab_idtoincludedirs uobj_id include_dir_str;
+							(* Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includedirs: i=%u --> %s" !i include_dir_str; *) 
 							i := !i + 1;
 						end
 					done;
 
 																																				
 		with Yojson.Basic.Util.Type_error _ -> 
-				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includes: no valid include tags. skipping include parsing";
+				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includedirs: no valid include tags. skipping include parsing";
 			;
 		end
 		;

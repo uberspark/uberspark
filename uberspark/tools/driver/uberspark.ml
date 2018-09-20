@@ -52,6 +52,7 @@ let file_copy input_name output_name =
 		
 let main () =
 	begin
+		let i = ref 0 in
 		let speclist = [
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
@@ -74,21 +75,34 @@ let main () =
 			Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
 			Uslog.logf log_mpf Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
 
-			Uslog.logf log_mpf Uslog.Info "proceeding to parse includes...";
-			Libusmf.usmf_parse_uobj_mf_includes !cmdopt_uobjmanifest;
-			Uslog.logf log_mpf Uslog.Info "includes parsed.";
-
+	
 			uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
 			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
 
+		Uslog.logf log_mpf Uslog.Info "proceeding to parse includes...";
+			Libusmf.usmf_parse_uobj_mf_includedirs !uobj_id !cmdopt_uobjmanifest;
+			Uslog.logf log_mpf Uslog.Info "includes parsed.";
 
+			let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludedirs !uobj_id) in
+				begin
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+					while (!i < (List.length str_list)) do
+						begin
+							let include_dir_str = (List.nth str_list !i) in
+							Uslog.logf log_mpf Uslog.Info "i=%u --> %s" !i include_dir_str; 
+							i := !i + 1;
+						end
+					done;
+				end
+
+(*
 			file_copy !cmdopt_uobjmanifest (!uobj_name ^ ".gsm.pp");
 
 			Uslog.logf log_mpf Uslog.Info "uobj_name=%s, uobj_id=%u\n"  !uobj_name !uobj_id;
 			Libusmf.usmf_memoffsets := false;
 			Libusmf.usmf_parse_uobj_mf (Hashtbl.find Libusmf.slab_idtogsm !uobj_id) (Hashtbl.find Libusmf.slab_idtommapfile !uobj_id);
-
+*)
 
 		end
 	;;
