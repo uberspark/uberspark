@@ -50,17 +50,11 @@ let file_copy input_name output_name =
 ;;
 
 
-(* Create a pipe for the subprocess output. *)
-
-
 (* execute a process and print its output if verbose is set to true *)
-(* return the error code of the process *)
+(* return the error code of the process and the output as a list of lines *)
 let exec_process_withlog verbose =
-	(* Launch the program, redirecting its stdout to the pipe.
-   By calling Unix.create_process, we can avoid running the
-   command through the shell. *)
-		let readme, writeme = Unix.pipe () in
-	  let pid = Unix.create_process
+	let readme, writeme = Unix.pipe () in
+	let pid = Unix.create_process
     "gcc" [| "gcc" ; "-P"; "-E"; "../../dat.c"; "-o" ; "dat.i" |]
     Unix.stdin writeme writeme in
   Unix.close writeme;
@@ -77,8 +71,7 @@ let exec_process_withlog verbose =
 					Uslog.logf log_mpf Uslog.Info "%s" !p_singleoutputline;
 										
 				p_output := p_singleoutputline :: !p_output 
-				(* p_output := input_line in_channel :: !p_output *)
-      done
+	    done
     with End_of_file -> 
 			match	(Unix.waitpid [] pid) with
     	| (wpid, Unix.WEXITED status) ->
@@ -91,37 +84,12 @@ let exec_process_withlog verbose =
 			;
 			()
   end;
-  Unix.close readme;
-  (* List.iter print_endline (List.rev !lines); *)
+
+	Unix.close readme;
 	(!p_exitstatus, (List.rev !p_output))
 ;;
 
 
-				
-let read_process_lines command =
-  let lines = ref [] in
-  let in_channel = Unix.open_process_in command in
-  begin
-    try
-      while true do
-        lines := input_line in_channel :: !lines
-      done;
-    with End_of_file ->
-      ignore (Unix.close_process_in in_channel)
-  end;
-  List.rev !lines;
-;;
-
-let redirect_process () =
-  let ph = Unix.open_process_in "gcc 2>&1" in
-	try
-	  while true do
-	    let line = input_line ph in
-				Uslog.logf log_mpf Uslog.Info "%s" line; 
-    	()
-  	done
-		with End_of_file -> ()
-;;
     						
 								
 let main () =
