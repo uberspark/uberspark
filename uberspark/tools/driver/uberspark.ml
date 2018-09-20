@@ -51,7 +51,6 @@ let file_copy input_name output_name =
 
 
 (* Create a pipe for the subprocess output. *)
-let readme, writeme = Unix.pipe ();;
 
 
 (* execute a process and print its output if verbose is set to true *)
@@ -60,31 +59,35 @@ let exec_process_withlog () =
 	(* Launch the program, redirecting its stdout to the pipe.
    By calling Unix.create_process, we can avoid running the
    command through the shell. *)
-  let pid = Unix.create_process
+		let readme, writeme = Unix.pipe () in
+	  let pid = Unix.create_process
     "gcc" [| "gcc" ; "-P"; "-E"; "../../dat.c"; "-o" ; "dat.i" |]
     Unix.stdin writeme writeme in
   Unix.close writeme;
   let in_channel = Unix.in_channel_of_descr readme in
-  let lines = ref [] in
+  let p_output = ref [] in
+	let p_exitstatus = ref 0 in
+	let p_exitsignal = ref false in
   begin
     try
       while true do
-        lines := input_line in_channel :: !lines
+        p_output := input_line in_channel :: !p_output
       done
     with End_of_file -> 
 			match	(Unix.waitpid [] pid) with
     	| (wpid, Unix.WEXITED status) ->
-        	Printf.printf "program exited with status %d\n" status;
+        	p_exitstatus := status;
+					p_exitsignal := false;
     	| (wpid, Unix.WSIGNALED signal) ->
-        	Printf.printf "program killed by signal %d\n" signal;
+        	p_exitsignal := true;
     	| (wpid, Unix.WSTOPPED signal) ->
-        	Printf.printf "program stopped by signal %d\n" signal;
+        	p_exitsignal := true;
 			;
 			()
   end;
   Unix.close readme;
-  List.iter print_endline (List.rev !lines);
-	()
+  (* List.iter print_endline (List.rev !lines); *)
+	(!p_exitstatus, (List.rev !p_output))
 ;;
 
 
@@ -162,7 +165,15 @@ let main () =
 				end
 *)
 
-			 exec_process_withlog (); 
+			Uslog.current_level := Uslog.ord Uslog.Info;
+			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
+
+			let result = exec_process_withlog () in
+				let exit_status = fst result  in
+				let process_output = snd result in
+						Uslog.logf log_mpf Uslog.Info "Done: exit_status=%d\n" exit_status;
+	
+												 
 			(* read_process_lines "gcc -P -E dat.c -o dat.i";*)
 			(* redirect_process (); *)
 (*
