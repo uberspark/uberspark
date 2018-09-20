@@ -5,6 +5,7 @@ open Sys
 open Unix
 
 open Uslog
+open Libusmf
 
 let log_mpf = "uberSpark";;
 
@@ -36,7 +37,11 @@ let main () =
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Arg.parse speclist cmdopt_invalid usage_msg;
  			Uslog.logf log_mpf Uslog.Info "copt_builduobj: %b" !copt_builduobj;
-	end
+
+			Libusmf.usmf_parse_uobj_list "./testbed/testbed.uobjlst" "./testbed";
+			Uslog.logf log_mpf Uslog.Info "g_totalslabs=%d \n" !Libusmf.g_totalslabs;
+
+		end
 	;;
  
 		
