@@ -30,6 +30,9 @@ let cmdopt_invalid opt =
 let cmdopt_uobjlist = ref "";;
 let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 
+let cmdopt_uobjmanifest = ref "";;
+let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+
 		
 let main () =
 	begin
@@ -37,6 +40,7 @@ let main () =
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
+			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
 
 			] in
 		let usage_msg = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
