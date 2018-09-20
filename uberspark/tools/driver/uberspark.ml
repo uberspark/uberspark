@@ -55,7 +55,7 @@ let file_copy input_name output_name =
 
 (* execute a process and print its output if verbose is set to true *)
 (* return the error code of the process *)
-let exec_process_withlog () =
+let exec_process_withlog verbose =
 	(* Launch the program, redirecting its stdout to the pipe.
    By calling Unix.create_process, we can avoid running the
    command through the shell. *)
@@ -66,12 +66,18 @@ let exec_process_withlog () =
   Unix.close writeme;
   let in_channel = Unix.in_channel_of_descr readme in
   let p_output = ref [] in
+	let p_singleoutputline = ref "" in
 	let p_exitstatus = ref 0 in
 	let p_exitsignal = ref false in
   begin
     try
       while true do
-        p_output := input_line in_channel :: !p_output
+				p_singleoutputline := input_line in_channel;
+				if verbose then
+					Uslog.logf log_mpf Uslog.Info "%s" !p_singleoutputline;
+										
+				p_output := p_singleoutputline :: !p_output 
+				(* p_output := input_line in_channel :: !p_output *)
       done
     with End_of_file -> 
 			match	(Unix.waitpid [] pid) with
@@ -168,7 +174,7 @@ let main () =
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
 
-			let result = exec_process_withlog () in
+			let result = (exec_process_withlog true) in
 				let exit_status = fst result  in
 				let process_output = snd result in
 						Uslog.logf log_mpf Uslog.Info "Done: exit_status=%d\n" exit_status;
