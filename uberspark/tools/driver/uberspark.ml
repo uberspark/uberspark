@@ -143,13 +143,9 @@ let main () =
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
 
 			let (exit_status, exit_signal, process_output) = (exec_process_withlog true) in
-				(* let exit_status = fst result  in
-				let process_output = snd result in*)
 						Uslog.logf log_mpf Uslog.Info "Done: exit_signal=%b exit_status=%d\n" exit_signal exit_status;
 							
 												 
-			(* read_process_lines "gcc -P -E dat.c -o dat.i";*)
-			(* redirect_process (); *)
 (*
 			file_copy !cmdopt_uobjmanifest (!uobj_name ^ ".gsm.pp");
 
