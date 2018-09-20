@@ -784,6 +784,43 @@ let usmf_parse_uobj_mmap uobj_mmap_filename uobj_id =
 	()
 ;;
 
+
+
+(* parse uobj manifest specified by uobj_mf_filename and store includedirs *)
+(* and includes *)
+let usmf_parse_uobj_mf_includes uobj_mf_filename = 
+	let i = ref 0 in
+
+	if !g_totalslabs > 0 then
+		begin
+			try
+		
+			(* read the manifest JSON *)
+		  let uobj_entry = Yojson.Basic.from_file uobj_mf_filename in
+			  (* Locally open the JSON manipulation functions *)
+			  let open Yojson.Basic.Util in
+					let uobj_includedirs = uobj_entry |> member "uobj-includedirs" |> to_list in
+
+					while (!i < (List.length uobj_includedirs)) do
+						begin
+							i := !i + 1;
+						end
+					done;
+
+																																				
+		with Yojson.Json_error s -> 
+				Uslog.logf "libusmf" Uslog.Info "usmf_parse_uobj_mf_includes: skipping include parsing";
+			;
+		end
+		;
+;;
+
+
+
+
+
+
+
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
 let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename = 

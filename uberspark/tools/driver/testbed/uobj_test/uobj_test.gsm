@@ -1,4 +1,6 @@
 {
+	"uobj-includedirs" : [],
+	
 	"uobj-name": "uobj_test",
 	"uobj-type": "na",
 	"uobj-subtype": "na",
