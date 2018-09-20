@@ -16,8 +16,12 @@ let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
 
 let copt_builduobj = ref false;;
- 
- 
+
+let cmdopt_invalid opt = 
+ 	print_endline ("invalid option: " ^ opt);
+	ignore(exit 1);
+	;;
+
 let main () =
 	begin
 		let speclist = [
@@ -25,7 +29,7 @@ let main () =
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 		] in
 		let usage_msg = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
-			Arg.parse speclist print_endline usage_msg;
+			Arg.parse speclist cmdopt_invalid usage_msg;
 			print_endline ("copt_builduobj: " ^ string_of_bool !copt_builduobj);
 	end
 	;;
