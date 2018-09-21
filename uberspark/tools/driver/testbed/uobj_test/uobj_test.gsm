@@ -5,7 +5,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 */
 
 {
-	
+
+	/* uobj sources node */	
 	"uobj-sources" : {
 
 		"uobj-includedirs": [ 
@@ -21,9 +22,18 @@ author: amit vasudevan (amitvasudevan@acm.org)
 			"xc_init.h",
 			"libxmhfhw.h"
 		]
+		,
 		
+		"uobj-libdirs": [ 
+			"/usr/local/lib"
+		]
+		,
 
-
+		"uobj-libs": [ 
+			"libxmhfc",
+			"libxmhfhw"
+		]
+		
 	},
 	
 

@@ -67,6 +67,8 @@ let slab_idtodmadatasize =  ((Hashtbl.create 32) : ((int,int)  Hashtbl.t));;
 
 let slab_idtoincludedirs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtoincludes = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtolibdirs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtolibs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
 
 (*
@@ -855,7 +857,23 @@ let usmf_parse_uobj_mf_uobj_sources uobj_id uobj_mf_filename =
 											List.iter (fun x -> Hashtbl.add slab_idtoincludes uobj_id (x |> to_string)) uobj_includes_list;
 										end
 									;
-									
+
+								let uobj_libdirs = uobj_sources_json |> member "uobj-libdirs" in
+									if uobj_libdirs != `Null then
+										begin
+										let uobj_libdirs_list = uobj_libdirs |> to_list in
+											List.iter (fun x -> Hashtbl.add slab_idtolibdirs uobj_id (x |> to_string)) uobj_libdirs_list;
+										end
+									;
+
+								let uobj_libs = uobj_sources_json |> member "uobj-libs" in
+									if uobj_libs != `Null then
+										begin
+										let uobj_libs_list = uobj_libs |> to_list in
+											List.iter (fun x -> Hashtbl.add slab_idtolibs uobj_id (x |> to_string)) uobj_libs_list;
+										end
+									;
+																																				
 								retval := true;
 							end
 						else
