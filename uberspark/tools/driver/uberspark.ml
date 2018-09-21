@@ -144,17 +144,25 @@ let main () =
 		Libusmf.usmf_parse_uobj_mf_uobj_sources !uobj_id !cmdopt_uobjmanifest;
 		Uslog.logf log_mpf Uslog.Info "done parsing uobj-sources...";
 
-					let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludedirs !uobj_id) in
+(*
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludedirs !uobj_id) in
 				begin
 					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
 					while (!i < (List.length str_list)) do
 						begin
-							let include_dir_str = (List.nth str_list !i) in
-							Uslog.logf log_mpf Uslog.Info "i=%u --> %s" !i include_dir_str; 
+							let mstr = (List.nth str_list !i) in
+							Uslog.logf log_mpf Uslog.Info "i=%u --> %s" !i mstr; 
 							i := !i + 1;
 						end
 					done;
 				end
+*)
+
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludedirs !uobj_id) in
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtoincludes !uobj_id) in
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
 		
 
 (*

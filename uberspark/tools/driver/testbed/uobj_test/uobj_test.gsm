@@ -13,6 +13,17 @@ author: amit vasudevan (amitvasudevan@acm.org)
 			"../.",
 			"/usr/local/include"
 		]
+
+		,
+		
+		"uobj-includes": [ 
+			"xmhf.h",
+			"xc_init.h",
+			"libxmhfhw.h"
+		]
+		
+
+
 	},
 	
 
