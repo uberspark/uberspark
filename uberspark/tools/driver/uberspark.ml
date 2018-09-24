@@ -33,6 +33,7 @@ let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
 (* external tools *)
 let g_uberspark_exttool_pp = "gcc";;
 let g_uberspark_exttool_cc = "gcc";;
+let g_uberspark_exttool_ld = "ld";;
 
 let copt_builduobj = ref false;;
 
@@ -203,7 +204,35 @@ let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list =
 						) uobj_cfile_list;
 	()
 ;;
-    						
+
+								
+let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list uobj_bin_name = 
+		let ld_cmdline = ref [] in
+			ld_cmdline := !ld_cmdline @ [ "-melf_i386" ];
+			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ x ]) uobj_cfile_list; 
+			ld_cmdline := !ld_cmdline @ [ "-o" ];
+			ld_cmdline := !ld_cmdline @ [ uobj_bin_name ];
+			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ ("-L"^x) ]) uobj_libdirs_list; 
+			ld_cmdline := !ld_cmdline @ [ "--start-group" ];
+			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ ("-l"^x) ]) uobj_libs_list; 
+			ld_cmdline := !ld_cmdline @ [ "--end-group" ];
+			let (pestatus, pesignal, poutput) = 
+				(exec_process_withlog g_uberspark_exttool_ld !ld_cmdline true) in
+						if (pesignal == true) || (pestatus != 0) then
+							begin
+									Uslog.logf log_mpf Uslog.Error "in linking uobj binary '%s'!" uobj_bin_name;
+									ignore(exit 1);
+							end
+						else
+							begin
+									Uslog.logf log_mpf Uslog.Info "Linked uobj binary '%s' successfully" uobj_bin_name;
+							end
+						;
+		()
+;;
+																
+																								
+																																    						
 								
 let main () =
 	begin
