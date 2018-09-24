@@ -21,8 +21,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		,
 		
 		"uobj-libs": [ 
-			"libxmhfc",
-			"libxmhfhw"
+			"ubersparkc"
 		]
 		
 		,

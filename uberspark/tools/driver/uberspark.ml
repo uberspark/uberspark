@@ -209,7 +209,7 @@ let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list =
 let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list uobj_bin_name = 
 		let ld_cmdline = ref [] in
 			ld_cmdline := !ld_cmdline @ [ "-melf_i386" ];
-			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ x ]) uobj_cfile_list; 
+			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ (x^".o") ]) uobj_cfile_list; 
 			ld_cmdline := !ld_cmdline @ [ "-o" ];
 			ld_cmdline := !ld_cmdline @ [ uobj_bin_name ];
 			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ ("-L"^x) ]) uobj_libdirs_list; 
@@ -307,8 +307,20 @@ let main () =
 						(uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs));
 				end
 			;
-			
-			
+
+			Uslog.logf log_mpf Uslog.Info "Proceeding to link uobj binary '%s'..."
+				!uobj_name;
+			let uobj_libdirs_list = ref [] in
+			let uobj_libs_list = ref [] in
+				uobj_libdirs_list := !uobj_libdirs_list @ [ g_uberspark_install_libsdir ]; 	
+				uobj_libdirs_list := !uobj_libdirs_list @
+								(Hashtbl.find_all Libusmf.slab_idtolibdirs !uobj_id);
+				uobj_libs_list := !uobj_libs_list @
+								(Hashtbl.find_all Libusmf.slab_idtolibs !uobj_id);
+				uberspark_link_uobj (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)
+					!uobj_libdirs_list !uobj_libs_list !uobj_name;
+
+						
 			Uslog.logf log_mpf Uslog.Info "Done.\r\n";
 
 		end
