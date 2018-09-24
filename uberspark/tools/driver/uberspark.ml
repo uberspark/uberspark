@@ -176,7 +176,7 @@ let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list =
 			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
 			cc_cmdline := !cc_cmdline @ [ uobj_cfile_name ];
 			cc_cmdline := !cc_cmdline @ [ "-o" ];
-			cc_cmdline := !cc_cmdline @ [ ((Filename.chop_extension uobj_cfile_name) ^ ".o") ];
+			cc_cmdline := !cc_cmdline @ [ (uobj_cfile_name ^ ".o") ];
 			(exec_process_withlog g_uberspark_exttool_cc !cc_cmdline true)
 ;;
 
