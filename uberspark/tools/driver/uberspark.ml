@@ -91,7 +91,7 @@ let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename u
 	
   close fd_in;
   close fd_out;
-	()
+	(uobj_out_manifest_filename)
 ;;
 
 
@@ -238,9 +238,12 @@ let main () =
 					List.iter print_endline tlist;
 
 
-				uberspark_generate_uobj_mf_forpreprocessing !uobj_id 
-					!uobj_manifest_filename Libusmf.slab_idtoincludes;
-
+				let uobj_mf_filename_forpreprocessing = 
+					uberspark_generate_uobj_mf_forpreprocessing !uobj_id 
+					!uobj_manifest_filename Libusmf.slab_idtoincludes in
+						Uslog.logf log_mpf Uslog.Info "uobj_mf_filename_forpreprocessing=%s\n"
+							uobj_mf_filename_forpreprocessing;
+						
 (*
 			Uslog.current_level := Uslog.ord Uslog.Info;
 			Uslog.logf log_mpf Uslog.Info "proceeding to execute...\n";
