@@ -169,7 +169,15 @@ let main () =
 
 				let str_list = (Hashtbl.find_all Libusmf.slab_idtolibs !uobj_id) in
 					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
-				
+
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id) in
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtocasmfiles !uobj_id) in
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+								
+				let str_list = (Hashtbl.find_all Libusmf.slab_idtoasmfiles !uobj_id) in
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
 
 (*
 			Uslog.current_level := Uslog.ord Uslog.Info;

@@ -69,6 +69,12 @@ let slab_idtoincludedirs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtoincludes = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtolibdirs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtolibs = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtocfiles = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtocasmfiles = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtoasmfiles = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+
+
+
 
 
 (*
@@ -873,7 +879,31 @@ let usmf_parse_uobj_mf_uobj_sources uobj_id uobj_mf_filename =
 											List.iter (fun x -> Hashtbl.add slab_idtolibs uobj_id (x |> to_string)) uobj_libs_list;
 										end
 									;
-																																				
+
+								let uobj_cfiles = uobj_sources_json |> member "uobj-cfiles" in
+									if uobj_cfiles != `Null then
+										begin
+										let uobj_cfiles_list = uobj_cfiles |> to_list in
+											List.iter (fun x -> Hashtbl.add slab_idtocfiles uobj_id (x |> to_string)) uobj_cfiles_list;
+										end
+									;
+
+								let uobj_casmfiles = uobj_sources_json |> member "uobj-casmfiles" in
+									if uobj_casmfiles != `Null then
+										begin
+										let uobj_casmfiles_list = uobj_casmfiles |> to_list in
+											List.iter (fun x -> Hashtbl.add slab_idtocasmfiles uobj_id (x |> to_string)) uobj_casmfiles_list;
+										end
+									;
+
+								let uobj_asmfiles = uobj_sources_json |> member "uobj-asmfiles" in
+									if uobj_asmfiles != `Null then
+										begin
+										let uobj_asmfiles_list = uobj_asmfiles |> to_list in
+											List.iter (fun x -> Hashtbl.add slab_idtoasmfiles uobj_id (x |> to_string)) uobj_asmfiles_list;
+										end
+									;
+																																																																																																																																																																																																																																																																																																
 								retval := true;
 							end
 						else

@@ -34,6 +34,26 @@ author: amit vasudevan (amitvasudevan@acm.org)
 			"libxmhfhw"
 		]
 		
+		,
+		
+		"uobj-cfiles": [
+			"main.c"
+		]
+		
+		,
+		
+		"uobj-casmfiles": [
+		
+		]
+		
+		,
+		
+		"uobj-asmfiles": [
+		
+		
+		]
+
+		
 	},
 	
 
