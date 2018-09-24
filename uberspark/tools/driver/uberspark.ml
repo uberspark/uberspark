@@ -46,6 +46,14 @@ let uberspark_build_includedirs_base () =
 		(!p_output)		
 ;;	
 
+let uberspark_build_includedirs uobj_id uobj_hashtbl_includedirs = 
+  let p_output = ref [] in
+	let uobj_hashtbl_includedirs_list = (Hashtbl.find_all uobj_hashtbl_includedirs uobj_id) in 
+		List.iter (fun x -> p_output := !p_output @ [ "-I" ] @ [ x ]) uobj_hashtbl_includedirs_list;
+	(!p_output)		
+;;	
+
+
 
 let file_copy input_name output_name =
 	let buffer_size = 8192 in
@@ -195,6 +203,10 @@ let main () =
 
 
 				let tlist =  uberspark_build_includedirs_base () in 
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length tlist);
+					List.iter print_endline tlist;
+
+				let tlist =  uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs in 
 					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length tlist);
 					List.iter print_endline tlist;
 
