@@ -24,10 +24,10 @@ let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 let g_uberspark_pp_std_defines = [ "-D"; "__XMHF_TARGET_CPU_X86__"; 
 																	"-D"; "__XMHF_TARGET_CONTAINER_VMX__";
 																	"-D"; "__XMHF_TARGET_PLATFORM_X86PC__";
-																	"-D"; "__XMHF_TARGET_TRIAD_X86_VMX_X86PC__";
-																	"-D"; "__ASSEMBLY__"	
+																	"-D"; "__XMHF_TARGET_TRIAD_X86_VMX_X86PC__"
 																	];;
 
+let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
 
 
 (* external tools *)
@@ -155,6 +155,7 @@ let uberspark_generate_uobj_mf_preprocessed
 			pp_cmdline := !pp_cmdline @ [ "-E" ];
 			pp_cmdline := !pp_cmdline @ [ "-P" ];
 			pp_cmdline := !pp_cmdline @ g_uberspark_pp_std_defines;
+			pp_cmdline := !pp_cmdline @ g_uberspark_pp_std_define_assembly;
 			pp_cmdline := !pp_cmdline @ uobj_includedirs_list;
 			pp_cmdline := !pp_cmdline @ [ uobj_manifest_filename_forpreprocessing ];
 			pp_cmdline := !pp_cmdline @ [ "-o" ];
