@@ -206,9 +206,12 @@ let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list =
 ;;
 
 								
-let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list uobj_bin_name = 
+let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list 
+		uobj_linker_script uobj_bin_name = 
 		let ld_cmdline = ref [] in
 			ld_cmdline := !ld_cmdline @ [ "-melf_i386" ];
+			ld_cmdline := !ld_cmdline @ [ "-T" ];
+			ld_cmdline := !ld_cmdline @ [ uobj_linker_script ];
 			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ (x^".o") ]) uobj_cfile_list; 
 			ld_cmdline := !ld_cmdline @ [ "-o" ];
 			ld_cmdline := !ld_cmdline @ [ uobj_bin_name ];
@@ -318,7 +321,8 @@ let main () =
 				uobj_libs_list := !uobj_libs_list @
 								(Hashtbl.find_all Libusmf.slab_idtolibs !uobj_id);
 				uberspark_link_uobj (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)
-					!uobj_libdirs_list !uobj_libs_list !uobj_name;
+					!uobj_libdirs_list !uobj_libs_list 
+					(!uobj_name ^ ".lscript") !uobj_name;
 
 						
 			Uslog.logf log_mpf Uslog.Info "Done.\r\n";

@@ -1,0 +1,54 @@
+OUTPUT_ARCH("i386")
+
+MEMORY
+{
+  smem_code (rwxai) : ORIGIN = 0x07000000, LENGTH = (0x07200000 - 0x07000000)
+  smem_data (rwxai) : ORIGIN = 0x07200000, LENGTH = (0x0aa00000 - 0x07200000)
+  smem_stack (rwxai) : ORIGIN = 0x0aa00000, LENGTH = (0x0b800000 - 0x0aa00000)
+  smem_dmadata (rwxai) : ORIGIN = 0x0b800000, LENGTH = (0x0ba00000 - 0x0b800000)
+  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
+}
+
+SECTIONS
+{
+	. = 0x07000000;
+
+	.slabcode : {
+		*(.text)
+		. = (0x07200000 - 0x07000000);
+	} >smem_code =0x9090
+
+	.slabdata : {
+		*(.data)
+		*(.bss)
+		*(.rodata)
+		*(.rodata.str1.1)
+		*(.comment)
+		*(.eh_frame)
+		. = (0x0aa00000 - 0x07200000);
+	} >smem_data =0x0000
+
+	.slabstack : {
+		*(.stack)
+		*(.note.GNU-stack)
+		. = (0x0b800000 - 0x0aa00000);
+	} >smem_stack =0x0000
+
+	.slabdmadata : {
+		*(.slab_dmadata)
+		. = (0x0ba00000 - 0x0b800000);
+	} >smem_dmadata =0x0000
+
+
+	/* this is to cause the link to fail if there is
+	* anything we didn't explicitly place.
+	* when this does cause link to fail, temporarily comment
+	* this part out to see what sections end up in the output
+	* which are not handled above, and handle them.
+	*/
+	.unaccounted : {
+	*(*)
+	} >unaccounted
+
+
+}
