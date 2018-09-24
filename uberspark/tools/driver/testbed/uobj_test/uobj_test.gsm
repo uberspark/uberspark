@@ -10,17 +10,13 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	"uobj-sources" : {
 
 		"uobj-includedirs": [ 
-			".",
-			"../.",
-			"/usr/local/include"
+			"."
 		]
 
 		,
 		
 		"uobj-includes": [ 
-			"xmhf.h",
-			"xc_init.h",
-			"libxmhfhw.h"
+			"uberspark.h"
 		]
 		,
 		
