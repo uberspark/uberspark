@@ -34,6 +34,19 @@ let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
 
+
+let uberspark_build_includedirs_base () = 
+  let p_output = ref [] in
+		p_output := !p_output @ [ "-I" ];
+		p_output := !p_output @ [ g_uberspark_install_includedir ];
+		p_output := !p_output @ [ "-I" ];
+		p_output := !p_output @ [ g_uberspark_install_hwmincludedir ];
+		p_output := !p_output @ [ "-I" ];
+		p_output := !p_output @ [ g_uberspark_install_libsincludesdir ];
+		(!p_output)		
+;;	
+
+
 let file_copy input_name output_name =
 	let buffer_size = 8192 in
 	let buffer = Bytes.create buffer_size in
@@ -178,6 +191,12 @@ let main () =
 								
 				let str_list = (Hashtbl.find_all Libusmf.slab_idtoasmfiles !uobj_id) in
 					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length str_list);
+
+
+
+				let tlist =  uberspark_build_includedirs_base () in 
+					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length tlist);
+					List.iter print_endline tlist;
 
 (*
 			Uslog.current_level := Uslog.ord Uslog.Info;
