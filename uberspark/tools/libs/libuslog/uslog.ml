@@ -28,7 +28,8 @@ module Uslog =
 		| Debug -> 20
 
 	let current_level = ref (ord Info)
-
+	let error_level = ref (ord Error)
+	
 	let logf name lvl =
     let do_log str =
         if (ord lvl) >= !current_level then
@@ -36,8 +37,12 @@ module Uslog =
 						print_string "[";
 						print_string name;
 						print_string "] ";
+						if (ord lvl) == !error_level then
+								print_string "[ERROR] ";
 						print_endline str;
-    				end
+						if (ord lvl) == !error_level then
+								print_endline " ";
+						end
 		in
     Printf.ksprintf do_log
 
