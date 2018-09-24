@@ -35,6 +35,22 @@ let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
 
 
+let file_copy input_name output_name =
+	let buffer_size = 8192 in
+	let buffer = Bytes.create buffer_size in
+  let fd_in = openfile input_name [O_RDONLY] 0 in
+  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
+    |  0 -> ()
+    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
+  in
+  copy_loop ();
+  close fd_in;
+  close fd_out;
+	()
+;;
+
+
 let uberspark_build_includedirs_base () = 
   let p_output = ref [] in
 		p_output := !p_output @ [ "-I" ];
@@ -54,21 +70,32 @@ let uberspark_build_includedirs uobj_id uobj_hashtbl_includedirs =
 ;;	
 
 
+let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename uobj_hashtbl_includes =
+  let uobj_out_manifest_filename = (uobj_manifest_filename ^ ".c") in
+	let fd_in = openfile uobj_manifest_filename [O_RDONLY] 0 in
+  let fd_out = openfile uobj_out_manifest_filename [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+	let uobj_hashtbl_includes_list = (Hashtbl.find_all uobj_hashtbl_includes uobj_id) in 
+	let uobj_includes_str = ref "" in
 
-let file_copy input_name output_name =
+		List.iter (fun x -> uobj_includes_str := !uobj_includes_str ^ "#include <" ^ x ^ ">\r\n") uobj_hashtbl_includes_list;
+		uobj_includes_str := !uobj_includes_str ^ "\r\n";
+		write_substring fd_out !uobj_includes_str 0 (String.length !uobj_includes_str);
+
 	let buffer_size = 8192 in
 	let buffer = Bytes.create buffer_size in
-  let fd_in = openfile input_name [O_RDONLY] 0 in
-  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
   let rec copy_loop () = match read fd_in buffer 0 buffer_size with
     |  0 -> ()
     | r -> ignore (write fd_out buffer 0 r); copy_loop ()
   in
   copy_loop ();
+	
   close fd_in;
   close fd_out;
 	()
 ;;
+
+
+
 
 
 (* execute a process and print its output if verbose is set to true *)
@@ -209,6 +236,10 @@ let main () =
 				let tlist =  uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs in 
 					Uslog.logf log_mpf Uslog.Info "length=%u\n"  (List.length tlist);
 					List.iter print_endline tlist;
+
+
+				uberspark_generate_uobj_mf_forpreprocessing !uobj_id 
+					!uobj_manifest_filename Libusmf.slab_idtoincludes;
 
 (*
 			Uslog.current_level := Uslog.ord Uslog.Info;
