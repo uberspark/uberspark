@@ -18,14 +18,16 @@ module Uslog =
   	  | Error
     	| Warn
     	| Info
+			| Debug
 
 	let ord lvl =
     match lvl with
     | Error -> 50
     | Warn  -> 40
     | Info  -> 30
+		| Debug -> 20
 
-	let current_level = ref (ord Warn)
+	let current_level = ref (ord Info)
 
 	let logf name lvl =
     let do_log str =
