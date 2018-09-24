@@ -170,6 +170,7 @@ let uberspark_generate_uobj_mf_preprocessed
 let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list = 
 		let cc_cmdline = ref [] in
 			cc_cmdline := !cc_cmdline @ [ "-c" ];
+			cc_cmdline := !cc_cmdline @ [ "-m32" ];
 			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_defines;
 			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly;
 			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
