@@ -14,17 +14,12 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		]
 
 		,
-		
-		"uobj-includes": [ 
-			"uberspark.h"
-		]
-		,
-		
-		"uobj-libdirs": [ 
-			"/usr/local/lib"
-		]
-		,
 
+		"uobj-libdirs": [ 
+
+		]
+		,
+		
 		"uobj-libs": [ 
 			"libxmhfc",
 			"libxmhfhw"
@@ -47,6 +42,11 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		"uobj-asmfiles": [
 		
 		
+		]
+		,
+
+		"uobj-includes": [ 
+			"uberspark.h"
 		]
 
 		

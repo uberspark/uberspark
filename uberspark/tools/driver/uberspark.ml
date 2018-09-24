@@ -32,6 +32,7 @@ let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
 
 (* external tools *)
 let g_uberspark_exttool_pp = "gcc";;
+let g_uberspark_exttool_cc = "gcc";;
 
 let copt_builduobj = ref false;;
 
@@ -165,6 +166,42 @@ let uberspark_generate_uobj_mf_preprocessed
 ;;
 
 
+
+let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list = 
+		let cc_cmdline = ref [] in
+			cc_cmdline := !cc_cmdline @ [ "-c" ];
+			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_defines;
+			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly;
+			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
+			cc_cmdline := !cc_cmdline @ [ uobj_cfile_name ];
+			cc_cmdline := !cc_cmdline @ [ "-o" ];
+			cc_cmdline := !cc_cmdline @ [ ((Filename.basename uobj_cfile_name) ^ ".o") ];
+			(exec_process_withlog g_uberspark_exttool_cc !cc_cmdline true)
+;;
+
+
+let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list = 
+	List.iter (fun x ->  
+							Uslog.logf log_mpf Uslog.Info "Compiling: %s" x;
+							let (pestatus, pesignal, poutput) = 
+								(uberspark_compile_uobj_cfile x uobj_includedirs_list) in
+									begin
+										if (pesignal == true) || (pestatus != 0) then
+											begin
+													(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
+													(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
+													(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
+													Uslog.logf log_mpf Uslog.Error "in compiling %s!" x;
+													ignore(exit 1);
+											end
+										else
+											begin
+													Uslog.logf log_mpf Uslog.Info "Compiled %s successfully" x;
+											end
+									end
+						) uobj_cfile_list;
+	()
+;;
     						
 								
 let main () =
@@ -231,6 +268,17 @@ let main () =
 					(uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs));	
 			Uslog.logf log_mpf Uslog.Info "Pre-processed uobj manifest file";
 	
+			if (List.length (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)) > 0 then
+				begin
+					Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj cfiles...";
+					uberspark_compile_uobj_cfiles 
+						(Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)
+						(uberspark_build_includedirs_base () @ 
+						(uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs));
+				end
+			;
+			
+			
 			Uslog.logf log_mpf Uslog.Info "Done.\r\n";
 
 		end
