@@ -6,6 +6,6 @@ char from_buffer[512];
 char to_buffer[512];
 
 void main(void){
- memset(buffer, 0, sizeof(buffer));
+ memset(from_buffer, 0, sizeof(from_buffer));
  memcpy(to_buffer, from_buffer, sizeof(to_buffer)); 
 }
