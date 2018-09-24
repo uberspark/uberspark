@@ -20,6 +20,8 @@ let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
+(* external tools *)
+let g_uberspark_exttool_pp = "gcc";;
 
 let copt_builduobj = ref false;;
 
@@ -48,6 +50,46 @@ let file_copy input_name output_name =
   close fd_in;
   close fd_out;
 	()
+;;
+
+
+(* execute a process and print its output if verbose is set to true *)
+(* return the error code of the process and the output as a list of lines *)
+let exec_process_withlog p_name cmdline verbose =
+	let readme, writeme = Unix.pipe () in
+	let pid = Unix.create_process
+		p_name (Array.of_list ([p_name] @ cmdline))
+    Unix.stdin writeme writeme in
+  Unix.close writeme;
+  let in_channel = Unix.in_channel_of_descr readme in
+  let p_output = ref [] in
+	let p_singleoutputline = ref "" in
+	let p_exitstatus = ref 0 in
+	let p_exitsignal = ref false in
+  begin
+    try
+      while true do
+				p_singleoutputline := input_line in_channel;
+				if verbose then
+					Uslog.logf log_mpf Uslog.Info "%s" !p_singleoutputline;
+										
+				p_output := p_singleoutputline :: !p_output 
+	    done
+    with End_of_file -> 
+			match	(Unix.waitpid [] pid) with
+    	| (wpid, Unix.WEXITED status) ->
+        	p_exitstatus := status;
+					p_exitsignal := false;
+    	| (wpid, Unix.WSIGNALED signal) ->
+        	p_exitsignal := true;
+    	| (wpid, Unix.WSTOPPED signal) ->
+        	p_exitsignal := true;
+			;
+			()
+  end;
+
+	Unix.close readme;
+	(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
 ;;
 
 
@@ -95,46 +137,19 @@ let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename u
 ;;
 
 
-
-
-
-(* execute a process and print its output if verbose is set to true *)
-(* return the error code of the process and the output as a list of lines *)
-let exec_process_withlog p_name cmdline verbose =
-	let readme, writeme = Unix.pipe () in
-	let pid = Unix.create_process
-		p_name (Array.of_list cmdline)
-    Unix.stdin writeme writeme in
-  Unix.close writeme;
-  let in_channel = Unix.in_channel_of_descr readme in
-  let p_output = ref [] in
-	let p_singleoutputline = ref "" in
-	let p_exitstatus = ref 0 in
-	let p_exitsignal = ref false in
-  begin
-    try
-      while true do
-				p_singleoutputline := input_line in_channel;
-				if verbose then
-					Uslog.logf log_mpf Uslog.Info "%s" !p_singleoutputline;
-										
-				p_output := p_singleoutputline :: !p_output 
-	    done
-    with End_of_file -> 
-			match	(Unix.waitpid [] pid) with
-    	| (wpid, Unix.WEXITED status) ->
-        	p_exitstatus := status;
-					p_exitsignal := false;
-    	| (wpid, Unix.WSIGNALED signal) ->
-        	p_exitsignal := true;
-    	| (wpid, Unix.WSTOPPED signal) ->
-        	p_exitsignal := true;
-			;
-			()
-  end;
-
-	Unix.close readme;
-	(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
+let uberspark_generate_uobj_mf_preprocessed 
+	uobj_id uobj_manifest_filename_forpreprocessing uobj_includedirs_list =
+	  let uobj_mf_filename_preprocessed = 
+			((Filename.basename uobj_manifest_filename_forpreprocessing) ^ ".pp") in
+		let pp_cmdline = ref [] in
+			pp_cmdline := !pp_cmdline @ [ "-E" ];
+			pp_cmdline := !pp_cmdline @ [ "-P" ];
+			pp_cmdline := !pp_cmdline @ uobj_includedirs_list;
+			pp_cmdline := !pp_cmdline @ [ uobj_manifest_filename_forpreprocessing ];
+			pp_cmdline := !pp_cmdline @ [ "-o" ];
+			pp_cmdline := !pp_cmdline @ [ uobj_mf_filename_preprocessed ];
+			exec_process_withlog g_uberspark_exttool_pp !pp_cmdline true;
+	(uobj_mf_filename_preprocessed)
 ;;
 
 
@@ -241,8 +256,14 @@ let main () =
 				let uobj_mf_filename_forpreprocessing = 
 					uberspark_generate_uobj_mf_forpreprocessing !uobj_id 
 					!uobj_manifest_filename Libusmf.slab_idtoincludes in
-						Uslog.logf log_mpf Uslog.Info "uobj_mf_filename_forpreprocessing=%s\n"
-							uobj_mf_filename_forpreprocessing;
+						begin
+							Uslog.logf log_mpf Uslog.Info "uobj_mf_filename_forpreprocessing=%s\n"
+								uobj_mf_filename_forpreprocessing;
+							let ilist_base =  uberspark_build_includedirs_base () in 
+							let ilist =  (uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs) in 
+								uberspark_generate_uobj_mf_preprocessed !uobj_id
+									uobj_mf_filename_forpreprocessing (ilist_base @ ilist);	
+						end
 						
 (*
 			Uslog.current_level := Uslog.ord Uslog.Info;
