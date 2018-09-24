@@ -14,6 +14,7 @@ all: build-tools
 
 .PHONY: build-tools
 build-tools:
+	cd ./libs && $(MAKE) -w all
 	$(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
 	#$(CP) -f umfcommon.ml umf/.	
 	cd ./driver && $(MAKE) -w all
@@ -30,6 +31,7 @@ build-tools:
 
 .PHONY: clean
 clean:
+	cd ./libs && $(MAKE) -w clean
 	cd ./driver && $(MAKE) -w clean
 	cd ./umf && $(MAKE) -w clean
 	cd ./ubp && $(MAKE) -w clean
