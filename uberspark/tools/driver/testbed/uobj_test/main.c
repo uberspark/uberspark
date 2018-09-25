@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <string.h>
 
-char from_buffer[512];
-char to_buffer[512];
+__attribute__((section (".data"))) char from_buffer[512];
+__attribute__((section (".data"))) char to_buffer[512];
 
 void main(void){
  memset(from_buffer, 0, sizeof(from_buffer));

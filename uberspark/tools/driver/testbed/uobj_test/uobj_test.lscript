@@ -2,11 +2,11 @@ OUTPUT_ARCH("i386")
 
 MEMORY
 {
-  smem_code (rwxai) : ORIGIN = 0x07000000, LENGTH = (0x07200000 - 0x07000000)
-  smem_data (rwxai) : ORIGIN = 0x07200000, LENGTH = (0x0aa00000 - 0x07200000)
-  smem_stack (rwxai) : ORIGIN = 0x0aa00000, LENGTH = (0x0b800000 - 0x0aa00000)
-  smem_dmadata (rwxai) : ORIGIN = 0x0b800000, LENGTH = (0x0ba00000 - 0x0b800000)
-  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
+  smem_code (rwxai) :		ORIGIN = 0x07000000, LENGTH = 0x00200000
+  smem_data (rwxai) : 		ORIGIN = 0x07200000, LENGTH = 0x00200000
+  smem_stack (rwxai) : 		ORIGIN = 0x07400000, LENGTH = 0x00200000
+  smem_dmadata (rwxai) : 	ORIGIN = 0x07600000, LENGTH = 0x00200000
+  unaccounted (rwxai) : 	ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
 }
 
 SECTIONS
@@ -15,28 +15,28 @@ SECTIONS
 
 	.slabcode : {
 		*(.text)
-		. = (0x07200000 - 0x07000000);
+		. = 0x00200000;
 	} >smem_code =0x9090
 
+
 	.slabdata : {
-		*(.data)
-		*(.bss)
-		*(.rodata)
-		*(.rodata.str1.1)
-		*(.comment)
-		*(.eh_frame)
-		. = (0x0aa00000 - 0x07200000);
+		*(.data);
+		*(.rodata);
+		*(.rodata.str1.1);
+		*(.comment);
+		*(.eh_frame);
+		. = 0x00200000;
 	} >smem_data =0x0000
 
 	.slabstack : {
-		*(.stack)
-		*(.note.GNU-stack)
-		. = (0x0b800000 - 0x0aa00000);
+		*(.stack);
+		*(.note.GNU-stack);
+		. = 0x00200000;
 	} >smem_stack =0x0000
 
 	.slabdmadata : {
-		*(.slab_dmadata)
-		. = (0x0ba00000 - 0x0b800000);
+		*(.slab_dmadata);
+		. = 0x00200000;
 	} >smem_dmadata =0x0000
 
 
