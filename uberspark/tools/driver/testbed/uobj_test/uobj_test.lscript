@@ -1,9 +1,11 @@
 OUTPUT_ARCH("i386")
 
+PHDRS { mytext PT_LOAD ; }
+
 MEMORY
 {
-  smem_code (rwxai) :		ORIGIN = 0x07000000, LENGTH = 0x00200000
-  smem_data (rwxai) : 		ORIGIN = 0x07200000, LENGTH = 0x00200000
+  smem_code (RWXAIL) :		ORIGIN = 0x07000000, LENGTH = 0x00200000
+  smem_data (RWXAIL) : 		ORIGIN = 0x07200000, LENGTH = 0x00200000
   smem_stack (rwxai) : 		ORIGIN = 0x07400000, LENGTH = 0x00200000
   smem_dmadata (rwxai) : 	ORIGIN = 0x07600000, LENGTH = 0x00200000
   unaccounted (rwxai) : 	ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
@@ -35,9 +37,9 @@ SECTIONS
 	} >smem_stack =0x0000
 
 	.slabdmadata : {
-		*(.slab_dmadata);
+		*(.uobj_dmadata);
 		. = 0x00200000;
-	} >smem_dmadata =0x0000
+	} >smem_dmadata :mytext =0x0000
 
 
 	/* this is to cause the link to fail if there is

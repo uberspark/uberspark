@@ -4,6 +4,7 @@
 
 __attribute__((section (".data"))) char from_buffer[512];
 __attribute__((section (".data"))) char to_buffer[512];
+__attribute__((section (".uobj_dmadata"))) char uobj_dmadata_ph[1] = {0};
 
 void main(void){
  memset(from_buffer, 0, sizeof(from_buffer));

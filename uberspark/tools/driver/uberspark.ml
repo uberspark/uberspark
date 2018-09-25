@@ -211,7 +211,7 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 		uobj_linker_script uobj_bin_name = 
 		let ld_cmdline = ref [] in
 			ld_cmdline := !ld_cmdline @ [ "--oformat" ];
-			ld_cmdline := !ld_cmdline @ [ "elf32-i386" ];
+			ld_cmdline := !ld_cmdline @ [ "binary" ];
 			ld_cmdline := !ld_cmdline @ [ "-T" ];
 			ld_cmdline := !ld_cmdline @ [ uobj_linker_script ]; 
 			List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ (x^".o") ]) uobj_cfile_list; 
