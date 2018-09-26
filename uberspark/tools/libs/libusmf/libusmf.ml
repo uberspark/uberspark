@@ -945,14 +945,16 @@ let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename =
 									if uobj_sections_json != `Null then
 										begin
 											let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
+												retval := true;
 												List.iter (fun (x,y) ->
 														Uslog.logf "libusmf" Uslog.Debug "%s: key=%s" __LOC__ x;
 														uobj_sections_list := !uobj_sections_list @	
-															(Yojson.Basic.Util.to_list y) ;
+															[(Yojson.Basic.Util.to_list y)] ;
+														if (List.length (Yojson.Basic.Util.to_list y)) < 2 then
+																retval:=false;
 														()
 													) uobj_sections_assoc_list;
-												Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_sections_assoc_list);
-											retval := true;
+												Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
 										end
 									else
 										begin
