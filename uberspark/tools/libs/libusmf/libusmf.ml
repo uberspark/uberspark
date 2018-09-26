@@ -948,9 +948,17 @@ let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename =
 												retval := true;
 												List.iter (fun (x,y) ->
 														Uslog.logf "libusmf" Uslog.Debug "%s: key=%s" __LOC__ x;
-														uobj_sections_list := !uobj_sections_list @	
-															[(Yojson.Basic.Util.to_list y)] ;
-														if (List.length (Yojson.Basic.Util.to_list y)) < 2 then
+														let uobj_section_attribute_list = ref [] in
+															uobj_section_attribute_list := !uobj_section_attribute_list @
+																						[ x ];
+															List.iter (fun z ->
+																uobj_section_attribute_list := !uobj_section_attribute_list @
+																						[ (z |> to_string) ];
+																()
+															)(Yojson.Basic.Util.to_list y);
+															
+															uobj_sections_list := !uobj_sections_list @	[ !uobj_section_attribute_list ];
+															if (List.length (Yojson.Basic.Util.to_list y)) < 2 then
 																retval:=false;
 														()
 													) uobj_sections_assoc_list;

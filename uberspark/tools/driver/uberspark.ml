@@ -260,7 +260,7 @@ let uberspark_generate_uobj_linker_script uobj_name uobj_load_addr
 		List.iter (fun x ->
 			Uslog.logf log_mpf Uslog.Info "%s: new section" __LOC__;
 			List.iter (fun y ->
-				(* Uslog.logf log_mpf Uslog.Info "%s: attribute=%s" __LOC__ y; *)
+				 Uslog.logf log_mpf Uslog.Info "%s: attribute=%s" __LOC__ y; 
 				()
 			) x;
 			()
