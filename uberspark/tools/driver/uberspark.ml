@@ -257,6 +257,16 @@ let uberspark_generate_uobj_linker_script uobj_name uobj_load_addr
 		Printf.fprintf oc "\n	. = 0x%08x;" uobj_load_addr;
 		Printf.fprintf oc "\n";
 
+		List.iter (fun x ->
+			Uslog.logf log_mpf Uslog.Info "%s: new section" __LOC__;
+			List.iter (fun y ->
+				(* Uslog.logf log_mpf Uslog.Info "%s: attribute=%s" __LOC__ y; *)
+				()
+			) x;
+			()
+		) uobj_sections_list;
+
+
 		Printf.fprintf oc "\n";
 		Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";
 		Printf.fprintf oc "\n	* anything we didn't explicitly place.";
