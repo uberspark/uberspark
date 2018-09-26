@@ -927,6 +927,45 @@ let usmf_parse_uobj_mf_uobj_sources uobj_id uobj_mf_filename =
 
 
 
+(* parse uobj manifest "uobj-binary" *)
+let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename = 
+	let retval = ref false in
+	if !g_totalslabs > 0 then
+		begin
+			try
+		
+			(* read the JSON manifest file *)
+		  let uobj_mf_json = Yojson.Basic.from_file uobj_mf_filename in
+			   let open Yojson.Basic.Util in
+			  	let uobj_binary_json = uobj_mf_json |> member "uobj-binary" in
+						if uobj_binary_json != `Null then
+							begin
+
+																																																																																																																																																																																																																																																																																																
+								retval := true;
+							end
+						else
+							begin
+								retval := false;
+							end
+						;							
+		with Yojson.Basic.Util.Type_error _ -> 
+				Uslog.logf "libusmf" Uslog.Debug "%s: invalid uobj-binary definition. skipping parsing" __LOC__;
+				retval := false;
+			;
+		end
+	else
+		begin
+			retval := false;
+		end
+		;
+	(!retval)
+;;
+
+
+
+
+
 
 (* parse uobj manifest specified by uobj_mf_filename and store parsed info*)
 (* indexed by uobj_id*)
