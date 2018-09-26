@@ -256,7 +256,7 @@ let main () =
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
 			
-			Uslog.current_level := Uslog.ord Uslog.Debug;
+			(* Uslog.current_level := Uslog.ord Uslog.Debug; *)
 
 			Uslog.logf log_mpf Uslog.Info "%s" banner;
 			Uslog.logf log_mpf Uslog.Info ">>>>>>";

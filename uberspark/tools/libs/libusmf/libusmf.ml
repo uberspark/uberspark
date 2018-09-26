@@ -952,14 +952,6 @@ let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename =
 														()
 													) uobj_sections_assoc_list;
 												Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_sections_assoc_list);
-												
-											(* Yojson.Basic.Util.convert_each (fun x->Yojson.Basic.pretty_to_string x) uobj_sections_json; *)  
-											(*let uobj_sections_list_json = Yojson.Basic.Util.to_list uobj_sections_json in*)
-											(*Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_sections_list_json);
-											*)
-											(*let uobj_code = uobj_sections_json |> index 0 in*)
-											(* List.iter (fun x -> uobj_sections_list := !uobj_sections_list @ (x |> to_list)) uobj_sections_json; *)
-											(* Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_code); *)
 											retval := true;
 										end
 									else
