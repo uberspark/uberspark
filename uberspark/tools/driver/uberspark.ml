@@ -256,6 +256,8 @@ let main () =
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
 			
+			Uslog.current_level := Uslog.ord Uslog.Debug;
+
 			Uslog.logf log_mpf Uslog.Info "%s" banner;
 			Uslog.logf log_mpf Uslog.Info ">>>>>>";
 			Arg.parse speclist cmdopt_invalid usage_msg;
@@ -304,12 +306,14 @@ let main () =
 			Uslog.logf log_mpf Uslog.Info "Pre-processed uobj manifest file";
 
 	
-			if (Libusmf.usmf_parse_uobj_mf_uobj_binary !uobj_id !uobj_mf_filename_preprocessed) == false then
-				begin
-					Uslog.logf log_mpf Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
-					ignore (exit 1);
-				end
-			;
+			let (rval, uobj_sections_list) = 
+				Libusmf.usmf_parse_uobj_mf_uobj_binary !uobj_id !uobj_mf_filename_preprocessed in
+					if (rval == false) then
+						begin
+							Uslog.logf log_mpf Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
+							ignore (exit 1);
+						end
+					;
 
 			Uslog.logf log_mpf Uslog.Info "Parsed uobj-binary from uobj manifest.";
 		

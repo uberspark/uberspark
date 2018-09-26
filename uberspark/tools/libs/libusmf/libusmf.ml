@@ -930,6 +930,7 @@ let usmf_parse_uobj_mf_uobj_sources uobj_id uobj_mf_filename =
 (* parse uobj manifest "uobj-binary" *)
 let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename = 
 	let retval = ref false in
+	let uobj_sections_list = ref [] in
 	if !g_totalslabs > 0 then
 		begin
 			try
@@ -940,9 +941,31 @@ let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename =
 			  	let uobj_binary_json = uobj_mf_json |> member "uobj-binary" in
 						if uobj_binary_json != `Null then
 							begin
-
-																																																																																																																																																																																																																																																																																																
-								retval := true;
+								let uobj_sections_json = uobj_binary_json |> member "uobj-sections" in
+									if uobj_sections_json != `Null then
+										begin
+											let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
+												List.iter (fun (x,y) ->
+														Uslog.logf "libusmf" Uslog.Debug "%s: key=%s" __LOC__ x;
+														uobj_sections_list := !uobj_sections_list @	
+															(Yojson.Basic.Util.to_list y) ;
+														()
+													) uobj_sections_assoc_list;
+												Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_sections_assoc_list);
+												
+											(* Yojson.Basic.Util.convert_each (fun x->Yojson.Basic.pretty_to_string x) uobj_sections_json; *)  
+											(*let uobj_sections_list_json = Yojson.Basic.Util.to_list uobj_sections_json in*)
+											(*Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_sections_list_json);
+											*)
+											(*let uobj_code = uobj_sections_json |> index 0 in*)
+											(* List.iter (fun x -> uobj_sections_list := !uobj_sections_list @ (x |> to_list)) uobj_sections_json; *)
+											(* Uslog.logf "libusmf" Uslog.Debug "%s: list length=%u" __LOC__ (List.length uobj_code); *)
+											retval := true;
+										end
+									else
+										begin
+											retval := false;
+										end
 							end
 						else
 							begin
@@ -959,7 +982,7 @@ let usmf_parse_uobj_mf_uobj_binary uobj_id uobj_mf_filename =
 			retval := false;
 		end
 		;
-	(!retval)
+	(!retval, !uobj_sections_list)
 ;;
 
 

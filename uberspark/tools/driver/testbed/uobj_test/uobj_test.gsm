@@ -54,10 +54,10 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* uobj binary node */	
 	"uobj-binary" : {
 		"uobj-sections": {
-			"uobj_section_code" 	: [ "rx", "0x200000" ],
-			"uobj_section_data" 	: [ "rw", "0x200000" ],
-			"uobj_section_stack" 	: [ "rw", "0x200000" ],
-			"uobj_section_dmadata" 	: [ "rw", "0x200000" ]
+			"uobj_code" 	: [ "rx", "0x200000" ],
+			"uobj_data" 	: [ "rw", "0x200000" ],
+			"uobj_stack" 	: [ "rw", "0x200000" ],
+			"uobj_dmadata" 	: [ "rw", "0x200000" ]
 		}
 	},
 
