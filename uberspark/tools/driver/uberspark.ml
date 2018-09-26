@@ -302,7 +302,18 @@ let main () =
 					(uberspark_build_includedirs_base () @ 
 					(uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs));	
 			Uslog.logf log_mpf Uslog.Info "Pre-processed uobj manifest file";
+
 	
+			if (Libusmf.usmf_parse_uobj_mf_uobj_binary !uobj_id !uobj_mf_filename_preprocessed) == false then
+				begin
+					Uslog.logf log_mpf Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			Uslog.logf log_mpf Uslog.Info "Parsed uobj-binary from uobj manifest.";
+		
+				
 			if (List.length (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)) > 0 then
 				begin
 					Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj cfiles...";
