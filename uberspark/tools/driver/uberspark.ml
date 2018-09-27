@@ -265,7 +265,7 @@ let uberspark_generate_uobj_linker_script uobj_name uobj_load_addr
 			()
 		)  uobj_sections_list;
 				
-		Printf.fprintf oc "\n  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */";
+		(* Printf.fprintf oc "\n  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */"; *)
 		Printf.fprintf oc "\n}";
 		Printf.fprintf oc "\n";
 		
@@ -309,9 +309,9 @@ let uberspark_generate_uobj_linker_script uobj_name uobj_load_addr
 		Printf.fprintf oc "\n	* this part out to see what sections end up in the output";
 		Printf.fprintf oc "\n	* which are not handled above, and handle them.";
 		Printf.fprintf oc "\n	*/";
-		Printf.fprintf oc "\n	.unaccounted : {";
+		Printf.fprintf oc "\n	/DISCARD/ : {";
 		Printf.fprintf oc "\n	*(*)";
-		Printf.fprintf oc "\n	} >unaccounted";
+		Printf.fprintf oc "\n	}";
 		Printf.fprintf oc "\n}";
 		Printf.fprintf oc "\n";
 																																																																																																																								
