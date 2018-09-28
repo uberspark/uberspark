@@ -174,7 +174,7 @@ let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list =
 			cc_cmdline := !cc_cmdline @ [ "-m32" ];
 			cc_cmdline := !cc_cmdline @ [ "-fno-common" ];
 			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_defines;
-			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly;
+(*			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly; *)
 			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
 			cc_cmdline := !cc_cmdline @ [ uobj_cfile_name ];
 			cc_cmdline := !cc_cmdline @ [ "-o" ];
@@ -337,8 +337,12 @@ let uberspark_generate_uobj_hdr uobj_name uobj_load_addr
 			(* new section *)
 			let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
 			let section_name = (List.nth x 3) in
-				Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
-					section_name section_name_var;
+			  if (compare section_name ".text") <> 0 then
+					begin
+						Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
+							section_name section_name_var;
+					end
+				;
 			()
 		)  uobj_sections_list;
 
@@ -346,7 +350,7 @@ let uberspark_generate_uobj_hdr uobj_name uobj_load_addr
 		Printf.fprintf oc "\n";
 			
 		close_out oc;
-	()
+	(uobj_hdr_filename)
 ;; 
 																								
 																																
@@ -432,17 +436,18 @@ let main () =
 		
 
 				
-			uberspark_generate_uobj_hdr !uobj_name 0x80000000 
-				uobj_sections_list;
-			Uslog.logf log_mpf Uslog.Info "Generated uobj header file";
-								
+			let uobj_hdr_cfile = uberspark_generate_uobj_hdr !uobj_name 0x80000000 
+				uobj_sections_list in
+				Uslog.logf log_mpf Uslog.Info "Generated uobj header file";
+			
+							
 												
 																				
 			if (List.length (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)) > 0 then
 				begin
 					Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj cfiles...";
 					uberspark_compile_uobj_cfiles 
-						(Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)
+						((Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id) @ [ uobj_hdr_cfile ])
 						(uberspark_build_includedirs_base () @ 
 						(uberspark_build_includedirs !uobj_id Libusmf.slab_idtoincludedirs));
 				end
@@ -463,7 +468,7 @@ let main () =
 								(Hashtbl.find_all Libusmf.slab_idtolibdirs !uobj_id);
 				uobj_libs_list := !uobj_libs_list @
 								(Hashtbl.find_all Libusmf.slab_idtolibs !uobj_id);
-				uberspark_link_uobj (Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id)
+				uberspark_link_uobj ((Hashtbl.find_all Libusmf.slab_idtocfiles !uobj_id) @ [ uobj_hdr_cfile ])
 					!uobj_libdirs_list !uobj_libs_list 
 					(!uobj_name ^ ".lscript") !uobj_name;
 
