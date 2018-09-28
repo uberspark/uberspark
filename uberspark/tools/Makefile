@@ -16,16 +16,11 @@ all: build-tools
 build-tools:
 	cd ./libs && $(MAKE) -w all
 	$(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
-	#$(CP) -f umfcommon.ml umf/.	
 	cd ./driver && $(MAKE) -w all
 	cd ./umf && $(MAKE) -w all
-	#$(CP) -f umfcommon.ml ubp/.	
 	cd ./ubp && $(MAKE) -w all
-	#$(CP) -f umfcommon.ml ucasm/.	
 	cd ./ucasm && $(MAKE) -w all
-	#$(CP) -f umfcommon.ml uhwm/.
 	cd ./uhwm && $(MAKE) -w all
-	#$(CP) -f umfcommon.ml uccomp/.
 	cd ./uccomp && $(MAKE) -w all
 	
 
