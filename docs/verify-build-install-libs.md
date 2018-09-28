@@ -9,7 +9,7 @@ following tasks in order:
 
 * Switch directory to UberSpark libraries sources
 {% highlight bash %}
-cd uberspark/libs
+cd src/libs
 {% endhighlight %}
 
 * Prepare for build
