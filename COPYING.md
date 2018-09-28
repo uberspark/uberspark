@@ -48,17 +48,5 @@ information place, and that distributed binaries be accompanied with
 that copyright and license information.
 
 We attempt to avoid GPL-style licenses requiring that derived works
-also be under GPL-style licenses. However, there is currently some GPL
-code in this repository. See below.
-
-Binary distribution
-===================
-
-There is currently some GPL-licensed code in this repository. See below.
-
-GPL status of sub-folders
-==========================
-
-xmhf-uobjs/xc_newlog uberobject uses some GPL code for E1000 network hardware
-interactions.
+also be under GPL-style licenses. 
 
