@@ -1,4 +1,7 @@
-Version: 
-Codename: 
-Release-date: 
+Version: 4.1
+Codename: TBD
+Release-date: TBD
 Changelog:
+	* add libusmf to deal with JSON based manifest parsing
+	* migrate tools to use libusmf/JSON based manifest parsing
+	* consolidate and refine documentation
