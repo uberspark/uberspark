@@ -1,6 +1,0 @@
-name="usmf"
-description="manifest parsing module"
-version="1.0"
-requires=""
-archive(byte)="usmf.cmo"
-archive(native)="usmf.cmx"
