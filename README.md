@@ -14,12 +14,13 @@ performance overhead with low verification costs.
 Visit: <http://uberspark.org> for more information on how to download, 
 build, install, contribute and get involved.
 
-Read the documentation at `docs/toc.md`. The formatted documentation can 
-also be read online at: <http://uberspark.org/docs/toc.html>
+The formatted documentation can 
+be read online at: <http://uberspark.org/docs/toc.html>
 
+Documentation sources are within `docs/` 
 
 ## Contact and Maintainer
-Amit Vasudevan (amitvasudevan@acm.org)
+Amit Vasudevan (<http://hypcode.org>)
 
 
 ## Copying
