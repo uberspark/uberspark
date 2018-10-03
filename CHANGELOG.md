@@ -3,6 +3,12 @@
 
 ## Changelog
 
+* Version 4.1 (Eject)
+	* add libusmf to deal with JSON based manifest parsing
+	* migrate tools to use libusmf/JSON based manifest parsing
+	* add foundation for stand-alone tool driver
+	* consolidate and refine documentation
+
 * Version 4.0 (Alpha Prime)
 	* first stand-alone uberspark release
 
