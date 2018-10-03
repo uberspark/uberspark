@@ -1,7 +1,8 @@
 Version: 4.1
-Codename: TBD
-Release-date: TBD
+Codename: Eject
+Release-date: 3rd October 2018
 Changelog:
 	* add libusmf to deal with JSON based manifest parsing
 	* migrate tools to use libusmf/JSON based manifest parsing
+	* add foundation for stand-alone tool driver
 	* consolidate and refine documentation
