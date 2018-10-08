@@ -1075,6 +1075,26 @@ let usmf_parse_uobjs g_memoffsets =
 
 ;;
 
+(* read manifest into json object *)
+let usmf_read_manifest uobj_id uobj_mf_filename = 
+	let retval = ref false in
+	if !g_totalslabs > 0 then
+		begin
+		
+			(* read the JSON manifest file *)
+		  let uobj_mf_json = Yojson.Basic.from_file uobj_mf_filename in
+				retval := true;
+				(!retval, uobj_mf_json)
+
+		end
+	else
+		begin
+			retval := false;
+			(!retval, `Null)
+		end
+	;
+;;
+
 
 end
 

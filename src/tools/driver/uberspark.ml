@@ -378,6 +378,7 @@ let main () =
 			Uslog.logf log_mpf Uslog.Info ">>>>>>";
 			Arg.parse speclist cmdopt_invalid usage_msg;
 
+
 			Uslog.logf log_mpf Uslog.Info "Parsing uobj list using: %s..." !cmdopt_uobjlist;
 			Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
 			Uslog.logf log_mpf Uslog.Info "Parsed uobj list, total uobjs=%u" !Libusmf.g_totalslabs;
@@ -386,6 +387,7 @@ let main () =
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
 			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
 
+(*
 			Uslog.logf log_mpf Uslog.Info "Parsing uobj manifest using: %s..." !cmdopt_uobjmanifest;
 			Uslog.logf log_mpf Uslog.Info "uobj_name='%s', uobj_id=%u" !uobj_name !uobj_id;
 
@@ -472,7 +474,18 @@ let main () =
 					!uobj_libdirs_list !uobj_libs_list 
 					(!uobj_name ^ ".lscript") !uobj_name;
 
-						
+*)
+					
+			let (retval, uobj_mf_json) = Libusmf.usmf_read_manifest !uobj_id 
+				!uobj_manifest_filename in
+			
+					if (retval == false) then
+						begin
+							Uslog.logf log_mpf Uslog.Error "could not read uobj manifest.";
+							ignore (exit 1);
+						end
+					;		
+					
 			Uslog.logf log_mpf Uslog.Info "Done.\r\n";
 
 		end
