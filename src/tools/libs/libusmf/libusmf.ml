@@ -1080,12 +1080,19 @@ let usmf_read_manifest uobj_id uobj_mf_filename =
 	let retval = ref false in
 	if !g_totalslabs > 0 then
 		begin
+			try
 		
 			(* read the JSON manifest file *)
 		  let uobj_mf_json = Yojson.Basic.from_file uobj_mf_filename in
 				retval := true;
 				(!retval, uobj_mf_json)
 
+			with Yojson.Json_error s -> 
+				Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR in parsing manifest!";
+				retval := false;
+				(!retval, `Null)
+			;
+			
 		end
 	else
 		begin

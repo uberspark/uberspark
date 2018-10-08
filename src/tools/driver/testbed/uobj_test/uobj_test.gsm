@@ -7,7 +7,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 {
 
 	/* uobj sources node */	
-	"uobj-sources" : {
+	gulti:"uobj-sources" : {
 
 		"uobj-includedirs": [ 
 			"."
