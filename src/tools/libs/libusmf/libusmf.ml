@@ -1088,7 +1088,7 @@ let usmf_read_manifest uobj_id uobj_mf_filename =
 				(!retval, uobj_mf_json)
 
 			with Yojson.Json_error s -> 
-				Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR in parsing manifest!";
+				Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
 				retval := false;
 				(!retval, `Null)
 			;

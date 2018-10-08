@@ -7,7 +7,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 {
 
 	/* uobj sources node */	
-	gulti:"uobj-sources" : {
+	"uobj-sources" : {
 
 		"uobj-includedirs": [ 
 			"."
@@ -54,7 +54,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* uobj binary node */	
 	"uobj-binary" : {
 		"uobj-sections": {
-			"uobj_code" 	: [ "rx", "0x200000", ".text" ],
+			"uobj_code" 	: [ "rx", US_STR(CODE_SIZE), ".text" ],
 			"uobj_data" 	: [ "rw", "0x200000", ".data", ".rodata*" ],
 			"uobj_stack" 	: [ "rw", "0x200000", ".stack" ],
 			"uobj_dmadata" 	: [ "rw", "0x200000", ".dmadata" ]
