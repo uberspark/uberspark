@@ -13,10 +13,12 @@ all:
 	cd libuslog && $(MAKE) -w all
 	cd libusmf && $(MAKE) -w all
 	cd usextbinutils && $(MAKE) -w all 
+	cd usosservices && $(MAKE) -w all 
 
 .PHONY: clean
 clean:
 	cd libuslog && $(MAKE) -w clean
 	cd libusmf && $(MAKE) -w clean
 	cd usextbinutils && $(MAKE) -w clean
+	cd usosservices && $(MAKE) -w clean
 	
