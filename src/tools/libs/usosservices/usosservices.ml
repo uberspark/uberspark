@@ -4,6 +4,7 @@
 *)
 
 open Unix
+open Uslog
 
 module UsOsservices =
 	struct
@@ -22,5 +23,46 @@ module UsOsservices =
 	  close fd_out;
 		()
 	;;
+
+
+	(* execute a process and print its output if verbose is set to true *)
+	(* return the error code of the process and the output as a list of lines *)
+	let exec_process_withlog p_name cmdline verbose verbose_mod_tag =
+		let readme, writeme = Unix.pipe () in
+		let pid = Unix.create_process
+			p_name (Array.of_list ([p_name] @ cmdline))
+	    Unix.stdin writeme writeme in
+	  Unix.close writeme;
+	  let in_channel = Unix.in_channel_of_descr readme in
+	  let p_output = ref [] in
+		let p_singleoutputline = ref "" in
+		let p_exitstatus = ref 0 in
+		let p_exitsignal = ref false in
+	  begin
+	    try
+	      while true do
+					p_singleoutputline := input_line in_channel;
+					if verbose then
+						Uslog.logf verbose_mod_tag Uslog.Info "%s" !p_singleoutputline;
+											
+					p_output := p_singleoutputline :: !p_output 
+		    done
+	    with End_of_file -> 
+				match	(Unix.waitpid [] pid) with
+	    	| (wpid, Unix.WEXITED status) ->
+	        	p_exitstatus := status;
+						p_exitsignal := false;
+	    	| (wpid, Unix.WSIGNALED signal) ->
+	        	p_exitsignal := true;
+	    	| (wpid, Unix.WSTOPPED signal) ->
+	        	p_exitsignal := true;
+				;
+				()
+	  end;
+	
+		Unix.close readme;
+		(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
+	;;
+
 
 	end
