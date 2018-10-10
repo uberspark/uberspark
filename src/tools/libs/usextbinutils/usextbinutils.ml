@@ -10,6 +10,8 @@ module Usextbinutils =
 	struct
 
 	let tool_pp = "gcc" ;;
+	let usextbinutils_tag = "Usextbinutils" ;;
+			
 			
 	let preprocess 
 			pp_inputfilename pp_outputfilename pp_includedirs_list pp_defines_list =
@@ -26,7 +28,7 @@ module Usextbinutils =
 				Uslog.logf "testing" Uslog.Info "hello";
 
 				ignore(Usosservices.exec_process_withlog 
-					tool_pp !pp_cmdline true);
+					tool_pp !pp_cmdline true usextbinutils_tag);
 		(pp_outputfilename)
 	;;
 				
