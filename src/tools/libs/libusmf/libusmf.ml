@@ -1082,7 +1082,7 @@ let usmf_parse_uobjs g_memoffsets =
 
 
 (* read manifest into json object *)
-let usmf_read_manifest usmf_filename = 
+let usmf_read_manifest usmf_filename keep_temp_files = 
 	let retval = ref false in
 	let usmf_filename_in_pp = (usmf_filename ^ ".c") in
 	let usmf_filename_out_pp = (usmf_filename ^ ".upp") in
@@ -1091,9 +1091,14 @@ let usmf_read_manifest usmf_filename =
 			usmf_filename_out_pp 
 			(Usconfig.get_std_incdirs ())
 			(Usconfig.get_std_defines () @ Usconfig.get_std_define_asm ());
-			(* (Usconfig.get_std_defines ()) ; *) 
-		Usosservices.file_remove usmf_filename_in_pp; 
 
+		if(keep_temp_files == false) then 
+			begin
+				Usosservices.file_remove usmf_filename_in_pp; 
+				Usosservices.file_remove usmf_filename_out_pp;
+			end
+		;
+		
 (*
 				if !g_totalslabs > 0 then
 		begin
