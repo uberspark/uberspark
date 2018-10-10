@@ -7,6 +7,7 @@ open Yojson.Basic.Util
 open Yojson.Basic
 open Yojson
 
+open Usconfig
 open Usosservices
 open Usextbinutils
 
@@ -1086,8 +1087,10 @@ let usmf_read_manifest usmf_filename =
 	let usmf_filename_in_pp = (usmf_filename ^ ".c") in
 	let usmf_filename_out_pp = (usmf_filename ^ ".upp") in
 		Usosservices.file_copy usmf_filename usmf_filename_in_pp;
-		(*Usextbinutils.preprocess usmf_filename_in_pp 
-			usmf_filename_out_pp pp_includedirs_list pp_defines_list;*) 
+		Usextbinutils.preprocess usmf_filename_in_pp 
+			usmf_filename_out_pp 
+			(Usconfig.get_std_incdirs ())
+			(Usconfig.get_std_incdirs ()); 
 		Usosservices.file_remove usmf_filename_in_pp; 
 
 (*
