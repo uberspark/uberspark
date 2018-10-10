@@ -6,6 +6,10 @@
 module Usconfig =
 	struct
 
-	(* let tool_pp = "gcc" ;; *)
-	
+	(* standard include directories *)
+	let stdinc_dirs = [
+											"../../include";
+											"."
+										];;
+		
 	end
