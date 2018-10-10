@@ -7,6 +7,8 @@ open Yojson.Basic.Util
 open Yojson.Basic
 open Yojson
 
+open Usextbinutils
+
 module Libusmf = 
 	struct
 
