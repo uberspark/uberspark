@@ -1090,7 +1090,8 @@ let usmf_read_manifest usmf_filename =
 		Usextbinutils.preprocess usmf_filename_in_pp 
 			usmf_filename_out_pp 
 			(Usconfig.get_std_incdirs ())
-			(Usconfig.get_std_incdirs ()); 
+			(Usconfig.get_std_defines () @ Usconfig.get_std_define_asm ());
+			(* (Usconfig.get_std_defines ()) ; *) 
 		Usosservices.file_remove usmf_filename_in_pp; 
 
 (*
@@ -1118,6 +1119,7 @@ let usmf_read_manifest usmf_filename =
 	;
 *)
 
+	(!retval, `Null)
 ;;
 
 

@@ -476,8 +476,7 @@ let main () =
 
 *)
 					
-			let (retval, uobj_mf_json) = Libusmf.usmf_read_manifest !uobj_id 
-				!uobj_manifest_filename in
+			let (retval, uobj_mf_json) = Libusmf.usmf_read_manifest !uobj_manifest_filename in
 			
 					if (retval == false) then
 						begin
