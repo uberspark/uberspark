@@ -9,6 +9,9 @@ open Usosservices
 module Usextbinutils =
 	struct
 
+
+	(* Uslog.logf usextbinutils_tag Uslog.Debug "hello"; *)
+	
 	let tool_pp = "gcc" ;;
 	let usextbinutils_tag = "Usextbinutils" ;;
 			
@@ -20,13 +23,15 @@ module Usextbinutils =
 			let pp_cmdline = ref [] in
 				pp_cmdline := !pp_cmdline @ [ "-E" ];
 				pp_cmdline := !pp_cmdline @ [ "-P" ];
-				pp_cmdline := !pp_cmdline @ pp_defines_list;
-				pp_cmdline := !pp_cmdline @ pp_includedirs_list;
+				List.iter (fun x -> 
+						pp_cmdline := !pp_cmdline @ [ "-I" ] @ [ x ]
+						) pp_includedirs_list;
+				List.iter (fun x -> 
+						pp_cmdline := !pp_cmdline @ [ "-D" ] @ [ x ]
+						) pp_defines_list;
 				pp_cmdline := !pp_cmdline @ [ pp_inputfilename ];
 				pp_cmdline := !pp_cmdline @ [ "-o" ];
 				pp_cmdline := !pp_cmdline @ [ pp_outputfilename ];
-				Uslog.logf "testing" Uslog.Info "hello";
-
 				ignore(Usosservices.exec_process_withlog 
 					tool_pp !pp_cmdline true usextbinutils_tag);
 		(pp_outputfilename)
