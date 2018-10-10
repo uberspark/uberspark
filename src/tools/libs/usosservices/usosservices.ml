@@ -65,4 +65,24 @@ module Usosservices =
 	;;
 
 
+	let abspath path =
+		let curdir = Unix.getcwd () in
+		let retval = ref true in
+		let path_filename = (Filename.basename path) in
+		let path_dirname = (Filename.dirname path) in
+		let retval_abspath = ref "" in
+			try
+				Unix.chdir path_dirname;
+				retval_abspath := Unix.getcwd ();
+				retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				Unix.chdir curdir;
+				
+			with Unix.Unix_error (ecode, fname, fparam) -> 
+				retval := false;
+			;
+	
+		(!retval, !retval_abspath)
+	;;
+
+
 	end
