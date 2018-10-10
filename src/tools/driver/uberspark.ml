@@ -29,6 +29,11 @@ let g_uberspark_pp_std_defines = [ "-D"; "__XMHF_TARGET_CPU_X86__";
 
 let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
 
+(* standard include directories *)
+let g_uberspark_stdinc_dirs = [
+																"../../include";
+																"."
+															];;
 
 (* external tools *)
 let g_uberspark_exttool_pp = "gcc";;
