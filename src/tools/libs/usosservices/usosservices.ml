@@ -4,6 +4,7 @@
 *)
 
 open Unix
+open Sys
 open Uslog
 
 module Usosservices =
@@ -21,6 +22,12 @@ module Usosservices =
 	  copy_loop ();
 	  close fd_in;
 	  close fd_out;
+		()
+	;;
+
+
+	let file_remove filename =
+		Sys.remove filename;
 		()
 	;;
 

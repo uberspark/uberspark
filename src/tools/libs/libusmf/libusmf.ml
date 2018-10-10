@@ -7,6 +7,7 @@ open Yojson.Basic.Util
 open Yojson.Basic
 open Yojson
 
+open Usosservices
 open Usextbinutils
 
 module Libusmf = 
@@ -1077,10 +1078,16 @@ let usmf_parse_uobjs g_memoffsets =
 
 ;;
 
+
+
 (* read manifest into json object *)
-let usmf_read_manifest uobj_id uobj_mf_filename = 
+let usmf_read_manifest usmf_filename = 
 	let retval = ref false in
-	if !g_totalslabs > 0 then
+	let usmf_filename_in_pp = (usmf_filename ^ ".c") in
+	let usmf_filename_out_pp = (usmf_filename ^ ".upp") in
+		Usosservices.file_copy usmf_filename usmf_filename_in_pp;
+		 
+		if !g_totalslabs > 0 then
 		begin
 			try
 		
