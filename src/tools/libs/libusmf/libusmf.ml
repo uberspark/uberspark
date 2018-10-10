@@ -1086,10 +1086,12 @@ let usmf_read_manifest usmf_filename =
 	let usmf_filename_in_pp = (usmf_filename ^ ".c") in
 	let usmf_filename_out_pp = (usmf_filename ^ ".upp") in
 		Usosservices.file_copy usmf_filename usmf_filename_in_pp;
-		Usextbintools.preprocess usmf_filename_in_pp 
-			usmf_filename_out_pp pp_includedirs_list pp_defines_list; 
+		(*Usextbinutils.preprocess usmf_filename_in_pp 
+			usmf_filename_out_pp pp_includedirs_list pp_defines_list;*) 
 		Usosservices.file_remove usmf_filename_in_pp; 
-		if !g_totalslabs > 0 then
+
+(*
+				if !g_totalslabs > 0 then
 		begin
 			try
 		
@@ -1111,6 +1113,8 @@ let usmf_read_manifest usmf_filename =
 			(!retval, `Null)
 		end
 	;
+*)
+
 ;;
 
 
