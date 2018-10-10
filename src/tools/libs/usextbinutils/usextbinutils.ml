@@ -3,9 +3,10 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
-open UsOsservices
+open Uslog
+open Usosservices
 
-module UsExtbinutils =
+module Usextbinutils =
 	struct
 
 	let tool_pp = "gcc" ;;
@@ -22,7 +23,9 @@ module UsExtbinutils =
 				pp_cmdline := !pp_cmdline @ [ pp_inputfilename ];
 				pp_cmdline := !pp_cmdline @ [ "-o" ];
 				pp_cmdline := !pp_cmdline @ [ pp_outputfilename ];
-				ignore(UsOsservices.exec_process_withlog 
+				Uslog.logf "testing" Uslog.Info "hello";
+
+				ignore(Usosservices.exec_process_withlog 
 					tool_pp !pp_cmdline true);
 		(pp_outputfilename)
 	;;

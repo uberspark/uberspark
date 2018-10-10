@@ -6,7 +6,7 @@
 open Unix
 open Uslog
 
-module UsOsservices =
+module Usosservices =
 	struct
 		
 	let file_copy input_name output_name =
