@@ -11,9 +11,9 @@ module UsExtbinutils =
 	let tool_pp = "gcc" ;;
 			
 	let preprocess 
-			pp_inputfilename pp_includedirs_list pp_defines_list =
-		  let pp_outputfilename = 
-				((Filename.basename pp_inputfilename) ^ ".upp") in
+			pp_inputfilename pp_outputfilename pp_includedirs_list pp_defines_list =
+		  (* let pp_outputfilename = 
+				((Filename.basename pp_inputfilename) ^ ".upp") in *)
 			let pp_cmdline = ref [] in
 				pp_cmdline := !pp_cmdline @ [ "-E" ];
 				pp_cmdline := !pp_cmdline @ [ "-P" ];
