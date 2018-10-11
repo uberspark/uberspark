@@ -1079,6 +1079,9 @@ let usmf_parse_uobjs g_memoffsets =
 
 ;;
 
+(*----------------------------------------------------------------------------*)
+(* new json object based manifest node parsing *)
+(*----------------------------------------------------------------------------*)
 
 
 (* read manifest into json object *)

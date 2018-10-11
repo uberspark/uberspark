@@ -7,6 +7,18 @@ author: amit vasudevan (amitvasudevan@acm.org)
 #include <uberspark.h>
 
 {
+	/* manifest header */
+	"usmf-hdr": {
+		"usmf-type": ""	/*manifest type: uobj list, uobj lib, uobj*/
+	},	
+
+
+	/* manifest dependencies node */
+	"usmf-deps": {
+		"addl-includedirs": [],
+		"addl-libdirs": [],
+
+	},
 
 	/* uobj sources node */	
 	"uobj-sources" : {
