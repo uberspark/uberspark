@@ -56,7 +56,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* uobj binary node */	
 	"uobj-binary" : {
 		"uobj-sections": {
-			"uobj_code" 	: [ "rx", "0x200000", ".text" ],
+			"uobj_code" 	: [ "rx", USMF_STR(0x200000), ".text" ],
 			"uobj_data" 	: [ "rw", "0x200000", ".data", ".rodata*" ],
 			"uobj_stack" 	: [ "rw", "0x200000", ".stack" ],
 			"uobj_dmadata" 	: [ "rw", "0x200000", ".dmadata" ]
