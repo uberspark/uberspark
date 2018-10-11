@@ -8,9 +8,15 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 {
 	/* manifest header */
-	"usmf-hdr": {
-		"usmf-type": ""	/*manifest type: uobj list, uobj lib, uobj*/
-	},	
+	/* "usmf-type" --> manifest type: uobj list, uobj lib, uobj
+	*/
+
+	/* following are the manifest nodes for uobj usmf-type = uobj lib */
+	/*
+		"uobjlib-deps" --> dependencies (addl includedirs, addl libdirs, libs)
+		"uobjlib-sources" --> sources (casm, c)
+		"uobjlib-vharness" --> verification harness	
+	*/
 
 
 	/* manifest dependencies node */
