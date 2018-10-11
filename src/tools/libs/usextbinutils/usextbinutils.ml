@@ -32,9 +32,10 @@ module Usextbinutils =
 				pp_cmdline := !pp_cmdline @ [ pp_inputfilename ];
 				pp_cmdline := !pp_cmdline @ [ "-o" ];
 				pp_cmdline := !pp_cmdline @ [ pp_outputfilename ];
-				ignore(Usosservices.exec_process_withlog 
-					tool_pp !pp_cmdline true usextbinutils_tag);
-		(pp_outputfilename)
+				let (pp_retval, _, _) =
+						Usosservices.exec_process_withlog 
+					tool_pp !pp_cmdline true usextbinutils_tag in
+		(pp_retval, pp_outputfilename)
 	;;
 				
 								
