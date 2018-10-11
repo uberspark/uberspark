@@ -8,7 +8,7 @@ module Usconfig =
 
 	(* standard include directories *)
 	let std_incdirs = [
-										"../../include";
+										"../../../../include";
 										"."
 										];;
 
