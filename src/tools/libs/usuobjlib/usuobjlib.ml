@@ -4,7 +4,7 @@
 ------------------------------------------------------------------------------*)
 
 open Uslog
-open Libusmf
+open Usmanifest
 
 module Usuobjlib =
 	struct
@@ -24,7 +24,7 @@ module Usuobjlib =
 				uobjlib_manifest_filename build_dir keep_temp_files = 
 		
 		let usmf_type = ref "" in
-		let (retval, mf_json) = Libusmf.usmf_read_manifest 
+		let (retval, mf_json) = Usmanifest.read_manifest 
 															uobjlib_manifest_filename keep_temp_files in
 			if (retval == false) then
 				begin
@@ -33,7 +33,7 @@ module Usuobjlib =
 				end
 			;		
 
-			usmf_type := Libusmf.usmf_parse_node_usmf_type mf_json; 
+			usmf_type := Usmanifest.parse_node_usmf_type mf_json; 
 			if (compare !usmf_type usmf_type_usuobjlib) <> 0 then
 				begin
 					Uslog.logf log_tag Uslog.Error "invalid manifest type '%s'." !usmf_type;
