@@ -7,6 +7,10 @@ open Yojson.Basic.Util
 open Yojson.Basic
 open Yojson
 
+open Usconfig
+open Usosservices
+open Usextbinutils
+
 module Libusmf = 
 	struct
 
@@ -1073,6 +1077,49 @@ let usmf_parse_uobjs g_memoffsets =
 			end
 		done;
 
+;;
+
+(*----------------------------------------------------------------------------*)
+(* new json object based manifest node parsing *)
+(*----------------------------------------------------------------------------*)
+
+
+(* read manifest into json object *)
+let usmf_read_manifest usmf_filename keep_temp_files = 
+	let retval = ref false in
+  let retjson = ref `Null in
+	let usmf_filename_in_pp = (usmf_filename ^ ".c") in
+	let usmf_filename_out_pp = (usmf_filename ^ ".upp") in
+		Usosservices.file_copy usmf_filename usmf_filename_in_pp;
+		let (pp_retval, _) = Usextbinutils.preprocess usmf_filename_in_pp 
+													usmf_filename_out_pp 
+													(Usconfig.get_std_incdirs ())
+													(Usconfig.get_std_defines () @ 
+														Usconfig.get_std_define_asm ()) in
+
+		if(pp_retval == 0) then 
+			begin
+				try
+			
+					 let uobj_mf_json = Yojson.Basic.from_file usmf_filename_out_pp in
+							retval := true;
+							retjson := uobj_mf_json;
+							
+				with Yojson.Json_error s -> 
+						Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
+						retval := false;
+				;
+				
+				if(keep_temp_files == false) then
+					begin
+						Usosservices.file_remove usmf_filename_in_pp;
+						Usosservices.file_remove usmf_filename_out_pp;
+					end
+				;
+			end
+		;	
+
+	(!retval, !retjson)
 ;;
 
 
