@@ -22,7 +22,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* manifest dependencies node */
 	"usmf-deps": {
 		"addl-includedirs": [],
-		"addl-libdirs": [],
+		"addl-libdirs": []
 
 	},
 
