@@ -1123,6 +1123,20 @@ let usmf_read_manifest usmf_filename keep_temp_files =
 ;;
 
 
+
+(* return manifest type string *)
+let usmf_parse_node_usmf_type usmf_json =
+	try
+		let open Yojson.Basic.Util in
+			let usmf_type = usmf_json |> member "usmf-type" |> to_string in
+ 				(usmf_type)
+	with Yojson.Basic.Util.Type_error _ -> 
+			("")
+	;
+
+;;
+
+
 end
 
 

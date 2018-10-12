@@ -11,6 +11,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* "usmf-type" --> manifest type: uobj list, uobj lib, uobj
 	*/
 
+	"usmf-type" : "uobjlib",
+
 	/* following are the manifest nodes for uobj usmf-type = uobj lib */
 	/*
 		"uobjlib-deps" --> dependencies (addl includedirs, addl libdirs, libs)

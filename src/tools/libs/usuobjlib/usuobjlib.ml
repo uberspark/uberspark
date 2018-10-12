@@ -1,7 +1,7 @@
-(*
+(*------------------------------------------------------------------------------
 	uberSpark uberobject library verification and build interface
 	author: amit vasudevan (amitvasudevan@acm.org)
-*)
+------------------------------------------------------------------------------*)
 
 open Uslog
 open Libusmf
@@ -11,10 +11,13 @@ module Usuobjlib =
 
 	let log_tag = "Usuobjlib";;
 
+
+	(*--------------------------------------------------------------------------*)
 	(* build a uobjlib *)
 	(* uobjlib_manifest_filename = uobjlib manifest filename *)
 	(* build_dir = directory to use for building *)
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
+	(*--------------------------------------------------------------------------*)
 	let build 
 				uobjlib_manifest_filename build_dir keep_temp_files = 
 		
@@ -28,7 +31,6 @@ module Usuobjlib =
 			;		
 					
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
-
 		()
 	;;
 								
