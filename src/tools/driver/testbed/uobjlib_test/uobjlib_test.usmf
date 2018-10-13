@@ -1,0 +1,38 @@
+/*
+sample json file for uobjlib
+author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+#include <uberspark.h>
+
+{
+	/* manifest type */
+	"usmf-type" : "uobjlib",
+
+
+	/* uobjlib dependencies node */
+	"uobjlib-deps": {
+		"addl-includedirs": [],
+		"addl-uobjlibdirs": [],
+		"addl-uobjlibs": []
+	},
+
+	/* uobjlib sources node */
+	"uobjlib-sources": {
+		"c-files": [],
+		"casm-files": []
+	},
+	
+	/* uobj verification harness node */
+	"uobjlib-vharness": {
+		/*
+			"filename": ["param1","param2",.."paramn"],
+			...		
+		*/
+	},
+	
+	
+}
+
+
+
