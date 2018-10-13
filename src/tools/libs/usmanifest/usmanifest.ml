@@ -73,5 +73,54 @@ module Usmanifest =
 	
 	;;
 
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjlib-sources" *)
+	(* return: lists of c-files and casm files *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_uobjlib_sources usmf_json =
+		let uobjlib_cfiles_list = ref [] in
+		let uobjlib_casmfiles_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjlib_sources_json = usmf_json |> member "uobjlib-sources" in
+					if uobjlib_sources_json != `Null then
+						begin
+	
+							let uobjlib_cfiles_json = uobjlib_sources_json |> 
+								member "c-files" in
+								if uobjlib_cfiles_json != `Null then
+									begin
+										let uobjlib_cfiles_json_list = uobjlib_cfiles_json |> 
+												to_list in 
+											List.iter (fun x -> uobjlib_cfiles_list := 
+													!uobjlib_cfiles_list @ [(x |> to_string)]
+												) uobjlib_cfiles_json_list;
+									end
+								;
+
+							let uobjlib_casmfiles_json = uobjlib_sources_json |> 
+								member "casm-files" in
+								if uobjlib_casmfiles_json != `Null then
+									begin
+										let uobjlib_casmfiles_json_list = uobjlib_casmfiles_json |> 
+												to_list in 
+											List.iter (fun x -> uobjlib_casmfiles_list := 
+													!uobjlib_casmfiles_list @ [(x |> to_string)]
+												) uobjlib_casmfiles_json_list;
+									end
+								;
+
+						end
+					;
+					(!uobjlib_cfiles_list, !uobjlib_casmfiles_list)
+		with Yojson.Basic.Util.Type_error _ -> 
+				(!uobjlib_cfiles_list, !uobjlib_casmfiles_list)
+		;
+	
+	;;
+
+
 								
 	end
