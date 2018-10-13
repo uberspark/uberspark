@@ -33,6 +33,8 @@ module Usuobjlib =
 				end
 			;		
 
+			Uslog.logf log_tag Uslog.Info "Done.\n";
+
 			usmf_type := Usmanifest.parse_node_usmf_type mf_json; 
 			if (compare !usmf_type usmf_type_usuobjlib) <> 0 then
 				begin
@@ -40,7 +42,15 @@ module Usuobjlib =
 					ignore (exit 1);
 				end
 			;
-															
+						
+			Uslog.logf log_tag Uslog.Info "Done.\r\n";
+						
+			let(uobjlib_cfiles, uobjlib_casmfiles) = 
+				Usmanifest.parse_node_uobjlib_sources	mf_json in
+					Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
+						(List.length uobjlib_cfiles) (List.length uobjlib_casmfiles);
+																								
+																																										
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
 		()
 	;;

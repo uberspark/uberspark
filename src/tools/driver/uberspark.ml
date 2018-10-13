@@ -386,7 +386,7 @@ let main () =
 
 			uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
-			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
+(*			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);*)
 
 (*
 			Uslog.logf log_mpf Uslog.Info "Parsing uobj manifest using: %s..." !cmdopt_uobjmanifest;

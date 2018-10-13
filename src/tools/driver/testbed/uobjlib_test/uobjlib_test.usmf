@@ -19,8 +19,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 	/* uobjlib sources node */
 	"uobjlib-sources": {
-		"c-files": [],
-		"casm-files": []
+		"c-files": [ "test1.c", "test2.c"],
+		"casm-files": [ "tesa.cS", "tesb.cS"]
 	},
 	
 	/* uobj verification harness node */
@@ -29,7 +29,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 			"filename": ["param1","param2",.."paramn"],
 			...		
 		*/
-	},
+	}
 	
 	
 }
