@@ -6,25 +6,21 @@ author: amit vasudevan (amitvasudevan@acm.org)
 #include <uberspark.h>
 
 {
-	/* manifest type */
-	"usmf-type" : "uobjlib",
-
-
-	/* uobjlib dependencies node */
-	"uobjlib-deps": {
-		"addl-includedirs": [],
-		"addl-uobjlibdirs": [],
-		"addl-uobjlibs": []
+	/* manifest header */
+	"usmf-hdr" : {
+		"type" : "uobjlib",
+		"subtype" : "",
+		"id" : "uobjlib_test"
 	},
 
-	/* uobjlib sources node */
-	"uobjlib-sources": {
+	/* sources */
+	"usmf-sources" : {
 		"c-files": [ "test1.c", "test2.c"],
 		"casm-files": [ "tesa.cS", "tesb.cS"]
 	},
-	
-	/* uobj verification harness node */
-	"uobjlib-vharness": {
+
+	/* verification harness node */
+	"usmf-vharness": {
 		/*
 			"filename": ["param1","param2",.."paramn"],
 			...		
