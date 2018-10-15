@@ -74,6 +74,19 @@ module Usuobjlib =
 				begin
 					Uslog.logf log_tag Uslog.Info "total vharness elements=%u\n"
 						(List.length uobjlib_vharness_list);
+				
+					List.iter (fun x ->
+						Uslog.logf log_tag Uslog.Info "total elements=%u\n"
+							(List.length x);
+
+						List.iter (fun y ->
+							Uslog.logf log_tag Uslog.Info "element=%s\n" y;
+							()
+						) x;
+
+						()
+					) uobjlib_vharness_list;
+
 				end
 			;
 
