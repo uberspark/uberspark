@@ -52,13 +52,20 @@ module Usuobjlib =
 				end
 			;
 			
-(*						
-			let(uobjlib_cfiles, uobjlib_casmfiles) = 
-				Usmanifest.parse_node_uobjlib_sources	mf_json in
-					Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
+						
+			let(rval, uobjlib_cfiles, uobjlib_casmfiles) = 
+				Usmanifest.parse_node_usmf_sources	mf_json in
+
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid usmf-sources node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length uobjlib_cfiles) (List.length uobjlib_casmfiles);
-*)
-																							
+
 																																										
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
 		()

@@ -92,49 +92,52 @@ module Usmanifest =
 
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobjlib-sources" *)
-	(* return: lists of c-files and casm files *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then lists of c-files and casm files *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_uobjlib_sources usmf_json =
-		let uobjlib_cfiles_list = ref [] in
-		let uobjlib_casmfiles_list = ref [] in
+	let parse_node_usmf_sources usmf_json =
+		let retval = ref true in
+		let usmf_cfiles_list = ref [] in
+		let usmf_casmfiles_list = ref [] in
 
 		try
 			let open Yojson.Basic.Util in
-		  	let uobjlib_sources_json = usmf_json |> member "uobjlib-sources" in
-					if uobjlib_sources_json != `Null then
+		  	let usmf_sources_json = usmf_json |> member "usmf-sources" in
+					if usmf_sources_json != `Null then
 						begin
 	
-							let uobjlib_cfiles_json = uobjlib_sources_json |> 
+							let usmf_cfiles_json = usmf_sources_json |> 
 								member "c-files" in
-								if uobjlib_cfiles_json != `Null then
+								if usmf_cfiles_json != `Null then
 									begin
-										let uobjlib_cfiles_json_list = uobjlib_cfiles_json |> 
+										let usmf_cfiles_json_list = usmf_cfiles_json |> 
 												to_list in 
-											List.iter (fun x -> uobjlib_cfiles_list := 
-													!uobjlib_cfiles_list @ [(x |> to_string)]
-												) uobjlib_cfiles_json_list;
+											List.iter (fun x -> usmf_cfiles_list := 
+													!usmf_cfiles_list @ [(x |> to_string)]
+												) usmf_cfiles_json_list;
 									end
 								;
 
-							let uobjlib_casmfiles_json = uobjlib_sources_json |> 
+							let usmf_casmfiles_json = usmf_sources_json |> 
 								member "casm-files" in
-								if uobjlib_casmfiles_json != `Null then
+								if usmf_casmfiles_json != `Null then
 									begin
-										let uobjlib_casmfiles_json_list = uobjlib_casmfiles_json |> 
+										let usmf_casmfiles_json_list = usmf_casmfiles_json |> 
 												to_list in 
-											List.iter (fun x -> uobjlib_casmfiles_list := 
-													!uobjlib_casmfiles_list @ [(x |> to_string)]
-												) uobjlib_casmfiles_json_list;
+											List.iter (fun x -> usmf_casmfiles_list := 
+													!usmf_casmfiles_list @ [(x |> to_string)]
+												) usmf_casmfiles_json_list;
 									end
 								;
 
 						end
 					;
-					(!uobjlib_cfiles_list, !uobjlib_casmfiles_list)
+					
 		with Yojson.Basic.Util.Type_error _ -> 
-				(!uobjlib_cfiles_list, !uobjlib_casmfiles_list)
+				retval := false;
 		;
 	
+		(!retval, !usmf_cfiles_list, !usmf_casmfiles_list)
 	;;
 
 
