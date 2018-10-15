@@ -37,19 +37,22 @@ module Usuobjlib =
 
 			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
 					Usmanifest.parse_node_usmf_hdr mf_json in
-				Uslog.logf log_tag Uslog.Info "rval=%b" rval;
-			
-(*
-			usmf_type := Usmanifest.parse_node_usmf_type mf_json; 
-			if (compare !usmf_type usmf_type_usuobjlib) <> 0 then
+				
+			if (rval == false) then
 				begin
-					Uslog.logf log_tag Uslog.Error "invalid manifest type '%s'." !usmf_type;
+					Uslog.logf log_tag Uslog.Error "invalid manifest hdr.";
 					ignore (exit 1);
 				end
 			;
-						
-			Uslog.logf log_tag Uslog.Info "Done.\r\n";
-						
+				
+			if (compare usmf_hdr_type usmf_type_usuobjlib) <> 0 then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjlib manifest type '%s'." !usmf_type;
+					ignore (exit 1);
+				end
+			;
+			
+(*						
 			let(uobjlib_cfiles, uobjlib_casmfiles) = 
 				Usmanifest.parse_node_uobjlib_sources	mf_json in
 					Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
