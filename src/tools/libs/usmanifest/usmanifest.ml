@@ -58,6 +58,38 @@ module Usmanifest =
 
 
 	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "usmf-hdr" *)
+	(* return: true if successfully parsed usmf-hdr, false if not *)
+	(* if true also return: manifest type string; manifest subtype string; *)
+	(* id as string *)
+	(*--------------------------------------------------------------------------*)
+
+	let parse_node_usmf_hdr usmf_json =
+		let retval = ref false in
+		let usmf_hdr_type = ref "" in
+		let usmf_hdr_subtype = ref "" in
+		let usmf_hdr_id = ref "" in
+		try
+			let open Yojson.Basic.Util in
+				let usmf_json_usmf_hdr = usmf_json |> member "usmf-hdr" in
+				if(usmf_json_usmf_hdr <> `Null) then
+					begin
+						usmf_hdr_type := usmf_json_usmf_hdr |> member "type" |> to_string;
+						usmf_hdr_subtype := usmf_json_usmf_hdr |> member "subtype" |> to_string;
+						usmf_hdr_id := usmf_json_usmf_hdr |> member "id" |> to_string;
+						retval := true;
+					end
+				;
+
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+		(!retval, !usmf_hdr_type, !usmf_hdr_subtype, !usmf_hdr_id)
+	;;
+
+
+	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "usmf-type" *)
 	(* return: manifest type string *)
 	(*--------------------------------------------------------------------------*)

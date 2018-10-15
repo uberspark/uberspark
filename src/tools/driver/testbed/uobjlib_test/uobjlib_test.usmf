@@ -9,7 +9,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* manifest header */
 	"usmf-hdr" : {
 		"type" : "uobjlib",
-		"subtype" : "",
+		"subtype" : "", 
 		"id" : "uobjlib_test"
 	},
 
