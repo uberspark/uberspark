@@ -141,5 +141,54 @@ module Usmanifest =
 	;;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "usmf-vharness" *)
+	(* return true if vharness node present, false if not *)
+	(* return: if true then returns list of lists of vharnesses *)
+	(*--------------------------------------------------------------------------*)
+	
+	let parse_node_usmf_vharness usmf_json =
+		let retval = ref false in
+		let usmf_vharness_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let usmf_vharness_json = usmf_json |> member "usmf-vharness" in
+					if usmf_vharness_json != `Null then
+						begin
+
+							let usmf_vharness_assoc_list = Yojson.Basic.Util.to_assoc 
+									usmf_vharness_json in
+								
+								retval := true;
+								List.iter (fun (x,y) ->
+									Uslog.logf "usmanifest" Uslog.Debug "%s: key=%s" __LOC__ x;
+									let usmf_vharness_attribute_list = ref [] in
+										usmf_vharness_attribute_list := !usmf_vharness_attribute_list @
+																	[ x ];
+										List.iter (fun z ->
+											usmf_vharness_attribute_list := !usmf_vharness_attribute_list @
+																	[ (z |> to_string) ];
+											()
+										)(Yojson.Basic.Util.to_list y);
+										
+										usmf_vharness_list := !usmf_vharness_list @	[ !usmf_vharness_attribute_list ];
+										(* if (List.length (Yojson.Basic.Util.to_list y)) < 3 then
+											retval:=false;
+										*)
+									()
+								) usmf_vharness_assoc_list;
+							Uslog.logf "usmanifests" Uslog.Debug "%s: list length=%u" __LOC__ (List.length !usmf_vharness_list);
+
+						end
+					;
+					
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+	
+		(!retval, !usmf_vharness_list)
+	;;
+
 								
 	end
