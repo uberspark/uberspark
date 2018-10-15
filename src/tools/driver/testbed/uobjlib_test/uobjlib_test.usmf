@@ -17,14 +17,16 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	"usmf-sources" : {
 		"c-files": [ "test1.c", "test2.c"],
 		"casm-files": [ "tesa.cS", "tesb.cS"]
-	},
+	}
+
+	
+	,
 
 	/* verification harness node */
 	"usmf-vharness": {
-		/*
-			"filename": ["param1","param2",.."paramn"],
-			...		
-		*/
+		"test1.c" : [ "spec", "parm1", "parm2" ],
+		"test2.c" : [ "absint", "parm1" ]
+			
 	}
 	
 	

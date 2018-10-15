@@ -66,6 +66,17 @@ module Usuobjlib =
 			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length uobjlib_cfiles) (List.length uobjlib_casmfiles);
 
+
+			let(rval, uobjlib_vharness_list) = 
+				Usmanifest.parse_node_usmf_vharness	mf_json in
+
+			if (rval == true) then
+				begin
+					Uslog.logf log_tag Uslog.Info "total vharness elements=%u\n"
+						(List.length uobjlib_vharness_list);
+				end
+			;
+
 																																										
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
 		()
