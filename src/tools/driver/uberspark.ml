@@ -6,7 +6,9 @@ open Unix
 open Filename
 
 open Uslog
+open Usosservices
 open Libusmf
+open Usuobjlib
 
 let log_mpf = "uberSpark";;
 
@@ -356,7 +358,6 @@ let uberspark_generate_uobj_hdr uobj_name uobj_load_addr
 																																
 																																																
 let main () =
-	begin
 		let speclist = [
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
@@ -385,7 +386,7 @@ let main () =
 
 			uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
 			uobj_name := Filename.chop_extension !uobj_manifest_filename;
-			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
+(*			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);*)
 
 (*
 			Uslog.logf log_mpf Uslog.Info "Parsing uobj manifest using: %s..." !cmdopt_uobjmanifest;
@@ -476,20 +477,9 @@ let main () =
 
 *)
 					
-			let (retval, uobj_mf_json) = Libusmf.usmf_read_manifest !uobj_manifest_filename true in
-			
-					if (retval == false) then
-						begin
-							Uslog.logf log_mpf Uslog.Error "could not read uobj manifest.";
-							ignore (exit 1);
-						end
-					;		
-					
-			Uslog.logf log_mpf Uslog.Info "Done.\r\n";
+			Usuobjlib.build !uobj_manifest_filename "" true;
+ ;;
 
-		end
-	;;
- 
 		
 main ();;
 
