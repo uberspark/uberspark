@@ -51,13 +51,18 @@
 #ifndef __XMHF_HWM_H__
 #define __XMHF_HWM_H__
 
+#ifndef __ASSEMBLY__
+
 #define __CASMFNDEF__(x) __attribute__((naked))
 #define __CASMFNCALL__(x) (x);
+
+#endif // __ASSEMBLY__
 
 
 #if defined(__XMHF_TARGET_TRIAD_X86_VMX_X86PC__)
 
 #ifndef __ASSEMBLY__
+
 	typedef struct {
 		u32 addr_start;
 		u32 addr_end;
