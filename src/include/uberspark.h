@@ -46,11 +46,8 @@
 
 //author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __XMHF_USPARK_H_
-#define __XMHF_USPARK_H_
-
-
-#ifndef __ASSEMBLY__
+#ifndef __UBERSPARK_H__
+#define __UBERSPARK_H__
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -59,11 +56,12 @@
 #include <string.h>
 
 #include <xmhf-hwm.h>
-#endif //__ASSEMBLY__
 
 
 #define USMF_STR(s) _USMF_STR(s)
 #define _USMF_STR(s) #s
+
+#ifndef __ASSEMBLY__
 
 
 #if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
@@ -95,4 +93,7 @@ u32 framac_nondetu32interval(u32 min, u32 max)
 
 #endif //
 
-#endif /* _XMHF_USPARK_H */
+#endif //__ASSEMBLY__
+
+
+#endif //__UBERSPARK_H__
