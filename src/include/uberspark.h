@@ -54,6 +54,8 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
+#include <assert.h>
 
 #include <xmhf-hwm.h>
 
