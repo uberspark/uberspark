@@ -47,8 +47,13 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
+#ifndef __ASSEMBLY__
+
 #ifndef __XMHF_VERIFICATION__
 #define assert(x) ((void)0)
 #endif
+
+#endif //__ASSEMBLY__
+
 
 #endif /* __ASSERT_H__ */

@@ -49,10 +49,15 @@
 #ifndef __STDBOOL_H__
 #define __STDBOOL_H__
 
+#ifndef __ASSEMBLY__
+
 typedef int boolean_t;
 typedef boolean_t bool;
 #define true 1
 #define false 0
 #define __bool_true_false_are_defined
+
+#endif //__ASSEMBLY__
+
 
 #endif /* __STDBOOL_H__ */
