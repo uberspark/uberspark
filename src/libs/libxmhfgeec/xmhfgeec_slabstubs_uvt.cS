@@ -49,10 +49,10 @@
  * author: amit vasudevan (amitvasudevan@acm.org)
 */
 
-
-#include <xmhf.h>
+#include <uberspark.h>
+//#include <xmhf.h>
 #include <xmhfgeec.h>
-#include <xmhf-debug.h>
+//#include <xmhf-debug.h>
 
 CASM_FUNCDEF_FULL(.slab_entrystub, 1, void, _slab_entrystub,
 {

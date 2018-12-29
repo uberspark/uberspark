@@ -50,10 +50,8 @@
 */
 
 
-#include <xmhf.h>
-#include <xmhf-hwm.h>
+#include <uberspark.h>
 #include <xmhfgeec.h>
-#include <xmhf-debug.h>
 
 #define xmhfhwm_cpu_insn_jmpxsentinel() \
 	__builtin_annot("movl $0x06200000, %eax"); \
