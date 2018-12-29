@@ -49,11 +49,8 @@
  * author: amit vasudevan (amitvasudevan@acm.org)
 */
 
-
-#include <xmhf.h>
-#include <xmhf-hwm.h>
+#include <uberspark.h>
 #include <xmhfgeec.h>
-#include <xmhf-debug.h>
 
 u32 cpuid = 0;	//BSP cpu
 slab_params_t sp;
