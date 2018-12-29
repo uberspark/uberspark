@@ -49,10 +49,11 @@
  * author: amit vasudevan (amitvasudevan@acm.org)
 */
 
+#include <uberspark.h>
 
-#include <xmhf.h>
+//#include <xmhf.h>
 #include <xmhfgeec.h>
-#include <xmhf-debug.h>
+//#include <xmhf-debug.h>
 
 __attribute__ ((section(".rodata"))) char * _namestring="_xmhfslab_";
 __attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) u8 _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
