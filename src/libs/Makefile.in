@@ -60,6 +60,12 @@ install-libs-bin:
 	$(CP) -f $(USPARK_LIBSDIR)/libxmhfcrypto/include/* $(USPARK_INSTALL_LIBSINCLUDESDIR)/.
 	$(CP) -f $(USPARK_LIBSDIR)/libxmhfhw/libubersparkhw.a $(USPARK_INSTALL_LIBSDIR)/.
 	$(CP) -f $(USPARK_LIBSDIR)/libxmhfhw/include/* $(USPARK_INSTALL_LIBSINCLUDESDIR)/.
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/include/* $(USPARK_INSTALL_LIBSINCLUDESDIR)/.
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/xmhfgeec_slabmapdef.o $(USPARK_INSTALL_LIBSDIR)/xmhfgeec_slabmapdef.o
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/xmhfgeec_slabstubs_uvt.o.o $(USPARK_INSTALL_LIBSDIR)/xmhfgeec_slabstubs_uvt.o
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/xmhfgeec_slabstubs_uvug.o.o $(USPARK_INSTALL_LIBSDIR)/xmhfgeec_slabstubs_uvug.o
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/xmhfgeec_slabstubs_uvu.o.o $(USPARK_INSTALL_LIBSDIR)/xmhfgeec_slabstubs_uvu.o
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/xmhfgeec_slabstubs_vft.o.o $(USPARK_INSTALL_LIBSDIR)/xmhfgeec_slabstubs_vft.o
 
 .PHONY: install-libs-src
 install-libs-src:
