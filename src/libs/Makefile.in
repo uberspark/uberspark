@@ -38,16 +38,16 @@ all:	verify-ubersparklibs clean build-ubersparklibs
 
 .PHONY: verify-ubersparklibs
 verify-ubersparklibs:
-	#cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w verify	
-	#cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w verify	
-	#cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w verify
+	cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w verify	
+	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w verify	
+	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w verify
 	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w verify
 
 .PHONY: build-ubersparklibs
 build-ubersparklibs:
-	#cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w build	
-	#cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w build	
-	#cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w build	
+	cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w build	
+	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w build	
+	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w build	
 	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w build	
 
 .PHONY: install-libs-bin
