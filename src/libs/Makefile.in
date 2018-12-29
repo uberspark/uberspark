@@ -72,6 +72,9 @@ install-libs-src:
 	$(MKDIR) -p $(USPARK_INSTALL_LIBSDIR)/libubersparkhw
 	$(CP) -f $(USPARK_LIBSDIR)/libxmhfhw/*.c $(USPARK_INSTALL_LIBSDIR)/libubersparkhw/.
 	$(CP) -f $(USPARK_LIBSDIR)/libxmhfhw/*.cS $(USPARK_INSTALL_LIBSDIR)/libubersparkhw/.
+	$(MKDIR) -p $(USPARK_INSTALL_LIBSDIR)/libxmhfgeec
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/*.c $(USPARK_INSTALL_LIBSDIR)/libxmhfgeec/.
+	$(CP) -f $(USPARK_LIBSDIR)/libxmhfgeec/*.cS $(USPARK_INSTALL_LIBSDIR)/libxmhfgeec/.
 	
 
 
