@@ -51,8 +51,8 @@
 #ifndef __XMHFGEEC_H__
 #define __XMHFGEEC_H__
 
-#include <xmhf-hwm.h>
-#include <xmhfhw.h>
+//#include <xmhf-hwm.h>
+//#include <xmhfhw.h>
 
 /*
 	1. XMHFGEEC_SLABTYPE_VfT_PROG_PRIME     -- verified trusted special prime slab
