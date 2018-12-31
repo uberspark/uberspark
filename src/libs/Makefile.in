@@ -17,6 +17,7 @@ USPARK_LIBSINCLUDES := -I$(USPARK_LIBSDIR)/libxmhfc/include
 USPARK_LIBSINCLUDES += -I$(USPARK_LIBSDIR)/libxmhfcrypto/include
 USPARK_LIBSINCLUDES += -I$(USPARK_LIBSDIR)/libxmhfhw/include
 USPARK_LIBSINCLUDES += -I$(USPARK_LIBSDIR)/libxmhfgeec/include
+USPARK_LIBSINCLUDES += -I$(USPARK_LIBSDIR)/libxmhfdebug/include
 
 CCERT_CFLAGS += $(USPARK_LIBSINCLUDES)
 CCERT_CASMFLAGS += $(USPARK_LIBSINCLUDES)
@@ -28,6 +29,7 @@ V_FLAGS += -cpp-extra-args=-I$(USPARK_LIBSDIR)/libxmhfc/include
 V_FLAGS += -cpp-extra-args=-I$(USPARK_LIBSDIR)/libxmhfcrypto/include
 V_FLAGS += -cpp-extra-args=-I$(USPARK_LIBSDIR)/libxmhfhw/include
 V_FLAGS += -cpp-extra-args=-I$(USPARK_LIBSDIR)/libxmhfgeec/include
+V_FLAGS += -cpp-extra-args=-I$(USPARK_LIBSDIR)/libxmhfdebug/include
 
 
 ###### targets
@@ -45,10 +47,11 @@ verify-ubersparklibs:
 
 .PHONY: build-ubersparklibs
 build-ubersparklibs:
-	cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w build	
-	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w build	
-	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w build	
-	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w build	
+	#cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w build	
+	#cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w build	
+	#cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w build	
+	#cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w build	
+	cd $(USPARK_LIBSDIR)/libxmhfdebug && make -f libxmhfdebug.mk -w build	
 
 .PHONY: install-libs-bin
 install-libs-bin:
