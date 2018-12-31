@@ -52,7 +52,7 @@
 
 #if defined (__DEBUG_SERIAL__)
 
-#include <xmhfhw.h>
+//#include <xmhfhw.h>
 
 #include "_com.h"        		//UART/serial
 
