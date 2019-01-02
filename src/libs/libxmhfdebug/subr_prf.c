@@ -43,10 +43,12 @@
  * Amit Vasudevan (amitvasudevan@acm.org)
  */
 
-#include <stdint.h>
+#include <uberspark.h>
+
+//#include <stdint.h>
 //#include <stdio.h>
-#include <stddef.h>
-#include <ctype.h>
+//#include <stddef.h>
+//#include <ctype.h>
 
 //#include <sys/libkern.h>
 static __inline int imax(int a, int b) { return (a > b ? a : b); }
