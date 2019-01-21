@@ -44,67 +44,27 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
-//author: amit vasudevan (amitvasudevan@acm.org)
-
-#ifndef __UBERSPARK_H__
-#define __UBERSPARK_H__
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-#include <assert.h>
+/*
+ * slab stubs for guest program slabs
+ * author: amit vasudevan (amitvasudevan@acm.org)
+*/
 
 
-#include <xmhf-hwm.h>
+#include <uberspark.h>
+#include <xmhfgeec.h>
 
-
-#define USMF_STR(s) _USMF_STR(s)
-#define _USMF_STR(s) #s
-
-
-#define XMHFGEEC_MAX_SLABS                  32
-#define XMHFGEEC_TOTAL_SLABS                16
-#define XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES 6
-#define XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES 6
-#define	XMHF_SLAB_STACKSIZE					16384
-
-
-#ifndef __ASSEMBLY__
-
-
-#if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
-//////
-// frama-c non-determinism functions
-//////
-
-u32 Frama_C_entropy_source;
-
-//@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
-void Frama_C_update_entropy(void);
-
-u32 framac_nondetu32(void){
-  Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
-}
-
-u32 framac_nondetu32interval(u32 min, u32 max)
+CASM_FUNCDEF_FULL(.slab_entrystub, 1, void, _slab_entrystub,
 {
-  u32 r,aux;
-  Frama_C_update_entropy();
-  aux = Frama_C_entropy_source;
-  if ((aux>=min) && (aux <=max))
-    r = aux;
-  else
-    r = min;
-  return r;
-}
+	xmhfhwm_cpu_insn_pushl_mesp(0x4); //push slab_params_t *
+	xmhfhwm_cpu_insn_call(slab_main);
+	xmhfhwm_cpu_insn_addl_imm_esp(0x4); //remove slab_params_t *
+    xmhfhwm_cpu_insn_hlt();
+},
+slab_params_t *sp)
 
-#endif //
+CASM_FUNCDEF(void, __slab_callsentinel,
+{
+    xmhfhwm_cpu_insn_hlt();
+},
+slab_params_t *sp)
 
-#endif //__ASSEMBLY__
-
-
-#endif //__UBERSPARK_H__

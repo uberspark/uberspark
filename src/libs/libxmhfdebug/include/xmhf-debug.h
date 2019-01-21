@@ -44,67 +44,66 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
-//author: amit vasudevan (amitvasudevan@acm.org)
-
-#ifndef __UBERSPARK_H__
-#define __UBERSPARK_H__
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-#include <assert.h>
-
-
-#include <xmhf-hwm.h>
-
-
-#define USMF_STR(s) _USMF_STR(s)
-#define _USMF_STR(s) #s
-
-
-#define XMHFGEEC_MAX_SLABS                  32
-#define XMHFGEEC_TOTAL_SLABS                16
-#define XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES 6
-#define XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES 6
-#define	XMHF_SLAB_STACKSIZE					16384
-
+#ifndef __XMHF_DEBUG_H__
+#define __XMHF_DEBUG_H__
 
 #ifndef __ASSEMBLY__
 
 
-#if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
-//////
-// frama-c non-determinism functions
-//////
+#if defined (__DEBUG_SERIAL__)
 
-u32 Frama_C_entropy_source;
+//#include <xmhfhw.h>
 
-//@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
-void Frama_C_update_entropy(void);
+#include "_com.h"        		//UART/serial
 
-u32 framac_nondetu32(void){
-  Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
+#define LOG_LEVEL_NONE    0x00
+#define LOG_LEVEL_ALL     0xFF
+
+#define LOG_TARGET_NONE   0x00
+#define LOG_TARGET_VGA    0x01
+#define LOG_TARGET_SERIAL 0x02
+#define LOG_TARGET_MEMORY 0x04
+
+#define LOG_PROFILE (1<<0)
+#define LOG_TRACE   (1<<1)
+#define LOG_ERROR   (1<<2)
+
+#define ENABLED_LOG_TYPES (LOG_PROFILE|LOG_TRACE|LOG_ERROR)
+
+static inline void xmhf_debug_init(char *params){
+	(void)params;
+  xmhfhw_platform_serial_init(params);
 }
 
-u32 framac_nondetu32interval(u32 min, u32 max)
-{
-  u32 r,aux;
-  Frama_C_update_entropy();
-  aux = Frama_C_entropy_source;
-  if ((aux>=min) && (aux <=max))
-    r = aux;
-  else
-    r = min;
-  return r;
+extern __attribute__(( section(".data") )) u32 libxmhfdebug_lock;
+
+static inline void _XDPRINTF_(const char *fmt, ...){
+    va_list       ap;
+	int retval;
+	char buffer[1024];
+
+	va_start(ap, fmt);
+	retval = vsnprintf(&buffer, 1024, fmt, ap);
+	spin_lock(&libxmhfdebug_lock);
+	xmhfhw_platform_serial_puts(&buffer);
+	spin_unlock(&libxmhfdebug_lock);
+    va_end(ap);
 }
 
-#endif //
+#else
 
-#endif //__ASSEMBLY__
+static inline void xmhf_debug_init(char *params){
+	(void)params;
+}
+
+#define _XDPRINTF_(format, args...)
+
+#endif // defined
 
 
-#endif //__UBERSPARK_H__
+
+
+
+#endif	//__ASSEMBLY__
+
+#endif //__XMHF_DEBUG_H__

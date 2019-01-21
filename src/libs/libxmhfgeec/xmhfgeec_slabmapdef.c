@@ -44,67 +44,28 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
-//author: amit vasudevan (amitvasudevan@acm.org)
+/*
+ * slab entry stub
+ * author: amit vasudevan (amitvasudevan@acm.org)
+*/
 
-#ifndef __UBERSPARK_H__
-#define __UBERSPARK_H__
+#include <uberspark.h>
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-#include <assert.h>
+//#include <xmhf.h>
+#include <xmhfgeec.h>
+//#include <xmhf-debug.h>
 
-
-#include <xmhf-hwm.h>
-
-
-#define USMF_STR(s) _USMF_STR(s)
-#define _USMF_STR(s) #s
-
-
-#define XMHFGEEC_MAX_SLABS                  32
-#define XMHFGEEC_TOTAL_SLABS                16
-#define XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES 6
-#define XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES 6
-#define	XMHF_SLAB_STACKSIZE					16384
+__attribute__ ((section(".rodata"))) char * _namestring="_xmhfslab_";
+__attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) u8 _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
+__attribute__ ((section(".stackhdr"))) u32 _slab_tos[MAX_PLATFORM_CPUS]= {
+    ((u32)&_slab_stack[1]),
+    ((u32)&_slab_stack[2]),
+    ((u32)&_slab_stack[3]),
+    ((u32)&_slab_stack[4]),
+    ((u32)&_slab_stack[5]),
+    ((u32)&_slab_stack[6]),
+    ((u32)&_slab_stack[7]),
+    ((u32)&_slab_stack[8])  };
+__attribute__ ((section(".slab_dmadata"))) u8 _dmadataplaceholder[1] = {0};
 
 
-#ifndef __ASSEMBLY__
-
-
-#if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
-//////
-// frama-c non-determinism functions
-//////
-
-u32 Frama_C_entropy_source;
-
-//@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
-void Frama_C_update_entropy(void);
-
-u32 framac_nondetu32(void){
-  Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
-}
-
-u32 framac_nondetu32interval(u32 min, u32 max)
-{
-  u32 r,aux;
-  Frama_C_update_entropy();
-  aux = Frama_C_entropy_source;
-  if ((aux>=min) && (aux <=max))
-    r = aux;
-  else
-    r = min;
-  return r;
-}
-
-#endif //
-
-#endif //__ASSEMBLY__
-
-
-#endif //__UBERSPARK_H__
