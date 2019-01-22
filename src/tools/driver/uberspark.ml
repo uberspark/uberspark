@@ -37,18 +37,21 @@ let g_uberspark_exttool_pp = "gcc";;
 let g_uberspark_exttool_cc = "gcc";;
 let g_uberspark_exttool_ld = "ld";;
 
-let copt_builduobj = ref false;;
-
+(*----------------------------------------------------------------------------*)
+(* command line options *)
 let cmdopt_invalid opt = 
 	Uslog.logf log_mpf Uslog.Info "invalid option: '%s'; use -help to see available options" opt;
 	ignore(exit 1);
 	;;
+
+let copt_builduobj = ref false;;
 
 let cmdopt_uobjlist = ref "";;
 let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 
 let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+(*----------------------------------------------------------------------------*)
 
 
 let file_copy input_name output_name =
@@ -373,19 +376,30 @@ let main () =
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
 			
-			Uslog.current_level := Uslog.ord Uslog.Debug; 
+		(* set debug verbosity *)
+		Uslog.current_level := Uslog.ord Uslog.Debug; 
 
-			Uslog.logf log_mpf Uslog.Info "%s" banner;
-			Uslog.logf log_mpf Uslog.Info ">>>>>>";
-			Arg.parse speclist cmdopt_invalid usage_msg;
+	  (* print banner and parse command line args *)
+		Uslog.logf log_mpf Uslog.Info "%s" banner;
+		Uslog.logf log_mpf Uslog.Info ">>>>>>";
+		Arg.parse speclist cmdopt_invalid usage_msg;
 
+		(* parse uobj list *)
+		Uslog.logf log_mpf Uslog.Info "Parsing uobj list using: %s..." !cmdopt_uobjlist;
+		Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
+		Uslog.logf log_mpf Uslog.Info "Parsed uobj list, total uobjs=%u" !Libusmf.g_totalslabs;
 
-			Uslog.logf log_mpf Uslog.Info "Parsing uobj list using: %s..." !cmdopt_uobjlist;
-			Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
-			Uslog.logf log_mpf Uslog.Info "Parsed uobj list, total uobjs=%u" !Libusmf.g_totalslabs;
+		(* grab uobj manifest filename and derive uobj name *)
+		uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
+		uobj_name := Filename.chop_extension !uobj_manifest_filename;
 
-			uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
-			uobj_name := Filename.chop_extension !uobj_manifest_filename;
+		(* check options and do the task *)
+		if (!copt_builduobj == true ) then
+			begin
+				Usuobj.build !uobj_manifest_filename "" true	
+			end
+		;
+
 (*			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);*)
 
 (*
@@ -476,8 +490,9 @@ let main () =
 					(!uobj_name ^ ".lscript") !uobj_name;
 
 *)
-					
-			Usuobjlib.build !uobj_manifest_filename "" true;
+			
+(*							
+			Usuobjlib.build !uobj_manifest_filename "" true;*)
  ;;
 
 		
