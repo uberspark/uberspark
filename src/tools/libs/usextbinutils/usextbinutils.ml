@@ -62,6 +62,31 @@ module Usextbinutils =
 				(cc_retval, cc_outputfilename)
 	;;
 
+
+	let uberspark_compile_cfiles cfile_list uobj_includedirs_list = 
+		List.iter (fun x ->  
+								Uslog.logf log_mpf Uslog.Info "Compiling: %s" x;
+								let (pestatus, pesignal, poutput) = 
+									(uberspark_compile_uobj_cfile x uobj_includedirs_list) in
+										begin
+											if (pesignal == true) || (pestatus != 0) then
+												begin
+														(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
+														(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
+														(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
+														Uslog.logf log_mpf Uslog.Error "in compiling %s!" x;
+														ignore(exit 1);
+												end
+											else
+												begin
+														Uslog.logf log_mpf Uslog.Info "Compiled %s successfully" x;
+												end
+										end
+							) uobj_cfile_list;
+		()
+	;;
+
+
 																							
 	let test_func () =
 		(true)

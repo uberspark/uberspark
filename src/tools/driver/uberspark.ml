@@ -23,6 +23,7 @@ let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
+(*
 (* standard definitions *)
 let g_uberspark_pp_std_defines = [ "-D"; "__XMHF_TARGET_CPU_X86__"; 
 																	"-D"; "__XMHF_TARGET_CONTAINER_VMX__";
@@ -31,12 +32,14 @@ let g_uberspark_pp_std_defines = [ "-D"; "__XMHF_TARGET_CPU_X86__";
 																	];;
 
 let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
+*)
 
-
+(*
 (* external tools *)
 let g_uberspark_exttool_pp = "gcc";;
 let g_uberspark_exttool_cc = "gcc";;
 let g_uberspark_exttool_ld = "ld";;
+*)
 
 (*----------------------------------------------------------------------------*)
 (* command line options *)
@@ -54,7 +57,7 @@ let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
 (*----------------------------------------------------------------------------*)
 
-
+(*
 let file_copy input_name output_name =
 	let buffer_size = 8192 in
 	let buffer = Bytes.create buffer_size in
@@ -69,7 +72,9 @@ let file_copy input_name output_name =
   close fd_out;
 	()
 ;;
+*)
 
+(*
 
 (* execute a process and print its output if verbose is set to true *)
 (* return the error code of the process and the output as a list of lines *)
@@ -109,7 +114,7 @@ let exec_process_withlog p_name cmdline verbose =
 	Unix.close readme;
 	(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
 ;;
-
+*)
 
 let uberspark_build_includedirs_base () = 
   let p_output = ref [] in
@@ -129,7 +134,7 @@ let uberspark_build_includedirs uobj_id uobj_hashtbl_includedirs =
 	(!p_output)		
 ;;	
 
-
+(*
 let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename uobj_hashtbl_includes =
   let uobj_out_manifest_filename = (uobj_manifest_filename ^ ".c") in
 	let fd_in = openfile uobj_manifest_filename [O_RDONLY] 0 in
@@ -153,8 +158,9 @@ let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename u
   close fd_out;
 	(uobj_out_manifest_filename)
 ;;
+*)
 
-
+(*
 let uberspark_generate_uobj_mf_preprocessed 
 	uobj_id uobj_manifest_filename_forpreprocessing uobj_includedirs_list =
 	  let uobj_mf_filename_preprocessed = 
@@ -171,46 +177,9 @@ let uberspark_generate_uobj_mf_preprocessed
 			ignore(exec_process_withlog g_uberspark_exttool_pp !pp_cmdline true);
 	(uobj_mf_filename_preprocessed)
 ;;
+*)
 
 
-
-let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list = 
-		let cc_cmdline = ref [] in
-			cc_cmdline := !cc_cmdline @ [ "-c" ];
-			cc_cmdline := !cc_cmdline @ [ "-m32" ];
-			cc_cmdline := !cc_cmdline @ [ "-fno-common" ];
-			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_defines;
-(*			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly; *)
-			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
-			cc_cmdline := !cc_cmdline @ [ uobj_cfile_name ];
-			cc_cmdline := !cc_cmdline @ [ "-o" ];
-			cc_cmdline := !cc_cmdline @ [ (uobj_cfile_name ^ ".o") ];
-			(exec_process_withlog g_uberspark_exttool_cc !cc_cmdline true)
-;;
-
-
-let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list = 
-	List.iter (fun x ->  
-							Uslog.logf log_mpf Uslog.Info "Compiling: %s" x;
-							let (pestatus, pesignal, poutput) = 
-								(uberspark_compile_uobj_cfile x uobj_includedirs_list) in
-									begin
-										if (pesignal == true) || (pestatus != 0) then
-											begin
-													(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
-													(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
-													(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
-													Uslog.logf log_mpf Uslog.Error "in compiling %s!" x;
-													ignore(exit 1);
-											end
-										else
-											begin
-													Uslog.logf log_mpf Uslog.Info "Compiled %s successfully" x;
-											end
-									end
-						) uobj_cfile_list;
-	()
-;;
 
 								
 let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list 
@@ -359,7 +328,10 @@ let uberspark_generate_uobj_hdr uobj_name uobj_load_addr
 	(uobj_hdr_filename)
 ;; 
 																								
+														
+(*----------------------------------------------------------------------------*)
 																																
+																																																																				
 																																																
 let main () =
 		let speclist = [
