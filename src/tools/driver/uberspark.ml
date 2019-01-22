@@ -9,6 +9,7 @@ open Uslog
 open Usosservices
 open Libusmf
 open Usuobjlib
+open Usuobj
 
 let log_mpf = "uberSpark";;
 
