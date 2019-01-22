@@ -56,7 +56,7 @@ module Usuobj =
 			
 		Uslog.logf log_tag Uslog.Info "Validated uobj hdr and manifest type.\n";
 						
-		let(rval, uobjlib_cfiles, uobjlib_casmfiles) = 
+		let(rval, uobj_cfiles, uobj_casmfiles) = 
 			Usmanifest.parse_node_usmf_sources	mf_json in
 
 		if (rval == false) then
@@ -67,7 +67,7 @@ module Usuobj =
 		;
 
 		Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
-					(List.length uobjlib_cfiles) (List.length uobjlib_casmfiles);
+					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
 
 
