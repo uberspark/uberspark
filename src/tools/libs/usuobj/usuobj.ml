@@ -3,8 +3,10 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 ------------------------------------------------------------------------------*)
 
+open Usconfig
 open Uslog
 open Usmanifest
+open Usextbinutils
 
 module Usuobj =
 	struct
@@ -12,6 +14,31 @@ module Usuobj =
 	let log_tag = "Usuobj";;
 
 	let usmf_type_usuobj = "uobj";;
+
+
+	let compile_cfile_list cfile_list cc_includedirs_list cc_defines_list =
+		List.iter (fun x ->  
+								Uslog.logf log_tag Uslog.Info "Compiling: %s" x;
+								let (pestatus, pesignal, cc_outputfilename) = 
+									(Usextbinutils.compile_cfile x (x ^ ".o") cc_includedirs_list cc_defines_list) in
+										begin
+											if (pesignal == true) || (pestatus != 0) then
+												begin
+														(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
+														(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
+														(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
+														Uslog.logf log_tag Uslog.Error "in compiling %s!" x;
+														ignore(exit 1);
+												end
+											else
+												begin
+														Uslog.logf log_tag Uslog.Info "Compiled %s successfully" x;
+												end
+										end
+							) cfile_list;
+		()
+	;;
+
 
 
 	(*--------------------------------------------------------------------------*)
@@ -70,8 +97,8 @@ module Usuobj =
 					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
 		
-
-
+		compile_cfile_list uobj_cfiles (Usconfig.get_std_incdirs ())
+			(Usconfig.get_std_defines ());
 
 																																										
 		Uslog.logf log_tag Uslog.Info "Done.\r\n";

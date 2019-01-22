@@ -63,28 +63,6 @@ module Usextbinutils =
 	;;
 
 
-	let compile_cfile_list cfile_list cc_includedirs_list cc_defines_list =
-		List.iter (fun x ->  
-								Uslog.logf usextbinutils_tag Uslog.Info "Compiling: %s" x;
-								let (pestatus, pesignal, cc_outputfilename) = 
-									(compile_cfile x (x ^ ".o") cc_includedirs_list cc_defines_list) in
-										begin
-											if (pesignal == true) || (pestatus != 0) then
-												begin
-														(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
-														(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
-														(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
-														Uslog.logf usextbinutils_tag Uslog.Error "in compiling %s!" x;
-														ignore(exit 1);
-												end
-											else
-												begin
-														Uslog.logf usextbinutils_tag Uslog.Info "Compiled %s successfully" x;
-												end
-										end
-							) cfile_list;
-		()
-	;;
 
 
 																							
