@@ -181,7 +181,7 @@ let uberspark_generate_uobj_mf_preprocessed
 
 
 
-								
+(*								
 let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list 
 		uobj_linker_script uobj_bin_name = 
 		let ld_cmdline = ref [] in
@@ -327,6 +327,7 @@ let uberspark_generate_uobj_hdr uobj_name uobj_load_addr
 		close_out oc;
 	(uobj_hdr_filename)
 ;; 
+*)
 																								
 														
 (*----------------------------------------------------------------------------*)

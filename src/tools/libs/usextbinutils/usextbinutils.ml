@@ -56,33 +56,33 @@ module Usextbinutils =
 				cc_cmdline := !cc_cmdline @ [ cc_inputfilename ];
 				cc_cmdline := !cc_cmdline @ [ "-o" ];
 				cc_cmdline := !cc_cmdline @ [ cc_outputfilename ];
-				let (cc_retval, _, _) =
+				let (cc_pestatus, cc_pesignal, _) =
 						Usosservices.exec_process_withlog 
 					tool_cc !cc_cmdline true usextbinutils_tag in
-				(cc_retval, cc_outputfilename)
+				(cc_pestatus, cc_pesignal, cc_outputfilename)
 	;;
 
 
-	let uberspark_compile_cfiles cfile_list uobj_includedirs_list = 
+	let compile_cfile_list cfile_list cc_includedirs_list cc_defines_list =
 		List.iter (fun x ->  
-								Uslog.logf log_mpf Uslog.Info "Compiling: %s" x;
-								let (pestatus, pesignal, poutput) = 
-									(uberspark_compile_uobj_cfile x uobj_includedirs_list) in
+								Uslog.logf usextbinutils_tag Uslog.Info "Compiling: %s" x;
+								let (pestatus, pesignal, cc_outputfilename) = 
+									(compile_cfile x (x ^ ".o") cc_includedirs_list cc_defines_list) in
 										begin
 											if (pesignal == true) || (pestatus != 0) then
 												begin
 														(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
 														(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
 														(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
-														Uslog.logf log_mpf Uslog.Error "in compiling %s!" x;
+														Uslog.logf usextbinutils_tag Uslog.Error "in compiling %s!" x;
 														ignore(exit 1);
 												end
 											else
 												begin
-														Uslog.logf log_mpf Uslog.Info "Compiled %s successfully" x;
+														Uslog.logf usextbinutils_tag Uslog.Info "Compiled %s successfully" x;
 												end
 										end
-							) uobj_cfile_list;
+							) cfile_list;
 		()
 	;;
 
