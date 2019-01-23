@@ -18,6 +18,7 @@ all:
 	cd libusmf && $(MAKE) -w all
 	cd usuobjlib && $(MAKE) -w all
 	cd usuobj && $(MAKE) -w all
+	cd usuobjgen && $(MAKE) -w all
 
 .PHONY: clean
 clean:
@@ -29,4 +30,5 @@ clean:
 	cd libusmf && $(MAKE) -w clean
 	cd usuobjlib && $(MAKE) -w clean
 	cd usuobj && $(MAKE) -w clean
+	cd usuobjgen && $(MAKE) -w clean
 	
