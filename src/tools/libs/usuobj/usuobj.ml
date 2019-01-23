@@ -7,6 +7,7 @@ open Usconfig
 open Uslog
 open Usmanifest
 open Usextbinutils
+open Usuobjgen
 
 module Usuobj =
 	struct
@@ -96,6 +97,11 @@ module Usuobj =
 		Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
+
+		(* generate uobj header *)
+		(* use usmf_hdr_id as the uobj_name *)
+		Usuobjgen.generate_uobj_hdr usmf_hdr_id 0x60000000 [];
+		
 		
 		compile_cfile_list uobj_cfiles (Usconfig.get_std_incdirs ())
 			(Usconfig.get_std_defines ());
