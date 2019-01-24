@@ -100,12 +100,13 @@ module Usuobj =
 
 		(* generate uobj header *)
 		(* use usmf_hdr_id as the uobj_name *)
-		Usuobjgen.generate_uobj_hdr usmf_hdr_id 0x60000000 [];
+		let uobj_hdr_filename = Usuobjgen.generate_uobj_hdr usmf_hdr_id 0x60000000 [] in
+			Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 		
 		
-		compile_cfile_list uobj_cfiles (Usconfig.get_std_incdirs ())
-			(Usconfig.get_std_defines ());
-
+		compile_cfile_list (uobj_cfiles @ [ uobj_hdr_filename ]) 
+				(Usconfig.get_std_incdirs ())
+				(Usconfig.get_std_defines ());
 																																										
 		Uslog.logf log_tag Uslog.Info "Done.\r\n";
 		()
