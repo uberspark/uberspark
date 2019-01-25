@@ -128,25 +128,31 @@ module Usuobj =
 			Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 		
 		
-		
-				
-								
+						
 		compile_cfile_list (uobj_cfiles @ [ uobj_hdr_filename ]) 
 				(Usconfig.get_std_incdirs ())
 				(Usconfig.get_std_defines ());
-				
-(*																																										
-							if (pesignal == true) || (pestatus != 0) then
-								begin
-										Uslog.logf log_mpf Uslog.Error "in linking uobj binary '%s'!" uobj_bin_name;
-										ignore(exit 1);
-								end
-							else
-								begin
-										Uslog.logf log_mpf Uslog.Info "Linked uobj binary '%s' successfully" uobj_bin_name;
-								end
-							;
-*)																																																																																
+	
+		Uslog.logf log_tag Uslog.Info "Proceeding to link uobj binary '%s'..."
+				usmf_hdr_id;
+			let uobj_libdirs_list = ref [] in
+			let uobj_libs_list = ref [] in
+			let (pestatus, pesignal) = 
+					(Usextbinutils.link_uobj  
+						(uobj_cfiles @ [ uobj_hdr_filename ])
+						!uobj_libdirs_list !uobj_libs_list
+						uobj_linker_script_filename usmf_hdr_id
+					) in
+					if (pesignal == true) || (pestatus != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in linking uobj binary '%s'!" usmf_hdr_id;
+								ignore(exit 1);
+						end
+					else
+						begin
+								Uslog.logf log_tag Uslog.Info "Linked uobj binary '%s' successfully" usmf_hdr_id;
+						end
+					;
 																																																																																																																						
 																																																																																																																																																																																																		
 		Uslog.logf log_tag Uslog.Info "Done.\r\n";
