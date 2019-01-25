@@ -196,6 +196,28 @@ module Usmanifest =
 	(* return true on successful parse, false if not *)
 	(* return: if true then lists of c-files and casm files *)
 	(*--------------------------------------------------------------------------*)
+	let parse_node_uobj_binary usmf_json =
+		let retval = ref false in
+		let uobj_sections_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_binary_json = usmf_json |> member "uobj-binary" in
+					if usmf_binary_json != `Null then
+						begin
+							retval := true;
+						
+					
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
 								
+		(!retval)
+	;;
+																								
 																								
 	end
