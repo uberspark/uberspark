@@ -111,6 +111,15 @@ module Usuobj =
 			(List.length uobj_sections_list); 
 		
 
+		(* generate uobj linker script *)
+		(* use usmf_hdr_id as the uobj_name *)
+
+		let uobj_linker_script_filename =	
+			Usuobjgen.generate_uobj_linker_script usmf_hdr_id 0x60000000 
+				uobj_sections_list in
+			Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+				
+
 
 		(* generate uobj header *)
 		(* use usmf_hdr_id as the uobj_name *)

@@ -126,7 +126,7 @@ module Usuobjgen =
 			Printf.fprintf oc "\n";
 																																																																																																																									
 			close_out oc;
-			()
+			(uobj_linker_script_filename)
 	;;
 																																																
 																																																																								
