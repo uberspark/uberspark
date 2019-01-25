@@ -97,6 +97,20 @@ module Usuobj =
 		Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
+		(* parse uobj-binary node *)
+		(*let (rval, uobj_sections_list) = 
+				Libusmf.usmf_parse_uobj_mf_uobj_binary !uobj_id !uobj_mf_filename_preprocessed in
+					if (rval == false) then
+						begin
+							Uslog.logf log_mpf Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
+							ignore (exit 1);
+						end
+					;
+
+		Uslog.logf log_tag Uslog.Info "Parsed uobj-binary from uobj manifest: total sections=%u"
+			(List.length uobj_sections_list);
+		*)
+
 
 		(* generate uobj header *)
 		(* use usmf_hdr_id as the uobj_name *)
@@ -104,6 +118,9 @@ module Usuobj =
 			Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 		
 		
+		
+				
+								
 		compile_cfile_list (uobj_cfiles @ [ uobj_hdr_filename ]) 
 				(Usconfig.get_std_incdirs ())
 				(Usconfig.get_std_defines ());
