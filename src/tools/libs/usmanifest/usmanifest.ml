@@ -241,7 +241,7 @@ module Usmanifest =
 		;
 
 								
-		(!retval)
+		(!retval, !uobj_sections_list)
 	;;
 																								
 																								

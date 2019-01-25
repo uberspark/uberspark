@@ -98,8 +98,7 @@ module Usuobj =
 					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
 		(* parse uobj-binary node *)
-		(* let (rval, uobj_sections_list) = *) 
-		let rval =  
+		let (rval, uobj_sections_list) = 
 				Usmanifest.parse_node_uobj_binary mf_json in
 					if (rval == false) then
 						begin
@@ -108,8 +107,8 @@ module Usuobj =
 						end
 					;
 
-		Uslog.logf log_tag Uslog.Info "Parsed uobj-binary from uobj manifest: total sections=%u"  0;
-		(*	(List.length uobj_sections_list); *)
+		Uslog.logf log_tag Uslog.Info "Parsed uobj-binary from uobj manifest: total sections=%u"
+			(List.length uobj_sections_list); 
 		
 
 
