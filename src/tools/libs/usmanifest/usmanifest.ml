@@ -198,12 +198,12 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	let parse_node_uobj_binary usmf_json =
 		let retval = ref false in
-		let uobj_sections_list = ref [] in
+		(* let uobj_sections_list = ref [] in *)
 
 		try
 			let open Yojson.Basic.Util in
 		  	let uobj_binary_json = usmf_json |> member "uobj-binary" in
-					if usmf_binary_json != `Null then
+					if uobj_binary_json != `Null then
 						begin
 							retval := true;
 						

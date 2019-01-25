@@ -98,18 +98,19 @@ module Usuobj =
 					(List.length uobj_cfiles) (List.length uobj_casmfiles);
 
 		(* parse uobj-binary node *)
-		(*let (rval, uobj_sections_list) = 
-				Libusmf.usmf_parse_uobj_mf_uobj_binary !uobj_id !uobj_mf_filename_preprocessed in
+		(* let (rval, uobj_sections_list) = *) 
+		let rval =  
+				Usmanifest.parse_node_uobj_binary mf_json in
 					if (rval == false) then
 						begin
-							Uslog.logf log_mpf Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
+							Uslog.logf log_tag Uslog.Error "invalid or no uobj-binary node found within uobj manifest.";
 							ignore (exit 1);
 						end
 					;
 
-		Uslog.logf log_tag Uslog.Info "Parsed uobj-binary from uobj manifest: total sections=%u"
-			(List.length uobj_sections_list);
-		*)
+		Uslog.logf log_tag Uslog.Info "Parsed uobj-binary from uobj manifest: total sections=%u"  0;
+		(*	(List.length uobj_sections_list); *)
+		
 
 
 		(* generate uobj header *)
