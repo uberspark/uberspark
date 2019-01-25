@@ -134,7 +134,21 @@ module Usuobj =
 		compile_cfile_list (uobj_cfiles @ [ uobj_hdr_filename ]) 
 				(Usconfig.get_std_incdirs ())
 				(Usconfig.get_std_defines ());
-																																										
+				
+(*																																										
+							if (pesignal == true) || (pestatus != 0) then
+								begin
+										Uslog.logf log_mpf Uslog.Error "in linking uobj binary '%s'!" uobj_bin_name;
+										ignore(exit 1);
+								end
+							else
+								begin
+										Uslog.logf log_mpf Uslog.Info "Linked uobj binary '%s' successfully" uobj_bin_name;
+								end
+							;
+*)																																																																																
+																																																																																																																						
+																																																																																																																																																																																																		
 		Uslog.logf log_tag Uslog.Info "Done.\r\n";
 		()
 	;;
