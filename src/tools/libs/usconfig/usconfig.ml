@@ -6,6 +6,16 @@
 module Usconfig =
 	struct
 
+	(* uobj manifest default filename *)
+	let std_uobj_usmf_name = "UOBJ.USMF";;
+	
+	(* uobj collection manifest default filename *)
+	let std_uobj_coll_usmf_name = "UOBJCOLL.USMF";;
+
+	(* uobj library manifest default filename *)
+	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
+
+
 	(* standard include directories *)
 	let std_incdirs = [
 										"/usr/local/uberspark/include";
