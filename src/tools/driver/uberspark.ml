@@ -140,7 +140,8 @@ let main () =
 		(* check options and do the task *)
 		if (!copt_builduobj == true ) then
 			begin
-				Usuobj.build !uobj_manifest_filename "" true	
+				let uobj = new Usuobj.uobject in
+					uobj#build !uobj_manifest_filename "" true	
 			end
 		;
 
