@@ -14,6 +14,7 @@ module Usuobjcollection =
 	struct
 
 	let log_tag = "Usuobjcollection";;
+	let total_uobjs = ref 0;;
 
 	let usmf_type_uobjcollection = "uobj_collection";;
 
