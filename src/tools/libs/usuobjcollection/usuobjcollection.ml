@@ -15,14 +15,17 @@ module Usuobjcollection =
 	struct
 
 	let log_tag = "Usuobjcollection";;
+	
 	let total_uobjs = ref 0;;
 
-	let usmf_type_uobjcollection = "uobj_collection";;
+	let usmf_type_uobjcoll = "uobj_collection";;
 
-	let uobjcoll_rootdir = ref "";;
-	let uobjcoll_usmf_filename_canonical = ref "";;
-	let uobjcoll_uobj_dir_list = ref [];;
-	let uobjcoll_total_uobjs = ref 0;;
+	let rootdir = ref "";;
+
+	let usmf_filename_canonical = ref "";;
+	
+	let uobj_dir_list = ref [];;
+
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -41,16 +44,16 @@ module Usuobjcollection =
 					ignore (exit 1);
 				end
 			;
-		uobjcoll_usmf_filename_canonical := retval_path;
-		Uslog.logf log_tag Uslog.Info "canonical path=%s" !uobjcoll_usmf_filename_canonical;		
+		usmf_filename_canonical := retval_path;
+		Uslog.logf log_tag Uslog.Info "canonical path=%s" !usmf_filename_canonical;		
 		
 		(* compute root directory of uobj collection manifest *)
-		uobjcoll_rootdir := Filename.dirname !uobjcoll_usmf_filename_canonical;
-		Uslog.logf log_tag Uslog.Info "root-dir=%s" !uobjcoll_rootdir;		
+		rootdir := Filename.dirname !usmf_filename_canonical;
+		Uslog.logf log_tag Uslog.Info "root-dir=%s" !rootdir;		
 		
 		(* read uobj collection manifest into JSON object *)
 		let (retval, mf_json) = Usmanifest.read_manifest 
-															!uobjcoll_usmf_filename_canonical keep_temp_files in
+															!usmf_filename_canonical keep_temp_files in
 			if (retval == false) then
 				begin
 					Uslog.logf log_tag Uslog.Error "could not read uobj collection manifest.";
@@ -73,7 +76,7 @@ module Usuobjcollection =
 
 								
 		(* sanity check header type *)
-		if (compare usmf_hdr_type usmf_type_uobjcollection) <> 0 then
+		if (compare usmf_hdr_type usmf_type_uobjcoll) <> 0 then
 			begin
 				Uslog.logf log_tag Uslog.Error "invalid uobj collection manifest type '%s'." usmf_hdr_type;
 				ignore (exit 1);
@@ -82,7 +85,7 @@ module Usuobjcollection =
 		Uslog.logf log_tag Uslog.Info "Validated uobj collection hdr and manifest type.";
 
 		(* parse uobj-coll node and compute uobj dir list and uobj count *)
-		let(rval, uobj_dir_list) = 
+		let(rval, ret_uobj_dir_list) = 
 			Usmanifest.parse_node_usmf_uobj_coll	mf_json in
 	
 			if (rval == false) then
@@ -92,9 +95,9 @@ module Usuobjcollection =
 				end
 			;
 				
-		uobjcoll_uobj_dir_list := uobj_dir_list;
-		uobjcoll_total_uobjs := (List.length !uobjcoll_uobj_dir_list);
-		Uslog.logf log_tag Uslog.Info "uobj count=%u" !uobjcoll_total_uobjs;
+		uobj_dir_list := ret_uobj_dir_list;
+		total_uobjs := (List.length !uobj_dir_list);
+		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
@@ -118,8 +121,7 @@ module Usuobjcollection =
 								end
 							;
 						Uslog.logf log_tag Uslog.Info "entry: %s; canonical path=%s" x retval_path;
-		) !uobjcoll_uobj_dir_list;
-
+		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
