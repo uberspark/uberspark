@@ -5,6 +5,7 @@
 
 open Usconfig
 open Uslog
+open Usosservices
 open Usmanifest
 open Usextbinutils
 open Usuobjgen
@@ -18,6 +19,8 @@ module Usuobjcollection =
 
 	let usmf_type_uobjcollection = "uobj_collection";;
 
+	let uobjcoll_rootdir = ref "";;
+
 	(*--------------------------------------------------------------------------*)
 	(* build a uobj collection *)
 	(* us_manifest_filename = us manifest filename *)
@@ -28,6 +31,22 @@ module Usuobjcollection =
 				us_manifest_filename build_dir keep_temp_files = 
 
 		Uslog.logf log_tag Uslog.Info "Starting...";
+		
+		(* compute the canonical path of the manifest filename *)
+		let (retval, retval_path) = Usosservices.abspath us_manifest_filename in
+			if (retval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "unable to obtain canonical path for '%s'" us_manifest_filename;
+					ignore (exit 1);
+				end
+			;
+		Uslog.logf log_tag Uslog.Info "canonical path=%s" retval_path;		
+		
+		(* compute root directory of uobj collection manifest *)
+		uobjcoll_rootdir := Filename.dirname retval_path;
+		Uslog.logf log_tag Uslog.Info "root-dir=%s" !uobjcoll_rootdir;		
+		
+		
 		
 		let usmf_type = ref "" in
 		let (retval, mf_json) = Usmanifest.read_manifest 
@@ -76,10 +95,20 @@ module Usuobjcollection =
 
 		(* instantiate uobjs *)
 		List.iter (fun x ->  
-						Uslog.logf log_tag Uslog.Info "uobj dir: %s" x;
+						(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" x; *)
+						let (retval, retval_path) = (Usosservices.abspath x) in
+							if (retval == false) then
+								begin
+									Uslog.logf log_tag Uslog.Error "unable to obtain canonical path for '%s'" x;
+									ignore (exit 1);
+								end
+							;
+						Uslog.logf log_tag Uslog.Info "entry: %s; canonical path=%s" x retval_path;
 		) uobj_dir_list;
 
+		
 																																																																																																																																																																																																		
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
 	;;
