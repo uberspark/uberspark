@@ -13,6 +13,9 @@ module Usextbinutils =
 	(* Uslog.logf usextbinutils_tag Uslog.Debug "hello"; *)
 	
 	let tool_pp = "gcc" ;;
+	let tool_cc = "gcc" ;;
+	let tool_ld = "ld" ;;
+	
 	let usextbinutils_tag = "Usextbinutils" ;;
 			
 			
@@ -38,7 +41,51 @@ module Usextbinutils =
 		(pp_retval, pp_outputfilename)
 	;;
 				
-								
+			
+	let compile_cfile cc_inputfilename cc_outputfilename cc_includedirs_list
+		cc_defines_list =  
+			let cc_cmdline = ref [] in
+				cc_cmdline := !cc_cmdline @ [ "-c" ];
+				cc_cmdline := !cc_cmdline @ [ "-m32" ];
+				cc_cmdline := !cc_cmdline @ [ "-fno-common" ];
+				List.iter (fun x -> 
+						cc_cmdline := !cc_cmdline @ [ "-I" ] @ [ x ]
+						) cc_includedirs_list;
+				List.iter (fun x -> 
+						cc_cmdline := !cc_cmdline @ [ "-D" ] @ [ x ]
+						) cc_defines_list;
+				cc_cmdline := !cc_cmdline @ [ cc_inputfilename ];
+				cc_cmdline := !cc_cmdline @ [ "-o" ];
+				cc_cmdline := !cc_cmdline @ [ cc_outputfilename ];
+				let (cc_pestatus, cc_pesignal, _) =
+						Usosservices.exec_process_withlog 
+					tool_cc !cc_cmdline true usextbinutils_tag in
+				(cc_pestatus, cc_pesignal, cc_outputfilename)
+	;;
+
+
+	let link_uobj uobj_ofile_list uobj_libdirs_list uobj_libs_list 
+			uobj_linker_script uobj_bin_name = 
+			let ld_cmdline = ref [] in
+				ld_cmdline := !ld_cmdline @ [ "--oformat" ];
+				ld_cmdline := !ld_cmdline @ [ "binary" ];
+				ld_cmdline := !ld_cmdline @ [ "-T" ];
+				ld_cmdline := !ld_cmdline @ [ uobj_linker_script ]; 
+				List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ (x^".o") ]) uobj_ofile_list; 
+				ld_cmdline := !ld_cmdline @ [ "-o" ];
+				ld_cmdline := !ld_cmdline @ [ uobj_bin_name ];
+				List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ ("-L"^x) ]) uobj_libdirs_list; 
+				ld_cmdline := !ld_cmdline @ [ "--start-group" ];
+				List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ ("-l"^x) ]) uobj_libs_list; 
+				ld_cmdline := !ld_cmdline @ [ "--end-group" ];
+				let (ld_pestatus, ld_pesignal, _) = 
+						Usosservices.exec_process_withlog 
+						tool_ld !ld_cmdline true usextbinutils_tag in
+				(ld_pestatus, ld_pesignal) 
+	;;
+
+
+																							
 	let test_func () =
 		(true)
 	;;

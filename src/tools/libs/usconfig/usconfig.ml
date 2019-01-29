@@ -8,7 +8,9 @@ module Usconfig =
 
 	(* standard include directories *)
 	let std_incdirs = [
-										"../../../../include";
+										"/usr/local/uberspark/include";
+										"/usr/local/uberspark/hwm/include";
+										"/usr/local/uberspark/libs/include";
 										"."
 										];;
 

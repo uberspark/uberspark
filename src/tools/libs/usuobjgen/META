@@ -1,0 +1,6 @@
+name="usuobjgen"
+description="uberSpark uberobject support module generation interface"
+version="1.0"
+requires=""
+archive(byte)="usuobjgen.cmo"
+archive(native)="usuobjgen.cmx"
