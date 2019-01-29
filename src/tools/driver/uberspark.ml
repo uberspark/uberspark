@@ -126,10 +126,11 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		Arg.parse speclist cmdopt_invalid usage_msg;
 
-		(* parse uobj list *)
-		Uslog.logf log_mpf Uslog.Info "Parsing uobj list using: %s..." !cmdopt_uobjlist;
-		Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
-		Uslog.logf log_mpf Uslog.Info "Parsed uobj list, total uobjs=%u" !Libusmf.g_totalslabs;
+		(* build uobj collection *)
+		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
+		Usuobjcollection.build !cmdopt_uobjlist "" true
+		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
+		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
 		(* grab uobj manifest filename and derive uobj name *)
 		uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
