@@ -74,6 +74,11 @@ module Usuobjcollection =
 		Uslog.logf log_tag Uslog.Info "uobj count=%u"
 			(List.length uobj_dir_list);
 
+		(* instantiate uobjs *)
+		List.iter (fun x ->  
+						Uslog.logf log_tag Uslog.Info "uobj dir: %s" x;
+		) uobj_dir_list;
+
 																																																																																																																																																																																																		
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
