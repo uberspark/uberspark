@@ -27,7 +27,7 @@ module Usuobjcollection =
 	let build 
 				us_manifest_filename build_dir keep_temp_files = 
 
-		Uslog.logf log_tag Uslog.Info "Starting...\n";
+		Uslog.logf log_tag Uslog.Info "Starting...";
 		
 		let usmf_type = ref "" in
 		let (retval, mf_json) = Usmanifest.read_manifest 
@@ -39,7 +39,7 @@ module Usuobjcollection =
 				end
 			;		
 
-		Uslog.logf log_tag Uslog.Info "Parsed uobj collection manifest.\n";
+		Uslog.logf log_tag Uslog.Info "Parsed uobj collection manifest.";
 
 		let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
 				Usmanifest.parse_node_usmf_hdr mf_json in
@@ -58,10 +58,24 @@ module Usuobjcollection =
 			end
 		;
 			
-		Uslog.logf log_tag Uslog.Info "Validated uobj collection hdr and manifest type.\n";
+		Uslog.logf log_tag Uslog.Info "Validated uobj collection hdr and manifest type.";
 						
+						
+		let(rval, uobj_dir_list) = 
+			Usmanifest.parse_node_usmf_uobj_coll	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobj-coll node in manifest.";
+					ignore (exit 1);
+				end
+			;
+				
+		Uslog.logf log_tag Uslog.Info "uobj count=%u"
+			(List.length uobj_dir_list);
+
 																																																																																																																																																																																																		
-		Uslog.logf log_tag Uslog.Info "Done.\r\n";
+		Uslog.logf log_tag Uslog.Info "Done.";
 		()
 	;;
 								
