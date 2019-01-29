@@ -20,6 +20,7 @@ module Usuobjcollection =
 	let usmf_type_uobjcollection = "uobj_collection";;
 
 	let uobjcoll_rootdir = ref "";;
+	let uobjcoll_usmf_filename = ref "";;
 
 	(*--------------------------------------------------------------------------*)
 	(* build a uobj collection *)
@@ -40,7 +41,8 @@ module Usuobjcollection =
 					ignore (exit 1);
 				end
 			;
-		Uslog.logf log_tag Uslog.Info "canonical path=%s" retval_path;		
+		uobjcoll_usmf_filename := retval_path;
+		Uslog.logf log_tag Uslog.Info "canonical path=%s" !uobjcoll_usmf_filename;		
 		
 		(* compute root directory of uobj collection manifest *)
 		uobjcoll_rootdir := Filename.dirname retval_path;
