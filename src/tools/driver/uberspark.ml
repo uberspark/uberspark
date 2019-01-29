@@ -10,6 +10,7 @@ open Usosservices
 open Libusmf
 open Usuobjlib
 open Usuobj
+open Usuobjcollection
 
 let log_mpf = "uberSpark";;
 
@@ -128,7 +129,7 @@ let main () =
 
 		(* build uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
-		Usuobjcollection.build !cmdopt_uobjlist "" true
+		Usuobjcollection.build !cmdopt_uobjlist "" true;
 		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
