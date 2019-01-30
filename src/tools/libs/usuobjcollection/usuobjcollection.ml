@@ -119,21 +119,13 @@ module Usuobjcollection =
 
 
 	(*--------------------------------------------------------------------------*)
-	(* parse manifest for uobjs *)
+	(* collect uobjs after parsing their respective manifests *)
 	(*--------------------------------------------------------------------------*)
-	let parse_manifest_for_uobjs () = 
+	let collect_uobjs_with_manifest_parsing () = 
 
 		(* instantiate uobjs *)
 		List.iter (fun x ->  
-						(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" x; *)
-						let (retval, retval_path) = (Usosservices.abspath x) in
-							if (retval == false) then
-								begin
-									Uslog.logf log_tag Uslog.Error "unable to obtain canonical path for '%s'" x;
-									ignore (exit 1);
-								end
-							;
-						Uslog.logf log_tag Uslog.Info "entry: %s; canonical path=%s" x retval_path;
+						Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); 
 		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 		Uslog.logf log_tag Uslog.Info "Done.";
