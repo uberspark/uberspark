@@ -27,6 +27,8 @@ class uobject = object(self)
 		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
 		val o_usmf_sources_casm_files: string list ref = ref [];
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
+		val o_uobj_sections_list : string list list ref = ref [];
+		method get_o_uobj_sections_list = !o_uobj_sections_list;
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
@@ -38,17 +40,20 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest usmf_filename keep_temp_files =
 
+			(* read manifest JSON *)
 			let (rval, mf_json) = Usmanifest.read_manifest 
 																usmf_filename keep_temp_files in
 			
 			if (rval == false) then (false)
 			else
+			(* parse usmf-hdr node *)
 			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
 			if (rval == false) then (false)
 			else
 			
+			(* sanity check type to be uobj *)
 			if (compare usmf_hdr_type usmf_type_usuobj) <> 0 then (false)
 			else
 			let dummy = 0 in
@@ -58,6 +63,7 @@ class uobject = object(self)
 					o_usmf_hdr_id := usmf_hdr_id;
 				end;
 
+			(* parse usmf-sources node *)
 			let(rval, usmf_source_c_files, usmf_sources_casm_files) = 
 				Usmanifest.parse_node_usmf_sources	mf_json in
 	
@@ -68,7 +74,18 @@ class uobject = object(self)
 					o_usmf_sources_c_files := usmf_source_c_files;
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
-									
+
+			(* parse uobj-binary node *)
+			let (rval, uobj_sections_list) = 
+										Usmanifest.parse_node_uobj_binary mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_uobj_sections_list := uobj_sections_list;
+				end;
+																											
 			(true)
 		;
 
