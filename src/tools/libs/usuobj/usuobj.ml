@@ -18,6 +18,9 @@ class uobject = object(self)
 		val usmf_type_usuobj = "uobj";
 
 		val o_usmf_hdr_type = ref "";
+		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
+		val o_usmf_hdr_subtype = ref "";
+		val o_usmf_hdr_id = ref "";
 
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
@@ -42,6 +45,9 @@ class uobject = object(self)
 									if (compare usmf_hdr_type usmf_type_usuobj) == 0 then
 										begin
 											o_usmf_hdr_type := usmf_hdr_type;								
+											o_usmf_hdr_subtype := usmf_hdr_subtype;
+											o_usmf_hdr_id := usmf_hdr_id;
+											fretval := true;
 										end
 									;
 
@@ -51,9 +57,6 @@ class uobject = object(self)
 					end
 				;		
 	
-			
-				
-
 			(!fretval)
 		;
 

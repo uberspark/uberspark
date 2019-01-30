@@ -125,7 +125,17 @@ module Usuobjcollection =
 
 		(* instantiate uobjs *)
 		List.iter (fun x ->  
-						Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); 
+			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
+			let uobj = new Usuobj.uobject in
+				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
+				if (retval == false) then
+					begin
+						Uslog.logf log_tag Uslog.Error "unable to parse manifest for uobj: '%s'" x;
+						ignore (exit 1);
+					end
+				;
+
+				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 		Uslog.logf log_tag Uslog.Info "Done.";
