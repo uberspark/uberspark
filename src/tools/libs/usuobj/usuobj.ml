@@ -37,28 +37,25 @@ class uobject = object(self)
 
 			let (rval, mf_json) = Usmanifest.read_manifest 
 																usmf_filename keep_temp_files in
-				if (rval == true) then
-					begin
-						let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
+			
+			if (rval == false) then (!fretval)
+			else
+			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
-							if (rval == true) then
-								begin
-									if (compare usmf_hdr_type usmf_type_usuobj) == 0 then
-										begin
-											o_usmf_hdr_type := usmf_hdr_type;								
-											o_usmf_hdr_subtype := usmf_hdr_subtype;
-											o_usmf_hdr_id := usmf_hdr_id;
-											fretval := true;
-										end
-									;
-
-								end
-							;
-					
-					end
-				;		
-	
+			if (rval == false) then (!fretval)
+			else
+			
+			if (compare usmf_hdr_type usmf_type_usuobj) <> 0 then (!fretval)
+			else
+			let dummy = 0 in
+				begin
+					o_usmf_hdr_type := usmf_hdr_type;								
+					o_usmf_hdr_subtype := usmf_hdr_subtype;
+					o_usmf_hdr_id := usmf_hdr_id;
+					fretval := true;
+				end;
+			
 			(!fretval)
 		;
 
