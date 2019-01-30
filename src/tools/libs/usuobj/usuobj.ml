@@ -20,7 +20,9 @@ class uobject = object(self)
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
 		val o_usmf_hdr_subtype = ref "";
+		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
 		val o_usmf_hdr_id = ref "";
+		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
 
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
