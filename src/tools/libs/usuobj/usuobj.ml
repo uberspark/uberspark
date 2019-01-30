@@ -23,7 +23,11 @@ class uobject = object(self)
 		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
 		val o_usmf_hdr_id = ref "";
 		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
-
+		val o_usmf_sources_c_files: string list ref = ref [];
+		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
+		val o_usmf_sources_casm_files: string list ref = ref [];
+		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
+		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
 
@@ -33,30 +37,39 @@ class uobject = object(self)
 		(* keep_temp_files = true if temporary files need to be preserved *)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest usmf_filename keep_temp_files =
-			let fretval = ref false in
 
 			let (rval, mf_json) = Usmanifest.read_manifest 
 																usmf_filename keep_temp_files in
 			
-			if (rval == false) then (!fretval)
+			if (rval == false) then (false)
 			else
 			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
-			if (rval == false) then (!fretval)
+			if (rval == false) then (false)
 			else
 			
-			if (compare usmf_hdr_type usmf_type_usuobj) <> 0 then (!fretval)
+			if (compare usmf_hdr_type usmf_type_usuobj) <> 0 then (false)
 			else
 			let dummy = 0 in
 				begin
 					o_usmf_hdr_type := usmf_hdr_type;								
 					o_usmf_hdr_subtype := usmf_hdr_subtype;
 					o_usmf_hdr_id := usmf_hdr_id;
-					fretval := true;
 				end;
-			
-			(!fretval)
+
+			let(rval, usmf_source_c_files, usmf_sources_casm_files) = 
+				Usmanifest.parse_node_usmf_sources	mf_json in
+	
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_usmf_sources_c_files := usmf_source_c_files;
+					o_usmf_sources_casm_files := usmf_sources_casm_files;
+				end;
+									
+			(true)
 		;
 
 

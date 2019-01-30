@@ -136,6 +136,8 @@ module Usuobjcollection =
 				;
 
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
+				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
+
 		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						
 		Uslog.logf log_tag Uslog.Info "Done.";
