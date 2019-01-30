@@ -94,8 +94,21 @@ module Usuobjcollection =
 					ignore (exit 1);
 				end
 			;
-				
-		uobj_dir_list := ret_uobj_dir_list;
+		
+		(* iterate through and make the uobj dir list canonical *)
+		List.iter (fun x ->  
+						(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" x; *)
+						let (retval, retval_path) = (Usosservices.abspath (!rootdir ^ "/" ^ x)) in
+							if (retval == false) then
+								begin
+									Uslog.logf log_tag Uslog.Error "unable to obtain canonical path for '%s'" x;
+									ignore (exit 1);
+								end
+							;
+						(*Uslog.logf log_tag Uslog.Info "entry: %s; canonical path=%s" x retval_path;*)
+						uobj_dir_list := !uobj_dir_list @ [ retval_path ];
+		) ret_uobj_dir_list;
+						
 		total_uobjs := (List.length !uobj_dir_list);
 		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
 
