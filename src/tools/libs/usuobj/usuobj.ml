@@ -17,7 +17,46 @@ class uobject = object(self)
 		
 		val usmf_type_usuobj = "uobj";
 
+		val o_usmf_hdr_type = ref "";
+
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
+
+
+		(*--------------------------------------------------------------------------*)
+		(* parse uobj manifest *)
+		(* usmf_filename = uobj manifest filename *)
+		(* keep_temp_files = true if temporary files need to be preserved *)
+		(*--------------------------------------------------------------------------*)
+		method parse_manifest usmf_filename keep_temp_files =
+			let fretval = ref false in
+
+			let (rval, mf_json) = Usmanifest.read_manifest 
+																usmf_filename keep_temp_files in
+				if (rval == true) then
+					begin
+						let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
+								Usmanifest.parse_node_usmf_hdr mf_json in
+
+							if (rval == true) then
+								begin
+									if (compare usmf_hdr_type usmf_type_usuobj) == 0 then
+										begin
+											o_usmf_hdr_type := usmf_hdr_type;								
+										end
+									;
+
+								end
+							;
+					
+					end
+				;		
+	
+			
+				
+
+			(!fretval)
+		;
+
 
 		(*--------------------------------------------------------------------------*)
 		(* compile a uobj cfile *)
