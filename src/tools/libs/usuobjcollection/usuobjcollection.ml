@@ -26,6 +26,7 @@ module Usuobjcollection =
 	
 	let uobj_dir_list = ref [];;
 
+	let uobj_list = ref [];;
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -135,6 +136,7 @@ module Usuobjcollection =
 					end
 				;
 
+				uobj_list := !uobj_list @ [ uobj ];
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
 
