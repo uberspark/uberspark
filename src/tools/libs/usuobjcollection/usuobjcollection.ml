@@ -26,7 +26,9 @@ module Usuobjcollection =
 	
 	let uobj_dir_list = ref [];;
 
-	let uobj_list = ref [];;
+	(*let uobj_list = ref [];;*)
+
+	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -136,7 +138,19 @@ module Usuobjcollection =
 					end
 				;
 
-				uobj_list := !uobj_list @ [ uobj ];
+				(* uobj_list := !uobj_list @ [ uobj ]; *)
+		    if (Hashtbl.mem uobj_hashtbl (uobj#get_o_usmf_hdr_id)) then
+		    	begin
+						Uslog.logf log_tag Uslog.Error "multiple uobjs with same id: '%s'" (uobj#get_o_usmf_hdr_id);
+						ignore (exit 1);
+		    	end
+		    else
+		    	begin
+						Hashtbl.add uobj_hashtbl (uobj#get_o_usmf_hdr_id) uobj;
+		    	end
+		    ;
+
+
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
 
