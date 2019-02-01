@@ -127,17 +127,23 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		Arg.parse speclist cmdopt_invalid usage_msg;
 
-		(* build uobj collection *)
+		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
 		Usuobjcollection.init_build_configuration !cmdopt_uobjlist "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
 		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
+		(* build uobj collection by building individidual uobjs *)
+		(*Usuobjcollection.build "" true;*)
+
+(*
 		(* grab uobj manifest filename and derive uobj name *)
 		uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
 		uobj_name := Filename.chop_extension !uobj_manifest_filename;
+*)
 
+(*
 		(* check options and do the task *)
 		if (!copt_builduobj == true ) then
 			begin
@@ -145,6 +151,8 @@ let main () =
 					uobj#build !uobj_manifest_filename "" true	
 			end
 		;
+*)
+
 
 (*			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);*)
 
