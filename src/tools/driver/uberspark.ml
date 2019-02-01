@@ -135,7 +135,7 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
 		(* build uobj collection by building individidual uobjs *)
-		(*Usuobjcollection.build "" true;*)
+		Usuobjcollection.build "" true;
 
 (*
 		(* grab uobj manifest filename and derive uobj name *)

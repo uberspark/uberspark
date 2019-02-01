@@ -160,5 +160,21 @@ module Usuobjcollection =
 		()
 	;;
 								
+
 																								
+	(*--------------------------------------------------------------------------*)
+	(* build a uobj *)
+	(* build_dir = directory to use for building *)
+	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
+	(*--------------------------------------------------------------------------*)
+	let build build_dir keep_temp_files = 
+		Hashtbl.iter (fun key value ->  
+			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
+			value#build build_dir keep_temp_files;
+		) uobj_hashtbl;
+
+		()
+	;;
+																																																																																																
+																																																																																																
 	end
