@@ -29,16 +29,26 @@ class uobject = object(self)
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
 		val o_uobj_sections_list : string list list ref = ref [];
 		method get_o_uobj_sections_list = !o_uobj_sections_list;
+		val o_usmf_filename = ref "";
+		method get_o_usmf_filename = !o_usmf_filename;
+		val o_uobj_dir_abspathname = ref "";
+		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
+		
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
-		(* usmf_filename = uobj manifest filename *)
+		(* usmf_filename = canonical uobj manifest filename *)
 		(* keep_temp_files = true if temporary files need to be preserved *)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest usmf_filename keep_temp_files =
+			
+			(* store filename and uobj dir absolute pathname *)
+			o_usmf_filename := Filename.basename usmf_filename;
+			o_uobj_dir_abspathname := Filename.dirname usmf_filename;
+			
 
 			(* read manifest JSON *)
 			let (rval, mf_json) = Usmanifest.read_manifest 
