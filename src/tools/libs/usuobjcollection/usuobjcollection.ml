@@ -168,10 +168,22 @@ module Usuobjcollection =
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
 	let build build_dir keep_temp_files = 
-		Hashtbl.iter (fun key value ->  
+		Hashtbl.iter (fun key uobj ->  
 			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
+			let(rval, r_prevpath, r_curpath) = Usosservices.dir_change 
+				(uobj#get_o_uobj_dir_abspathname) in
+				if(rval == true) then 
+					begin
+						uobj#build build_dir keep_temp_files;
+						ignore(Usosservices.dir_change r_prevpath);
+					end
+				else
+					begin
+						Uslog.logf log_tag Uslog.Error "could not change to uobj directory: %s" (uobj#get_o_uobj_dir_abspathname);
+						ignore (exit 1);
+					end
+				;
 			
-			value#build build_dir keep_temp_files;
 		) uobj_hashtbl;
 
 		()
