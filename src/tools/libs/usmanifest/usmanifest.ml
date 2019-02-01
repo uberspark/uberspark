@@ -244,5 +244,36 @@ module Usmanifest =
 		(!retval, !uobj_sections_list)
 	;;
 																								
+			
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-coll" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list of uobj directories *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobj_coll usmf_json =
+		let retval = ref true in
+		let usmf_uobj_dirs_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_coll_json = usmf_json |> member "uobj-coll" in
+					if uobj_coll_json != `Null then
+						begin
+							let usmf_uobj_coll_json_list = uobj_coll_json |> 
+									to_list in 
+								List.iter (fun x -> usmf_uobj_dirs_list := 
+										!usmf_uobj_dirs_list @ [(x |> to_string)]
+									) usmf_uobj_coll_json_list;
+						end
+					;
+	
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+	
+		(!retval, !usmf_uobj_dirs_list)
+	;;
 																								
+																																													
+																																																																																							
 	end

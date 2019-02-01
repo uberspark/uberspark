@@ -92,4 +92,23 @@ module Usosservices =
 	;;
 
 
+	let dir_change path =
+		let retval = ref true in
+		let retval_prevpath = ref "" in
+		let retval_curpath = ref "" in
+			try
+				retval_prevpath := Unix.getcwd ();
+				Unix.chdir path;
+				retval_curpath := Unix.getcwd ();
+
+			with Unix.Unix_error (ecode, fname, fparam) -> 
+				retval := false;
+			;
+	
+		(!retval, !retval_prevpath, !retval_curpath)
+	;;
+
+
+
+
 	end

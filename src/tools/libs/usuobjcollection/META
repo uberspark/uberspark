@@ -1,0 +1,6 @@
+name="usuobjcollection"
+description="uberSpark uberobject collection interface"
+version="1.0"
+requires=""
+archive(byte)="usuobjcollection.cmo"
+archive(native)="usuobjcollection.cmx"
