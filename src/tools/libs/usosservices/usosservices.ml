@@ -92,4 +92,21 @@ module Usosservices =
 	;;
 
 
+	let dir_change path =
+		let retval = ref true in
+		let retval_abspath = ref "" in
+			try
+				Unix.chdir path;
+				retval_abspath := Unix.getcwd ();
+
+			with Unix.Unix_error (ecode, fname, fparam) -> 
+				retval := false;
+			;
+	
+		(!retval, !retval_abspath)
+	;;
+
+
+
+
 	end

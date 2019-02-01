@@ -170,6 +170,7 @@ module Usuobjcollection =
 	let build build_dir keep_temp_files = 
 		Hashtbl.iter (fun key value ->  
 			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
+			
 			value#build build_dir keep_temp_files;
 		) uobj_hashtbl;
 
