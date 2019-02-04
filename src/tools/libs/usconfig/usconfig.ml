@@ -41,6 +41,22 @@ module Usconfig =
 											];;
 				
 	let get_std_define_asm () =	(std_define_asm)	;;
+	
 				
+	(* maximum platform CPUs *)
+	(* TBD: this has to be synced with hw model defs *)
+	let std_max_platform_cpus = 8;;
+	let get_std_max_platform_cpus () =	(std_max_platform_cpus)	;;
+									
+	let std_max_incldevlist_entries = 6;;
+	let get_std_max_incldevlist_entries () = (std_max_incldevlist_entries) ;;
+
+	let std_max_excldevlist_entries = 6;;
+	let get_std_max_excldevlist_entries () = (std_max_excldevlist_entries) ;;
+
+	let std_max_sections = 16;;
+	let get_std_max_sections () = (std_max_sections) ;;
+
+;;
 								
 	end

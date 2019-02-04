@@ -161,6 +161,17 @@ typedef struct {
 	slab_entrystub_t entrystub;
 } __attribute__((packed)) xmhfgeec_slab_info_t;
 
+//////
+
+typedef void * uobj_entrystub_t;
+
+typedef struct {
+	uobj_entrystub_t entrystub;
+} __attribute__((packed)) uobj_info_t;
+
+
+//////
+
 
 #define XMHFGEEC_SLAB_CALLCAP_MASK(x)               (1UL << x)
 #define XMHFGEEC_SLAB_UAPICAP_MASK(x)               (1UL << x)
