@@ -139,6 +139,11 @@ let main () =
 		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
 		Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
 
+		(* build uobj collection info table binary *)
+		Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
+		Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
+
+
 		(* build uobj collection by building individidual uobjs *)
 		Usuobjcollection.build "" true;
 
