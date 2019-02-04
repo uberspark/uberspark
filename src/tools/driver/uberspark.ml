@@ -6,6 +6,7 @@ open Unix
 open Filename
 
 open Uslog
+open Usconfig
 open Usosservices
 open Libusmf
 open Usuobjlib
@@ -133,6 +134,10 @@ let main () =
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
 		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+
+		(* generate uobj collection info table *)
+		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
+		Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
 
 		(* build uobj collection by building individidual uobjs *)
 		Usuobjcollection.build "" true;

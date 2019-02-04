@@ -15,6 +15,9 @@ module Usconfig =
 	(* uobj library manifest default filename *)
 	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
 
+	(* uobj collection info default filename *)
+	let std_uobjcoll_info_filename = "uobjcoll_info_table.c";;
+	let get_std_uobjcoll_info_filename () =	(std_uobjcoll_info_filename)	;;
 
 	(* standard include directories *)
 	let std_incdirs = [
