@@ -193,17 +193,17 @@ class uobject = object(self)
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj info table *)
 	(*--------------------------------------------------------------------------*)
-	method generate_uobj_info total_uobjs ochannel = 
+	method generate_uobj_info ochannel = 
 		let i = ref 0 in 
 		
-		Printf.fprintf oc "\n";
-    Printf.fprintf oc "\n	//%s" (!o_usmf_hdr_id);
-    Printf.fprintf oc "\n	{";
+		Printf.fprintf ochannel "\n";
+    Printf.fprintf ochannel "\n	//%s" (!o_usmf_hdr_id);
+    Printf.fprintf ochannel "\n	{";
 
-  	Printf.fprintf oc "\n\t0x00000000UL, ";    (*entrystub*)
+  	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
 								
-    Printf.fprintf oc "\n	}";
-		Printf.fprintf oc "\n";
+    Printf.fprintf ochannel "\n	}";
+		Printf.fprintf ochannel "\n";
 
 		()
 	;
