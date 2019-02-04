@@ -216,5 +216,28 @@ module Usuobjcollection =
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								
 		()
 	;;
+
 																																																																																																
+	(*--------------------------------------------------------------------------*)
+	(* generate uobj collection info table *)
+	(*--------------------------------------------------------------------------*)
+	let build_uobjcoll_info_table uobjcoll_info_table_filename = 
+		let (pestatus, pesignal, cc_outputfilename) = 
+			Usextbinutils.compile_cfile uobjcoll_info_table_filename (uobjcoll_info_table_filename ^ ".o") 
+				(Usconfig.get_std_incdirs ())	(Usconfig.get_std_defines ()) in
+			if (pesignal == true) || (pestatus != 0) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in compiling %s!" uobjcoll_info_table_filename;
+						ignore(exit 1);
+				end
+			else
+				begin
+						Uslog.logf log_tag Uslog.Info "Compiled %s successfully" uobjcoll_info_table_filename;
+				end
+			;
+
+		()
+	;;
+																																																																																																																																																																																																																																																																																																																																																																																																
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
 	end
