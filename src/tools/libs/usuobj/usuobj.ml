@@ -153,7 +153,7 @@ class uobject = object(self)
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
-				Usuobjgen.generate_uobj_hdr !o_usmf_hdr_id 0x60000000 
+				self#generate_uobj_hdr !o_usmf_hdr_id 0x60000000 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 			
