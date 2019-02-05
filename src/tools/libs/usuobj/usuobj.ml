@@ -171,7 +171,7 @@ class uobject = object(self)
 						(Usextbinutils.link_uobj  
 							(!o_usmf_sources_c_files @ [ uobj_hdr_filename ])
 							!uobj_libdirs_list !uobj_libs_list
-							uobj_linker_script_filename !o_usmf_hdr_id
+							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".bin")
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
