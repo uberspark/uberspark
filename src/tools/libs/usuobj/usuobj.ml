@@ -60,7 +60,7 @@ class uobject = object(self)
 			let uobj_section_load_addr = ref 0 in
 			uobj_section_load_addr := uobj_load_addr;
 			List.iter (fun x ->
-				(* compute subsection listnew section *)
+				(* compute subsection list *)
 				let elem_index = ref 0 in
 				let subsections_list = ref [] in
 				while (!elem_index < List.length x) do
