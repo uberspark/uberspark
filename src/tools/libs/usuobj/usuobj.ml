@@ -186,10 +186,14 @@ class uobject = object(self)
 
 		(*--------------------------------------------------------------------------*)
 		(* build a uobj *)
+		(* uobj_load_addr = addr at which uobj is loaded *)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 		(*--------------------------------------------------------------------------*)
-		method build build_dir keep_temp_files = 
+		method build 
+			(uobj_load_addr : int)
+			(build_dir : string)
+			(keep_temp_files : bool) = 
 	
 			Uslog.logf log_tag Uslog.Info "Starting build in '%s' [%b]\n" build_dir keep_temp_files;
 			
@@ -207,7 +211,7 @@ class uobject = object(self)
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
-				self#generate_uobj_hdr !o_usmf_hdr_id 0x60000000 
+				self#generate_uobj_hdr !o_usmf_hdr_id uobj_load_addr 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 			
