@@ -77,7 +77,7 @@ class uobject = object(self)
 						s_name = (List.nth x 0);
 						s_type = 0;
 						s_attribute = (List.nth x 1);
-						s_subsection_list = [];
+						s_subsection_list = !subsections_list;
 						s_origin =  !uobj_section_load_addr;
 						s_length = int_of_string (List.nth x 2);
 					};
