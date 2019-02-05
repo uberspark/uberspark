@@ -29,6 +29,7 @@ module Usuobjcollection =
 	(*let uobj_list = ref [];;*)
 
 	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
+	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -150,6 +151,16 @@ module Usuobjcollection =
 		    	end
 		    ;
 
+		    if (Hashtbl.mem uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id)) then
+		    	begin
+						Uslog.logf log_tag Uslog.Error "uobj appears multiple times in collection: '%s'" (uobj#get_o_usmf_hdr_id);
+						ignore (exit 1);
+		    	end
+		    else
+		    	begin
+						Hashtbl.add uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id) x;
+		    	end
+		    ;
 
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
@@ -283,7 +294,11 @@ module Usuobjcollection =
 	(*--------------------------------------------------------------------------*)
 	let build_uobjcoll_binary_image uobjcoll_binary_image_filename =
 		(* iterate through the uobjs and output image name *)
-		
+		Hashtbl.iter (fun key uobj ->  
+   		Uslog.logf log_tag Uslog.Info "uobj_id:%s" (uobj#get_o_usmf_hdr_id);
+   		Uslog.logf log_tag Uslog.Info "uobj_dir:%s" (Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id));
+
+		) uobj_hashtbl;
 		
 		()		 
 	;;
