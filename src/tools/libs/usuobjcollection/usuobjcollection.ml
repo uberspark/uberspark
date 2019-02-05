@@ -250,7 +250,7 @@ module Usuobjcollection =
 		let uobjcoll_info_table_lscript = Usuobjgen.generate_uobj_linker_script  
 			(uobjcoll_info_table_filename) 
 			0 
-			[ ["data"; "rw"; "0x2000"; ".data"] ] in 
+			[ ["data"; "rw"; string_of_int (Usconfig.get_std_uobjcoll_info_table_max_size()); ".data"] ] in 
 		
 		(* build uobj collection info table binary *)
 		let uobj_libdirs_list = ref [] in

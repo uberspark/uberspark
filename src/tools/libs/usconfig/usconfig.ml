@@ -60,6 +60,9 @@ module Usconfig =
 	let std_max_sections = 16;;
 	let get_std_max_sections () = (std_max_sections) ;;
 
+	let std_uobjcoll_info_table_max_size = 0x2000;;
+	let get_std_uobjcoll_info_table_max_size () = (std_uobjcoll_info_table_max_size) ;;
+
 ;;
 								
 	end
