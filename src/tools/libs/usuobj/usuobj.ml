@@ -45,6 +45,9 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 		
+		val o_uobj_size = ref 0; 
+		method get_o_uobj_size = !o_uobj_size;
+		
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
@@ -86,7 +89,7 @@ class uobject = object(self)
 				()
 			)  !o_uobj_sections_list;
 
-
+			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
 			()
 		;
 
