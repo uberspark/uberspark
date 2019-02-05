@@ -31,7 +31,9 @@ module Usuobjgen =
 				(* new section *)
 				let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
 				let section_name = (List.nth x 3) in
-				  if (compare section_name ".text") <> 0 then
+				  if ((compare section_name ".text") <> 0) && 
+						((compare section_name ".ustack") <> 0) &&
+						((compare section_name ".tstack") <> 0) then
 						begin
 							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
 								section_name section_name_var;
@@ -106,7 +108,7 @@ module Usuobjgen =
 					()
 				) x;
 		
-				Printf.fprintf oc "\n . = %s;" section_size;
+				Printf.fprintf oc "\n . = %s;" section_size; 
 		    Printf.fprintf oc "\n	} >uobjmem_%s =0x9090" (List.nth x 0);
 		    Printf.fprintf oc "\n";
 				uobj_section_load_addr := !uobj_section_load_addr + 
