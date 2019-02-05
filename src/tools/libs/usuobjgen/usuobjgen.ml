@@ -24,6 +24,9 @@ module Usuobjgen =
 			Printf.fprintf oc "\n#include <uberspark.h>";
 			Printf.fprintf oc "\n";
 	
+			Printf.fprintf oc "\n__attribute__((section (\".ustack\"))) uint8_t __ustack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_USTACK]={ 0 };";
+			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
+	
 			List.iter (fun x ->
 				(* new section *)
 				let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
