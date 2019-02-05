@@ -3,6 +3,8 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 ------------------------------------------------------------------------------*)
 
+open Unix
+
 open Usconfig
 open Uslog
 open Usosservices
@@ -293,12 +295,40 @@ module Usuobjcollection =
 	(* build uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
 	let build_uobjcoll_binary_image uobjcoll_binary_image_filename =
+	  let fd_out = openfile uobjcoll_binary_image_filename [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+		
 		(* iterate through the uobjs and output image name *)
 		Hashtbl.iter (fun key uobj ->  
-   		Uslog.logf log_tag Uslog.Info "uobj_id:%s" (uobj#get_o_usmf_hdr_id);
+   		(*Uslog.logf log_tag Uslog.Info "uobj_id:%s" (uobj#get_o_usmf_hdr_id);
    		Uslog.logf log_tag Uslog.Info "uobj_dir:%s" (Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id));
-
+			*)
+			let uobj_binary_filename = 
+				(Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id)) ^ "/" ^
+				(uobj#get_o_usmf_hdr_id) ^ ".bin" in
+	   		Uslog.logf log_tag Uslog.Info "uobj_bin_filename:%s" uobj_binary_filename;
+				
+				let info =
+    			try Unix.stat uobj_binary_filename
+    			with Unix.Unix_error (e, _, _) ->
+						Uslog.logf log_tag Uslog.Error "no %s: %s!" uobj_binary_filename
+								(Unix.error_message e);
+      			exit 1 in
+		   		Uslog.logf log_tag Uslog.Info "filesize=%u" info.Unix.st_size;
+		
+				let buffer_size = 8192 in
+				let buffer = Bytes.create buffer_size in
+	  		let fd_in = openfile uobj_binary_filename [O_RDONLY] 0 in
+			  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
+			    |  0 -> ()
+			    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
+			  in
+			  copy_loop ();
+			  close fd_in;
+		
+				
 		) uobj_hashtbl;
+
+	  close fd_out;
 		
 		()		 
 	;;
