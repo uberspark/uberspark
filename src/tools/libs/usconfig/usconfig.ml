@@ -29,6 +29,18 @@ module Usconfig =
 
 	let get_std_incdirs () =	(std_incdirs)	;;
 
+
+	let std_max_sections = 16;;
+	let get_std_max_sections () = (std_max_sections) ;;
+
+	let std_uobjcoll_info_table_max_size = 0x2000;;
+	let get_std_uobjcoll_info_table_max_size () = (std_uobjcoll_info_table_max_size) ;;
+
+	(*--------------------------------------------------------------------------*)
+	(* stuff below needs to be in sync with include/uberspark-config.h *)
+	(*--------------------------------------------------------------------------*)
+
+
 	(* standard preprocessor definitions *)
 	let std_defines = [ 
 											"__XMHF_TARGET_CPU_X86__"; 
@@ -57,11 +69,6 @@ module Usconfig =
 	let std_max_excldevlist_entries = 6;;
 	let get_std_max_excldevlist_entries () = (std_max_excldevlist_entries) ;;
 
-	let std_max_sections = 16;;
-	let get_std_max_sections () = (std_max_sections) ;;
-
-	let std_uobjcoll_info_table_max_size = 0x2000;;
-	let get_std_uobjcoll_info_table_max_size () = (std_uobjcoll_info_table_max_size) ;;
 
 ;;
 								
