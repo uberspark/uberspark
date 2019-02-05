@@ -57,7 +57,7 @@
 #include <ctype.h>
 #include <assert.h>
 
-
+#include <uberspark-config.h>
 #include <xmhf-hwm.h>
 
 
