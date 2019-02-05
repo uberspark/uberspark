@@ -204,11 +204,21 @@ module Usuobjcollection =
 		Printf.fprintf oc "\n#include <xmhfgeec.h>";
 		Printf.fprintf oc "\n";
 		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) uobj_info_t uobjcoll_info_table[] = {";
+(*		Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) uobj_info_t uobjcoll_info_table[] = {";*)
+		Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) uobjcoll_info_t uobjcoll_info_table = {";
+
+		Printf.fprintf oc "\n\tUOBJCOLL_INFO_T_MAGIC,";
+		Printf.fprintf oc "\n\t%u," !total_uobjs;
+		Printf.fprintf oc "\n\tUOBJ_INFO_T_SIZE,";
+		Printf.fprintf oc "\n\t0x00000000UL,";
+
+		Printf.fprintf oc "\n\t{";
 
 		Hashtbl.iter (fun key uobj ->  
 				uobj#generate_uobj_info oc;
 		) uobj_hashtbl;
+
+		Printf.fprintf oc "\n\t}";
 
 		Printf.fprintf oc "\n};";
 
