@@ -204,6 +204,9 @@ class uobject = object(self)
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
 	
+			(* compute memory map *)
+			self#compute_sections_memory_map uobj_load_addr;
+		
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
