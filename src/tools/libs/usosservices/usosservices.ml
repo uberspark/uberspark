@@ -133,3 +133,13 @@ module Usosservices =
 
 
 	end
+	
+(*	
+				let info =
+    			try Unix.stat uobj_binary_filename
+    			with Unix.Unix_error (e, _, _) ->
+						Uslog.logf log_tag Uslog.Error "no %s: %s!" uobj_binary_filename
+								(Unix.error_message e);
+      			exit 1 in
+		   		Uslog.logf log_tag Uslog.Info "filesize=%u" info.Unix.st_size;
+*)

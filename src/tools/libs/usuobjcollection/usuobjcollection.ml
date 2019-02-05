@@ -303,7 +303,7 @@ module Usuobjcollection =
 				(Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id)) ^ "/" ^
 				(uobj#get_o_usmf_hdr_id) ^ ".bin" in
 
-				Uslog.logf log_tag Uslog.Info "uobj_bin_filename:%s" uobj_binary_filename;
+				(*Uslog.logf log_tag Uslog.Info "uobj_bin_filename:%s" uobj_binary_filename;*)
 				input_filename_list := !input_filename_list @ [ uobj_binary_filename ];
 				
 		) uobj_hashtbl;
@@ -316,12 +316,3 @@ module Usuobjcollection =
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
 	end
 	
-(*	
-				let info =
-    			try Unix.stat uobj_binary_filename
-    			with Unix.Unix_error (e, _, _) ->
-						Uslog.logf log_tag Uslog.Error "no %s: %s!" uobj_binary_filename
-								(Unix.error_message e);
-      			exit 1 in
-		   		Uslog.logf log_tag Uslog.Info "filesize=%u" info.Unix.st_size;
-*)
