@@ -237,11 +237,32 @@ module Usuobjcollection =
 			;
 
 		(* generate linker sript *)
-		Usuobjgen.generate_uobj_linker_script  
+		let uobjcoll_info_table_lscript = Usuobjgen.generate_uobj_linker_script  
 			(uobjcoll_info_table_filename) 
 			0 
-			[ ["data"; "rw"; "0x2000"; ".data"] ]; 
+			[ ["data"; "rw"; "0x2000"; ".data"] ] in 
 		
+		(* build uobj collection info table binary *)
+		let uobj_libdirs_list = ref [] in
+		let uobj_libs_list = ref [] in
+		let (pestatus, pesignal) = 
+				(Usextbinutils.link_uobj  
+					[uobjcoll_info_table_filename]
+					!uobj_libdirs_list !uobj_libs_list
+					uobjcoll_info_table_lscript (uobjcoll_info_table_filename ^ ".bin")
+				) in
+				if (pesignal == true) || (pestatus != 0) then
+					begin
+							Uslog.logf log_tag Uslog.Error "in building uobj collection info table binary!";
+							ignore(exit 1);
+					end
+				else
+					begin
+							Uslog.logf log_tag Uslog.Info "Built uobj collection info table binary";
+					end
+				;
+
+
 
 		()
 	;;
