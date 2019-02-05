@@ -49,6 +49,10 @@
 #ifndef __UBERSPARK_CONFIG_H__
 #define __UBERSPARK_CONFIG_H__
 
+
+#define USCONFIG_SIZEOF_UOBJ_TSTACK			4096
+#define USCONFIG_SIZEOF_UOBJ_USTACK			4096
+
 //////
 // to be defunct definitions
 //////

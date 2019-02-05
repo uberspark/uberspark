@@ -69,6 +69,12 @@ module Usconfig =
 	let std_max_excldevlist_entries = 6;;
 	let get_std_max_excldevlist_entries () = (std_max_excldevlist_entries) ;;
 
+	let sizeof_uobj_tstack = 4096;;
+	let get_sizeof_uobj_tstack () = (sizeof_uobj_tstack) ;;
+
+	let sizeof_uobj_ustack = 4096;;
+	let get_sizeof_uobj_ustack () = (sizeof_uobj_ustack) ;;
+ 
 
 ;;
 								
