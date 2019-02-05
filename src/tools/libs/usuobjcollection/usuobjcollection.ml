@@ -200,7 +200,7 @@ module Usuobjcollection =
 					end
 				;
 			
-				(*uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;*)
+				uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;
 		) uobj_hashtbl;
 
 		()
