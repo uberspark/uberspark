@@ -206,6 +206,7 @@ class uobject = object(self)
 	
 			(* compute memory map *)
 			self#compute_sections_memory_map uobj_load_addr;
+			Uslog.logf log_tag Uslog.Info "uobj size=%u" self#get_o_uobj_size;
 		
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
