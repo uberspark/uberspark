@@ -12,7 +12,18 @@ open Usuobjgen
 module Usuobj =
 struct
 
+		type section_info_t = 
+			{
+				s_name: string;
+				s_type: int;
+				s_attribute : string;
+				s_subsection_list : string list;
+				s_origin: int;
+				s_length: int;	
+			};;
+
 class uobject = object(self)
+			
 		val log_tag = "Usuobj";
 		
 		val usmf_type_usuobj = "uobj";
@@ -34,8 +45,50 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 		
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
+
+
+		(*--------------------------------------------------------------------------*)
+		(* compute memory map for sections *)
+		(* uobj_load_addr = load address of uobj *)
+		(*--------------------------------------------------------------------------*)
+		method compute_sections_memory_map
+			(uobj_load_addr : int) =
+
+			let uobj_section_load_addr = ref 0 in
+			uobj_section_load_addr := uobj_load_addr;
+			List.iter (fun x ->
+				(* compute subsection listnew section *)
+				let elem_index = ref 0 in
+				let subsections_list = ref [] in
+				while (!elem_index < List.length x) do
+						if (!elem_index > 2) then
+							begin
+						    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
+							end
+						; 
+						elem_index := !elem_index + 1;
+				done;
+					
+				Hashtbl.add uobj_sections_memory_map_hashtbl (List.nth x 0) 
+					{
+						s_name = (List.nth x 0);
+						s_type = 0;
+						s_attribute = (List.nth x 1);
+						s_subsection_list = [];
+						s_origin =  !uobj_section_load_addr;
+						s_length = int_of_string (List.nth x 2);
+					};
+			
+				uobj_section_load_addr := !uobj_section_load_addr + int_of_string (List.nth x 2);
+				()
+			)  !o_uobj_sections_list;
+
+
+			()
+		;
 
 
 		(*--------------------------------------------------------------------------*)
@@ -45,6 +98,7 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest usmf_filename keep_temp_files =
 			
+				
 			(* store filename and uobj dir absolute pathname *)
 			o_usmf_filename := Filename.basename usmf_filename;
 			o_uobj_dir_abspathname := Filename.dirname usmf_filename;
@@ -319,3 +373,16 @@ end
     Printf.fprintf oc "\n\t},";
 *)
 
+(*
+ 		type section_info_t = 
+			{
+				origin: int;
+				length: int;	
+				subsection_list : string list;
+			};;
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
+	
+			Hashtbl.add uobj_sections_hashtbl "sample" { origin=0; length=0; subsection_list = ["one"; "two"; "three"]};
+			let mysection = Hashtbl.find uobj_sections_hashtbl "sample" in
+				Uslog.logf log_tag Uslog.Info "origin=%u" mysection.origin;
+*)
