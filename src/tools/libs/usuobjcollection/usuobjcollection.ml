@@ -294,9 +294,11 @@ module Usuobjcollection =
 	(*--------------------------------------------------------------------------*)
 	(* build uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
-	let build_uobjcoll_binary_image uobjcoll_binary_image_filename =
+	let build_uobjcoll_binary_image uobjcoll_binary_image_filename 
+		uobjcoll_info_table_binary_filename =
 		
 		let input_filename_list = ref [] in
+		input_filename_list := !input_filename_list @ [ uobjcoll_info_table_binary_filename];
 		(* iterate through the uobjs and output image name *)
 		Hashtbl.iter (fun key uobj ->  
 			let uobj_binary_filename = 
