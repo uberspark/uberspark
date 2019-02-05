@@ -236,6 +236,13 @@ module Usuobjcollection =
 				end
 			;
 
+		(* generate linker sript *)
+		Usuobjgen.generate_uobj_linker_script  
+			(uobjcoll_info_table_filename) 
+			0 
+			[ ["data"; "rw"; "0x2000"; ".data"] ]; 
+		
+
 		()
 	;;
 																																																																																																																																																																																																																																																																																																																																																																																																
