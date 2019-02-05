@@ -182,13 +182,15 @@ module Usuobjcollection =
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
 	let build uobjcoll_load_addr build_dir keep_temp_files = 
+		let uobj_load_addr = ref 0 in
+		uobj_load_addr := uobjcoll_load_addr;
 		Hashtbl.iter (fun key uobj ->  
 			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
 			let(rval, r_prevpath, r_curpath) = Usosservices.dir_change 
 				(uobj#get_o_uobj_dir_abspathname) in
 				if(rval == true) then 
 					begin
-						uobj#build uobjcoll_load_addr build_dir keep_temp_files;
+						uobj#build !uobj_load_addr build_dir keep_temp_files;
 						ignore(Usosservices.dir_change r_prevpath);
 					end
 				else
@@ -198,6 +200,7 @@ module Usuobjcollection =
 					end
 				;
 			
+				(*uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;*)
 		) uobj_hashtbl;
 
 		()
