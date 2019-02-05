@@ -162,20 +162,24 @@ typedef struct {
 } __attribute__((packed)) xmhfgeec_slab_info_t;
 
 //////
+#define UOBJCOLL_INFO_T_MAGIC	0xD00DF00D
+#define UOBJCOLL_MAX_UOBJS		32
 
 typedef void * uobj_entrystub_t;
-
-typedef struct {
-	uint32_t magic;
-	uint32_t total_uobjs;
-	uint32_t sizeof_uobj_info_t;
-	uint32_t offsetof_uobj_info_table;
-} __attribute__((packed)) uobjcoll_info_t;
 
 typedef struct {
 	uobj_entrystub_t entrystub;
 } __attribute__((packed)) uobj_info_t;
 
+typedef struct {
+	uint32_t magic;
+	uint32_t total_uobjs;
+	uint32_t sizeof_uobj_info_t;
+	uint32_t filler0;
+	uobj_info_t uobj[UOBJCOLL_MAX_UOBJS];
+} __attribute__((packed)) uobjcoll_info_t;
+
+#define UOBJ_INFO_T_SIZE		(sizeof(uobj_info_t))
 
 //////
 
