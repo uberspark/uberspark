@@ -49,7 +49,14 @@
 #ifndef __UBERSPARK_CONFIG_H__
 #define __UBERSPARK_CONFIG_H__
 
-
+//////
+// to be defunct definitions
+//////
+#define XMHFGEEC_MAX_SLABS                  32
+#define XMHFGEEC_TOTAL_SLABS                16
+#define XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES 6
+#define XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES 6
+#define	XMHF_SLAB_STACKSIZE					16384
 
 #ifndef __ASSEMBLY__
 
