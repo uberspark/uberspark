@@ -171,7 +171,7 @@ class uobject = object(self)
 						(Usextbinutils.link_uobj  
 							(!o_usmf_sources_c_files @ [ uobj_hdr_filename ])
 							!uobj_libdirs_list !uobj_libs_list
-							uobj_linker_script_filename !o_usmf_hdr_id
+							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".bin")
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
@@ -190,6 +190,88 @@ class uobject = object(self)
 		;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* generate uobj info table *)
+	(*--------------------------------------------------------------------------*)
+	method generate_uobj_info ochannel = 
+		let i = ref 0 in 
+		
+		Printf.fprintf ochannel "\n";
+    Printf.fprintf ochannel "\n	//%s" (!o_usmf_hdr_id);
+    Printf.fprintf ochannel "\n	{";
+
+  	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
+								
+    Printf.fprintf ochannel "\n	}";
+		Printf.fprintf ochannel "\n";
+
+		()
+	;
+
+
 end ;;
 
 end
+
+
+(*---------------------------------------------------------------------------*)
+(* potpourri *)
+(*---------------------------------------------------------------------------*)
+(*		
+						(*slab_tos*)
+    Printf.fprintf oc "\n\t{";
+		i := 0;
+		while (!i < Usconfig.get_std_max_platform_cpus) do
+		    (* Printf.fprintf oc "\n\t\t   %s + (1*XMHF_SLAB_STACKSIZE)," (Hashtbl.find slab_idtostack_addrstart !i);*)
+		    Printf.fprintf oc "\n\t\t0x00000000UL,";
+				i := !i + 1;
+		done;
+    Printf.fprintf oc "\n\t},";
+
+		Printf.fprintf oc "\n\t0x00000000UL, ";    (*slab_callcaps*)
+    Printf.fprintf oc "\n\ttrue,";             (*slab_uapisupported*)
+		
+		(*slab_uapicaps*)
+    Printf.fprintf oc "\n\t{";
+		i := 0;
+		while (!i < total_uobjs) do
+		    Printf.fprintf oc "\n\t\t0x00000000UL,";
+				i := !i + 1;
+		done;
+    Printf.fprintf oc "\n\t},";
+
+		Printf.fprintf oc "\n\t0x00000000UL, ";    (*slab_memgrantreadcaps*)
+		Printf.fprintf oc "\n\t0x00000000UL, ";    (*slab_memgrantwritecaps*)
+
+		(*incl_devices*)
+    Printf.fprintf oc "\n\t{";
+		i := 0;
+		while (!i < get_std_max_incldevlist_entries) do
+		    Printf.fprintf oc "\n\t\t{0x00000000UL,0x00000000UL},";
+				i := !i + 1;
+		done;
+    Printf.fprintf oc "\n\t},";
+
+		Printf.fprintf oc "\n\t0x00000000UL, ";    (*incl_devices_count*)
+
+		(*excl_devices*)
+    Printf.fprintf oc "\n\t{";
+		i := 0;
+		while (!i < get_std_max_excldevlist_entries) do
+		    Printf.fprintf oc "\n\t\t{0x00000000UL,0x00000000UL},";
+				i := !i + 1;
+		done;
+    Printf.fprintf oc "\n\t},";
+		
+		Printf.fprintf oc "\n\t0x00000000UL, ";    (*excl_devices_count*)
+
+		(*excl_devices*)
+    Printf.fprintf oc "\n\t{";
+		i := 0;
+		while (!i < get_std_max_excldevlist_entries) do
+		    Printf.fprintf oc "\n\t\t{0x00000000UL,0x00000000UL},";
+				i := !i + 1;
+		done;
+    Printf.fprintf oc "\n\t},";
+*)
+

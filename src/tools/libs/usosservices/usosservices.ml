@@ -26,6 +26,27 @@ module Usosservices =
 	;;
 
 
+	let file_concat output_name input_name_list =
+	  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
+
+		List.iter (fun x ->  
+			let buffer_size = 8192 in
+			let buffer = Bytes.create buffer_size in
+		  let fd_in = openfile x [O_RDONLY] 0 in
+		  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
+		    |  0 -> ()
+		    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
+		  in
+		  copy_loop ();
+		  close fd_in;
+		) input_name_list;
+
+		close fd_out;
+		()
+	;;
+
+
+
 	let file_remove filename =
 		Sys.remove filename;
 		()
@@ -112,3 +133,13 @@ module Usosservices =
 
 
 	end
+	
+(*	
+				let info =
+    			try Unix.stat uobj_binary_filename
+    			with Unix.Unix_error (e, _, _) ->
+						Uslog.logf log_tag Uslog.Error "no %s: %s!" uobj_binary_filename
+								(Unix.error_message e);
+      			exit 1 in
+		   		Uslog.logf log_tag Uslog.Info "filesize=%u" info.Unix.st_size;
+*)
