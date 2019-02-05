@@ -46,60 +46,23 @@
 
 //author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __UBERSPARK_H__
-#define __UBERSPARK_H__
+#ifndef __UBERSPARK_CONFIG_H__
+#define __UBERSPARK_CONFIG_H__
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <string.h>
-#include <ctype.h>
-#include <assert.h>
-
-#include <uberspark-config.h>
-#include <xmhf-hwm.h>
-
-
-#define USMF_STR(s) _USMF_STR(s)
-#define _USMF_STR(s) #s
-
-
-
+//////
+// to be defunct definitions
+//////
+#define XMHFGEEC_MAX_SLABS                  32
+#define XMHFGEEC_TOTAL_SLABS                16
+#define XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES 6
+#define XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES 6
+#define	XMHF_SLAB_STACKSIZE					16384
 
 #ifndef __ASSEMBLY__
 
 
-#if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
-//////
-// frama-c non-determinism functions
-//////
-
-u32 Frama_C_entropy_source;
-
-//@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
-void Frama_C_update_entropy(void);
-
-u32 framac_nondetu32(void){
-  Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
-}
-
-u32 framac_nondetu32interval(u32 min, u32 max)
-{
-  u32 r,aux;
-  Frama_C_update_entropy();
-  aux = Frama_C_entropy_source;
-  if ((aux>=min) && (aux <=max))
-    r = aux;
-  else
-    r = min;
-  return r;
-}
-
-#endif //
 
 #endif //__ASSEMBLY__
 
 
-#endif //__UBERSPARK_H__
+#endif //__UBERSPARK_CONFIG_H__
