@@ -47,6 +47,8 @@ class uobject = object(self)
 		
 		val o_uobj_size = ref 0; 
 		method get_o_uobj_size = !o_uobj_size;
+		val o_uobj_load_addr = ref 0;
+		method get_o_uobj_load_addr = !o_uobj_load_addr;
 		
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
 		
@@ -62,6 +64,7 @@ class uobject = object(self)
 			: int =
 
 			let uobj_section_load_addr = ref 0 in
+			o_uobj_load_addr := uobj_load_addr;
 			uobj_section_load_addr := uobj_load_addr;
 			List.iter (fun x ->
 				(* compute subsection list *)
