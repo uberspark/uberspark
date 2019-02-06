@@ -319,7 +319,12 @@ class uobject = object(self)
 	
 			Printf.fprintf oc "\n#include <uberspark.h>";
 			Printf.fprintf oc "\n";
-	
+
+			Printf.fprintf oc "\n__attribute__((section (\".hdr\"))) uobj_info_t __uobj_info =";
+			self#generate_uobj_info oc;
+			Printf.fprintf oc ";";
+			
+			
 			Printf.fprintf oc "\n__attribute__((section (\".ustack\"))) uint8_t __ustack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_USTACK]={ 0 };";
 			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
 	
