@@ -193,12 +193,10 @@ class uobject = object(self)
 
 		(*--------------------------------------------------------------------------*)
 		(* build a uobj *)
-		(* uobj_load_addr = addr at which uobj is loaded *)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 		(*--------------------------------------------------------------------------*)
 		method build 
-			(uobj_load_addr : int)
 			(build_dir : string)
 			(keep_temp_files : bool) = 
 	
@@ -208,22 +206,18 @@ class uobject = object(self)
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
 	
-			(* compute memory map *)
-			(*self#compute_sections_memory_map uobj_load_addr;
-			Uslog.logf log_tag Uslog.Info "uobj size=%u" self#get_o_uobj_size;
-			*)
-			
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 0x60000000 
+				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 
+					(self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 					
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
-				self#generate_uobj_hdr !o_usmf_hdr_id uobj_load_addr 
+				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 			
