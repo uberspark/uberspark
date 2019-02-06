@@ -41,8 +41,13 @@ let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
 
+let cmdopt_loadaddr_specified = ref false;;
 let cmdopt_loadaddr = ref "";;
-let cmdopt_loadaddr_set value = cmdopt_loadaddr := value;;
+let cmdopt_loadaddr_set 
+	(value : string) = 
+	cmdopt_loadaddr_specified := true;
+	cmdopt_loadaddr := value;
+	;;
 
 (*----------------------------------------------------------------------------*)
 
@@ -132,6 +137,12 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info "%s" banner;
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		Arg.parse speclist cmdopt_invalid usage_msg;
+
+		(* sanity check command line arguments *)
+		if(!cmdopt_loadaddr_specified == false) then
+				cmdopt_loadaddr := "0x60000000";
+		;
+
 
 		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
