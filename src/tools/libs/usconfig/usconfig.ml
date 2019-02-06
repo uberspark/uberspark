@@ -33,8 +33,6 @@ module Usconfig =
 	let std_max_sections = 16;;
 	let get_std_max_sections () = (std_max_sections) ;;
 
-	let std_uobjcoll_info_table_max_size = 0x2000;;
-	let get_std_uobjcoll_info_table_max_size () = (std_uobjcoll_info_table_max_size) ;;
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
@@ -75,6 +73,8 @@ module Usconfig =
 	let sizeof_uobj_ustack = 4096;;
 	let get_sizeof_uobj_ustack () = (sizeof_uobj_ustack) ;;
  
+	let sizeof_uobjcoll_info_t = 0x21000;;
+	let get_sizeof_uobjcoll_info_t () = (sizeof_uobjcoll_info_t) ;;
 
 ;;
 								

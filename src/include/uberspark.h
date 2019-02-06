@@ -90,6 +90,7 @@ typedef struct {
 	uobj_info_t uobj[UOBJCOLL_MAX_UOBJS];
 } __attribute__((packed)) uobjcoll_info_t;
 
+#define SIZEOF_UOBJCOLL_INFO_T	(sizeof(uobjcoll_info_t))
 #define UOBJ_INFO_T_SIZE		(sizeof(uobj_info_t))
 
 //////
