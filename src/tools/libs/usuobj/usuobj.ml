@@ -266,7 +266,25 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n	{";
 
   	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
-								
+
+		(*ustack_tos*)
+    Printf.fprintf ochannel "\n\t{";
+		i := 0;
+		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		    Printf.fprintf ochannel "\n\t\t0x00000000UL,";
+				i := !i + 1;
+		done;
+    Printf.fprintf ochannel "\n\t},";
+
+		(*tstack_tos*)
+    Printf.fprintf ochannel "\n\t{";
+		i := 0;
+		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		    Printf.fprintf ochannel "\n\t\t0x00000000UL,";
+				i := !i + 1;
+		done;
+    Printf.fprintf ochannel "\n\t},";
+																								
     Printf.fprintf ochannel "\n	}";
 		Printf.fprintf ochannel "\n";
 
