@@ -58,7 +58,8 @@ class uobject = object(self)
 		(* uobj_load_addr = load address of uobj *)
 		(*--------------------------------------------------------------------------*)
 		method compute_sections_memory_map
-			(uobj_load_addr : int) =
+			(uobj_load_addr : int) 
+			: int =
 
 			let uobj_section_load_addr = ref 0 in
 			uobj_section_load_addr := uobj_load_addr;
@@ -90,7 +91,7 @@ class uobject = object(self)
 			)  !o_uobj_sections_list;
 
 			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
-			()
+			(!o_uobj_size)
 		;
 
 
