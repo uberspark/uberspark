@@ -36,6 +36,8 @@ module Usconfig =
 	let section_name_ustack = "uobj_ustack";;
 	let get_section_name_ustack () = (section_name_ustack);;
 
+	let section_name_tstack = "uobj_tstack";;
+	let get_section_name_tstack () = (section_name_tstack);;
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)

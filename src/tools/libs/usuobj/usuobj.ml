@@ -282,11 +282,17 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n\t},";
 
 		(*tstack_tos*)
-    Printf.fprintf ochannel "\n\t{";
+    let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
+			(Usconfig.get_section_name_tstack()) in
+		let tstack_size = (Usconfig.get_sizeof_uobj_tstack()) in
+		let tstack_tos = ref 0 in
+		tstack_tos := info.s_origin + tstack_size;
+		Printf.fprintf ochannel "\n\t{";
 		i := 0;
 		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
-		    Printf.fprintf ochannel "\n\t\t0x00000000UL,";
+		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !tstack_tos;
 				i := !i + 1;
+				tstack_tos := !tstack_tos + tstack_size;
 		done;
     Printf.fprintf ochannel "\n\t},";
 																								
