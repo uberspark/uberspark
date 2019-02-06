@@ -144,7 +144,7 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
 
 		(* build uobj collection by building individidual uobjs *)
-		Usuobjcollection.build 0x60000000 "" true;
+		Usuobjcollection.build "" true;
 
 		(* build final image *)
 		Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")

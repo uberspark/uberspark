@@ -195,11 +195,10 @@ module Usuobjcollection =
 																								
 	(*--------------------------------------------------------------------------*)
 	(* build a uobj *)
-	(* uobj_load_addr = load addr of uobj *)
 	(* build_dir = directory to use for building *)
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
-	let build uobjcoll_load_addr build_dir keep_temp_files = 
+	let build build_dir keep_temp_files = 
 		Hashtbl.iter (fun key uobj ->  
 			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
 			let(rval, r_prevpath, r_curpath) = Usosservices.dir_change 
