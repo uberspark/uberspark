@@ -205,9 +205,10 @@ class uobject = object(self)
 						(List.length !o_usmf_sources_casm_files);
 	
 			(* compute memory map *)
-			self#compute_sections_memory_map uobj_load_addr;
+			(*self#compute_sections_memory_map uobj_load_addr;
 			Uslog.logf log_tag Uslog.Info "uobj size=%u" self#get_o_uobj_size;
-		
+			*)
+			
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
@@ -268,11 +269,17 @@ class uobject = object(self)
   	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
 
 		(*ustack_tos*)
-    Printf.fprintf ochannel "\n\t{";
+    let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
+			(Usconfig.get_section_name_ustack()) in
+		let ustack_size = (Usconfig.get_sizeof_uobj_ustack()) in
+		let ustack_tos = ref 0 in
+		ustack_tos := info.s_origin + ustack_size;
+		Printf.fprintf ochannel "\n\t{";
 		i := 0;
 		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
-		    Printf.fprintf ochannel "\n\t\t0x00000000UL,";
+		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !ustack_tos;
 				i := !i + 1;
+				ustack_tos := !ustack_tos + ustack_size;
 		done;
     Printf.fprintf ochannel "\n\t},";
 

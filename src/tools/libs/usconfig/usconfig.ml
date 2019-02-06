@@ -33,6 +33,9 @@ module Usconfig =
 	let std_max_sections = 16;;
 	let get_std_max_sections () = (std_max_sections) ;;
 
+	let section_name_ustack = "uobj_ustack";;
+	let get_section_name_ustack () = (section_name_ustack);;
+
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
