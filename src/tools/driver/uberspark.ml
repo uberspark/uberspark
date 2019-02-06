@@ -132,7 +132,7 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
 		Usuobjcollection.init_build_configuration !cmdopt_uobjlist "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
-		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
+		Usuobjcollection.compute_memory_map 0x60000000;
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
 		(* generate uobj collection info table *)
