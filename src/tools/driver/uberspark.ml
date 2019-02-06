@@ -140,7 +140,7 @@ let main () =
 
 		(* sanity check command line arguments *)
 		if(!cmdopt_loadaddr_specified == false) then
-				cmdopt_loadaddr := "0x60000000";
+				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
 
 

@@ -39,6 +39,10 @@ module Usconfig =
 	let section_name_tstack = "uobj_tstack";;
 	let get_section_name_tstack () = (section_name_tstack);;
 
+	let default_load_addr = "0x60000000";;
+	let get_default_load_addr () = (default_load_addr);;
+
+
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
 	(*--------------------------------------------------------------------------*)
