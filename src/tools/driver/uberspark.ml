@@ -40,6 +40,10 @@ let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 
 let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+
+let cmdopt_loadaddr = ref "";;
+let cmdopt_loadaddr_set value = cmdopt_loadaddr := value;;
+
 (*----------------------------------------------------------------------------*)
 
 
@@ -110,6 +114,7 @@ let main () =
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
 			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
+			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
