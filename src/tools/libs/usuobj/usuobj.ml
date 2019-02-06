@@ -334,7 +334,8 @@ class uobject = object(self)
 				let section_name = (List.nth x 3) in
 				  if ((compare section_name ".text") <> 0) && 
 						((compare section_name ".ustack") <> 0) &&
-						((compare section_name ".tstack") <> 0) then
+						((compare section_name ".tstack") <> 0) &&
+						((compare section_name ".hdr") <> 0) then
 						begin
 							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
 								section_name section_name_var;
