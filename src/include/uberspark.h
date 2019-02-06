@@ -78,6 +78,8 @@ typedef void * uobj_entrystub_t;
 
 typedef struct {
 	uobj_entrystub_t entrystub;
+	uint8_t ustack_tos[MAX_PLATFORM_CPUS];
+	uint8_t tstack_tos[MAX_PLATFORM_CPUS];
 } __attribute__((packed)) uobj_info_t;
 
 typedef struct {
