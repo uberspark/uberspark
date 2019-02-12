@@ -5,7 +5,7 @@
 
 ###### archive name
 ARCHIVE = libusloader-linux-um.a
-ARCHIVE_DEPS = -lsample
+ARCHIVE_DEPS = -Wl,-l,hugetlbfs
 
 ###### create archive deps file
 #ARCHIVE_DEPSFILE = `echo $(ARCHIVE) | tr a-z A-Z`

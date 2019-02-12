@@ -52,7 +52,6 @@
 extern uint32_t sample_interface(uint32_t num);
 
 
-
 #endif /* __ASSEMBLY__ */
 
 #endif /*__USLOADER_LINUX_UM_H__ */
