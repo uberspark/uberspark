@@ -19,13 +19,15 @@ export USPARK_LOADERSDIR := $(USPARK_DIR)/loaders
 ###### targets
 
 .PHONY: all
-all: build-tools
+all: build-tools build-loaders
 
+.PHONY: build-loaders
+build-loaders:
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w all
 
 .PHONY: build-tools
 build-tools:
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w all
-	cd $(USPARK_LOADERSDIR) && $(MAKE) -w all
 	
 
 .PHONY: install-tools
