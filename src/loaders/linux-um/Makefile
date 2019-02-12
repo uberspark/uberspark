@@ -5,6 +5,11 @@
 
 ###### archive name
 ARCHIVE = libusloader-linux-um.a
+ARCHIVE_DEPS = -lsample
+
+###### create archive deps file
+#ARCHIVE_DEPSFILE = `echo $(ARCHIVE) | tr a-z A-Z`
+ARCHIVE_DEPSFILE = $(ARCHIVE).deps
 
 ###### compute source directory where this Makefile resides
 srcdir := $(dir $(lastword $(MAKEFILE_LIST)))
@@ -22,7 +27,8 @@ all: build
 
 .PHONY: build
 build: $(ARCHIVE)
-
+	@echo $(ARCHIVE_DEPS) >$(ARCHIVE_DEPSFILE)
+	
 $(ARCHIVE): $(OBJECTS)
 	$(AR) -rcs $(ARCHIVE) $(OBJECTS)
 
