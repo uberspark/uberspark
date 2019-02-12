@@ -46,6 +46,6 @@
 
 #include <uberspark.h>
 
-uint32_t sample_interface(uint32_t num1){
+uint32_t sample_interface(uint32_t num){
 	return num++;
 }
