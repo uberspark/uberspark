@@ -60,7 +60,6 @@
 #include <uberspark-config.h>
 #include <xmhf-hwm.h>
 
-
 #define USMF_STR(s) _USMF_STR(s)
 #define _USMF_STR(s) #s
 

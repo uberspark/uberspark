@@ -15,6 +15,8 @@ let g_uberspark_install_libsincludesdir = "@prefix@@ubersparkhomedir@@ubersparkl
 let g_uberspark_install_loadersdir = "@prefix@@ubersparkhomedir@@ubersparkloadersdir@";;
 let g_uberspark_install_loadersincludesdir = "@prefix@@ubersparkhomedir@@ubersparkloadersincludesdir@";;
 let g_uberspark_install_toolsdir = "@prefix@@ubersparkhomedir@@ubersparktoolsdir@";;
+
+let g_uberspark_basedefs = "-D__XMHF_TARGET_CPU_X86__ -D__XMHF_TARGET_CONTAINER_VMX__ -D__XMHF_TARGET_PLATFORM_X86PC__ -D__XMHF_TARGET_TRIAD_X86_VMX_X86PC__";;
  
 let main () =
 	let len = Array.length Sys.argv in
@@ -72,6 +74,14 @@ let main () =
 						print_string g_uberspark_install_toolsdir;
 	      				print_newline ();
 	      			end
+
+	      		else if (compare "--print-uberspark-basedefs" Sys.argv.(1)) = 0 then
+	      			begin
+						print_string g_uberspark_basedefs;
+	      				print_newline ();
+	      			end
+
+
 	      		else
 	      			begin
 						print_string "Invalid argument!";
