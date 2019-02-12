@@ -49,6 +49,8 @@ AC_SUBST([ubersparkhwmdir], ['/hwm'])
 AC_SUBST([ubersparkhwmincludedir], ['/hwm/include'])
 AC_SUBST([ubersparklibsdir], ['/libs'])
 AC_SUBST([ubersparklibsincludesdir], ['/libs/include'])
+AC_SUBST([ubersparkloadersdir], ['/loaders'])
+AC_SUBST([ubersparkloadersincludesdir], ['/loaders/include'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
 
 AC_CONFIG_FILES(
