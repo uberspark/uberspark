@@ -28,6 +28,7 @@ install-loaders:
 	$(MKDIR) -p $(USPARK_INSTALL_LOADERSDIR)
 	$(MKDIR) -p $(USPARK_INSTALL_LOADERSINCLUDESDIR)
 	$(CP) -f $(USPARK_LOADERSDIR)/linux-um/libusloader-linux-um.a $(USPARK_INSTALL_LOADERSDIR)/.
+	$(CP) -f $(USPARK_LOADERSDIR)/linux-um/libusloader-linux-um.a.deps $(USPARK_INSTALL_LOADERSDIR)/.
 	$(CP) -f $(USPARK_LOADERSDIR)/linux-um/usloader-linux-um.h $(USPARK_INSTALL_LOADERSINCLUDESDIR)/.
 	
 
