@@ -2,35 +2,36 @@
 # top-level Makefile for uberspark loaders
 # author: amit vasudevan (amitvasudevan@acm.org)
 #
+
+###### archive name
+ARCHIVE = libusloader-linux-um.a
+
+###### compute source directory where this Makefile resides
 srcdir := $(dir $(lastword $(MAKEFILE_LIST)))
 vpath %.c $(srcdir)
 
-# bring in common definitions
-include $(srcdir)/../../../common.mk
-
-
+###### populate sources and objects
 C_SOURCES := $(wildcard $(srcdir)/*.c)
 C_SOURCES := $(patsubst $(srcdir)/%, %, $(C_SOURCES))
-
 OBJECTS = $(patsubst %.c, %.o, $(C_SOURCES))
 
-OBJECTS_DIR = _objs_libusloader-linux-um
-THE_ARCHIVE = libusloader-linux-um.a
 
-# targets
+###### targets
 .PHONY: all
-all: $(THE_ARCHIVE)
+all: build
 
-$(THE_ARCHIVE): $(OBJECTS)
-	cd $(OBJECTS_DIR) && $(AR) -rcs $(THE_ARCHIVE) $(OBJECTS)
-	$(CP) $(OBJECTS_DIR)/$(THE_ARCHIVE) .
+.PHONY: build
+build: $(ARCHIVE)
+
+$(ARCHIVE): $(OBJECTS)
+	$(AR) -rcs $(ARCHIVE) $(OBJECTS)
 
 %.o: %.c
-	mkdir -p $(OBJECTS_DIR)
 	@echo Building "$@" from "$<"
-	$(CC) -c $(CC_CFLAGS) -o $(OBJECTS_DIR)/$@ $<
+	$(CC) -c $(CC_CFLAGS) -o $@ $<
+
 
 .PHONY: clean
 clean:
-	$(RM) -rf $(OBJECTS_DIR)
-
+	$(RM) $(OBJECTS)
+	$(RM) $(ARCHIVE)
