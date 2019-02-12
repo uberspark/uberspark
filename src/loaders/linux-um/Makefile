@@ -28,7 +28,7 @@ $(THE_ARCHIVE): $(OBJECTS)
 %.o: %.c
 	mkdir -p $(OBJECTS_DIR)
 	@echo Building "$@" from "$<"
-	$(CC) -c $(C_FLAGS) -o $(OBJECTS_DIR)/$@ $<
+	$(CC) -c $(CC_CFLAGS) -o $(OBJECTS_DIR)/$@ $<
 
 .PHONY: clean
 clean:

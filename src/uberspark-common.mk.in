@@ -102,7 +102,15 @@ V_FLAGS += -cpp-extra-args=-I$(USPARK_INSTALL_HWMINCLUDEDIR)
 V_FLAGS += -cpp-extra-args=-I$(USPARK_INSTALL_LIBSINCLUDESDIR)
 V_FLAGS += $(USPARK_VERIFICATION_DEFS)
 
+
+###### regular c compiler includes
+CC_FLAGS = -O
+
+
+
 ###### compcert C and CASM flag definitions, assembly flag definitions
 export CCERT_CFLAGS = -O $(CCERT_FLAGS) $(USPARK_COMPILER_DEFS) 
 export CCERT_CASMFLAGS = -O0 $(CCERT_FLAGS) $(USPARK_COMPILER_DEFS)
 export ASMFLAGS = $(I_FLAGS) $(USPARK_COMPILER_DEFS) -D__ASSEMBLY__
+
+export CC_CFLAGS = $(CC_FLAGS) $(USPARK_COMPILER_DEFS) 
