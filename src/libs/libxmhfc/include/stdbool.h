@@ -51,8 +51,7 @@
 
 #ifndef __ASSEMBLY__
 
-typedef int boolean_t;
-typedef boolean_t bool;
+typedef int bool;
 #define true 1
 #define false 0
 #define __bool_true_false_are_defined

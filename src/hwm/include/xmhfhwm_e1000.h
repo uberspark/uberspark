@@ -302,8 +302,8 @@ struct e1000_eeprom_info {
     uint16_t address_bits;
     uint16_t delay_usec;
     uint16_t page_size;
-    boolean_t use_eerd;
-    boolean_t use_eewr;
+    bool use_eerd;
+    bool use_eewr;
 };
 
 /* Flex ASF Information */
@@ -985,7 +985,7 @@ struct e1000_hw {
 	uint32_t		ledctl_default;
 	uint32_t		ledctl_mode1;
 	uint32_t		ledctl_mode2;
-	boolean_t		tx_pkt_filtering;
+	bool		tx_pkt_filtering;
 	uint16_t		phy_spd_default;
 	uint16_t		autoneg_advertised;
 	uint16_t		pci_cmd_word;
@@ -1009,28 +1009,28 @@ struct e1000_hw {
 	uint8_t			dma_fairness;
 	uint8_t			mac_addr[NODE_ADDRESS_SIZE];
 	uint8_t			perm_mac_addr[NODE_ADDRESS_SIZE];
-	boolean_t		disable_polarity_correction;
-	boolean_t		speed_downgraded;
-	boolean_t		get_link_status;
-	boolean_t		serdes_link_down;
-	boolean_t		tbi_compatibility_en;
-	boolean_t		tbi_compatibility_on;
-	boolean_t		laa_is_present;
-	boolean_t		phy_reset_disable;
-	boolean_t		initialize_hw_bits_disable;
-	boolean_t		fc_send_xon;
-	boolean_t		fc_strict_ieee;
-	boolean_t		report_tx_early;
-	boolean_t		adaptive_ifs;
-	boolean_t		ifs_params_forced;
-	boolean_t		in_ifs_mode;
-	boolean_t		mng_reg_access_disabled;
-	boolean_t		leave_av_bit_off;
-	boolean_t		kmrn_lock_loss_workaround_disabled;
-	boolean_t		bad_tx_carr_stats_fd;
-	boolean_t		has_manc2h;
-	boolean_t		rx_needs_kicking;
-	boolean_t		has_smbus;
+	bool		disable_polarity_correction;
+	bool		speed_downgraded;
+	bool		get_link_status;
+	bool		serdes_link_down;
+	bool		tbi_compatibility_en;
+	bool		tbi_compatibility_on;
+	bool		laa_is_present;
+	bool		phy_reset_disable;
+	bool		initialize_hw_bits_disable;
+	bool		fc_send_xon;
+	bool		fc_strict_ieee;
+	bool		report_tx_early;
+	bool		adaptive_ifs;
+	bool		ifs_params_forced;
+	bool		in_ifs_mode;
+	bool		mng_reg_access_disabled;
+	bool		leave_av_bit_off;
+	bool		kmrn_lock_loss_workaround_disabled;
+	bool		bad_tx_carr_stats_fd;
+	bool		has_manc2h;
+	bool		rx_needs_kicking;
+	bool		has_smbus;
 };
 
 
