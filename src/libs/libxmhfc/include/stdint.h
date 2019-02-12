@@ -309,15 +309,6 @@ typedef __uintptr_t             uintptr_t;
 #define _INTPTR_T_DECLARED
 #endif
 
-typedef uint8_t         uint8_t;
-typedef uint16_t        uint16_t;
-typedef uint32_t        uint32_t;
-typedef uint64_t        uint64_t;
-
-typedef int64_t         s64;
-typedef int32_t         s32;
-typedef int16_t         s16;
-typedef int8_t          s8;
 
 typedef __uint8_t       u_int8_t;       /* unsigned integrals (deprecated) */
 typedef __uint16_t      u_int16_t;
