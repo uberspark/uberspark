@@ -1,15 +1,15 @@
 /*
- * @XMHF_LICENSE_HEADER_START@
+ * @UBERSPARK_LICENSE_HEADER_START@
  *
- * eXtensible, Modular Hypervisor Framework (XMHF)
- * Copyright (c) 2009-2012 Carnegie Mellon University
- * Copyright (c) 2010-2012 VDG Inc.
+ * uberSpark
+ * Copyright (c) 2016-2019 Carnegie Mellon University
+ * Copyright (c) 2017-2019 Carnegie Mellon University / SEI
+ * Copyright (c) 2016-2019 Amit Vasudevan
  * All Rights Reserved.
  *
- * Developed by: XMHF Team
- *               Carnegie Mellon University / CyLab
- *               VDG Inc.
- *               http://xmhf.org
+ * Developed by: uberSpark Team
+ *               Carnegie Mellon University / SEI
+ *               http://uberspark.org
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,7 +23,7 @@
  * the documentation and/or other materials provided with the
  * distribution.
  *
- * Neither the names of Carnegie Mellon or VDG Inc, nor the names of
+ * Neither the names of Carnegie Mellon or SEI, nor the names of
  * its contributors may be used to endorse or promote products derived
  * from this software without specific prior written permission.
  *
@@ -41,19 +41,17 @@
  * THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @XMHF_LICENSE_HEADER_END@
+ * @UBERSPARK_LICENSE_HEADER_END@
  */
 
-//author: amit vasudevan (amitvasudevan@acm.org)
+#ifndef __USLOADER_LINUX_UM_H__
+#define __USLOADER_LINUX_UM_H__
 
-#include <uberspark.h>
-#include <xmhfhw.h>
 
-CASM_FUNCDEF(uint64_t, read_rsp,
-{
-    xmhfhwm_cpu_insn_xorl_edx_edx();
-    xmhfhwm_cpu_insn_movl_esp_eax();
-    xmhfhwm_cpu_insn_retu64();
-},
-void *noparam)
+#ifndef __ASSEMBLY__
+extern uint32_t sample_interface(uint32_t num);
 
+
+#endif /* __ASSEMBLY__ */
+
+#endif /*__USLOADER_LINUX_UM_H__ */

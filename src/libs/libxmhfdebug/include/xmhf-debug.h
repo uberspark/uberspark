@@ -75,7 +75,7 @@ static inline void xmhf_debug_init(char *params){
   xmhfhw_platform_serial_init(params);
 }
 
-extern __attribute__(( section(".data") )) u32 libxmhfdebug_lock;
+extern __attribute__(( section(".data") )) uint32_t libxmhfdebug_lock;
 
 static inline void _XDPRINTF_(const char *fmt, ...){
     va_list       ap;

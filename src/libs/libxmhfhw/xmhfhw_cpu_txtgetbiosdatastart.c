@@ -52,7 +52,7 @@
 /*@
 	assigns \nothing;
 @*/
-u32 get_bios_data_start(u32 heap_memaddr, uint32_t heap_size)
+uint32_t get_bios_data_start(uint32_t heap_memaddr, uint32_t heap_size)
 {
-	return (u32)(heap_memaddr + sizeof(uint64_t));
+	return (uint32_t)(heap_memaddr + sizeof(uint64_t));
 }

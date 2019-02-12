@@ -69,9 +69,9 @@ CASM_FUNCDEF(void, xmhfhw_cpu_invvpid,
     xmhfhwm_cpu_insn_addl_imm_esp(0x10);		//remove 128-bits and reset esp to incoming frame
     xmhfhwm_cpu_insn_ret();						//return
 },
-u32 invalidation_type,
-u32 vpid,
-u32 linear_addr_lo,
-u32 linear_addr_hi)
+uint32_t invalidation_type,
+uint32_t vpid,
+uint32_t linear_addr_lo,
+uint32_t linear_addr_hi)
 
 

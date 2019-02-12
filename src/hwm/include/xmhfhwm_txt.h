@@ -56,38 +56,38 @@
 #ifndef __ASSEMBLY__
 
 typedef struct {
-	u64 biosdatasize;
+	uint64_t biosdatasize;
         bios_data_t biosdata;
-	u64 osmledatasize;
-	u8 osmledata[PAGE_SIZE_4K];
-	u64 ossinitdatasize;
+	uint64_t osmledatasize;
+	uint8_t osmledata[PAGE_SIZE_4K];
+	uint64_t ossinitdatasize;
         os_sinit_data_t ossinitdata;
-	u64 sinitmledatasize;
+	uint64_t sinitmledatasize;
         sinit_mle_data_t sinitmledata;
 } __attribute__((packed)) xmhfhwm_txt_heap_t;
 
 extern xmhfhwm_txt_heap_t xmhfhwm_txt_heap;
 
-extern u32 xmhfhwm_txt_heap_base_hi;
-extern u32 xmhfhwm_txt_heap_base_lo;
+extern uint32_t xmhfhwm_txt_heap_base_hi;
+extern uint32_t xmhfhwm_txt_heap_base_lo;
 
-extern u32 xmhfhwm_txt_heap_size_hi;
-extern u32 xmhfhwm_txt_heap_size_lo;
+extern uint32_t xmhfhwm_txt_heap_size_hi;
+extern uint32_t xmhfhwm_txt_heap_size_lo;
 
-extern u32 xmhfhwm_txt_mle_join_hi;
-extern u32 xmhfhwm_txt_mle_join_lo;
+extern uint32_t xmhfhwm_txt_mle_join_hi;
+extern uint32_t xmhfhwm_txt_mle_join_lo;
 
-extern u32 xmhfhwm_txt_rlp_wakeup_addr;
-
-
-extern void xmhfhwm_vdriver_txt_write_rlp_wakeup_addr(u32 oldval, u32 newval);
+extern uint32_t xmhfhwm_txt_rlp_wakeup_addr;
 
 
+extern void xmhfhwm_vdriver_txt_write_rlp_wakeup_addr(uint32_t oldval, uint32_t newval);
 
-bool _impl_xmhfhwm_txt_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result);
-bool _impl_xmhfhwm_txt_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value);
+
+
+bool _impl_xmhfhwm_txt_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_xmhfhwm_txt_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
 bool _impl_xmhfhwm_txt_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size);
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size);
 
 
 #endif // __ASSEMBLY__

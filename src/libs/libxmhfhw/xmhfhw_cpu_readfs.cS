@@ -50,7 +50,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u32, read_segreg_fs,
+CASM_FUNCDEF(uint32_t, read_segreg_fs,
 {
   xmhfhwm_cpu_insn_movl_fs_eax();
   xmhfhwm_cpu_insn_retu32();

@@ -13,12 +13,21 @@ export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_HWMDIR := $(USPARK_DIR)/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/tools
+export USPARK_LOADERSDIR := $(USPARK_DIR)/loaders
 
 
 ###### targets
 
 .PHONY: all
-all: build-tools
+all: build-tools build-loaders
+
+.PHONY: build-loaders
+build-loaders:
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w build
+
+.PHONY: install-loaders
+install-loaders:
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w install
 
 
 .PHONY: build-tools
@@ -60,7 +69,7 @@ install-hwm:
 	$(CP) -rf $(USPARK_HWMDIR)/* $(USPARK_INSTALL_HWMDIR)/.
 
 .PHONY: install
-install: install-tools install-hdrs install-hwm
+install: install-tools install-loaders install-hdrs install-hwm
 
 
 .PHONY: clean

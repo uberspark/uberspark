@@ -52,7 +52,7 @@
 
 
 
-CASM_FUNCDEF(u32, read_cr2,
+CASM_FUNCDEF(uint32_t, read_cr2,
 {
   xmhfhwm_cpu_insn_movl_cr2_eax();
   xmhfhwm_cpu_insn_retu32();

@@ -161,8 +161,8 @@
 	requires \valid(value);
 	assigns *value;
 @*/
-void xmhf_baseplatform_arch_x86_pci_type1_read(u32 bus, u32 device, u32 function, u32 index, u32 len,
-			u32 *value){
+void xmhf_baseplatform_arch_x86_pci_type1_read(uint32_t bus, uint32_t device, uint32_t function, uint32_t index, uint32_t len,
+			uint32_t *value){
 
 	//sanity checks
 	if ( bus > 255 || PCI_DEVICE_FN(device,function) > 255 || index > 4095)
@@ -174,13 +174,13 @@ void xmhf_baseplatform_arch_x86_pci_type1_read(u32 bus, u32 device, u32 function
 	//read a byte, word or dword depending on len
 	switch (len) {
 		case 1:	//byte
-		  *value = (u32) CASM_FUNCCALL(inb,PCI_CONFIG_DATA_PORT + (index & 3));
+		  *value = (uint32_t) CASM_FUNCCALL(inb,PCI_CONFIG_DATA_PORT + (index & 3));
 		  break;
 		case 2:	//word
-		  *value = (u32) CASM_FUNCCALL(inw,PCI_CONFIG_DATA_PORT + (index & 2));
+		  *value = (uint32_t) CASM_FUNCCALL(inw,PCI_CONFIG_DATA_PORT + (index & 2));
 		  break;
 		case 4:	//dword
-		  *value = (u32 ) CASM_FUNCCALL(inl,PCI_CONFIG_DATA_PORT);
+		  *value = (uint32_t ) CASM_FUNCCALL(inl,PCI_CONFIG_DATA_PORT);
 		  break;
 		default:
 		  *value = 0;

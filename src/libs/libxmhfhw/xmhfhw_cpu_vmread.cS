@@ -52,12 +52,12 @@
 
 
 
-CASM_FUNCDEF(u32, xmhfhw_cpu_x86vmx_vmread,
+CASM_FUNCDEF(uint32_t, xmhfhw_cpu_x86vmx_vmread,
 {
     xmhfhwm_cpu_insn_movl_mesp_ecx(0x4);
     xmhfhwm_cpu_insn_vmread_ecx_eax();
     xmhfhwm_cpu_insn_retu32();
 },
-u32 encoding)
+uint32_t encoding)
 
 

@@ -62,16 +62,16 @@ xmhfhwm_txt_heap_t xmhfhwm_txt_heap = {
 	.sinitmledata.rlp_wakeup_addr = XMHFHWM_TXT_SYSMEM_RLPWAKEUPADDR,
 };
 
-u32 xmhfhwm_txt_heap_base_hi=0;
-u32 xmhfhwm_txt_heap_base_lo=XMHFHWM_TXT_SYSMEM_HEAPBASE;
+uint32_t xmhfhwm_txt_heap_base_hi=0;
+uint32_t xmhfhwm_txt_heap_base_lo=XMHFHWM_TXT_SYSMEM_HEAPBASE;
 
-u32 xmhfhwm_txt_heap_size_hi=0;
-u32 xmhfhwm_txt_heap_size_lo=sizeof(xmhfhwm_txt_heap);
+uint32_t xmhfhwm_txt_heap_size_hi=0;
+uint32_t xmhfhwm_txt_heap_size_lo=sizeof(xmhfhwm_txt_heap);
 
-u32 xmhfhwm_txt_mle_join_hi=0;
-u32 xmhfhwm_txt_mle_join_lo=0;
+uint32_t xmhfhwm_txt_mle_join_hi=0;
+uint32_t xmhfhwm_txt_mle_join_lo=0;
 
-u32 xmhfhwm_txt_rlp_wakeup_addr=0;
+uint32_t xmhfhwm_txt_rlp_wakeup_addr=0;
 
 static unsigned char *xmhfhwm_txt_memcpy(unsigned char *dst, const unsigned char *src, size_t n)
 {
@@ -87,37 +87,37 @@ static unsigned char *xmhfhwm_txt_memcpy(unsigned char *dst, const unsigned char
 }
 
 
-bool _impl_xmhfhwm_txt_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result){
+bool _impl_xmhfhwm_txt_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result){
 	bool retval = true;
 
 	if(sysmemaddr == (TXT_PUB_CONFIG_REGS_BASE+TXTCR_HEAP_BASE)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_heap_base_lo;
+		*read_result = (uint64_t)xmhfhwm_txt_heap_base_lo;
 
 	}else if(sysmemaddr == (TXT_PUB_CONFIG_REGS_BASE+TXTCR_HEAP_BASE+0x4)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_heap_base_hi;
+		*read_result = (uint64_t)xmhfhwm_txt_heap_base_hi;
 
 	}else if(sysmemaddr == (TXT_PUB_CONFIG_REGS_BASE+TXTCR_HEAP_SIZE)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_heap_size_lo;
+		*read_result = (uint64_t)xmhfhwm_txt_heap_size_lo;
 
 	}else if(sysmemaddr == (TXT_PUB_CONFIG_REGS_BASE+TXTCR_HEAP_SIZE+0x4)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_heap_size_hi;
+		*read_result = (uint64_t)xmhfhwm_txt_heap_size_hi;
 
 	}else if(sysmemaddr == (TXT_PRIV_CONFIG_REGS_BASE+TXTCR_MLE_JOIN)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_mle_join_lo;
+		*read_result = (uint64_t)xmhfhwm_txt_mle_join_lo;
 
 	}else if(sysmemaddr == (TXT_PRIV_CONFIG_REGS_BASE+TXTCR_MLE_JOIN+0x4)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_txt_mle_join_hi;
+		*read_result = (uint64_t)xmhfhwm_txt_mle_join_hi;
 
 	}else if(sysmemaddr >= XMHFHWM_TXT_SYSMEM_HEAPBASE &&
 		sysmemaddr < (XMHFHWM_TXT_SYSMEM_HEAPBASE+sizeof(xmhfhwm_txt_heap))){
 		//@assert (readsize == SYSMEMREADU32);
-                *read_result = (u64) *((u32 *)((u32)&xmhfhwm_txt_heap + (sysmemaddr - XMHFHWM_TXT_SYSMEM_HEAPBASE)));
+                *read_result = (uint64_t) *((uint32_t *)((uint32_t)&xmhfhwm_txt_heap + (sysmemaddr - XMHFHWM_TXT_SYSMEM_HEAPBASE)));
 	}else{
 		retval= false;
 	}
@@ -127,21 +127,21 @@ bool _impl_xmhfhwm_txt_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_re
 }
 
 
-bool _impl_xmhfhwm_txt_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value){
+bool _impl_xmhfhwm_txt_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value){
 	bool retval = false;
 
 	if(sysmemaddr == (TXT_PRIV_CONFIG_REGS_BASE+TXTCR_MLE_JOIN)){
 		//@assert writesize == SYSMEMWRITEU32;
-		xmhfhwm_txt_mle_join_lo = (u32)write_value;
+		xmhfhwm_txt_mle_join_lo = (uint32_t)write_value;
 		retval = true;
 	}else if(sysmemaddr == (TXT_PRIV_CONFIG_REGS_BASE+TXTCR_MLE_JOIN+0x4)){
 		//@assert writesize == SYSMEMWRITEU32;
-		xmhfhwm_txt_mle_join_hi = (u32)write_value;
+		xmhfhwm_txt_mle_join_hi = (uint32_t)write_value;
 		retval = true;
 	}else if(sysmemaddr == XMHFHWM_TXT_SYSMEM_RLPWAKEUPADDR){
 		//@assert writesize == SYSMEMWRITEU32;
-		xmhfhwm_vdriver_txt_write_rlp_wakeup_addr(xmhfhwm_txt_rlp_wakeup_addr, (u32)write_value);
-		xmhfhwm_txt_rlp_wakeup_addr = (u32)write_value;
+		xmhfhwm_vdriver_txt_write_rlp_wakeup_addr(xmhfhwm_txt_rlp_wakeup_addr, (uint32_t)write_value);
+		xmhfhwm_txt_rlp_wakeup_addr = (uint32_t)write_value;
 		retval = true;
 	}else{
 
@@ -154,7 +154,7 @@ bool _impl_xmhfhwm_txt_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write
 
 
 bool _impl_xmhfhwm_txt_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size){
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size){
 	bool retval = true;
 
 	if(sysmemcopy_type == SYSMEMCOPYSYS2OBJ){
@@ -163,7 +163,7 @@ bool _impl_xmhfhwm_txt_sysmemcopy(sysmem_copy_t sysmemcopy_type,
 		if(srcaddr >= XMHFHWM_TXT_SYSMEM_HEAPBASE &&
 			(srcaddr+size-1) < (XMHFHWM_TXT_SYSMEM_HEAPBASE+sizeof(xmhfhwm_txt_heap))){
 			//@assert \valid((unsigned char *)dstaddr + (0..(size-1)));
-			xmhfhwm_txt_memcpy(dstaddr, ((u32)&xmhfhwm_txt_heap+(srcaddr-XMHFHWM_TXT_SYSMEM_HEAPBASE)), size);
+			xmhfhwm_txt_memcpy(dstaddr, ((uint32_t)&xmhfhwm_txt_heap+(srcaddr-XMHFHWM_TXT_SYSMEM_HEAPBASE)), size);
 		}else{
 			//@assert 1;
 			retval = false;

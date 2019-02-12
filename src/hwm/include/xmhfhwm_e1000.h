@@ -68,18 +68,18 @@
 
 
 //#define e1000_readl(addr)		*(volatile unsigned int *)(addr)
-//#define e1000_writel(value, addr)	*(volatile unsigned int *)(addr) = (u32)(value)
+//#define e1000_writel(value, addr)	*(volatile unsigned int *)(addr) = (uint32_t)(value)
 //#define e1000_readw(addr)		*(volatile unsigned short *)(addr)
-//#define e1000_writew(value, addr)	*(volatile unsigned short *)(addr) = (u16)(value)
+//#define e1000_writew(value, addr)	*(volatile unsigned short *)(addr) = (uint16_t)(value)
 //#define e1000_readb(addr)		*(volatile unsigned char *)(addr)
-//#define e1000_writeb(value, addr)	*(volatile unsigned char *)(addr) = (u8)(value)
+//#define e1000_writeb(value, addr)	*(volatile unsigned char *)(addr) = (uint8_t)(value)
 
 #define e1000_readl(addr)		CASM_FUNCCALL(xmhfhw_sysmemaccess_readu32, addr)
 #define e1000_writel(value, addr)	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu32, addr, value)
 #define e1000_readw(addr)		CASM_FUNCCALL(xmhfhw_sysmemaccess_readu16, addr)
-#define e1000_writew(value, addr)	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu16, addr, (u16)value)
+#define e1000_writew(value, addr)	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu16, addr, (uint16_t)value)
 #define e1000_readb(addr)		CASM_FUNCCALL(xmhfhw_sysmemaccess_readu8, addr)
-#define e1000_writeb(value, addr)	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu8, addr, (u8)value)
+#define e1000_writeb(value, addr)	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu8, addr, (uint8_t)value)
 
 /* 128M configuration, two descriptors describe one 8K packet */
 #define E1000_DESC_COUNT	0x1		// no. of descriptors
@@ -149,7 +149,7 @@ struct e1000_adapter;
 #define e1000_cpu_to_le64(x)	(x)
 #define e1000_cpu_to_le32(x)	(x)
 
-void e1000_delay(u64 count);
+void e1000_delay(uint64_t count);
 
 #define e1000_udelay(n)	e1000_delay(n * 3000)
 #define e1000_mdelay(n)	e1000_delay(n * 3000000)
@@ -302,8 +302,8 @@ struct e1000_eeprom_info {
     uint16_t address_bits;
     uint16_t delay_usec;
     uint16_t page_size;
-    boolean_t use_eerd;
-    boolean_t use_eewr;
+    bool use_eerd;
+    bool use_eewr;
 };
 
 /* Flex ASF Information */
@@ -985,7 +985,7 @@ struct e1000_hw {
 	uint32_t		ledctl_default;
 	uint32_t		ledctl_mode1;
 	uint32_t		ledctl_mode2;
-	boolean_t		tx_pkt_filtering;
+	bool		tx_pkt_filtering;
 	uint16_t		phy_spd_default;
 	uint16_t		autoneg_advertised;
 	uint16_t		pci_cmd_word;
@@ -1009,28 +1009,28 @@ struct e1000_hw {
 	uint8_t			dma_fairness;
 	uint8_t			mac_addr[NODE_ADDRESS_SIZE];
 	uint8_t			perm_mac_addr[NODE_ADDRESS_SIZE];
-	boolean_t		disable_polarity_correction;
-	boolean_t		speed_downgraded;
-	boolean_t		get_link_status;
-	boolean_t		serdes_link_down;
-	boolean_t		tbi_compatibility_en;
-	boolean_t		tbi_compatibility_on;
-	boolean_t		laa_is_present;
-	boolean_t		phy_reset_disable;
-	boolean_t		initialize_hw_bits_disable;
-	boolean_t		fc_send_xon;
-	boolean_t		fc_strict_ieee;
-	boolean_t		report_tx_early;
-	boolean_t		adaptive_ifs;
-	boolean_t		ifs_params_forced;
-	boolean_t		in_ifs_mode;
-	boolean_t		mng_reg_access_disabled;
-	boolean_t		leave_av_bit_off;
-	boolean_t		kmrn_lock_loss_workaround_disabled;
-	boolean_t		bad_tx_carr_stats_fd;
-	boolean_t		has_manc2h;
-	boolean_t		rx_needs_kicking;
-	boolean_t		has_smbus;
+	bool		disable_polarity_correction;
+	bool		speed_downgraded;
+	bool		get_link_status;
+	bool		serdes_link_down;
+	bool		tbi_compatibility_en;
+	bool		tbi_compatibility_on;
+	bool		laa_is_present;
+	bool		phy_reset_disable;
+	bool		initialize_hw_bits_disable;
+	bool		fc_send_xon;
+	bool		fc_strict_ieee;
+	bool		report_tx_early;
+	bool		adaptive_ifs;
+	bool		ifs_params_forced;
+	bool		in_ifs_mode;
+	bool		mng_reg_access_disabled;
+	bool		leave_av_bit_off;
+	bool		kmrn_lock_loss_workaround_disabled;
+	bool		bad_tx_carr_stats_fd;
+	bool		has_manc2h;
+	bool		rx_needs_kicking;
+	bool		has_smbus;
 };
 
 
@@ -2942,7 +2942,7 @@ struct e1000_host_command_info {
 //////
 // e1000e top-level definitions
 
-typedef u32 e1000_dma_addr_t;
+typedef uint32_t e1000_dma_addr_t;
 
 #define E1000_DBG(args...)
 #define E1000_ERR(args...) printk(KERN_ERR "e1000: " args)
@@ -3041,24 +3041,24 @@ struct e1000_adapter {
 
 
 
-extern void cbhwm_e1000_write_tdt(u32 origval, u32 newval);
-extern void cbhwm_e1000_write_tdbah(u32 origval, u32 newval);
-extern void cbhwm_e1000_write_tdbal(u32 origval, u32 newval);
-extern void cbhwm_e1000_write_tdlen(u32 origval, u32 newval);
+extern void cbhwm_e1000_write_tdt(uint32_t origval, uint32_t newval);
+extern void cbhwm_e1000_write_tdbah(uint32_t origval, uint32_t newval);
+extern void cbhwm_e1000_write_tdbal(uint32_t origval, uint32_t newval);
+extern void cbhwm_e1000_write_tdlen(uint32_t origval, uint32_t newval);
 
 
-bool _impl_xmhfhwm_e1000_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result);
-bool _impl_xmhfhwm_e1000_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value);
+bool _impl_xmhfhwm_e1000_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_xmhfhwm_e1000_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
 
-extern u32 xmhfhwm_e1000_tctl; 	//transmit control register, E1000_TCTL
-extern u32 xmhfhwm_e1000_tdt; 	//transmit descriptor tail, E1000_TDT
-extern u32 xmhfhwm_e1000_tdh; 	//transmit descriptor head, E1000_TDH
+extern uint32_t xmhfhwm_e1000_tctl; 	//transmit control register, E1000_TCTL
+extern uint32_t xmhfhwm_e1000_tdt; 	//transmit descriptor tail, E1000_TDT
+extern uint32_t xmhfhwm_e1000_tdh; 	//transmit descriptor head, E1000_TDH
 
-extern u32 xmhfhwm_e1000_tdbah;		//E1000_TDBAH, high-32bits of transmit descriptor base address
-extern u32 xmhfhwm_e1000_tdbal;		//E1000_TDBAL, low-32bits of transmit descriptor base address
-extern u32 xmhfhwm_e1000_tdlen;		//E1000_TDLEN, descroptor length
-extern u32 xmhfhwm_e1000_swsm;		//E1000_SWSM, sw semaphore
-extern u32 xmhfhwm_e1000_eecd;		//E1000_EECD, eeprom/flash control
+extern uint32_t xmhfhwm_e1000_tdbah;		//E1000_TDBAH, high-32bits of transmit descriptor base address
+extern uint32_t xmhfhwm_e1000_tdbal;		//E1000_TDBAL, low-32bits of transmit descriptor base address
+extern uint32_t xmhfhwm_e1000_tdlen;		//E1000_TDLEN, descroptor length
+extern uint32_t xmhfhwm_e1000_swsm;		//E1000_SWSM, sw semaphore
+extern uint32_t xmhfhwm_e1000_eecd;		//E1000_EECD, eeprom/flash control
 
 
 extern bool xmhfhwm_e1000_status_transmitting; // true if transmitting, false if not

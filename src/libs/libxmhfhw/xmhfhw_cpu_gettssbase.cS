@@ -51,7 +51,7 @@
 
 
 
-CASM_FUNCDEF(u64,  xmhf_baseplatform_arch_x86_gettssbase,
+CASM_FUNCDEF(uint64_t,  xmhf_baseplatform_arch_x86_gettssbase,
 {
     xmhfhwm_cpu_insn_subl_imm_esp(0x8);
     xmhfhwm_cpu_insn_sgdt_mesp(0x0);

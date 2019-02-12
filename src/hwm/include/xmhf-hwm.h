@@ -68,9 +68,9 @@
 #ifndef __ASSEMBLY__
 
 	typedef struct {
-		u32 addr_start;
-		u32 addr_end;
-		u32 protection;
+		uint32_t addr_start;
+		uint32_t addr_end;
+		uint32_t protection;
 	} physmem_extent_t;
 
 	typedef enum {

@@ -52,29 +52,29 @@
 
 #include <uberspark.h>
 
-u32 xmhfhwm_e1000_tctl=0; 	//transmit control register, E1000_TCTL
-u32 xmhfhwm_e1000_tdt=0; 	//transmit descriptor tail, E1000_TDT
-u32 xmhfhwm_e1000_tdh=0; 	//transmit descriptor head, E1000_TDH
-u32 xmhfhwm_e1000_tdbah;		//E1000_TDBAH, high-32bits of transmit descriptor base address
-u32 xmhfhwm_e1000_tdbal;		//E1000_TDBAL, low-32bits of transmit descriptor base address
-u32 xmhfhwm_e1000_tdlen;		//E1000_TDLEN, descroptor length
-u32 xmhfhwm_e1000_swsm;		//E1000_SWSM, sw semaphore
-u32 xmhfhwm_e1000_eecd;		//E1000_EECD, eeprom/flash control
+uint32_t xmhfhwm_e1000_tctl=0; 	//transmit control register, E1000_TCTL
+uint32_t xmhfhwm_e1000_tdt=0; 	//transmit descriptor tail, E1000_TDT
+uint32_t xmhfhwm_e1000_tdh=0; 	//transmit descriptor head, E1000_TDH
+uint32_t xmhfhwm_e1000_tdbah;		//E1000_TDBAH, high-32bits of transmit descriptor base address
+uint32_t xmhfhwm_e1000_tdbal;		//E1000_TDBAL, low-32bits of transmit descriptor base address
+uint32_t xmhfhwm_e1000_tdlen;		//E1000_TDLEN, descroptor length
+uint32_t xmhfhwm_e1000_swsm;		//E1000_SWSM, sw semaphore
+uint32_t xmhfhwm_e1000_eecd;		//E1000_EECD, eeprom/flash control
 
 bool xmhfhwm_e1000_status_transmitting = false; // true if transmitting, false if not
 
 
-bool _impl_xmhfhwm_e1000_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result){
+bool _impl_xmhfhwm_e1000_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result){
 
 	if(sysmemaddr >= E1000_HWADDR_BASE && sysmemaddr < (E1000_HWADDR_BASE + E1000_HWADDR_SIZE)){
 		switch((sysmemaddr - E1000_HWADDR_BASE)){
 			case E1000_TCTL:{
-				*read_result = (u64)xmhfhwm_e1000_tctl;
+				*read_result = (uint64_t)xmhfhwm_e1000_tctl;
 				return true;
 			}
 
 			case E1000_TDT:{
-				*read_result = (u64)xmhfhwm_e1000_tdt;
+				*read_result = (uint64_t)xmhfhwm_e1000_tdt;
 				return true;
 			}
 
@@ -84,33 +84,33 @@ bool _impl_xmhfhwm_e1000_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_
 					xmhfhwm_e1000_tdh = xmhfhwm_e1000_tdt;
 					xmhfhwm_e1000_status_transmitting=false;
 				}
-				*read_result = (u64)xmhfhwm_e1000_tdh;
+				*read_result = (uint64_t)xmhfhwm_e1000_tdh;
 				return true;
 			}
 
 			case E1000_TDBAH:{
-				*read_result = (u64)xmhfhwm_e1000_tdbah;
+				*read_result = (uint64_t)xmhfhwm_e1000_tdbah;
 				return true;
 			}
 
 			case E1000_TDBAL:{
-				*read_result = (u64)xmhfhwm_e1000_tdbal;
+				*read_result = (uint64_t)xmhfhwm_e1000_tdbal;
 				return true;
 			}
 
 
 			case E1000_TDLEN:{
-				*read_result = (u64)xmhfhwm_e1000_tdlen;
+				*read_result = (uint64_t)xmhfhwm_e1000_tdlen;
 				return true;
 			}
 
 			case E1000_SWSM:{
-				*read_result = (u64)xmhfhwm_e1000_swsm;
+				*read_result = (uint64_t)xmhfhwm_e1000_swsm;
 				return true;
 			}
 
 			case E1000_EECD:{
-				*read_result = (u64)xmhfhwm_e1000_eecd;
+				*read_result = (uint64_t)xmhfhwm_e1000_eecd;
 				return true;
 			}
 
@@ -124,55 +124,55 @@ bool _impl_xmhfhwm_e1000_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_
 }
 
 
-bool _impl_xmhfhwm_e1000_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value){
+bool _impl_xmhfhwm_e1000_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value){
 
 	if(sysmemaddr >= E1000_HWADDR_BASE && sysmemaddr < (E1000_HWADDR_BASE + E1000_HWADDR_SIZE)){
 		switch((sysmemaddr - E1000_HWADDR_BASE)){
 			case E1000_TCTL:{
-				xmhfhwm_e1000_tctl = (u32)write_value;
+				xmhfhwm_e1000_tctl = (uint32_t)write_value;
 				return true;
 			}
 
 			case E1000_TDT:{
-				cbhwm_e1000_write_tdt(xmhfhwm_e1000_tdt, (u32)write_value);
-				xmhfhwm_e1000_tdt = (u32)write_value;
+				cbhwm_e1000_write_tdt(xmhfhwm_e1000_tdt, (uint32_t)write_value);
+				xmhfhwm_e1000_tdt = (uint32_t)write_value;
 				if(xmhfhwm_e1000_tctl & E1000_TCTL_EN)
 					xmhfhwm_e1000_status_transmitting = true;
 				return true;
 			}
 
 			case E1000_TDH:{
-				xmhfhwm_e1000_tdh = (u32)write_value;
+				xmhfhwm_e1000_tdh = (uint32_t)write_value;
 				return true;
 			}
 
 			case E1000_TDBAH:{
-				cbhwm_e1000_write_tdbah(xmhfhwm_e1000_tdbah, (u32)write_value);
-				xmhfhwm_e1000_tdbah = (u32)write_value;
+				cbhwm_e1000_write_tdbah(xmhfhwm_e1000_tdbah, (uint32_t)write_value);
+				xmhfhwm_e1000_tdbah = (uint32_t)write_value;
 				return true;
 			}
 
 			case E1000_TDBAL:{
-				cbhwm_e1000_write_tdbal(xmhfhwm_e1000_tdbal, (u32)write_value);
-				xmhfhwm_e1000_tdbal = (u32)write_value;
+				cbhwm_e1000_write_tdbal(xmhfhwm_e1000_tdbal, (uint32_t)write_value);
+				xmhfhwm_e1000_tdbal = (uint32_t)write_value;
 				return true;
 			}
 
 			case E1000_TDLEN:{
-				cbhwm_e1000_write_tdlen(xmhfhwm_e1000_tdlen, (u32)write_value);
-				xmhfhwm_e1000_tdlen = (u32)write_value;
+				cbhwm_e1000_write_tdlen(xmhfhwm_e1000_tdlen, (uint32_t)write_value);
+				xmhfhwm_e1000_tdlen = (uint32_t)write_value;
 				return true;
 			}
 
 
 			case E1000_SWSM:{
-				xmhfhwm_e1000_swsm = (u32)write_value;
+				xmhfhwm_e1000_swsm = (uint32_t)write_value;
 				return true;
 			}
 
 
 			case E1000_EECD:{
-				xmhfhwm_e1000_eecd = (u32)write_value;
+				xmhfhwm_e1000_eecd = (uint32_t)write_value;
 				if(xmhfhwm_e1000_eecd & E1000_EECD_REQ)
 					xmhfhwm_e1000_eecd |= E1000_EECD_GNT;
 

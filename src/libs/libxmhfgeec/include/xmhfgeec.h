@@ -103,25 +103,25 @@
 typedef void * slab_entrystub_t;
 
 
-typedef u32 slab_callcaps_t;
-typedef u32 slab_uapicaps_t;
-typedef u32 slab_memgrantreadcaps_t;
-typedef u32 slab_memgrantwritecaps_t;
-typedef u32 slab_memoffset_t;
+typedef uint32_t slab_callcaps_t;
+typedef uint32_t slab_uapicaps_t;
+typedef uint32_t slab_memgrantreadcaps_t;
+typedef uint32_t slab_memgrantwritecaps_t;
+typedef uint32_t slab_memoffset_t;
 
 /*
 typedef struct {
-    u32 pci_bus;
-    u32 pci_device;
-    u32 pci_function;
-    u32 vendor_id;
-    u32 device_id;
+    uint32_t pci_bus;
+    uint32_t pci_device;
+    uint32_t pci_function;
+    uint32_t vendor_id;
+    uint32_t device_id;
 }__attribute__((packed)) xc_platformdevice_arch_desc_t;
 
 
 typedef struct {
 	bool desc_valid;
-	u32 numdevices;
+	uint32_t numdevices;
     xc_platformdevice_arch_desc_t arch_desc[MAX_PLATFORM_DEVICES];
 } __attribute__((packed)) slab_platformdevices_t;
 */
@@ -129,33 +129,33 @@ typedef struct {
 /*
 //slab physical memory extent type
 typedef struct {
-    u32 addr_start;
-    u32 addr_end;
-    u32 protection;
+    uint32_t addr_start;
+    uint32_t addr_end;
+    uint32_t protection;
 } slab_physmem_extent_t;
 */
 
 //slab device entry
 typedef struct {
-    u32 vendor_id;
-    u32 device_id;
+    uint32_t vendor_id;
+    uint32_t device_id;
 } slab_device_entry_t;
 
 typedef struct {
 	bool slab_inuse;
-	u32 slabtype;
-	//u32 mempgtbl_cr3;
-	//u32 iotbl_base;
-	u32 slabtos[MAX_PLATFORM_CPUS];
+	uint32_t slabtype;
+	//uint32_t mempgtbl_cr3;
+	//uint32_t iotbl_base;
+	uint32_t slabtos[MAX_PLATFORM_CPUS];
     slab_callcaps_t slab_callcaps;
     bool slab_uapisupported;
     slab_uapicaps_t slab_uapicaps[XMHFGEEC_TOTAL_SLABS];
     slab_memgrantreadcaps_t slab_memgrantreadcaps;
     slab_memgrantwritecaps_t slab_memgrantwritecaps;
     slab_device_entry_t incl_devices[XMHF_CONFIG_MAX_INCLDEVLIST_ENTRIES];
-    u32 incl_devices_count;
+    uint32_t incl_devices_count;
     slab_device_entry_t excl_devices[XMHF_CONFIG_MAX_EXCLDEVLIST_ENTRIES];
-    u32 excl_devices_count;
+    uint32_t excl_devices_count;
     physmem_extent_t slab_physmem_extents[HIC_SLAB_PHYSMEM_MAXEXTENTS];
     //slab_memoffset_t slab_memoffset_entries[XMHF_CONFIG_MAX_MEMOFFSET_ENTRIES];
 	slab_entrystub_t entrystub;
@@ -170,17 +170,17 @@ typedef struct {
 
 
 typedef struct {
-    u32 slab_ctype;
-    u32 src_slabid;
-    u32 dst_slabid;
-    u32 dst_uapifn;
-    u32 cpuid;
-    u32 in_out_params[16];
+    uint32_t slab_ctype;
+    uint32_t src_slabid;
+    uint32_t dst_slabid;
+    uint32_t dst_uapifn;
+    uint32_t cpuid;
+    uint32_t in_out_params[16];
 } __attribute__((packed)) slab_params_t;
 
 /*typedef struct {
-    u32 reserved;
-    u32 uapifn;
+    uint32_t reserved;
+    uint32_t uapifn;
 }__attribute__((packed)) xmhf_uapi_params_hdr_t;
 */
 
@@ -211,8 +211,8 @@ extern void slab_main(slab_params_t *sp);
 // slab stack variable decls.
 //////
 
-extern __attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) u8 _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
-extern __attribute__ ((section(".stackhdr"))) u32 _slab_tos[MAX_PLATFORM_CPUS];
+extern __attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) uint8_t _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
+extern __attribute__ ((section(".stackhdr"))) uint32_t _slab_tos[MAX_PLATFORM_CPUS];
 
 
 extern __attribute__((section(".data"))) __attribute__((aligned(4096))) xmhfgeec_slab_info_t xmhfgeec_slab_info_table[XMHFGEEC_TOTAL_SLABS];

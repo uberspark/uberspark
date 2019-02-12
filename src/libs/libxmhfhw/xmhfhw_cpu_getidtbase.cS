@@ -50,7 +50,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u32, xmhf_baseplatform_arch_x86_getidtbase,
+CASM_FUNCDEF(uint32_t, xmhf_baseplatform_arch_x86_getidtbase,
 {
 		xmhfhwm_cpu_insn_subl_imm_esp(0x8);
 		xmhfhwm_cpu_insn_sidt_mesp(0x0);

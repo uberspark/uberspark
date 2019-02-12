@@ -60,7 +60,6 @@
 #include <uberspark-config.h>
 #include <xmhf-hwm.h>
 
-
 #define USMF_STR(s) _USMF_STR(s)
 #define _USMF_STR(s) #s
 
@@ -103,19 +102,19 @@ typedef struct {
 // frama-c non-determinism functions
 //////
 
-u32 Frama_C_entropy_source;
+uint32_t Frama_C_entropy_source;
 
 //@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
 void Frama_C_update_entropy(void);
 
-u32 framac_nondetu32(void){
+uint32_t framac_nondetu32(void){
   Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
+  return (uint32_t)Frama_C_entropy_source;
 }
 
-u32 framac_nondetu32interval(u32 min, u32 max)
+uint32_t framac_nondetu32interval(uint32_t min, uint32_t max)
 {
-  u32 r,aux;
+  uint32_t r,aux;
   Frama_C_update_entropy();
   aux = Frama_C_entropy_source;
   if ((aux>=min) && (aux <=max))

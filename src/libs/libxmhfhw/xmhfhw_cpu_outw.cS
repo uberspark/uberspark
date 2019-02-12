@@ -52,7 +52,7 @@
 
 
 
-//__attribute__((naked)) void outw (u32 value, u32 port){
+//__attribute__((naked)) void outw (uint32_t value, uint32_t port){
 CASM_FUNCDEF(void, outw,
 {
     xmhfhwm_cpu_insn_movl_mesp_eax(0x4); //eax = val
@@ -60,7 +60,7 @@ CASM_FUNCDEF(void, outw,
     xmhfhwm_cpu_insn_outw_ax_dx(); //output ax to dx
     xmhfhwm_cpu_insn_ret();
 },
-u32 value,
-u32 port)
+uint32_t value,
+uint32_t port)
 
 

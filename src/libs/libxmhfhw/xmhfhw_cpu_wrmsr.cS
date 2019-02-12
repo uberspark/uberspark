@@ -55,12 +55,12 @@
 CASM_FUNCDEF(void, wrmsr64,
 {
   xmhfhwm_cpu_insn_movl_mesp_ecx(0x4); //ecx = msr
-  xmhfhwm_cpu_insn_movl_mesp_eax(0x8); //eax = (u32)newval
-  xmhfhwm_cpu_insn_movl_mesp_edx(0xC); //edx = (u32)((u64)newval >> 32)
+  xmhfhwm_cpu_insn_movl_mesp_eax(0x8); //eax = (uint32_t)newval
+  xmhfhwm_cpu_insn_movl_mesp_edx(0xC); //edx = (uint32_t)((uint64_t)newval >> 32)
   xmhfhwm_cpu_insn_wrmsr();
   xmhfhwm_cpu_insn_ret();
 },
-u32 msr,
-u32 newval_lo,
-u32 newval_hi)
+uint32_t msr,
+uint32_t newval_lo,
+uint32_t newval_hi)
 

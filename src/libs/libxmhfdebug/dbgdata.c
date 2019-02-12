@@ -46,4 +46,4 @@
 
 //////
 //libxmhfdebug debug data
-__attribute__(( section(".data") )) u32 libxmhfdebug_lock = 1;
+__attribute__(( section(".data") )) uint32_t libxmhfdebug_lock = 1;

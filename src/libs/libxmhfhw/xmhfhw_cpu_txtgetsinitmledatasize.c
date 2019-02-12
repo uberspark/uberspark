@@ -52,10 +52,10 @@
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_sinit_mle_data_size(u32 heap_memaddr, uint32_t heap_size)
+uint64_t get_sinit_mle_data_size(uint32_t heap_memaddr, uint32_t heap_size)
 {
-	u32 memaddr = ((u32)heap_memaddr + (u32)get_bios_data_size(heap_memaddr, heap_size) +
-                         (u32)get_os_mle_data_size(heap_memaddr, heap_size) +
-                         (u32)get_os_sinit_data_size(heap_memaddr, heap_size));
+	uint32_t memaddr = ((uint32_t)heap_memaddr + (uint32_t)get_bios_data_size(heap_memaddr, heap_size) +
+                         (uint32_t)get_os_mle_data_size(heap_memaddr, heap_size) +
+                         (uint32_t)get_os_sinit_data_size(heap_memaddr, heap_size));
 	return xmhfhw_sysmemaccess_readu64( memaddr );
 }
