@@ -12,6 +12,8 @@ let g_uberspark_install_hwmdir = "@prefix@@ubersparkhomedir@@ubersparkhwmdir@";;
 let g_uberspark_install_hwmincludedir = "@prefix@@ubersparkhomedir@@ubersparkhwmincludedir@";;
 let g_uberspark_install_libsdir = "@prefix@@ubersparkhomedir@@ubersparklibsdir@";;
 let g_uberspark_install_libsincludesdir = "@prefix@@ubersparkhomedir@@ubersparklibsincludesdir@";;
+let g_uberspark_install_loadersdir = "@prefix@@ubersparkhomedir@@ubersparkloadersdir@";;
+let g_uberspark_install_loadersincludesdir = "@prefix@@ubersparkhomedir@@ubersparkloadersincludesdir@";;
 let g_uberspark_install_toolsdir = "@prefix@@ubersparkhomedir@@ubersparktoolsdir@";;
  
 let main () =
@@ -53,6 +55,18 @@ let main () =
 						print_string g_uberspark_install_libsincludesdir;
 	      				print_newline ();
 	      			end
+
+	      		else if (compare "--print-uberspark-loadersdir" Sys.argv.(1)) = 0 then
+	      			begin
+						print_string g_uberspark_install_loadersdir;
+	      				print_newline ();
+	      			end
+	      		else if (compare "--print-uberspark-loadersincludesdir" Sys.argv.(1)) = 0 then
+	      			begin
+						print_string g_uberspark_install_loadersincludesdir;
+	      				print_newline ();
+	      			end
+
 	      		else if (compare "--print-uberspark-toolsdir" Sys.argv.(1)) = 0 then
 	      			begin
 						print_string g_uberspark_install_toolsdir;
