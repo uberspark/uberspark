@@ -69,7 +69,7 @@ install-hwm:
 	$(CP) -rf $(USPARK_HWMDIR)/* $(USPARK_INSTALL_HWMDIR)/.
 
 .PHONY: install
-install: install-tools install-hdrs install-hwm
+install: install-tools install-loaders install-hdrs install-hwm
 
 
 .PHONY: clean
