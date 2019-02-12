@@ -49,6 +49,8 @@
 
 
 #ifndef __ASSEMBLY__
+extern uint32_t sample_interface(uint32_t num);
+
 
 
 #endif /* __ASSEMBLY__ */

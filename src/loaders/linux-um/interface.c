@@ -45,6 +45,8 @@
  */
 
 #include <uberspark.h>
+#include "usloader-linux-um.h"
+
 
 uint32_t sample_interface(uint32_t num){
 	return num++;
