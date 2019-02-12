@@ -13,6 +13,7 @@ export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_HWMDIR := $(USPARK_DIR)/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/tools
+export USPARK_LOADERSDIR := $(USPARK_DIR)/loaders
 
 
 ###### targets
@@ -24,6 +25,7 @@ all: build-tools
 .PHONY: build-tools
 build-tools:
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w all
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w all
 	
 
 .PHONY: install-tools
