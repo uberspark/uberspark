@@ -40,6 +40,15 @@ let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 
 let cmdopt_uobjmanifest = ref "";;
 let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+
+let cmdopt_loadaddr_specified = ref false;;
+let cmdopt_loadaddr = ref "";;
+let cmdopt_loadaddr_set 
+	(value : string) = 
+	cmdopt_loadaddr_specified := true;
+	cmdopt_loadaddr := value;
+	;;
+
 (*----------------------------------------------------------------------------*)
 
 
@@ -110,6 +119,7 @@ let main () =
 			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
 			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
+			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
@@ -128,11 +138,19 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		Arg.parse speclist cmdopt_invalid usage_msg;
 
+		(* sanity check command line arguments *)
+		if(!cmdopt_loadaddr_specified == false) then
+				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
+		;
+
+
 		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
 		Usuobjcollection.init_build_configuration !cmdopt_uobjlist "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
-		(*Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");*)
+		Usuobjcollection.compute_memory_map 
+			((int_of_string(!cmdopt_loadaddr)) + 
+			(Usconfig.get_sizeof_uobjcoll_info_t()));
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
 		(* generate uobj collection info table *)

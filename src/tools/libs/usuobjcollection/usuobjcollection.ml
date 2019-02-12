@@ -174,6 +174,24 @@ module Usuobjcollection =
 	;;
 								
 
+
+	(*--------------------------------------------------------------------------*)
+	(* compute uobj collection memory map *)
+	(* uobjcoll_load_addr = load address of uobj collection *)
+	(*--------------------------------------------------------------------------*)
+	let compute_memory_map
+			(uobjcoll_load_addr : int) =
+		let uobj_load_addr = ref 0 in
+		uobj_load_addr := uobjcoll_load_addr;
+
+		Hashtbl.iter (fun key uobj ->  
+				uobj#compute_sections_memory_map !uobj_load_addr;
+				uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;
+		) uobj_hashtbl;
+
+		()
+	;;
+
 																								
 	(*--------------------------------------------------------------------------*)
 	(* build a uobj *)
@@ -263,7 +281,7 @@ module Usuobjcollection =
 		let uobjcoll_info_table_lscript = Usuobjgen.generate_uobj_linker_script  
 			(uobjcoll_info_table_filename) 
 			0 
-			[ ["data"; "rw"; string_of_int (Usconfig.get_std_uobjcoll_info_table_max_size()); ".data"] ] in 
+			[ ["data"; "rw"; string_of_int (Usconfig.get_sizeof_uobjcoll_info_t()); ".data"] ] in 
 		
 		(* build uobj collection info table binary *)
 		let uobj_libdirs_list = ref [] in

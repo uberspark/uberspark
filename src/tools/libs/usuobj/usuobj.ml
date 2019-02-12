@@ -12,7 +12,18 @@ open Usuobjgen
 module Usuobj =
 struct
 
+		type section_info_t = 
+			{
+				s_name: string;
+				s_type: int;
+				s_attribute : string;
+				s_subsection_list : string list;
+				s_origin: int;
+				s_length: int;	
+			};;
+
 class uobject = object(self)
+			
 		val log_tag = "Usuobj";
 		
 		val usmf_type_usuobj = "uobj";
@@ -34,8 +45,57 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 		
+		val o_uobj_size = ref 0; 
+		method get_o_uobj_size = !o_uobj_size;
+		val o_uobj_load_addr = ref 0;
+		method get_o_uobj_load_addr = !o_uobj_load_addr;
+		
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
+
+
+		(*--------------------------------------------------------------------------*)
+		(* compute memory map for sections *)
+		(* uobj_load_addr = load address of uobj *)
+		(*--------------------------------------------------------------------------*)
+		method compute_sections_memory_map
+			(uobj_load_addr : int) 
+			: int =
+
+			let uobj_section_load_addr = ref 0 in
+			o_uobj_load_addr := uobj_load_addr;
+			uobj_section_load_addr := uobj_load_addr;
+			List.iter (fun x ->
+				(* compute subsection list *)
+				let elem_index = ref 0 in
+				let subsections_list = ref [] in
+				while (!elem_index < List.length x) do
+						if (!elem_index > 2) then
+							begin
+						    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
+							end
+						; 
+						elem_index := !elem_index + 1;
+				done;
+					
+				Hashtbl.add uobj_sections_memory_map_hashtbl (List.nth x 0) 
+					{
+						s_name = (List.nth x 0);
+						s_type = 0;
+						s_attribute = (List.nth x 1);
+						s_subsection_list = !subsections_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = int_of_string (List.nth x 2);
+					};
+			
+				uobj_section_load_addr := !uobj_section_load_addr + int_of_string (List.nth x 2);
+				()
+			)  !o_uobj_sections_list;
+
+			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
+			(!o_uobj_size)
+		;
 
 
 		(*--------------------------------------------------------------------------*)
@@ -45,6 +105,7 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest usmf_filename keep_temp_files =
 			
+				
 			(* store filename and uobj dir absolute pathname *)
 			o_usmf_filename := Filename.basename usmf_filename;
 			o_uobj_dir_abspathname := Filename.dirname usmf_filename;
@@ -135,7 +196,9 @@ class uobject = object(self)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 		(*--------------------------------------------------------------------------*)
-		method build build_dir keep_temp_files = 
+		method build 
+			(build_dir : string)
+			(keep_temp_files : bool) = 
 	
 			Uslog.logf log_tag Uslog.Info "Starting build in '%s' [%b]\n" build_dir keep_temp_files;
 			
@@ -146,14 +209,15 @@ class uobject = object(self)
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 0x60000000 
+				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 
+					(self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 					
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
-				Usuobjgen.generate_uobj_hdr !o_usmf_hdr_id 0x60000000 
+				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 			
@@ -201,13 +265,93 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n	{";
 
   	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
-								
+
+		(*ustack_tos*)
+    let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
+			(Usconfig.get_section_name_ustack()) in
+		let ustack_size = (Usconfig.get_sizeof_uobj_ustack()) in
+		let ustack_tos = ref 0 in
+		ustack_tos := info.s_origin + ustack_size;
+		Printf.fprintf ochannel "\n\t{";
+		i := 0;
+		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !ustack_tos;
+				i := !i + 1;
+				ustack_tos := !ustack_tos + ustack_size;
+		done;
+    Printf.fprintf ochannel "\n\t},";
+
+		(*tstack_tos*)
+    let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
+			(Usconfig.get_section_name_tstack()) in
+		let tstack_size = (Usconfig.get_sizeof_uobj_tstack()) in
+		let tstack_tos = ref 0 in
+		tstack_tos := info.s_origin + tstack_size;
+		Printf.fprintf ochannel "\n\t{";
+		i := 0;
+		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !tstack_tos;
+				i := !i + 1;
+				tstack_tos := !tstack_tos + tstack_size;
+		done;
+    Printf.fprintf ochannel "\n\t},";
+																								
     Printf.fprintf ochannel "\n	}";
 		Printf.fprintf ochannel "\n";
 
 		()
 	;
 
+	(*--------------------------------------------------------------------------*)
+	(* generate uobj header *)
+	(*--------------------------------------------------------------------------*)
+	method generate_uobj_hdr 
+			(uobj_name : string) 
+			(uobj_load_addr : int)
+			(uobj_sections_list : string list list)
+			: string  =
+		let uobj_hdr_filename = (uobj_name ^ ".hdr.c") in
+		let oc = open_out uobj_hdr_filename in
+			Printf.fprintf oc "\n/* autogenerated uberSpark uobj header */";
+			Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
+	
+			Printf.fprintf oc "\n#include <uberspark.h>";
+			Printf.fprintf oc "\n";
+
+			Printf.fprintf oc "\n__attribute__((section (\".hdr\"))) uobj_info_t __uobj_info =";
+			self#generate_uobj_info oc;
+			Printf.fprintf oc ";";
+			
+			
+			Printf.fprintf oc "\n__attribute__((section (\".ustack\"))) uint8_t __ustack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_USTACK]={ 0 };";
+			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
+	
+			List.iter (fun x ->
+				(* new section *)
+				let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
+				let section_name = (List.nth x 3) in
+				  if ((compare section_name ".text") <> 0) && 
+						((compare section_name ".ustack") <> 0) &&
+						((compare section_name ".tstack") <> 0) &&
+						((compare section_name ".hdr") <> 0) then
+						begin
+							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
+								section_name section_name_var;
+						end
+					;
+				()
+			)  uobj_sections_list;
+	
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
+				
+			close_out oc;
+		(uobj_hdr_filename)
+	; 
+
+		
 
 end ;;
 
@@ -275,3 +419,16 @@ end
     Printf.fprintf oc "\n\t},";
 *)
 
+(*
+ 		type section_info_t = 
+			{
+				origin: int;
+				length: int;	
+				subsection_list : string list;
+			};;
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
+	
+			Hashtbl.add uobj_sections_hashtbl "sample" { origin=0; length=0; subsection_list = ["one"; "two"; "three"]};
+			let mysection = Hashtbl.find uobj_sections_hashtbl "sample" in
+				Uslog.logf log_tag Uslog.Info "origin=%u" mysection.origin;
+*)
