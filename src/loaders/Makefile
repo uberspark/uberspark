@@ -12,8 +12,8 @@ include ../uberspark-common.mk
 
 
 ###### targets
-.PHONY: all
-all:	build-loaders
+.PHONY: build
+build:	build-loaders
 
 .PHONY: install
 install: install-loaders
