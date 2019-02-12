@@ -54,12 +54,12 @@
 void set_all_mtrrs(bool enable)
 {
 	mtrr_def_type_t mtrr_def_type;
-	u64 msrval;
+	uint64_t msrval;
 
 	unpack_mtrr_def_type_t(&mtrr_def_type, CASM_FUNCCALL(rdmsr64,MSR_MTRRdefType));
 	mtrr_def_type.e = enable ? 1 : 0;
 	msrval = pack_mtrr_def_type_t(&mtrr_def_type);
-	CASM_FUNCCALL(wrmsr64,MSR_MTRRdefType, (u32)msrval, (u32)((u64)msrval >> 32) );
+	CASM_FUNCCALL(wrmsr64,MSR_MTRRdefType, (uint32_t)msrval, (uint32_t)((uint64_t)msrval >> 32) );
 }
 
 

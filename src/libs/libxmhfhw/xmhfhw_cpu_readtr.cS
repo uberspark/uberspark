@@ -49,7 +49,7 @@
 #include <uberspark.h>
 #include <xmhfhw.h>
 
-CASM_FUNCDEF(u32, read_tr_sel,
+CASM_FUNCDEF(uint32_t, read_tr_sel,
 {
   xmhfhwm_cpu_insn_xorl_eax_eax();
   xmhfhwm_cpu_insn_str_ax();

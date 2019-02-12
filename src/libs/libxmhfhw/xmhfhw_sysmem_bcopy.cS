@@ -71,9 +71,9 @@ CASM_FUNCDEF(void, xmhfhw_sysmemaccess_copy,
 	xmhfhwm_cpu_insn_popl_esi();	//restore esi
 	xmhfhwm_cpu_insn_ret();		//return
 },
-u8 *dest,
-u8 *src,
-u32 size)
+uint8_t *dest,
+uint8_t *src,
+uint32_t size)
 
 
 

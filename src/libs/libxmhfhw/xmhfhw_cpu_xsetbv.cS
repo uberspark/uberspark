@@ -59,7 +59,7 @@ CASM_FUNCDEF(void, xsetbv,
     xmhfhwm_cpu_insn_xsetbv();
     xmhfhwm_cpu_insn_ret();
 },
-u32 xcr_reg,
-u32 value_lo,
-u32 value_hi)
+uint32_t xcr_reg,
+uint32_t value_lo,
+uint32_t value_hi)
 

@@ -50,7 +50,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u64, read_cr4,
+CASM_FUNCDEF(uint64_t, read_cr4,
 {
     xmhfhwm_cpu_insn_xorl_edx_edx();
     xmhfhwm_cpu_insn_movl_cr4_eax();

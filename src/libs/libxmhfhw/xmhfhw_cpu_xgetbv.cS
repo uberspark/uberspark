@@ -51,11 +51,11 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u64, xgetbv,
+CASM_FUNCDEF(uint64_t, xgetbv,
 {
     xmhfhwm_cpu_insn_movl_mesp_ecx(0x4);
     xmhfhwm_cpu_insn_xgetbv();
     xmhfhwm_cpu_insn_retu64();
 },
-u32 xcr_reg)
+uint32_t xcr_reg)
 

@@ -56,7 +56,7 @@
 
 
 
-CASM_FUNCDEF(u16, xmhfhw_sysmemaccess_readu16,
+CASM_FUNCDEF(uint16_t, xmhfhw_sysmemaccess_readu16,
 {
 	xmhfhwm_cpu_insn_pushl_esi();	//save esi
 	xmhfhwm_cpu_insn_movl_mesp_esi(0x8); //esi = addr
@@ -65,6 +65,6 @@ CASM_FUNCDEF(u16, xmhfhw_sysmemaccess_readu16,
 	xmhfhwm_cpu_insn_popl_esi();	//restore esi
 	xmhfhwm_cpu_insn_retu32();		//return
 },
-u32 addr)
+uint32_t addr)
 
 

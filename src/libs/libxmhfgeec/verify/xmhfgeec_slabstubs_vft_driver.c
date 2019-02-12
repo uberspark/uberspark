@@ -52,7 +52,7 @@
 #include <uberspark.h>
 #include <xmhfgeec.h>
 
-u32 cpuid = 0;	//BSP cpu
+uint32_t cpuid = 0;	//BSP cpu
 slab_params_t sp;
 
 /*
@@ -103,9 +103,9 @@ void slab_main(slab_params_t *sp){
 
 
 void main(void){
-	u32 *stackelem;
-	u32 check_esp, check_eip = CASM_RET_EIP;
-	u64 val;
+	uint32_t *stackelem;
+	uint32_t check_esp, check_eip = CASM_RET_EIP;
+	uint64_t val;
 
 
 	//initialize sp
@@ -129,7 +129,7 @@ void main(void){
 
 	//populate hardware model stack
 	xmhfhwm_cpu_gprs_esp = _slab_tos[cpuid];
-	check_esp = xmhfhwm_cpu_gprs_esp - sizeof(u32); // pointing to sp
+	check_esp = xmhfhwm_cpu_gprs_esp - sizeof(uint32_t); // pointing to sp
 
 	// upon control transfer to a slab entry stub the stack is
 	// setup by the sentinel as follows:

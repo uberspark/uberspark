@@ -56,16 +56,16 @@
 //#include <xmhf-debug.h>
 
 __attribute__ ((section(".rodata"))) char * _namestring="_xmhfslab_";
-__attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) u8 _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
-__attribute__ ((section(".stackhdr"))) u32 _slab_tos[MAX_PLATFORM_CPUS]= {
-    ((u32)&_slab_stack[1]),
-    ((u32)&_slab_stack[2]),
-    ((u32)&_slab_stack[3]),
-    ((u32)&_slab_stack[4]),
-    ((u32)&_slab_stack[5]),
-    ((u32)&_slab_stack[6]),
-    ((u32)&_slab_stack[7]),
-    ((u32)&_slab_stack[8])  };
-__attribute__ ((section(".slab_dmadata"))) u8 _dmadataplaceholder[1] = {0};
+__attribute__ ((section(".stack"))) __attribute__ ((aligned(4096))) uint8_t _slab_stack[MAX_PLATFORM_CPUS][XMHF_SLAB_STACKSIZE];
+__attribute__ ((section(".stackhdr"))) uint32_t _slab_tos[MAX_PLATFORM_CPUS]= {
+    ((uint32_t)&_slab_stack[1]),
+    ((uint32_t)&_slab_stack[2]),
+    ((uint32_t)&_slab_stack[3]),
+    ((uint32_t)&_slab_stack[4]),
+    ((uint32_t)&_slab_stack[5]),
+    ((uint32_t)&_slab_stack[6]),
+    ((uint32_t)&_slab_stack[7]),
+    ((uint32_t)&_slab_stack[8])  };
+__attribute__ ((section(".slab_dmadata"))) uint8_t _dmadataplaceholder[1] = {0};
 
 

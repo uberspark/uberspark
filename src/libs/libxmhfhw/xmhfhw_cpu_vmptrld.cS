@@ -51,7 +51,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u32, __vmx_vmptrld,
+CASM_FUNCDEF(uint32_t, __vmx_vmptrld,
 {
     xmhfhwm_cpu_insn_vmptrld_mesp(0x4);
     xmhfhwm_cpu_insn_jbe(vptrld_error);
@@ -62,6 +62,6 @@ CASM_FUNCDEF(u32, __vmx_vmptrld,
     CASM_LABEL(vptrld_done);
     xmhfhwm_cpu_insn_retu32();
 },
-u64 vmcs)
+uint64_t vmcs)
 
 

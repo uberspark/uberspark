@@ -57,5 +57,5 @@ CASM_FUNCDEF(void, xmhfhw_cpu_loadTR,
     xmhfhwm_cpu_insn_ltr_ax();
     xmhfhwm_cpu_insn_ret();
 },
-u32 tr_selector)
+uint32_t tr_selector)
 

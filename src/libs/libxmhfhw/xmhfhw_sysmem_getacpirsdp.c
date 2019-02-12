@@ -58,10 +58,10 @@
 	requires \valid((char *)table+(0..size-1));
 	assigns \nothing;
 @*/
-static u32 _acpi_computetablechecksum(char *table, u32 size){
+static uint32_t _acpi_computetablechecksum(char *table, uint32_t size){
   char *p;
   char checksum=0;
-  u32 i;
+  uint32_t i;
 
   p=(char *)table;
 
@@ -74,7 +74,7 @@ static u32 _acpi_computetablechecksum(char *table, u32 size){
 	for(i=0; i< size; i++)
 	  checksum+= (char)(*(p+i));
 
-  return (u32)checksum;
+  return (uint32_t)checksum;
 }
 
 
@@ -89,20 +89,20 @@ static u32 _acpi_computetablechecksum(char *table, u32 size){
 	requires \valid(rsdp);
 	assigns \nothing;
 @*/
-u32 xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
-  u16 ebdaseg;
-  u32 ebdaphys;
-  u32 i, found=0;
+uint32_t xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
+  uint16_t ebdaseg;
+  uint32_t ebdaphys;
+  uint32_t i, found=0;
 
 
   //get EBDA segment from 040E:0000h in BIOS data area
-  //xmhfhw_sysmemaccess_copy((u8 *)&ebdaseg, (u8 *)0x0000040E, sizeof(u16));
+  //xmhfhw_sysmemaccess_copy((uint8_t *)&ebdaseg, (uint8_t *)0x0000040E, sizeof(uint16_t));
   ebdaseg = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu16, 0x0000040EUL);
 
   //convert it to its 32-bit physical address
-  ebdaphys=(u32)(ebdaseg * 16);
+  ebdaphys=(uint32_t)(ebdaseg * 16);
   //_XDPRINTF_("%s:%u ebdaseg=%x, ebdaphys=%x\n", __func__, __LINE__,
-	//(u32)ebdaseg, ebdaphys);
+	//(uint32_t)ebdaseg, ebdaphys);
 
 
   //search first 1KB of ebda for rsdp signature (8 bytes long)
@@ -113,7 +113,7 @@ u32 xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
 	@*/
 
   for(i=0; i < (1024-8); i+=16){
-    CASM_FUNCCALL(xmhfhw_sysmem_copy_sys2obj, (u8 *)rsdp, (u8 *)(ebdaphys+i), sizeof(ACPI_RSDP));
+    CASM_FUNCCALL(xmhfhw_sysmem_copy_sys2obj, (uint8_t *)rsdp, (uint8_t *)(ebdaphys+i), sizeof(ACPI_RSDP));
     if(rsdp->signature == ACPI_RSDP_SIGNATURE){
       if(!_acpi_computetablechecksum((char *)rsdp, 20)){
         found=1;
@@ -125,7 +125,7 @@ u32 xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
 
   //found RSDP?
   if(found)
-    return (u32)(ebdaphys+i);
+    return (uint32_t)(ebdaphys+i);
 
 
 
@@ -136,7 +136,7 @@ u32 xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
 		loop variant (0xFFFFF-8) - i;
 	@*/
   for(i=0xE0000; i < (0xFFFFF-8); i+=16){
-    CASM_FUNCCALL(xmhfhw_sysmem_copy_sys2obj, (u8 *)rsdp, (u8 *)i, sizeof(ACPI_RSDP));
+    CASM_FUNCCALL(xmhfhw_sysmem_copy_sys2obj, (uint8_t *)rsdp, (uint8_t *)i, sizeof(ACPI_RSDP));
     if(rsdp->signature == ACPI_RSDP_SIGNATURE){
       if(!_acpi_computetablechecksum((char *)rsdp, 20)){
         found=1;

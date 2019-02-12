@@ -58,6 +58,6 @@ int fls(int mask)
     if(mask == 0)
 	return mask;
     else
-	return (int)bsrl((u32)mask) + 1;
+	return (int)bsrl((uint32_t)mask) + 1;
 }
 

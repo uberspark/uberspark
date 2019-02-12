@@ -51,7 +51,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u32, inl,
+CASM_FUNCDEF(uint32_t, inl,
 {
     xmhfhwm_cpu_insn_movl_mesp_edx(0x4); //edx = port
     xmhfhwm_cpu_insn_xorl_eax_eax();
@@ -59,5 +59,5 @@ CASM_FUNCDEF(u32, inl,
     xmhfhwm_cpu_insn_xorl_edx_edx();
     xmhfhwm_cpu_insn_retu32();
 },
-u32 port)
+uint32_t port)
 

@@ -60,5 +60,5 @@ CASM_FUNCDEF(void, spin_lock,
     xmhfhwm_cpu_insn_jnc(splock);
     xmhfhwm_cpu_insn_ret();
 },
-volatile u32 *lock)
+volatile uint32_t *lock)
 
