@@ -122,18 +122,18 @@
 //Vt-d DMAR structure
 //sizeof(VTD_DMAR) = 48 bytes
 typedef struct{
-  u32 signature;
-  u32 length;
-  u8 revision;
-  u8 checksum;
-  u8 oemid[6];
-  u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
-  u8 hostaddresswidth;
-  u8 flags;
-  u8 rsvdz[10];
+  uint32_t signature;
+  uint32_t length;
+  uint8_t revision;
+  uint8_t checksum;
+  uint8_t oemid[6];
+  uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
+  uint8_t hostaddresswidth;
+  uint8_t flags;
+  uint8_t rsvdz[10];
 }__attribute__ ((packed)) VTD_DMAR;
 
 
@@ -141,92 +141,92 @@ typedef struct{
 //VT-d DMAR table DRHD structure
 //sizeof(VTD_DMAR_DRHD) = 16 bytes
 typedef struct{
-  u16 type;
-  u16 length;
-  u8 flags;
-  u8 rsvdz0;
-  u16 pcisegment;
-  u64 regbaseaddr;
+  uint16_t type;
+  uint16_t length;
+  uint8_t flags;
+  uint8_t rsvdz0;
+  uint16_t pcisegment;
+  uint64_t regbaseaddr;
 }__attribute__ ((packed)) VTD_DMAR_DRHD;
 
 
 //VT-d DRHD structure
 typedef struct{
-  u16 type;
-  u16 length;
-  u8 flags;
-  u8 rsvdz0;
-  u16 pcisegment;
-  u64 regbaseaddr;
-  u32 iotlb_regaddr;    //not part of ACPI structure
-  u32 iva_regaddr;      //not part of ACPI structure
+  uint16_t type;
+  uint16_t length;
+  uint8_t flags;
+  uint8_t rsvdz0;
+  uint16_t pcisegment;
+  uint64_t regbaseaddr;
+  uint32_t iotlb_regaddr;    //not part of ACPI structure
+  uint32_t iva_regaddr;      //not part of ACPI structure
 }__attribute__ ((packed)) VTD_DRHD;
 
-typedef u32 vtd_drhd_handle_t;
+typedef uint32_t vtd_drhd_handle_t;
 
 typedef struct {
-    u64 qwords[2];
+    uint64_t qwords[2];
 } __attribute__((packed)) vtd_ret_entry_t;
 
 //#define vtd_make_rete(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_rete(paddr, flags) \
-  ((u64)(paddr) & (0xFFFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0xFFFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 typedef struct {
-    u64 qwords[2];
+    uint64_t qwords[2];
 } __attribute__((packed)) vtd_cet_entry_t;
 
 //#define vtd_make_cete(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_cete(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 //#define vtd_make_cetehigh(address_width, domain_id) \
-//  (((u64)domain_id & 0x000000000000FFFFULL) << 7) | ((u64)(address_width) & 0x0000000000000007ULL)
+//  (((uint64_t)domain_id & 0x000000000000FFFFULL) << 7) | ((uint64_t)(address_width) & 0x0000000000000007ULL)
 
 #define vtd_make_cetehigh(address_width, domain_id) \
-  (((u64)domain_id) * 256) | ((u64)(address_width) & 0x0000000000000007ULL)
+  (((uint64_t)domain_id) * 256) | ((uint64_t)(address_width) & 0x0000000000000007ULL)
 
 //#define vtd_make_cetehigh(address_width, domain_id) \
-//  (((u64)1) * 256) | ((u64)(address_width) & 0x0000000000000007ULL)
+//  (((uint64_t)1) * 256) | ((uint64_t)(address_width) & 0x0000000000000007ULL)
 
-typedef u64 vtd_pml4te_t;
-typedef u64 vtd_pdpte_t;
-typedef u64 vtd_pdte_t;
-typedef u64 vtd_pte_t;
+typedef uint64_t vtd_pml4te_t;
+typedef uint64_t vtd_pdpte_t;
+typedef uint64_t vtd_pdte_t;
+typedef uint64_t vtd_pte_t;
 
 
 /* make a pml4 entry from individual fields */
 //#define vtd_make_pml4te(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_pml4te(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 /* make a page directory pointer entry from individual fields */
 //#define vtd_make_pdpte(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_pdpte(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 /* make a page directory entry for a 4KB page from individual fields */
 //#define vtd_make_pdte(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_pdte(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 
 /* make a page table entry from individual fields */
 //#define vtd_make_pte(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1)))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1)))) | (uint64_t)(flags)
 
 #define vtd_make_pte(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 
 
@@ -235,278 +235,278 @@ typedef u64 vtd_pte_t;
 
 /*//VTD_VER_REG (sec. 10.4.1)
 typedef union {
-  u32 value;
+  uint32_t value;
   struct
   {
-    u32 min : 4;			//minor version no.
-    u32 max : 4;			//major version no.
-    u32 rsvdz : 24;		//reserved
+    uint32_t min : 4;			//minor version no.
+    uint32_t max : 4;			//major version no.
+    uint32_t rsvdz : 24;		//reserved
   } __attribute__((packed)) bits;
 } __attribute__ ((packed)) VTD_VER_REG;
 */
 
 //VTD_CAP_REG (sec. 10.4.2)
 typedef struct {
-    u32 nd      ;//: 3;    		//no. of domains
-    u32 afl     ;//: 1;			//advanced fault logging
-    u32 rwbf    ;//: 1;			//required write-buffer flushing
-    u32 plmr    ;//: 1;			//protected low-memory region
-    u32 phmr    ;//: 1;			//protected high-memory region
-    u32 cm      ;//: 1;				//caching mode
-    u32 sagaw   ;//: 5;			//supported adjuested guest address widths
-    u32 rsvdz0  ;//: 3;		//reserved
-    u32 mgaw    ;//: 6;			//maximum guest address width
-    u32 zlr     ;//: 1;				//zero length read
-    u32 isoch   ;//: 1;			//isochrony
-    u32 fro     ;//: 10;			//fault-recording register offset
-    u32 sps     ;//: 4;			//super-page support
-    u32 rsvdz1  ;//: 1;		//reserved
-    u32 psi     ;//: 1;				//page selective invalidation
-    u32 nfr     ;//: 8;				//no. of fault-recording registers
-    u32 mamv    ;//: 6;			//max. address mask value
-    u32 dwd     ;//: 1;				//DMA write draining
-    u32 drd     ;//: 1;				//DMA read draining
-    u32 rsvdz2  ;//: 8;		//reserved
+    uint32_t nd      ;//: 3;    		//no. of domains
+    uint32_t afl     ;//: 1;			//advanced fault logging
+    uint32_t rwbf    ;//: 1;			//required write-buffer flushing
+    uint32_t plmr    ;//: 1;			//protected low-memory region
+    uint32_t phmr    ;//: 1;			//protected high-memory region
+    uint32_t cm      ;//: 1;				//caching mode
+    uint32_t sagaw   ;//: 5;			//supported adjuested guest address widths
+    uint32_t rsvdz0  ;//: 3;		//reserved
+    uint32_t mgaw    ;//: 6;			//maximum guest address width
+    uint32_t zlr     ;//: 1;				//zero length read
+    uint32_t isoch   ;//: 1;			//isochrony
+    uint32_t fro     ;//: 10;			//fault-recording register offset
+    uint32_t sps     ;//: 4;			//super-page support
+    uint32_t rsvdz1  ;//: 1;		//reserved
+    uint32_t psi     ;//: 1;				//page selective invalidation
+    uint32_t nfr     ;//: 8;				//no. of fault-recording registers
+    uint32_t mamv    ;//: 6;			//max. address mask value
+    uint32_t dwd     ;//: 1;				//DMA write draining
+    uint32_t drd     ;//: 1;				//DMA read draining
+    uint32_t rsvdz2  ;//: 8;		//reserved
 } __attribute__ ((packed)) VTD_CAP_REG;
 
 
 #define pack_VTD_CAP_REG(s) \
-    (u64)( \
-    (((u64)(s)->rsvdz2 &   0x00000000000000FFULL) << 56) | \
-    (((u64)(s)->drd    &   0x0000000000000001ULL) << 55) | \
-    (((u64)(s)->dwd    &   0x0000000000000001ULL) << 54) | \
-    (((u64)(s)->mamv   &   0x000000000000003FULL) << 48) | \
-    (((u64)(s)->nfr    &   0x00000000000000FFULL) << 40) | \
-    (((u64)(s)->psi    &   0x0000000000000001ULL) << 39) | \
-    (((u64)(s)->rsvdz1 &   0x0000000000000001ULL) << 38) | \
-    (((u64)(s)->sps    &   0x000000000000000FULL) << 34) | \
-    (((u64)(s)->fro    &   0x00000000000003FFULL) << 24) | \
-    (((u64)(s)->isoch  &   0x0000000000000001ULL) << 23) | \
-    (((u64)(s)->zlr    &   0x0000000000000001ULL) << 22) | \
-    (((u64)(s)->mgaw   &   0x000000000000003FULL) << 16) | \
-    (((u64)(s)->rsvdz0 &   0x0000000000000007ULL) << 13) | \
-    (((u64)(s)->sagaw  &   0x000000000000001FULL) << 8 ) | \
-    (((u64)(s)->cm     &   0x0000000000000001ULL) << 7 ) | \
-    (((u64)(s)->phmr   &   0x0000000000000001ULL) << 6 ) | \
-    (((u64)(s)->plmr   &   0x0000000000000001ULL) << 5 ) | \
-    (((u64)(s)->rwbf   &   0x0000000000000001ULL) << 4 ) | \
-    (((u64)(s)->afl    &   0x0000000000000001ULL) << 3 ) | \
-    (((u64)(s)->nd     &   0x0000000000000007ULL) << 0 )  \
+    (uint64_t)( \
+    (((uint64_t)(s)->rsvdz2 &   0x00000000000000FFULL) << 56) | \
+    (((uint64_t)(s)->drd    &   0x0000000000000001ULL) << 55) | \
+    (((uint64_t)(s)->dwd    &   0x0000000000000001ULL) << 54) | \
+    (((uint64_t)(s)->mamv   &   0x000000000000003FULL) << 48) | \
+    (((uint64_t)(s)->nfr    &   0x00000000000000FFULL) << 40) | \
+    (((uint64_t)(s)->psi    &   0x0000000000000001ULL) << 39) | \
+    (((uint64_t)(s)->rsvdz1 &   0x0000000000000001ULL) << 38) | \
+    (((uint64_t)(s)->sps    &   0x000000000000000FULL) << 34) | \
+    (((uint64_t)(s)->fro    &   0x00000000000003FFULL) << 24) | \
+    (((uint64_t)(s)->isoch  &   0x0000000000000001ULL) << 23) | \
+    (((uint64_t)(s)->zlr    &   0x0000000000000001ULL) << 22) | \
+    (((uint64_t)(s)->mgaw   &   0x000000000000003FULL) << 16) | \
+    (((uint64_t)(s)->rsvdz0 &   0x0000000000000007ULL) << 13) | \
+    (((uint64_t)(s)->sagaw  &   0x000000000000001FULL) << 8 ) | \
+    (((uint64_t)(s)->cm     &   0x0000000000000001ULL) << 7 ) | \
+    (((uint64_t)(s)->phmr   &   0x0000000000000001ULL) << 6 ) | \
+    (((uint64_t)(s)->plmr   &   0x0000000000000001ULL) << 5 ) | \
+    (((uint64_t)(s)->rwbf   &   0x0000000000000001ULL) << 4 ) | \
+    (((uint64_t)(s)->afl    &   0x0000000000000001ULL) << 3 ) | \
+    (((uint64_t)(s)->nd     &   0x0000000000000007ULL) << 0 )  \
     )
 
 #define unpack_VTD_CAP_REG(s, value) \
-    (s)->rsvdz2     = (u32)(((u64)value >>  56 ) & 0x00000000000000FFULL); \
-    (s)->drd        = (u32)(((u64)value >>  55 ) & 0x0000000000000001ULL); \
-    (s)->dwd        = (u32)(((u64)value >>  54 ) & 0x0000000000000001ULL); \
-    (s)->mamv       = (u32)(((u64)value >>  48 ) & 0x000000000000003FULL); \
-    (s)->nfr        = (u32)(((u64)value >>  40 ) & 0x00000000000000FFULL); \
-    (s)->psi        = (u32)(((u64)value >>  39 ) & 0x0000000000000001ULL); \
-    (s)->rsvdz1     = (u32)(((u64)value >>  38 ) & 0x0000000000000001ULL); \
-    (s)->sps        = (u32)(((u64)value >>  34 ) & 0x000000000000000FULL); \
-    (s)->fro        = (u32)(((u64)value >>  24 ) & 0x00000000000003FFULL); \
-    (s)->isoch      = (u32)(((u64)value >>  23 ) & 0x0000000000000001ULL); \
-    (s)->zlr        = (u32)(((u64)value >>  22 ) & 0x0000000000000001ULL); \
-    (s)->mgaw       = (u32)(((u64)value >>  16 ) & 0x000000000000003FULL); \
-    (s)->rsvdz0     = (u32)(((u64)value >>  13 ) & 0x0000000000000007ULL); \
-    (s)->sagaw      = (u32)(((u64)value >>  8  ) & 0x000000000000001FULL); \
-    (s)->cm         = (u32)(((u64)value >>  7  ) & 0x0000000000000001ULL); \
-    (s)->phmr       = (u32)(((u64)value >>  6  ) & 0x0000000000000001ULL); \
-    (s)->plmr       = (u32)(((u64)value >>  5  ) & 0x0000000000000001ULL); \
-    (s)->rwbf       = (u32)(((u64)value >>  4  ) & 0x0000000000000001ULL); \
-    (s)->afl        = (u32)(((u64)value >>  3  ) & 0x0000000000000001ULL); \
-    (s)->nd         = (u32)(((u64)value >>  0  ) & 0x0000000000000007ULL);
+    (s)->rsvdz2     = (uint32_t)(((uint64_t)value >>  56 ) & 0x00000000000000FFULL); \
+    (s)->drd        = (uint32_t)(((uint64_t)value >>  55 ) & 0x0000000000000001ULL); \
+    (s)->dwd        = (uint32_t)(((uint64_t)value >>  54 ) & 0x0000000000000001ULL); \
+    (s)->mamv       = (uint32_t)(((uint64_t)value >>  48 ) & 0x000000000000003FULL); \
+    (s)->nfr        = (uint32_t)(((uint64_t)value >>  40 ) & 0x00000000000000FFULL); \
+    (s)->psi        = (uint32_t)(((uint64_t)value >>  39 ) & 0x0000000000000001ULL); \
+    (s)->rsvdz1     = (uint32_t)(((uint64_t)value >>  38 ) & 0x0000000000000001ULL); \
+    (s)->sps        = (uint32_t)(((uint64_t)value >>  34 ) & 0x000000000000000FULL); \
+    (s)->fro        = (uint32_t)(((uint64_t)value >>  24 ) & 0x00000000000003FFULL); \
+    (s)->isoch      = (uint32_t)(((uint64_t)value >>  23 ) & 0x0000000000000001ULL); \
+    (s)->zlr        = (uint32_t)(((uint64_t)value >>  22 ) & 0x0000000000000001ULL); \
+    (s)->mgaw       = (uint32_t)(((uint64_t)value >>  16 ) & 0x000000000000003FULL); \
+    (s)->rsvdz0     = (uint32_t)(((uint64_t)value >>  13 ) & 0x0000000000000007ULL); \
+    (s)->sagaw      = (uint32_t)(((uint64_t)value >>  8  ) & 0x000000000000001FULL); \
+    (s)->cm         = (uint32_t)(((uint64_t)value >>  7  ) & 0x0000000000000001ULL); \
+    (s)->phmr       = (uint32_t)(((uint64_t)value >>  6  ) & 0x0000000000000001ULL); \
+    (s)->plmr       = (uint32_t)(((uint64_t)value >>  5  ) & 0x0000000000000001ULL); \
+    (s)->rwbf       = (uint32_t)(((uint64_t)value >>  4  ) & 0x0000000000000001ULL); \
+    (s)->afl        = (uint32_t)(((uint64_t)value >>  3  ) & 0x0000000000000001ULL); \
+    (s)->nd         = (uint32_t)(((uint64_t)value >>  0  ) & 0x0000000000000007ULL);
 
 
 
 //VTD_ECAP_REG (sec. 10.4.3)
 typedef struct {
-    u32 c       ;//:1;					//coherency
-    u32 qi      ;//:1;					//queued invalidation support
-    u32 di      ;//:1;					//device IOTLB support
-    u32 ir      ;//:1;					//interrupt remapping support
-    u32 eim     ;//:1;				//extended interrupt mode
-    u32 ch      ;//:1;					//caching hints
-    u32 pt      ;//:1;					//pass through
-    u32 sc      ;//:1;					//snoop control
-    u32 iro     ;//:10;				//IOTLB register offset
-    u32 rsvdz0  ;//: 2;		//reserved
-    u32 mhmv    ;//: 4;			//maximum handle mask value
-    u32 rsvdz1  ;//: 32;		//reserved
-    u32 rsvdz2  ;//: 8;		//reserved
+    uint32_t c       ;//:1;					//coherency
+    uint32_t qi      ;//:1;					//queued invalidation support
+    uint32_t di      ;//:1;					//device IOTLB support
+    uint32_t ir      ;//:1;					//interrupt remapping support
+    uint32_t eim     ;//:1;				//extended interrupt mode
+    uint32_t ch      ;//:1;					//caching hints
+    uint32_t pt      ;//:1;					//pass through
+    uint32_t sc      ;//:1;					//snoop control
+    uint32_t iro     ;//:10;				//IOTLB register offset
+    uint32_t rsvdz0  ;//: 2;		//reserved
+    uint32_t mhmv    ;//: 4;			//maximum handle mask value
+    uint32_t rsvdz1  ;//: 32;		//reserved
+    uint32_t rsvdz2  ;//: 8;		//reserved
 } __attribute__ ((packed)) VTD_ECAP_REG;
 
 #define pack_VTD_ECAP_REG(s) \
-    (u64)( \
-    (((u64)(s)->rsvdz2 &   0x00000000000000FFULL) << 56) | \
-    (((u64)(s)->rsvdz1 &   0x00000000FFFFFFFFULL) << 24) | \
-    (((u64)(s)->mhmv   &   0x000000000000000FULL) << 20) | \
-    (((u64)(s)->rsvdz0 &   0x0000000000000003ULL) << 18) | \
-    (((u64)(s)->iro    &   0x00000000000003FFULL) << 8 ) | \
-    (((u64)(s)->sc     &   0x0000000000000001ULL) << 7 ) | \
-    (((u64)(s)->pt     &   0x0000000000000001ULL) << 6 ) | \
-    (((u64)(s)->ch     &   0x0000000000000001ULL) << 5 ) | \
-    (((u64)(s)->eim    &   0x0000000000000001ULL) << 4 ) | \
-    (((u64)(s)->ir     &   0x0000000000000001ULL) << 3 ) | \
-    (((u64)(s)->di     &   0x0000000000000001ULL) << 2 ) | \
-    (((u64)(s)->qi     &   0x0000000000000001ULL) << 1 ) | \
-    (((u64)(s)->c      &   0x0000000000000001ULL) << 0 )  \
+    (uint64_t)( \
+    (((uint64_t)(s)->rsvdz2 &   0x00000000000000FFULL) << 56) | \
+    (((uint64_t)(s)->rsvdz1 &   0x00000000FFFFFFFFULL) << 24) | \
+    (((uint64_t)(s)->mhmv   &   0x000000000000000FULL) << 20) | \
+    (((uint64_t)(s)->rsvdz0 &   0x0000000000000003ULL) << 18) | \
+    (((uint64_t)(s)->iro    &   0x00000000000003FFULL) << 8 ) | \
+    (((uint64_t)(s)->sc     &   0x0000000000000001ULL) << 7 ) | \
+    (((uint64_t)(s)->pt     &   0x0000000000000001ULL) << 6 ) | \
+    (((uint64_t)(s)->ch     &   0x0000000000000001ULL) << 5 ) | \
+    (((uint64_t)(s)->eim    &   0x0000000000000001ULL) << 4 ) | \
+    (((uint64_t)(s)->ir     &   0x0000000000000001ULL) << 3 ) | \
+    (((uint64_t)(s)->di     &   0x0000000000000001ULL) << 2 ) | \
+    (((uint64_t)(s)->qi     &   0x0000000000000001ULL) << 1 ) | \
+    (((uint64_t)(s)->c      &   0x0000000000000001ULL) << 0 )  \
     )
 
 #define unpack_VTD_ECAP_REG(s, value) \
-    (s)->rsvdz2     = (u32)(((u64)value >>  56 ) & 0x00000000000000FFULL); \
-    (s)->rsvdz1     = (u32)(((u64)value >>  24 ) & 0x00000000FFFFFFFFULL); \
-    (s)->mhmv       = (u32)(((u64)value >>  20 ) & 0x000000000000000FULL); \
-    (s)->rsvdz0     = (u32)(((u64)value >>  18 ) & 0x0000000000000003ULL); \
-    (s)->iro        = (u32)(((u64)value >>  8  ) & 0x00000000000003FFULL); \
-    (s)->sc         = (u32)(((u64)value >>  7  ) & 0x0000000000000001ULL); \
-    (s)->pt         = (u32)(((u64)value >>  6  ) & 0x0000000000000001ULL); \
-    (s)->ch         = (u32)(((u64)value >>  5  ) & 0x0000000000000001ULL); \
-    (s)->eim        = (u32)(((u64)value >>  4  ) & 0x0000000000000001ULL); \
-    (s)->ir         = (u32)(((u64)value >>  3  ) & 0x0000000000000001ULL); \
-    (s)->di         = (u32)(((u64)value >>  2  ) & 0x0000000000000001ULL); \
-    (s)->qi         = (u32)(((u64)value >>  1  ) & 0x0000000000000001ULL); \
-    (s)->c          = (u32)(((u64)value >>  0  ) & 0x0000000000000001ULL);
+    (s)->rsvdz2     = (uint32_t)(((uint64_t)value >>  56 ) & 0x00000000000000FFULL); \
+    (s)->rsvdz1     = (uint32_t)(((uint64_t)value >>  24 ) & 0x00000000FFFFFFFFULL); \
+    (s)->mhmv       = (uint32_t)(((uint64_t)value >>  20 ) & 0x000000000000000FULL); \
+    (s)->rsvdz0     = (uint32_t)(((uint64_t)value >>  18 ) & 0x0000000000000003ULL); \
+    (s)->iro        = (uint32_t)(((uint64_t)value >>  8  ) & 0x00000000000003FFULL); \
+    (s)->sc         = (uint32_t)(((uint64_t)value >>  7  ) & 0x0000000000000001ULL); \
+    (s)->pt         = (uint32_t)(((uint64_t)value >>  6  ) & 0x0000000000000001ULL); \
+    (s)->ch         = (uint32_t)(((uint64_t)value >>  5  ) & 0x0000000000000001ULL); \
+    (s)->eim        = (uint32_t)(((uint64_t)value >>  4  ) & 0x0000000000000001ULL); \
+    (s)->ir         = (uint32_t)(((uint64_t)value >>  3  ) & 0x0000000000000001ULL); \
+    (s)->di         = (uint32_t)(((uint64_t)value >>  2  ) & 0x0000000000000001ULL); \
+    (s)->qi         = (uint32_t)(((uint64_t)value >>  1  ) & 0x0000000000000001ULL); \
+    (s)->c          = (uint32_t)(((uint64_t)value >>  0  ) & 0x0000000000000001ULL);
 
 
 
 
 //VTD_GCMD_REG (sec. 10.4.4)
 typedef struct {
-    u32 rsvdz0  ;//: 23;		//reserved
-    u32 cfi     ;//: 1;				//compatibility format interrupt
-    u32 sirtp   ;//: 1;			//set interrupt remap table pointer
-    u32 ire     ;//:1;				//interrupt remapping enable
-    u32 qie     ;//:1;				//queued invalidation enable
-    u32 wbf     ;//:1;				//write buffer flush
-    u32 eafl    ;//:1;				//enable advanced fault logging
-    u32 sfl     ;//:1;				//set fault log
-    u32 srtp    ;//:1;				//set root table pointer
-    u32 te      ;//:1;					//translation enable
+    uint32_t rsvdz0  ;//: 23;		//reserved
+    uint32_t cfi     ;//: 1;				//compatibility format interrupt
+    uint32_t sirtp   ;//: 1;			//set interrupt remap table pointer
+    uint32_t ire     ;//:1;				//interrupt remapping enable
+    uint32_t qie     ;//:1;				//queued invalidation enable
+    uint32_t wbf     ;//:1;				//write buffer flush
+    uint32_t eafl    ;//:1;				//enable advanced fault logging
+    uint32_t sfl     ;//:1;				//set fault log
+    uint32_t srtp    ;//:1;				//set root table pointer
+    uint32_t te      ;//:1;					//translation enable
 } __attribute__ ((packed)) VTD_GCMD_REG;
 
 #define pack_VTD_GCMD_REG(s) \
-    (u32)( \
-    (((u32)(s)->te       & 0x00000001UL) << 31) | \
-    (((u32)(s)->srtp     & 0x00000001UL) << 30) | \
-    (((u32)(s)->sfl      & 0x00000001UL) << 29) | \
-    (((u32)(s)->eafl     & 0x00000001UL) << 28) | \
-    (((u32)(s)->wbf      & 0x00000001UL) << 27) | \
-    (((u32)(s)->qie      & 0x00000001UL) << 26) | \
-    (((u32)(s)->ire      & 0x00000001UL) << 25) | \
-    (((u32)(s)->sirtp    & 0x00000001UL) << 24) | \
-    (((u32)(s)->cfi      & 0x00000001UL) << 23) | \
-    (((u32)(s)->rsvdz0   & 0x007FFFFFUL) << 0 ) \
+    (uint32_t)( \
+    (((uint32_t)(s)->te       & 0x00000001UL) << 31) | \
+    (((uint32_t)(s)->srtp     & 0x00000001UL) << 30) | \
+    (((uint32_t)(s)->sfl      & 0x00000001UL) << 29) | \
+    (((uint32_t)(s)->eafl     & 0x00000001UL) << 28) | \
+    (((uint32_t)(s)->wbf      & 0x00000001UL) << 27) | \
+    (((uint32_t)(s)->qie      & 0x00000001UL) << 26) | \
+    (((uint32_t)(s)->ire      & 0x00000001UL) << 25) | \
+    (((uint32_t)(s)->sirtp    & 0x00000001UL) << 24) | \
+    (((uint32_t)(s)->cfi      & 0x00000001UL) << 23) | \
+    (((uint32_t)(s)->rsvdz0   & 0x007FFFFFUL) << 0 ) \
     )
 
 #define unpack_VTD_GCMD_REG(s, value) \
-    (s)->te         = (u32)(((u32)value >> 31) & 0x00000001UL); \
-    (s)->srtp       = (u32)(((u32)value >> 30) & 0x00000001UL); \
-    (s)->sfl        = (u32)(((u32)value >> 29) & 0x00000001UL); \
-    (s)->eafl       = (u32)(((u32)value >> 28) & 0x00000001UL); \
-    (s)->wbf        = (u32)(((u32)value >> 27) & 0x00000001UL); \
-    (s)->qie        = (u32)(((u32)value >> 26) & 0x00000001UL); \
-    (s)->ire        = (u32)(((u32)value >> 25) & 0x00000001UL); \
-    (s)->sirtp      = (u32)(((u32)value >> 24) & 0x00000001UL); \
-    (s)->cfi        = (u32)(((u32)value >> 23) & 0x00000001UL); \
-    (s)->rsvdz0     = (u32)(((u32)value >> 0 ) & 0x007FFFFFUL);
+    (s)->te         = (uint32_t)(((uint32_t)value >> 31) & 0x00000001UL); \
+    (s)->srtp       = (uint32_t)(((uint32_t)value >> 30) & 0x00000001UL); \
+    (s)->sfl        = (uint32_t)(((uint32_t)value >> 29) & 0x00000001UL); \
+    (s)->eafl       = (uint32_t)(((uint32_t)value >> 28) & 0x00000001UL); \
+    (s)->wbf        = (uint32_t)(((uint32_t)value >> 27) & 0x00000001UL); \
+    (s)->qie        = (uint32_t)(((uint32_t)value >> 26) & 0x00000001UL); \
+    (s)->ire        = (uint32_t)(((uint32_t)value >> 25) & 0x00000001UL); \
+    (s)->sirtp      = (uint32_t)(((uint32_t)value >> 24) & 0x00000001UL); \
+    (s)->cfi        = (uint32_t)(((uint32_t)value >> 23) & 0x00000001UL); \
+    (s)->rsvdz0     = (uint32_t)(((uint32_t)value >> 0 ) & 0x007FFFFFUL);
 
 
 
 
 //VTD_GSTS_REG (sec. 10.4.5)
 typedef struct {
-    u32 rsvdz0  ; //: 23;		//reserved
-    u32 cfis    ; //:1;				//compatibility interrupt format status
-    u32 irtps   ; //:1;			//interrupt remapping table pointer status
-    u32 ires    ; //:1;				//interrupt remapping enable status
-    u32 qies    ; //:1;				//queued invalidation enable status
-    u32 wbfs    ; //:1;				//write buffer flush status
-    u32 afls    ; //:1;				//advanced fault logging status
-    u32 fls     ; //:1;				//fault log status
-    u32 rtps    ; //:1;				//root table pointer status
-    u32 tes     ; //:1;				//translation enable status
+    uint32_t rsvdz0  ; //: 23;		//reserved
+    uint32_t cfis    ; //:1;				//compatibility interrupt format status
+    uint32_t irtps   ; //:1;			//interrupt remapping table pointer status
+    uint32_t ires    ; //:1;				//interrupt remapping enable status
+    uint32_t qies    ; //:1;				//queued invalidation enable status
+    uint32_t wbfs    ; //:1;				//write buffer flush status
+    uint32_t afls    ; //:1;				//advanced fault logging status
+    uint32_t fls     ; //:1;				//fault log status
+    uint32_t rtps    ; //:1;				//root table pointer status
+    uint32_t tes     ; //:1;				//translation enable status
 } __attribute__ ((packed)) VTD_GSTS_REG;
 
 #define pack_VTD_GSTS_REG(s) \
-    (u32)( \
-    (((u32)(s)->tes      & 0x00000001UL) << 31) | \
-    (((u32)(s)->rtps     & 0x00000001UL) << 30) | \
-    (((u32)(s)->fls      & 0x00000001UL) << 29) | \
-    (((u32)(s)->afls     & 0x00000001UL) << 28) | \
-    (((u32)(s)->wbfs     & 0x00000001UL) << 27) | \
-    (((u32)(s)->qies     & 0x00000001UL) << 26) | \
-    (((u32)(s)->ires     & 0x00000001UL) << 25) | \
-    (((u32)(s)->irtps    & 0x00000001UL) << 24) | \
-    (((u32)(s)->cfis     & 0x00000001UL) << 23) | \
-    (((u32)(s)->rsvdz0   & 0x007FFFFFUL) << 0 ) \
+    (uint32_t)( \
+    (((uint32_t)(s)->tes      & 0x00000001UL) << 31) | \
+    (((uint32_t)(s)->rtps     & 0x00000001UL) << 30) | \
+    (((uint32_t)(s)->fls      & 0x00000001UL) << 29) | \
+    (((uint32_t)(s)->afls     & 0x00000001UL) << 28) | \
+    (((uint32_t)(s)->wbfs     & 0x00000001UL) << 27) | \
+    (((uint32_t)(s)->qies     & 0x00000001UL) << 26) | \
+    (((uint32_t)(s)->ires     & 0x00000001UL) << 25) | \
+    (((uint32_t)(s)->irtps    & 0x00000001UL) << 24) | \
+    (((uint32_t)(s)->cfis     & 0x00000001UL) << 23) | \
+    (((uint32_t)(s)->rsvdz0   & 0x007FFFFFUL) << 0 ) \
     )
 
 #define unpack_VTD_GSTS_REG(s, value) \
-     (s)->tes       = (u32)(((u32)value >> 31) & 0x00000001UL); \
-     (s)->rtps      = (u32)(((u32)value >> 30) & 0x00000001UL); \
-     (s)->fls       = (u32)(((u32)value >> 29) & 0x00000001UL); \
-     (s)->afls      = (u32)(((u32)value >> 28) & 0x00000001UL); \
-     (s)->wbfs      = (u32)(((u32)value >> 27) & 0x00000001UL); \
-     (s)->qies      = (u32)(((u32)value >> 26) & 0x00000001UL); \
-     (s)->ires      = (u32)(((u32)value >> 25) & 0x00000001UL); \
-     (s)->irtps     = (u32)(((u32)value >> 24) & 0x00000001UL); \
-     (s)->cfis      = (u32)(((u32)value >> 23) & 0x00000001UL); \
-     (s)->rsvdz0    = (u32)(((u32)value >> 0 ) & 0x007FFFFFUL);
+     (s)->tes       = (uint32_t)(((uint32_t)value >> 31) & 0x00000001UL); \
+     (s)->rtps      = (uint32_t)(((uint32_t)value >> 30) & 0x00000001UL); \
+     (s)->fls       = (uint32_t)(((uint32_t)value >> 29) & 0x00000001UL); \
+     (s)->afls      = (uint32_t)(((uint32_t)value >> 28) & 0x00000001UL); \
+     (s)->wbfs      = (uint32_t)(((uint32_t)value >> 27) & 0x00000001UL); \
+     (s)->qies      = (uint32_t)(((uint32_t)value >> 26) & 0x00000001UL); \
+     (s)->ires      = (uint32_t)(((uint32_t)value >> 25) & 0x00000001UL); \
+     (s)->irtps     = (uint32_t)(((uint32_t)value >> 24) & 0x00000001UL); \
+     (s)->cfis      = (uint32_t)(((uint32_t)value >> 23) & 0x00000001UL); \
+     (s)->rsvdz0    = (uint32_t)(((uint32_t)value >> 0 ) & 0x007FFFFFUL);
 
 
 
 //VTD_RTADDR_REG (sec. 10.4.6)
 typedef struct {
-    u32 rsvdz0  ; //: 12;		//reserved
-    u32 rta     ; //: 32;			//root table address
-    u32 rta_high ; // : 22;			//root table address
+    uint32_t rsvdz0  ; //: 12;		//reserved
+    uint32_t rta     ; //: 32;			//root table address
+    uint32_t rta_high ; // : 22;			//root table address
 } __attribute__ ((packed)) VTD_RTADDR_REG;
 
 #define pack_VTD_RTADDR_REG(s) \
-    (u64)( \
-    (((u64)(s)->rta_high &   0x00000000003FFFFFULL) << 44) | \
-    (((u64)(s)->rta      &   0x00000000FFFFFFFFULL) << 12) | \
-    (((u64)(s)->rsvdz0   &   0x0000000000000FFFULL) << 0 )  \
+    (uint64_t)( \
+    (((uint64_t)(s)->rta_high &   0x00000000003FFFFFULL) << 44) | \
+    (((uint64_t)(s)->rta      &   0x00000000FFFFFFFFULL) << 12) | \
+    (((uint64_t)(s)->rsvdz0   &   0x0000000000000FFFULL) << 0 )  \
     )
 
 #define unpack_VTD_RTADDR_REG(s, value) \
-    (s)->rta_high    = (u32)(((u64)value >>  44 ) & 0x00000000003FFFFFULL); \
-    (s)->rta         = (u32)(((u64)value >>  12 ) & 0x00000000FFFFFFFFULL); \
-    (s)->rsvdz0      = (u32)(((u64)value >>  0  ) & 0x0000000000000FFFULL);
+    (s)->rta_high    = (uint32_t)(((uint64_t)value >>  44 ) & 0x00000000003FFFFFULL); \
+    (s)->rta         = (uint32_t)(((uint64_t)value >>  12 ) & 0x00000000FFFFFFFFULL); \
+    (s)->rsvdz0      = (uint32_t)(((uint64_t)value >>  0  ) & 0x0000000000000FFFULL);
 
 
 
 
 //VTD_CCMD_REG (sec. 10.4.7)
 typedef struct {
-    u32 did     ; //:16;				//domain id
-    u32 sid     ; //:16;				//source id
-    u32 fm      ; //:2;					//function mask
-    u32 rsvdz0  ; //: 25;		//reserved
-    u32 caig    ; //:2;				//context invalidation actual granularity
-    u32 cirg    ; //:2;				//context invalidation request granularity
-    u32 icc     ; //:1;				//invalidate context-cache
+    uint32_t did     ; //:16;				//domain id
+    uint32_t sid     ; //:16;				//source id
+    uint32_t fm      ; //:2;					//function mask
+    uint32_t rsvdz0  ; //: 25;		//reserved
+    uint32_t caig    ; //:2;				//context invalidation actual granularity
+    uint32_t cirg    ; //:2;				//context invalidation request granularity
+    uint32_t icc     ; //:1;				//invalidate context-cache
 } __attribute__ ((packed)) VTD_CCMD_REG;
 
 #define pack_VTD_CCMD_REG(s) \
-    (u64)( \
-    (((u64)(s)->icc    &   0x0000000000000001ULL) << 63) | \
-    (((u64)(s)->cirg   &   0x0000000000000003ULL) << 61) | \
-    (((u64)(s)->caig   &   0x0000000000000003ULL) << 59) | \
-    (((u64)(s)->rsvdz0 &   0x0000000001FFFFFFULL) << 34) | \
-    (((u64)(s)->fm     &   0x0000000000000003ULL) << 32) | \
-    (((u64)(s)->sid    &   0x000000000000FFFFULL) << 16) | \
-    (((u64)(s)->did    &   0x000000000000FFFFULL) << 0 )  \
+    (uint64_t)( \
+    (((uint64_t)(s)->icc    &   0x0000000000000001ULL) << 63) | \
+    (((uint64_t)(s)->cirg   &   0x0000000000000003ULL) << 61) | \
+    (((uint64_t)(s)->caig   &   0x0000000000000003ULL) << 59) | \
+    (((uint64_t)(s)->rsvdz0 &   0x0000000001FFFFFFULL) << 34) | \
+    (((uint64_t)(s)->fm     &   0x0000000000000003ULL) << 32) | \
+    (((uint64_t)(s)->sid    &   0x000000000000FFFFULL) << 16) | \
+    (((uint64_t)(s)->did    &   0x000000000000FFFFULL) << 0 )  \
     )
 
 #define unpack_VTD_CCMD_REG(s, value) \
-    (s)->icc     = (u32)(((u64)value >>   63) & 0x0000000000000001ULL); \
-    (s)->cirg    = (u32)(((u64)value >>   61) & 0x0000000000000003ULL); \
-    (s)->caig    = (u32)(((u64)value >>   59) & 0x0000000000000003ULL); \
-    (s)->rsvdz0  = (u32)(((u64)value >>   34) & 0x0000000001FFFFFFULL); \
-    (s)->fm      = (u32)(((u64)value >>   32) & 0x0000000000000003ULL); \
-    (s)->sid     = (u32)(((u64)value >>   16) & 0x000000000000FFFFULL); \
-    (s)->did     = (u32)(((u64)value >>   0 ) & 0x000000000000FFFFULL);
+    (s)->icc     = (uint32_t)(((uint64_t)value >>   63) & 0x0000000000000001ULL); \
+    (s)->cirg    = (uint32_t)(((uint64_t)value >>   61) & 0x0000000000000003ULL); \
+    (s)->caig    = (uint32_t)(((uint64_t)value >>   59) & 0x0000000000000003ULL); \
+    (s)->rsvdz0  = (uint32_t)(((uint64_t)value >>   34) & 0x0000000001FFFFFFULL); \
+    (s)->fm      = (uint32_t)(((uint64_t)value >>   32) & 0x0000000000000003ULL); \
+    (s)->sid     = (uint32_t)(((uint64_t)value >>   16) & 0x000000000000FFFFULL); \
+    (s)->did     = (uint32_t)(((uint64_t)value >>   0 ) & 0x000000000000FFFFULL);
 
 
 
@@ -514,49 +514,49 @@ typedef struct {
 //VTD_IOTLB_REG (sec. 10.4.8.1)
 
 typedef struct {
-    u32 rsvdz0  ; //: 32;		//reserved
-    u32 did     ; //:16;				//domain-id
-    u32 dw      ; //: 1;				//drain writes
-    u32 dr      ; //:1;					//drain reads
-    u32 rsvdz1  ; //: 7;		//reserved
-    u32 iaig    ; //: 3;			//IOTLB actual invalidation granularity
-    u32 iirg    ; //: 3;			//IOTLB request invalidation granularity
-    u32 ivt     ; //: 1;				//invalidate IOTLB
+    uint32_t rsvdz0  ; //: 32;		//reserved
+    uint32_t did     ; //:16;				//domain-id
+    uint32_t dw      ; //: 1;				//drain writes
+    uint32_t dr      ; //:1;					//drain reads
+    uint32_t rsvdz1  ; //: 7;		//reserved
+    uint32_t iaig    ; //: 3;			//IOTLB actual invalidation granularity
+    uint32_t iirg    ; //: 3;			//IOTLB request invalidation granularity
+    uint32_t ivt     ; //: 1;				//invalidate IOTLB
 } __attribute__ ((packed)) VTD_IOTLB_REG;
 
 #define pack_VTD_IOTLB_REG(s) \
-    (u64)( \
-    (((u64)(s)->ivt &    0x0000000000000001ULL) << 63) | \
-    (((u64)(s)->iirg &   0x0000000000000007ULL) << 60) | \
-    (((u64)(s)->iaig &   0x0000000000000007ULL) << 57) | \
-    (((u64)(s)->rsvdz1 & 0x000000000000007FULL) << 50) | \
-    (((u64)(s)->dr &     0x0000000000000001ULL) << 49) | \
-    (((u64)(s)->dw &     0x0000000000000001ULL) << 48) | \
-    (((u64)(s)->did &    0x000000000000FFFFULL) << 32) | \
-    (((u64)(s)->rsvdz0 & 0x00000000FFFFFFFFULL) << 0 ) \
+    (uint64_t)( \
+    (((uint64_t)(s)->ivt &    0x0000000000000001ULL) << 63) | \
+    (((uint64_t)(s)->iirg &   0x0000000000000007ULL) << 60) | \
+    (((uint64_t)(s)->iaig &   0x0000000000000007ULL) << 57) | \
+    (((uint64_t)(s)->rsvdz1 & 0x000000000000007FULL) << 50) | \
+    (((uint64_t)(s)->dr &     0x0000000000000001ULL) << 49) | \
+    (((uint64_t)(s)->dw &     0x0000000000000001ULL) << 48) | \
+    (((uint64_t)(s)->did &    0x000000000000FFFFULL) << 32) | \
+    (((uint64_t)(s)->rsvdz0 & 0x00000000FFFFFFFFULL) << 0 ) \
     )
 
 #define unpack_VTD_IOTLB_REG(s, value) \
-    (s)->ivt = (u32)(((u64)value >>    63) & 0x0000000000000001ULL); \
-    (s)->iirg = (u32)(((u64)value >>   60) & 0x0000000000000007ULL); \
-    (s)->iaig = (u32)(((u64)value >>   57) & 0x0000000000000007ULL); \
-    (s)->rsvdz1 = (u32)(((u64)value >> 50) & 0x000000000000007FULL); \
-    (s)->dr = (u32)(((u64)value >>     49) & 0x0000000000000001ULL); \
-    (s)->dw = (u32)(((u64)value >>     48) & 0x0000000000000001ULL); \
-    (s)->did = (u32)(((u64)value >>    32) & 0x000000000000FFFFULL); \
-    (s)->rsvdz0 = (u32)(((u64)value >> 0 ) & 0x00000000FFFFFFFFULL);
+    (s)->ivt = (uint32_t)(((uint64_t)value >>    63) & 0x0000000000000001ULL); \
+    (s)->iirg = (uint32_t)(((uint64_t)value >>   60) & 0x0000000000000007ULL); \
+    (s)->iaig = (uint32_t)(((uint64_t)value >>   57) & 0x0000000000000007ULL); \
+    (s)->rsvdz1 = (uint32_t)(((uint64_t)value >> 50) & 0x000000000000007FULL); \
+    (s)->dr = (uint32_t)(((uint64_t)value >>     49) & 0x0000000000000001ULL); \
+    (s)->dw = (uint32_t)(((uint64_t)value >>     48) & 0x0000000000000001ULL); \
+    (s)->did = (uint32_t)(((uint64_t)value >>    32) & 0x000000000000FFFFULL); \
+    (s)->rsvdz0 = (uint32_t)(((uint64_t)value >> 0 ) & 0x00000000FFFFFFFFULL);
 
 
 /*//VTD_IVA_REG (sec. 10.4.8.2)
 typedef union {
-  u64 value;
+  uint64_t value;
   struct
   {
-    u32 am: 6;				//address mask
-    u32 ih:1;					//invalidation hint
-    u32 rsvdz0: 5;		//reserved
-    u32 addr:32;			//address
-    u32 addr_high :20;			//address
+    uint32_t am: 6;				//address mask
+    uint32_t ih:1;					//invalidation hint
+    uint32_t rsvdz0: 5;		//reserved
+    uint32_t addr:32;			//address
+    uint32_t addr_high :20;			//address
   } __attribute__((packed)) bits;
 } __attribute__ ((packed)) VTD_IVA_REG;
 */
@@ -564,19 +564,19 @@ typedef union {
 /*
 //VTD_FSTS_REG	(sec. 10.4.9)
 typedef union {
-  u32 value;
+  uint32_t value;
   struct
   {
-    u32 pfo:1;				//fault overflow
-    u32 ppf:1;				//primary pending fault
-    u32 afo:1;				//advanced fault overflow
-    u32 apf:1;				//advanced pending fault
-    u32 iqe:1;				//invalidation queue error
-    u32 ice:1;				//invalidation completion error
-    u32 ite:1;				//invalidation time-out error
-    u32 rsvdz0: 1;		//reserved
-    u32 fri:8;				//fault record index
-    u32 rsvdz1: 16;		//reserved
+    uint32_t pfo:1;				//fault overflow
+    uint32_t ppf:1;				//primary pending fault
+    uint32_t afo:1;				//advanced fault overflow
+    uint32_t apf:1;				//advanced pending fault
+    uint32_t iqe:1;				//invalidation queue error
+    uint32_t ice:1;				//invalidation completion error
+    uint32_t ite:1;				//invalidation time-out error
+    uint32_t rsvdz0: 1;		//reserved
+    uint32_t fri:8;				//fault record index
+    uint32_t rsvdz1: 16;		//reserved
   } __attribute__((packed)) bits;
 } __attribute__ ((packed)) VTD_FSTS_REG;
 */
@@ -584,63 +584,63 @@ typedef union {
 
 //VTD_FECTL_REG	(sec. 10.4.10)
 typedef struct {
-    u32 rsvdp0  ; //:30;		//reserved
-    u32 ip      ; //:1;					//interrupt pending
-    u32 im      ; //:1;					//interrupt mask
+    uint32_t rsvdp0  ; //:30;		//reserved
+    uint32_t ip      ; //:1;					//interrupt pending
+    uint32_t im      ; //:1;					//interrupt mask
 } __attribute__ ((packed)) VTD_FECTL_REG;
 
 #define pack_VTD_FECTL_REG(s) \
-    (u32)( \
-    (((u32)(s)->im & 0x00000001UL) << 31) | \
-    (((u32)(s)->ip & 0x00000001UL) << 30) | \
-    (((u32)(s)->rsvdp0 & 0x3FFFFFFFUL) << 0) \
+    (uint32_t)( \
+    (((uint32_t)(s)->im & 0x00000001UL) << 31) | \
+    (((uint32_t)(s)->ip & 0x00000001UL) << 30) | \
+    (((uint32_t)(s)->rsvdp0 & 0x3FFFFFFFUL) << 0) \
     )
 
 #define unpack_VTD_FECTL_REG(s, value) \
-    (s)->im = (u32)(((u32)value >> 31) & 0x00000001UL); \
-    (s)->ip = (u32)(((u32)value >> 30) & 0x00000001UL); \
-    (s)->rsvdp0 = (u32)(((u32)value >> 0) & 0x3FFFFFFFUL);
+    (s)->im = (uint32_t)(((uint32_t)value >> 31) & 0x00000001UL); \
+    (s)->ip = (uint32_t)(((uint32_t)value >> 30) & 0x00000001UL); \
+    (s)->rsvdp0 = (uint32_t)(((uint32_t)value >> 0) & 0x3FFFFFFFUL);
 
 
 //VTD_PMEN_REG (sec. 10.4.16)
 typedef struct {
-    u32 prs     ; // :1;			//protected region status
-    u32 rsvdp   ; //:30;		//reserved
-    u32 epm     ; //:1;			//enable protected memory
+    uint32_t prs     ; // :1;			//protected region status
+    uint32_t rsvdp   ; //:30;		//reserved
+    uint32_t epm     ; //:1;			//enable protected memory
 } __attribute__ ((packed)) VTD_PMEN_REG;
 
 #define pack_VTD_PMEN_REG(s) \
-    (u32)( \
-    (((u32)(s)->epm & 0x00000001UL) << 31) | \
-    (((u32)(s)->rsvdp & 0x3FFFFFFFUL) << 1) | \
-    (((u32)(s)->prs & 0x00000001UL) << 0) \
+    (uint32_t)( \
+    (((uint32_t)(s)->epm & 0x00000001UL) << 31) | \
+    (((uint32_t)(s)->rsvdp & 0x3FFFFFFFUL) << 1) | \
+    (((uint32_t)(s)->prs & 0x00000001UL) << 0) \
     )
 
 #define unpack_VTD_PMEN_REG(s, value) \
-    (s)->epm = (u32)(((u32)value >> 31) & 0x00000001UL); \
-    (s)->rsvdp = (u32)(((u32)value >> 1) & 0x3FFFFFFFUL); \
-    (s)->prs = (u32)(((u32)value >> 0) & 0x00000001UL);
+    (s)->epm = (uint32_t)(((uint32_t)value >> 31) & 0x00000001UL); \
+    (s)->rsvdp = (uint32_t)(((uint32_t)value >> 1) & 0x3FFFFFFFUL); \
+    (s)->prs = (uint32_t)(((uint32_t)value >> 0) & 0x00000001UL);
 
 
 
 //VTD_PLMBASE_REG (sec. 10.4.17)
 typedef struct {
-  u32 value;
+  uint32_t value;
 } __attribute__ ((packed)) VTD_PLMBASE_REG;
 
 //VTD_PLMLIMIT_REG (sec. 10.4.18)
 typedef struct {
-  u32 value;
+  uint32_t value;
 } __attribute__ ((packed)) VTD_PLMLIMIT_REG;
 
 //VTD_PHMBASE_REG (sec. 10.4.19)
 typedef struct {
-  u64 value;
+  uint64_t value;
 } __attribute__ ((packed)) VTD_PHMBASE_REG;
 
 //VTD_PHMLIMIT_REG (sec. 10.4.20)
 typedef struct {
-  u64 value;
+  uint64_t value;
 } __attribute__ ((packed)) VTD_PHMLIMIT_REG;
 
 
@@ -650,39 +650,39 @@ typedef enum {
 } xmhfhwm_vtd_regtype_t;
 
 typedef struct {
-	u32 reg_ver;
-	u32 reg_gcmd;
-	u32 reg_gsts;
-	u32 reg_fsts;
-	u32 reg_fectl;
-	u32 reg_pmen;
-	u32 reg_plmbase;
-	u32 reg_plmlimit;
+	uint32_t reg_ver;
+	uint32_t reg_gcmd;
+	uint32_t reg_gsts;
+	uint32_t reg_fsts;
+	uint32_t reg_fectl;
+	uint32_t reg_pmen;
+	uint32_t reg_plmbase;
+	uint32_t reg_plmlimit;
 
-	u32 reg_cap_lo;
-	u32 reg_cap_hi;
-	u32 reg_ecap_lo;
-	u32 reg_ecap_hi;
-	u32 reg_rtaddr_lo;
-	u32 reg_rtaddr_hi;
-	u32 reg_ccmd_lo;
-	u32 reg_ccmd_hi;
-	u32 reg_phmbase_lo;
-	u32 reg_phmbase_hi;
-	u32 reg_phmlimit_lo;
-	u32 reg_phmlimit_hi;
-	u32 reg_iotlb_lo;
-	u32 reg_iotlb_hi;
-	u32 reg_iva_lo;
-	u32 reg_iva_hi;
+	uint32_t reg_cap_lo;
+	uint32_t reg_cap_hi;
+	uint32_t reg_ecap_lo;
+	uint32_t reg_ecap_hi;
+	uint32_t reg_rtaddr_lo;
+	uint32_t reg_rtaddr_hi;
+	uint32_t reg_ccmd_lo;
+	uint32_t reg_ccmd_hi;
+	uint32_t reg_phmbase_lo;
+	uint32_t reg_phmbase_hi;
+	uint32_t reg_phmlimit_lo;
+	uint32_t reg_phmlimit_hi;
+	uint32_t reg_iotlb_lo;
+	uint32_t reg_iotlb_hi;
+	uint32_t reg_iva_lo;
+	uint32_t reg_iva_hi;
 
-	u64 regbaseaddr;
-	u64 iotlbaddr;
-	u64 ivaaddr;
+	uint64_t regbaseaddr;
+	uint64_t iotlbaddr;
+	uint64_t ivaaddr;
 } xmhfhwm_vtd_drhd_state_t;
 
-bool _impl_xmhfhwm_vtd_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result);
-bool _impl_xmhfhwm_vtd_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value);
+bool _impl_xmhfhwm_vtd_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_xmhfhwm_vtd_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
 
 extern xmhfhwm_vtd_drhd_state_t xmhfhwm_vtd_drhd_state[];
 

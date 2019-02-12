@@ -126,11 +126,11 @@
 
 
 typedef struct {
-	u32 vendor_id;
-	u32 device_id;
-	u32 bus;
-	u32 dev;
-	u32 func;
+	uint32_t vendor_id;
+	uint32_t device_id;
+	uint32_t bus;
+	uint32_t dev;
+	uint32_t func;
 } __attribute__((packed)) pci_device_t;
 
 #endif /* __ASSEMBLY__ */

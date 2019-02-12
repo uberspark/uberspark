@@ -294,13 +294,13 @@
 
 
 typedef struct {
-    u32 baud;
-    u8 data_bits;
-    u8 parity;
-    u8 stop_bits;
-    u8 fifo;
-    u32 clock_hz;
-    u32 port;
+    uint32_t baud;
+    uint8_t data_bits;
+    uint8_t parity;
+    uint8_t stop_bits;
+    uint8_t fifo;
+    uint32_t clock_hz;
+    uint32_t port;
 } __attribute__((packed)) uart_config_t;
 
 
@@ -344,7 +344,7 @@ static inline void dbg_x86_uart_putc_bare(char ch){
   while ( ! (inb(g_uart_config.port+0x5) & 0x20) );
 
   //write the character
-  outb((u8)ch, g_uart_config.port);
+  outb((uint8_t)ch, g_uart_config.port);
 
   //wait for xmit hold register to be empty and line is idle
   while ( ! (inb(g_uart_config.port+0x5) & 0x40) );
@@ -373,9 +373,9 @@ static inline void xmhfhw_platform_serial_puts(char *buffer){
 		dbg_x86_uart_putc(*buffer++);
 	/*while (*buffer){
         if(*buffer == '\n')
-            dbg_x86_uart_putc_bare((u32)'\r');
+            dbg_x86_uart_putc_bare((uint32_t)'\r');
 
-        dbg_x86_uart_putc_bare((u32)*buffer);
+        dbg_x86_uart_putc_bare((uint32_t)*buffer);
 
         buffer++;
 	}*/
@@ -394,29 +394,29 @@ static inline void xmhfhw_platform_serial_init(char *params){
   g_uart_config.fifo = 0;
 
   // disable UART interrupts
-  outb((u8)0, g_uart_config.port+0x1); //clear interrupt enable register
+  outb((uint8_t)0, g_uart_config.port+0x1); //clear interrupt enable register
 
   //compute divisor latch data from baud-rate and set baud-rate
   {
-	u16 divisor_latch_data = g_uart_config.clock_hz / (g_uart_config.baud * 16);
+	uint16_t divisor_latch_data = g_uart_config.clock_hz / (g_uart_config.baud * 16);
 
 	outb(0x80, g_uart_config.port+0x3); //enable divisor latch access by
 									    //writing to line control register
 
-	outb((u8)divisor_latch_data, g_uart_config.port); //write low 8-bits of divisor latch data
-	outb((u8)(divisor_latch_data >> 8), g_uart_config.port+0x1); //write high 8-bits of divisor latch data
+	outb((uint8_t)divisor_latch_data, g_uart_config.port); //write low 8-bits of divisor latch data
+	outb((uint8_t)(divisor_latch_data >> 8), g_uart_config.port+0x1); //write high 8-bits of divisor latch data
 
    }
 
   //set data bits, stop bits and parity info. by writing to
   //line control register
-  outb((u8)((g_uart_config.data_bits - 5) |
+  outb((uint8_t)((g_uart_config.data_bits - 5) |
                ((g_uart_config.stop_bits - 1) << 2) |
                       g_uart_config.parity), g_uart_config.port+0x3);
 
   //signal ready by setting DTR and RTS high in
   //modem control register
-  outb((u8)0x3, g_uart_config.port+0x4);
+  outb((uint8_t)0x3, g_uart_config.port+0x4);
 
   return;
 }

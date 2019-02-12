@@ -159,9 +159,9 @@ enum {
 
 //tomcrypt_hash.h
 struct sha1_state {
-    u64 length;
-    u32 state[5], curlen;
-    u8 buf[64];
+    uint64_t length;
+    uint32_t state[5], curlen;
+    uint8_t buf[64];
 };
 
 

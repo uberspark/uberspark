@@ -309,10 +309,10 @@ typedef __uintptr_t             uintptr_t;
 #define _INTPTR_T_DECLARED
 #endif
 
-typedef uint8_t         u8;
-typedef uint16_t        u16;
-typedef uint32_t        u32;
-typedef uint64_t        u64;
+typedef uint8_t         uint8_t;
+typedef uint16_t        uint16_t;
+typedef uint32_t        uint32_t;
+typedef uint64_t        uint64_t;
 
 typedef int64_t         s64;
 typedef int32_t         s32;
