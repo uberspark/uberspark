@@ -23,7 +23,12 @@ all: build-tools build-loaders
 
 .PHONY: build-loaders
 build-loaders:
-	cd $(USPARK_LOADERSDIR) && $(MAKE) -w all
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w build
+
+.PHONY: install-loaders
+install-loaders:
+	cd $(USPARK_LOADERSDIR) && $(MAKE) -w install
+
 
 .PHONY: build-tools
 build-tools:
