@@ -47,6 +47,12 @@
 #include <uberspark.h>
 #include "usloader-linux-um.h"
 
+#include <stdio.h>
+#include <sys/mman.h>
+#include <asm/mman.h>
+#include <errno.h>
+#include <hugetlbfs.h>
+
 bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
 	uint32_t hugepagesize;
 
