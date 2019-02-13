@@ -47,6 +47,28 @@
 #include <uberspark.h>
 #include "usloader-linux-um.h"
 
+bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
+	uint32_t hugepagesize;
+
+	//sanity check input parameter
+    if(phugepagesize == NULL)
+    	return false;
+
+	//grab huge page size of system
+    hugepagesize = gethugepagesize();
+
+    //in case of error print out a warning and return false
+    if(hugepagesizes == -1){
+        printf("\n%s: gethugepagesizes error: %s\n", __FUNCTION__, strerror(errno));
+        return false;
+    }
+
+    //store huge page size in the provided output parameter
+    *phugepagesize = hugepagesize;
+
+}
+
+
 //usloader_linux_um_loaduobjcoll
 bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	FILE *fp;
