@@ -50,12 +50,26 @@
 //usloader_linux_um_loaduobjcoll
 bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	FILE *fp;
+	uint32_t uobjcoll_filename_size;
+	void *uobjcoll_vaddr;
 
+	//open the uobjcoll image file
 	fp=fopen(uobjcoll_filename, "r");
 	if(fp == NULL){
 		return false;
 	}
 
+	//compute file size in bytes
+	fseek(fp, 0, SEEK_END);
+	uobjcoll_filename_size = ftell(fp);
+
+	//rewind fp to beginning of file
+	fseek(f, 0, SEEK_SET);
+
+	//read image file into allocated uobjcoll virtual address
+	fread(uobjcoll_vaddr, uobjcoll_filename_size, 1, fp);
+
+	//close uobjcoll image file
 	fclose(fp);
 	return true;
 }
