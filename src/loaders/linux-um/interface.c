@@ -74,7 +74,9 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	FILE *fp;
 	uint32_t uobjcoll_filename_size;
 	void *uobjcoll_vaddr;
+	uint32_t pagesize;
 
+#if 0
 	//open the uobjcoll image file
 	fp=fopen(uobjcoll_filename, "r");
 	if(fp == NULL){
@@ -93,6 +95,13 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 
 	//close uobjcoll image file
 	fclose(fp);
+#endif
+
+	if(!usloader_linux_um_getpagesize(&pagesize)){
+        printf("\n%s: error in obtaining pagesize\n", __FUNCTION__);
+        return false;
+	}
+
 	return true;
 }
 
