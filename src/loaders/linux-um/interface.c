@@ -47,6 +47,18 @@
 #include <uberspark.h>
 #include "usloader-linux-um.h"
 
+//usloader_linux_um_loaduobjcoll
+bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
+	FILE *fp;
+
+	fp=fopen(uobjcoll_filename, "r");
+	if(fp == NULL){
+		return false;
+	}
+
+	fclose(fp);
+	return true;
+}
 
 uint32_t sample_interface(uint32_t num){
 	return num++;
