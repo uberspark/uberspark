@@ -61,17 +61,20 @@ bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
     	return false;
 
 	//grab huge page size of system
-    hugepagesize = gethugepagesize();
+    //hugepagesize = gethugepagesize();
+
 
     //in case of error print out a warning and return false
-    if(hugepagesize == -1){
-        printf("\n%s: gethugepagesize error: %s\n", __FUNCTION__, strerror(errno));
+    //if(hugepagesize == -1){
+    if(gethugepagesizes(&hugepagesize, 1) == -1){
+    	printf("\n%s: gethugepagesize error: %s\n", __FUNCTION__, strerror(errno));
         return false;
     }
 
     //store huge page size in the provided output parameter
     *phugepagesize = hugepagesize;
 
+    return true;
 }
 
 
