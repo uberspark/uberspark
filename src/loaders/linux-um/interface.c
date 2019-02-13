@@ -64,8 +64,8 @@ bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
     hugepagesize = gethugepagesize();
 
     //in case of error print out a warning and return false
-    if(hugepagesizes == -1){
-        printf("\n%s: gethugepagesizes error: %s\n", __FUNCTION__, strerror(errno));
+    if(hugepagesize == -1){
+        printf("\n%s: gethugepagesize error: %s\n", __FUNCTION__, strerror(errno));
         return false;
     }
 
