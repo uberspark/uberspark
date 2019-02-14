@@ -33,6 +33,8 @@ module Usuobjcollection =
 	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
 	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
+	let o_load_addr = ref 0;;
+
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
 	(* usmf_filename = uobj collection manifest filename *)
@@ -183,6 +185,7 @@ module Usuobjcollection =
 			(uobjcoll_load_addr : int) =
 		let uobj_load_addr = ref 0 in
 		uobj_load_addr := uobjcoll_load_addr;
+		o_load_addr := uobjcoll_load_addr;
 
 		Hashtbl.iter (fun key uobj ->  
 				uobj#compute_sections_memory_map !uobj_load_addr;
