@@ -79,9 +79,9 @@ bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
 
 
 //usloader_linux_um_loaduobjcoll
-bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
-		uint32_t *uobjcoll_load_addr,
-		uint32_t *uobjcoll_load_size){
+bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
+		uint32_t *o_uobjcoll_load_addr,
+		uint32_t *o_uobjcoll_load_size){
 	FILE *fp;
 	uint32_t uobjcoll_filename_size;
 	void *uobjcoll_vaddr;
@@ -91,9 +91,9 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
 	uint32_t uobjcoll_load_addr;
 
 	//sanity check params
-	if(uobjcoll_filename == NULL ||)
-		uobjcoll_load_addr == NULL ||
-		uobjcoll_load_size == NULL)
+	if(i_uobjcoll_filename == NULL ||)
+		o_uobjcoll_load_addr == NULL ||
+		o_uobjcoll_load_size == NULL)
 		return false;
 
     //get memory backing page size
@@ -103,7 +103,7 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
 	}
 
 	//open the uobjcoll image file
-	fp=fopen(uobjcoll_filename, "r");
+	fp=fopen(i_uobjcoll_filename, "r");
 	if(fp == NULL){
 		return false;
 	}
@@ -151,12 +151,19 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
         printf("\n%s: inconsistent load warning!\n", __FUNCTION__);
     }
 
+
+    //return results
+    *o_uobjcoll_load_addr = uobjcoll_load_addr;
+    *o_uobjcoll_load_size = (num_pages * pagesize);
+
+
+/*
     //now unmap the uobj va space
     if(munmap(uobjcoll_load_addr, (num_pages * pagesize)) == -1){
         printf("\n%s: error in munmap :%s\n", __FUNCTION__, strerror(errno));
         return false;
     }
-
+*/
 
 	//read image file into allocated uobjcoll virtual address
 	//fread(uobjcoll_vaddr, uobjcoll_filename_size, 1, fp);
