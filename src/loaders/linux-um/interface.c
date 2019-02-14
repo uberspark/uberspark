@@ -86,6 +86,7 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	uint32_t pagesize;
 	uint32_t num_pages;
 	uobjcoll_hdr_t uobjcoll_hdr;
+	uint32_t uobjcoll_load_addr;
 
     //get memory backing page size
 	if(!usloader_linux_um_getpagesize(&pagesize)){
@@ -124,6 +125,30 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 
     printf("\n%s: num_pages=%u\n", __FUNCTION__,
     		num_pages);
+
+
+    //mmap a huge page
+    uobjcoll_load_addr = mmap(uobjcoll_hdr.load_addr,
+    		(num_pages * pagesize), (PROT_READ | PROT_WRITE | PROT_EXEC),
+    		MAP_PRIVATE | (MAP_FIXED | MAP_ANONYMOUS | MAP_HUGETLB), -1 , 0);
+
+    //bail out if we could not mmap
+    if(uobjcoll_load_addr == MAP_FAILED){
+        printf("\n%s: mmap error: %s\n", __FUNCTION__, strerror(errno));
+        return false;
+    }
+
+    //sanity check mmaped address with va
+    if(uobjcoll_load_addr != uobjcoll_hdr.load_addr){
+        printf("\n%s: inconsistent load warning!\n", __FUNCTION__);
+    }
+
+    //now unmap the uobj va space
+    if(munmap(uobjcoll_load_addr, (num_pages * pagesize)) == -1){
+        printf("\n%s: error in munmap :%s\n", __FUNCTION__, strerror(errno));
+        return false;
+    }
+
 
 	//read image file into allocated uobjcoll virtual address
 	//fread(uobjcoll_vaddr, uobjcoll_filename_size, 1, fp);
