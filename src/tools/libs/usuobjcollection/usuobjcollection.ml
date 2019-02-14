@@ -184,7 +184,7 @@ module Usuobjcollection =
 	let compute_memory_map
 			(uobjcoll_load_addr : int) =
 		let uobj_load_addr = ref 0 in
-		uobj_load_addr := uobjcoll_load_addr;
+		uobj_load_addr := uobjcoll_load_addr + (Usconfig.get_sizeof_uobjcoll_info_t());
 		o_load_addr := uobjcoll_load_addr;
 
 		Hashtbl.iter (fun key uobj ->  
