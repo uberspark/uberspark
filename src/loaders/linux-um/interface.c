@@ -91,7 +91,7 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
 	uint32_t uobjcoll_load_addr;
 
 	//sanity check params
-	if(i_uobjcoll_filename == NULL ||)
+	if(i_uobjcoll_filename == NULL ||
 		o_uobjcoll_load_addr == NULL ||
 		o_uobjcoll_load_size == NULL)
 		return false;
