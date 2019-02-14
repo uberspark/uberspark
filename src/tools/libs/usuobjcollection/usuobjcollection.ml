@@ -33,6 +33,8 @@ module Usuobjcollection =
 	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
 	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
+	let o_load_addr = ref 0;;
+
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
 	(* usmf_filename = uobj collection manifest filename *)
@@ -182,7 +184,8 @@ module Usuobjcollection =
 	let compute_memory_map
 			(uobjcoll_load_addr : int) =
 		let uobj_load_addr = ref 0 in
-		uobj_load_addr := uobjcoll_load_addr;
+		uobj_load_addr := uobjcoll_load_addr + (Usconfig.get_sizeof_uobjcoll_info_t());
+		o_load_addr := uobjcoll_load_addr;
 
 		Hashtbl.iter (fun key uobj ->  
 				uobj#compute_sections_memory_map !uobj_load_addr;
@@ -238,10 +241,14 @@ module Usuobjcollection =
 (*		Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) uobj_info_t uobjcoll_info_table[] = {";*)
 		Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) uobjcoll_info_t uobjcoll_info_table = {";
 
-		Printf.fprintf oc "\n\tUOBJCOLL_INFO_T_MAGIC,";
-		Printf.fprintf oc "\n\t%u," !total_uobjs;
-		Printf.fprintf oc "\n\tUOBJ_INFO_T_SIZE,";
-		Printf.fprintf oc "\n\t0x00000000UL,";
+		Printf.fprintf oc "\n\t{";
+
+		Printf.fprintf oc "\n\t\tUOBJCOLL_INFO_T_MAGIC,";
+		Printf.fprintf oc "\n\t\t%u," !total_uobjs;
+		Printf.fprintf oc "\n\t\tUOBJ_INFO_T_SIZE,";
+		Printf.fprintf oc "\n\t\t0x%08x" !o_load_addr;
+
+		Printf.fprintf oc "\n\t},";
 
 		Printf.fprintf oc "\n\t{";
 
