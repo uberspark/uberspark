@@ -85,6 +85,13 @@ typedef struct {
 	uint32_t magic;
 	uint32_t total_uobjs;
 	uint32_t sizeof_uobj_info_t;
+	uint32_t load_addr;
+}__attribute__((packed)) uobjcoll_hdr_t;
+
+typedef struct {
+	uint32_t magic;
+	uint32_t total_uobjs;
+	uint32_t sizeof_uobj_info_t;
 	uint32_t filler0;
 	uobj_info_t uobj[UOBJCOLL_MAX_UOBJS];
 } __attribute__((packed)) uobjcoll_info_t;
