@@ -79,7 +79,9 @@ bool usloader_linux_um_getpagesize(uint32_t *phugepagesize){
 
 
 //usloader_linux_um_loaduobjcoll
-bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
+bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
+		uint32_t *uobjcoll_load_addr,
+		uint32_t *uobjcoll_load_size){
 	FILE *fp;
 	uint32_t uobjcoll_filename_size;
 	void *uobjcoll_vaddr;
@@ -87,6 +89,8 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	uint32_t num_pages;
 	uobjcoll_hdr_t uobjcoll_hdr;
 	uint32_t uobjcoll_load_addr;
+
+
 
     //get memory backing page size
 	if(!usloader_linux_um_getpagesize(&pagesize)){
