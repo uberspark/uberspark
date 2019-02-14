@@ -84,7 +84,14 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	uint32_t uobjcoll_filename_size;
 	void *uobjcoll_vaddr;
 	uint32_t pagesize;
+	uint32_t num_pages;
 	uobjcoll_hdr_t uobjcoll_hdr;
+
+    //get memory backing page size
+	if(!usloader_linux_um_getpagesize(&pagesize)){
+        printf("\n%s: error in obtaining pagesize\n", __FUNCTION__);
+        return false;
+	}
 
 	//open the uobjcoll image file
 	fp=fopen(uobjcoll_filename, "r");
@@ -105,6 +112,18 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
     printf("\n%s: magic=0x%08x, load_addr=0x%08x\n", __FUNCTION__,
     		uobjcoll_hdr.magic, uobjcoll_hdr.load_addr);
 
+    //compute number of pages needed to hold image
+    if( (uobjcoll_filename_size / pagesize) == 0)
+    	num_pages = 1;
+    else{
+    	if (uobjcoll_filename_size % pagesize)
+    		num_pages = (uobjcoll_filename_size / pagesize) + 1;
+    	else
+    		num_pages = (uobjcoll_filename_size / pagesize);
+    }
+
+    printf("\n%s: num_pages=%u\n", __FUNCTION__,
+    		num_pages);
 
 	//read image file into allocated uobjcoll virtual address
 	//fread(uobjcoll_vaddr, uobjcoll_filename_size, 1, fp);
@@ -112,10 +131,6 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename){
 	//close uobjcoll image file
 	fclose(fp);
 
-	if(!usloader_linux_um_getpagesize(&pagesize)){
-        printf("\n%s: error in obtaining pagesize\n", __FUNCTION__);
-        return false;
-	}
 
 	return true;
 }
