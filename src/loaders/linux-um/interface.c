@@ -175,6 +175,22 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
 	return true;
 }
 
+
+bool usloader_linux_um_unloaduobjcoll(uint32_t i_uobjcoll_load_addr,
+		uint32_t i_uobjcoll_load_size){
+
+    //now unmap the uobj va space
+    if(munmap(i_uobjcoll_load_addr, i_uobjcoll_load_size) == -1){
+        printf("\n%s: error in munmap :%s\n", __FUNCTION__, strerror(errno));
+        return false;
+    }else
+    	return true;
+
+}
+
+
+
+
 uint32_t sample_interface(uint32_t num){
 	return num++;
 }

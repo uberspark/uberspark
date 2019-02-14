@@ -57,6 +57,8 @@ extern bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
 		uint32_t *uobjcoll_load_addr,
 		uint32_t *uobjcoll_load_size);
 
+extern bool usloader_linux_um_unloaduobjcoll(uint32_t i_uobjcoll_load_addr,
+		uint32_t i_uobjcoll_load_size);
 
 #endif /* __ASSEMBLY__ */
 
