@@ -90,7 +90,11 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename,
 	uobjcoll_hdr_t uobjcoll_hdr;
 	uint32_t uobjcoll_load_addr;
 
-
+	//sanity check params
+	if(uobjcoll_filename == NULL ||)
+		uobjcoll_load_addr == NULL ||
+		uobjcoll_load_size == NULL)
+		return false;
 
     //get memory backing page size
 	if(!usloader_linux_um_getpagesize(&pagesize)){
