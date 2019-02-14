@@ -246,7 +246,7 @@ module Usuobjcollection =
 		Printf.fprintf oc "\n\t\tUOBJCOLL_INFO_T_MAGIC,";
 		Printf.fprintf oc "\n\t\t%u," !total_uobjs;
 		Printf.fprintf oc "\n\t\tUOBJ_INFO_T_SIZE,";
-		Printf.fprintf oc "\n\t\t0x00000000UL,";
+		Printf.fprintf oc "\n\t\t0x%08x" !o_load_addr;
 
 		Printf.fprintf oc "\n\t},";
 
