@@ -151,26 +151,15 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
         printf("\n%s: inconsistent load warning!\n", __FUNCTION__);
     }
 
-
-    //return results
-    *o_uobjcoll_load_addr = uobjcoll_load_addr;
-    *o_uobjcoll_load_size = (num_pages * pagesize);
-
-
-/*
-    //now unmap the uobj va space
-    if(munmap(uobjcoll_load_addr, (num_pages * pagesize)) == -1){
-        printf("\n%s: error in munmap :%s\n", __FUNCTION__, strerror(errno));
-        return false;
-    }
-*/
-
 	//read image file into allocated uobjcoll virtual address
-	//fread(uobjcoll_vaddr, uobjcoll_filename_size, 1, fp);
+	fread(uobjcoll_load_addr, uobjcoll_filename_size, 1, fp);
 
 	//close uobjcoll image file
 	fclose(fp);
 
+    //return results
+    *o_uobjcoll_load_addr = uobjcoll_load_addr;
+    *o_uobjcoll_load_size = (num_pages * pagesize);
 
 	return true;
 }
