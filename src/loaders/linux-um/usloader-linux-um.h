@@ -51,6 +51,7 @@
 #ifndef __ASSEMBLY__
 extern uint32_t sample_interface(uint32_t num);
 
+extern bool usloader_linux_um_getpagesize(uint32_t *phugepagesize);
 extern bool usloader_linux_um_loaduobjcoll(uint8_t *uobjcoll_filename);
 
 #endif /* __ASSEMBLY__ */
