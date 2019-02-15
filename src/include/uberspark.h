@@ -73,6 +73,9 @@
 #define UOBJCOLL_INFO_T_MAGIC	0xD00DF00D
 #define UOBJCOLL_MAX_UOBJS		32
 
+#define UOBJ_MAX_SENTINELS		8
+
+
 typedef void * uobj_entrystub_t;
 
 typedef struct {
