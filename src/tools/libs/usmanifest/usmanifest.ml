@@ -196,7 +196,7 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-binary" *)
 	(* return true on successful parse, false if not *)
-	(* return: if true then lists of c-files and casm files *)
+	(* return: if true then list of sections *)
 	(*--------------------------------------------------------------------------*)
 	let parse_node_uobj_binary usmf_json =
 		let retval = ref false in
