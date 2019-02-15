@@ -76,6 +76,12 @@
 typedef void * uobj_entrystub_t;
 
 typedef struct {
+	uint32_t s_type;
+	uint32_t s_load_addr;
+	uint32_t s_load_size;
+} __attribute__((packed)) uobj_sentinel_info_t;
+
+typedef struct {
 	uobj_entrystub_t entrystub;
 	uint32_t ustack_tos[MAX_PLATFORM_CPUS];
 	uint32_t tstack_tos[MAX_PLATFORM_CPUS];
