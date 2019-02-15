@@ -60,13 +60,8 @@
 #include <uberspark-config.h>
 #include <xmhf-hwm.h>
 
-#define USMF_STR(s) _USMF_STR(s)
 #define _USMF_STR(s) #s
-
-
-
-
-#ifndef __ASSEMBLY__
+#define USMF_STR(s) _USMF_STR(s)
 
 
 //////
@@ -75,8 +70,14 @@
 
 #define UOBJ_MAX_SENTINELS		8
 
-#define UOBJ_SENTINEL_TYPE_CALL	0xFFFF0000UL
+#define UOBJ_SENTINEL_TYPE_CALL	0xFFFF0000
+//////
 
+
+#ifndef __ASSEMBLY__
+
+
+//////
 
 typedef void * uobj_entrystub_t;
 
