@@ -161,8 +161,11 @@ class uobject = object(self)
 			let dummy = 0 in
 				begin
 					o_uobj_sentinels_list := uobj_sentinels_list;
-					(* List.iter (fun x ->
-					) uobj_sentinels_list;*)
+					List.iter (fun x ->
+						Uslog.logf log_tag Uslog.Info "%s;%s;%s;%s;%s" 
+							(List.nth x 0) (List.nth x 1) (List.nth x 2) (List.nth x 3) (List.nth x 4);
+						
+					) !o_uobj_sentinels_list;
 				end;
 
 
@@ -174,7 +177,7 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
-					o_uobj_sections_list := uobj_sections_list;
+					o_uobj_sections_list := !o_uobj_sections_list @ uobj_sections_list;
 				end;
 																											
 			(true)
