@@ -22,6 +22,8 @@ struct
 				s_length: int;	
 			};;
 
+		
+
 class uobject = object(self)
 			
 		val log_tag = "Usuobj";
@@ -40,6 +42,10 @@ class uobject = object(self)
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
 		val o_uobj_sections_list : string list list ref = ref [];
 		method get_o_uobj_sections_list = !o_uobj_sections_list;
+
+		val o_uobj_sentinels_list : string list list ref = ref [];
+		method get_o_uobj_sentinels_list = !o_uobj_sentinels_list;
+
 		val o_usmf_filename = ref "";
 		method get_o_usmf_filename = !o_usmf_filename;
 		val o_uobj_dir_abspathname = ref "";
@@ -145,6 +151,20 @@ class uobject = object(self)
 					o_usmf_sources_c_files := usmf_source_c_files;
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
+
+			(* parse uobj-sentinels node *)
+			let (rval, uobj_sentinels_list) = 
+										Usmanifest.parse_node_uobj_sentinels mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_uobj_sentinels_list := uobj_sentinels_list;
+					(* List.iter (fun x ->
+					) uobj_sentinels_list;*)
+				end;
+
 
 			(* parse uobj-binary node *)
 			let (rval, uobj_sections_list) = 
