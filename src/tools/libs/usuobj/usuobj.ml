@@ -162,9 +162,19 @@ class uobject = object(self)
 				begin
 					o_uobj_sentinels_list := uobj_sentinels_list;
 					List.iter (fun x ->
-						Uslog.logf log_tag Uslog.Info "%s;%s;%s;%s;%s" 
+						(*Uslog.logf log_tag Uslog.Info "%s;%s;%s;%s;%s" 
 							(List.nth x 0) (List.nth x 1) (List.nth x 2) (List.nth x 3) (List.nth x 4);
+						*)
 						
+						(*make a unique name for this sentinel*)
+						let sentinel_name = ref "" in
+							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 1); 
+						
+						(* make a section for this sentinel*)
+						(* 0 = name, 1 = protections, 2 = size, 3...n = subsection names *)
+						o_uobj_sections_list := !o_uobj_sections_list @
+							[ [ !sentinel_name; (List.nth x 3); (List.nth x 4); ("." ^ !sentinel_name) ] ];
+							
 					) !o_uobj_sentinels_list;
 				end;
 
