@@ -75,6 +75,8 @@
 
 #define UOBJ_MAX_SENTINELS		8
 
+#define UOBJ_SENTINEL_TYPE_CALL	0xFFFF0000UL
+
 
 typedef void * uobj_entrystub_t;
 
