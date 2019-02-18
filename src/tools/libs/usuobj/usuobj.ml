@@ -22,15 +22,6 @@ struct
 				s_length: int;	
 			};;
 
-		type section_info_t = 
-			{
-				s_name: string;
-				s_type: int;
-				s_attribute : string;
-				s_subsection_list : string list;
-				s_origin: int;
-				s_length: int;	
-			};;
 
 		
 
@@ -50,6 +41,7 @@ class uobject = object(self)
 		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
 		val o_usmf_sources_casm_files: string list ref = ref [];
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
+
 		val o_uobj_sections_list : string list list ref = ref [];
 		method get_o_uobj_sections_list = !o_uobj_sections_list;
 
@@ -67,7 +59,7 @@ class uobject = object(self)
 		val o_uobj_load_addr = ref 0;
 		method get_o_uobj_load_addr = !o_uobj_load_addr;
 		
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 

@@ -9,6 +9,16 @@ open Usosservices
 module Usextbinutils =
 	struct
 
+	type ld_section_info_t = 
+		{
+			s_name: string;
+			s_type: int;
+			s_attribute : string;
+			s_subsection_list : string list;
+			s_origin: int;
+			s_length: int;	
+		};;
+
 
 	(* Uslog.logf usextbinutils_tag Uslog.Debug "hello"; *)
 	
