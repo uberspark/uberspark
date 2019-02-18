@@ -56,6 +56,9 @@ class uobject = object(self)
 		val o_uobj_sentinels_list : string list list ref = ref [];
 		method get_o_uobj_sentinels_list = !o_uobj_sentinels_list;
 
+		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
+		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
+
 		val o_usmf_filename = ref "";
 		method get_o_usmf_filename = !o_usmf_filename;
 		val o_uobj_dir_abspathname = ref "";
@@ -172,6 +175,17 @@ class uobject = object(self)
 				begin
 					o_uobj_sentinels_list := uobj_sentinels_list;
 					List.iter (fun x ->
+
+(*		type sentinel_info_t = 
+			{
+				s_type: string;
+				s_fname: string;
+				s_fparamdwords : int;
+				s_attribute : string;
+				s_origin: int;
+				s_length: int;	
+			};;
+*)						
 						(*Uslog.logf log_tag Uslog.Info "%s;%s;%s;%s;%s" 
 							(List.nth x 0) (List.nth x 1) (List.nth x 2) (List.nth x 3) (List.nth x 4);
 						*)
