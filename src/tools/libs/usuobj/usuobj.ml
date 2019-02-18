@@ -191,7 +191,7 @@ class uobject = object(self)
 				end;
 
 
-			(* parse uobj-binary node *)
+			(* parse uobj-sections node *)
 			let (rval, uobj_sections_list) = 
 										Usmanifest.parse_node_uobj_binary mf_json in
 
@@ -200,6 +200,34 @@ class uobject = object(self)
 			let dummy = 0 in
 				begin
 					o_uobj_sections_list := !o_uobj_sections_list @ uobj_sections_list;
+
+					List.iter (fun x ->
+						(* compute subsection list *)
+						let elem_index = ref 0 in
+						let subsections_list = ref [] in
+						while (!elem_index < List.length x) do
+								if (!elem_index > 2) then
+									begin
+								    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
+									end
+								; 
+								elem_index := !elem_index + 1;
+						done;
+
+
+						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
+							{
+								s_name = (List.nth x 0);
+								s_type = 0;
+								s_attribute = (List.nth x 1);
+								s_subsection_list = !subsections_list;
+								s_origin =  0;
+								s_length = int_of_string (List.nth x 2);
+							};
+							
+					) uobj_sections_list;
+
+								
 				end;
 																											
 			(true)
