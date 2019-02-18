@@ -285,10 +285,15 @@ module Usuobjcollection =
 			;
 
 		(* generate linker sript *)
-		let uobjcoll_info_table_lscript = Usuobjgen.generate_uobj_linker_script  
-			(uobjcoll_info_table_filename) 
-			0 
-			[ ["data"; "rw"; string_of_int (Usconfig.get_sizeof_uobjcoll_info_t()); ".data"] ] in 
+		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
+						Hashtbl.add uobjcoll_info_table_lscript_sections "data" 
+							{s_name = "data";	s_type = 0;	s_attribute = "rw";
+								s_subsection_list = [ ".data" ];	s_origin = 0;
+								s_length = (Usconfig.get_sizeof_uobjcoll_info_t());
+							};
+		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
+			(uobjcoll_info_table_filename) uobjcoll_info_table_lscript_sections in
+			
 		
 		(* build uobj collection info table binary *)
 		let uobj_libdirs_list = ref [] in
