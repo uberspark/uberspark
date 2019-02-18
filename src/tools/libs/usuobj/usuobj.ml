@@ -45,6 +45,9 @@ class uobject = object(self)
 		val o_uobj_sections_list : string list list ref = ref [];
 		method get_o_uobj_sections_list = !o_uobj_sections_list;
 
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
+
 
 		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
