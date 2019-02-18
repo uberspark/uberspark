@@ -12,6 +12,16 @@ open Usuobjgen
 module Usuobj =
 struct
 
+		type sentinel_info_t = 
+			{
+				s_type: string;
+				s_fname: string;
+				s_fparamdwords : int;
+				s_attribute : string;
+				s_origin: int;
+				s_length: int;	
+			};;
+
 		type section_info_t = 
 			{
 				s_name: string;
