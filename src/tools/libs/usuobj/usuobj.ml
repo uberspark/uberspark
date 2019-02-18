@@ -176,23 +176,19 @@ class uobject = object(self)
 					o_uobj_sentinels_list := uobj_sentinels_list;
 					List.iter (fun x ->
 
-(*		type sentinel_info_t = 
-			{
-				s_type: string;
-				s_fname: string;
-				s_fparamdwords : int;
-				s_attribute : string;
-				s_origin: int;
-				s_length: int;	
-			};;
-*)						
-						(*Uslog.logf log_tag Uslog.Info "%s;%s;%s;%s;%s" 
-							(List.nth x 0) (List.nth x 1) (List.nth x 2) (List.nth x 3) (List.nth x 4);
-						*)
-						
 						(*make a unique name for this sentinel*)
 						let sentinel_name = ref "" in
 							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 1); 
+
+						Hashtbl.add o_uobj_sentinels_hashtbl (List.nth x 0) 
+							{
+								s_type = (List.nth x 0);
+								s_fname = (List.nth x 1);
+								s_fparamdwords = int_of_string (List.nth x 2);
+								s_attribute = (List.nth x 3);
+								s_origin = 0;
+								s_length = int_of_string (List.nth x 4);
+							};
 						
 						(* make a section for this sentinel*)
 						(* 0 = name, 1 = protections, 2 = size, 3...n = subsection names *)
