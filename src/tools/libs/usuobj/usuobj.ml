@@ -53,8 +53,6 @@ class uobject = object(self)
 		val o_uobj_sections_list : string list list ref = ref [];
 		method get_o_uobj_sections_list = !o_uobj_sections_list;
 
-		val o_uobj_sentinels_list : string list list ref = ref [];
-		method get_o_uobj_sentinels_list = !o_uobj_sentinels_list;
 
 		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
@@ -173,7 +171,6 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
-					o_uobj_sentinels_list := uobj_sentinels_list;
 					List.iter (fun x ->
 
 						(*make a unique name for this sentinel*)
@@ -195,7 +192,7 @@ class uobject = object(self)
 						o_uobj_sections_list := !o_uobj_sections_list @
 							[ [ !sentinel_name; (List.nth x 3); (List.nth x 4); ("." ^ !sentinel_name) ] ];
 							
-					) !o_uobj_sentinels_list;
+					) uobj_sentinels_list;
 				end;
 
 
