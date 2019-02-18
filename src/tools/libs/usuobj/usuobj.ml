@@ -180,7 +180,7 @@ class uobject = object(self)
 						let sentinel_name = ref "" in
 							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 1); 
 
-						Hashtbl.add o_uobj_sentinels_hashtbl (List.nth x 0) 
+						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
 							{
 								s_type = (List.nth x 0);
 								s_fname = (List.nth x 1);
