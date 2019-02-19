@@ -67,49 +67,6 @@ class uobject = object(self)
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
 
-		(*--------------------------------------------------------------------------*)
-		(* compute memory map for sections *)
-		(* uobj_load_addr = load address of uobj *)
-		(*--------------------------------------------------------------------------*)
-		method compute_sections_memory_map
-			(uobj_load_addr : int) 
-			: int =
-
-			let uobj_section_load_addr = ref 0 in
-			o_uobj_load_addr := uobj_load_addr;
-			uobj_section_load_addr := uobj_load_addr;
-			List.iter (fun x ->
-				(* compute subsection list *)
-				let elem_index = ref 0 in
-				let subsections_list = ref [] in
-				while (!elem_index < List.length x) do
-						if (!elem_index > 2) then
-							begin
-						    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
-							end
-						; 
-						elem_index := !elem_index + 1;
-				done;
-					
-				Hashtbl.add uobj_sections_memory_map_hashtbl (List.nth x 0) 
-					{
-						s_name = (List.nth x 0);
-						s_type = 0;
-						s_attribute = (List.nth x 1);
-						s_subsection_list = !subsections_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = int_of_string (List.nth x 2);
-					};
-			
-				uobj_section_load_addr := !uobj_section_load_addr + int_of_string (List.nth x 2);
-				()
-			)  !o_uobj_sections_list;
-
-			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
-			(!o_uobj_size)
-		;
-
-
 
 		(*--------------------------------------------------------------------------*)
 		(* consolidate sections with memory map *)
