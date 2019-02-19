@@ -333,11 +333,17 @@ class uobject = object(self)
 	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
-			let uobj_linker_script_filename =	
+(*			let uobj_linker_script_filename =	
 				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 
 					(self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+*)
+			let uobj_linker_script_filename =	
+				Usuobjgen.generate_linker_script !o_usmf_hdr_id 
+					uobj_sections_memory_map_hashtbl in
+				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+
 					
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
