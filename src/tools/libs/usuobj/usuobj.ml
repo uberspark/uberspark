@@ -63,6 +63,7 @@ class uobject = object(self)
 		method get_o_uobj_load_addr = !o_uobj_load_addr;
 		
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
@@ -91,6 +92,15 @@ class uobject = object(self)
 						s_origin =  !uobj_section_load_addr;
 						s_length = x.s_length;
 					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{
+						s_name = key;
+						s_type = int_of_string(x.s_type);
+						s_attribute = x.s_attribute;
+						s_subsection_list = [ ("." ^ key) ];
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
 			
 				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
 			)  o_uobj_sentinels_hashtbl;
@@ -99,6 +109,15 @@ class uobject = object(self)
 			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
 
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
+					{
+						s_name = x.s_name;
+						s_type = x.s_type;
+						s_attribute = x.s_attribute;
+						s_subsection_list = x.s_subsection_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 					{
 						s_name = x.s_name;
 						s_type = x.s_type;
