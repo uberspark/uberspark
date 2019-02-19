@@ -286,8 +286,8 @@ module Usuobjcollection =
 			;
 
 		(* generate linker sript *)
-		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
-						Hashtbl.add uobjcoll_info_table_lscript_sections "data" 
+		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
+						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
 							{s_name = "data";	s_type = 0;	s_attribute = "rw";
 								s_subsection_list = [ ".data" ];	s_origin = 0;
 								s_length = (Usconfig.get_sizeof_uobjcoll_info_t());

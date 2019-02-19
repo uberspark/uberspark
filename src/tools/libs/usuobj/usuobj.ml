@@ -311,7 +311,7 @@ class uobject = object(self)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
 				Usuobjgen.generate_linker_script !o_usmf_hdr_id 
-					uobj_sections_memory_map_hashtbl in
+					uobj_sections_memory_map_hashtbl_byorigin in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 
 					

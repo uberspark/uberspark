@@ -16,7 +16,7 @@ module Usuobjgen =
 
 	let generate_linker_script 
 		(fname : string)
-		(sections_hashtbl : (string, Usextbinutils.ld_section_info_t) Hashtbl.t)
+		(sections_hashtbl : (int, Usextbinutils.ld_section_info_t) Hashtbl.t)
  		: string =
 		
 		let linker_script_filename = (fname ^ ".lscript") in
