@@ -71,6 +71,9 @@ module Usmanifest =
 		let usmf_hdr_type = ref "" in
 		let usmf_hdr_subtype = ref "" in
 		let usmf_hdr_id = ref "" in
+		let usmf_hdr_platform = ref "" in
+		let usmf_hdr_cpu = ref "" in
+		let usmf_hdr_arch = ref "" in
 		try
 			let open Yojson.Basic.Util in
 				let usmf_json_usmf_hdr = usmf_json |> member "usmf-hdr" in
@@ -79,6 +82,9 @@ module Usmanifest =
 						usmf_hdr_type := usmf_json_usmf_hdr |> member "type" |> to_string;
 						usmf_hdr_subtype := usmf_json_usmf_hdr |> member "subtype" |> to_string;
 						usmf_hdr_id := usmf_json_usmf_hdr |> member "id" |> to_string;
+						usmf_hdr_platform := usmf_json_usmf_hdr |> member "platform" |> to_string;
+						usmf_hdr_cpu := usmf_json_usmf_hdr |> member "cpu" |> to_string;
+						usmf_hdr_arch := usmf_json_usmf_hdr |> member "arch" |> to_string;
 						retval := true;
 					end
 				;
