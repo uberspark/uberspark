@@ -15,6 +15,7 @@ struct
 		type sentinel_info_t = 
 			{
 				s_type: string;
+				s_type_id : string;
 				s_fname: string;
 				s_fparamdwords : int;
 				s_attribute : string;
@@ -101,7 +102,7 @@ class uobject = object(self)
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
 					{
 						s_name = key;
-						s_type = int_of_string(x.s_type);
+						s_type = int_of_string(x.s_type_id);
 						s_attribute = x.s_attribute;
 						s_subsection_list = [ ("." ^ key) ];
 						s_origin =  !uobj_section_load_addr;
@@ -110,7 +111,7 @@ class uobject = object(self)
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 					{
 						s_name = key;
-						s_type = int_of_string(x.s_type);
+						s_type = int_of_string(x.s_type_id);
 						s_attribute = x.s_attribute;
 						s_subsection_list = [ ("." ^ key) ];
 						s_origin =  !uobj_section_load_addr;
@@ -217,22 +218,24 @@ class uobject = object(self)
 
 						(*make a unique name for this sentinel*)
 						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 1); 
+							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 2); 
 
 						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
 							{
 								s_type = (List.nth x 0);
-								s_fname = (List.nth x 1);
-								s_fparamdwords = int_of_string (List.nth x 2);
-								s_attribute = (List.nth x 3);
+								s_type_id = (List.nth x 1);
+								s_fname = (List.nth x 2);
+								s_fparamdwords = int_of_string (List.nth x 3);
+								s_attribute = (List.nth x 4);
 								s_origin = 0;
-								s_length = int_of_string (List.nth x 4);
+								s_length = int_of_string (List.nth x 5);
 							};
 						
 						(* make a section for this sentinel*)
 						(* 0 = name, 1 = protections, 2 = size, 3...n = subsection names *)
-						o_uobj_sections_list := !o_uobj_sections_list @
+						(*o_uobj_sections_list := !o_uobj_sections_list @
 							[ [ !sentinel_name; (List.nth x 3); (List.nth x 4); ("." ^ !sentinel_name) ] ];
+						*)
 							
 					) uobj_sentinels_list;
 				end;
