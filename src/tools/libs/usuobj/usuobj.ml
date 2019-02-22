@@ -317,6 +317,8 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method generate_sentinels 
 			(build_dir : string) = 
+			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
 			()
@@ -338,6 +340,10 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
+	
+	
+			(* generate sentinels *)
+			self#generate_sentinels build_dir;
 	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
