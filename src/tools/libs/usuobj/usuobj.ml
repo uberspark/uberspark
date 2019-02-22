@@ -231,12 +231,6 @@ class uobject = object(self)
 								s_length = int_of_string (List.nth x 5);
 							};
 						
-						(* make a section for this sentinel*)
-						(* 0 = name, 1 = protections, 2 = size, 3...n = subsection names *)
-						(*o_uobj_sections_list := !o_uobj_sections_list @
-							[ [ !sentinel_name; (List.nth x 3); (List.nth x 4); ("." ^ !sentinel_name) ] ];
-						*)
-							
 					) uobj_sentinels_list;
 				end;
 
