@@ -317,6 +317,16 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+
+				Uslog.logf log_tag Uslog.Info "sentinel-%s-%s-%s-%s.S at 0x%08x"
+					x.s_type !o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch
+					x_v.s_origin;
+		
+			) o_uobj_sentinels_hashtbl;
+
+
 			Uslog.logf log_tag Uslog.Info "Done.\r\n";
 			()
 		;
