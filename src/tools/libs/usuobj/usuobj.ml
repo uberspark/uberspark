@@ -6,6 +6,7 @@
 open Usconfig
 open Uslog
 open Usmanifest
+open Usosservices
 open Usextbinutils
 open Usuobjgen
 
@@ -325,6 +326,8 @@ class uobject = object(self)
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
 					
+				Usosservices.file_copy ((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) (".");
+				
 						
 				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
