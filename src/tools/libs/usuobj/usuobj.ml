@@ -312,6 +312,19 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
+		(* generate uobj sentinels *)
+		(* build_dir = directory to use for building *)
+		(*--------------------------------------------------------------------------*)
+		method generate_sentinels 
+			(build_dir : string) = 
+
+			Uslog.logf log_tag Uslog.Info "Done.\r\n";
+			()
+		;
+
+
+
+		(*--------------------------------------------------------------------------*)
 		(* build a uobj *)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
