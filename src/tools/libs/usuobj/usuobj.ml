@@ -318,11 +318,18 @@ class uobject = object(self)
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				let sentinel_fname = "sentinel-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+				let sentinel_libfname = "libsentinel-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+					
+						
 				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
-				Uslog.logf log_tag Uslog.Info "sentinel-%s-%s-%s-%s.S at 0x%08x"
-					x.s_type !o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch
-					x_v.s_origin;
+				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
+					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
 		
 			) o_uobj_sentinels_hashtbl;
 
