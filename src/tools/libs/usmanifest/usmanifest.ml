@@ -93,7 +93,8 @@ module Usmanifest =
 				retval := false;
 		;
 
-		(!retval, !usmf_hdr_type, !usmf_hdr_subtype, !usmf_hdr_id)
+		(!retval, !usmf_hdr_type, !usmf_hdr_subtype, !usmf_hdr_id,
+			!usmf_hdr_platform, !usmf_hdr_cpu, !usmf_hdr_arch)
 	;;
 
 

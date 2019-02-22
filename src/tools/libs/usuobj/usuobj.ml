@@ -158,7 +158,8 @@ class uobject = object(self)
 			if (rval == false) then (false)
 			else
 			(* parse usmf-hdr node *)
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
+			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
+					usmf_hdr_platform, usmf_hdr_cpu, usmf_hdr_arch) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
 			if (rval == false) then (false)
