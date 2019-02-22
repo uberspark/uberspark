@@ -33,10 +33,23 @@ class uobject = object(self)
 
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
+		
 		val o_usmf_hdr_subtype = ref "";
 		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
+
 		val o_usmf_hdr_id = ref "";
 		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
+		
+		val o_usmf_hdr_platform = ref "";
+		method get_o_usmf_hdr_platform = !o_usmf_hdr_platform;
+		
+		val o_usmf_hdr_cpu = ref "";
+		method get_o_usmf_hdr_cpu = !o_usmf_hdr_cpu;
+
+		val o_usmf_hdr_arch = ref "";
+		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
+
+				
 		val o_usmf_sources_c_files: string list ref = ref [];
 		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
 		val o_usmf_sources_casm_files: string list ref = ref [];
@@ -67,6 +80,8 @@ class uobject = object(self)
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
+
+		
 
 
 		(*--------------------------------------------------------------------------*)
@@ -173,6 +188,9 @@ class uobject = object(self)
 					o_usmf_hdr_type := usmf_hdr_type;								
 					o_usmf_hdr_subtype := usmf_hdr_subtype;
 					o_usmf_hdr_id := usmf_hdr_id;
+					o_usmf_hdr_platform := usmf_hdr_platform;
+					o_usmf_hdr_cpu := usmf_hdr_cpu;
+					o_usmf_hdr_arch := usmf_hdr_arch;
 				end;
 
 			(* parse usmf-sources node *)
