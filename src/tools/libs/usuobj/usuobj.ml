@@ -73,8 +73,8 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 
-		val o_uobj_build_dir = ref ".";
-		method get_o_uobj_build_dir = !o_uobj_build_dir;
+		val o_uobj_build_dirname = ref ".";
+		method get_o_uobj_build_dirname = !o_uobj_build_dirname;
 		
 		val o_uobj_size = ref 0; 
 		method get_o_uobj_size = !o_uobj_size;
@@ -86,6 +86,11 @@ class uobject = object(self)
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
+		val o_sentinel_source_file_list : string list ref = ref [];
+		method get_o_sentinel_source_file_list = !o_sentinel_source_file_list;
+
+		val o_sentinel_lib_source_file_list : string list ref = ref [];
+		method get_o_sentinel_lib_source_file_list = !o_sentinel_lib_source_file_list;
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
@@ -343,12 +348,18 @@ class uobject = object(self)
 					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname);
 				
+				o_sentinel_source_file_list := !o_sentinel_source_file_list @ 
+					[ target_sentinel_fname ];
+
+				o_sentinel_lib_source_file_list := !o_sentinel_lib_source_file_list @ 
+					[ target_sentinel_libfname ];
 						
-				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
 				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
 					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
-		
+				*)
+				
 			) o_uobj_sentinels_hashtbl;
 
 
