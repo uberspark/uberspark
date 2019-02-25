@@ -378,6 +378,25 @@ class uobject = object(self)
 		;
 
 
+		(*--------------------------------------------------------------------------*)
+		(* build uobj sentinels *)
+		(*--------------------------------------------------------------------------*)
+		method build_sentinels 
+			() = 
+			Uslog.logf log_tag Uslog.Info "Building sentinels for target (%s-%s-%s)...\r\n"
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+
+			(* compile all the sentinel source files *)							
+			self#compile_cfile_list !o_sentinels_source_file_list
+					(Usconfig.get_std_incdirs ())
+					(Usconfig.get_std_defines () @ 
+								Usconfig.get_std_define_asm ());
+
+			Uslog.logf log_tag Uslog.Info "Built sentinels.";
+			()
+		;
+
+
 				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
 				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
@@ -403,6 +422,9 @@ class uobject = object(self)
 	
 			(* generate sentinels *)
 			self#generate_sentinels ();
+
+			(* generate sentinels lib *)
+			self#generate_sentinels_lib ();
 	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
