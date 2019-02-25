@@ -320,10 +320,9 @@ class uobject = object(self)
 
 		(*--------------------------------------------------------------------------*)
 		(* generate uobj sentinels *)
-		(* build_dir = directory to use for building *)
 		(*--------------------------------------------------------------------------*)
 		method generate_sentinels 
-			(build_dir : string) = 
+			() = 
 			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
@@ -386,7 +385,7 @@ class uobject = object(self)
 	
 	
 			(* generate sentinels *)
-			self#generate_sentinels build_dir;
+			self#generate_sentinels ();
 	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
