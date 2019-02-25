@@ -69,8 +69,12 @@ class uobject = object(self)
 
 		val o_usmf_filename = ref "";
 		method get_o_usmf_filename = !o_usmf_filename;
+
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
+
+		val o_uobj_build_dir = ref ".";
+		method get_o_uobj_build_dir = !o_uobj_build_dir;
 		
 		val o_uobj_size = ref 0; 
 		method get_o_uobj_size = !o_uobj_size;
@@ -81,78 +85,6 @@ class uobject = object(self)
 		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
-
-
-		
-
-
-		(*--------------------------------------------------------------------------*)
-		(* consolidate sections with memory map *)
-		(* uobj_load_addr = load address of uobj *)
-		(*--------------------------------------------------------------------------*)
-		method consolidate_sections_with_memory_map
-			(uobj_load_addr : int) 
-			: int =
-
-			let uobj_section_load_addr = ref 0 in
-			o_uobj_load_addr := uobj_load_addr;
-			uobj_section_load_addr := uobj_load_addr;
-			
-			(* iterate over sentinels *)
-			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
-				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{
-						s_name = key;
-						s_type = int_of_string(x.s_type_id);
-						s_attribute = x.s_attribute;
-						s_subsection_list = [ ("." ^ key) ];
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
-					};
-				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{
-						s_name = key;
-						s_type = int_of_string(x.s_type_id);
-						s_attribute = x.s_attribute;
-						s_subsection_list = [ ("." ^ key) ];
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
-					};
-			
-				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
-			)  o_uobj_sentinels_hashtbl;
-
-			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
-
-				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{
-						s_name = x.s_name;
-						s_type = x.s_type;
-						s_attribute = x.s_attribute;
-						s_subsection_list = x.s_subsection_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
-					};
-				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{
-						s_name = x.s_name;
-						s_type = x.s_type;
-						s_attribute = x.s_attribute;
-						s_subsection_list = x.s_subsection_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
-					};
-
-				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
-			)  o_uobj_sections_hashtbl;
-			
-					
-
-			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
-			(!o_uobj_size)
-		;
-
 
 
 		(*--------------------------------------------------------------------------*)
@@ -277,6 +209,78 @@ class uobject = object(self)
 																											
 			(true)
 		;
+		
+
+
+		(*--------------------------------------------------------------------------*)
+		(* consolidate sections with memory map *)
+		(* uobj_load_addr = load address of uobj *)
+		(*--------------------------------------------------------------------------*)
+		method consolidate_sections_with_memory_map
+			(uobj_load_addr : int) 
+			: int =
+
+			let uobj_section_load_addr = ref 0 in
+			o_uobj_load_addr := uobj_load_addr;
+			uobj_section_load_addr := uobj_load_addr;
+			
+			(* iterate over sentinels *)
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				Hashtbl.add uobj_sections_memory_map_hashtbl key 
+					{
+						s_name = key;
+						s_type = int_of_string(x.s_type_id);
+						s_attribute = x.s_attribute;
+						s_subsection_list = [ ("." ^ key) ];
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{
+						s_name = key;
+						s_type = int_of_string(x.s_type_id);
+						s_attribute = x.s_attribute;
+						s_subsection_list = [ ("." ^ key) ];
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+			
+				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+			)  o_uobj_sentinels_hashtbl;
+
+			(* iterate over regular sections *)
+			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
+
+				Hashtbl.add uobj_sections_memory_map_hashtbl key 
+					{
+						s_name = x.s_name;
+						s_type = x.s_type;
+						s_attribute = x.s_attribute;
+						s_subsection_list = x.s_subsection_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{
+						s_name = x.s_name;
+						s_type = x.s_type;
+						s_attribute = x.s_attribute;
+						s_subsection_list = x.s_subsection_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+
+				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+			)  o_uobj_sections_hashtbl;
+			
+					
+
+			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
+			(!o_uobj_size)
+		;
+
+
+
 
 
 		(*--------------------------------------------------------------------------*)
