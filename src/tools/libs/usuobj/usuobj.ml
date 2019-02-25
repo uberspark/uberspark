@@ -440,7 +440,10 @@ class uobject = object(self)
 				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
 					!o_uobj_sections_list in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
-			
+
+			(* compile all sentinels *)							
+			self#build_sentinels ();
+									
 			(* compile all the cfiles *)							
 			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
 					(Usconfig.get_std_incdirs ())
