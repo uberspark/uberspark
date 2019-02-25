@@ -86,11 +86,11 @@ class uobject = object(self)
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
-		val o_sentinel_source_file_list : string list ref = ref [];
-		method get_o_sentinel_source_file_list = !o_sentinel_source_file_list;
+		val o_sentinels_source_file_list : string list ref = ref [];
+		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 
-		val o_sentinel_lib_source_file_list : string list ref = ref [];
-		method get_o_sentinel_lib_source_file_list = !o_sentinel_lib_source_file_list;
+		val o_sentinels_lib_source_file_list : string list ref = ref [];
+		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
@@ -338,7 +338,7 @@ class uobject = object(self)
 					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname);
 				
-				o_sentinel_source_file_list := !o_sentinel_source_file_list @ 
+				o_sentinels_source_file_list := !o_sentinels_source_file_list @ 
 					[ target_sentinel_fname ];
 
 			) o_uobj_sentinels_hashtbl;
@@ -368,7 +368,7 @@ class uobject = object(self)
 					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname);
 				
-				o_sentinel_lib_source_file_list := !o_sentinel_lib_source_file_list @ 
+				o_sentinels_lib_source_file_list := !o_sentinels_lib_source_file_list @ 
 					[ target_sentinel_libfname ];
 						
 			) o_uobj_sentinels_hashtbl;
