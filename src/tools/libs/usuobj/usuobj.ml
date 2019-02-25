@@ -326,8 +326,12 @@ class uobject = object(self)
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
 					
-				Usosservices.file_copy ((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) (".");
-				Usosservices.file_copy ((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) (".");
+				Usosservices.file_copy 
+					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
+					(self#get_o_uobj_dir_abspathname ^ "/" ^ sentinel_fname);
+				Usosservices.file_copy 
+					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
+					(self#get_o_uobj_dir_abspathname ^ "/" ^ sentinel_libfname);
 				
 						
 				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
