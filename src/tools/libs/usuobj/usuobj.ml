@@ -330,10 +330,34 @@ class uobject = object(self)
 				let sentinel_fname = "sentinel-" ^ x.s_type ^ "-" ^ 
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
-				let sentinel_libfname = "libsentinel-" ^ x.s_type ^ "-" ^ 
+				let target_sentinel_fname = "sentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
-				let target_sentinel_fname = "sentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
+					
+				Usosservices.file_copy 
+					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
+					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname);
+				
+				o_sentinel_source_file_list := !o_sentinel_source_file_list @ 
+					[ target_sentinel_fname ];
+
+			) o_uobj_sentinels_hashtbl;
+
+			Uslog.logf log_tag Uslog.Info "Generated sentinels.";
+			()
+		;
+
+
+		(*--------------------------------------------------------------------------*)
+		(* generate uobj sentinels lib *)
+		(*--------------------------------------------------------------------------*)
+		method generate_sentinels_lib 
+			() = 
+			Uslog.logf log_tag Uslog.Info "Generating sentinels lib for target (%s-%s-%s)..."
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				let sentinel_libfname = "libsentinel-" ^ x.s_type ^ "-" ^ 
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
 				let target_sentinel_libfname = "libsentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
@@ -341,31 +365,24 @@ class uobject = object(self)
 						!o_usmf_hdr_arch ^ ".S" in
 					
 				Usosservices.file_copy 
-					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
-					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname);
-				Usosservices.file_copy 
 					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname);
 				
-				o_sentinel_source_file_list := !o_sentinel_source_file_list @ 
-					[ target_sentinel_fname ];
-
 				o_sentinel_lib_source_file_list := !o_sentinel_lib_source_file_list @ 
 					[ target_sentinel_libfname ];
 						
+			) o_uobj_sentinels_hashtbl;
+
+			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
+			()
+		;
+
+
 				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
 				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
 					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
 				*)
-				
-			) o_uobj_sentinels_hashtbl;
-
-
-			Uslog.logf log_tag Uslog.Info "Done.\r\n";
-			()
-		;
-
 
 
 		(*--------------------------------------------------------------------------*)
