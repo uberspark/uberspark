@@ -411,7 +411,7 @@ class uobject = object(self)
 					(Usconfig.get_std_defines () @ 
 								Usconfig.get_std_define_asm ());
 
-			Uslog.logf log_tag Uslog.Info "Built sentinels.";
+			Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
 			()
 		;
 
@@ -463,6 +463,9 @@ class uobject = object(self)
 
 			(* compile all sentinels *)							
 			self#build_sentinels ();
+									
+			(* compile sentinels lib *)
+			self#build_sentinels_lib ();						
 									
 			(* compile all the cfiles *)							
 			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
