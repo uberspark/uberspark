@@ -374,14 +374,23 @@ class uobject = object(self)
 				let target_sentinel_libfname = "libsentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
-					
+				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 				
 				let (pp_retval, _) = Usextbinutils.preprocess 
 											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
 											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname) 
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
-												Usconfig.get_std_define_asm () ) in
+												Usconfig.get_std_define_asm () @
+												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
+													(Printf.sprintf "0x%08x" x_v.s_origin)
+												] @
+												[ "UOBJ_SENTINEL_SECTION_NAME=.text"
+												] @
+												[ "UOBJ_SENTINEL_ENTRY_POINT_FNAME=" ^ x.s_fname ^ 
+													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
+													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch
+												]) in
 					if (pp_retval != 0) then
 						begin
 								Uslog.logf log_tag Uslog.Error "in generating sentinel lib: %s"

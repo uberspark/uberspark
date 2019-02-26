@@ -6,12 +6,12 @@
 */
 
 // @param -- section name
-.section .text
+.section UOBJ_SENTINEL_SECTION_NAME
 
 // @param -- uobj entry point function name
-.global uobj_entry_point_fname
-uobj_entry_point_fname:
+.global UOBJ_SENTINEL_ENTRY_POINT_FNAME
+UOBJ_SENTINEL_ENTRY_POINT_FNAME:
 
 	// @ param -- the sentinel for the uobj entry point
-	movl $(UOBJ_ENTRY_POINT_SENTINEL), %eax
+	movl $(UOBJ_SENTINEL_ENTRY_POINT), %eax
 	jmp *%eax
