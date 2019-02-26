@@ -334,11 +334,6 @@ class uobject = object(self)
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
 					
-				(*Usosservices.file_copy 
-					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
-					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname);
-				*)
-				
 				let (pp_retval, _) = Usextbinutils.preprocess 
 											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
 											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname) 
@@ -380,10 +375,22 @@ class uobject = object(self)
 						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
 						!o_usmf_hdr_arch ^ ".S" in
 					
-				Usosservices.file_copy 
-					((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
-					(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname);
 				
+				let (pp_retval, _) = Usextbinutils.preprocess 
+											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
+											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname) 
+											(Usconfig.get_std_incdirs ())
+											(Usconfig.get_std_defines () @ 
+												Usconfig.get_std_define_asm () ) in
+					if (pp_retval != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in generating sentinel lib: %s"
+									target_sentinel_libfname;
+								ignore(exit 1);
+						end
+					;
+				
+												
 				o_sentinels_lib_source_file_list := !o_sentinels_lib_source_file_list @ 
 					[ target_sentinel_libfname ];
 						
