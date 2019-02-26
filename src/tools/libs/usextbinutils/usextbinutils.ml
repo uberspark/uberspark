@@ -25,6 +25,7 @@ module Usextbinutils =
 	let tool_pp = "gcc" ;;
 	let tool_cc = "gcc" ;;
 	let tool_ld = "ld" ;;
+	let tool_ar = "ar" ;;
 	
 	let usextbinutils_tag = "Usextbinutils" ;;
 			
@@ -92,6 +93,18 @@ module Usextbinutils =
 						Usosservices.exec_process_withlog 
 						tool_ld !ld_cmdline true usextbinutils_tag in
 				(ld_pestatus, ld_pesignal) 
+	;;
+
+
+	let mklib lib_ofile_list lib_name = 
+			let ar_cmdline = ref [] in
+				ar_cmdline := !ar_cmdline @ [ "-rcs" ];
+				ar_cmdline := !ar_cmdline @ [ lib_name ]; 
+				List.iter (fun x -> ar_cmdline := !ar_cmdline @ [ (x^".o") ]) lib_ofile_list; 
+				let (ar_pestatus, ar_pesignal, _) = 
+						Usosservices.exec_process_withlog 
+						tool_ar !ar_cmdline true usextbinutils_tag in
+				(ar_pestatus, ar_pesignal) 
 	;;
 
 
