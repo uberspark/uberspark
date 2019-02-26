@@ -538,7 +538,10 @@ class uobject = object(self)
 				let uobj_libs_list = ref [] in
 				let (pestatus, pesignal) = 
 						(Usextbinutils.link_uobj  
-							(!o_usmf_sources_c_files @ [ uobj_hdr_filename ])
+							( !o_sentinels_source_file_list @
+								!o_usmf_sources_c_files @ 
+								[ uobj_hdr_filename ]
+							)
 							!uobj_libdirs_list !uobj_libs_list
 							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".bin")
 						) in
