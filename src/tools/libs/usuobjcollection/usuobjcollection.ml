@@ -326,19 +326,54 @@ module Usuobjcollection =
 	(*--------------------------------------------------------------------------*)
 	(* build uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
-	let build_uobjcoll_binary_image uobjcoll_binary_image_filename 
+	let build_uobjcoll_binary_image 
+		uobjcoll_binary_image_filename 
 		uobjcoll_info_table_binary_filename =
 		
 		let input_filename_list = ref [] in
-		input_filename_list := !input_filename_list @ [ uobjcoll_info_table_binary_filename];
-		(* iterate through the uobjs and output image name *)
+
+		(* generate flat-form binary for uobj info table *)
+		let (pestatus, pesignal) = 
+		(Usextbinutils.mkbin
+			  (uobjcoll_info_table_binary_filename ^ ".elf")
+				(uobjcoll_info_table_binary_filename ^ ".bin")
+		) in
+		if (pesignal == true) || (pestatus != 0) then
+			begin
+					Uslog.logf log_tag Uslog.Error "in generating flat-form binary for uobjcoll info table!";
+					ignore(exit 1);
+			end
+		;
+ 
+		(* add uobj info table flat-form binary filename to list of files to be*)
+		(* concatentated*)
+		input_filename_list := !input_filename_list @ [ uobjcoll_info_table_binary_filename ^ ".bin"];
+	
+		(* iterate through the uobjs and generate flat-form binaries *)
 		Hashtbl.iter (fun key uobj ->  
-			let uobj_binary_filename = 
+			let uobj_binary_input_filename = 
+				(Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id)) ^ "/" ^
+				(uobj#get_o_usmf_hdr_id) ^ ".elf" in
+			let uobj_binary_output_filename = 
 				(Hashtbl.find uobj_dir_hashtbl (uobj#get_o_usmf_hdr_id)) ^ "/" ^
 				(uobj#get_o_usmf_hdr_id) ^ ".bin" in
 
-				(*Uslog.logf log_tag Uslog.Info "uobj_bin_filename:%s" uobj_binary_filename;*)
-				input_filename_list := !input_filename_list @ [ uobj_binary_filename ];
+				(* generate flat-form binary for uobj *)
+				let (pestatus, pesignal) = 
+				(Usextbinutils.mkbin
+					  uobj_binary_input_filename
+						uobj_binary_output_filename
+				) in
+				if (pesignal == true) || (pestatus != 0) then
+					begin
+							Uslog.logf log_tag Uslog.Error "in generating flat-form binary for uobj: %s!" (uobj#get_o_usmf_hdr_id);
+							ignore(exit 1);
+					end
+				;
+
+				(* add uobj flat-form binary filename to list of files to be*)
+				(* concatentated*)
+				input_filename_list := !input_filename_list @ [ uobj_binary_output_filename ];
 				
 		) uobj_hashtbl;
 
