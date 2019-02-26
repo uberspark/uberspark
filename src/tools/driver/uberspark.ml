@@ -164,7 +164,7 @@ let main () =
 
 		(* build final image *)
 		Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")
-		((Usconfig.get_std_uobjcoll_info_filename ()) ^ ".bin");
+		(Usconfig.get_std_uobjcoll_info_filename ());
 
 (*
 		(* grab uobj manifest filename and derive uobj name *)
