@@ -342,7 +342,7 @@ class uobject = object(self)
 												Usconfig.get_std_define_asm () @
 												[ "UOBJ_ENTRY_POINT_FNAME=" ^ x.s_fname 
 												] @
-												[ "UOBJ_SENTINEL_SECTION_NAME=" ^ key
+												[ "UOBJ_SENTINEL_SECTION_NAME=." ^ key
 												] @
 												[ "UOBJ_SENTINEL_ENTRY_POINT_FNAME=" ^ x.s_fname ^ 
 													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
