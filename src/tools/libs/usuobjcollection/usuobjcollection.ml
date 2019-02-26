@@ -304,7 +304,7 @@ module Usuobjcollection =
 				(Usextbinutils.link_uobj  
 					[uobjcoll_info_table_filename]
 					!uobj_libdirs_list !uobj_libs_list
-					uobjcoll_info_table_lscript (uobjcoll_info_table_filename ^ ".bin")
+					uobjcoll_info_table_lscript (uobjcoll_info_table_filename ^ ".elf")
 				) in
 				if (pesignal == true) || (pestatus != 0) then
 					begin
