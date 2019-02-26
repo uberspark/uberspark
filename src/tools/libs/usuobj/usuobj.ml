@@ -402,16 +402,35 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method build_sentinels_lib 
 			() = 
-			Uslog.logf log_tag Uslog.Info "Building sentinels lib for target (%s-%s-%s)...\r\n"
-				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+			let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in
+				
+			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
+				uobj_sentinels_lib_name;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_sentinels_lib_source_file_list
 					(Usconfig.get_std_incdirs ())
 					(Usconfig.get_std_defines () @ 
 								Usconfig.get_std_define_asm ());
-
-			Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+			
+			(* now create the lib archive *)
+			let (pestatus, pesignal) = 
+					(Usextbinutils.mklib  
+						!o_sentinels_lib_source_file_list
+						(uobj_sentinels_lib_name ^ ".a")
+					) in
+					if (pesignal == true) || (pestatus != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
+								ignore(exit 1);
+						end
+					else
+						begin
+								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+						end
+					;
+		
 			()
 		;
 
