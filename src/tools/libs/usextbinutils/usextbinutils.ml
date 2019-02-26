@@ -26,7 +26,8 @@ module Usextbinutils =
 	let tool_cc = "gcc" ;;
 	let tool_ld = "ld" ;;
 	let tool_ar = "ar" ;;
-	
+	let tool_objcopy = "objcopy" ;;
+		
 	let usextbinutils_tag = "Usextbinutils" ;;
 			
 			
@@ -94,6 +95,22 @@ module Usextbinutils =
 						tool_ld !ld_cmdline true usextbinutils_tag in
 				(ld_pestatus, ld_pesignal) 
 	;;
+
+
+	let mkbin uobj_input_filename uobj_output_filename = 
+			let objcopy_cmdline = ref [] in
+				objcopy_cmdline := !objcopy_cmdline @ [ "-I" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "elf32-i386" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "-O" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "binary" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ uobj_input_filename ];
+				objcopy_cmdline := !objcopy_cmdline @ [ uobj_output_filename ];
+				let (objcopy_pestatus, objcopy_pesignal, _) = 
+						Usosservices.exec_process_withlog 
+						tool_objcopy !objcopy_cmdline true usextbinutils_tag in
+				(objcopy_pestatus, objcopy_pesignal) 
+	;;
+
 
 
 	let mklib lib_ofile_list lib_name = 
