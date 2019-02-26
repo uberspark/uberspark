@@ -543,7 +543,7 @@ class uobject = object(self)
 								[ uobj_hdr_filename ]
 							)
 							!uobj_libdirs_list !uobj_libs_list
-							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".bin")
+							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".elf")
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
