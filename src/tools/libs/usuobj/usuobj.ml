@@ -57,9 +57,7 @@ class uobject = object(self)
 		val o_usmf_sources_casm_files: string list ref = ref [];
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
 
-		val o_uobj_sections_list : string list list ref = ref [];
-		method get_o_uobj_sections_list = !o_uobj_sections_list;
-
+	
 		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
 
@@ -181,7 +179,6 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
-					o_uobj_sections_list := !o_uobj_sections_list @ uobj_sections_list;
 
 					List.iter (fun x ->
 						(* compute subsection list *)
@@ -517,7 +514,7 @@ class uobject = object(self)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
 				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
-					!o_uobj_sections_list in
+					o_uobj_sections_hashtbl in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
 
 			(* compile all sentinels *)							
@@ -616,7 +613,8 @@ class uobject = object(self)
 	method generate_uobj_hdr 
 			(uobj_name : string) 
 			(uobj_load_addr : int)
-			(uobj_sections_list : string list list)
+			(*(uobj_sections_list : string list list)*)
+			uobj_sections_hashtbl
 			: string  =
 		let uobj_hdr_filename = (uobj_name ^ ".hdr.c") in
 		let oc = open_out uobj_hdr_filename in
@@ -636,21 +634,21 @@ class uobject = object(self)
 			Printf.fprintf oc "\n__attribute__((section (\".ustack\"))) uint8_t __ustack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_USTACK]={ 0 };";
 			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
 	
-			List.iter (fun x ->
+			(* iterate over regular sections *)
+			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
 				(* new section *)
-				let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
-				let section_name = (List.nth x 3) in
-				  if ((compare section_name ".text") <> 0) && 
-						((compare section_name ".ustack") <> 0) &&
-						((compare section_name ".tstack") <> 0) &&
-						((compare section_name ".hdr") <> 0) then
+				let section_name_var = ("__uobjsection_filler_" ^ x.s_name) in
+				
+				  if ((compare (List.nth x.s_subsection_list 0) ".text") <> 0) && 
+						((compare (List.nth x.s_subsection_list 0) ".ustack") <> 0) &&
+						((compare (List.nth x.s_subsection_list 0) ".tstack") <> 0) &&
+						((compare (List.nth x.s_subsection_list 0) ".hdr") <> 0) then
 						begin
 							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
-								section_name section_name_var;
+								(List.nth x.s_subsection_list 0) section_name_var;
 						end
 					;
-				()
-			)  uobj_sections_list;
+			)  uobj_sections_hashtbl;
 	
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
