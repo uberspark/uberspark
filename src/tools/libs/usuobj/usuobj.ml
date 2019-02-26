@@ -339,7 +339,15 @@ class uobject = object(self)
 											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname) 
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
-												Usconfig.get_std_define_asm () ) in
+												Usconfig.get_std_define_asm () @
+												[ "UOBJ_ENTRY_POINT_FNAME=" ^ x.s_fname 
+												] @
+												[ "UOBJ_SENTINEL_SECTION_NAME=" ^ key
+												] @
+												[ "UOBJ_SENTINEL_ENTRY_POINT_FNAME=" ^ x.s_fname ^ 
+													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
+													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch
+												]) in
 					if (pp_retval != 0) then
 						begin
 								Uslog.logf log_tag Uslog.Error "in generating sentinel: %s"

@@ -6,14 +6,14 @@
 */
 
 // @ param -- the uobj entry point function this sentinel is for
-.extern sentinel_uobj_entry_point_function
+.extern UOBJ_ENTRY_POINT_FNAME
 
 // @param -- section name
-.section .text
+.section UOBJ_SENTINEL_SECTION_NAME
 
 // @param -- customized name based on platform, cpu and arch
-.global sentinel_call_generic_generic_x86_32
-sentinel_call_generic_generic_x86_32:
+.global UOBJ_SENTINEL_ENTRY_POINT_FNAME
+UOBJ_SENTINEL_ENTRY_POINT_FNAME:
 
 	// @ param -- the uobj entry point function this sentinel is for
-	jmp sentinel_uobj_entry_point_function
+	jmp UOBJ_ENTRY_POINT_FNAME
