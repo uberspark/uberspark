@@ -91,6 +91,7 @@ typedef struct {
 } __attribute__((packed)) uobj_sentinel_info_t;
 
 typedef struct {
+	uint32_t total_sentinels;
 	uobj_sentinel_info_t sentinels[UOBJ_MAX_SENTINELS];
 	uint32_t ustack_tos[MAX_PLATFORM_CPUS];
 	uint32_t tstack_tos[MAX_PLATFORM_CPUS];
