@@ -569,7 +569,21 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n	//%s" (!o_usmf_hdr_id);
     Printf.fprintf ochannel "\n	{";
 
-  	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
+	  (* total_sentinels *)
+  	Printf.fprintf ochannel "\n\t0x%08xUL, " (Hashtbl.length o_uobj_sentinels_hashtbl);
+		
+		(* plug in the sentinels *)
+		Printf.fprintf ochannel "\n\t{";
+		Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+			let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+			Printf.fprintf ochannel "\n\t\t{";
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (int_of_string(x.s_type_id));
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (0);
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (x_v.s_origin);
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL " (x.s_length);
+			Printf.fprintf ochannel "\n\t\t},";
+		)  o_uobj_sentinels_hashtbl;
+		Printf.fprintf ochannel "\n\t},";
 
 		(*ustack_tos*)
     let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
