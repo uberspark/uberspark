@@ -516,13 +516,16 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
-	
+
+			(* generate sentinels declarations *)
+			self#generate_sentinel_decls ();
 	
 			(* generate sentinels *)
 			self#generate_sentinels ();
 
 			(* generate sentinels lib *)
 			self#generate_sentinels_lib ();
+
 	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
