@@ -51,6 +51,7 @@ AC_SUBST([ubersparklibsdir], ['/libs'])
 AC_SUBST([ubersparklibsincludesdir], ['/libs/include'])
 AC_SUBST([ubersparkloadersdir], ['/loaders'])
 AC_SUBST([ubersparkloadersincludesdir], ['/loaders/include'])
+AC_SUBST([ubersparksentinelsdir], ['/sentinels'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
 
 AC_CONFIG_FILES(

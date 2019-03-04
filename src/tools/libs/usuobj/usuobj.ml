@@ -6,21 +6,26 @@
 open Usconfig
 open Uslog
 open Usmanifest
+open Usosservices
 open Usextbinutils
 open Usuobjgen
 
 module Usuobj =
 struct
 
-		type section_info_t = 
+		type sentinel_info_t = 
 			{
-				s_name: string;
-				s_type: int;
+				s_type: string;
+				s_type_id : string;
+				s_fname: string;
+				s_fparamdwords : int;
 				s_attribute : string;
-				s_subsection_list : string list;
 				s_origin: int;
 				s_length: int;	
 			};;
+
+
+		
 
 class uobject = object(self)
 			
@@ -30,73 +35,60 @@ class uobject = object(self)
 
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
+		
 		val o_usmf_hdr_subtype = ref "";
 		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
+
 		val o_usmf_hdr_id = ref "";
 		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
+		
+		val o_usmf_hdr_platform = ref "";
+		method get_o_usmf_hdr_platform = !o_usmf_hdr_platform;
+		
+		val o_usmf_hdr_cpu = ref "";
+		method get_o_usmf_hdr_cpu = !o_usmf_hdr_cpu;
+
+		val o_usmf_hdr_arch = ref "";
+		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
+
+				
 		val o_usmf_sources_c_files: string list ref = ref [];
 		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
 		val o_usmf_sources_casm_files: string list ref = ref [];
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
-		val o_uobj_sections_list : string list list ref = ref [];
-		method get_o_uobj_sections_list = !o_uobj_sections_list;
+
+	
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
+
+
+		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
+		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
+
 		val o_usmf_filename = ref "";
 		method get_o_usmf_filename = !o_usmf_filename;
+
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
+
+		val o_uobj_build_dirname = ref ".";
+		method get_o_uobj_build_dirname = !o_uobj_build_dirname;
 		
 		val o_uobj_size = ref 0; 
 		method get_o_uobj_size = !o_uobj_size;
 		val o_uobj_load_addr = ref 0;
 		method get_o_uobj_load_addr = !o_uobj_load_addr;
 		
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
+		val o_sentinels_source_file_list : string list ref = ref [];
+		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 
-		(*--------------------------------------------------------------------------*)
-		(* compute memory map for sections *)
-		(* uobj_load_addr = load address of uobj *)
-		(*--------------------------------------------------------------------------*)
-		method compute_sections_memory_map
-			(uobj_load_addr : int) 
-			: int =
-
-			let uobj_section_load_addr = ref 0 in
-			o_uobj_load_addr := uobj_load_addr;
-			uobj_section_load_addr := uobj_load_addr;
-			List.iter (fun x ->
-				(* compute subsection list *)
-				let elem_index = ref 0 in
-				let subsections_list = ref [] in
-				while (!elem_index < List.length x) do
-						if (!elem_index > 2) then
-							begin
-						    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
-							end
-						; 
-						elem_index := !elem_index + 1;
-				done;
-					
-				Hashtbl.add uobj_sections_memory_map_hashtbl (List.nth x 0) 
-					{
-						s_name = (List.nth x 0);
-						s_type = 0;
-						s_attribute = (List.nth x 1);
-						s_subsection_list = !subsections_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = int_of_string (List.nth x 2);
-					};
-			
-				uobj_section_load_addr := !uobj_section_load_addr + int_of_string (List.nth x 2);
-				()
-			)  !o_uobj_sections_list;
-
-			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
-			(!o_uobj_size)
-		;
-
+		val o_sentinels_lib_source_file_list : string list ref = ref [];
+		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
@@ -118,7 +110,8 @@ class uobject = object(self)
 			if (rval == false) then (false)
 			else
 			(* parse usmf-hdr node *)
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id) =
+			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
+					usmf_hdr_platform, usmf_hdr_cpu, usmf_hdr_arch) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
 			if (rval == false) then (false)
@@ -132,6 +125,9 @@ class uobject = object(self)
 					o_usmf_hdr_type := usmf_hdr_type;								
 					o_usmf_hdr_subtype := usmf_hdr_subtype;
 					o_usmf_hdr_id := usmf_hdr_id;
+					o_usmf_hdr_platform := usmf_hdr_platform;
+					o_usmf_hdr_cpu := usmf_hdr_cpu;
+					o_usmf_hdr_arch := usmf_hdr_arch;
 				end;
 
 			(* parse usmf-sources node *)
@@ -146,7 +142,36 @@ class uobject = object(self)
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
 
-			(* parse uobj-binary node *)
+			(* parse uobj-sentinels node *)
+			let (rval, uobj_sentinels_list) = 
+										Usmanifest.parse_node_uobj_sentinels mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					List.iter (fun x ->
+
+						(*make a unique name for this sentinel*)
+						let sentinel_name = ref "" in
+							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 2); 
+
+						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
+							{
+								s_type = (List.nth x 0);
+								s_type_id = (List.nth x 1);
+								s_fname = (List.nth x 2);
+								s_fparamdwords = int_of_string (List.nth x 3);
+								s_attribute = (List.nth x 4);
+								s_origin = 0;
+								s_length = int_of_string (List.nth x 5);
+							};
+						
+					) uobj_sentinels_list;
+				end;
+
+
+			(* parse uobj-sections node *)
 			let (rval, uobj_sections_list) = 
 										Usmanifest.parse_node_uobj_binary mf_json in
 
@@ -154,11 +179,110 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
-					o_uobj_sections_list := uobj_sections_list;
+
+					List.iter (fun x ->
+						(* compute subsection list *)
+						let elem_index = ref 0 in
+						let subsections_list = ref [] in
+						while (!elem_index < List.length x) do
+								if (!elem_index > 2) then
+									begin
+								    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
+									end
+								; 
+								elem_index := !elem_index + 1;
+						done;
+
+
+						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
+							{
+								s_name = (List.nth x 0);
+								s_type = 0;
+								s_attribute = (List.nth x 1);
+								s_subsection_list = !subsections_list;
+								s_origin =  0;
+								s_length = int_of_string (List.nth x 2);
+							};
+							
+					) uobj_sections_list;
+
+								
 				end;
 																											
 			(true)
 		;
+		
+
+
+		(*--------------------------------------------------------------------------*)
+		(* consolidate sections with memory map *)
+		(* uobj_load_addr = load address of uobj *)
+		(*--------------------------------------------------------------------------*)
+		method consolidate_sections_with_memory_map
+			(uobj_load_addr : int) 
+			: int =
+
+			let uobj_section_load_addr = ref 0 in
+			o_uobj_load_addr := uobj_load_addr;
+			uobj_section_load_addr := uobj_load_addr;
+			
+			(* iterate over sentinels *)
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				Hashtbl.add uobj_sections_memory_map_hashtbl key 
+					{
+						s_name = key;
+						s_type = int_of_string(x.s_type_id);
+						s_attribute = x.s_attribute;
+						s_subsection_list = [ ("." ^ key) ];
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{
+						s_name = key;
+						s_type = int_of_string(x.s_type_id);
+						s_attribute = x.s_attribute;
+						s_subsection_list = [ ("." ^ key) ];
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+			
+				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+			)  o_uobj_sentinels_hashtbl;
+
+			(* iterate over regular sections *)
+			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
+
+				Hashtbl.add uobj_sections_memory_map_hashtbl key 
+					{
+						s_name = x.s_name;
+						s_type = x.s_type;
+						s_attribute = x.s_attribute;
+						s_subsection_list = x.s_subsection_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{
+						s_name = x.s_name;
+						s_type = x.s_type;
+						s_attribute = x.s_attribute;
+						s_subsection_list = x.s_subsection_list;
+						s_origin =  !uobj_section_load_addr;
+						s_length = x.s_length;
+					};
+
+				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+			)  o_uobj_sections_hashtbl;
+			
+					
+
+			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
+			(!o_uobj_size)
+		;
+
+
+
 
 
 		(*--------------------------------------------------------------------------*)
@@ -192,6 +316,171 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
+		(* generate uobj sentinels *)
+		(*--------------------------------------------------------------------------*)
+		method generate_sentinels 
+			() = 
+			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				let sentinel_fname = "sentinel-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+				let target_sentinel_fname = "sentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+					
+				let (pp_retval, _) = Usextbinutils.preprocess 
+											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
+											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname) 
+											(Usconfig.get_std_incdirs ())
+											(Usconfig.get_std_defines () @ 
+												Usconfig.get_std_define_asm () @
+												[ "UOBJ_ENTRY_POINT_FNAME=" ^ x.s_fname 
+												] @
+												[ "UOBJ_SENTINEL_SECTION_NAME=." ^ key
+												] @
+												[ "UOBJ_SENTINEL_ENTRY_POINT_FNAME=" ^ x.s_fname ^ 
+													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
+													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch
+												]) in
+					if (pp_retval != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in generating sentinel: %s"
+									target_sentinel_fname;
+								ignore(exit 1);
+						end
+					;
+				
+				
+				o_sentinels_source_file_list := !o_sentinels_source_file_list @ 
+					[ target_sentinel_fname ];
+
+			) o_uobj_sentinels_hashtbl;
+
+			Uslog.logf log_tag Uslog.Info "Generated sentinels.";
+			()
+		;
+
+
+		(*--------------------------------------------------------------------------*)
+		(* generate uobj sentinels lib *)
+		(*--------------------------------------------------------------------------*)
+		method generate_sentinels_lib 
+			() = 
+			Uslog.logf log_tag Uslog.Info "Generating sentinels lib for target (%s-%s-%s)..."
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				let sentinel_libfname = "libsentinel-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+				let target_sentinel_libfname = "libsentinel-" ^ x.s_fname ^ "-" ^ x.s_type ^ "-" ^ 
+						!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ 
+						!o_usmf_hdr_arch ^ ".S" in
+				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+				
+				let (pp_retval, _) = Usextbinutils.preprocess 
+											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
+											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname) 
+											(Usconfig.get_std_incdirs ())
+											(Usconfig.get_std_defines () @ 
+												Usconfig.get_std_define_asm () @
+												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
+													(Printf.sprintf "0x%08x" x_v.s_origin)
+												] @
+												[ "UOBJ_SENTINEL_SECTION_NAME=.text"
+												] @
+												[ "UOBJ_SENTINEL_ENTRY_POINT_FNAME=" ^ x.s_fname ^ 
+													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
+													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch
+												]) in
+					if (pp_retval != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in generating sentinel lib: %s"
+									target_sentinel_libfname;
+								ignore(exit 1);
+						end
+					;
+				
+												
+				o_sentinels_lib_source_file_list := !o_sentinels_lib_source_file_list @ 
+					[ target_sentinel_libfname ];
+						
+			) o_uobj_sentinels_hashtbl;
+
+			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
+			()
+		;
+
+
+		(*--------------------------------------------------------------------------*)
+		(* build uobj sentinels *)
+		(*--------------------------------------------------------------------------*)
+		method build_sentinels 
+			() = 
+			Uslog.logf log_tag Uslog.Info "Building sentinels for target (%s-%s-%s)...\r\n"
+				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
+
+			(* compile all the sentinel source files *)							
+			self#compile_cfile_list !o_sentinels_source_file_list
+					(Usconfig.get_std_incdirs ())
+					(Usconfig.get_std_defines () @ 
+								Usconfig.get_std_define_asm ());
+
+			Uslog.logf log_tag Uslog.Info "Built sentinels.";
+			()
+		;
+
+
+		(*--------------------------------------------------------------------------*)
+		(* build uobj sentinels lib *)
+		(*--------------------------------------------------------------------------*)
+		method build_sentinels_lib 
+			() = 
+			let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in
+				
+			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
+				uobj_sentinels_lib_name;
+
+			(* compile all the sentinel lib source files *)							
+			self#compile_cfile_list !o_sentinels_lib_source_file_list
+					(Usconfig.get_std_incdirs ())
+					(Usconfig.get_std_defines () @ 
+								Usconfig.get_std_define_asm ());
+			
+			(* now create the lib archive *)
+			let (pestatus, pesignal) = 
+					(Usextbinutils.mklib  
+						!o_sentinels_lib_source_file_list
+						(uobj_sentinels_lib_name ^ ".a")
+					) in
+					if (pesignal == true) || (pestatus != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
+								ignore(exit 1);
+						end
+					else
+						begin
+								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+						end
+					;
+		
+			()
+		;
+
+
+
+				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+
+				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
+					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
+				*)
+
+
+		(*--------------------------------------------------------------------------*)
 		(* build a uobj *)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
@@ -206,21 +495,34 @@ class uobject = object(self)
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
 	
+	
+			(* generate sentinels *)
+			self#generate_sentinels ();
+
+			(* generate sentinels lib *)
+			self#generate_sentinels_lib ();
+	
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_uobj_linker_script !o_usmf_hdr_id 
-					(self#get_o_uobj_load_addr) 
-					!o_uobj_sections_list in
+				Usuobjgen.generate_linker_script !o_usmf_hdr_id 
+					uobj_sections_memory_map_hashtbl_byorigin in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+
 					
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
 				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
-					!o_uobj_sections_list in
+					o_uobj_sections_hashtbl in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
-			
+
+			(* compile all sentinels *)							
+			self#build_sentinels ();
+									
+			(* compile sentinels lib *)
+			self#build_sentinels_lib ();						
+									
 			(* compile all the cfiles *)							
 			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
 					(Usconfig.get_std_incdirs ())
@@ -233,9 +535,12 @@ class uobject = object(self)
 				let uobj_libs_list = ref [] in
 				let (pestatus, pesignal) = 
 						(Usextbinutils.link_uobj  
-							(!o_usmf_sources_c_files @ [ uobj_hdr_filename ])
+							( !o_sentinels_source_file_list @
+								!o_usmf_sources_c_files @ 
+								[ uobj_hdr_filename ]
+							)
 							!uobj_libdirs_list !uobj_libs_list
-							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".bin")
+							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".elf")
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
@@ -264,7 +569,21 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n	//%s" (!o_usmf_hdr_id);
     Printf.fprintf ochannel "\n	{";
 
-  	Printf.fprintf ochannel "\n\t0x00000000UL, ";    (*entrystub*)
+	  (* total_sentinels *)
+  	Printf.fprintf ochannel "\n\t0x%08xUL, " (Hashtbl.length o_uobj_sentinels_hashtbl);
+		
+		(* plug in the sentinels *)
+		Printf.fprintf ochannel "\n\t{";
+		Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+			let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+			Printf.fprintf ochannel "\n\t\t{";
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (int_of_string(x.s_type_id));
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (0);
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (x_v.s_origin);
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL " (x.s_length);
+			Printf.fprintf ochannel "\n\t\t},";
+		)  o_uobj_sentinels_hashtbl;
+		Printf.fprintf ochannel "\n\t},";
 
 		(*ustack_tos*)
     let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
@@ -308,7 +627,8 @@ class uobject = object(self)
 	method generate_uobj_hdr 
 			(uobj_name : string) 
 			(uobj_load_addr : int)
-			(uobj_sections_list : string list list)
+			(*(uobj_sections_list : string list list)*)
+			uobj_sections_hashtbl
 			: string  =
 		let uobj_hdr_filename = (uobj_name ^ ".hdr.c") in
 		let oc = open_out uobj_hdr_filename in
@@ -328,21 +648,21 @@ class uobject = object(self)
 			Printf.fprintf oc "\n__attribute__((section (\".ustack\"))) uint8_t __ustack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_USTACK]={ 0 };";
 			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
 	
-			List.iter (fun x ->
+			(* iterate over regular sections *)
+			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
 				(* new section *)
-				let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
-				let section_name = (List.nth x 3) in
-				  if ((compare section_name ".text") <> 0) && 
-						((compare section_name ".ustack") <> 0) &&
-						((compare section_name ".tstack") <> 0) &&
-						((compare section_name ".hdr") <> 0) then
+				let section_name_var = ("__uobjsection_filler_" ^ x.s_name) in
+				
+				  if ((compare (List.nth x.s_subsection_list 0) ".text") <> 0) && 
+						((compare (List.nth x.s_subsection_list 0) ".ustack") <> 0) &&
+						((compare (List.nth x.s_subsection_list 0) ".tstack") <> 0) &&
+						((compare (List.nth x.s_subsection_list 0) ".hdr") <> 0) then
 						begin
 							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
-								section_name section_name_var;
+								(List.nth x.s_subsection_list 0) section_name_var;
 						end
 					;
-				()
-			)  uobj_sections_list;
+			)  uobj_sections_hashtbl;
 	
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";

@@ -9,13 +9,25 @@ open Usosservices
 module Usextbinutils =
 	struct
 
+	type ld_section_info_t = 
+		{
+			s_name: string;
+			s_type: int;
+			s_attribute : string;
+			s_subsection_list : string list;
+			s_origin: int;
+			s_length: int;	
+		};;
+
 
 	(* Uslog.logf usextbinutils_tag Uslog.Debug "hello"; *)
 	
 	let tool_pp = "gcc" ;;
 	let tool_cc = "gcc" ;;
 	let tool_ld = "ld" ;;
-	
+	let tool_ar = "ar" ;;
+	let tool_objcopy = "objcopy" ;;
+		
 	let usextbinutils_tag = "Usextbinutils" ;;
 			
 			
@@ -68,7 +80,7 @@ module Usextbinutils =
 			uobj_linker_script uobj_bin_name = 
 			let ld_cmdline = ref [] in
 				ld_cmdline := !ld_cmdline @ [ "--oformat" ];
-				ld_cmdline := !ld_cmdline @ [ "binary" ];
+				ld_cmdline := !ld_cmdline @ [ "elf32-i386" ];
 				ld_cmdline := !ld_cmdline @ [ "-T" ];
 				ld_cmdline := !ld_cmdline @ [ uobj_linker_script ]; 
 				List.iter (fun x -> ld_cmdline := !ld_cmdline @ [ (x^".o") ]) uobj_ofile_list; 
@@ -82,6 +94,34 @@ module Usextbinutils =
 						Usosservices.exec_process_withlog 
 						tool_ld !ld_cmdline true usextbinutils_tag in
 				(ld_pestatus, ld_pesignal) 
+	;;
+
+
+	let mkbin uobj_input_filename uobj_output_filename = 
+			let objcopy_cmdline = ref [] in
+				objcopy_cmdline := !objcopy_cmdline @ [ "-I" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "elf32-i386" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "-O" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ "binary" ];
+				objcopy_cmdline := !objcopy_cmdline @ [ uobj_input_filename ];
+				objcopy_cmdline := !objcopy_cmdline @ [ uobj_output_filename ];
+				let (objcopy_pestatus, objcopy_pesignal, _) = 
+						Usosservices.exec_process_withlog 
+						tool_objcopy !objcopy_cmdline true usextbinutils_tag in
+				(objcopy_pestatus, objcopy_pesignal) 
+	;;
+
+
+
+	let mklib lib_ofile_list lib_name = 
+			let ar_cmdline = ref [] in
+				ar_cmdline := !ar_cmdline @ [ "-rcs" ];
+				ar_cmdline := !ar_cmdline @ [ lib_name ]; 
+				List.iter (fun x -> ar_cmdline := !ar_cmdline @ [ (x^".o") ]) lib_ofile_list; 
+				let (ar_pestatus, ar_pesignal, _) = 
+						Usosservices.exec_process_withlog 
+						tool_ar !ar_cmdline true usextbinutils_tag in
+				(ar_pestatus, ar_pesignal) 
 	;;
 
 
