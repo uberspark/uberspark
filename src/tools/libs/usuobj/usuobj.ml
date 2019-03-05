@@ -131,7 +131,7 @@ class uobject = object(self)
 				end;
 
 			(* parse usmf-sources node *)
-			let(rval, usmf_source_c_files, usmf_sources_casm_files) = 
+			let(rval, usmf_sources_h_files, usmf_source_c_files, usmf_sources_casm_files) = 
 				Usmanifest.parse_node_usmf_sources	mf_json in
 	
 			if (rval == false) then (false)
