@@ -442,6 +442,7 @@ class uobject = object(self)
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
 												Usconfig.get_std_define_asm () @
+												[ self#get_o_pp_definition ] @
 												[ "UOBJ_ENTRY_POINT_FNAME=" ^ x.s_fname 
 												] @
 												[ "UOBJ_SENTINEL_SECTION_NAME=." ^ key
@@ -492,6 +493,7 @@ class uobject = object(self)
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
 												Usconfig.get_std_define_asm () @
+												[ self#get_o_pp_definition ] @
 												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
 													(Printf.sprintf "0x%08x" x_v.s_origin)
 												] @
@@ -532,6 +534,7 @@ class uobject = object(self)
 			self#compile_cfile_list !o_sentinels_source_file_list
 					(Usconfig.get_std_incdirs ())
 					(Usconfig.get_std_defines () @ 
+					[ self#get_o_pp_definition ] @
 								Usconfig.get_std_define_asm ());
 
 			Uslog.logf log_tag Uslog.Info "Built sentinels.";
@@ -553,7 +556,8 @@ class uobject = object(self)
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_sentinels_lib_source_file_list
 					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines () @ 
+					(Usconfig.get_std_defines () @
+					[ self#get_o_pp_definition ] @ 
 								Usconfig.get_std_define_asm ());
 			
 			(* now create the lib archive *)
@@ -634,7 +638,7 @@ class uobject = object(self)
 			(* compile all the cfiles *)							
 			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
 					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines ());
+					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
 		
 			(* link the uobj binary *)
 			Uslog.logf log_tag Uslog.Info "Proceeding to link uobj binary '%s'..."
