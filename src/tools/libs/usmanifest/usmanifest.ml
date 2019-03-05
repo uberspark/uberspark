@@ -159,7 +159,7 @@ module Usmanifest =
 				retval := false;
 		;
 	
-		(!retval, !!usmf_hfiles_list, !usmf_cfiles_list, !usmf_casmfiles_list)
+		(!retval, !usmf_hfiles_list, !usmf_cfiles_list, !usmf_casmfiles_list)
 	;;
 
 
