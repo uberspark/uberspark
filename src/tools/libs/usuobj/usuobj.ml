@@ -365,13 +365,18 @@ class uobject = object(self)
 				Printf.fprintf oc "\n";
 			) self#get_o_usmf_sources_h_files;
 
+		  (* plug in sentinel declarations *)
+			Printf.fprintf oc "\n/* sentinel declarations follow */";
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 
-(*				Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
-				Printf.fprintf oc "\n#endif //__ASSEMBLY__";
+			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				Uslog.logf log_tag Uslog.Info "key=%s" key;
+			
+			) self#get_o_uobj_sentinels_hashtbl;
 
-				Printf.fprintf oc "\n";
-				Printf.fprintf oc "\n";
-*)
+			Printf.fprintf oc "\n#endif //__ASSEMBLY__";
+			Printf.fprintf oc "\n";
 
 			(* generate hfile epilogue *)
 			Printf.fprintf oc "\n";
