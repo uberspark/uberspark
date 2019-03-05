@@ -340,7 +340,31 @@ class uobject = object(self)
 			Printf.fprintf oc "\n";
 
 			(* bring in all the contents of the individual h-files *)
-			
+			List.iter (fun x ->
+				let hfilename = (self#get_o_uobj_dir_abspathname ^ "/" ^ x) in 
+				(* Uslog.logf log_tag Uslog.Info "h-file: %s" x; *)
+
+				Printf.fprintf oc "\n#ifndef __%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
+				Printf.fprintf oc "\n#define __%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
+				Printf.fprintf oc "\n";
+				Printf.fprintf oc "\n";
+
+				let ic = open_in hfilename in
+				try
+    			while true do
+      			let line = input_line ic in
+      			Printf.fprintf oc "%s\n" line;
+    			done
+  			with End_of_file -> ();				
+				close_in ic;
+	
+				Printf.fprintf oc "\n";
+				Printf.fprintf oc "\n";
+				Printf.fprintf oc "\n#endif //__%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
+				Printf.fprintf oc "\n";
+				Printf.fprintf oc "\n";
+			) self#get_o_usmf_sources_h_files;
+
 
 (*				Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 				Printf.fprintf oc "\n#endif //__ASSEMBLY__";
@@ -350,7 +374,11 @@ class uobject = object(self)
 *)
 
 			(* generate hfile epilogue *)
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n#endif //__%s_h__" self#get_o_usmf_hdr_id;
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
 				
 			(* close uobj hfile *)	
 			close_out oc;
