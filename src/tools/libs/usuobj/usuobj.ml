@@ -51,7 +51,8 @@ class uobject = object(self)
 		val o_usmf_hdr_arch = ref "";
 		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
 
-				
+		val o_usmf_sources_h_files: string list ref = ref [];
+		method get_o_usmf_sources_h_files = !o_usmf_sources_h_files;
 		val o_usmf_sources_c_files: string list ref = ref [];
 		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
 		val o_usmf_sources_casm_files: string list ref = ref [];
@@ -138,6 +139,7 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
+					o_usmf_sources_h_files := usmf_sources_h_files;
 					o_usmf_sources_c_files := usmf_source_c_files;
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
@@ -336,6 +338,9 @@ class uobject = object(self)
 			Printf.fprintf oc "\n#define __%s_h__" self#get_o_usmf_hdr_id;
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
+
+			(* bring in all the contents of the individual h-files *)
+			
 
 (*				Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 				Printf.fprintf oc "\n#endif //__ASSEMBLY__";
