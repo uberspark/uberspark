@@ -317,7 +317,8 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		(* consolidate h-files and embed sentinel declarations *)
 		(*--------------------------------------------------------------------------*)
-		method consolidate_hfiles_and_embed_sentinels
+		method generate_uobj_hfile
+		(* method consolidate_hfiles_and_embed_sentinels *)
 			() = 
 			Uslog.logf log_tag Uslog.Info "Consolidating uobj headers and embedding sentinels...";
 
