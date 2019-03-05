@@ -315,11 +315,11 @@ class uobject = object(self)
 		;
 
 		(*--------------------------------------------------------------------------*)
-		(* generate uobj sentinel declaration header *)
+		(* consolidate h-files and embed sentinel declarations *)
 		(*--------------------------------------------------------------------------*)
-		method generate_sentinel_decls 
+		method consolidate_hfiles_and_embed_sentinels
 			() = 
-			Uslog.logf log_tag Uslog.Info "Generating sentinel decls...\r\n";
+			Uslog.logf log_tag Uslog.Info "Consolidating uobj headers and embedding sentinels...";
 
 			let uobj_sentinel_decls_filename = 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ 

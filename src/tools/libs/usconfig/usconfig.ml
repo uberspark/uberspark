@@ -15,6 +15,10 @@ module Usconfig =
 	(* uobj library manifest default filename *)
 	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
 
+	(* uobj consolidated header filename *)
+	let uobj_hfilename = "uobj";;
+	let get_uobj_hfilename () =	(!uobj_hfilename)	;;
+
 	(* uobj collection info default filename *)
 	let std_uobjcoll_info_filename = "uobjcoll_info_table.c";;
 	let get_std_uobjcoll_info_filename () =	(std_uobjcoll_info_filename)	;;
