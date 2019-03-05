@@ -93,6 +93,13 @@ class uobject = object(self)
 		val o_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
 
+		val o_preprocess_definition = ref "";
+		method get_o_preprocess_definition = !o_preprocess_definition;
+
+
+
+
+
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
 		(* usmf_filename = canonical uobj manifest filename *)
@@ -214,7 +221,11 @@ class uobject = object(self)
 
 								
 				end;
+	
 																											
+			(* initialize uobj preprocess definition *)
+			o_preprocess_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
+			
 			(true)
 		;
 		
