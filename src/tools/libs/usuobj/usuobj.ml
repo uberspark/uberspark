@@ -372,7 +372,11 @@ class uobject = object(self)
 
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
 				Uslog.logf log_tag Uslog.Info "key=%s" key;
-			
+				let sentinel_fname = x.s_fname ^ 
+													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
+													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch in
+				
+				Printf.fprintf oc "\n%s (void);" sentinel_fname;
 			) self#get_o_uobj_sentinels_hashtbl;
 
 			Printf.fprintf oc "\n#endif //__ASSEMBLY__";
