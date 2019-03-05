@@ -17,7 +17,9 @@ struct
 			{
 				s_type: string;
 				s_type_id : string;
+				s_retvaldecl : string;
 				s_fname: string;
+				s_fparamdecl: string;
 				s_fparamdwords : int;
 				s_attribute : string;
 				s_origin: int;
@@ -162,11 +164,13 @@ class uobject = object(self)
 							{
 								s_type = (List.nth x 0);
 								s_type_id = (List.nth x 1);
-								s_fname = (List.nth x 2);
-								s_fparamdwords = int_of_string (List.nth x 3);
-								s_attribute = (List.nth x 4);
+								s_retvaldecl = (List.nth x 2);
+								s_fname = (List.nth x 3);
+								s_fparamdecl = (List.nth x 4);
+								s_fparamdwords = int_of_string (List.nth x 5);
+								s_attribute = (List.nth x 6);
 								s_origin = 0;
-								s_length = int_of_string (List.nth x 5);
+								s_length = int_of_string (List.nth x 7);
 							};
 						
 					) uobj_sentinels_list;
