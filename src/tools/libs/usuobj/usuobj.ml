@@ -93,8 +93,8 @@ class uobject = object(self)
 		val o_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
 
-		val o_preprocess_definition = ref "";
-		method get_o_preprocess_definition = !o_preprocess_definition;
+		val o_pp_definition = ref "";
+		method get_o_pp_definition = !o_pp_definition;
 
 
 
@@ -224,7 +224,7 @@ class uobject = object(self)
 	
 																											
 			(* initialize uobj preprocess definition *)
-			o_preprocess_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
+			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
 			
 			(true)
 		;
@@ -392,13 +392,13 @@ class uobject = object(self)
 													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch in
 
 				Printf.fprintf oc "\n";
-				Printf.fprintf oc "\n#ifdef __UOBJ_%s__" self#get_o_usmf_hdr_id;
+				Printf.fprintf oc "\n#ifdef %s" self#get_o_pp_definition;
 				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl x.s_fname
 						x.s_fparamdecl;	
 				Printf.fprintf oc "\n#else";
 				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl sentinel_fname
 						x.s_fparamdecl;	
-				Printf.fprintf oc "\n#endif //__UOBJ_%s__" self#get_o_usmf_hdr_id;
+				Printf.fprintf oc "\n#endif //%s" self#get_o_pp_definition;
 				Printf.fprintf oc "\n";
 
 			) self#get_o_uobj_sentinels_hashtbl;
