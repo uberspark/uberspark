@@ -379,8 +379,17 @@ class uobject = object(self)
 				let sentinel_fname = x.s_fname ^ 
 													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
 													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch in
-				
-				Printf.fprintf oc "\n%s (void);" sentinel_fname;
+
+				Printf.fprintf oc "\n";
+				Printf.fprintf oc "\n#ifdef __UOBJ_%s__" self#get_o_usmf_hdr_id;
+				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl x.s_fname
+						x.s_fparamdecl;	
+				Printf.fprintf oc "\n#else";
+				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl sentinel_fname
+						x.s_fparamdecl;	
+				Printf.fprintf oc "\n#endif //__UOBJ_%s__" self#get_o_usmf_hdr_id;
+				Printf.fprintf oc "\n";
+
 			) self#get_o_uobj_sentinels_hashtbl;
 
 			Printf.fprintf oc "\n#endif //__ASSEMBLY__";

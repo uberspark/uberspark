@@ -71,6 +71,10 @@ module Usconfig =
 											];;
 				
 	let get_std_define_asm () =	(std_define_asm)	;;
+
+	
+	let definition_uobj_self = "__UOBJ_SELF__";;
+	let get_definition_uobj_self () =	(definition_uobj_self)	;;
 	
 				
 	(* maximum platform CPUs *)
