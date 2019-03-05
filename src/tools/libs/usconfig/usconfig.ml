@@ -17,7 +17,7 @@ module Usconfig =
 
 	(* uobj consolidated header filename *)
 	let uobj_hfilename = "uobj";;
-	let get_uobj_hfilename () =	(!uobj_hfilename)	;;
+	let get_uobj_hfilename () =	(uobj_hfilename)	;;
 
 	(* uobj collection info default filename *)
 	let std_uobjcoll_info_filename = "uobjcoll_info_table.c";;

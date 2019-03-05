@@ -324,7 +324,7 @@ class uobject = object(self)
 			(* create uobj hfile *)
 			let uobj_hfilename = 
 					(self#get_o_uobj_dir_abspathname ^ "/" ^ 
-						Usconfig.get_uobj_hfilename ^ ".h") in
+						(Usconfig.get_uobj_hfilename ()) ^ ".h") in
 			let oc = open_out uobj_hfilename in
 			
 			(* generate hfile prologue *)
@@ -534,8 +534,8 @@ class uobject = object(self)
 						(List.length !o_usmf_sources_c_files) 
 						(List.length !o_usmf_sources_casm_files);
 
-			(* generate sentinels declarations *)
-			self#generate_sentinel_decls ();
+			(* generate uobj top-level header *)
+			self#generate_uobj_hfile ();
 	
 			(* generate sentinels *)
 			self#generate_sentinels ();
