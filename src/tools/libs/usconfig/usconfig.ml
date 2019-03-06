@@ -53,8 +53,13 @@ module Usconfig =
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
+	(* also check include/uberspark.h for sentinel definitions *)
 	(*--------------------------------------------------------------------------*)
-
+	let sentinel_types =
+    [ "call", "UOBJ_SENTINEL_TYPE_CALL"; 
+		]
+  ;;
+	let get_sentinel_types () =	(sentinel_types)	;;
 
 	(* standard preprocessor definitions *)
 	let std_defines = [ 

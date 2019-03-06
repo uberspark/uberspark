@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 ------------------------------------------------------------------------------*)
 
+
 open Usconfig
 open Uslog
 open Usmanifest
@@ -396,12 +397,23 @@ class uobject = object(self)
 				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl x.s_fname
 						x.s_fparamdecl;	
 				Printf.fprintf oc "\n#else";
+				let sentinel_type_definition_string = 
+					List.assoc x.s_type (Usconfig.get_sentinel_types ()) in	
+				Printf.fprintf oc "\n";
 				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl sentinel_fname
-						x.s_fparamdecl;	
+						x.s_fparamdecl;
+
+				Printf.fprintf oc "\n#ifdef %s" ("ENFORCE_" ^ sentinel_type_definition_string);
+					Printf.fprintf oc "\n#define %s %s" x.s_fname sentinel_fname;
+				Printf.fprintf oc "\n#endif //%s" ("ENFORCE_" ^ sentinel_type_definition_string);
+				
 				Printf.fprintf oc "\n#endif //%s" self#get_o_pp_definition;
 				Printf.fprintf oc "\n";
 
 			) self#get_o_uobj_sentinels_hashtbl;
+
+			(* now print out the last entry of the sentinel equal to the call *)
+
 
 			Printf.fprintf oc "\n#endif //__ASSEMBLY__";
 			Printf.fprintf oc "\n";
