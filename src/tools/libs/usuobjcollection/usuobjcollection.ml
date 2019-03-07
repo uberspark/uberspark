@@ -25,7 +25,10 @@ module Usuobjcollection =
 	let rootdir = ref "";;
 
 	let usmf_filename_canonical = ref "";;
-	
+
+	let o_binary_image_filename = ref "";;
+
+			
 	let uobj_dir_list = ref [];;
 
 	(*let uobj_list = ref [];;*)
@@ -127,6 +130,9 @@ module Usuobjcollection =
 
 		(* store uobj collection id *)
 		o_usmf_hdr_id := usmf_hdr_id;
+
+		(* store uobj collection binary filename *)
+		o_binary_image_filename := (usmf_hdr_id ^ ".bin");
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
@@ -414,10 +420,10 @@ module Usuobjcollection =
 			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmf_name);
 		
 		(* copy uobj collection binary image *)
-		(* Usosservices.file_copy !usmf_filename_canonical 
-			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmf_name);
-			*)
-		
+		Usosservices.file_copy (!usmf_filename_canonical ^ ".bin") 
+			(uobjcoll_install_dir ^ "/" ^ !o_binary_image_filename);
+
+				
 		(* iterate over all the uobjs in the collection *)
 		(* and invoke their install method *)
 		Hashtbl.iter (fun key uobj ->  
