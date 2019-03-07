@@ -59,6 +59,7 @@ AC_CONFIG_FILES(
 			[uberspark-common.mk]
 			[Makefile]
 			[./tools/ubersparkconfig.ml]
+			[./tools/libs/usconfig/usconfig.ml]
 			)
 
 AC_OUTPUT
