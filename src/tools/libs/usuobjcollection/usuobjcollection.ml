@@ -402,7 +402,7 @@ module Usuobjcollection =
 		Uslog.logf log_tag Uslog.Info "install uobjcoll in: %s" uobjcoll_install_dir;
 		let (retval, retecode, retemsg) = Usosservices.mkdir uobjcoll_install_dir 0o755 in
 		
-		if (retval == false) then (* && (retecode != Unix.EEXIST) then *)
+		if (retval == false) && (retecode != Unix.EEXIST) then 
 			begin
 				Uslog.logf log_tag Uslog.Error "error in creating directory: %s" retemsg;
 			end
