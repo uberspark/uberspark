@@ -37,6 +37,10 @@ module Usconfig =
 	let sentinel_dir = "/usr/local/uberspark/sentinels";;
 	let get_sentinel_dir () = (sentinel_dir);;
 
+	(* uobjcoll default installation directory *)
+	let default_install_uobjcolldir = "/usr/local/uberspark/uobjcoll";;
+	let get_default_install_uobjcolldir () = (default_install_uobjcolldir);;
+
 
 	let std_max_sections = 16;;
 	let get_std_max_sections () = (std_max_sections) ;;
