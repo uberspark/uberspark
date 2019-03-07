@@ -155,6 +155,15 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 (*----------------------------------------------------------------------------*)
 let handle_option_info () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
+		
+		(* we need --uobj to be specified on the command line *)
+		if !cmdopt_uobj_specified == false then
+			begin
+				Uslog.logf log_mpf Uslog.Error "--uobj needs to be specified!";
+				ignore(exit 1);
+			end
+		;
+		
 		()
 ;;
 
@@ -227,7 +236,7 @@ let main () =
 		(* check if information requested *)
 		if !cmdopt_info == true then 
 			begin
-				
+				handle_option_info ();
 			end
 		else
 		begin
