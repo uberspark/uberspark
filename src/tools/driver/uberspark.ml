@@ -170,6 +170,26 @@ let main () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		Arg.parse speclist cmdopt_invalid usage_msg;
 
+		(* load up default platform, cpu and arch if not specified on command line*)
+		if !cmdopt_platform_specified == false then
+			begin
+				cmdopt_platform := Usconfig.get_uberspark_config_hw_platform_default;
+			end
+		;
+		if !cmdopt_cpu_specified == false then
+			begin
+				cmdopt_cpu := Usconfig.get_uberspark_config_hw_cpu_default;
+			end
+		;
+		if !cmdopt_arch_specified == false then
+			begin
+				cmdopt_arch := Usconfig.get_uberspark_config_hw_arch_default;
+			end
+		;
+
+		Uslog.logf log_mpf Uslog.Info "Target platform='%s', CPU='%s', arch='%s'"
+			!cmdopt_platform !cmdopt_cpu !cmdopt_arch;
+
 		(* sanity check command line arguments *)
 		if(!cmdopt_loadaddr_specified == false) then
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
