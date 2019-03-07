@@ -802,8 +802,22 @@ class uobject = object(self)
 	method install 
 			(install_dir : string) 
 			=
-			Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." install_dir;
+			
+			(* create uobj installation folder if not already existing *)
+			let uobj_install_dir = (install_dir ^ "/" ^ !o_usmf_hdr_id) in
+				Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." uobj_install_dir;
+			let (retval, retecode, retemsg) = Usosservices.mkdir uobj_install_dir 0o755 in
+				if (retval == false) && (retecode != Unix.EEXIST) then 
+				begin
+					Uslog.logf log_tag Uslog.Error "error in creating directory: %s" retemsg;
+				end
+				;
 
+			(* copy uobj manifest *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ !o_usmf_filename)
+				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
+			
+			
 		()
 	; 
 
