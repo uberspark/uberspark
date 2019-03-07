@@ -85,6 +85,12 @@ let cmdopt_uobj_set
 	cmdopt_uobj := value;
 	;;
 
+let cmdopt_get_includedir = ref false;;
+
+let cmdopt_get_libdir = ref false;;
+
+let cmdopt_get_libsentinels = ref false;;
+
 
 (*----------------------------------------------------------------------------*)
 
@@ -172,6 +178,9 @@ let main () =
 
 			("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
 			("--uobj", Arg.String (cmdopt_uobj_set), "uobj-collection/uobj name");
+			("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
+			("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
+			("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
