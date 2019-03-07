@@ -77,6 +77,14 @@ let cmdopt_arch_set
 
 let cmdopt_info = ref false;;
 
+let cmdopt_uobj_specified = ref false;;
+let cmdopt_uobj = ref "";;
+let cmdopt_uobj_set 
+	(value : string) = 
+	cmdopt_uobj_specified := true;
+	cmdopt_uobj := value;
+	;;
+
 
 (*----------------------------------------------------------------------------*)
 
@@ -163,6 +171,7 @@ let main () =
 			("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
 
 			("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
+			("--uobj", Arg.String (cmdopt_uobj_set), "uobj-collection/uobj name");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
