@@ -168,7 +168,7 @@ let main () =
 		(* install uobj collection and uobjs if specified *)
 		if !copt_install == true then
 			begin
-				Usuobjcollection.install ".";
+				Usuobjcollection.install (Usconfig.get_default_install_uobjcolldir ());
 			end
 		;
 
