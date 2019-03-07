@@ -154,16 +154,21 @@ let main () =
 		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr));
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
-		(* generate uobj collection info table *)
-		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
-		Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
+		(* if we are building *)
+		if !copt_builduobj == true then
+			begin
+				(* generate uobj collection info table *)
+				Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
+				Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
 
-		(* build uobj collection info table binary *)
-		Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
-		Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
+				(* build uobj collection info table binary *)
+				Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
+				Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
 
-		(* build uobj collection by building individidual uobjs *)
-		Usuobjcollection.build "" true;
+				(* build uobj collection by building individidual uobjs *)
+				Usuobjcollection.build "" true;
+			end
+		;
 
 		(* install uobj collection and uobjs if specified *)
 		if !copt_install == true then
