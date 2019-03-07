@@ -55,6 +55,11 @@ AC_SUBST([ubersparksentinelsdir], ['/sentinels'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
 AC_SUBST([ubersparkuobjcolldir], ['/uobjcoll'])
 
+AC_SUBST([uberspark_config_hw_platform_default], ['generic'])
+AC_SUBST([uberspark_config_hw_cpu_default], ['generic'])
+AC_SUBST([uberspark_config_hw_arch_default], ['generic'])
+
+
 AC_CONFIG_FILES(
 			[uberspark-common.mk]
 			[Makefile]

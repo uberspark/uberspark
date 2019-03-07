@@ -15,6 +15,22 @@ module Usconfig =
 	let get_uberspark_config_install_uobjcolldir = 
 		"@prefix@@ubersparkhomedir@@ubersparkuobjcolldir@";;
 
+
+	(*------------------------------------------------------------------------*)
+	(* uberspark hardware related configuration information *)	
+	(*------------------------------------------------------------------------*)
+	let get_uberspark_config_hw_platform_default = 
+		"@uberspark_config_hw_platform_default@";;
+
+	let get_uberspark_config_hw_cpu_default = 
+		"@uberspark_config_hw_cpu_default@";;
+
+	let get_uberspark_config_hw_arch_default = 
+		"@uberspark_config_hw_arch_default@";;
+
+
+	(*------------------------------------------------------------------------*)
+
 	(* uobj manifest default filename *)
 	let std_uobj_usmf_name = "UOBJ.USMF";;
 	
