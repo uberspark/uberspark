@@ -102,10 +102,11 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobjlib-sources" *)
 	(* return true on successful parse, false if not *)
-	(* return: if true then lists of c-files and casm files *)
+	(* return: if true then lists of h-files, c-files and casm files *)
 	(*--------------------------------------------------------------------------*)
 	let parse_node_usmf_sources usmf_json =
 		let retval = ref true in
+		let usmf_hfiles_list = ref [] in
 		let usmf_cfiles_list = ref [] in
 		let usmf_casmfiles_list = ref [] in
 
@@ -114,6 +115,18 @@ module Usmanifest =
 		  	let usmf_sources_json = usmf_json |> member "usmf-sources" in
 					if usmf_sources_json != `Null then
 						begin
+
+							let usmf_hfiles_json = usmf_sources_json |> 
+								member "h-files" in
+								if usmf_hfiles_json != `Null then
+									begin
+										let usmf_hfiles_json_list = usmf_hfiles_json |> 
+												to_list in 
+											List.iter (fun x -> usmf_hfiles_list := 
+													!usmf_hfiles_list @ [(x |> to_string)]
+												) usmf_hfiles_json_list;
+									end
+								;
 	
 							let usmf_cfiles_json = usmf_sources_json |> 
 								member "c-files" in
@@ -146,7 +159,7 @@ module Usmanifest =
 				retval := false;
 		;
 	
-		(!retval, !usmf_cfiles_list, !usmf_casmfiles_list)
+		(!retval, !usmf_hfiles_list, !usmf_cfiles_list, !usmf_casmfiles_list)
 	;;
 
 
