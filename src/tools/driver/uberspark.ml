@@ -165,6 +165,13 @@ let main () =
 		(* build uobj collection by building individidual uobjs *)
 		Usuobjcollection.build "" true;
 
+		(* install uobj collection and uobjs if specified *)
+		if !copt_install == true then
+			begin
+				Usuobjcollection.install ".";
+			end
+		;
+
 		(* build final image *)
 		Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")
 		(Usconfig.get_std_uobjcoll_info_filename ());
