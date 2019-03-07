@@ -35,6 +35,9 @@ module Usuobjcollection =
 
 	let o_load_addr = ref 0;;
 
+	let o_usmf_hdr_id = ref"";;
+
+
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
 	(* usmf_filename = uobj collection manifest filename *)
@@ -120,6 +123,10 @@ module Usuobjcollection =
 						
 		total_uobjs := (List.length !uobj_dir_list);
 		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
+
+
+		(* store uobj collection id *)
+		o_usmf_hdr_id := usmf_hdr_id;
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
