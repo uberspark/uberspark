@@ -51,6 +51,31 @@ let cmdopt_loadaddr_set
 	cmdopt_loadaddr := value;
 	;;
 
+let cmdopt_platform_specified = ref false;;
+let cmdopt_platform = ref "";;
+let cmdopt_platform_set 
+	(value : string) = 
+	cmdopt_platform_specified := true;
+	cmdopt_platform := value;
+	;;
+
+let cmdopt_cpu_specified = ref false;;
+let cmdopt_cpu = ref "";;
+let cmdopt_cpu_set 
+	(value : string) = 
+	cmdopt_cpu_specified := true;
+	cmdopt_cpu := value;
+	;;
+
+let cmdopt_arch_specified = ref false;;
+let cmdopt_arch = ref "";;
+let cmdopt_arch_set 
+	(value : string) = 
+	cmdopt_arch_specified := true;
+	cmdopt_arch := value;
+	;;
+
+
 (*----------------------------------------------------------------------------*)
 
 
@@ -123,6 +148,10 @@ let main () =
 			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
 			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
 			("--install", Arg.Set copt_install, "Install uobj/uobj collection");
+
+			("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
+			("--cpu", Arg.String (cmdopt_platform_set), "set hardware CPU type");
+			("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
