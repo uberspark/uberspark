@@ -190,6 +190,7 @@ let handle_option_info () =
 		if !cmdopt_uobj_specified == false then
 			begin
 				Uslog.logf log_mpf Uslog.Error "--uobj needs to be specified!";
+				Arg.usage cmdline_speclist usage_msg;
 				ignore(exit 1);
 			end
 		;
