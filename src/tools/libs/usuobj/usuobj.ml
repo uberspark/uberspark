@@ -817,6 +817,10 @@ class uobject = object(self)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ !o_usmf_filename)
 				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
 			
+			(* copy uobj header file *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+															Usconfig.uobj_hfilename ^ ".h")
+				(uobj_install_dir ^ "/" ^ !o_usmf_hdr_id ^ ".h"); 
 			
 		()
 	; 
