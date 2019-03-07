@@ -397,9 +397,10 @@ module Usuobjcollection =
 	let install 
 		(install_dir : string)
 		= 
-
-		Uslog.logf log_tag Uslog.Info "install uobjcoll in: %s" install_dir;
-		let (retval, retecode, retemsg) = Usosservices.mkdir install_dir 0o755 in
+			
+		let uobjcoll_install_dir = (install_dir ^ "/" ^ !o_usmf_hdr_id) in
+		Uslog.logf log_tag Uslog.Info "install uobjcoll in: %s" uobjcoll_install_dir;
+		let (retval, retecode, retemsg) = Usosservices.mkdir uobjcoll_install_dir 0o755 in
 		
 		if (retval == false) then (* && (retecode != Unix.EEXIST) then *)
 			begin
