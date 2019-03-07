@@ -795,7 +795,17 @@ class uobject = object(self)
 		(uobj_hdr_filename)
 	; 
 
-		
+
+	(*--------------------------------------------------------------------------*)
+	(* install uobj *)
+	(*--------------------------------------------------------------------------*)
+	method install 
+			(install_dir : string) 
+			=
+			Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." install_dir;
+
+		()
+	; 
 
 end ;;
 

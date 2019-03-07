@@ -416,8 +416,7 @@ module Usuobjcollection =
 		(* iterate over all the uobjs in the collection *)
 		(* and invoke their install method *)
 		Hashtbl.iter (fun key uobj ->  
-				Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." key;
-				(* uobj#install uobjcoll_install_dir; *)
+				uobj#install uobjcoll_install_dir;
 		) uobj_hashtbl;
 		
 		
