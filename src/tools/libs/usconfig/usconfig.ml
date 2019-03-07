@@ -10,7 +10,7 @@ module Usconfig =
 	let std_uobj_usmf_name = "UOBJ.USMF";;
 	
 	(* uobj collection manifest default filename *)
-	let std_uobj_coll_usmf_name = "UOBJCOLL.USMF";;
+	let default_uobjcoll_usmf_name = "UOBJCOLL.USMF";;
 
 	(* uobj library manifest default filename *)
 	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
