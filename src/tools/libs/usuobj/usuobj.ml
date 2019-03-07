@@ -75,6 +75,10 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 
+		val o_uobj_sentinels_libname = ref "";
+		method get_o_uobj_sentinels_libname = !o_uobj_sentinels_libname;
+
+
 		val o_uobj_build_dirname = ref ".";
 		method get_o_uobj_build_dirname = !o_uobj_build_dirname;
 		
@@ -589,6 +593,7 @@ class uobject = object(self)
 						end
 					;
 		
+				o_uobj_sentinels_libname := (uobj_sentinels_lib_name ^ ".a");
 			()
 		;
 
