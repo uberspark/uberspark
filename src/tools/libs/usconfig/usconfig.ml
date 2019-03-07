@@ -10,7 +10,7 @@ module Usconfig =
 	let std_uobj_usmf_name = "UOBJ.USMF";;
 	
 	(* uobj collection manifest default filename *)
-	let std_uobj_coll_usmf_name = "UOBJCOLL.USMF";;
+	let default_uobjcoll_usmf_name = "UOBJCOLL.USMF";;
 
 	(* uobj library manifest default filename *)
 	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
@@ -36,6 +36,10 @@ module Usconfig =
 	(* sentinel directory *)
 	let sentinel_dir = "/usr/local/uberspark/sentinels";;
 	let get_sentinel_dir () = (sentinel_dir);;
+
+	(* uobjcoll default installation directory *)
+	let default_install_uobjcolldir = "/usr/local/uberspark/uobjcoll";;
+	let get_default_install_uobjcolldir () = (default_install_uobjcolldir);;
 
 
 	let std_max_sections = 16;;

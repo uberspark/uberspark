@@ -130,7 +130,20 @@ module Usosservices =
 	;;
 
 
+	let mkdir path perm =
+		let retval = ref true in
+		let retecode = ref Unix.EFAULT in
+		let reterrmsg = ref "" in
+		try
+    	Unix.mkdir path perm;
+		with Unix.Unix_error (ecode, fname, fparam) -> 
+				reterrmsg := Unix.error_message ecode;
+				retecode := ecode;
+				retval := false;
+		;
 
+		(!retval, !retecode, !reterrmsg)
+	;;
 
 	end
 	

@@ -53,6 +53,7 @@ AC_SUBST([ubersparkloadersdir], ['/loaders'])
 AC_SUBST([ubersparkloadersincludesdir], ['/loaders/include'])
 AC_SUBST([ubersparksentinelsdir], ['/sentinels'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
+AC_SUBST([ubersparkuobjcolldir], ['/uobjcoll'])
 
 AC_CONFIG_FILES(
 			[uberspark-common.mk]

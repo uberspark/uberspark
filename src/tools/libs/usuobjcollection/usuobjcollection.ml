@@ -25,7 +25,10 @@ module Usuobjcollection =
 	let rootdir = ref "";;
 
 	let usmf_filename_canonical = ref "";;
-	
+
+	let o_binary_image_filename = ref "";;
+
+			
 	let uobj_dir_list = ref [];;
 
 	(*let uobj_list = ref [];;*)
@@ -34,6 +37,9 @@ module Usuobjcollection =
 	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
 	let o_load_addr = ref 0;;
+
+	let o_usmf_hdr_id = ref"";;
+
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -120,6 +126,13 @@ module Usuobjcollection =
 						
 		total_uobjs := (List.length !uobj_dir_list);
 		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
+
+
+		(* store uobj collection id *)
+		o_usmf_hdr_id := usmf_hdr_id;
+
+		(* store uobj collection binary filename *)
+		o_binary_image_filename := (usmf_hdr_id ^ ".bin");
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
@@ -382,6 +395,44 @@ module Usuobjcollection =
 		()		 
 	;;
 
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
+
+	(*--------------------------------------------------------------------------*)
+	(* install uobj collection *)
+	(* install_dir = directory to install to *)
+	(*--------------------------------------------------------------------------*)
+	let install 
+		(install_dir : string)
+		= 
+			
+		let uobjcoll_install_dir = (install_dir ^ "/" ^ !o_usmf_hdr_id) in
+		Uslog.logf log_tag Uslog.Info "install uobjcoll in: %s" uobjcoll_install_dir;
+		
+		let (retval, retecode, retemsg) = Usosservices.mkdir uobjcoll_install_dir 0o755 in
+		
+		if (retval == false) && (retecode != Unix.EEXIST) then 
+			begin
+				Uslog.logf log_tag Uslog.Error "error in creating directory: %s" retemsg;
+			end
+		;
+		
+		(* copy uobj collection manifest *)
+		Usosservices.file_copy !usmf_filename_canonical 
+			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmf_name);
+		
+		(* copy uobj collection binary image *)
+		Usosservices.file_copy (!usmf_filename_canonical ^ ".bin") 
+			(uobjcoll_install_dir ^ "/" ^ !o_binary_image_filename);
+
+				
+		(* iterate over all the uobjs in the collection *)
+		(* and invoke their install method *)
+		Hashtbl.iter (fun key uobj ->  
+				uobj#install uobjcoll_install_dir;
+		) uobj_hashtbl;
+		
+		
+		()		 
+	;;
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
 	end
 	

@@ -75,6 +75,10 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 
+		val o_uobj_sentinels_libname = ref "";
+		method get_o_uobj_sentinels_libname = !o_uobj_sentinels_libname;
+
+
 		val o_uobj_build_dirname = ref ".";
 		method get_o_uobj_build_dirname = !o_uobj_build_dirname;
 		
@@ -226,7 +230,11 @@ class uobject = object(self)
 																											
 			(* initialize uobj preprocess definition *)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
-			
+
+			(* initialize uobj sentinels lib name *)
+			o_uobj_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
+									
 			(true)
 		;
 		
@@ -559,11 +567,11 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method build_sentinels_lib 
 			() = 
-			let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
-				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in
+			(*let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
 			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
-				uobj_sentinels_lib_name;
+				self#get_o_uobj_sentinels_libname;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_sentinels_lib_source_file_list
@@ -576,7 +584,7 @@ class uobject = object(self)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
 						!o_sentinels_lib_source_file_list
-						(uobj_sentinels_lib_name ^ ".a")
+						(self#get_o_uobj_sentinels_libname ^ ".a")
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
@@ -795,7 +803,41 @@ class uobject = object(self)
 		(uobj_hdr_filename)
 	; 
 
-		
+
+	(*--------------------------------------------------------------------------*)
+	(* install uobj *)
+	(*--------------------------------------------------------------------------*)
+	method install 
+			(install_dir : string) 
+			=
+			
+			(* create uobj installation folder if not already existing *)
+			let uobj_install_dir = (install_dir ^ "/" ^ !o_usmf_hdr_id) in
+				Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." uobj_install_dir;
+			let (retval, retecode, retemsg) = Usosservices.mkdir uobj_install_dir 0o755 in
+				if (retval == false) && (retecode != Unix.EEXIST) then 
+				begin
+					Uslog.logf log_tag Uslog.Error "error in creating directory: %s" retemsg;
+				end
+				;
+
+			(* copy uobj manifest *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ !o_usmf_filename)
+				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
+			
+			(* copy uobj header file *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+															Usconfig.uobj_hfilename ^ ".h")
+				(uobj_install_dir ^ "/" ^ !o_usmf_hdr_id ^ ".h"); 
+	
+			(* copy sentinels lib *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+															self#get_o_uobj_sentinels_libname ^ ".a")
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_sentinels_libname ^ ".a"); 
+			
+							
+		()
+	; 
 
 end ;;
 

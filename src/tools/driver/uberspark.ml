@@ -35,6 +35,8 @@ let cmdopt_invalid opt =
 
 let copt_builduobj = ref false;;
 
+let copt_install = ref false;;
+
 let cmdopt_uobjlist = ref "";;
 let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
 
@@ -120,6 +122,7 @@ let main () =
 			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
 			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
 			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+			("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
@@ -151,20 +154,34 @@ let main () =
 		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr));
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
 
-		(* generate uobj collection info table *)
-		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
-		Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
+		(* if we are building *)
+		if !copt_builduobj == true then
+			begin
+				(* generate uobj collection info table *)
+				Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
+				Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
 
-		(* build uobj collection info table binary *)
-		Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
-		Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
+				(* build uobj collection info table binary *)
+				Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
+				Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
 
-		(* build uobj collection by building individidual uobjs *)
-		Usuobjcollection.build "" true;
+				(* build uobj collection by building individidual uobjs *)
+				Usuobjcollection.build "" true;
 
-		(* build final image *)
-		Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")
-		(Usconfig.get_std_uobjcoll_info_filename ());
+				(* build final image *)
+				Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")
+				(Usconfig.get_std_uobjcoll_info_filename ());
+		
+			end
+		;
+
+		(* install uobj collection and uobjs if specified *)
+		if !copt_install == true then
+			begin
+				Usuobjcollection.install (Usconfig.get_default_install_uobjcolldir ());
+			end
+		;
+
 
 (*
 		(* grab uobj manifest filename and derive uobj name *)
