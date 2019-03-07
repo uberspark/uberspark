@@ -25,9 +25,12 @@ let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
+let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)";;
+let usage_msg = "Usage:";;
 
 (*----------------------------------------------------------------------------*)
-(* command line options *)
+(* command line options setters *)
+(*----------------------------------------------------------------------------*)
 let cmdopt_invalid opt = 
 	Uslog.logf log_mpf Uslog.Info "invalid option: '%s'; use -help to see available options" opt;
 	ignore(exit 1);
@@ -90,6 +93,33 @@ let cmdopt_get_includedir = ref false;;
 let cmdopt_get_libdir = ref false;;
 
 let cmdopt_get_libsentinels = ref false;;
+
+
+(*----------------------------------------------------------------------------*)
+(* command line options *)
+(*----------------------------------------------------------------------------*)
+
+let cmdline_speclist = [
+	("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
+	("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
+	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
+
+	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
+	("--cpu", Arg.String (cmdopt_platform_set), "set hardware CPU type");
+	("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
+
+	("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
+	("--uobj", Arg.String (cmdopt_uobj_set), "uobj-collection/uobj name");
+	("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
+	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
+	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
+
+	];;
+
+
 
 
 (*----------------------------------------------------------------------------*)
@@ -173,27 +203,6 @@ let handle_option_info () =
 																																																								
 (*----------------------------------------------------------------------------*)
 let main () =
-		let speclist = [
-			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
-			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
-			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
-			("--install", Arg.Set copt_install, "Install uobj/uobj collection");
-
-			("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
-			("--cpu", Arg.String (cmdopt_platform_set), "set hardware CPU type");
-			("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
-
-			("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
-			("--uobj", Arg.String (cmdopt_uobj_set), "uobj-collection/uobj name");
-			("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
-			("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
-			("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
-
-			] in
-		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
-		let usage_msg = "Usage:" in
 		let uobj_id = ref 0 in
 		let uobj_manifest_filename = ref "" in
 		let uobj_name = ref "" in
@@ -206,7 +215,7 @@ let main () =
 	  (* print banner and parse command line args *)
 		Uslog.logf log_mpf Uslog.Info "%s" banner;
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
-		Arg.parse speclist cmdopt_invalid usage_msg;
+		Arg.parse cmdline_speclist cmdopt_invalid usage_msg;
 
 		(* load up default platform, cpu and arch if not specified on command line*)
 		if !cmdopt_platform_specified == false then
