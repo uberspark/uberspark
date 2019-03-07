@@ -230,7 +230,11 @@ class uobject = object(self)
 																											
 			(* initialize uobj preprocess definition *)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
-			
+
+			(* initialize uobj sentinels lib name *)
+			o_uobj_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
+									
 			(true)
 		;
 		
@@ -563,11 +567,11 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method build_sentinels_lib 
 			() = 
-			let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
-				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in
+			(*let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
 			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
-				uobj_sentinels_lib_name;
+				self#get_o_uobj_sentinels_libname;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_sentinels_lib_source_file_list
@@ -580,7 +584,7 @@ class uobject = object(self)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
 						!o_sentinels_lib_source_file_list
-						(uobj_sentinels_lib_name ^ ".a")
+						(self#get_o_uobj_sentinels_libname ^ ".a")
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
@@ -593,7 +597,6 @@ class uobject = object(self)
 						end
 					;
 		
-				o_uobj_sentinels_libname := (uobj_sentinels_lib_name ^ ".a");
 			()
 		;
 
@@ -829,8 +832,8 @@ class uobject = object(self)
 	
 			(* copy sentinels lib *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
-															self#get_o_uobj_sentinels_libname)
-				(uobj_install_dir ^ "/" ^ self#get_o_uobj_sentinels_libname); 
+															self#get_o_uobj_sentinels_libname ^ ".a")
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_sentinels_libname ^ ".a"); 
 			
 							
 		()
