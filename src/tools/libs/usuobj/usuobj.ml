@@ -826,7 +826,13 @@ class uobject = object(self)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
 															Usconfig.uobj_hfilename ^ ".h")
 				(uobj_install_dir ^ "/" ^ !o_usmf_hdr_id ^ ".h"); 
+	
+			(* copy sentinels lib *)
+			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+															self#get_o_uobj_sentinels_libname)
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_sentinels_libname); 
 			
+							
 		()
 	; 
 
