@@ -413,6 +413,7 @@ module Usuobjcollection =
 		Usosservices.file_copy !usmf_filename_canonical 
 			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmf_name);
 		
+		
 		(* iterate over all the uobjs in the collection *)
 		(* and invoke their install method *)
 		Hashtbl.iter (fun key uobj ->  
