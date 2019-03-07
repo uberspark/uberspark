@@ -75,6 +75,8 @@ let cmdopt_arch_set
 	cmdopt_arch := value;
 	;;
 
+let cmdopt_info = ref false;;
+
 
 (*----------------------------------------------------------------------------*)
 
@@ -135,11 +137,18 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 																
 *)
 																								
-														
+
 (*----------------------------------------------------------------------------*)
-																																
-																																																																				
-																																																
+let handle_option_info () =
+		Uslog.logf log_mpf Uslog.Info ">>>>>>";
+		()
+;;
+
+(*----------------------------------------------------------------------------*)
+
+																												
+																																																								
+(*----------------------------------------------------------------------------*)
 let main () =
 		let speclist = [
 			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
@@ -152,6 +161,8 @@ let main () =
 			("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
 			("--cpu", Arg.String (cmdopt_platform_set), "set hardware CPU type");
 			("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
+
+			("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
 
 			] in
 		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
@@ -195,6 +206,15 @@ let main () =
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
 
+		(* check if information requested *)
+		if !cmdopt_info == true then 
+			begin
+				
+			end
+		else
+		begin
+				
+
 
 		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
@@ -231,6 +251,8 @@ let main () =
 			end
 		;
 
+		end
+		;
 
 (*
 		(* grab uobj manifest filename and derive uobj name *)
