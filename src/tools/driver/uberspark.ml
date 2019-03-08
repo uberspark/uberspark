@@ -116,8 +116,8 @@ let cmdline_speclist = [
 	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
 	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
-	("--cpu", Arg.String (cmdopt_platform_set), "set hardware CPU type");
-	("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
+	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
+	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
 
 	("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
 	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
