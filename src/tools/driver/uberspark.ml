@@ -212,7 +212,7 @@ let handle_option_info () =
 		
 		if !cmdopt_get_includedir == true then
 			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_basedir;
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" Usconfig.get_uberspark_config_install_prefix;
 			end
 		else if !cmdopt_get_libdir == true then
 			begin

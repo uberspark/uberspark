@@ -9,6 +9,9 @@ module Usconfig =
 	(*------------------------------------------------------------------------*)
 	(* uberspark installation configuration information *)	
 	(*------------------------------------------------------------------------*)
+	let get_uberspark_config_install_prefix = 
+		"@prefix@";;
+
 	let get_uberspark_config_install_rootdir = 
 		"@prefix@@ubersparkhomedir@";;
 
