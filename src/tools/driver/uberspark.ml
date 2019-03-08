@@ -197,18 +197,21 @@ let handle_option_info () =
 
 		let uobj_basedir = Usconfig.get_uberspark_config_install_uobjcolldir ^
 			"/" ^ !cmdopt_uobj in
+		let uobj_libsentinels = "lib" ^ "-" ^
+				!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ "-" ^ !cmdopt_arch in
+				
 		
 		if !cmdopt_get_includedir == true then
 			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_includedir";
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_basedir;
 			end
 		else if !cmdopt_get_libdir == true then
 			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_libdir";
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_basedir;
 			end
 		else if !cmdopt_get_libsentinels == true then
 			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_libsentinels";
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_libsentinels;
 			end
 		else
 			begin
