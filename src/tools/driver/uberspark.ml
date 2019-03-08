@@ -80,6 +80,14 @@ let cmdopt_arch_set
 
 let cmdopt_info = ref false;;
 
+let cmdopt_uobjcoll_specified = ref false;;
+let cmdopt_uobjcoll = ref "";;
+let cmdopt_uobjcoll_set 
+	(value : string) = 
+	cmdopt_uobjcoll_specified := true;
+	cmdopt_uobjcoll := value;
+	;;
+
 let cmdopt_uobj_specified = ref false;;
 let cmdopt_uobj = ref "";;
 let cmdopt_uobj_set 
@@ -112,7 +120,8 @@ let cmdline_speclist = [
 	("--arch", Arg.String (cmdopt_platform_set), "set hardware CPU architecture");
 
 	("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
-	("--uobj", Arg.String (cmdopt_uobj_set), "uobj-collection/uobj name");
+	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
+	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
 	("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
 	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
 	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
@@ -187,18 +196,18 @@ let handle_option_info () =
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 		
 		(* we need --uobj to be specified on the command line *)
-		if !cmdopt_uobj_specified == false then
+		if !cmdopt_uobj_specified == false || !cmdopt_uobjcoll_specified == false then
 			begin
-				Uslog.logf log_mpf Uslog.Error "--uobj needs to be specified!";
+				Uslog.logf log_mpf Uslog.Error "--uobjcoll and --uobj need to be specified!";
 				Arg.usage cmdline_speclist usage_msg;
 				ignore(exit 1);
 			end
 		;
 
 		let uobj_basedir = Usconfig.get_uberspark_config_install_uobjcolldir ^
-			"/" ^ !cmdopt_uobj in
-		let uobj_libsentinels = "lib" ^ "-" ^
-				!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ "-" ^ !cmdopt_arch in
+			"/" ^ !cmdopt_uobjcoll ^ "/" ^ !cmdopt_uobj in
+		let uobj_libsentinels = !cmdopt_uobj ^ "-" ^ 
+			!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ "-" ^ !cmdopt_arch in
 				
 		
 		if !cmdopt_get_includedir == true then
