@@ -237,14 +237,24 @@ let main () =
 		let uobj_name = ref "" in
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
-			
-		(* set debug verbosity *)
-		Uslog.current_level := Uslog.ord Uslog.None; 
 
+		(* parse command line arguments *)
+		Arg.parse cmdline_speclist cmdopt_invalid usage_msg;
+			
+		(* set debug verbosity accordingly *)
+		if !cmdopt_info == true then
+			begin
+				Uslog.current_level := Uslog.ord Uslog.None;
+			end
+		else
+			begin
+				Uslog.current_level := Uslog.ord Uslog.Debug;
+			end
+		;
+		
 	  (* print banner and parse command line args *)
 		Uslog.logf log_mpf Uslog.Info "%s" banner;
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
-		Arg.parse cmdline_speclist cmdopt_invalid usage_msg;
 
 		(* load up default platform, cpu and arch if not specified on command line*)
 		if !cmdopt_platform_specified == false then
