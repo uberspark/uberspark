@@ -200,18 +200,15 @@ let handle_option_info () =
 		
 		if !cmdopt_get_includedir == true then
 			begin
-				print_string "cmdopt_get_includedir";
-				print_newline ();
+				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_includedir";
 			end
 		else if !cmdopt_get_libdir == true then
 			begin
-				print_string "cmdopt_get_libdir";
-				print_newline ();
+				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_libdir";
 			end
 		else if !cmdopt_get_libsentinels == true then
 			begin
-				print_string "cmdopt_get_libsentinels";
-				print_newline ();
+				Uslog.logf log_mpf Uslog.Stdoutput "cmdopt_get_libsentinels";
 			end
 		else
 			begin
@@ -244,7 +241,7 @@ let main () =
 		(* set debug verbosity accordingly *)
 		if !cmdopt_info == true then
 			begin
-				Uslog.current_level := Uslog.ord Uslog.None;
+				Uslog.current_level := Uslog.ord Uslog.Stdoutput;
 			end
 		else
 			begin
