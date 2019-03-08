@@ -15,14 +15,16 @@ module Uslog =
 		*)
 		
 	type log_level =
-  	  | Error
+  	  | None
+			| Error
     	| Warn
     	| Info
 			| Debug
 
 	let ord lvl =
     match lvl with
-    | Error -> 50
+		| None  -> 100
+		| Error -> 50
     | Warn  -> 40
     | Info  -> 30
 		| Debug -> 20

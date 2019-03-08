@@ -194,7 +194,35 @@ let handle_option_info () =
 				ignore(exit 1);
 			end
 		;
+
+		let uobj_basedir = Usconfig.get_uberspark_config_install_uobjcolldir ^
+			"/" ^ !cmdopt_uobj in
 		
+		if !cmdopt_get_includedir == true then
+			begin
+				print_string "cmdopt_get_includedir";
+				print_newline ();
+			end
+		else if !cmdopt_get_libdir == true then
+			begin
+				print_string "cmdopt_get_libdir";
+				print_newline ();
+			end
+		else if !cmdopt_get_libsentinels == true then
+			begin
+				print_string "cmdopt_get_libsentinels";
+				print_newline ();
+			end
+		else
+			begin
+				Uslog.logf log_mpf Uslog.Error "one of the get_xxx needs to be specified!";
+				Arg.usage cmdline_speclist usage_msg;
+				ignore(exit 1);
+				
+		  end
+		;
+
+						
 		()
 ;;
 
@@ -211,7 +239,7 @@ let main () =
 		let uobj_mf_filename_preprocessed = ref "" in  
 			
 		(* set debug verbosity *)
-		Uslog.current_level := Uslog.ord Uslog.Debug; 
+		Uslog.current_level := Uslog.ord Uslog.None; 
 
 	  (* print banner and parse command line args *)
 		Uslog.logf log_mpf Uslog.Info "%s" banner;
