@@ -255,45 +255,6 @@ let handle_option_info () =
 		  end
 		;
 
-
-(*			
-						
-		(* we need --uobj to be specified on the command line *)
-		if !cmdopt_uobj_specified == false || !cmdopt_uobjcoll_specified == false then
-			begin
-				Uslog.logf log_mpf Uslog.Error "--uobjcoll and --uobj need to be specified!";
-				Arg.usage cmdline_speclist usage_msg;
-				ignore(exit 1);
-			end
-		;
-
-		let uobj_basedir = Usconfig.get_uberspark_config_install_uobjcolldir ^
-			"/" ^ !cmdopt_uobjcoll ^ "/" ^ !cmdopt_uobj in
-		let uobj_libsentinels = !cmdopt_uobj ^ "-" ^ 
-			!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ "-" ^ !cmdopt_arch in
-				
-		
-		if !cmdopt_get_includedir == true then
-			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "%s" Usconfig.get_uberspark_config_install_prefix;
-			end
-		else if !cmdopt_get_libdir == true then
-			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_basedir;
-			end
-		else if !cmdopt_get_libsentinels == true then
-			begin
-				Uslog.logf log_mpf Uslog.Stdoutput "%s" uobj_libsentinels;
-			end
-		else
-			begin
-				Uslog.logf log_mpf Uslog.Error "one of the get_xxx needs to be specified!";
-				Arg.usage cmdline_speclist usage_msg;
-				ignore(exit 1);
-				
-		  end
-		;
-*)
 						
 		()
 ;;
