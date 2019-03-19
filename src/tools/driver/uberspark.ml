@@ -104,6 +104,9 @@ let cmdopt_get_libsentinels = ref false;;
 
 let cmdopt_get_installrootdir = ref false;;
 
+let cmdopt_get_buildshimsdir = ref false;;
+
+
 (*----------------------------------------------------------------------------*)
 (* command line options *)
 (*----------------------------------------------------------------------------*)
@@ -128,6 +131,7 @@ let cmdline_speclist = [
 	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
 	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
 	("--get-installrootdir", Arg.Set cmdopt_get_installrootdir, "get installation root directory");
+	("--get-buildshimsdir", Arg.Set cmdopt_get_buildshimsdir, "get installation build shims directory");
 
 
 	];;
@@ -242,6 +246,12 @@ let handle_option_info () =
 			begin
 				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
 					Usconfig.get_uberspark_config_install_rootdir;
+			end
+
+		else if !cmdopt_get_buildshimsdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_buildshimsdir;
 			end
 		
 		;

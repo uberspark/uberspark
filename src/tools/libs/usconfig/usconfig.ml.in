@@ -18,6 +18,10 @@ module Usconfig =
 	let get_uberspark_config_install_includedir = 
 		"@prefix@@ubersparkhomedir@@ubersparkincludedir@";;
 
+	let get_uberspark_config_install_buildshimsdir = 
+		"@prefix@@ubersparkhomedir@@ubersparkbuildshimsdir@";;
+
+
 	let get_uberspark_config_install_uobjcolldir = 
 		"@prefix@@ubersparkhomedir@@ubersparkuobjcolldir@";;
 
