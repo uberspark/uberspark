@@ -102,6 +102,7 @@ let cmdopt_get_libdir = ref false;;
 
 let cmdopt_get_libsentinels = ref false;;
 
+let cmdopt_get_installrootdir = ref false;;
 
 (*----------------------------------------------------------------------------*)
 (* command line options *)
@@ -119,12 +120,15 @@ let cmdline_speclist = [
 	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
 	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
 
-	("--info", Arg.Set cmdopt_info, "Get information on an installed uobj or uobj collection");
 	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
 	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
+
+	("--info", Arg.Set cmdopt_info, "Get information on uberSpark, installed uobj collection, or uobj");
 	("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
 	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
 	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
+	("--get-installrootdir", Arg.Set cmdopt_get_installrootdir, "get installation root directory");
+
 
 	];;
 
@@ -193,8 +197,47 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 
 (*----------------------------------------------------------------------------*)
 let handle_option_info () =
+		let handle_option_info_error = ref false in
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
+
+		if !cmdopt_get_includedir == true then
+			begin
+				if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == false then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
+					end
+				else if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == true then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
+					end
+				else if !cmdopt_uobjcoll_specified == false && !cmdopt_uobj_specified == false then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_includedir;
+					end
+				else
+					begin
+						handle_option_info_error := true;
+					end
+				;
+			end
+		;
+			
+		(* else if *) 	
 		
+		if !handle_option_info_error == true then
+			begin
+				Uslog.logf log_mpf Uslog.Error "invalid --info arguments";
+				Arg.usage cmdline_speclist usage_msg;
+				ignore(exit 1);
+		  end
+		;
+
+
+(*			
+						
 		(* we need --uobj to be specified on the command line *)
 		if !cmdopt_uobj_specified == false || !cmdopt_uobjcoll_specified == false then
 			begin
@@ -230,7 +273,7 @@ let handle_option_info () =
 				
 		  end
 		;
-
+*)
 						
 		()
 ;;
