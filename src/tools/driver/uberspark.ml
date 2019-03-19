@@ -223,9 +223,29 @@ let handle_option_info () =
 					end
 				;
 			end
-		;
 			
-		(* else if *) 	
+		else if !cmdopt_get_libdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(Usconfig.get_uberspark_config_install_uobjcolldir ^	"/" ^ 
+					!cmdopt_uobjcoll ^ "/" ^ !cmdopt_uobj);
+			end
+			
+		else if !cmdopt_get_libsentinels == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(!cmdopt_uobj ^ "-" ^ 	!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ 
+					"-" ^ !cmdopt_arch);
+			end
+		
+		else if !cmdopt_get_installrootdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_rootdir;
+			end
+		
+		;
+		
 		
 		if !handle_option_info_error == true then
 			begin
