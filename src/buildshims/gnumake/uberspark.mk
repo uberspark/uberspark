@@ -10,7 +10,9 @@
 # UBERSPARK_UOBJ = uobj name
 ######
 
+__UBERSPARK_GNUMAKE_DEFAULT_GOAL := $(.DEFAULT_GOAL)
 .DEFAULT_GOAL := all
+
 
 __UBERSPARK_INCLUDES = -I$(shell uberspark --info --get-includedir)
 __UBERSPARK_INCLUDES += -I$(shell ubersparkconfig --print-uberspark-hwmincludedir)
@@ -41,4 +43,6 @@ uberspark_uobjcoll_build:
 uberspark_uobjcoll_install:
 	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjlist $(UBERSPARK_UOBJCOLL).usmf --install
 
+
+.DEFAULT_GOAL := $(__UBERSPARK_GNUMAKE_DEFAULT_GOAL)
 	
