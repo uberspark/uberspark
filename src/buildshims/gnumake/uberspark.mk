@@ -6,8 +6,11 @@
 ######
 # input variables
 # UBERSPARK_UOBJCOLL = uobj collection name
+# UBERSPARK_UOBJCOLL_DIR = uobj collection directory
 # UBERSPARK_UOBJ = uobj name
 ######
+
+.DEFAULT_GOAL := all
 
 __UBERSPARK_INCLUDES = -I$(shell uberspark --info --get-includedir)
 __UBERSPARK_INCLUDES += -I$(shell ubersparkconfig --print-uberspark-hwmincludedir)
@@ -29,3 +32,13 @@ UBERSPARK_LFLAGS += -Wl,-l,$(shell uberspark --info --uobjcoll app-fviews --uobj
 UBERSPARK_LFLAGS += $(shell cat $(__UBERSPARK_LIBS_DIRS)/libusloader-linux-um.a.deps)
 
 
+#targets
+.PHONY: uberspark_uobjcoll_build
+uberspark_uobjcoll_build:
+	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjlist $(UBERSPARK_UOBJCOLL).usmf --builduobj
+
+.PHONY: uberspark_uobjcoll_install
+uberspark_uobjcoll_install:
+	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjlist $(UBERSPARK_UOBJCOLL).usmf --install
+
+	
