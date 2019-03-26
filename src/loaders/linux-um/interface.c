@@ -89,6 +89,8 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
 	uint32_t num_pages;
 	uobjcoll_hdr_t uobjcoll_hdr;
 	uint32_t uobjcoll_load_addr;
+	uint32_t bytesread;
+
 
 	//sanity check params
 	if(i_uobjcoll_filename == NULL ||
@@ -103,7 +105,7 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
 	}
 
 	//open the uobjcoll image file
-	fp=fopen(i_uobjcoll_filename, "r");
+	fp=fopen(i_uobjcoll_filename, "rb");
 	if(fp == NULL){
 		return false;
 	}
@@ -111,6 +113,8 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
 	//compute file size in bytes
 	fseek(fp, 0, SEEK_END);
 	uobjcoll_filename_size = ftell(fp);
+    printf("\n%s: file size=%u (%08x)\n", __FUNCTION__,
+    		uobjcoll_filename_size, uobjcoll_filename_size);
 
 	//rewind fp to beginning of file
 	fseek(fp, 0, SEEK_SET);
@@ -151,8 +155,16 @@ bool usloader_linux_um_loaduobjcoll(uint8_t *i_uobjcoll_filename,
         printf("\n%s: inconsistent load warning!\n", __FUNCTION__);
     }
 
+	//rewind fp to beginning of file
+	fseek(fp, 0, SEEK_SET);
+
 	//read image file into allocated uobjcoll virtual address
-	fread(uobjcoll_load_addr, uobjcoll_filename_size, 1, fp);
+	bytesread = fread(uobjcoll_load_addr, uobjcoll_filename_size, 1, fp);
+	if(bytesread != uobjcoll_filename_size && ferror(fp)){
+        printf("\n%s: inconsistent file read warning: read %u bytes out of %u!\n",
+        		__FUNCTION__, bytesread, uobjcoll_filename_size);
+        perror("error follows");
+	}
 
 	//close uobjcoll image file
 	fclose(fp);

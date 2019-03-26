@@ -6,6 +6,41 @@
 module Usconfig =
 	struct
 
+	(*------------------------------------------------------------------------*)
+	(* uberspark installation configuration information *)	
+	(*------------------------------------------------------------------------*)
+	let get_uberspark_config_install_prefix = 
+		"@prefix@";;
+
+	let get_uberspark_config_install_rootdir = 
+		"@prefix@@ubersparkhomedir@";;
+
+	let get_uberspark_config_install_includedir = 
+		"@prefix@@ubersparkhomedir@@ubersparkincludedir@";;
+
+	let get_uberspark_config_install_buildshimsdir = 
+		"@prefix@@ubersparkhomedir@@ubersparkbuildshimsdir@";;
+
+
+	let get_uberspark_config_install_uobjcolldir = 
+		"@prefix@@ubersparkhomedir@@ubersparkuobjcolldir@";;
+
+
+	(*------------------------------------------------------------------------*)
+	(* uberspark hardware related configuration information *)	
+	(*------------------------------------------------------------------------*)
+	let get_uberspark_config_hw_platform_default = 
+		"@uberspark_config_hw_platform_default@";;
+
+	let get_uberspark_config_hw_cpu_default = 
+		"@uberspark_config_hw_cpu_default@";;
+
+	let get_uberspark_config_hw_arch_default = 
+		"@uberspark_config_hw_arch_default@";;
+
+
+	(*------------------------------------------------------------------------*)
+
 	(* uobj manifest default filename *)
 	let std_uobj_usmf_name = "UOBJ.USMF";;
 	

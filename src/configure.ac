@@ -49,16 +49,23 @@ AC_SUBST([ubersparkhwmdir], ['/hwm'])
 AC_SUBST([ubersparkhwmincludedir], ['/hwm/include'])
 AC_SUBST([ubersparklibsdir], ['/libs'])
 AC_SUBST([ubersparklibsincludesdir], ['/libs/include'])
+AC_SUBST([ubersparkbuildshimsdir], ['/buildshims'])
 AC_SUBST([ubersparkloadersdir], ['/loaders'])
 AC_SUBST([ubersparkloadersincludesdir], ['/loaders/include'])
 AC_SUBST([ubersparksentinelsdir], ['/sentinels'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
 AC_SUBST([ubersparkuobjcolldir], ['/uobjcoll'])
 
+AC_SUBST([uberspark_config_hw_platform_default], ['generic'])
+AC_SUBST([uberspark_config_hw_cpu_default], ['generic'])
+AC_SUBST([uberspark_config_hw_arch_default], ['generic'])
+
+
 AC_CONFIG_FILES(
 			[uberspark-common.mk]
 			[Makefile]
 			[./tools/ubersparkconfig.ml]
+			[./tools/libs/usconfig/usconfig.ml]
 			)
 
 AC_OUTPUT

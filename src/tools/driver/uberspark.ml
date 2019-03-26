@@ -25,9 +25,12 @@ let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
+let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)";;
+let usage_msg = "Usage:";;
 
 (*----------------------------------------------------------------------------*)
-(* command line options *)
+(* command line options setters *)
+(*----------------------------------------------------------------------------*)
 let cmdopt_invalid opt = 
 	Uslog.logf log_mpf Uslog.Info "invalid option: '%s'; use -help to see available options" opt;
 	ignore(exit 1);
@@ -50,6 +53,91 @@ let cmdopt_loadaddr_set
 	cmdopt_loadaddr_specified := true;
 	cmdopt_loadaddr := value;
 	;;
+
+let cmdopt_platform_specified = ref false;;
+let cmdopt_platform = ref "";;
+let cmdopt_platform_set 
+	(value : string) = 
+	cmdopt_platform_specified := true;
+	cmdopt_platform := value;
+	;;
+
+let cmdopt_cpu_specified = ref false;;
+let cmdopt_cpu = ref "";;
+let cmdopt_cpu_set 
+	(value : string) = 
+	cmdopt_cpu_specified := true;
+	cmdopt_cpu := value;
+	;;
+
+let cmdopt_arch_specified = ref false;;
+let cmdopt_arch = ref "";;
+let cmdopt_arch_set 
+	(value : string) = 
+	cmdopt_arch_specified := true;
+	cmdopt_arch := value;
+	;;
+
+let cmdopt_info = ref false;;
+
+let cmdopt_uobjcoll_specified = ref false;;
+let cmdopt_uobjcoll = ref "";;
+let cmdopt_uobjcoll_set 
+	(value : string) = 
+	cmdopt_uobjcoll_specified := true;
+	cmdopt_uobjcoll := value;
+	;;
+
+let cmdopt_uobj_specified = ref false;;
+let cmdopt_uobj = ref "";;
+let cmdopt_uobj_set 
+	(value : string) = 
+	cmdopt_uobj_specified := true;
+	cmdopt_uobj := value;
+	;;
+
+let cmdopt_get_includedir = ref false;;
+
+let cmdopt_get_libdir = ref false;;
+
+let cmdopt_get_libsentinels = ref false;;
+
+let cmdopt_get_installrootdir = ref false;;
+
+let cmdopt_get_buildshimsdir = ref false;;
+
+
+(*----------------------------------------------------------------------------*)
+(* command line options *)
+(*----------------------------------------------------------------------------*)
+
+let cmdline_speclist = [
+	("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
+	("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
+	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
+
+	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
+	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
+	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
+
+	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
+	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
+
+	("--info", Arg.Set cmdopt_info, "Get information on uberSpark, installed uobj collection, or uobj");
+	("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
+	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
+	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
+	("--get-installrootdir", Arg.Set cmdopt_get_installrootdir, "get installation root directory");
+	("--get-buildshimsdir", Arg.Set cmdopt_get_buildshimsdir, "get installation build shims directory");
+
+
+	];;
+
+
+
 
 (*----------------------------------------------------------------------------*)
 
@@ -110,41 +198,140 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 																
 *)
 																								
-														
-(*----------------------------------------------------------------------------*)
-																																
-																																																																				
-																																																
-let main () =
-		let speclist = [
-			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
-			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
-			("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
-			("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
-			] in
-		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
-		let usage_msg = "Usage:" in
+(*----------------------------------------------------------------------------*)
+let handle_option_info () =
+		let handle_option_info_error = ref false in
+		Uslog.logf log_mpf Uslog.Info ">>>>>>";
+
+		if !cmdopt_get_includedir == true then
+			begin
+				if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == false then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
+					end
+				else if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == true then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
+					end
+				else if !cmdopt_uobjcoll_specified == false && !cmdopt_uobj_specified == false then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_includedir;
+					end
+				else
+					begin
+						handle_option_info_error := true;
+					end
+				;
+			end
+			
+		else if !cmdopt_get_libdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(Usconfig.get_uberspark_config_install_uobjcolldir ^	"/" ^ 
+					!cmdopt_uobjcoll ^ "/" ^ !cmdopt_uobj);
+			end
+			
+		else if !cmdopt_get_libsentinels == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(!cmdopt_uobj ^ "-" ^ 	!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ 
+					"-" ^ !cmdopt_arch);
+			end
+		
+		else if !cmdopt_get_installrootdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_rootdir;
+			end
+
+		else if !cmdopt_get_buildshimsdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_buildshimsdir;
+			end
+		
+		;
+		
+		
+		if !handle_option_info_error == true then
+			begin
+				Uslog.logf log_mpf Uslog.Error "invalid --info arguments";
+				Arg.usage cmdline_speclist usage_msg;
+				ignore(exit 1);
+		  end
+		;
+
+						
+		()
+;;
+
+(*----------------------------------------------------------------------------*)
+
+																												
+																																																								
+(*----------------------------------------------------------------------------*)
+let main () =
 		let uobj_id = ref 0 in
 		let uobj_manifest_filename = ref "" in
 		let uobj_name = ref "" in
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
-			
-		(* set debug verbosity *)
-		Uslog.current_level := Uslog.ord Uslog.Debug; 
 
+		(* parse command line arguments *)
+		Arg.parse cmdline_speclist cmdopt_invalid usage_msg;
+			
+		(* set debug verbosity accordingly *)
+		if !cmdopt_info == true then
+			begin
+				Uslog.current_level := Uslog.ord Uslog.Stdoutput;
+			end
+		else
+			begin
+				Uslog.current_level := Uslog.ord Uslog.Debug;
+			end
+		;
+		
 	  (* print banner and parse command line args *)
 		Uslog.logf log_mpf Uslog.Info "%s" banner;
 		Uslog.logf log_mpf Uslog.Info ">>>>>>";
-		Arg.parse speclist cmdopt_invalid usage_msg;
+
+		(* load up default platform, cpu and arch if not specified on command line*)
+		if !cmdopt_platform_specified == false then
+			begin
+				cmdopt_platform := Usconfig.get_uberspark_config_hw_platform_default;
+			end
+		;
+		if !cmdopt_cpu_specified == false then
+			begin
+				cmdopt_cpu := Usconfig.get_uberspark_config_hw_cpu_default;
+			end
+		;
+		if !cmdopt_arch_specified == false then
+			begin
+				cmdopt_arch := Usconfig.get_uberspark_config_hw_arch_default;
+			end
+		;
+
+		Uslog.logf log_mpf Uslog.Info "Target platform='%s', CPU='%s', arch='%s'"
+			!cmdopt_platform !cmdopt_cpu !cmdopt_arch;
 
 		(* sanity check command line arguments *)
 		if(!cmdopt_loadaddr_specified == false) then
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
+
+		(* check if information requested *)
+		if !cmdopt_info == true then 
+			begin
+				handle_option_info ();
+			end
+		else
+		begin
+				
 
 
 		(* create uobj collection *)
@@ -182,6 +369,8 @@ let main () =
 			end
 		;
 
+		end
+		;
 
 (*
 		(* grab uobj manifest filename and derive uobj name *)
