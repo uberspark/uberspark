@@ -312,7 +312,56 @@ module Usmanifest =
 		(!retval, !uobj_sentinels_list)
 	;;
 																																																																																																
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-publicmethods" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list public methods *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_uobj_publicmethods usmf_json =
+		let retval = ref false in
+		let uobj_publicmethods_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_publicmethods_json = usmf_json |> member "uobj-publicmethods" in
+					if uobj_publicmethods_json != `Null then
+						begin
+
+							let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										let uobj_publicmethods_attribute_list = ref [] in
+											uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
+																		[ x ];
+											List.iter (fun z ->
+												uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
+																		[ (z |> to_string) ];
+												()
+											)(Yojson.Basic.Util.to_list y);
+											
+											uobj_publicmethods_list := !uobj_publicmethods_list @	[ !uobj_publicmethods_attribute_list ];
+											if (List.length (Yojson.Basic.Util.to_list y)) < 3 then
+												retval:=false;
+										()
+									) uobj_publicmethods_assoc_list;
+								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_publicmethods_list);
+
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, !uobj_publicmethods_list)
+	;;
+
 			
+						
+												
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-coll" *)
 	(* return true on successful parse, false if not *)
