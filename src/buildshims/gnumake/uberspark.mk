@@ -37,11 +37,11 @@ UBERSPARK_LFLAGS += $(shell cat $(__UBERSPARK_LIBS_DIRS)/libusloader-linux-um.a.
 #targets
 .PHONY: uberspark_uobjcoll_build
 uberspark_uobjcoll_build:
-	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjlist $(UBERSPARK_UOBJCOLL).usmf --builduobj
+	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjcollmf $(UBERSPARK_UOBJCOLL).usmf --builduobj
 
 .PHONY: uberspark_uobjcoll_install
 uberspark_uobjcoll_install:
-	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjlist $(UBERSPARK_UOBJCOLL).usmf --install
+	cd $(UBERSPARK_UOBJCOLL_DIR) && uberspark --uobjcollmf $(UBERSPARK_UOBJCOLL).usmf --install
 
 
 .DEFAULT_GOAL := $(__UBERSPARK_GNUMAKE_DEFAULT_GOAL)

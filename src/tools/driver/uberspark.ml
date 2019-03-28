@@ -326,6 +326,14 @@ let main () =
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
 
+		(* setup defaults *)
+		if (String.compare !cmdopt_uobjcollmf "") == 0 then
+			begin
+				cmdopt_uobjcollmf := Usconfig.default_uobjcoll_usmf_name;
+			end
+		;
+
+
 		(* check if information requested *)
 		if !cmdopt_info == true then 
 			begin
