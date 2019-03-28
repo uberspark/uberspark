@@ -28,6 +28,15 @@ struct
 			};;
 
 
+		type uobj_publicmethods_info_t = 
+			{
+				pm_fname: string;
+				pm_retvaldecl : string;
+				pm_fparamdecl: string;
+				pm_fparamdwords : int;
+			};;
+
+
 		
 
 class uobject = object(self)
@@ -65,6 +74,8 @@ class uobject = object(self)
 		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
 
+		val o_uobj_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_info_t)  Hashtbl.t)); 
+		method get_o_uobj_publicmethods_hashtbl = o_uobj_publicmethods_hashtbl;
 
 		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
@@ -157,6 +168,29 @@ class uobject = object(self)
 					o_usmf_sources_c_files := usmf_source_c_files;
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
+
+
+			(* parse uobj-publicmethods node *)
+			let (rval, uobj_publicmethods_list) = 
+										Usmanifest.parse_node_uobj_publicmethods mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					List.iter (fun x ->
+
+						Hashtbl.add o_uobj_publicmethods_hashtbl (List.nth x 0) 
+							{
+								pm_fname = (List.nth x 0);
+								pm_retvaldecl = (List.nth x 1);
+								pm_fparamdecl = (List.nth x 2);
+								pm_fparamdwords = int_of_string (List.nth x 3);
+							};
+						
+					) uobj_publicmethods_list;
+				end;
+
 
 			(* parse uobj-sentinels node *)
 			let (rval, uobj_sentinels_list) = 
