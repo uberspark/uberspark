@@ -409,21 +409,12 @@ module Usmanifest =
 
 							let uobjcoll_sentineltypes_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_sentineltypes_json in
 								retval := true;
-								List.iter (fun (x,y) ->
-										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
-										(*let uobj_publicmethods_attribute_list = ref [] in
-											uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
-																		[ x ];
-											List.iter (fun z ->
-												uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
-																		[ (z |> to_string) ];
-												()
-											)(Yojson.Basic.Util.to_list y);
-											
-											uobj_publicmethods_list := !uobj_publicmethods_list @	[ !uobj_publicmethods_attribute_list ];
-											if (List.length (Yojson.Basic.Util.to_list y)) < 3 then
-												retval:=false;
-										()*)
+								List.iter (fun (s_type, s_type_id_json) ->
+										let s_type_id = Yojson.Basic.Util.to_string s_type_id_json in
+										Uslog.logf log_tag Uslog.Debug "%s: type=%s type_id=%s" __LOC__ 
+												s_type s_type_id;
+											uobjcoll_sentineltypes_list := !uobjcoll_sentineltypes_list @	[ [s_type; s_type_id ] ];
+										()
 									) uobjcoll_sentineltypes_assoc_list;
 								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobjcoll_sentineltypes_list);
 
