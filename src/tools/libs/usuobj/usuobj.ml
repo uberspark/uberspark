@@ -113,11 +113,11 @@ class uobject = object(self)
 		method get_o_pp_definition = !o_pp_definition;
 
 
-		method o_test (p1 : ((string, Usuobjcollection.sentineltypes_t) Hashtbl.t) ) 
+		(*method o_test (p1 : ((string, Usuobjcollection.sentineltypes_t) Hashtbl.t) ) 
 		: bool = 
 			Uslog.logf log_tag Uslog.Info "p1=%s" p1;
 			(true)	
-		;
+		;*)
 
 
 		(*--------------------------------------------------------------------------*)
