@@ -127,6 +127,17 @@ module Usuobjcollection =
 		total_uobjs := (List.length !uobj_dir_list);
 		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
 
+		(* parse uobjcoll-sentineltypes node *)
+		let(rval, ret_uobjcoll_sentineltypes_list) = 
+			Usmanifest.parse_node_usmf_uobjcoll_sentineltypes	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-sentineltypes node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
 
 		(* store uobj collection id *)
 		o_usmf_hdr_id := usmf_hdr_id;

@@ -397,7 +397,7 @@ module Usmanifest =
 	(* return true on successful parse, false if not *)
 	(* return: if true then list sentinel types *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_uobjcoll_sentineltypes usmf_json =
+	let parse_node_usmf_uobjcoll_sentineltypes usmf_json =
 		let retval = ref false in
 		let uobjcoll_sentineltypes_list = ref [] in
 
