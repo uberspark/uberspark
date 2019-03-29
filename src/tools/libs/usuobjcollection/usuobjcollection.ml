@@ -5,6 +5,7 @@
 
 open Unix
 
+open Ustypes
 open Usconfig
 open Uslog
 open Usosservices
