@@ -6,10 +6,10 @@
 module Ustypes =
 struct
 
-	type testtype_t = 
-		{
-			s_f1: string;
-			s_f2: int;
-		};;
+		type uobjcoll_sentineltypes_t = 
+			{
+				s_type: string;
+				s_type_id : string;
+			};;
 				
 end

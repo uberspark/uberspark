@@ -17,13 +17,6 @@ open Usuobj
 module Usuobjcollection =
 	struct
 
-		type sentineltypes_t = 
-			{
-				s_type: string;
-				s_type_id : string;
-			};;
-
-
 	let log_tag = "Usuobjcollection";;
 	
 	let total_uobjs = ref 0;;
@@ -51,7 +44,7 @@ module Usuobjcollection =
 
 	(*let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;*)
 
-	let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, sentineltypes_t)  Hashtbl.t));;
+	let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));;
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
@@ -172,7 +165,7 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
-				(*let testval = uobj#o_test o_uobjcoll_sentineltypes_hashtbl in*)
+				let testval = uobj#o_test o_uobjcoll_sentineltypes_hashtbl in
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
 					begin
