@@ -143,6 +143,18 @@ module Usuobjcollection =
 				end
 			;
 
+			List.iter (fun x ->
+
+				Hashtbl.add o_uobjcoll_sentineltypes_hashtbl (List.nth x 0) 
+					{
+						s_type = (List.nth x 0);
+						s_type_id = (List.nth x 1);
+					};
+				
+			) ret_uobjcoll_sentineltypes_list;
+
+
+
 
 		(* store uobj collection id *)
 		o_usmf_hdr_id := usmf_hdr_id;

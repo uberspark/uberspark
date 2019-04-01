@@ -126,7 +126,6 @@ class uobject = object(self)
 					Hashtbl.add o_sentineltypes_hashtbl key st;
 			) sentineltypes_hashtbl;
 			()	
-			(* Uslog.logf log_tag Uslog.Info "s_type=%s" st.s_type; *)
 		;
 
 
