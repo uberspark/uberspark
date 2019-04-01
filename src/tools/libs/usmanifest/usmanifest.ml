@@ -311,7 +311,19 @@ module Usmanifest =
 		(!retval, !uobj_publicmethods_list)
 	;;
 
-			
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-calleemethods" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list of list of calleemethods *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_uobj_calleemethods usmf_json =
+		let retval = ref true in
+		let myhash = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
+			Hashtbl.add myhash "sample" ["olala"];
+		(!retval, myhash)
+	;;
+						
 						
 												
 	(*--------------------------------------------------------------------------*)

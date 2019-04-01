@@ -116,6 +116,7 @@ class uobject = object(self)
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
 
+		val o_myhash = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 
 
 		(*--------------------------------------------------------------------------*)
@@ -191,6 +192,23 @@ class uobject = object(self)
 							};
 						
 					) uobj_publicmethods_list;
+				end;
+
+
+			(* parse uobj-callemethods node *)
+			let (rval, uobj_calleemethods_hashtbl) = 
+										Usmanifest.parse_node_uobj_calleemethods mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_myhash := uobj_calleemethods_hashtbl;
+					Hashtbl.iter (fun key value  ->
+						Uslog.logf log_tag Uslog.Info "key=%s length of list=%u" key (List.length value);
+					) !o_myhash;
+
+					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-calleemethods";
 				end;
 
 
