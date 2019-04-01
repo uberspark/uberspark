@@ -47,6 +47,7 @@ module Usuobjcollection =
 	let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));;
 
 	let o_entrycallees_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));;
+	let o_exitcallees_hashtbl = ref ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_exitcallee_t)  Hashtbl.t));;
 
 
 
@@ -173,6 +174,20 @@ module Usuobjcollection =
 			o_entrycallees_hashtbl := ret_uobjcoll_entrycallees_hashtbl;
 			Uslog.logf log_tag Uslog.Info "entrycallees entries=%u" (Hashtbl.length !o_entrycallees_hashtbl);
 
+
+		(* parse uobjcoll-exitcallees node *)
+		let(rval, ret_uobjcoll_exitcallees_hashtbl) = 
+			Usmanifest.parse_node_usmf_uobjcoll_exitcallees	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-exitcallees node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			o_exitcallees_hashtbl := ret_uobjcoll_exitcallees_hashtbl;
+			Uslog.logf log_tag Uslog.Info "exitcallees entries=%u" (Hashtbl.length !o_exitcallees_hashtbl);
 
 
 		(* store uobj collection id *)
