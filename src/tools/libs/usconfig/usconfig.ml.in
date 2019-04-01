@@ -100,6 +100,15 @@ module Usconfig =
   ;;
 	let get_sentinel_types () =	(sentinel_types)	;;
 
+	(* sentinel protection and binary size in bytes *)
+	(* TODO: figure out the best place to specify these *)
+	let sentinel_prot = "rx";;
+	let get_sentinel_prot () = (sentinel_prot);;
+
+	let sentinel_size_bytes = "0x1000";;
+	let get_sentinel_size_bytes () = (sentinel_size_bytes);;
+
+
 	(* standard preprocessor definitions *)
 	let std_defines = [ 
 											"__XMHF_TARGET_CPU_X86__"; 
