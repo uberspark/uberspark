@@ -353,7 +353,40 @@ module Usmanifest =
 		(!retval, uobj_calleemethods_hashtbl)
 	;;
 						
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-exitcallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list of exitcallees function names *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobj_exitcallees usmf_json =
+		let retval = ref true in
+		let uobj_exitcallees_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_exitcallees_json = usmf_json |> member "uobj-exitcallees" in
+					if uobj_exitcallees_json != `Null then
+						begin
+							let usmf_uobj_exitcallees_json_list = uobj_exitcallees_json |> 
+									to_list in 
+								List.iter (fun x -> uobj_exitcallees_list := 
+										!uobj_exitcallees_list @ [(x |> to_string)]
+									) usmf_uobj_exitcallees_json_list;
+						end
+					;
+	
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+	
+		(!retval, !uobj_exitcallees_list)
+	;;
 						
+												
+																		
+																								
+																																				
 												
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-coll" *)
