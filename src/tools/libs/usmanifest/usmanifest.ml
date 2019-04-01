@@ -6,6 +6,7 @@
 open Yojson
 
 
+open Ustypes
 open Usconfig
 open Uslog
 open Usosservices
