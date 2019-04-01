@@ -112,13 +112,21 @@ class uobject = object(self)
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
 
+		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
+		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
-		method o_test (p1 : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
-		: bool = 
+
+		(*--------------------------------------------------------------------------*)
+		(* init_sentineltypes_hashtbl *)
+		(* sentineltypes_hashtbl = hash table of sentinel types *)
+		(*--------------------------------------------------------------------------*)
+		method init_sentineltypes_hashtbl (sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			= 
 			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-					Uslog.logf log_tag Uslog.Info "s_type=%s" st.s_type;
-			)  p1;
-			(true)	
+					Hashtbl.add o_sentineltypes_hashtbl key st;
+			) sentineltypes_hashtbl;
+			()	
+			(* Uslog.logf log_tag Uslog.Info "s_type=%s" st.s_type; *)
 		;
 
 

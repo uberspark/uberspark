@@ -165,7 +165,7 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
-				let testval = uobj#o_test o_uobjcoll_sentineltypes_hashtbl in
+				uobj#init_sentineltypes_hashtbl o_uobjcoll_sentineltypes_hashtbl;
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
 					begin
