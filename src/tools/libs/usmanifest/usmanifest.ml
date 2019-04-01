@@ -315,7 +315,7 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-calleemethods" *)
 	(* return true on successful parse, false if not *)
-	(* return: if true then list of list of calleemethods *)
+	(* return: if true then hashtable of calleemethods indexed by uobj id*)
 	(*--------------------------------------------------------------------------*)
 	let parse_node_uobj_calleemethods usmf_json =
 		let retval = ref true in
