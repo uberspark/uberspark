@@ -193,38 +193,6 @@ class uobject = object(self)
 					) uobj_publicmethods_list;
 				end;
 
-(*
-			(* parse uobj-sentinels node *)
-			let (rval, uobj_sentinels_list) = 
-										Usmanifest.parse_node_uobj_sentinels mf_json in
-
-			if (rval == false) then (false)
-			else
-			let dummy = 0 in
-				begin
-					List.iter (fun x ->
-
-						(*make a unique name for this sentinel*)
-						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 2); 
-
-						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
-							{
-								s_type = (List.nth x 0);
-								s_type_id = (List.nth x 1);
-								s_retvaldecl = (List.nth x 2);
-								s_fname = (List.nth x 3);
-								s_fparamdecl = (List.nth x 4);
-								s_fparamdwords = int_of_string (List.nth x 5);
-								s_attribute = (List.nth x 6);
-								s_origin = 0;
-								s_length = int_of_string (List.nth x 7);
-							};
-						
-					) uobj_sentinels_list;
-				end;
-*)
-
 
 			(* parse uobj-sections node *)
 			let (rval, uobj_sections_list) = 
