@@ -46,6 +46,11 @@ module Usuobjcollection =
 
 	let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));;
 
+	let o_entrycallees_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));;
+
+
+
+
 	(*--------------------------------------------------------------------------*)
 	(* initialize build configuration for a uobj collection *)
 	(* usmf_filename = uobj collection manifest filename *)
@@ -153,6 +158,20 @@ module Usuobjcollection =
 				
 			) ret_uobjcoll_sentineltypes_list;
 
+
+		(* parse uobjcoll-entrycallees node *)
+		let(rval, ret_uobjcoll_entrycallees_hashtbl) = 
+			Usmanifest.parse_node_usmf_uobjcoll_entrycallees	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-entrycallees node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			o_entrycallees_hashtbl := ret_uobjcoll_entrycallees_hashtbl;
+			Uslog.logf log_tag Uslog.Info "entrycallees entries=%u" (Hashtbl.length !o_entrycallees_hashtbl);
 
 
 

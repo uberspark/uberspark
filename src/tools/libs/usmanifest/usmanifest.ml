@@ -421,7 +421,47 @@ module Usmanifest =
 		(!retval, !uobjcoll_sentineltypes_list)
 	;;
 																																													
-																																																																																										
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjcoll-entrycallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then hashtable of entrycallees indexed by uobj id*)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobjcoll_entrycallees usmf_json =
+		let retval = ref true in
+		let uobjcoll_entrycallees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjcoll_entrycallees_json = usmf_json |> member "uobjcoll-entrycallees" in
+					if uobjcoll_entrycallees_json != `Null then
+						begin
+
+							let uobjcoll_entrycallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_entrycallees_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										let uobjcoll_entrycallees_attribute_list = ref [] in
+											List.iter (fun z ->
+												uobjcoll_entrycallees_attribute_list := !uobjcoll_entrycallees_attribute_list @
+																		[ (z |> to_string) ];
+												()
+											)(Yojson.Basic.Util.to_list y);
+											
+											Hashtbl.add uobjcoll_entrycallees_hashtbl x !uobjcoll_entrycallees_attribute_list;
+										()
+									) uobjcoll_entrycallees_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobjcoll_entrycallees_hashtbl)
+	;;
+																																																																																																																																																																																				
 																																																																																																																																																																																				
 																																																																																							
 	end
