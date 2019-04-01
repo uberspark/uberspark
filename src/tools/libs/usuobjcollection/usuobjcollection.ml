@@ -177,7 +177,6 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
-				uobj#init_sentineltypes_hashtbl o_uobjcoll_sentineltypes_hashtbl;
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
 					begin
@@ -211,6 +210,10 @@ module Usuobjcollection =
 
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
+				
+				(* initialize uobj sentinel types *)
+				uobj#init_sentineltypes o_uobjcoll_sentineltypes_hashtbl;
+
 
 		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						

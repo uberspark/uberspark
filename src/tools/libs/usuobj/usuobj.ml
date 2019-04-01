@@ -116,17 +116,6 @@ class uobject = object(self)
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
 
-		(*--------------------------------------------------------------------------*)
-		(* init_sentineltypes_hashtbl *)
-		(* sentineltypes_hashtbl = hash table of sentinel types *)
-		(*--------------------------------------------------------------------------*)
-		method init_sentineltypes_hashtbl (sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
-			= 
-			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-					Hashtbl.add o_sentineltypes_hashtbl key st;
-			) sentineltypes_hashtbl;
-			()	
-		;
 
 
 		(*--------------------------------------------------------------------------*)
@@ -204,7 +193,7 @@ class uobject = object(self)
 					) uobj_publicmethods_list;
 				end;
 
-
+(*
 			(* parse uobj-sentinels node *)
 			let (rval, uobj_sentinels_list) = 
 										Usmanifest.parse_node_uobj_sentinels mf_json in
@@ -234,6 +223,7 @@ class uobject = object(self)
 						
 					) uobj_sentinels_list;
 				end;
+*)
 
 
 			(* parse uobj-sections node *)
@@ -285,6 +275,19 @@ class uobject = object(self)
 			(true)
 		;
 		
+
+		(*--------------------------------------------------------------------------*)
+		(* init_sentineltypes *)
+		(* sentineltypes_hashtbl = hash table of sentinel types *)
+		(*--------------------------------------------------------------------------*)
+		method init_sentineltypes (sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			= 
+			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+					Hashtbl.add o_sentineltypes_hashtbl key st;
+			) sentineltypes_hashtbl;
+			()	
+		;
+
 
 
 		(*--------------------------------------------------------------------------*)
