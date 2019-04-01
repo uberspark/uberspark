@@ -462,6 +462,48 @@ module Usmanifest =
 								
 		(!retval, uobjcoll_entrycallees_hashtbl)
 	;;
+
+																																																																																																																																																																																				
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjcoll-exitcallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then hashtable of exitcallees indexed by callee function name*)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobjcoll_exitcallees usmf_json =
+		let retval = ref true in
+		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_exitcallee_t)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjcoll_exitcallees_json = usmf_json |> member "uobjcoll-exitcallees" in
+					if uobjcoll_exitcallees_json != `Null then
+						begin
+
+							let uobjcoll_exitcallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_exitcallees_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										
+										Hashtbl.add uobjcoll_exitcallees_hashtbl x 
+										{
+											s_retvaldecl = Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 0);
+											s_fname = x;
+											s_fparamdecl = Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 1);
+											s_fparamdwords = int_of_string ( Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 2));
+										};
+				
+										()
+									) uobjcoll_exitcallees_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobjcoll_exitcallees_hashtbl)
+	;;
 																																																																																																																																																																																				
 																																																																																																																																																																																				
 																																																																																							
