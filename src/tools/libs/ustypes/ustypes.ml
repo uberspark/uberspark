@@ -11,5 +11,14 @@ struct
 				s_type: string;
 				s_type_id : string;
 			};;
+
+		type uobjcoll_exitcallee_t = 
+			{
+				s_retvaldecl : string;
+				s_fname: string;
+				s_fparamdecl: string;
+				s_fparamdwords : int;
+			};;
 				
+												
 end
