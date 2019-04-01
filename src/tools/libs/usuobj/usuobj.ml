@@ -115,8 +115,7 @@ class uobject = object(self)
 		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
-
-		val o_myhash = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+		val o_calleemethods_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 
 
 		(*--------------------------------------------------------------------------*)
@@ -203,10 +202,10 @@ class uobject = object(self)
 			else
 			let dummy = 0 in
 				begin
-					o_myhash := uobj_calleemethods_hashtbl;
+					o_calleemethods_hashtbl := uobj_calleemethods_hashtbl;
 					Hashtbl.iter (fun key value  ->
 						Uslog.logf log_tag Uslog.Info "key=%s length of list=%u" key (List.length value);
-					) !o_myhash;
+					) !o_calleemethods_hashtbl;
 
 					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-calleemethods";
 				end;

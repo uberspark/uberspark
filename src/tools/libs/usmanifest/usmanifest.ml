@@ -319,9 +319,37 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	let parse_node_uobj_calleemethods usmf_json =
 		let retval = ref true in
-		let myhash = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
-			Hashtbl.add myhash "sample" ["olala"];
-		(!retval, myhash)
+		let uobj_calleemethods_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_calleemethods_json = usmf_json |> member "uobj-calleemethods" in
+					if uobj_calleemethods_json != `Null then
+						begin
+
+							let uobj_calleemethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_calleemethods_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										let uobj_calleemethods_attribute_list = ref [] in
+											List.iter (fun z ->
+												uobj_calleemethods_attribute_list := !uobj_calleemethods_attribute_list @
+																		[ (z |> to_string) ];
+												()
+											)(Yojson.Basic.Util.to_list y);
+											
+											Hashtbl.add uobj_calleemethods_hashtbl x !uobj_calleemethods_attribute_list;
+										()
+									) uobj_calleemethods_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobj_calleemethods_hashtbl)
 	;;
 						
 						
