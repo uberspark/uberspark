@@ -117,6 +117,7 @@ class uobject = object(self)
 
 		val o_calleemethods_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 
+		val o_exitcallees_list : string list ref = ref [];
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
@@ -208,6 +209,23 @@ class uobject = object(self)
 					) !o_calleemethods_hashtbl;
 
 					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-calleemethods";
+				end;
+
+
+			(* parse uobj-exitcallees node *)
+			let (rval, uobj_exitcallees_list) = 
+										Usmanifest.parse_node_usmf_uobj_exitcallees mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_exitcallees_list := uobj_exitcallees_list;
+					List.iter (fun v  ->
+						Uslog.logf log_tag Uslog.Info "exitcallee=%s" v;
+					) !o_exitcallees_list;
+
+					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-exitcallees";
 				end;
 
 
