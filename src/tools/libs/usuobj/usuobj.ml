@@ -3,7 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 ------------------------------------------------------------------------------*)
 
-
+open Ustypes
 open Usconfig
 open Uslog
 open Usmanifest
@@ -25,6 +25,15 @@ struct
 				s_attribute : string;
 				s_origin: int;
 				s_length: int;	
+			};;
+
+
+		type uobj_publicmethods_info_t = 
+			{
+				pm_fname: string;
+				pm_retvaldecl : string;
+				pm_fparamdecl: string;
+				pm_fparamdwords : int;
 			};;
 
 
@@ -65,6 +74,8 @@ class uobject = object(self)
 		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
 
+		val o_uobj_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_info_t)  Hashtbl.t)); 
+		method get_o_uobj_publicmethods_hashtbl = o_uobj_publicmethods_hashtbl;
 
 		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
@@ -101,9 +112,12 @@ class uobject = object(self)
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
 
+		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
+		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
+		val o_calleemethods_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 
-
+		val o_exitcallees_list : string list ref = ref [];
 
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
@@ -158,9 +172,10 @@ class uobject = object(self)
 					o_usmf_sources_casm_files := usmf_sources_casm_files;
 				end;
 
-			(* parse uobj-sentinels node *)
-			let (rval, uobj_sentinels_list) = 
-										Usmanifest.parse_node_uobj_sentinels mf_json in
+
+			(* parse uobj-publicmethods node *)
+			let (rval, uobj_publicmethods_list) = 
+										Usmanifest.parse_node_uobj_publicmethods mf_json in
 
 			if (rval == false) then (false)
 			else
@@ -168,24 +183,49 @@ class uobject = object(self)
 				begin
 					List.iter (fun x ->
 
-						(*make a unique name for this sentinel*)
-						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ (List.nth x 0) ^ "_" ^ (List.nth x 2); 
-
-						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
+						Hashtbl.add o_uobj_publicmethods_hashtbl (List.nth x 0) 
 							{
-								s_type = (List.nth x 0);
-								s_type_id = (List.nth x 1);
-								s_retvaldecl = (List.nth x 2);
-								s_fname = (List.nth x 3);
-								s_fparamdecl = (List.nth x 4);
-								s_fparamdwords = int_of_string (List.nth x 5);
-								s_attribute = (List.nth x 6);
-								s_origin = 0;
-								s_length = int_of_string (List.nth x 7);
+								pm_fname = (List.nth x 0);
+								pm_retvaldecl = (List.nth x 1);
+								pm_fparamdecl = (List.nth x 2);
+								pm_fparamdwords = int_of_string (List.nth x 3);
 							};
 						
-					) uobj_sentinels_list;
+					) uobj_publicmethods_list;
+				end;
+
+
+			(* parse uobj-callemethods node *)
+			let (rval, uobj_calleemethods_hashtbl) = 
+										Usmanifest.parse_node_uobj_calleemethods mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_calleemethods_hashtbl := uobj_calleemethods_hashtbl;
+					Hashtbl.iter (fun key value  ->
+						Uslog.logf log_tag Uslog.Info "key=%s length of list=%u" key (List.length value);
+					) !o_calleemethods_hashtbl;
+
+					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-calleemethods";
+				end;
+
+
+			(* parse uobj-exitcallees node *)
+			let (rval, uobj_exitcallees_list) = 
+										Usmanifest.parse_node_usmf_uobj_exitcallees mf_json in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					o_exitcallees_list := uobj_exitcallees_list;
+					List.iter (fun v  ->
+						Uslog.logf log_tag Uslog.Info "exitcallee=%s" v;
+					) !o_exitcallees_list;
+
+					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-exitcallees";
 				end;
 
 
@@ -238,6 +278,45 @@ class uobject = object(self)
 			(true)
 		;
 		
+
+		(*--------------------------------------------------------------------------*)
+		(* init_sentineltypes *)
+		(* sentineltypes_hashtbl = hash table of sentinel types *)
+		(*--------------------------------------------------------------------------*)
+		method init_sentineltypes (sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			= 
+			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
+			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+					Hashtbl.add o_sentineltypes_hashtbl key st;
+			) sentineltypes_hashtbl;
+
+			(* iterate over sentineltypes hash table to construct sentinels hash table*)
+			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_info_t) ->
+				
+						let sentinel_name = ref "" in
+							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.pm_fname; 
+
+						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
+							{
+								s_type = st.s_type;
+								s_type_id = st.s_type_id;
+								s_retvaldecl = pm.pm_retvaldecl;
+								s_fname = pm.pm_fname;
+								s_fparamdecl = pm.pm_fparamdecl;
+								s_fparamdwords = pm.pm_fparamdwords;
+								s_attribute = (Usconfig.get_sentinel_prot ());
+								s_origin = 0;
+								s_length = int_of_string (Usconfig.get_sentinel_size_bytes ());
+							};
+			
+						) o_uobj_publicmethods_hashtbl;
+			) o_sentineltypes_hashtbl;
+
+			
+			()	
+		;
+
 
 
 		(*--------------------------------------------------------------------------*)

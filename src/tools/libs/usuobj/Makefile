@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o usuobj.o -package str -package yojson -package unix  -package usconfig -package uslog -package usosservices -package usextbinutils -package usmanifest -package usuobjgen -linkpkg usuobj.ml
+	$(OCAMLC) -o usuobj.o -package str -package yojson -package unix -package ustypes -package usconfig -package uslog -package usosservices -package usextbinutils -package usmanifest -package usuobjgen -linkpkg usuobj.ml
 	ocamlfind remove usuobj 
 	ocamlfind install usuobj META usuobj.cmi usuobj.cmo usuobj.o 
 

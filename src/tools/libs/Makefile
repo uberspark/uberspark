@@ -10,6 +10,7 @@ include ../../uberspark-common.mk
 
 .PHONY: all
 all: 
+	cd ustypes && $(MAKE) -w all
 	cd usconfig && $(MAKE) -w all
 	cd libuslog && $(MAKE) -w all
 	cd usosservices && $(MAKE) -w all 
@@ -23,6 +24,7 @@ all:
 
 .PHONY: clean
 clean:
+	cd ustypes && $(MAKE) -w clean
 	cd usconfig && $(MAKE) -w clean
 	cd libuslog && $(MAKE) -w clean
 	cd usosservices && $(MAKE) -w clean

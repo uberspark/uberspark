@@ -5,6 +5,7 @@
 
 open Unix
 
+open Ustypes
 open Usconfig
 open Uslog
 open Usosservices
@@ -39,6 +40,16 @@ module Usuobjcollection =
 	let o_load_addr = ref 0;;
 
 	let o_usmf_hdr_id = ref"";;
+
+
+	(*let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;*)
+
+	let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));;
+
+	let o_entrycallees_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));;
+	let o_exitcallees_hashtbl = ref ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_exitcallee_t)  Hashtbl.t));;
+
+
 
 
 	(*--------------------------------------------------------------------------*)
@@ -127,6 +138,57 @@ module Usuobjcollection =
 		total_uobjs := (List.length !uobj_dir_list);
 		Uslog.logf log_tag Uslog.Info "uobj count=%u" !total_uobjs;
 
+		(* parse uobjcoll-sentineltypes node *)
+		let(rval, ret_uobjcoll_sentineltypes_list) = 
+			Usmanifest.parse_node_usmf_uobjcoll_sentineltypes	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-sentineltypes node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			List.iter (fun x ->
+
+				Hashtbl.add o_uobjcoll_sentineltypes_hashtbl (List.nth x 0) 
+					{
+						s_type = (List.nth x 0);
+						s_type_id = (List.nth x 1);
+					};
+				
+			) ret_uobjcoll_sentineltypes_list;
+
+
+		(* parse uobjcoll-entrycallees node *)
+		let(rval, ret_uobjcoll_entrycallees_hashtbl) = 
+			Usmanifest.parse_node_usmf_uobjcoll_entrycallees	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-entrycallees node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			o_entrycallees_hashtbl := ret_uobjcoll_entrycallees_hashtbl;
+			Uslog.logf log_tag Uslog.Info "entrycallees entries=%u" (Hashtbl.length !o_entrycallees_hashtbl);
+
+
+		(* parse uobjcoll-exitcallees node *)
+		let(rval, ret_uobjcoll_exitcallees_hashtbl) = 
+			Usmanifest.parse_node_usmf_uobjcoll_exitcallees	mf_json in
+	
+			if (rval == false) then
+				begin
+					Uslog.logf log_tag Uslog.Error "invalid uobjcoll-exitcallees node in manifest.";
+					ignore (exit 1);
+				end
+			;
+
+			o_exitcallees_hashtbl := ret_uobjcoll_exitcallees_hashtbl;
+			Uslog.logf log_tag Uslog.Info "exitcallees entries=%u" (Hashtbl.length !o_exitcallees_hashtbl);
+
 
 		(* store uobj collection id *)
 		o_usmf_hdr_id := usmf_hdr_id;
@@ -182,6 +244,10 @@ module Usuobjcollection =
 
 				Uslog.logf log_tag Uslog.Info "uobj type: %s" (uobj#get_o_usmf_hdr_type); 			 
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
+				
+				(* initialize uobj sentinel types *)
+				uobj#init_sentineltypes o_uobjcoll_sentineltypes_hashtbl;
+
 
 		) !uobj_dir_list;
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																						

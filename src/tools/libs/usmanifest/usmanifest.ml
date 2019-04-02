@@ -6,6 +6,7 @@
 open Yojson
 
 
+open Ustypes
 open Usconfig
 open Uslog
 open Usosservices
@@ -264,42 +265,41 @@ module Usmanifest =
 		(!retval, !uobj_sections_list)
 	;;
 
-																								
-																																																
+
 	(*--------------------------------------------------------------------------*)
-	(* parse manifest node "uobj-sentinels" *)
+	(* parse manifest node "uobj-publicmethods" *)
 	(* return true on successful parse, false if not *)
-	(* return: if true then list of sections *)
+	(* return: if true then list public methods *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_uobj_sentinels usmf_json =
+	let parse_node_uobj_publicmethods usmf_json =
 		let retval = ref false in
-		let uobj_sentinels_list = ref [] in
+		let uobj_publicmethods_list = ref [] in
 
 		try
 			let open Yojson.Basic.Util in
-		  	let uobj_sentinels_json = usmf_json |> member "uobj-sentinels" in
-					if uobj_sentinels_json != `Null then
+		  	let uobj_publicmethods_json = usmf_json |> member "uobj-publicmethods" in
+					if uobj_publicmethods_json != `Null then
 						begin
 
-							let uobj_sentinels_assoc_list = Yojson.Basic.Util.to_assoc uobj_sentinels_json in
+							let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
 								retval := true;
 								List.iter (fun (x,y) ->
 										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
-										let uobj_sentinels_attribute_list = ref [] in
-											uobj_sentinels_attribute_list := !uobj_sentinels_attribute_list @
+										let uobj_publicmethods_attribute_list = ref [] in
+											uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
 																		[ x ];
 											List.iter (fun z ->
-												uobj_sentinels_attribute_list := !uobj_sentinels_attribute_list @
+												uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
 																		[ (z |> to_string) ];
 												()
 											)(Yojson.Basic.Util.to_list y);
 											
-											uobj_sentinels_list := !uobj_sentinels_list @	[ !uobj_sentinels_attribute_list ];
+											uobj_publicmethods_list := !uobj_publicmethods_list @	[ !uobj_publicmethods_attribute_list ];
 											if (List.length (Yojson.Basic.Util.to_list y)) < 3 then
 												retval:=false;
 										()
-									) uobj_sentinels_assoc_list;
-								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sentinels_list);
+									) uobj_publicmethods_assoc_list;
+								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_publicmethods_list);
 
 						end
 					;
@@ -309,10 +309,85 @@ module Usmanifest =
 		;
 
 								
-		(!retval, !uobj_sentinels_list)
+		(!retval, !uobj_publicmethods_list)
 	;;
-																																																																																																
-			
+
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-calleemethods" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then hashtable of calleemethods indexed by uobj id*)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_uobj_calleemethods usmf_json =
+		let retval = ref true in
+		let uobj_calleemethods_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_calleemethods_json = usmf_json |> member "uobj-calleemethods" in
+					if uobj_calleemethods_json != `Null then
+						begin
+
+							let uobj_calleemethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_calleemethods_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										let uobj_calleemethods_attribute_list = ref [] in
+											List.iter (fun z ->
+												uobj_calleemethods_attribute_list := !uobj_calleemethods_attribute_list @
+																		[ (z |> to_string) ];
+												()
+											)(Yojson.Basic.Util.to_list y);
+											
+											Hashtbl.add uobj_calleemethods_hashtbl x !uobj_calleemethods_attribute_list;
+										()
+									) uobj_calleemethods_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobj_calleemethods_hashtbl)
+	;;
+						
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobj-exitcallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list of exitcallees function names *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobj_exitcallees usmf_json =
+		let retval = ref true in
+		let uobj_exitcallees_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobj_exitcallees_json = usmf_json |> member "uobj-exitcallees" in
+					if uobj_exitcallees_json != `Null then
+						begin
+							let usmf_uobj_exitcallees_json_list = uobj_exitcallees_json |> 
+									to_list in 
+								List.iter (fun x -> uobj_exitcallees_list := 
+										!uobj_exitcallees_list @ [(x |> to_string)]
+									) usmf_uobj_exitcallees_json_list;
+						end
+					;
+	
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+	
+		(!retval, !uobj_exitcallees_list)
+	;;
+						
+												
+																		
+																								
+																																				
+												
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-coll" *)
 	(* return true on successful parse, false if not *)
@@ -342,6 +417,127 @@ module Usmanifest =
 		(!retval, !usmf_uobj_dirs_list)
 	;;
 																								
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjcoll-sentineltypes" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then list sentinel types *)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobjcoll_sentineltypes usmf_json =
+		let retval = ref false in
+		let uobjcoll_sentineltypes_list = ref [] in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjcoll_sentineltypes_json = usmf_json |> member "uobjcoll-sentineltypes" in
+					if uobjcoll_sentineltypes_json != `Null then
+						begin
+
+							let uobjcoll_sentineltypes_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_sentineltypes_json in
+								retval := true;
+								List.iter (fun (s_type, s_type_id_json) ->
+										let s_type_id = Yojson.Basic.Util.to_string s_type_id_json in
+										Uslog.logf log_tag Uslog.Debug "%s: type=%s type_id=%s" __LOC__ 
+												s_type s_type_id;
+											uobjcoll_sentineltypes_list := !uobjcoll_sentineltypes_list @	[ [s_type; s_type_id ] ];
+										()
+									) uobjcoll_sentineltypes_assoc_list;
+								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobjcoll_sentineltypes_list);
+
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, !uobjcoll_sentineltypes_list)
+	;;
 																																													
+
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjcoll-entrycallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then hashtable of entrycallees indexed by uobj id*)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobjcoll_entrycallees usmf_json =
+		let retval = ref true in
+		let uobjcoll_entrycallees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjcoll_entrycallees_json = usmf_json |> member "uobjcoll-entrycallees" in
+					if uobjcoll_entrycallees_json != `Null then
+						begin
+
+							let uobjcoll_entrycallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_entrycallees_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										let uobjcoll_entrycallees_attribute_list = ref [] in
+											List.iter (fun z ->
+												uobjcoll_entrycallees_attribute_list := !uobjcoll_entrycallees_attribute_list @
+																		[ (z |> to_string) ];
+												()
+											)(Yojson.Basic.Util.to_list y);
+											
+											Hashtbl.add uobjcoll_entrycallees_hashtbl x !uobjcoll_entrycallees_attribute_list;
+										()
+									) uobjcoll_entrycallees_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobjcoll_entrycallees_hashtbl)
+	;;
+
+																																																																																																																																																																																				
+	(*--------------------------------------------------------------------------*)
+	(* parse manifest node "uobjcoll-exitcallees" *)
+	(* return true on successful parse, false if not *)
+	(* return: if true then hashtable of exitcallees indexed by callee function name*)
+	(*--------------------------------------------------------------------------*)
+	let parse_node_usmf_uobjcoll_exitcallees usmf_json =
+		let retval = ref true in
+		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_exitcallee_t)  Hashtbl.t)) in
+
+		try
+			let open Yojson.Basic.Util in
+		  	let uobjcoll_exitcallees_json = usmf_json |> member "uobjcoll-exitcallees" in
+					if uobjcoll_exitcallees_json != `Null then
+						begin
+
+							let uobjcoll_exitcallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_exitcallees_json in
+								retval := true;
+								List.iter (fun (x,y) ->
+										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										
+										Hashtbl.add uobjcoll_exitcallees_hashtbl x 
+										{
+											s_retvaldecl = Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 0);
+											s_fname = x;
+											s_fparamdecl = Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 1);
+											s_fparamdwords = int_of_string ( Yojson.Basic.Util.to_string (List.nth (Yojson.Basic.Util.to_list y) 2));
+										};
+				
+										()
+									) uobjcoll_exitcallees_assoc_list;
+						end
+					;
+															
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+								
+		(!retval, uobjcoll_exitcallees_hashtbl)
+	;;
+																																																																																																																																																																																				
+																																																																																																																																																																																				
 																																																																																							
 	end

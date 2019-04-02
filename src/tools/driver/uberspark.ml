@@ -40,11 +40,11 @@ let copt_builduobj = ref false;;
 
 let copt_install = ref false;;
 
-let cmdopt_uobjlist = ref "";;
-let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
+let cmdopt_uobjcollmf = ref "";;
+let cmdopt_uobjcollmf_set value = cmdopt_uobjcollmf := value;;
 
-let cmdopt_uobjmanifest = ref "";;
-let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+let cmdopt_uobjmf = ref "";;
+let cmdopt_uobjmf_set value = cmdopt_uobjmf := value;;
 
 let cmdopt_loadaddr_specified = ref false;;
 let cmdopt_loadaddr = ref "";;
@@ -114,8 +114,10 @@ let cmdopt_get_buildshimsdir = ref false;;
 let cmdline_speclist = [
 	("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
 	("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-	("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
-	("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
+	
+	("--uobjcollmf", Arg.String (cmdopt_uobjcollmf_set), "uobj collection manifest filename");
+	("--uobjmf", Arg.String (cmdopt_uobjmf_set), "uobj manifest filename");
+	
 	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
 	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
@@ -324,6 +326,14 @@ let main () =
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
 
+		(* setup defaults *)
+		if (String.compare !cmdopt_uobjcollmf "") == 0 then
+			begin
+				cmdopt_uobjcollmf := Usconfig.default_uobjcoll_usmf_name;
+			end
+		;
+
+
 		(* check if information requested *)
 		if !cmdopt_info == true then 
 			begin
@@ -335,8 +345,8 @@ let main () =
 
 
 		(* create uobj collection *)
-		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjlist;
-		Usuobjcollection.init_build_configuration !cmdopt_uobjlist "" true;
+		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjcollmf;
+		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
 		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr));
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
@@ -356,7 +366,7 @@ let main () =
 				Usuobjcollection.build "" true;
 
 				(* build final image *)
-				Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjlist ^ ".bin")
+				Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjcollmf ^ ".bin")
 				(Usconfig.get_std_uobjcoll_info_filename ());
 		
 			end
