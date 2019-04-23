@@ -77,6 +77,16 @@ typedef struct {
 	uint32_t reserved;		//reserved
 } __attribute__((packed)) usbinformat_section_info_t;
 
+typedef struct {
+	uint32_t magic;			//header magic
+	uint32_t num_sections;	//number of sections
+	uint32_t va_offset;		//virtual address offset from load address
+	uint32_t file_offset;	//offset within the binary file
+	uint32_t size;			//size of the section in bytes
+	uint32_t aligned_at;	//boundary that section is aligned at
+	uint32_t pad_to;		//boundary that section is padded to
+	uint32_t reserved;		//reserved
+} __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
 
 
 
