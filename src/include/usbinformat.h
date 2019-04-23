@@ -50,6 +50,12 @@
 #ifndef __UBERSPARK_BINFORMAT_H__
 #define __UBERSPARK_BINFORMAT_H__
 
+//header types
+#define USBINFORMAT_HDR_MAGIC_UOBJCOLL				0xBEEBOB00
+#define USBINFORMAT_HDR_MAGIC_ENTRYSENTINELS		0xBEEBOB01
+#define USBINFORMAT_HDR_MAGIC_UOBJ					0xBEEBOB02
+
+//section types
 #define USBINFORMAT_SECTION_TYPE_PADDING						0x0
 #define USBINFORMAT_SECTION_TYPE_UOBJ							0x1
 #define USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL			0x2
@@ -73,7 +79,20 @@
 #ifndef __ASSEMBLY__
 
 //////
-// uobjcoll binary basic section type definition
+// uobjcoll binary generic header type definition
+//////
+typedef struct {
+	uint32_t magic;			//header magic
+	uint32_t num_sections;	//number of sections
+	uint32_t aligned_at;	//boundary that header is aligned at
+	uint32_t pad_to;		//boundary that header is padded to
+	uint64_t size;			//size of header
+} __attribute__((packed)) usbinformat_hdr_t;
+
+
+
+//////
+// uobjcoll binary generic section type definition
 //////
 
 typedef struct {
@@ -89,49 +108,39 @@ typedef struct {
 
 
 //////
-// uobjcoll binary header type definition
+// uobjcoll binary main header type definition
 //////
 
 typedef struct {
-	uint32_t magic;			//header magic
-	uint32_t num_sections;	//number of sections
-	uint32_t aligned_at;	//boundary that header is aligned at
-	uint32_t pad_to;		//boundary that header is padded to
-	uint64_t size;			//size of header
+	usbinformat_hdr_t hdr;	//generic header fields
 	uint64_t load_addr;		//load address of the collection
 	uint64_t load_size;		//size in bytes of the loaded collection image
-	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS]; //uobjcoll section descriptions
+	//uobjcoll section descriptions
+	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS];
 } __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
 
 
 
 //////
-// uobjcoll binary entry sentinels section header type definition
+// uobjcoll binary entry sentinels header type definition
 //////
 
 typedef struct {
-	uint32_t magic;			//header magic
-	uint32_t num_sections;	//number of sections
-	uint32_t aligned_at;	//boundary that header is aligned at
-	uint32_t pad_to;		//boundary that header is padded to
-	uint64_t size;			//size of header
+	usbinformat_hdr_t hdr;	//generic header fields
 	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_ENTRYSENTINELS_HDR_MAX_SECTIONS]; //uobjcoll section descriptions
-} __attribute__((packed)) usbinformat_uobjcoll_entrysentinels_t;
+} __attribute__((packed)) usbinformat_entrysentinels_hdr_t;
 
 
 //////
-// uobjcoll binary uobj section header type definition
+// uobjcoll binary uobj header type definition
 //////
 
 typedef struct {
-	uint32_t magic;			//header magic
-	uint32_t num_sections;	//number of sections
-	uint32_t aligned_at;	//boundary that header is aligned at
-	uint32_t pad_to;		//boundary that header is padded to
-	uint64_t size;			//size of header
+	usbinformat_hdr_t hdr;	//generic header fields
 	uint64_t load_addr;		//load address of the uobj
 	uint64_t load_size;		//size in bytes of the uobj
-	usbinformat_section_info_t sections[USCONFIG_UOBJ_MAX_SECTIONS]; //uobj section descriptions
+	//uobj section descriptions
+	usbinformat_section_info_t sections[USCONFIG_UOBJ_MAX_SECTIONS];
 } __attribute__((packed)) usbinformat_uobj_hdr_t;
 
 
