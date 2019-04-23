@@ -119,6 +119,22 @@ typedef struct {
 } __attribute__((packed)) usbinformat_uobjcoll_entrysentinels_t;
 
 
+//////
+// uobjcoll binary uobj section header type definition
+//////
+
+typedef struct {
+	uint32_t magic;			//header magic
+	uint32_t num_sections;	//number of sections
+	uint32_t aligned_at;	//boundary that header is aligned at
+	uint32_t pad_to;		//boundary that header is padded to
+	uint64_t size;			//size of header
+	uint64_t load_addr;		//load address of the uobj
+	uint64_t load_size;		//size in bytes of the uobj
+	usbinformat_section_info_t sections[USCONFIG_UOBJ_MAX_SECTIONS]; //uobj section descriptions
+} __attribute__((packed)) usbinformat_uobj_hdr_t;
+
+
 
 #endif //__ASSEMBLY__
 
