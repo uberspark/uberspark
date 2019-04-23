@@ -50,6 +50,7 @@
 #ifndef __UBERSPARK_BINFORMAT_H__
 #define __UBERSPARK_BINFORMAT_H__
 
+#define USBINFORMAT_SECTION_TYPE_PADDING						0x0
 #define USBINFORMAT_SECTION_TYPE_UOBJ							0x1
 #define USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL			0x2
 #define USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL			0x3
@@ -63,29 +64,41 @@
 #define USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS					0xb
 #define USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS					0xc
 
+//max section count within uobjcoll header is equal to the max number of
+//uobjs plus the section for entry sentinels
+#define USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS	(USCONFIG_UOBJCOLL_MAX_UOBJS+1)
 
 #ifndef __ASSEMBLY__
+
+//////
+// uobjcoll binary basic section type definition
+//////
 
 typedef struct {
 	uint32_t type;			//section type
 	uint32_t prot;			//section protections
-	uint32_t va_offset;		//virtual address offset from load address
-	uint32_t file_offset;	//offset within the binary file
-	uint32_t size;			//size of the section in bytes
+	uint64_t va_offset;		//virtual address offset from load address
+	uint64_t file_offset;	//offset within the binary file
+	uint64_t size;			//size of the section in bytes
 	uint32_t aligned_at;	//boundary that section is aligned at
 	uint32_t pad_to;		//boundary that section is padded to
-	uint32_t reserved;		//reserved
+	uint64_t reserved;		//reserved
 } __attribute__((packed)) usbinformat_section_info_t;
+
+
+//////
+// uobjcoll binary header type definition
+//////
 
 typedef struct {
 	uint32_t magic;			//header magic
 	uint32_t num_sections;	//number of sections
-	uint32_t va_offset;		//virtual address offset from load address
-	uint32_t file_offset;	//offset within the binary file
-	uint32_t size;			//size of the section in bytes
-	uint32_t aligned_at;	//boundary that section is aligned at
-	uint32_t pad_to;		//boundary that section is padded to
-	uint32_t reserved;		//reserved
+	uint32_t aligned_at;	//boundary that header is aligned at
+	uint32_t pad_to;		//boundary that header is padded to
+	uint64_t size;			//size of header
+	uint64_t load_addr;		//load address of the collection
+	uint64_t load_size;		//size in bytes of the loaded collection image
+	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS]; //uobjcoll section descriptions
 } __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
 
 
