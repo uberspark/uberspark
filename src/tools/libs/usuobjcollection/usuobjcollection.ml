@@ -368,13 +368,28 @@ module Usuobjcollection =
 			;
 
 		(* generate linker sript *)
-		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
+		(*let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
 							{s_name = "data";	s_type = 0;	s_attribute = "rw";
 								s_subsection_list = [ ".data" ];	s_origin = 0;
 								s_length = (Usconfig.get_sizeof_uobjcoll_info_t());
 							};
-		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
+		*)
+		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
+						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
+							{f_name = "data";	
+								f_subsection_list = [ ".data" ];	
+								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
+								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								};
+								(*s_origin = 0;
+								s_length = (Usconfig.get_sizeof_uobjcoll_info_t());*)
+							};
+		
+
+				
+		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_scriptv2  
 			(uobjcoll_info_table_filename) uobjcoll_info_table_lscript_sections in
 			
 		
