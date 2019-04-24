@@ -119,6 +119,48 @@ class uobject = object(self)
 
 		val o_exitcallees_list : string list ref = ref [];
 
+
+		(*--------------------------------------------------------------------------*)
+		(* initialize *)
+		(* sentineltypes_hashtbl = hash table of sentinel types *)
+		(*--------------------------------------------------------------------------*)
+		method initialize 
+			(sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			= 
+			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
+			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+					Hashtbl.add o_sentineltypes_hashtbl key st;
+			) sentineltypes_hashtbl;
+
+			(* iterate over sentineltypes hash table to construct sentinels hash table*)
+			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_info_t) ->
+				
+						let sentinel_name = ref "" in
+							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.pm_fname; 
+
+						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
+							{
+								s_type = st.s_type;
+								s_type_id = st.s_type_id;
+								s_retvaldecl = pm.pm_retvaldecl;
+								s_fname = pm.pm_fname;
+								s_fparamdecl = pm.pm_fparamdecl;
+								s_fparamdwords = pm.pm_fparamdwords;
+								s_attribute = (Usconfig.get_sentinel_prot ());
+								s_origin = 0;
+								s_length = int_of_string (Usconfig.get_sentinel_size_bytes ());
+							};
+			
+						) o_uobj_publicmethods_hashtbl;
+			) o_sentineltypes_hashtbl;
+
+			
+			()	
+		;
+
+
+
 		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
 		(* usmf_filename = canonical uobj manifest filename *)
@@ -279,43 +321,6 @@ class uobject = object(self)
 		;
 		
 
-		(*--------------------------------------------------------------------------*)
-		(* init_sentineltypes *)
-		(* sentineltypes_hashtbl = hash table of sentinel types *)
-		(*--------------------------------------------------------------------------*)
-		method init_sentineltypes (sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
-			= 
-			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
-			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-					Hashtbl.add o_sentineltypes_hashtbl key st;
-			) sentineltypes_hashtbl;
-
-			(* iterate over sentineltypes hash table to construct sentinels hash table*)
-			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_info_t) ->
-				
-						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.pm_fname; 
-
-						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
-							{
-								s_type = st.s_type;
-								s_type_id = st.s_type_id;
-								s_retvaldecl = pm.pm_retvaldecl;
-								s_fname = pm.pm_fname;
-								s_fparamdecl = pm.pm_fparamdecl;
-								s_fparamdwords = pm.pm_fparamdwords;
-								s_attribute = (Usconfig.get_sentinel_prot ());
-								s_origin = 0;
-								s_length = int_of_string (Usconfig.get_sentinel_size_bytes ());
-							};
-			
-						) o_uobj_publicmethods_hashtbl;
-			) o_sentineltypes_hashtbl;
-
-			
-			()	
-		;
 
 
 
