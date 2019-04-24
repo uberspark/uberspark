@@ -390,7 +390,7 @@ module Usuobjcollection =
 
 				
 		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_scriptv2  
-			(uobjcoll_info_table_filename) uobjcoll_info_table_lscript_sections in
+			(uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) uobjcoll_info_table_lscript_sections in
 			
 		
 		(* build uobj collection info table binary *)

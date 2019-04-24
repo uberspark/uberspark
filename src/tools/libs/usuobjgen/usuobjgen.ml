@@ -18,7 +18,8 @@ module Usuobjgen =
 	
 	let generate_linker_scriptv2 
 		(fname : string)
-		(* (sections_hashtbl : (int, Usextbinutils.ld_section_info_t) Hashtbl.t) *)
+		(binary_origin : int)
+		(binary_size : int)
 		(sections_hashtbl : (int, Ustypes.section_info_t) Hashtbl.t) 
 		 		: string =
 		
@@ -30,43 +31,54 @@ module Usuobjgen =
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\nOUTPUT_ARCH(\"i386\")";
 			Printf.fprintf oc "\n";
+
 			Printf.fprintf oc "\nMEMORY";
 			Printf.fprintf oc "\n{";
-	
-			let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
-			List.iter (fun key ->
-			    let x = Hashtbl.find sections_hashtbl key in
-					(* new section memory *)
-					Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
-						("mem_" ^ x.f_name)
+			Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
+						("mem_binary")
 						( "rw" ^ "ail") 
-						(x.usbinformat.f_va_offset) 
-						(x.usbinformat.f_size);
-					()
-			) keys ;
-												
-																				
+						(binary_origin) 
+						(binary_size);
 			Printf.fprintf oc "\n}";
 			Printf.fprintf oc "\n";
-			
+	
 			Printf.fprintf oc "\nSECTIONS";
 			Printf.fprintf oc "\n{";
 			Printf.fprintf oc "\n";
 	
 			let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
-			List.iter (fun key ->
-			    let x = Hashtbl.find sections_hashtbl key in
+
+			let i = ref 0 in 			
+			while (!i < List.length keys) do
+			  let key = (List.nth keys !i) in
+				let x = Hashtbl.find sections_hashtbl key in
 					(* new section *)
-					Printf.fprintf oc "\n	. = 0x%08x;" x.usbinformat.f_va_offset;
-			    Printf.fprintf oc "\n %s : {" x.f_name;
-					List.iter (fun subsection ->
-						    Printf.fprintf oc "\n *(%s)" subsection;
-					) x.f_subsection_list;
-					Printf.fprintf oc "\n . = 0x%08x;" x.usbinformat.f_size; 
-			    Printf.fprintf oc "\n	} >mem_%s =0x9090" x.f_name;
-			    Printf.fprintf oc "\n";
-					()
-			) keys ;
+			    if(!i == (List.length keys) - 1 ) then 
+						begin
+							Printf.fprintf oc "\n %s : {" x.f_name;
+							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
+							List.iter (fun subsection ->
+								    Printf.fprintf oc "\n *(%s)" subsection;
+							) x.f_subsection_list;
+							Printf.fprintf oc "\n . = 0x%08x;" binary_size; 
+					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
+					    Printf.fprintf oc "\n";
+						end
+					else
+						begin
+							Printf.fprintf oc "\n %s : {" x.f_name;
+							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
+							List.iter (fun subsection ->
+								    Printf.fprintf oc "\n *(%s)" subsection;
+							) x.f_subsection_list;
+							Printf.fprintf oc "\n . = ALIGN(0x%08x);" x.usbinformat.f_pad_to; 
+					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
+					    Printf.fprintf oc "\n";
+						end
+					;
+    	
+				i := !i + 1;
+			done;
 						
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";
