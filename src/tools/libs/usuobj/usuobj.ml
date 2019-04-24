@@ -155,6 +155,28 @@ class uobject = object(self)
 						) o_uobj_publicmethods_hashtbl;
 			) o_sentineltypes_hashtbl;
 
+			(* add default uobj sections *)
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
+				{s_name="uobj_hdr"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".hdr"]; s_origin=0; s_length=0x1000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
+				{s_name="uobj_ustack"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".ustack"]; s_origin=0; s_length=0x100000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
+				{s_name="uobj_tstack"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".tstack"]; s_origin=0; s_length=0x100000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
+				{s_name="uobj_code"; s_type=0; s_attribute="rx";	
+				 s_subsection_list=[".text"]; s_origin=0; s_length=0x1000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
+				{s_name="uobj_data"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".data"; ".rodata"]; s_origin=0; s_length=0x1000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_stack" 
+				{s_name="uobj_stack"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".stack"]; s_origin=0; s_length=0x1000;	};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
+				{s_name="uobj_dmadata"; s_type=0; s_attribute="rw";	
+				 s_subsection_list=[".dmadata"]; s_origin=0; s_length=0x1000;	};
 			
 			()	
 		;
