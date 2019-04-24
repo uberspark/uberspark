@@ -315,7 +315,7 @@ class uobject = object(self)
 								elem_index := !elem_index + 1;
 						done;
 
-
+						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
 						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
 							{
 								s_name = (List.nth x 0);
