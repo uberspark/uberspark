@@ -297,9 +297,10 @@ class uobject = object(self)
 			let (rval, uobj_sections_list) = 
 										Usmanifest.parse_node_uobj_binary mf_json in
 
-			if (rval == false) then (false)
+			(*if (rval == false) then (false)
 			else
-			let dummy = 0 in
+			let dummy = 0 in*)
+			if (rval == true) then
 				begin
 
 					List.iter (fun x ->
