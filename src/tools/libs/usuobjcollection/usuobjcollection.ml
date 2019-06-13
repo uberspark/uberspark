@@ -271,8 +271,7 @@ module Usuobjcollection =
 		o_load_addr := uobjcoll_load_addr;
 
 		Hashtbl.iter (fun key uobj ->  
-				(* uobj#compute_sections_memory_map !uobj_load_addr; *)
-				uobj#consolidate_sections_with_memory_map !uobj_load_addr;
+				uobj#consolidate_sections_with_memory_map !uobj_load_addr uobjcoll_uobjsize;
 				uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;
 		) uobj_hashtbl;
 

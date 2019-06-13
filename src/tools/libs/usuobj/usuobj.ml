@@ -402,7 +402,8 @@ class uobject = object(self)
 		(* uobj_load_addr = load address of uobj *)
 		(*--------------------------------------------------------------------------*)
 		method consolidate_sections_with_memory_map
-			(uobj_load_addr : int) 
+			(uobj_load_addr : int)
+			(uobjsize : int)  
 			: int =
 
 			let uobj_section_load_addr = ref 0 in
