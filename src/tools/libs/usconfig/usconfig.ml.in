@@ -89,6 +89,8 @@ module Usconfig =
 	let default_load_addr = "0x60000000";;
 	let get_default_load_addr () = (default_load_addr);;
 
+	let default_uobjsize = "0x01000000";;
+	let get_default_uobjsize () = (default_uobjsize);;
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)

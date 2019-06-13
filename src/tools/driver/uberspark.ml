@@ -54,6 +54,14 @@ let cmdopt_loadaddr_set
 	cmdopt_loadaddr := value;
 	;;
 
+let cmdopt_uobjsize_specified = ref false;;
+let cmdopt_uobjsize = ref "";;
+let cmdopt_uobjsize_set 
+	(value : string) = 
+	cmdopt_uobjsize_specified := true;
+	cmdopt_uobjsize := value;
+	;;
+
 let cmdopt_platform_specified = ref false;;
 let cmdopt_platform = ref "";;
 let cmdopt_platform_set 
@@ -119,6 +127,7 @@ let cmdline_speclist = [
 	("--uobjmf", Arg.String (cmdopt_uobjmf_set), "uobj manifest filename");
 	
 	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+	("--uobjsize", Arg.String (cmdopt_uobjsize_set), "uobj size (in bytes)");
 	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
 	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
@@ -325,6 +334,12 @@ let main () =
 		if(!cmdopt_loadaddr_specified == false) then
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
+
+		(* sanity check uobj size command line argument *)
+		if(!cmdopt_uobjsize_specified == false) then
+				cmdopt_uobjsize := (Usconfig.get_default_uobjsize());
+		;
+
 
 		(* setup defaults *)
 		if (String.compare !cmdopt_uobjcollmf "") == 0 then
