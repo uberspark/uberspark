@@ -102,10 +102,16 @@ class uobject = object(self)
 		val o_uobj_build_dirname = ref ".";
 		method get_o_uobj_build_dirname = !o_uobj_build_dirname;
 		
-		val o_uobj_size = ref 0; 
-		method get_o_uobj_size = !o_uobj_size;
+		(* uobj load address base *)
 		val o_uobj_load_addr = ref 0;
 		method get_o_uobj_load_addr = !o_uobj_load_addr;
+		method set_o_uobj_load_addr load_addr = (o_uobj_load_addr := load_addr);
+
+		(* uobj size *)
+		val o_uobj_size = ref 0; 
+		method get_o_uobj_size = !o_uobj_size;
+		method set_o_uobj_size size = (o_uobj_size := size);
+
 		
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
 		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
