@@ -60,7 +60,10 @@ module Usuobjgen =
 							List.iter (fun subsection ->
 								    Printf.fprintf oc "\n *(%s)" subsection;
 							) x.f_subsection_list;
-							Printf.fprintf oc "\n . = 0x%08x;" binary_size; 
+							Printf.fprintf oc "\n . = ORIGIN(mem_binary) + LENGTH(mem_binary) - 1;";
+							Printf.fprintf oc "\n BYTE(0xAA)";
+							(* Printf.fprintf oc "\n . = ALIGN(0x%08x);" binary_size; *) 
+							(* Printf.fprintf oc "\n . = 0x%08x;" binary_size; *) 
 					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
 					    Printf.fprintf oc "\n";
 						end
