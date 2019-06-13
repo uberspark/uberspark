@@ -377,7 +377,7 @@ module Usuobjcollection =
 								};
 							};
 				
-		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_scriptv2  
+		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
 			(uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) uobjcoll_info_table_lscript_sections in
 			
 		
