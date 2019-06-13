@@ -264,7 +264,8 @@ module Usuobjcollection =
 	(* uobjcoll_load_addr = load address of uobj collection *)
 	(*--------------------------------------------------------------------------*)
 	let compute_memory_map
-			(uobjcoll_load_addr : int) =
+			(uobjcoll_load_addr : int)
+			(uobjcoll_uobjsize : int)  =
 		let uobj_load_addr = ref 0 in
 		uobj_load_addr := uobjcoll_load_addr + (Usconfig.get_sizeof_uobjcoll_info_t());
 		o_load_addr := uobjcoll_load_addr;
