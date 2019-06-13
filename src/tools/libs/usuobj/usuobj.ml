@@ -1,3 +1,12 @@
+(* { f_name = "";	
+ 	f_subsection_list = [ "" ];	
+	usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+									f_size = 0;
+									f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								};
+}
+*)
+
 (*------------------------------------------------------------------------------
 	uberSpark uberobject verification and build interface
 	author: amit vasudevan (amitvasudevan@acm.org)
@@ -71,7 +80,7 @@ class uobject = object(self)
 		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
 
 	
-		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
 
 		val o_uobj_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_info_t)  Hashtbl.t)); 
@@ -98,8 +107,8 @@ class uobject = object(self)
 		val o_uobj_load_addr = ref 0;
 		method get_o_uobj_load_addr = !o_uobj_load_addr;
 		
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
-		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
@@ -157,26 +166,61 @@ class uobject = object(self)
 
 			(* add default uobj sections *)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
-				{s_name="uobj_hdr"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".hdr"]; s_origin=0; s_length=0x1000;	};
+				{ f_name = "uobj_hdr";	
+				 	f_subsection_list = [ ".hdr" ];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x1000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
-				{s_name="uobj_ustack"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".ustack"]; s_origin=0; s_length=0x100000;	};
+				{ f_name = "uobj_ustack";	
+				 	f_subsection_list = [ ".ustack" ];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x100000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
-				{s_name="uobj_tstack"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".tstack"]; s_origin=0; s_length=0x100000;	};
+				{ f_name = "uobj_tstack";	
+				 	f_subsection_list = [ ".tstack" ];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x100000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
-				{s_name="uobj_code"; s_type=0; s_attribute="rx";	
-				 s_subsection_list=[".text"]; s_origin=0; s_length=0x1000;	};
+				{ f_name = "uobj_code";	
+				 	f_subsection_list = [ ".text" ];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x1000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
-				{s_name="uobj_data"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".data"; ".rodata"]; s_origin=0; s_length=0x1000;	};
+				{ f_name = "uobj_data";	
+				 	f_subsection_list = [".data"; ".rodata"];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x1000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_stack" 
-				{s_name="uobj_stack"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".stack"]; s_origin=0; s_length=0x1000;	};
+				{ f_name = "uobj_stack";	
+				 	f_subsection_list = [".stack"];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x1000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
-				{s_name="uobj_dmadata"; s_type=0; s_attribute="rw";	
-				 s_subsection_list=[".dmadata"]; s_origin=0; s_length=0x1000;	};
+				{ f_name = "uobj_dmadata";	
+				 	f_subsection_list = [".dmadata"];	
+					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+													f_size = 0x1000;
+													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+												};
+				};
 			
 			()	
 		;
@@ -318,14 +362,14 @@ class uobject = object(self)
 
 						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
 						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
-							{
-								s_name = (List.nth x 0);
-								s_type = 0;
-								s_attribute = (List.nth x 1);
-								s_subsection_list = !subsections_list;
-								s_origin =  0;
-								s_length = int_of_string (List.nth x 2);
+							{ f_name = (List.nth x 0);	
+							 	f_subsection_list = !subsections_list;	
+								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+																f_size = int_of_string (List.nth x 2);
+																f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+															};
 							};
+
 							
 					) uobj_sections_list;
 
@@ -362,50 +406,58 @@ class uobject = object(self)
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{
-						s_name = key;
-						s_type = int_of_string(x.s_type_id);
-						s_attribute = x.s_attribute;
-						s_subsection_list = [ ("." ^ key) ];
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
+					{ f_name = key;	
+					 	f_subsection_list = [ ("." ^ key) ];	
+						usbinformat = { f_type = int_of_string(x.s_type_id);
+														f_prot=0; 
+														f_va_offset = !uobj_section_load_addr; 
+														f_file_offset=0;
+														f_size = x.s_length;
+														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{
-						s_name = key;
-						s_type = int_of_string(x.s_type_id);
-						s_attribute = x.s_attribute;
-						s_subsection_list = [ ("." ^ key) ];
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
+					{ f_name = key;	
+					 	f_subsection_list = [ ("." ^ key) ];	
+						usbinformat = { f_type = int_of_string(x.s_type_id); 
+														f_prot=0; 
+														f_va_offset = !uobj_section_load_addr; 
+														f_file_offset=0;
+														f_size = x.s_length;
+														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													};
 					};
 			
 				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
 			)  o_uobj_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
+			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
 
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{
-						s_name = x.s_name;
-						s_type = x.s_type;
-						s_attribute = x.s_attribute;
-						s_subsection_list = x.s_subsection_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
+					{ f_name = x.f_name;	
+					 	f_subsection_list = x.f_subsection_list;	
+						usbinformat = { f_type=x.usbinformat.f_type; 
+														f_prot=0; 
+														f_va_offset = !uobj_section_load_addr; 
+														f_file_offset=0;
+														f_size = x.usbinformat.f_size;
+														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{
-						s_name = x.s_name;
-						s_type = x.s_type;
-						s_attribute = x.s_attribute;
-						s_subsection_list = x.s_subsection_list;
-						s_origin =  !uobj_section_load_addr;
-						s_length = x.s_length;
+					{ f_name = x.f_name;	
+					 	f_subsection_list = x.f_subsection_list;	
+						usbinformat = { f_type=x.usbinformat.f_type; 
+														f_prot=0; 
+														f_va_offset = !uobj_section_load_addr; 
+														f_file_offset=0;
+														f_size = x.usbinformat.f_size;
+														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													};
 					};
 
-				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+				uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;
 			)  o_uobj_sections_hashtbl;
 			
 					
@@ -622,7 +674,7 @@ class uobject = object(self)
 												Usconfig.get_std_define_asm () @
 												[ self#get_o_pp_definition ] @
 												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
-													(Printf.sprintf "0x%08x" x_v.s_origin)
+													(Printf.sprintf "0x%08x" x_v.usbinformat.f_va_offset)
 												] @
 												[ "UOBJ_SENTINEL_SECTION_NAME=.text"
 												] @
@@ -744,7 +796,8 @@ class uobject = object(self)
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_linker_script !o_usmf_hdr_id 
+				Usuobjgen.generate_linker_scriptv2 
+					!o_usmf_hdr_id 0 0 
 					uobj_sections_memory_map_hashtbl_byorigin in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 
@@ -818,7 +871,7 @@ class uobject = object(self)
 			Printf.fprintf ochannel "\n\t\t{";
 		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (int_of_string(x.s_type_id));
 		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (0);
-		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (x_v.s_origin);
+		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (x_v.usbinformat.f_va_offset);
 		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL " (x.s_length);
 			Printf.fprintf ochannel "\n\t\t},";
 		)  o_uobj_sentinels_hashtbl;
@@ -829,7 +882,7 @@ class uobject = object(self)
 			(Usconfig.get_section_name_ustack()) in
 		let ustack_size = (Usconfig.get_sizeof_uobj_ustack()) in
 		let ustack_tos = ref 0 in
-		ustack_tos := info.s_origin + ustack_size;
+		ustack_tos := info.usbinformat.f_va_offset + ustack_size;
 		Printf.fprintf ochannel "\n\t{";
 		i := 0;
 		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
@@ -844,7 +897,7 @@ class uobject = object(self)
 			(Usconfig.get_section_name_tstack()) in
 		let tstack_size = (Usconfig.get_sizeof_uobj_tstack()) in
 		let tstack_tos = ref 0 in
-		tstack_tos := info.s_origin + tstack_size;
+		tstack_tos := info.usbinformat.f_va_offset + tstack_size;
 		Printf.fprintf ochannel "\n\t{";
 		i := 0;
 		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
@@ -888,17 +941,17 @@ class uobject = object(self)
 			Printf.fprintf oc "\n__attribute__((section (\".tstack\"))) uint8_t __tstack[MAX_PLATFORM_CPUS * USCONFIG_SIZEOF_UOBJ_TSTACK]={ 0 };";
 	
 			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Usextbinutils.ld_section_info_t)  ->
+			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
 				(* new section *)
-				let section_name_var = ("__uobjsection_filler_" ^ x.s_name) in
+				let section_name_var = ("__uobjsection_filler_" ^ x.f_name) in
 				
-				  if ((compare (List.nth x.s_subsection_list 0) ".text") <> 0) && 
-						((compare (List.nth x.s_subsection_list 0) ".ustack") <> 0) &&
-						((compare (List.nth x.s_subsection_list 0) ".tstack") <> 0) &&
-						((compare (List.nth x.s_subsection_list 0) ".hdr") <> 0) then
+				  if ((compare (List.nth x.f_subsection_list 0) ".text") <> 0) && 
+						((compare (List.nth x.f_subsection_list 0) ".ustack") <> 0) &&
+						((compare (List.nth x.f_subsection_list 0) ".tstack") <> 0) &&
+						((compare (List.nth x.f_subsection_list 0) ".hdr") <> 0) then
 						begin
 							Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
-								(List.nth x.s_subsection_list 0) section_name_var;
+								(List.nth x.f_subsection_list 0) section_name_var;
 						end
 					;
 			)  uobj_sections_hashtbl;

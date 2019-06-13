@@ -97,7 +97,7 @@ module Usuobjgen =
 			(linker_script_filename)
 	;;
 																
-
+(*
 	let generate_linker_script 
 		(fname : string)
 		(sections_hashtbl : (int, Usextbinutils.ld_section_info_t) Hashtbl.t)
@@ -163,6 +163,6 @@ module Usuobjgen =
 			close_out oc;
 			(linker_script_filename)
 	;;																																																																																																																																																
-																																																																																																																																												
+*)																																																																																																																																												
 																																																																																																																																																																																																																																																																																				
 	end
