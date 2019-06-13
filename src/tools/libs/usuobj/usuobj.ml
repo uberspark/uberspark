@@ -469,7 +469,8 @@ class uobject = object(self)
 			
 					
 
-			o_uobj_size := !uobj_section_load_addr - uobj_load_addr;
+			(* o_uobj_size := !uobj_section_load_addr - uobj_load_addr; *)
+			o_uobj_size := uobjsize;
 			(!o_uobj_size)
 		;
 
