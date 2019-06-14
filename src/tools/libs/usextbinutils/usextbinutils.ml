@@ -9,19 +9,6 @@ open Usosservices
 module Usextbinutils =
 	struct
 
-(*	type ld_section_info_t = 
-		{
-			s_name: string;
-			s_type: int;
-			s_attribute : string;
-			s_subsection_list : string list;
-			s_origin: int;
-			s_length: int;	
-		};;
-*)
-
-	(* Uslog.logf usextbinutils_tag Uslog.Debug "hello"; *)
-	
 	let tool_pp = "gcc" ;;
 	let tool_cc = "gcc" ;;
 	let tool_ld = "ld" ;;
@@ -33,8 +20,6 @@ module Usextbinutils =
 			
 	let preprocess 
 			pp_inputfilename pp_outputfilename pp_includedirs_list pp_defines_list =
-		  (* let pp_outputfilename = 
-				((Filename.basename pp_inputfilename) ^ ".upp") in *)
 			let pp_cmdline = ref [] in
 				pp_cmdline := !pp_cmdline @ [ "-E" ];
 				pp_cmdline := !pp_cmdline @ [ "-P" ];
