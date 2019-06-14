@@ -40,6 +40,7 @@ module Usuobjcollection =
 	let o_load_addr = ref 0;;
 
 	let o_usmf_hdr_id = ref"";;
+	let get_o_usmf_hdr_id = !o_usmf_hdr_id;;
 
 
 	(*let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;*)
