@@ -39,8 +39,7 @@ module Usuobjcollection =
 
 	let o_load_addr = ref 0;;
 
-	let o_usmf_hdr_id = ref"";;
-	let get_o_usmf_hdr_id = !o_usmf_hdr_id;;
+	let o_usmf_hdr_id = ref "";;
 
 
 	(*let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;*)
@@ -100,6 +99,7 @@ module Usuobjcollection =
 				ignore (exit 1);
 			end
 		;
+
 
 								
 		(* sanity check header type *)
@@ -195,7 +195,7 @@ module Usuobjcollection =
 		o_usmf_hdr_id := usmf_hdr_id;
 
 		(* store uobj collection binary filename *)
-		o_binary_image_filename := (usmf_hdr_id ^ ".bin");
+		o_binary_image_filename := (usmf_hdr_id ^ ".usbin");
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()

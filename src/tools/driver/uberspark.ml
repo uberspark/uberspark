@@ -370,8 +370,8 @@ let main () =
 		(* if we are building *)
 		if !copt_builduobj == true then
 			begin
-				Uslog.logf log_mpf Uslog.Info "Collection id: %s" Usuobjcollection.get_o_usmf_hdr_id;
-				Usbin.generate_uobjcoll_bin_image (Usuobjcollection.get_o_usmf_hdr_id ^ ".usbin");		
+				Uslog.logf log_mpf Uslog.Info "Collection binary filename: %s" !Usuobjcollection.o_binary_image_filename;
+				Usbin.generate_uobjcoll_bin_image (!Usuobjcollection.o_binary_image_filename);		
 			end
 		;
 
