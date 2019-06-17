@@ -5,6 +5,7 @@
 
 open Usconfig
 open Uslog
+open Usextbinutils
 open Usuobjcollection
 
 module Usbin =
@@ -50,6 +51,66 @@ module Usbin =
 			Printf.fprintf oc "\n";
 
 			close_out oc;
+
+		()
+	;;
+
+
+	(*--------------------------------------------------------------------------*)
+	(* generate uobj collection header binary *)
+	(*--------------------------------------------------------------------------*)
+	let generate_uobjcoll_hdr_bin () = 
+		Uslog.logf log_tag Uslog.Info "Generating uobjcoll hdr binary...";
+
+(*
+		let (pestatus, pesignal, cc_outputfilename) = 
+			Usextbinutils.compile_cfile uobjcoll_info_table_filename (uobjcoll_info_table_filename ^ ".o") 
+				(Usconfig.get_std_incdirs ())	(Usconfig.get_std_defines ()) in
+			if (pesignal == true) || (pestatus != 0) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in compiling %s!" uobjcoll_info_table_filename;
+						ignore(exit 1);
+				end
+			else
+				begin
+						Uslog.logf log_tag Uslog.Info "Compiled %s successfully" uobjcoll_info_table_filename;
+				end
+			;
+
+		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
+						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
+							{f_name = "data";	
+								f_subsection_list = [ ".data" ];	
+								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
+								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								};
+							};
+				
+		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
+			(uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) uobjcoll_info_table_lscript_sections in
+			
+		
+		(* build uobj collection info table binary *)
+		let uobj_libdirs_list = ref [] in
+		let uobj_libs_list = ref [] in
+		let (pestatus, pesignal) = 
+				(Usextbinutils.link_uobj  
+					[uobjcoll_info_table_filename]
+					!uobj_libdirs_list !uobj_libs_list
+					uobjcoll_info_table_lscript (uobjcoll_info_table_filename ^ ".elf")
+				) in
+				if (pesignal == true) || (pestatus != 0) then
+					begin
+							Uslog.logf log_tag Uslog.Error "in building uobj collection info table binary!";
+							ignore(exit 1);
+					end
+				else
+					begin
+							Uslog.logf log_tag Uslog.Info "Built uobj collection info table binary";
+					end
+				;
+*)
 
 		()
 	;;

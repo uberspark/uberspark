@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o usextbinutils.o -package unix -package uslog -package usosservices -linkpkg usextbinutils.ml
+	$(OCAMLC) -o usextbinutils.o -package unix -package usconfig -package uslog -package usosservices -linkpkg usextbinutils.ml
 	ocamlfind remove usextbinutils 
 	ocamlfind install usextbinutils META usextbinutils.cmi usextbinutils.cmo usextbinutils.o 
 

@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+open Usconfig
 open Uslog
 open Usosservices
 
@@ -107,6 +108,27 @@ module Usextbinutils =
 						Usosservices.exec_process_withlog 
 						tool_ar !ar_cmdline true usextbinutils_tag in
 				(ar_pestatus, ar_pesignal) 
+	;;
+
+
+
+	let mkbin_from_cfile p_cfilename p_hashtbl_lscript_sections p_binfilename = 
+		let retval = ref false in 
+		let (pestatus, pesignal, cc_outputfilename) = 
+			compile_cfile p_cfilename (p_cfilename ^ ".o") 
+				(Usconfig.get_std_incdirs ())	(Usconfig.get_std_defines ()) in
+			if (pesignal == true) || (pestatus != 0) then
+				begin
+						Uslog.logf usextbinutils_tag Uslog.Error "in compiling %s!" p_cfilename;
+						retval := false;
+				end
+			else
+				begin
+						Uslog.logf usextbinutils_tag Uslog.Info "Compiled %s successfully" p_cfilename;
+				end
+			;
+
+	
 	;;
 
 
