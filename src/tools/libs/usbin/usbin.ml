@@ -40,8 +40,8 @@ module Usbin =
 
 				Printf.fprintf oc "\n\t},";
 
-				Printf.fprintf oc "\n\t0x%08xULL" 0;
-				Printf.fprintf oc "\n\t0x%08xULL" 0;
+				Printf.fprintf oc "\n\t0x%08xULL," 0;
+				Printf.fprintf oc "\n\t0x%08xULL," 0;
 
 				Printf.fprintf oc "\n\t{";
 
