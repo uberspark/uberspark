@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+open Ustypes
 open Usconfig
 open Uslog
 open Usextbinutils
@@ -53,14 +54,13 @@ module Usbin =
 			close_out oc;
 
 			(uobj_hfilename)
-		()
 	;;
 
 
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection header binary *)
 	(*--------------------------------------------------------------------------*)
-	let generate_uobjcoll_hdr_bin p_uobjcoll_hdr_filename () = 
+	let generate_uobjcoll_hdr_bin p_uobjcoll_hdr_filename = 
 		Uslog.logf log_tag Uslog.Info "Generating uobjcoll hdr binary...";
 
 		let uobjcoll_hdr_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
@@ -77,12 +77,12 @@ module Usbin =
 		let status = Usextbinutils.mkbin_from_cfile p_uobjcoll_hdr_filename uobjcoll_hdr_lscript_sections (p_uobjcoll_hdr_filename) 0 0x2000 in 
 			if (status == false) then
 				begin
-						Uslog.logf log_tag Uslog.Error "in generating uobjcoll hdr binary: %s!" uobjcoll_info_table_filename;
+						Uslog.logf log_tag Uslog.Error "in generating uobjcoll hdr binary: %s!" p_uobjcoll_hdr_filename;
 						ignore(exit 1);
 				end
 			else
 				begin
-						Uslog.logf log_tag Uslog.Info "generated uobjcoll hdr binary (%s) successfully" uobjcoll_info_table_filename;
+						Uslog.logf log_tag Uslog.Info "generated uobjcoll hdr binary (%s) successfully" p_uobjcoll_hdr_filename;
 				end
 			;
 
@@ -146,7 +146,9 @@ module Usbin =
 	let generate_uobjcoll_bin_image uobjcoll_bin_image_filename = 
 
 		(* generate uobj collection header source *)
-		generate_uobjcoll_hdr_src ();
+		let uobjcoll_hdr_filename = generate_uobjcoll_hdr_src () in
+			
+			generate_uobjcoll_hdr_bin uobjcoll_hdr_filename;
 
 		(* generate uobj collection info table *)
 		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
