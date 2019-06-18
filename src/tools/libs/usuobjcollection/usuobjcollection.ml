@@ -354,7 +354,7 @@ module Usuobjcollection =
 	(* generate uobj collection info table *)
 	(*--------------------------------------------------------------------------*)
 	let build_uobjcoll_info_table uobjcoll_info_table_filename = 
-		let (pestatus, pesignal, cc_outputfilename) = 
+(*		let (pestatus, pesignal, cc_outputfilename) = 
 			Usextbinutils.compile_cfile uobjcoll_info_table_filename (uobjcoll_info_table_filename ^ ".o") 
 				(Usconfig.get_std_incdirs ())	(Usconfig.get_std_defines ()) in
 			if (pesignal == true) || (pestatus != 0) then
@@ -367,6 +367,7 @@ module Usuobjcollection =
 						Uslog.logf log_tag Uslog.Info "Compiled %s successfully" uobjcoll_info_table_filename;
 				end
 			;
+*)
 
 		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
@@ -377,11 +378,22 @@ module Usuobjcollection =
 								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
 								};
 							};
-				
-		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
-			(uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) uobjcoll_info_table_lscript_sections in
-			
+
 		
+		let status = Usextbinutils.mkbin_from_cfile uobjcoll_info_table_filename uobjcoll_info_table_lscript_sections (uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) in 
+			if (status == false) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in generating uobjcoll info table binary: %s!" uobjcoll_info_table_filename;
+						ignore(exit 1);
+				end
+			else
+				begin
+						Uslog.logf log_tag Uslog.Info "generated uobjcoll info table binary (%s) successfully" uobjcoll_info_table_filename;
+				end
+			;
+
+						
+(*		
 		(* build uobj collection info table binary *)
 		let uobj_libdirs_list = ref [] in
 		let uobj_libs_list = ref [] in
@@ -402,7 +414,7 @@ module Usuobjcollection =
 					end
 				;
 
-
+*)
 
 		()
 	;;
@@ -416,7 +428,7 @@ module Usuobjcollection =
 		uobjcoll_info_table_binary_filename =
 		
 		let input_filename_list = ref [] in
-
+(*
 		(* generate flat-form binary for uobj info table *)
 		let (pestatus, pesignal) = 
 		(Usextbinutils.mkbin
@@ -429,6 +441,7 @@ module Usuobjcollection =
 					ignore(exit 1);
 			end
 		;
+*)
  
 		(* add uobj info table flat-form binary filename to list of files to be*)
 		(* concatentated*)

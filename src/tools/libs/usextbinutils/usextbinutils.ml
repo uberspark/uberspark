@@ -257,6 +257,7 @@ module Usextbinutils =
 				end
 			;
 
+		(!retval)
 	;;
 
 
