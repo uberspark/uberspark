@@ -52,6 +52,7 @@ module Usbin =
 
 			close_out oc;
 
+			(uobj_hfilename)
 		()
 	;;
 
@@ -59,8 +60,32 @@ module Usbin =
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection header binary *)
 	(*--------------------------------------------------------------------------*)
-	let generate_uobjcoll_hdr_bin () = 
+	let generate_uobjcoll_hdr_bin p_uobjcoll_hdr_filename () = 
 		Uslog.logf log_tag Uslog.Info "Generating uobjcoll hdr binary...";
+
+		let uobjcoll_hdr_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
+						Hashtbl.add uobjcoll_hdr_lscript_sections 0 
+							{f_name = "data";	
+								f_subsection_list = [ ".data" ];	
+								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+								f_size = 0x2000;
+								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								};
+							};
+
+		
+		let status = Usextbinutils.mkbin_from_cfile p_uobjcoll_hdr_filename uobjcoll_hdr_lscript_sections (p_uobjcoll_hdr_filename) 0 0x2000 in 
+			if (status == false) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in generating uobjcoll hdr binary: %s!" uobjcoll_info_table_filename;
+						ignore(exit 1);
+				end
+			else
+				begin
+						Uslog.logf log_tag Uslog.Info "generated uobjcoll hdr binary (%s) successfully" uobjcoll_info_table_filename;
+				end
+			;
+
 
 (*
 		let (pestatus, pesignal, cc_outputfilename) = 
