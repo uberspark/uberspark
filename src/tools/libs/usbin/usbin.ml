@@ -90,7 +90,7 @@ module Usbin =
 		()
 	;;
 
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
@@ -118,5 +118,37 @@ module Usbin =
 
 		()
 	;;
-							
+*)
+
+
+	(*--------------------------------------------------------------------------*)
+	(* generate uobj collection binary image *)
+	(*--------------------------------------------------------------------------*)
+	let generate_uobjcoll_bin_image uobjcoll_bin_image_filename = 
+		Uslog.logf log_tag Uslog.Info "Proceeding to generate uobjcoll binary ('%s')..." uobjcoll_bin_image_filename;
+
+
+		(* TBD: generate uobj collection info table? *)
+
+			
+		(* build individidual uobjs that are part of the collection *)
+		Usuobjcollection.build "" true;
+	
+		(* debug *)
+		Hashtbl.iter (fun key uobj ->  
+			Uslog.logf log_tag Uslog.Info "uobj id: %s" uobj#get_o_usmf_hdr_id;
+			Uslog.logf log_tag Uslog.Info "uobj path: %s" uobj#get_o_uobj_dir_abspathname;
+		) Usuobjcollection.uobj_hashtbl;
+	
+	
+		(* generate uobj collection header *)
+		let uobjcoll_hdr_filename = generate_uobjcoll_hdr_src () in
+			generate_uobjcoll_hdr_bin uobjcoll_hdr_filename;
+
+
+		()
+	;;
+														
+																												
+																																																								
 	end
