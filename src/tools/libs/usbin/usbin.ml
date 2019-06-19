@@ -66,6 +66,45 @@ module Usbin =
 	;;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* generate source for uobj collection header *)
+	(*--------------------------------------------------------------------------*)
+	let generate_src_uobjcoll_hdr_def p_uobjcoll_load_addr p_uobjcoll_size 
+		p_uobjcoll_total_uobjs =  
+		let src_uobjcoll_hdr_def_string = ref "" in
+		
+		(* hdr *)
+		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+			Printf.sprintf "\n\t{"; 
+			(*magic*)
+			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+				Printf.sprintf "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJCOLL,"; 
+			(*num_sections*)
+			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+				Printf.sprintf "\n\t\t0x%08xUL," p_uobjcoll_total_uobjs; 
+			(*aligned_at*)
+			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+				Printf.sprintf "\n\t\t0x%08xUL," 0x10000; 
+			(*pad_to*)
+			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+				Printf.sprintf "\n\t\t0x%08xUL," 0x10000; 
+			(*size*)
+			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+				Printf.sprintf "\n\t\t%sUL," (Usconfig.get_default_uobjcoll_hdr_size()); 
+		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+			Printf.sprintf "\n\t},"; 
+
+		(* load_addr *)
+		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+			Printf.sprintf "\n\t0x%08xULL," p_uobjcoll_load_addr; 
+		(* load_size *)
+		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
+			Printf.sprintf "\n\t0x%08xULL," p_uobjcoll_size; 
+
+
+		(!src_uobjcoll_hdr_def_string)
+	;;
+
 
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection header source *)
