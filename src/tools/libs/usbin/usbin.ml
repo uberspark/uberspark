@@ -135,9 +135,14 @@ module Usbin =
 		Usuobjcollection.build "" true;
 	
 		(* debug *)
+		Uslog.logf log_tag Uslog.Info "uobj collection load_addr: 0x%08x" !Usuobjcollection.o_load_addr;
+		Uslog.logf log_tag Uslog.Info "uobj collection size: 0x%08x" !Usuobjcollection.o_size;
+
 		Hashtbl.iter (fun key uobj ->  
 			Uslog.logf log_tag Uslog.Info "uobj id: %s" uobj#get_o_usmf_hdr_id;
 			Uslog.logf log_tag Uslog.Info "uobj path: %s" uobj#get_o_uobj_dir_abspathname;
+			Uslog.logf log_tag Uslog.Info "uobj load_addr: 0x%08x" uobj#get_o_uobj_load_addr;
+			Uslog.logf log_tag Uslog.Info "uobj size: 0x%08x" uobj#get_o_uobj_size;
 		) Usuobjcollection.uobj_hashtbl;
 	
 	

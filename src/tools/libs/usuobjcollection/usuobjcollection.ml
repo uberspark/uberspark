@@ -37,7 +37,12 @@ module Usuobjcollection =
 	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
 	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
+	(* uobj collection load address *)
 	let o_load_addr = ref 0;;
+
+	(* uobj collection size, in bytes *)
+	let o_size = ref 0;;
+
 
 	let o_usmf_hdr_id = ref "";;
 
@@ -270,10 +275,12 @@ module Usuobjcollection =
 		let uobj_load_addr = ref 0 in
 		uobj_load_addr := uobjcoll_load_addr + (Usconfig.get_sizeof_uobjcoll_info_t());
 		o_load_addr := uobjcoll_load_addr;
+		o_size := 0;
 
 		Hashtbl.iter (fun key uobj ->  
 				uobj#consolidate_sections_with_memory_map !uobj_load_addr uobjcoll_uobjsize;
 				uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;
+				o_size := !o_size + uobj#get_o_uobj_size;
 		) uobj_hashtbl;
 
 		()
