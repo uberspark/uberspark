@@ -16,6 +16,58 @@ module Usbin =
 
 
 	(*--------------------------------------------------------------------------*)
+	(* generate source for uobj section definitions *)
+	(*--------------------------------------------------------------------------*)
+	let generate_src_uobjs_section_def p_uobj_hashtbl p_uobjcoll_load_addr = 
+		let src_uobjs_section_def_string = ref "" in
+		
+		src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+			Printf.sprintf "\n\t{"; 
+
+
+		Hashtbl.iter (fun key uobj ->  
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t{"; 
+
+			(* type *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\tUSBINFORMAT_SECTION_TYPE_UOBJ,"; 
+			(* prot *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
+			(* va_offset *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - p_uobjcoll_load_addr); 
+			(* file_offset *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - p_uobjcoll_load_addr); 
+			(* size *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_size); 
+			(* aligned_at *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0x%8xUL," 0x1000; 
+			(* pad_to *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0x%8xUL," 0x1000; 
+			(* reserved *)
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t\t0ULL"; 
+
+
+			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+				Printf.sprintf "\n\t\t},"; 
+		) p_uobj_hashtbl;
+
+		src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
+			Printf.sprintf "\n\t}"; 
+
+		(!src_uobjs_section_def_string)
+	;;
+
+
+
+	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection header source *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_hdr_src () = 

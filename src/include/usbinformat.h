@@ -70,6 +70,10 @@
 #define USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS					0xb
 #define USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS					0xc
 
+//section prot
+#define USBINFORMAT_SECTION_PROT_RESERVED						0x0
+
+
 //max section count within uobjcoll header is equal to the max number of
 //uobjs plus the section for entry sentinels
 #define USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS	(USCONFIG_UOBJCOLL_MAX_UOBJS+1)
