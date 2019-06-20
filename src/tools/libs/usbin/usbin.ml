@@ -16,98 +16,7 @@ module Usbin =
 
 
 	(*--------------------------------------------------------------------------*)
-	(* generate source for uobj section definitions *)
-	(*--------------------------------------------------------------------------*)
-	let generate_src_uobjs_section_def p_uobj_hashtbl p_uobjcoll_load_addr = 
-		let src_uobjs_section_def_string = ref "" in
-		
-		src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-			Printf.sprintf "\n\t{"; 
-
-
-		Hashtbl.iter (fun key uobj ->  
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t{"; 
-
-			(* type *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\tUSBINFORMAT_SECTION_TYPE_UOBJ,"; 
-			(* prot *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
-			(* va_offset *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - p_uobjcoll_load_addr); 
-			(* file_offset *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - p_uobjcoll_load_addr); 
-			(* size *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_size); 
-			(* aligned_at *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0x%8xUL," 0x1000; 
-			(* pad_to *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0x%8xUL," 0x1000; 
-			(* reserved *)
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t\t0ULL"; 
-
-
-			src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-				Printf.sprintf "\n\t\t},"; 
-		) p_uobj_hashtbl;
-
-		src_uobjs_section_def_string := !src_uobjs_section_def_string ^ 
-			Printf.sprintf "\n\t}"; 
-
-		(!src_uobjs_section_def_string)
-	;;
-
-
-	(*--------------------------------------------------------------------------*)
-	(* generate source for uobj collection header *)
-	(*--------------------------------------------------------------------------*)
-	let generate_src_uobjcoll_hdr_def p_uobjcoll_load_addr p_uobjcoll_size 
-		p_uobjcoll_total_uobjs =  
-		let src_uobjcoll_hdr_def_string = ref "" in
-		
-		(* hdr *)
-		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-			Printf.sprintf "\n\t{"; 
-			(*magic*)
-			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-				Printf.sprintf "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJCOLL,"; 
-			(*num_sections*)
-			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-				Printf.sprintf "\n\t\t0x%08xUL," p_uobjcoll_total_uobjs; 
-			(*aligned_at*)
-			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-				Printf.sprintf "\n\t\t0x%08xUL," 0x10000; 
-			(*pad_to*)
-			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-				Printf.sprintf "\n\t\t0x%08xUL," 0x10000; 
-			(*size*)
-			src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-				Printf.sprintf "\n\t\t%sUL," (Usconfig.get_default_uobjcoll_hdr_size()); 
-		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-			Printf.sprintf "\n\t},"; 
-
-		(* load_addr *)
-		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-			Printf.sprintf "\n\t0x%08xULL," p_uobjcoll_load_addr; 
-		(* load_size *)
-		src_uobjcoll_hdr_def_string := !src_uobjcoll_hdr_def_string ^ 
-			Printf.sprintf "\n\t0x%08xULL," p_uobjcoll_size; 
-
-
-		(!src_uobjcoll_hdr_def_string)
-	;;
-
-
-	(*--------------------------------------------------------------------------*)
-	(* generate uobj collection header c file *)
+	(* generate uobj collection header source file *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_hdr_src () = 
 			Uslog.logf log_tag Uslog.Info "Generating uobjcoll hdr source...";
@@ -156,15 +65,15 @@ module Usbin =
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
 				(* va_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
+				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
 				(* file_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
+				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
 				(* size *)
-				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_size); 
+				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_size); 
 				(* aligned_at *)
-				Printf.fprintf oc "\n\t\t\t0x%8xUL," 0x1000; 
+				Printf.fprintf oc "\n\t\t\t0x%08xUL," 0x1000; 
 				(* pad_to *)
-				Printf.fprintf oc "\n\t\t\t0x%8xUL," 0x1000; 
+				Printf.fprintf oc "\n\t\t\t0x%08xUL," 0x1000; 
 				(* reserved *)
 				Printf.fprintf oc "\n\t\t\t0ULL"; 
 				Printf.fprintf oc "\n\t\t},"; 
