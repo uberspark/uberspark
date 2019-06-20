@@ -7,6 +7,7 @@ open Ustypes
 open Usconfig
 open Uslog
 open Usextbinutils
+open Usosservices
 open Usuobjcollection
 
 module Usbin =
@@ -185,6 +186,17 @@ module Usbin =
 		let uobjcoll_hdr_filename = generate_uobjcoll_hdr_src () in
 			generate_uobjcoll_hdr_bin uobjcoll_hdr_filename;
 
+		(* concatenate uobj collection header and uobjs *)
+		let input_filename_list = ref [] in
+		input_filename_list := !input_filename_list @ [ uobjcoll_hdr_filename ^ ".bin"];
+
+		Hashtbl.iter (fun key uobj ->  
+				input_filename_list := !input_filename_list @ [ (uobj#get_o_uobj_dir_abspathname ^ "/" ^ uobj#get_o_usmf_hdr_id ^ ".bin") ];
+		) Usuobjcollection.uobj_hashtbl;
+
+	  Usosservices.file_concat uobjcoll_bin_image_filename !input_filename_list;
+
+		Uslog.logf log_tag Uslog.Info "Generated uobjcoll binary ('%s') successfully!" uobjcoll_bin_image_filename;
 
 		()
 	;;
