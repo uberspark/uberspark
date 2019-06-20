@@ -225,7 +225,7 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
-				uobj#initialize o_uobjcoll_sentineltypes_hashtbl;
+				uobj#initialize o_uobjcoll_sentineltypes_hashtbl !o_section_alignment;
 
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
