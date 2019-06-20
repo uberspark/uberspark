@@ -87,6 +87,17 @@ let cmdopt_arch_set
 	cmdopt_arch := value;
 	;;
 
+
+let cmdopt_section_alignment_specified = ref false;;
+let cmdopt_section_alignment = ref "";;
+let cmdopt_section_alignment_set 
+	(value : string) = 
+	cmdopt_section_alignment_specified := true;
+	cmdopt_section_alignment := value;
+	;;
+
+
+
 let cmdopt_info = ref false;;
 
 let cmdopt_uobjcoll_specified = ref false;;
@@ -134,6 +145,8 @@ let cmdline_speclist = [
 	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
 	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
 	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
+
+	("--section-alignment", Arg.String (cmdopt_section_alignment_set), "set section alignment (4K, 2M or 4M)");
 
 	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
 	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
