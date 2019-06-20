@@ -43,6 +43,9 @@ module Usuobjcollection =
 	(* uobj collection size, in bytes *)
 	let o_size = ref 0;;
 
+	(* uobj collection section alignment *)
+	let o_section_alignment = ref 0;;
+
 	(* total uobjs within uobj collection *)
 	let o_total_uobjs = ref 0;;
 
@@ -66,7 +69,7 @@ module Usuobjcollection =
 	(* keep_temp_files = true if temp files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
 	let init_build_configuration 
-				usmf_filename build_dir keep_temp_files = 
+				usmf_filename build_dir keep_temp_files p_section_alignment = 
 
 		(* compute the canonical path of the manifest filename *)
 		let (retval, retval_path) = Usosservices.abspath usmf_filename in
@@ -203,6 +206,9 @@ module Usuobjcollection =
 
 		(* store uobj collection binary filename *)
 		o_binary_image_filename := (usmf_hdr_id ^ ".usbin");
+
+		(* store section alignment *)
+		o_section_alignment := p_section_alignment;
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
