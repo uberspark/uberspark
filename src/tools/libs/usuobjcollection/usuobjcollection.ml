@@ -392,7 +392,9 @@ module Usuobjcollection =
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
-								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								f_aligned_at = !o_section_alignment; 
+								f_pad_to = !o_section_alignment; 
+								f_reserved = 0;
 								};
 							};
 
