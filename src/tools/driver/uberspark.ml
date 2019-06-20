@@ -372,6 +372,18 @@ let main () =
 		begin
 				
 
+		(* select section alignment based on command line argument *)
+		let section_alignment = ref 0 in
+			if !cmdopt_section_alignment_specified == true then
+					begin
+						section_alignment := int_of_string(!cmdopt_section_alignment);
+					end
+			else
+					begin
+						section_alignment := int_of_string(Usconfig.get_default_section_alignment());
+					end
+			;
+
 
 		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjcollmf;

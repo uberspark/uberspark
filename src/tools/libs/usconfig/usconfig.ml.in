@@ -95,6 +95,10 @@ module Usconfig =
 	let default_uobjcoll_hdr_size = "0x01000000";;
 	let get_default_uobjcoll_hdr_size () = (default_uobjcoll_hdr_size);;
 
+	let default_section_alignment = "0x00200000";;
+	let get_default_section_alignment () = (default_section_alignment);;
+
+
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
 	(* also check include/uberspark.h for sentinel definitions *)
