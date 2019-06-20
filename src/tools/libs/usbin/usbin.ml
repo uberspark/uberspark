@@ -107,7 +107,7 @@ module Usbin =
 
 
 	(*--------------------------------------------------------------------------*)
-	(* generate uobj collection header source *)
+	(* generate uobj collection header c file *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_hdr_src () = 
 			Uslog.logf log_tag Uslog.Info "Generating uobjcoll hdr source...";
@@ -127,17 +127,52 @@ module Usbin =
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) usbinformat_uobjcoll_hdr_t uobjcoll_hdr = {";
 
-				Printf.fprintf oc "\n\t{";
-
-				Printf.fprintf oc "\n\t},";
-
-				Printf.fprintf oc "\n\t0x%08xULL," 0;
-				Printf.fprintf oc "\n\t0x%08xULL," 0;
-
-				Printf.fprintf oc "\n\t{";
-
-				Printf.fprintf oc "\n\t},";
-
+			(* generate common header *)
+			(* hdr *)
+			Printf.fprintf oc "\n\t{"; 
+			(*magic*)
+			Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJCOLL,"; 
+			(*num_sections*)
+			Printf.fprintf oc "\n\t\t0x%08xUL," !Usuobjcollection.o_total_uobjs; 
+			(*aligned_at*)
+			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
+			(*pad_to*)
+			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
+			(*size*)
+			Printf.fprintf oc "\n\t\t%sUL," (Usconfig.get_default_uobjcoll_hdr_size()); 
+			Printf.fprintf oc "\n\t},"; 
+			(* load_addr *)
+			Printf.fprintf oc "\n\t0x%08xULL," !Usuobjcollection.o_load_addr; 
+			(* load_size *)
+			Printf.fprintf oc "\n\t0x%08xULL," !Usuobjcollection.o_size; 
+			
+			(* generate section def list for uobjs *)
+			Printf.fprintf oc "\n\t{"; 
+			
+			Hashtbl.iter (fun key uobj ->  
+				Printf.fprintf oc "\n\t\t{"; 
+				(* type *)
+				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_TYPE_UOBJ,"; 
+				(* prot *)
+				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
+				(* va_offset *)
+				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
+				(* file_offset *)
+				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
+				(* size *)
+				Printf.fprintf oc "\n\t\t\t0x%8xULL," (uobj#get_o_uobj_size); 
+				(* aligned_at *)
+				Printf.fprintf oc "\n\t\t\t0x%8xUL," 0x1000; 
+				(* pad_to *)
+				Printf.fprintf oc "\n\t\t\t0x%8xUL," 0x1000; 
+				(* reserved *)
+				Printf.fprintf oc "\n\t\t\t0ULL"; 
+				Printf.fprintf oc "\n\t\t},"; 
+			) Usuobjcollection.uobj_hashtbl;
+			
+			Printf.fprintf oc "\n\t},"; 
+	
+			(* generate epilogue *)
 			Printf.fprintf oc "\n};";
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
