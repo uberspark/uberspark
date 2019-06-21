@@ -399,15 +399,21 @@ let main () =
 
 
 		(* create uobj collection *)
-		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjcollmf;
+		Uslog.logf log_mpf Uslog.Info "Proceeding to initialize uobj collection using: %s..." !cmdopt_uobjcollmf;
 		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
 		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr)) (int_of_string(!cmdopt_uobjsize));
-		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+		Uslog.logf log_mpf Uslog.Info "Initialized uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+
+	
+
 
 		(* if we are building *)
 		if !copt_builduobj == true then
 			begin
+				Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj collection...";
+				Usuobjcollection.compile "" true;
+				Uslog.logf log_mpf Uslog.Info "Successfully compiled uobj collection.";
 				Uslog.logf log_mpf Uslog.Info "Collection binary filename: %s" !Usuobjcollection.o_binary_image_filename;
 				Usbin.generate_uobjcoll_bin_image (!Usuobjcollection.o_binary_image_filename);		
 			end
