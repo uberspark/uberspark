@@ -393,10 +393,12 @@ let main () =
 					end
 			;
 
+		Uslog.logf log_mpf Uslog.Info "setting page size...";
+
 		(* setup page size *)
 		if !cmdopt_page_size_specified == true then
 					begin
-						Usconfig.set_page_size (int_of_string(!cmdopt_page_size));
+						Usconfig.page_size := (int_of_string(!cmdopt_page_size));
 					end
 			;
 

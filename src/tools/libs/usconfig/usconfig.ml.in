@@ -100,8 +100,6 @@ module Usconfig =
 
 	(* memory page size *)
 	let page_size = ref 0x00200000;;
-	let get_page_size = !page_size;;
-	let set_page_size p_page_size = (page_size := p_page_size);;
 
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
