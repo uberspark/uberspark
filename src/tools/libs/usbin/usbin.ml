@@ -104,13 +104,17 @@ module Usbin =
 							{f_name = "data";	
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
-								f_size = 0x2000;
-								f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());
+								f_aligned_at = !Usuobjcollection.o_section_alignment; 
+								f_pad_to = !Usuobjcollection.o_section_alignment; 
+								f_reserved = 0;
 								};
 							};
 
 		
-		let status = Usextbinutils.mkbin_from_cfile p_uobjcoll_hdr_filename uobjcoll_hdr_lscript_sections (p_uobjcoll_hdr_filename) 0 0x2000 in 
+		let status = Usextbinutils.mkbin_from_cfile p_uobjcoll_hdr_filename uobjcoll_hdr_lscript_sections 
+			(p_uobjcoll_hdr_filename) 0 
+			(int_of_string(Usconfig.get_default_uobjcoll_hdr_size ())) in 
 			if (status == false) then
 				begin
 						Uslog.logf log_tag Uslog.Error "in generating uobjcoll hdr binary: %s!" p_uobjcoll_hdr_filename;
