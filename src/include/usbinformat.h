@@ -83,7 +83,7 @@
 #ifndef __ASSEMBLY__
 
 //////
-// uobjcoll binary generic header type definition
+// uobj/uobjcoll binary generic header type definition
 //////
 typedef struct {
 	uint32_t magic;			//header magic
@@ -97,7 +97,7 @@ typedef struct {
 
 
 //////
-// uobjcoll binary generic section type definition
+// uobj/uobjcoll binary generic section type definition
 //////
 
 typedef struct {
@@ -113,7 +113,7 @@ typedef struct {
 
 
 //////
-// uobjcoll binary main header type definition
+// uobjcoll binary header type definition
 //////
 
 typedef struct {
@@ -125,7 +125,7 @@ typedef struct {
 } __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
 
 
-
+/*
 //////
 // uobjcoll binary entry sentinels header type definition
 //////
@@ -134,10 +134,10 @@ typedef struct {
 	usbinformat_hdr_t hdr;	//generic header fields
 	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_ENTRYSENTINELS_HDR_MAX_SECTIONS]; //uobjcoll section descriptions
 } __attribute__((packed)) usbinformat_entrysentinels_hdr_t;
-
+*/
 
 //////
-// uobjcoll binary uobj header type definition
+// uobj binary header type definition
 //////
 
 typedef struct {
