@@ -132,35 +132,18 @@ module Usbin =
 		()
 	;;
 
-(*
+
+
 	(*--------------------------------------------------------------------------*)
-	(* generate uobj collection binary image *)
+	(* generate binary images for a given uobj within the collection *)
 	(*--------------------------------------------------------------------------*)
-	let generate_uobjcoll_bin_image uobjcoll_bin_image_filename = 
+	let generate_uobj_bin_image p_uobj_id p_uobj = 
+			Uslog.logf log_tag Uslog.Info "Proceeding to generate binary for uobj '%s'..." p_uobj_id; 
 
-		(* generate uobj collection header source *)
-		let uobjcoll_hdr_filename = generate_uobjcoll_hdr_src () in
-			
-			generate_uobjcoll_hdr_bin uobjcoll_hdr_filename;
 
-		(* generate uobj collection info table *)
-		Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
-		Uslog.logf log_tag Uslog.Info "Generated uobj collection info. table.";
-	
-		(* build uobj collection info table binary *)
-		Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
-		Uslog.logf log_tag Uslog.Info "Built uobj collection info. table binary.";
-	
-		(* build uobj collection by building individidual uobjs *)
-		Usuobjcollection.build "" true;
-	
-		(* build final image *)
-		Usuobjcollection.build_uobjcoll_binary_image uobjcoll_bin_image_filename
-		(Usconfig.get_std_uobjcoll_info_filename ());
-
+			Uslog.logf log_tag Uslog.Info "Successfully generated binary for uobj '%s'" p_uobj_id; 
 		()
 	;;
-*)
 
 
 	(*--------------------------------------------------------------------------*)
@@ -173,8 +156,25 @@ module Usbin =
 		(* TBD: generate uobj collection info table? *)
 
 			
-		(* build individidual uobjs that are part of the collection *)
-		Usuobjcollection.build "" true;
+		(* build binaries for individidual uobjs that are part of the collection *)
+		(* Usuobjcollection.build "" true; *)
+		Hashtbl.iter (fun uobj_id uobj ->  
+			let(rval, r_prevpath, r_curpath) = Usosservices.dir_change 
+				(uobj#get_o_uobj_dir_abspathname) in
+				if(rval == true) then 
+					begin
+						generate_uobj_bin_image uobj_id uobj;
+						ignore(Usosservices.dir_change r_prevpath);
+					end
+				else
+					begin
+						Uslog.logf log_tag Uslog.Error "could not change to uobj directory: %s" (uobj#get_o_uobj_dir_abspathname);
+						ignore (exit 1);
+					end
+				;
+			
+		) Usuobjcollection.uobj_hashtbl;
+
 	
 		(* debug *)
 		Uslog.logf log_tag Uslog.Info "uobj collection load_addr: 0x%08x" !Usuobjcollection.o_load_addr;
