@@ -45,7 +45,7 @@ module Usbin =
 			(*num_sections*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," !Usuobjcollection.o_total_uobjs; 
 			(*page_size*)
-			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
+			Printf.fprintf oc "\n\t\t0x%08xUL," Usconfig.get_page_size; 
 			(*aligned_at*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
 			(*pad_to*)

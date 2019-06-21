@@ -96,6 +96,14 @@ let cmdopt_section_alignment_set
 	cmdopt_section_alignment := value;
 	;;
 
+(* page size *)
+let cmdopt_page_size_specified = ref false;;
+let cmdopt_page_size = ref "";;
+let cmdopt_page_size_set 
+	(value : string) = 
+	cmdopt_page_size_specified := true;
+	cmdopt_page_size := value;
+	;;
 
 
 let cmdopt_info = ref false;;
@@ -147,6 +155,7 @@ let cmdline_speclist = [
 	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
 
 	("--section-alignment", Arg.String (cmdopt_section_alignment_set), "set section alignment (4K, 2M or 4M)");
+	("--page-size", Arg.String (cmdopt_page_size_set), "set page size (4K or 2M)");
 
 	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
 	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
@@ -381,6 +390,13 @@ let main () =
 			else
 					begin
 						section_alignment := int_of_string(Usconfig.get_default_section_alignment());
+					end
+			;
+
+		(* setup page size *)
+		if !cmdopt_page_size_specified == true then
+					begin
+						Usconfig.set_page_size (int_of_string(!cmdopt_page_size));
 					end
 			;
 
