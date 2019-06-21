@@ -178,7 +178,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".hdr" ];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
@@ -186,7 +186,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x100000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
@@ -194,7 +194,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".tstack" ];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x100000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
@@ -202,7 +202,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
@@ -210,7 +210,7 @@ class uobject = object(self)
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_stack" 
@@ -218,7 +218,7 @@ class uobject = object(self)
 				 	f_subsection_list = [".stack"];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
@@ -226,7 +226,7 @@ class uobject = object(self)
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
-													f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			
@@ -374,7 +374,7 @@ class uobject = object(self)
 							 	f_subsection_list = !subsections_list;	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 																f_size = int_of_string (List.nth x 2);
-																f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+																f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 															};
 							};
 
@@ -422,7 +422,7 @@ class uobject = object(self)
 														f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
 														f_size = x.s_length;
-														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -433,8 +433,8 @@ class uobject = object(self)
 														f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
 														f_size = x.s_length;
-														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
-													};
+														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
 					};
 			
 				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
@@ -451,7 +451,7 @@ class uobject = object(self)
 														f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
 														f_size = x.usbinformat.f_size;
-														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
+														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -462,8 +462,8 @@ class uobject = object(self)
 														f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
 														f_size = x.usbinformat.f_size;
-														f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
-													};
+														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
 					};
 
 				uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;
