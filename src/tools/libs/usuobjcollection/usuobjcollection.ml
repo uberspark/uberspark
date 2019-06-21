@@ -292,8 +292,8 @@ module Usuobjcollection =
 
 																								
 	(*--------------------------------------------------------------------------*)
-	(* build a uobj *)
-	(* build_dir = directory to use for building *)
+	(* compile a uobj collection *)
+	(* build_dir = directory to use for compilation *)
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
 	let compile build_dir keep_temp_files = 
@@ -303,7 +303,7 @@ module Usuobjcollection =
 				(uobj#get_o_uobj_dir_abspathname) in
 				if(rval == true) then 
 					begin
-						uobj#build build_dir keep_temp_files;
+						uobj#compile build_dir keep_temp_files;
 						ignore(Usosservices.dir_change r_prevpath);
 					end
 				else
@@ -318,7 +318,7 @@ module Usuobjcollection =
 		()
 	;;
 										
-																																																																																																
+(*																																																																																																
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection info table *)
 	(*--------------------------------------------------------------------------*)
@@ -359,8 +359,9 @@ module Usuobjcollection =
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								
 		()
 	;;
+*)
 
-																																																																																																
+(*																																																																																																																																																																																																
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection info table *)
 	(*--------------------------------------------------------------------------*)
@@ -404,7 +405,7 @@ module Usuobjcollection =
 						Uslog.logf log_tag Uslog.Info "generated uobjcoll info table binary (%s) successfully" uobjcoll_info_table_filename;
 				end
 			;
-
+*)
 						
 (*		
 		(* build uobj collection info table binary *)

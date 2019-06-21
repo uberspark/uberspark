@@ -140,6 +140,85 @@ module Usbin =
 	let generate_uobj_bin_image p_uobj_id p_uobj = 
 			Uslog.logf log_tag Uslog.Info "Proceeding to generate binary for uobj '%s'..." p_uobj_id; 
 
+(*
+			(* generate uobj header *)
+			(* use usmf_hdr_id as the uobj_name *)
+			let uobj_hdr_filename = 
+				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
+					o_uobj_sections_hashtbl in
+				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
+*)
+
+(*
+		(* generate uobj linker script *)
+			(* use usmf_hdr_id as the uobj_name *)
+			let uobj_linker_script_filename =	
+				Usuobjgen.generate_linker_script 
+					!o_usmf_hdr_id (self#get_o_uobj_load_addr) (self#get_o_uobj_size) 
+					uobj_sections_memory_map_hashtbl_byorigin in
+				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+*)
+
+
+(*																		
+			(*TBD only do uobj_hdr_filename *)
+			(* compile all the cfiles *)							
+			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
+					(Usconfig.get_std_incdirs ())
+					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
+*)
+
+
+(*				
+			(* link the uobj binary *)
+			Uslog.logf log_tag Uslog.Info "Proceeding to link uobj binary '%s'..."
+					!o_usmf_hdr_id;
+				let uobj_libdirs_list = ref [] in
+				let uobj_libs_list = ref [] in
+				let (pestatus, pesignal) = 
+						(Usextbinutils.link_uobj  
+							( !o_sentinels_source_file_list @
+								!o_usmf_sources_c_files @ 
+								[ uobj_hdr_filename ]
+							)
+							!uobj_libdirs_list !uobj_libs_list
+							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".elf")
+						) in
+						if (pesignal == true) || (pestatus != 0) then
+							begin
+									Uslog.logf log_tag Uslog.Error "in linking uobj binary '%s'!" !o_usmf_hdr_id;
+									ignore(exit 1);
+							end
+						else
+							begin
+									Uslog.logf log_tag Uslog.Info "Linked uobj binary '%s' successfully" !o_usmf_hdr_id;
+							end
+						;
+*)																																																																																																																							
+
+
+(* TBD make flat form binary out of this
+*)
+
+(*						
+			(* now create the lib archive *)
+			let (pestatus, pesignal) = 
+					(Usextbinutils.mklib  
+						!o_sentinels_lib_source_file_list
+						(self#get_o_uobj_sentinels_libname ^ ".a")
+					) in
+					if (pesignal == true) || (pestatus != 0) then
+						begin
+								Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
+								ignore(exit 1);
+						end
+					else
+						begin
+								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+						end
+					;
+*)
+
 
 			Uslog.logf log_tag Uslog.Info "Successfully generated binary for uobj '%s'" p_uobj_id; 
 		()

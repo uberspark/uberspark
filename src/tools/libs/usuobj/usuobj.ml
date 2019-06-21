@@ -712,9 +712,9 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
-		(* build uobj sentinels *)
+		(* compile uobj sentinels *)
 		(*--------------------------------------------------------------------------*)
-		method build_sentinels 
+		method compile_sentinels 
 			() = 
 			Uslog.logf log_tag Uslog.Info "Building sentinels for target (%s-%s-%s)...\r\n"
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
@@ -732,9 +732,9 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
-		(* build uobj sentinels lib *)
+		(* compile uobj sentinels lib *)
 		(*--------------------------------------------------------------------------*)
-		method build_sentinels_lib 
+		method compile_sentinels_lib 
 			() = 
 			(*let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
@@ -748,7 +748,8 @@ class uobject = object(self)
 					(Usconfig.get_std_defines () @
 					[ self#get_o_pp_definition ] @ 
 								Usconfig.get_std_define_asm ());
-			
+
+(*						
 			(* now create the lib archive *)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
@@ -765,6 +766,7 @@ class uobject = object(self)
 								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
 						end
 					;
+*)
 		
 			()
 		;
@@ -779,15 +781,15 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
-		(* build a uobj *)
+		(* compile a uobj *)
 		(* build_dir = directory to use for building *)
 		(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 		(*--------------------------------------------------------------------------*)
-		method build 
+		method compile 
 			(build_dir : string)
 			(keep_temp_files : bool) = 
 	
-			Uslog.logf log_tag Uslog.Info "Starting build in '%s' [%b]\n" build_dir keep_temp_files;
+			Uslog.logf log_tag Uslog.Info "Starting compilation in '%s' [%b]\n" build_dir keep_temp_files;
 			
 			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length !o_usmf_sources_c_files) 
@@ -802,7 +804,7 @@ class uobject = object(self)
 			(* generate sentinels lib *)
 			self#generate_sentinels_lib ();
 
-	
+	(*
 			(* generate uobj linker script *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_linker_script_filename =	
@@ -810,26 +812,36 @@ class uobject = object(self)
 					!o_usmf_hdr_id (self#get_o_uobj_load_addr) (self#get_o_uobj_size) 
 					uobj_sections_memory_map_hashtbl_byorigin in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
-
-					
+		*)
+		
+		(*						
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
 				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
 					o_uobj_sections_hashtbl in
 				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
+		*)
 
 			(* compile all sentinels *)							
-			self#build_sentinels ();
+			self#compile_sentinels ();
 									
 			(* compile sentinels lib *)
-			self#build_sentinels_lib ();						
-									
+			self#compile_sentinels_lib ();						
+
+(*																		
 			(* compile all the cfiles *)							
 			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
 					(Usconfig.get_std_incdirs ())
 					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
-		
+*)
+
+			(* compile all the cfiles *)							
+			self#compile_cfile_list (!o_usmf_sources_c_files) 
+					(Usconfig.get_std_incdirs ())
+					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
+
+(*				
 			(* link the uobj binary *)
 			Uslog.logf log_tag Uslog.Info "Proceeding to link uobj binary '%s'..."
 					!o_usmf_hdr_id;
@@ -854,13 +866,13 @@ class uobject = object(self)
 									Uslog.logf log_tag Uslog.Info "Linked uobj binary '%s' successfully" !o_usmf_hdr_id;
 							end
 						;
-																																																																																																																							
+*)																																																																																																																							
 																																																																																																																																																																																																			
-			Uslog.logf log_tag Uslog.Info "Done.\r\n";
+			Uslog.logf log_tag Uslog.Info "Compilation finished.\r\n";
 			()
 		;
 
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj info table *)
 	(*--------------------------------------------------------------------------*)
@@ -923,6 +935,9 @@ class uobject = object(self)
 		()
 	;
 
+*)
+
+(*
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj header *)
 	(*--------------------------------------------------------------------------*)
@@ -972,7 +987,7 @@ class uobject = object(self)
 			close_out oc;
 		(uobj_hdr_filename)
 	; 
-
+*)
 
 	(*--------------------------------------------------------------------------*)
 	(* install uobj *)
