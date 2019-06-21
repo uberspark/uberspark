@@ -95,7 +95,6 @@ typedef struct {
 } __attribute__((packed)) usbinformat_hdr_t;
 
 
-
 //////
 // uobj/uobjcoll binary generic section type definition
 //////
@@ -124,17 +123,6 @@ typedef struct {
 	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS];
 } __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
 
-
-/*
-//////
-// uobjcoll binary entry sentinels header type definition
-//////
-
-typedef struct {
-	usbinformat_hdr_t hdr;	//generic header fields
-	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_ENTRYSENTINELS_HDR_MAX_SECTIONS]; //uobjcoll section descriptions
-} __attribute__((packed)) usbinformat_entrysentinels_hdr_t;
-*/
 
 //////
 // uobj binary header type definition
