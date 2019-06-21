@@ -112,11 +112,7 @@ class uobject = object(self)
 		method get_o_uobj_size = !o_uobj_size;
 		method set_o_uobj_size size = (o_uobj_size := size);
 
-		(* uobj section alignment *)
-		val o_uobj_section_alignment = ref 0; 
-		method get_o_uobj_section_alignment = !o_uobj_section_alignment;
-		method set_o_uobj_section_alignment alignment = (o_uobj_section_alignment := alignment);
-				
+		
 		
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
 		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
@@ -146,10 +142,7 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		method initialize 
 			(sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
-			(p_section_alignment : int )
 			= 
-			(* store uobj section alignment)*)
-			self#set_o_uobj_section_alignment p_section_alignment;	
 				
 			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
 			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->

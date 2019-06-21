@@ -95,9 +95,13 @@ module Usconfig =
 	let default_uobjcoll_hdr_size = "0x01000000";;
 	let get_default_uobjcoll_hdr_size () = (default_uobjcoll_hdr_size);;
 
-	let default_section_alignment = "0x00200000";;
+	(*let default_section_alignment = "0x00200000";;
 	let get_default_section_alignment () = (default_section_alignment);;
+	*)
 
+	(* section alignment *)
+	let section_alignment = ref 0x00200000;;
+		
 	(* memory page size *)
 	let page_size = ref 0x00200000;;
 

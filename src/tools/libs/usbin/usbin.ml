@@ -107,8 +107,8 @@ module Usbin =
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());
-								f_aligned_at = !Usuobjcollection.o_section_alignment; 
-								f_pad_to = !Usuobjcollection.o_section_alignment; 
+								f_aligned_at = !Usconfig.section_alignment; 
+								f_pad_to = !Usconfig.section_alignment; 
 								f_reserved = 0;
 								};
 							};

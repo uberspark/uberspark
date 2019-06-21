@@ -43,9 +43,6 @@ module Usuobjcollection =
 	(* uobj collection size, in bytes *)
 	let o_size = ref 0;;
 
-	(* uobj collection section alignment *)
-	let o_section_alignment = ref 0;;
-
 	(* total uobjs within uobj collection *)
 	let o_total_uobjs = ref 0;;
 
@@ -69,7 +66,7 @@ module Usuobjcollection =
 	(* keep_temp_files = true if temp files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
 	let init_build_configuration 
-				usmf_filename build_dir keep_temp_files p_section_alignment = 
+				usmf_filename build_dir keep_temp_files = 
 
 		(* compute the canonical path of the manifest filename *)
 		let (retval, retval_path) = Usosservices.abspath usmf_filename in
@@ -207,9 +204,6 @@ module Usuobjcollection =
 		(* store uobj collection binary filename *)
 		o_binary_image_filename := (usmf_hdr_id ^ ".usbin");
 
-		(* store section alignment *)
-		o_section_alignment := p_section_alignment;
-
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
 	;;
@@ -225,7 +219,7 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
-				uobj#initialize o_uobjcoll_sentineltypes_hashtbl !o_section_alignment;
+				uobj#initialize o_uobjcoll_sentineltypes_hashtbl;
 
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
@@ -392,8 +386,8 @@ module Usuobjcollection =
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
-								f_aligned_at = !o_section_alignment; 
-								f_pad_to = !o_section_alignment; 
+								f_aligned_at = !Usconfig.section_alignment; 
+								f_pad_to = !Usconfig.section_alignment; 
 								f_reserved = 0;
 								};
 							};

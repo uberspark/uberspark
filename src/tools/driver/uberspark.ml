@@ -381,31 +381,26 @@ let main () =
 		begin
 				
 
-		(* select section alignment based on command line argument *)
-		let section_alignment = ref 0 in
-			if !cmdopt_section_alignment_specified == true then
-					begin
-						section_alignment := int_of_string(!cmdopt_section_alignment);
-					end
-			else
-					begin
-						section_alignment := int_of_string(Usconfig.get_default_section_alignment());
-					end
-			;
+		(* setup section alignment *)
+		if !cmdopt_section_alignment_specified == true then
+			begin
+				Usconfig.section_alignment := int_of_string(!cmdopt_section_alignment);
+			end
+		;
 
 		Uslog.logf log_mpf Uslog.Info "setting page size...";
 
 		(* setup page size *)
 		if !cmdopt_page_size_specified == true then
-					begin
-						Usconfig.page_size := (int_of_string(!cmdopt_page_size));
-					end
-			;
+			begin
+				Usconfig.page_size := (int_of_string(!cmdopt_page_size));
+			end
+		;
 
 
 		(* create uobj collection *)
 		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjcollmf;
-		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true !section_alignment;
+		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
 		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr)) (int_of_string(!cmdopt_uobjsize));
 		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
