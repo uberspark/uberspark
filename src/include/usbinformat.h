@@ -88,6 +88,7 @@
 typedef struct {
 	uint32_t magic;			//header magic
 	uint32_t num_sections;	//number of sections
+	uint32_t page_size;		//memory page size
 	uint32_t aligned_at;	//boundary that header is aligned at
 	uint32_t pad_to;		//boundary that header is padded to
 	uint64_t size;			//size of header

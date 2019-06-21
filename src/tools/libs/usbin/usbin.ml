@@ -44,6 +44,8 @@ module Usbin =
 			Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJCOLL,"; 
 			(*num_sections*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," !Usuobjcollection.o_total_uobjs; 
+			(*page_size*)
+			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
 			(*aligned_at*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," 0x10000; 
 			(*pad_to*)
