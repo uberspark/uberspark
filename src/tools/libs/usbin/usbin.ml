@@ -153,7 +153,7 @@ module Usbin =
 			Printf.fprintf oc "\n#include <usbinformat.h>";
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
-			Printf.fprintf oc "\n__attribute__(( section(\".data\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
+			Printf.fprintf oc "\n__attribute__(( section(\".hdr\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
 
 			(* generate common header *)
 			(* hdr *)
