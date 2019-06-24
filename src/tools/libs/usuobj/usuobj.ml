@@ -188,15 +188,15 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x100000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
-				 	f_subsection_list = [ ".tstack" ];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+				 	f_subsection_list = [ ".tstack"; ".stack" ];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x100000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -204,7 +204,7 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -212,23 +212,27 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
+				
+			(*	
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_stack" 
 				{ f_name = "uobj_stack";	
 				 	f_subsection_list = [".stack"];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_STACK; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
+			*)
+			
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
