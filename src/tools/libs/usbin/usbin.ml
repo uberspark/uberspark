@@ -200,25 +200,22 @@ module Usbin =
 (* TBD make flat form binary out of this
 *)
 
-(*						
-			(* now create the lib archive *)
-			let (pestatus, pesignal) = 
-					(Usextbinutils.mklib  
-						!o_sentinels_lib_source_file_list
-						(self#get_o_uobj_sentinels_libname ^ ".a")
-					) in
-					if (pesignal == true) || (pestatus != 0) then
-						begin
-								Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
-								ignore(exit 1);
-						end
-					else
-						begin
-								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
-						end
-					;
-*)
-
+		(* create uobj sentinel library archive *)
+		let (pestatus, pesignal) = 
+				(Usextbinutils.mklib  
+					p_uobj#get_o_sentinels_lib_source_file_list
+					(p_uobj#get_o_uobj_sentinels_libname ^ ".a")
+				) in
+				if (pesignal == true) || (pestatus != 0) then
+					begin
+							Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
+							ignore(exit 1);
+					end
+				else
+					begin
+							Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+					end
+				;
 
 			Uslog.logf log_tag Uslog.Info "Successfully generated binary for uobj '%s'" p_uobj_id; 
 		()
