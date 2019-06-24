@@ -9,6 +9,7 @@ open Uslog
 open Usextbinutils
 open Usosservices
 open Usuobjcollection
+open Usuobjgen
 
 module Usbin =
 	struct
@@ -226,15 +227,14 @@ module Usbin =
 				generate_uobj_hdr_src p_uobj in
 				Uslog.logf log_tag Uslog.Info "uobj header source file generated ('%s')" uobj_hdr_filename;
 
-(*
-		(* generate uobj linker script *)
-			(* use usmf_hdr_id as the uobj_name *)
+			(* generate uobj linker script *)
 			let uobj_linker_script_filename =	
 				Usuobjgen.generate_linker_script 
-					!o_usmf_hdr_id (self#get_o_uobj_load_addr) (self#get_o_uobj_size) 
-					uobj_sections_memory_map_hashtbl_byorigin in
+					p_uobj#get_o_usmf_hdr_id 
+					p_uobj#get_o_uobj_load_addr
+					p_uobj#get_o_uobj_size 
+					p_uobj#get_uobj_sections_memory_map_hashtbl_byorigin in
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
-*)
 
 
 (*																		
