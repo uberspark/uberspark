@@ -110,6 +110,10 @@ class uobject = object(self)
 		method get_o_uobj_size = !o_uobj_size;
 		method set_o_uobj_size size = (o_uobj_size := size);
 
+		(* uobj section count *)
+		val o_uobj_num_sections = ref 0; 
+		method get_o_uobj_num_sections = !o_uobj_num_sections;
+		method set_o_uobj_num_sections num_sections = (o_uobj_num_sections := num_sections);
 
 		(* base uobj sections hashtbl indexed by section name *)		
 		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 

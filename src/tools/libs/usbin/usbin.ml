@@ -169,13 +169,13 @@ module Usbin =
 			(*pad_to*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," !Usconfig.page_size; 
 			(*size*)
-			Printf.fprintf oc "\n\t\t%sUL," (p_uobj#get_o_uobj_size); 
+			Printf.fprintf oc "\n\t\t0x%08xULL," (p_uobj#get_o_uobj_size); 
 			Printf.fprintf oc "\n\t},"; 
 			(* load_addr *)
 			Printf.fprintf oc "\n\t0x%08xULL," (p_uobj#get_o_uobj_load_addr); 
 			(* load_size *)
 			Printf.fprintf oc "\n\t0x%08xULL," (p_uobj#get_o_uobj_size); 
-			
+(*			
 			(* generate section def list for uobjs *)
 			Printf.fprintf oc "\n\t{"; 
 			
@@ -201,7 +201,7 @@ module Usbin =
 			) Usuobjcollection.uobj_hashtbl;
 			
 			Printf.fprintf oc "\n\t},"; 
-	
+*)	
 			(* generate epilogue *)
 			Printf.fprintf oc "\n};";
 			Printf.fprintf oc "\n";
