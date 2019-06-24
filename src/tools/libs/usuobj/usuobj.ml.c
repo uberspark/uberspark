@@ -1,11 +1,5 @@
-(* { f_name = "";	
- 	f_subsection_list = [ "" ];	
-	usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
-									f_size = 0;
-									f_aligned_at = 0x1000; f_pad_to = 0x1000; f_reserved = 0;
-								};
-}
-*)
+#include <uberspark.h>
+#include <usbinformat.h>
 
 (*------------------------------------------------------------------------------
 	uberSpark uberobject verification and build interface
@@ -189,7 +183,7 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+					usbinformat = { f_type=USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; f_va_offset=0; f_file_offset=0;
 													f_size = 0x1000;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
