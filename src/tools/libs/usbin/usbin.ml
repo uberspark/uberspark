@@ -137,7 +137,7 @@ module Usbin =
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj header source file *)
 	(*--------------------------------------------------------------------------*)
-	let generate_uobj_hdr_src p_uobj () = 
+	let generate_uobj_hdr_src p_uobj = 
 			Uslog.logf log_tag Uslog.Info "Generating uobj hdr source...";
 
 			(* create uobjcoll source file *)
@@ -220,14 +220,11 @@ module Usbin =
 	let generate_uobj_bin_image p_uobj_id p_uobj = 
 			Uslog.logf log_tag Uslog.Info "Proceeding to generate binary for uobj '%s'..." p_uobj_id; 
 
-(*
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
-				self#generate_uobj_hdr !o_usmf_hdr_id (self#get_o_uobj_load_addr) 
-					o_uobj_sections_hashtbl in
-				Uslog.logf log_tag Uslog.Info "uobj_hdr_filename=%s\n" uobj_hdr_filename;
-*)
+				generate_uobj_hdr_src p_uobj in
+				Uslog.logf log_tag Uslog.Info "uobj header source file generated ('%s')" uobj_hdr_filename;
 
 (*
 		(* generate uobj linker script *)
