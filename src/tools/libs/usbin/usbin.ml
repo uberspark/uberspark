@@ -268,9 +268,18 @@ module Usbin =
 							end
 						;
 
-
-(* TBD make flat form binary out of this
-*)
+		(* generate uobj flat-form binary *)
+		let (pestatus, pesignal) = 
+			(Usextbinutils.mkbin
+				  (p_uobj#get_o_usmf_hdr_id ^ ".elf")
+					(p_uobj#get_o_usmf_hdr_id ^ ".bin")
+			) in
+			if (pesignal == true) || (pestatus != 0) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in generating flat-form binary for uobj!";
+						ignore(exit 1);
+				end
+			;
 
 		(* create uobj sentinel library archive *)
 		let (pestatus, pesignal) = 
