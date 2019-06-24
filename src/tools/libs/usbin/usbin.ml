@@ -243,32 +243,30 @@ module Usbin =
 					(Usconfig.get_std_defines () @ [ p_uobj#get_o_pp_definition ]);
 
 
-(*				
 			(* link the uobj binary *)
 			Uslog.logf log_tag Uslog.Info "Proceeding to link uobj binary '%s'..."
-					!o_usmf_hdr_id;
+					p_uobj#get_o_usmf_hdr_id;
 				let uobj_libdirs_list = ref [] in
 				let uobj_libs_list = ref [] in
 				let (pestatus, pesignal) = 
 						(Usextbinutils.link_uobj  
-							( !o_sentinels_source_file_list @
-								!o_usmf_sources_c_files @ 
+							( p_uobj#get_o_sentinels_source_file_list @
+								p_uobj#get_o_usmf_sources_c_files @ 
 								[ uobj_hdr_filename ]
 							)
 							!uobj_libdirs_list !uobj_libs_list
-							uobj_linker_script_filename (!o_usmf_hdr_id ^ ".elf")
+							uobj_linker_script_filename (p_uobj#get_o_usmf_hdr_id ^ ".elf")
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
-									Uslog.logf log_tag Uslog.Error "in linking uobj binary '%s'!" !o_usmf_hdr_id;
+									Uslog.logf log_tag Uslog.Error "in linking uobj binary '%s'!" p_uobj#get_o_usmf_hdr_id;
 									ignore(exit 1);
 							end
 						else
 							begin
-									Uslog.logf log_tag Uslog.Info "Linked uobj binary '%s' successfully" !o_usmf_hdr_id;
+									Uslog.logf log_tag Uslog.Info "Linked uobj binary '%s' successfully" p_uobj#get_o_usmf_hdr_id;
 							end
 						;
-*)																																																																																																																							
 
 
 (* TBD make flat form binary out of this
