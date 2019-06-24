@@ -237,13 +237,10 @@ module Usbin =
 				Uslog.logf log_tag Uslog.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 
 
-(*																		
-			(*TBD only do uobj_hdr_filename *)
-			(* compile all the cfiles *)							
-			self#compile_cfile_list (!o_usmf_sources_c_files @ [ uobj_hdr_filename ]) 
+			(* compile uobj header *)
+			p_uobj#compile_cfile_list ([ uobj_hdr_filename ]) 
 					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
-*)
+					(Usconfig.get_std_defines () @ [ p_uobj#get_o_pp_definition ]);
 
 
 (*				
