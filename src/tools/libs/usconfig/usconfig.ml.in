@@ -108,7 +108,24 @@ module Usconfig =
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
 	(* also check include/uberspark.h for sentinel definitions *)
+	(* and include/usbinformat.h for binary definitions *)
 	(*--------------------------------------------------------------------------*)
+ 	let def_USBINFORMAT_SECTION_TYPE_PADDING = 0x0;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ =	0x1;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL = 0x2;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL = 0x3;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL = 0x4;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL = 0x5;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR =	0x6;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE = 0x7;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA = 0x8;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA = 0x9;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK = 0xa;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK = 0xb;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS = 0xc;;
+	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS = 0xd;;
+
+
 	let sentinel_types =
     [ "call", "UOBJ_SENTINEL_TYPE_CALL"; 
 		]
