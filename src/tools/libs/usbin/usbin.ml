@@ -161,7 +161,7 @@ module Usbin =
 			(*magic*)
 			Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJ,"; 
 			(*num_sections*)
-			Printf.fprintf oc "\n\t\t0x%08xUL," !Usuobjcollection.o_total_uobjs; 
+			Printf.fprintf oc "\n\t\t0x%08xUL," (p_uobj#get_o_uobj_sections_hashtbl_length);
 			(*page_size*)
 			Printf.fprintf oc "\n\t\t0x%08xUL," !Usconfig.page_size; 
 			(*aligned_at*)
@@ -175,13 +175,13 @@ module Usbin =
 			Printf.fprintf oc "\n\t0x%08xULL," (p_uobj#get_o_uobj_load_addr); 
 			(* load_size *)
 			Printf.fprintf oc "\n\t0x%08xULL," (p_uobj#get_o_uobj_size); 
-(*			
-			(* generate section def list for uobjs *)
+			
+			(* generate uobj section defs *)
 			Printf.fprintf oc "\n\t{"; 
 			
 			Hashtbl.iter (fun key uobj ->  
 				Printf.fprintf oc "\n\t\t{"; 
-				(* type *)
+				(*(* type *)
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_TYPE_UOBJ,"; 
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
@@ -197,11 +197,12 @@ module Usbin =
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," 0x1000; 
 				(* reserved *)
 				Printf.fprintf oc "\n\t\t\t0ULL"; 
+				*)
 				Printf.fprintf oc "\n\t\t},"; 
-			) Usuobjcollection.uobj_hashtbl;
+			) p_uobj#get_o_uobj_sections_hashtbl;
 			
 			Printf.fprintf oc "\n\t},"; 
-*)	
+	
 			(* generate epilogue *)
 			Printf.fprintf oc "\n};";
 			Printf.fprintf oc "\n";

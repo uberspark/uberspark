@@ -110,22 +110,25 @@ class uobject = object(self)
 		method get_o_uobj_size = !o_uobj_size;
 		method set_o_uobj_size size = (o_uobj_size := size);
 
+(*
 		(* uobj section count *)
 		val o_uobj_num_sections = ref 0; 
 		method get_o_uobj_num_sections = !o_uobj_num_sections;
 		method set_o_uobj_num_sections num_sections = (o_uobj_num_sections := num_sections);
+*)
 
 		(* base uobj sections hashtbl indexed by section name *)		
 		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
-		method get_o_uobj_sections_hashtbl = o_uobj_sections_hashtbl;
+		method get_o_uobj_sections_hashtbl = (o_uobj_sections_hashtbl);
+		method get_o_uobj_sections_hashtbl_length = (Hashtbl.length o_uobj_sections_hashtbl);
 		
 		(* hashtbl of uobj sections with memory map info indexed by section name *)
 		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
-		method get_uobj_sections_memory_map_hashtbl = uobj_sections_memory_map_hashtbl;
+		method get_uobj_sections_memory_map_hashtbl = (uobj_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info indexed by section va*)
 		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
-		method get_uobj_sections_memory_map_hashtbl_byorigin = uobj_sections_memory_map_hashtbl_byorigin;
+		method get_uobj_sections_memory_map_hashtbl_byorigin = (uobj_sections_memory_map_hashtbl_byorigin);
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
