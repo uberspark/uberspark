@@ -21,6 +21,7 @@ all:
 	cd usuobjlib && $(MAKE) -w all
 	cd usuobj && $(MAKE) -w all
 	cd usuobjcollection && $(MAKE) -w all
+	cd usbin && $(MAKE) -w all
 
 .PHONY: clean
 clean:
@@ -35,4 +36,4 @@ clean:
 	cd usuobjlib && $(MAKE) -w clean
 	cd usuobj && $(MAKE) -w clean
 	cd usuobjcollection && $(MAKE) -w clean
-	
+	cd usbin && $(MAKE) -w clean

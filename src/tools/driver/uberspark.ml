@@ -12,6 +12,7 @@ open Libusmf
 open Usuobjlib
 open Usuobj
 open Usuobjcollection
+open Usbin
 
 let log_mpf = "uberSpark";;
 
@@ -54,6 +55,14 @@ let cmdopt_loadaddr_set
 	cmdopt_loadaddr := value;
 	;;
 
+let cmdopt_uobjsize_specified = ref false;;
+let cmdopt_uobjsize = ref "";;
+let cmdopt_uobjsize_set 
+	(value : string) = 
+	cmdopt_uobjsize_specified := true;
+	cmdopt_uobjsize := value;
+	;;
+
 let cmdopt_platform_specified = ref false;;
 let cmdopt_platform = ref "";;
 let cmdopt_platform_set 
@@ -77,6 +86,25 @@ let cmdopt_arch_set
 	cmdopt_arch_specified := true;
 	cmdopt_arch := value;
 	;;
+
+
+let cmdopt_section_alignment_specified = ref false;;
+let cmdopt_section_alignment = ref "";;
+let cmdopt_section_alignment_set 
+	(value : string) = 
+	cmdopt_section_alignment_specified := true;
+	cmdopt_section_alignment := value;
+	;;
+
+(* page size *)
+let cmdopt_page_size_specified = ref false;;
+let cmdopt_page_size = ref "";;
+let cmdopt_page_size_set 
+	(value : string) = 
+	cmdopt_page_size_specified := true;
+	cmdopt_page_size := value;
+	;;
+
 
 let cmdopt_info = ref false;;
 
@@ -119,11 +147,15 @@ let cmdline_speclist = [
 	("--uobjmf", Arg.String (cmdopt_uobjmf_set), "uobj manifest filename");
 	
 	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+	("--uobjsize", Arg.String (cmdopt_uobjsize_set), "uobj size (in bytes)");
 	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
 
 	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
 	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
 	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
+
+	("--section-alignment", Arg.String (cmdopt_section_alignment_set), "set section alignment (4K, 2M or 4M)");
+	("--page-size", Arg.String (cmdopt_page_size_set), "set page size (4K or 2M)");
 
 	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
 	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
@@ -326,6 +358,12 @@ let main () =
 				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
 		;
 
+		(* sanity check uobj size command line argument *)
+		if(!cmdopt_uobjsize_specified == false) then
+				cmdopt_uobjsize := (Usconfig.get_default_uobjsize());
+		;
+
+
 		(* setup defaults *)
 		if (String.compare !cmdopt_uobjcollmf "") == 0 then
 			begin
@@ -343,32 +381,41 @@ let main () =
 		begin
 				
 
+		(* setup section alignment *)
+		if !cmdopt_section_alignment_specified == true then
+			begin
+				Usconfig.section_alignment := int_of_string(!cmdopt_section_alignment);
+			end
+		;
+
+		Uslog.logf log_mpf Uslog.Info "setting page size...";
+
+		(* setup page size *)
+		if !cmdopt_page_size_specified == true then
+			begin
+				Usconfig.page_size := (int_of_string(!cmdopt_page_size));
+			end
+		;
+
 
 		(* create uobj collection *)
-		Uslog.logf log_mpf Uslog.Info "Proceeding to build uobj collection using: %s..." !cmdopt_uobjcollmf;
+		Uslog.logf log_mpf Uslog.Info "Proceeding to initialize uobj collection using: %s..." !cmdopt_uobjcollmf;
 		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true;
 		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
-		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr));
-		Uslog.logf log_mpf Uslog.Info "Built uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr)) (int_of_string(!cmdopt_uobjsize));
+		Uslog.logf log_mpf Uslog.Info "Initialized uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+
+	
+
 
 		(* if we are building *)
 		if !copt_builduobj == true then
 			begin
-				(* generate uobj collection info table *)
-				Usuobjcollection.generate_uobjcoll_info (Usconfig.get_std_uobjcoll_info_filename ()); 
-				Uslog.logf log_mpf Uslog.Info "Generated uobj collection info. table.";
-
-				(* build uobj collection info table binary *)
-				Usuobjcollection.build_uobjcoll_info_table (Usconfig.get_std_uobjcoll_info_filename ());
-				Uslog.logf log_mpf Uslog.Info "Built uobj collection info. table binary.";
-
-				(* build uobj collection by building individidual uobjs *)
-				Usuobjcollection.build "" true;
-
-				(* build final image *)
-				Usuobjcollection.build_uobjcoll_binary_image (!cmdopt_uobjcollmf ^ ".bin")
-				(Usconfig.get_std_uobjcoll_info_filename ());
-		
+				Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj collection...";
+				Usuobjcollection.compile "" true;
+				Uslog.logf log_mpf Uslog.Info "Successfully compiled uobj collection.";
+				Uslog.logf log_mpf Uslog.Info "Collection binary filename: %s" !Usuobjcollection.o_binary_image_filename;
+				Usbin.generate_uobjcoll_bin_image (!Usuobjcollection.o_binary_image_filename);		
 			end
 		;
 

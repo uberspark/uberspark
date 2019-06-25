@@ -37,9 +37,16 @@ module Usuobjcollection =
 	let uobj_hashtbl = ((Hashtbl.create 32) : ((string,Usuobj.uobject)  Hashtbl.t));;
 	let uobj_dir_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;
 
+	(* uobj collection load address *)
 	let o_load_addr = ref 0;;
 
-	let o_usmf_hdr_id = ref"";;
+	(* uobj collection size, in bytes *)
+	let o_size = ref 0;;
+
+	(* total uobjs within uobj collection *)
+	let o_total_uobjs = ref 0;;
+
+	let o_usmf_hdr_id = ref "";;
 
 
 	(*let o_uobjcoll_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string,string)  Hashtbl.t));;*)
@@ -99,6 +106,7 @@ module Usuobjcollection =
 				ignore (exit 1);
 			end
 		;
+
 
 								
 		(* sanity check header type *)
@@ -194,7 +202,7 @@ module Usuobjcollection =
 		o_usmf_hdr_id := usmf_hdr_id;
 
 		(* store uobj collection binary filename *)
-		o_binary_image_filename := (usmf_hdr_id ^ ".bin");
+		o_binary_image_filename := (usmf_hdr_id ^ ".usbin");
 
 		Uslog.logf log_tag Uslog.Info "Done.";
 		()
@@ -211,6 +219,8 @@ module Usuobjcollection =
 		List.iter (fun x ->  
 			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
 			let uobj = new Usuobj.uobject in
+				uobj#initialize o_uobjcoll_sentineltypes_hashtbl;
+
 				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
 				if (retval == false) then
 					begin
@@ -246,7 +256,7 @@ module Usuobjcollection =
 				Uslog.logf log_tag Uslog.Info "uobj c-files: %u" (List.length uobj#get_o_usmf_sources_c_files); 			 
 				
 				(* initialize uobj sentinel types *)
-				uobj#init_sentineltypes o_uobjcoll_sentineltypes_hashtbl;
+				(*uobj#init_sentineltypes o_uobjcoll_sentineltypes_hashtbl;*)
 
 
 		) !uobj_dir_list;
@@ -262,15 +272,19 @@ module Usuobjcollection =
 	(* uobjcoll_load_addr = load address of uobj collection *)
 	(*--------------------------------------------------------------------------*)
 	let compute_memory_map
-			(uobjcoll_load_addr : int) =
+			(uobjcoll_load_addr : int)
+			(uobjcoll_uobjsize : int)  =
 		let uobj_load_addr = ref 0 in
 		uobj_load_addr := uobjcoll_load_addr + (Usconfig.get_sizeof_uobjcoll_info_t());
 		o_load_addr := uobjcoll_load_addr;
+		o_size := 0;
+		o_total_uobjs := 0;
 
 		Hashtbl.iter (fun key uobj ->  
-				(* uobj#compute_sections_memory_map !uobj_load_addr; *)
-				uobj#consolidate_sections_with_memory_map !uobj_load_addr;
+				uobj#consolidate_sections_with_memory_map !uobj_load_addr uobjcoll_uobjsize;
 				uobj_load_addr := !uobj_load_addr + uobj#get_o_uobj_size;
+				o_size := !o_size + uobj#get_o_uobj_size;
+				o_total_uobjs := !o_total_uobjs + 1;
 		) uobj_hashtbl;
 
 		()
@@ -278,18 +292,18 @@ module Usuobjcollection =
 
 																								
 	(*--------------------------------------------------------------------------*)
-	(* build a uobj *)
-	(* build_dir = directory to use for building *)
+	(* compile a uobj collection *)
+	(* build_dir = directory to use for compilation *)
 	(* keep_temp_files = true if temporary files need to be preserved in build_dir *)
 	(*--------------------------------------------------------------------------*)
-	let build build_dir keep_temp_files = 
+	let compile build_dir keep_temp_files = 
 		Hashtbl.iter (fun key uobj ->  
-			Uslog.logf log_tag Uslog.Info "Building uobj '%s'..." key; 
+			Uslog.logf log_tag Uslog.Info "Compiling uobj '%s'..." key; 
 			let(rval, r_prevpath, r_curpath) = Usosservices.dir_change 
 				(uobj#get_o_uobj_dir_abspathname) in
 				if(rval == true) then 
 					begin
-						uobj#build build_dir keep_temp_files;
+						uobj#compile build_dir keep_temp_files;
 						ignore(Usosservices.dir_change r_prevpath);
 					end
 				else
@@ -304,7 +318,7 @@ module Usuobjcollection =
 		()
 	;;
 										
-																																																																																																
+(*																																																																																																
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection info table *)
 	(*--------------------------------------------------------------------------*)
@@ -345,13 +359,14 @@ module Usuobjcollection =
 																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																								
 		()
 	;;
+*)
 
-																																																																																																
+(*																																																																																																																																																																																																
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj collection info table *)
 	(*--------------------------------------------------------------------------*)
 	let build_uobjcoll_info_table uobjcoll_info_table_filename = 
-		let (pestatus, pesignal, cc_outputfilename) = 
+(*		let (pestatus, pesignal, cc_outputfilename) = 
 			Usextbinutils.compile_cfile uobjcoll_info_table_filename (uobjcoll_info_table_filename ^ ".o") 
 				(Usconfig.get_std_incdirs ())	(Usconfig.get_std_defines ()) in
 			if (pesignal == true) || (pestatus != 0) then
@@ -364,18 +379,35 @@ module Usuobjcollection =
 						Uslog.logf log_tag Uslog.Info "Compiled %s successfully" uobjcoll_info_table_filename;
 				end
 			;
+*)
 
-		(* generate linker sript *)
-		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Usextbinutils.ld_section_info_t)  Hashtbl.t)) in
+		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
-							{s_name = "data";	s_type = 0;	s_attribute = "rw";
-								s_subsection_list = [ ".data" ];	s_origin = 0;
-								s_length = (Usconfig.get_sizeof_uobjcoll_info_t());
+							{f_name = "data";	
+								f_subsection_list = [ ".data" ];	
+								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
+								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
+								f_aligned_at = !Usconfig.section_alignment; 
+								f_pad_to = !Usconfig.section_alignment; 
+								f_reserved = 0;
+								};
 							};
-		let uobjcoll_info_table_lscript = Usuobjgen.generate_linker_script  
-			(uobjcoll_info_table_filename) uobjcoll_info_table_lscript_sections in
-			
+
 		
+		let status = Usextbinutils.mkbin_from_cfile uobjcoll_info_table_filename uobjcoll_info_table_lscript_sections (uobjcoll_info_table_filename) 0 (Usconfig.get_sizeof_uobjcoll_info_t()) in 
+			if (status == false) then
+				begin
+						Uslog.logf log_tag Uslog.Error "in generating uobjcoll info table binary: %s!" uobjcoll_info_table_filename;
+						ignore(exit 1);
+				end
+			else
+				begin
+						Uslog.logf log_tag Uslog.Info "generated uobjcoll info table binary (%s) successfully" uobjcoll_info_table_filename;
+				end
+			;
+*)
+						
+(*		
 		(* build uobj collection info table binary *)
 		let uobj_libdirs_list = ref [] in
 		let uobj_libs_list = ref [] in
@@ -396,12 +428,12 @@ module Usuobjcollection =
 					end
 				;
 
-
+*)
 
 		()
 	;;
 																																																																																																																																																																																																																																																																																																																																																																																																
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* build uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
@@ -410,7 +442,7 @@ module Usuobjcollection =
 		uobjcoll_info_table_binary_filename =
 		
 		let input_filename_list = ref [] in
-
+(*
 		(* generate flat-form binary for uobj info table *)
 		let (pestatus, pesignal) = 
 		(Usextbinutils.mkbin
@@ -423,6 +455,7 @@ module Usuobjcollection =
 					ignore(exit 1);
 			end
 		;
+*)
  
 		(* add uobj info table flat-form binary filename to list of files to be*)
 		(* concatentated*)
@@ -460,6 +493,7 @@ module Usuobjcollection =
 		
 		()		 
 	;;
+*)
 
 
 	(*--------------------------------------------------------------------------*)

@@ -57,7 +57,7 @@
 #include <ctype.h>
 #include <assert.h>
 
-#include <uberspark-config.h>
+#include <usconfig.h>
 #include <xmhf-hwm.h>
 
 #define _USMF_STR(s) #s
