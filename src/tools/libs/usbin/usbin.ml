@@ -154,6 +154,16 @@ module Usbin =
 			Printf.fprintf oc "\n#include <usbinformat.h>";
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
+
+			(* generate linker script externs *)
+			Hashtbl.iter (fun key (section_info:Ustypes.section_info_t) ->  
+				Printf.fprintf oc "\nextern volatile uint8_t %s_START_ADDR[];" key;
+				Printf.fprintf oc "\nextern volatile uint8_t %s_END_ADDR[];" key;
+			) p_uobj#get_o_uobj_sections_hashtbl;
+			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
+			
+						
 			Printf.fprintf oc "\n__attribute__(( section(\".hdr\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
 
 			(* generate common header *)
