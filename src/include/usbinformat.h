@@ -104,9 +104,9 @@ typedef struct {
 typedef struct {
 	uint32_t type;			//section type
 	uint32_t prot;			//section protections
-	uint64_t va_offset;		//virtual address offset from load address
-	uint64_t file_offset;	//offset within the binary file
-	uint64_t size;			//size of the section in bytes
+	uint8_t *addr_start;	//start address
+	uint8_t *addr_end;		//end address
+	uint8_t *addr_file;	//file pointer address of section within binary file
 	uint32_t aligned_at;	//boundary that section is aligned at
 	uint32_t pad_to;		//boundary that section is padded to
 	uint64_t reserved;		//reserved

@@ -57,13 +57,13 @@ module Usuobjgen =
 						begin
 							Printf.fprintf oc "\n %s : {" x.f_name;
 							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
-							Printf.fprintf oc "\n	PROVIDE(%s_START_ADDR = .);" x.f_name;
+							Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
 							List.iter (fun subsection ->
 								    Printf.fprintf oc "\n *(%s)" subsection;
 							) x.f_subsection_list;
 							Printf.fprintf oc "\n . = ORIGIN(mem_binary) + LENGTH(mem_binary) - 1;";
 							Printf.fprintf oc "\n BYTE(0xAA)";
-							Printf.fprintf oc "\n	PROVIDE(%s_END_ADDR = .);" x.f_name;
+							Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
 							Printf.fprintf oc "\n	} >mem_binary =0x9090";
 					    Printf.fprintf oc "\n";
 						end
@@ -71,12 +71,12 @@ module Usuobjgen =
 						begin
 							Printf.fprintf oc "\n %s : {" x.f_name;
 							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
-							Printf.fprintf oc "\n	PROVIDE(%s_START_ADDR = .);" x.f_name;
+							Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
 							List.iter (fun subsection ->
 								    Printf.fprintf oc "\n *(%s)" subsection;
 							) x.f_subsection_list;
 							Printf.fprintf oc "\n . = ALIGN(0x%08x);" x.usbinformat.f_pad_to; 
-							Printf.fprintf oc "\n	PROVIDE(%s_END_ADDR = .);" x.f_name;
+							Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
 					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
 					    Printf.fprintf oc "\n";
 						end

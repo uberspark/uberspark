@@ -68,12 +68,12 @@ module Usbin =
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_TYPE_UOBJ,"; 
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
-				(* va_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
-				(* file_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_load_addr - !Usuobjcollection.o_load_addr); 
-				(* size *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (uobj#get_o_uobj_size); 
+				(* addr_start *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," uobj#get_o_uobj_load_addr; 
+				(* addr_end *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," (uobj#get_o_uobj_load_addr + uobj#get_o_uobj_size); 
+				(* addr_file *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," uobj#get_o_uobj_load_addr; 
 				(* aligned_at *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," 0x1000; 
 				(* pad_to *)
@@ -106,8 +106,12 @@ module Usbin =
 						Hashtbl.add uobjcoll_hdr_lscript_sections 0 
 							{f_name = "data";	
 								f_subsection_list = [ ".data" ];	
-								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
-								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());
+								usbinformat = { f_type=0; f_prot=0; 
+								(*f_va_offset=0; f_file_offset=0;
+								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());*)
+								f_addr_start=0; 
+								f_addr_end = 0;
+								f_addr_file = 0;
 								f_aligned_at = !Usconfig.section_alignment; 
 								f_pad_to = !Usconfig.section_alignment; 
 								f_reserved = 0;
@@ -157,8 +161,8 @@ module Usbin =
 
 			(* generate linker script externs *)
 			Hashtbl.iter (fun key (section_info:Ustypes.section_info_t) ->  
-				Printf.fprintf oc "\nextern volatile uint8_t %s_START_ADDR[];" key;
-				Printf.fprintf oc "\nextern volatile uint8_t %s_END_ADDR[];" key;
+				Printf.fprintf oc "\nextern uint8_t %s_START_ADDR;" key;
+				Printf.fprintf oc "\nextern uint8_t %s_END_ADDR;" key;
 			) p_uobj#get_o_uobj_sections_hashtbl;
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
@@ -196,12 +200,12 @@ module Usbin =
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_type); 
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_prot); 
-				(* va_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (section_info.usbinformat.f_va_offset); 
-				(* file_offset *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (section_info.usbinformat.f_file_offset); 
-				(* size *)
-				Printf.fprintf oc "\n\t\t\t0x%08xULL," (section_info.usbinformat.f_size); 
+				(* addr_start *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_START_ADDR," section_info.f_name; 
+				(* addr end *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_END_ADDR," section_info.f_name; 
+				(* addr_file *)
+				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_START_ADDR," section_info.f_name; 
 				(* aligned_at *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_aligned_at); 
 				(* pad_to *)

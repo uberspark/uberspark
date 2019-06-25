@@ -11,9 +11,9 @@ struct
 			{
 				f_type         : int;			
 				f_prot         : int;			
-				f_va_offset    : int;
-				f_file_offset  : int;
-				f_size         : int;
+				f_addr_start   : int;
+				f_addr_end     : int;
+				f_addr_file    : int;
         f_aligned_at   : int;
 	      f_pad_to       : int;
         f_reserved     : int; 

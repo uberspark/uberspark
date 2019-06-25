@@ -180,40 +180,50 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x1000;
+					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x100000;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x100000;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x1000;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
+								f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x1000;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
@@ -232,8 +242,10 @@ class uobject = object(self)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x1000;
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
+													f_addr_start=0; 
+													f_addr_end = 0;
+													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 				};
@@ -380,8 +392,11 @@ class uobject = object(self)
 						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
 							{ f_name = (List.nth x 0);	
 							 	f_subsection_list = !subsections_list;	
-								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
-																f_size = int_of_string (List.nth x 2);
+								usbinformat = { f_type=0; f_prot=0; 
+																f_addr_start=0; 
+																f_addr_end = 0;
+																f_addr_file = 0;
+																(*f_size = int_of_string (List.nth x 2);*)
 																f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 															};
 							};
@@ -427,9 +442,12 @@ class uobject = object(self)
 					 	f_subsection_list = [ ("." ^ key) ];	
 						usbinformat = { f_type = int_of_string(x.s_type_id);
 														f_prot=0; 
-														f_va_offset = !uobj_section_load_addr; 
+														(*f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
-														f_size = x.s_length;
+														f_size = x.s_length;*)
+														f_addr_start=0; 
+														f_addr_end = 0;
+														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
 					};
@@ -438,14 +456,17 @@ class uobject = object(self)
 					 	f_subsection_list = [ ("." ^ key) ];	
 						usbinformat = { f_type = int_of_string(x.s_type_id); 
 														f_prot=0; 
-														f_va_offset = !uobj_section_load_addr; 
+														(*f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
-														f_size = x.s_length;
+														f_size = x.s_length;*)
+														f_addr_start=0; 
+														f_addr_end = 0;
+														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 					};
 			
-				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+				(*uobj_section_load_addr := !uobj_section_load_addr + x.s_length;*)
 			)  o_uobj_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
@@ -456,9 +477,12 @@ class uobject = object(self)
 					 	f_subsection_list = x.f_subsection_list;	
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
-														f_va_offset = !uobj_section_load_addr; 
+														(*f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
-														f_size = x.usbinformat.f_size;
+														f_size = x.usbinformat.f_size;*)
+														f_addr_start=0; 
+														f_addr_end = 0;
+														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
 					};
@@ -467,14 +491,17 @@ class uobject = object(self)
 					 	f_subsection_list = x.f_subsection_list;	
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
-														f_va_offset = !uobj_section_load_addr; 
+														(*f_va_offset = !uobj_section_load_addr; 
 														f_file_offset=0;
-														f_size = x.usbinformat.f_size;
+														f_size = x.usbinformat.f_size;*)
+														f_addr_start=0; 
+														f_addr_end = 0;
+														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 					};
 
-				uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;
+				(*uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;*)
 			)  o_uobj_sections_hashtbl;
 			
 					
@@ -692,7 +719,7 @@ class uobject = object(self)
 												Usconfig.get_std_define_asm () @
 												[ self#get_o_pp_definition ] @
 												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
-													(Printf.sprintf "0x%08x" x_v.usbinformat.f_va_offset)
+													(Printf.sprintf "0x%08x" x_v.usbinformat.f_addr_start)
 												] @
 												[ "UOBJ_SENTINEL_SECTION_NAME=.text"
 												] @
