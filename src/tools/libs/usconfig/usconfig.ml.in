@@ -105,6 +105,12 @@ module Usconfig =
 	(* memory page size *)
 	let page_size = ref 0x00200000;;
 
+	(* default general section size *)
+	let section_size_general = ref 0x00200000;;
+
+	(* default sentinel section size *)
+	let section_size_sentinel = ref 0x00001000;;
+
 	(*--------------------------------------------------------------------------*)
 	(* stuff below needs to be in sync with include/uberspark-config.h *)
 	(* also check include/uberspark.h for sentinel definitions *)
