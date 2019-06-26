@@ -182,7 +182,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".hdr" ];	
 					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -192,7 +192,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -202,7 +202,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -212,7 +212,7 @@ class uobject = object(self)
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 								f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -222,7 +222,7 @@ class uobject = object(self)
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
@@ -244,7 +244,7 @@ class uobject = object(self)
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
 													f_addr_start=0; 
-													f_addr_end = 0;
+													f_size = !Usconfig.section_size_general;
 													f_addr_file = 0;
 													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
