@@ -9,7 +9,7 @@ open Uslog
 open Usextbinutils
 open Usosservices
 open Usuobjcollection
-open Usuobjgen
+(* open Usuobjgen*)
 
 module Usbin =
 	struct
@@ -244,7 +244,7 @@ module Usbin =
 
 			(* generate uobj linker script *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_linker_script 
+				Usextbinutils.generate_linker_script 
 					p_uobj#get_o_usmf_hdr_id 
 					p_uobj#get_o_uobj_load_addr
 					p_uobj#get_o_uobj_size 

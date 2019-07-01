@@ -9,7 +9,7 @@ open Uslog
 open Usmanifest
 open Usosservices
 open Usextbinutils
-open Usuobjgen
+(*open Usuobjgen*)
 
 module Usuobj =
 struct
