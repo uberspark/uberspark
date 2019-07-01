@@ -428,17 +428,30 @@ class uobject = object(self)
 			o_uobj_load_addr := uobj_load_addr;
 			uobj_section_load_addr := uobj_load_addr;
 
-			Uslog.logf log_tag Uslog.Info "Length_of o_uobj_publicmethods_sentinels_hashtbl:%u" (Hashtbl.length o_uobj_publicmethods_sentinels_hashtbl);
-			
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
+				(* compute and round up section size to section alignment *)
+				let remainder_size = (x.s_length mod !Usconfig.section_alignment) in
+				let padding_size = ref 0 in
+					if remainder_size > 0 then
+						begin
+							padding_size := !Usconfig.section_alignment - remainder_size;
+						end
+					else
+						begin
+							padding_size := 0;
+						end
+					;
+				let section_size = (x.s_length + !padding_size) in 
+				
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
 					{ f_name = key;	
 					 	f_subsection_list = [ ("." ^ key) ];	
 						usbinformat = { f_type = int_of_string(x.s_type_id);
 														f_prot=0; 
 														f_addr_start = !uobj_section_load_addr; 
-														f_size = x.s_length;
+														(*f_size = x.s_length;*)
+														f_size = section_size;
 														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
@@ -449,17 +462,34 @@ class uobject = object(self)
 						usbinformat = { f_type = int_of_string(x.s_type_id); 
 														f_prot=0; 
 														f_addr_start = !uobj_section_load_addr; 
-														f_size = x.s_length;
+														(* f_size = x.s_length; *)
+														f_size = section_size;
 														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 					};
 			
-				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
+				(* uobj_section_load_addr := !uobj_section_load_addr + x.s_length; *)
+				Uslog.logf log_tag Uslog.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
 			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
+				(* compute and round up section size to section alignment *)
+				let remainder_size = (x.usbinformat.f_size mod !Usconfig.section_alignment) in
+				let padding_size = ref 0 in
+					if remainder_size > 0 then
+						begin
+							padding_size := !Usconfig.section_alignment - remainder_size;
+						end
+					else
+						begin
+							padding_size := 0;
+						end
+					;
+				let section_size = (x.usbinformat.f_size + !padding_size) in 
+
 
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
 					{ f_name = x.f_name;	
@@ -467,7 +497,8 @@ class uobject = object(self)
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_addr_start = !uobj_section_load_addr; 
-														f_size = x.usbinformat.f_size;
+														(*f_size = x.usbinformat.f_size;*)
+														f_size = section_size;
 														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 													};
@@ -478,18 +509,26 @@ class uobject = object(self)
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_addr_start = !uobj_section_load_addr; 
-														f_size = x.usbinformat.f_size;
+														(*f_size = x.usbinformat.f_size;*)
+														f_size = section_size;
 														f_addr_file = 0;
 														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
 												};
 					};
 
-				uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;
+				(*uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;*)
+				Uslog.logf log_tag Uslog.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  o_uobj_sections_hashtbl;
 			
-					
+			(*ensure all sections fit within the uobj size*)
+			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
+				begin
+					Uslog.logf log_tag Uslog.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
+					ignore(exit 1);
+				end
+			;	
 
-			(* o_uobj_size := !uobj_section_load_addr - uobj_load_addr; *)
 			o_uobj_size := uobjsize;
 			(!o_uobj_size)
 		;
