@@ -75,8 +75,16 @@ class uobject = object(self)
 		val o_uobj_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_info_t)  Hashtbl.t)); 
 		method get_o_uobj_publicmethods_hashtbl = o_uobj_publicmethods_hashtbl;
 
-		val o_uobj_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
-		method get_o_uobj_sentinels_hashtbl = o_uobj_sentinels_hashtbl;
+		val o_uobj_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
+		method get_o_uobj_publicmethods_sentinels_hashtbl = o_uobj_publicmethods_sentinels_hashtbl;
+
+		val o_uobj_publicmethods_sentinels_libname = ref "";
+		method get_o_uobj_publicmethods_sentinels_libname = !o_uobj_publicmethods_sentinels_libname;
+
+		val o_uobj_publicmethods_sentinels_lib_source_file_list : string list ref = ref [];
+		method get_o_uobj_publicmethods_sentinels_lib_source_file_list = !o_uobj_publicmethods_sentinels_lib_source_file_list;
+
+
 
 		val o_usmf_filename = ref "";
 		method get_o_usmf_filename = !o_usmf_filename;
@@ -84,8 +92,6 @@ class uobject = object(self)
 		val o_uobj_dir_abspathname = ref "";
 		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
 
-		val o_uobj_sentinels_libname = ref "";
-		method get_o_uobj_sentinels_libname = !o_uobj_sentinels_libname;
 
 
 		val o_uobj_build_dirname = ref ".";
@@ -126,8 +132,6 @@ class uobject = object(self)
 		val o_sentinels_source_file_list : string list ref = ref [];
 		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 
-		val o_sentinels_lib_source_file_list : string list ref = ref [];
-		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
 
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
@@ -160,7 +164,7 @@ class uobject = object(self)
 						let sentinel_name = ref "" in
 							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.pm_fname; 
 
-						Hashtbl.add o_uobj_sentinels_hashtbl !sentinel_name 
+						Hashtbl.add o_uobj_publicmethods_sentinels_hashtbl !sentinel_name 
 							{
 								s_type = st.s_type;
 								s_type_id = st.s_type_id;
@@ -401,7 +405,7 @@ class uobject = object(self)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
 
 			(* initialize uobj sentinels lib name *)
-			o_uobj_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
 									
 			(true)
@@ -424,7 +428,7 @@ class uobject = object(self)
 			o_uobj_load_addr := uobj_load_addr;
 			uobj_section_load_addr := uobj_load_addr;
 
-			Uslog.logf log_tag Uslog.Info "Length_of o_uobj_sentinels_hashtbl:%u" (Hashtbl.length o_uobj_sentinels_hashtbl);
+			Uslog.logf log_tag Uslog.Info "Length_of o_uobj_publicmethods_sentinels_hashtbl:%u" (Hashtbl.length o_uobj_publicmethods_sentinels_hashtbl);
 			
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
@@ -452,7 +456,7 @@ class uobject = object(self)
 					};
 			
 				uobj_section_load_addr := !uobj_section_load_addr + x.s_length;
-			)  o_uobj_sentinels_hashtbl;
+			)  o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
 			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
@@ -601,7 +605,7 @@ class uobject = object(self)
 				Printf.fprintf oc "\n#endif //%s" self#get_o_pp_definition;
 				Printf.fprintf oc "\n";
 
-			) self#get_o_uobj_sentinels_hashtbl;
+			) self#get_o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* now print out the last entry of the sentinel equal to the call *)
 
@@ -666,7 +670,7 @@ class uobject = object(self)
 				o_sentinels_source_file_list := !o_sentinels_source_file_list @ 
 					[ target_sentinel_fname ];
 
-			) o_uobj_sentinels_hashtbl;
+			) o_uobj_publicmethods_sentinels_hashtbl;
 
 			Uslog.logf log_tag Uslog.Info "Generated sentinels.";
 			()
@@ -715,10 +719,10 @@ class uobject = object(self)
 					;
 				
 												
-				o_sentinels_lib_source_file_list := !o_sentinels_lib_source_file_list @ 
+				o_uobj_publicmethods_sentinels_lib_source_file_list := !o_uobj_publicmethods_sentinels_lib_source_file_list @ 
 					[ target_sentinel_libfname ];
 						
-			) o_uobj_sentinels_hashtbl;
+			) o_uobj_publicmethods_sentinels_hashtbl;
 
 			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
 			()
@@ -754,10 +758,10 @@ class uobject = object(self)
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
 			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
-				self#get_o_uobj_sentinels_libname;
+				self#get_o_uobj_publicmethods_sentinels_libname;
 
 			(* compile all the sentinel lib source files *)							
-			self#compile_cfile_list !o_sentinels_lib_source_file_list
+			self#compile_cfile_list !o_uobj_publicmethods_sentinels_lib_source_file_list
 					(Usconfig.get_std_incdirs ())
 					(Usconfig.get_std_defines () @
 					[ self#get_o_pp_definition ] @ 
@@ -767,8 +771,8 @@ class uobject = object(self)
 			(* now create the lib archive *)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
-						!o_sentinels_lib_source_file_list
-						(self#get_o_uobj_sentinels_libname ^ ".a")
+						!o_uobj_publicmethods_sentinels_lib_source_file_list
+						(self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
@@ -898,7 +902,7 @@ class uobject = object(self)
     Printf.fprintf ochannel "\n	{";
 
 	  (* total_sentinels *)
-  	Printf.fprintf ochannel "\n\t0x%08xUL, " (Hashtbl.length o_uobj_sentinels_hashtbl);
+  	Printf.fprintf ochannel "\n\t0x%08xUL, " (Hashtbl.length o_uobj_publicmethods_sentinels_hashtbl);
 		
 		(* plug in the sentinels *)
 		Printf.fprintf ochannel "\n\t{";
@@ -910,7 +914,7 @@ class uobject = object(self)
 		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL, " (x_v.usbinformat.f_va_offset);
 		  	Printf.fprintf ochannel "\n\t\t\t0x%08xUL " (x.s_length);
 			Printf.fprintf ochannel "\n\t\t},";
-		)  o_uobj_sentinels_hashtbl;
+		)  o_uobj_publicmethods_sentinels_hashtbl;
 		Printf.fprintf ochannel "\n\t},";
 
 		(*ustack_tos*)
@@ -1031,8 +1035,8 @@ class uobject = object(self)
 	
 			(* copy sentinels lib *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
-															self#get_o_uobj_sentinels_libname ^ ".a")
-				(uobj_install_dir ^ "/" ^ self#get_o_uobj_sentinels_libname ^ ".a"); 
+															self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_libname ^ ".a"); 
 			
 							
 		()
