@@ -110,7 +110,7 @@ module Usbin =
 								(*f_va_offset=0; f_file_offset=0;
 								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());*)
 								f_addr_start=0; 
-								f_addr_end = 0;
+								f_size = 0;
 								f_addr_file = 0;
 								f_aligned_at = !Usconfig.section_alignment; 
 								f_pad_to = !Usconfig.section_alignment; 
