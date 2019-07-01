@@ -124,7 +124,7 @@ class uobject = object(self)
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
 		val o_sentinels_source_file_list : string list ref = ref [];
-s		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
+		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 
 		val o_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
@@ -170,7 +170,7 @@ s		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 								s_fparamdwords = pm.pm_fparamdwords;
 								s_attribute = (Usconfig.get_sentinel_prot ());
 								s_origin = 0;
-								s_length = int_of_string (Usconfig.get_sentinel_size_bytes ());
+								s_length = !Usconfig.section_size_sentinel;
 							};
 			
 						) o_uobj_publicmethods_hashtbl;
