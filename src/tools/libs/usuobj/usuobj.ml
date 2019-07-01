@@ -124,7 +124,7 @@ class uobject = object(self)
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
 
 		val o_sentinels_source_file_list : string list ref = ref [];
-		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
+s		method get_o_sentinels_source_file_list = !o_sentinels_source_file_list;
 
 		val o_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_sentinels_lib_source_file_list = !o_sentinels_lib_source_file_list;
@@ -228,17 +228,6 @@ class uobject = object(self)
 												};
 				};
 				
-			(*	
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_stack" 
-				{ f_name = "uobj_stack";	
-				 	f_subsection_list = [".stack"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_STACK; f_prot=0; f_va_offset=0; f_file_offset=0;
-													f_size = 0x1000;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
-												};
-				};
-			*)
-			
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
