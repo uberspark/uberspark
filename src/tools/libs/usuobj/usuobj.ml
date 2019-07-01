@@ -176,6 +176,7 @@ class uobject = object(self)
 						) o_uobj_publicmethods_hashtbl;
 			) o_sentineltypes_hashtbl;
 
+
 			(* add default uobj sections *)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
@@ -422,6 +423,8 @@ class uobject = object(self)
 			let uobj_section_load_addr = ref 0 in
 			o_uobj_load_addr := uobj_load_addr;
 			uobj_section_load_addr := uobj_load_addr;
+
+			Uslog.logf log_tag Uslog.Info "Length_of o_uobj_sentinels_hashtbl:%u" (Hashtbl.length o_uobj_sentinels_hashtbl);
 			
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
