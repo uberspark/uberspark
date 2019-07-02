@@ -520,8 +520,9 @@ class uobject = object(self)
 				Uslog.logf log_tag Uslog.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  o_uobj_sections_hashtbl;
-			
-			(*ensure all sections fit within the uobj size*)
+
+			(* check to see if the uobj sections fit neatly into uobj size *)
+			(* if not, add a filler section to pad it to uobj size *)
 			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
 				begin
 					Uslog.logf log_tag Uslog.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
@@ -529,6 +530,34 @@ class uobject = object(self)
 				end
 			;	
 
+			if (!uobj_section_load_addr - uobj_load_addr) < uobjsize then
+				begin
+					(* add padding section *)
+					Hashtbl.add uobj_sections_memory_map_hashtbl "usuobj_padding" 
+						{ f_name = "usuobj_padding";	
+						 	f_subsection_list = [ ];	
+							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_addr_file = 0;
+															f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														};
+						};
+					Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+						{ f_name = "usuobj_padding";	
+						 	f_subsection_list = [ ];	
+							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_addr_file = 0;
+															f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														};
+						};
+				end
+			;	
+						
 			o_uobj_size := uobjsize;
 			(!o_uobj_size)
 		;
