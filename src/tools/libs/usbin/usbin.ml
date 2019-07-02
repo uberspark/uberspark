@@ -9,7 +9,7 @@ open Uslog
 open Usextbinutils
 open Usosservices
 open Usuobjcollection
-open Usuobjgen
+(* open Usuobjgen*)
 
 module Usbin =
 	struct
@@ -69,11 +69,11 @@ module Usbin =
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
 				(* addr_start *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," uobj#get_o_uobj_load_addr; 
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," uobj#get_o_uobj_load_addr; 
 				(* addr_end *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," (uobj#get_o_uobj_load_addr + uobj#get_o_uobj_size); 
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," (uobj#get_o_uobj_load_addr + uobj#get_o_uobj_size); 
 				(* addr_file *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)0x%08x," uobj#get_o_uobj_load_addr; 
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," uobj#get_o_uobj_load_addr; 
 				(* aligned_at *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," 0x1000; 
 				(* pad_to *)
@@ -110,7 +110,7 @@ module Usbin =
 								(*f_va_offset=0; f_file_offset=0;
 								f_size = int_of_string(Usconfig.get_default_uobjcoll_hdr_size ());*)
 								f_addr_start=0; 
-								f_addr_end = 0;
+								f_size = 0;
 								f_addr_file = 0;
 								f_aligned_at = !Usconfig.section_alignment; 
 								f_pad_to = !Usconfig.section_alignment; 
@@ -159,6 +159,7 @@ module Usbin =
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
 
+(*
 			(* generate linker script externs *)
 			Hashtbl.iter (fun key (section_info:Ustypes.section_info_t) ->  
 				Printf.fprintf oc "\nextern uint8_t %s_START_ADDR;" key;
@@ -166,7 +167,7 @@ module Usbin =
 			) p_uobj#get_o_uobj_sections_hashtbl;
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
-			
+*)			
 						
 			Printf.fprintf oc "\n__attribute__(( section(\".hdr\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
 
@@ -201,11 +202,11 @@ module Usbin =
 				(* prot *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_prot); 
 				(* addr_start *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_START_ADDR," section_info.f_name; 
-				(* addr end *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_END_ADDR," section_info.f_name; 
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_addr_start); 
+				(* size *)
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_size); 
 				(* addr_file *)
-				Printf.fprintf oc "\n\t\t\t(uint8_t *)&%s_START_ADDR," section_info.f_name; 
+				Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_addr_file); 
 				(* aligned_at *)
 				Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_aligned_at); 
 				(* pad_to *)
@@ -243,7 +244,7 @@ module Usbin =
 
 			(* generate uobj linker script *)
 			let uobj_linker_script_filename =	
-				Usuobjgen.generate_linker_script 
+				Usextbinutils.generate_linker_script 
 					p_uobj#get_o_usmf_hdr_id 
 					p_uobj#get_o_uobj_load_addr
 					p_uobj#get_o_uobj_size 
@@ -298,8 +299,8 @@ module Usbin =
 		(* create uobj sentinel library archive *)
 		let (pestatus, pesignal) = 
 				(Usextbinutils.mklib  
-					p_uobj#get_o_sentinels_lib_source_file_list
-					(p_uobj#get_o_uobj_sentinels_libname ^ ".a")
+					p_uobj#get_o_uobj_publicmethods_sentinels_lib_source_file_list
+					(p_uobj#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
 				) in
 				if (pesignal == true) || (pestatus != 0) then
 					begin

@@ -36,8 +36,9 @@ module Usextbinutils =
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\nOUTPUT_ARCH(\"i386\")";
 			Printf.fprintf oc "\n";
+			Printf.fprintf oc "\n";
 
-			Printf.fprintf oc "\nMEMORY";
+(*			Printf.fprintf oc "\nMEMORY";
 			Printf.fprintf oc "\n{";
 			Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
 						("mem_binary")
@@ -46,7 +47,32 @@ module Usextbinutils =
 						(binary_size);
 			Printf.fprintf oc "\n}";
 			Printf.fprintf oc "\n";
+*)
+
+			Printf.fprintf oc "\nMEMORY";
+			Printf.fprintf oc "\n{";
 	
+			let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
+			List.iter (fun key ->
+			    let x = Hashtbl.find sections_hashtbl key in
+					(* new section memory *)
+					Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
+						("mem_" ^ x.f_name)
+						( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
+					()
+			) keys ;
+
+(*
+			Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
+					("mem_binary")
+					( "rw" ^ "ail") 
+					(binary_origin) 
+					(binary_size);
+*)	
+			Printf.fprintf oc "\n}";
+			Printf.fprintf oc "\n";
+		
+				
 			Printf.fprintf oc "\nSECTIONS";
 			Printf.fprintf oc "\n{";
 			Printf.fprintf oc "\n";
@@ -61,24 +87,33 @@ module Usextbinutils =
 			    if(!i == (List.length keys) - 1 ) then 
 						begin
 							Printf.fprintf oc "\n %s : {" x.f_name;
-							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
+							(*Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;*)
+							Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
 							List.iter (fun subsection ->
 								    Printf.fprintf oc "\n *(%s)" subsection;
 							) x.f_subsection_list;
-							Printf.fprintf oc "\n . = ORIGIN(mem_binary) + LENGTH(mem_binary) - 1;";
+							(* Printf.fprintf oc "\n . = ORIGIN(mem_binary) + LENGTH(mem_binary) - 1;";*)
+							Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
 							Printf.fprintf oc "\n BYTE(0xAA)";
-					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
+							Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
+							(*Printf.fprintf oc "\n	} >mem_binary =0x9090";*)
+					    Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
 					    Printf.fprintf oc "\n";
 						end
 					else
 						begin
 							Printf.fprintf oc "\n %s : {" x.f_name;
-							Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at;
+							(* Printf.fprintf oc "\n	. = ALIGN(0x%08x);" x.usbinformat.f_aligned_at; *)
+							Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
 							List.iter (fun subsection ->
 								    Printf.fprintf oc "\n *(%s)" subsection;
 							) x.f_subsection_list;
-							Printf.fprintf oc "\n . = ALIGN(0x%08x);" x.usbinformat.f_pad_to; 
-					    Printf.fprintf oc "\n	} >mem_binary =0x9090";
+							(* Printf.fprintf oc "\n . = ALIGN(0x%08x);" x.usbinformat.f_pad_to; *) 
+							Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
+							Printf.fprintf oc "\n BYTE(0xAA)";
+							Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
+					    (*Printf.fprintf oc "\n	} >mem_binary =0x9090";*)
+					    Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
 					    Printf.fprintf oc "\n";
 						end
 					;
