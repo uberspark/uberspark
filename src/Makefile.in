@@ -21,7 +21,7 @@ export USPARK_SENTINELSDIR := $(USPARK_DIR)/sentinels
 ###### targets
 
 .PHONY: all
-all: build-tools build-loaders
+all: build-tools 
 
 .PHONY: build-loaders
 build-loaders:
