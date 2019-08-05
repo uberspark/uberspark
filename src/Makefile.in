@@ -85,7 +85,7 @@ install-hwm:
 	$(CP) -rf $(USPARK_HWMDIR)/* $(USPARK_INSTALL_HWMDIR)/.
 
 .PHONY: install
-install: install-tools install-buildshims install-sentinels install-uobjcoll install-hdrs install-hwm
+install: install-tools install-buildshims install-uobjcoll install-hdrs install-hwm
 
 
 .PHONY: clean
