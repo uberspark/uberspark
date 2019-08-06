@@ -33,7 +33,6 @@ export OCAMLC = ocamlfind @OCAMLC@
 export FRAMAC = @FRAMAC@
 export CCERT = @CCERT@
 export CC = @CC@
-export CPP = @CPP@
 export AS = @AS@
 export AR = @AR@
 export LD = @LD@
@@ -134,12 +133,10 @@ I_FLAGS += -I$(USPARK_INSTALL_LIBSINCLUDESDIR)
 CCERT_FLAGS += $(I_FLAGS)
 
 ###### verification (frama-c) includes
-export V_FLAGS := -cpp-command "gcc -C -E -I."
-V_FLAGS += -cpp-extra-args=-D__XMHF_VERIFICATION__
+export V_FLAGS := -cpp-extra-args=-D__XMHF_VERIFICATION__
 V_FLAGS += -cpp-extra-args=-I$(USPARK_INSTALL_INCLUDEDIR)
 V_FLAGS += -cpp-extra-args=-I$(USPARK_INSTALL_HWMINCLUDEDIR)
 V_FLAGS += -cpp-extra-args=-I$(USPARK_INSTALL_LIBSINCLUDESDIR)
-V_FLAGS += -no-cpp-frama-c-compliant
 V_FLAGS += $(USPARK_VERIFICATION_DEFS)
 
 
