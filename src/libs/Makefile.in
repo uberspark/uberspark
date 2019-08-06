@@ -44,6 +44,7 @@ verify-ubersparklibs:
 	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w verify	
 	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w verify
 	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w verify
+	@echo uberSpark RTL verification success!
 
 .PHONY: build-ubersparklibs
 build-ubersparklibs:
