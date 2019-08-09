@@ -55,13 +55,13 @@
 	assigns \nothing;
 @*/
 bool xmhfhw_lapic_isbsp(void){
-	u32 eax, edx;
-	u64 msr_value;
+	uint32_t eax, edx;
+	uint64_t msr_value;
 
 	//read LAPIC base address from MSR
 	msr_value = CASM_FUNCCALL(rdmsr64, MSR_APIC_BASE);
-	eax = (u32)msr_value;
-	edx = (u32)(msr_value >> 32);
+	eax = (uint32_t)msr_value;
+	edx = (uint32_t)(msr_value >> 32);
 
 
 	if(eax & 0x100)

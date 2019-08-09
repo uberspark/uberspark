@@ -67,8 +67,8 @@
 @*/
 static int  sha1_compress(hash_state *md, unsigned char *buf)
 {
-    u32 a,b,c,d,e,W[80],i;
-    u32 t;
+    uint32_t a,b,c,d,e,W[80],i;
+    uint32_t t;
 
     /* copy the state into 512-bits into W[0..15] */
     	/*@

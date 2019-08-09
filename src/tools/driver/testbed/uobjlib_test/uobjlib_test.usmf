@@ -1,0 +1,36 @@
+/*
+sample json file for uobjlib
+author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+#include <uberspark.h>
+
+{
+	/* manifest header */
+	"usmf-hdr" : {
+		"type" : "uobjlib",
+		"subtype" : "", 
+		"id" : "uobjlib_test"
+	},
+
+	/* sources */
+	"usmf-sources" : {
+		"c-files": [ "test1.c", "test2.c"],
+		"casm-files": [ "tesa.cS", "tesb.cS"]
+	}
+
+	
+	,
+
+	/* verification harness node */
+	"usmf-vharness": {
+		"test1.c" : [ "spec", "parm1", "parm2" ],
+		"test2.c" : [ "absint", "parm1" ]
+			
+	}
+	
+	
+}
+
+
+

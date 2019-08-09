@@ -51,12 +51,12 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u64, rdmsr64,
+CASM_FUNCDEF(uint64_t, rdmsr64,
 {
   xmhfhwm_cpu_insn_movl_mesp_ecx(0x4); //ecx = msr
   xmhfhwm_cpu_insn_rdmsr();
   xmhfhwm_cpu_insn_retu64();
 },
-u32 msr)
+uint32_t msr)
 
 

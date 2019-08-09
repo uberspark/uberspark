@@ -46,24 +46,75 @@
 
 //author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __XMHF_USPARK_H_
-#define __XMHF_USPARK_H_
-
-
-#ifndef __ASSEMBLY__
+#ifndef __UBERSPARK_H__
+#define __UBERSPARK_H__
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
+#include <assert.h>
 
+#include <usconfig.h>
 #include <xmhf-hwm.h>
-#endif //__ASSEMBLY__
 
-
-#define USMF_STR(s) _USMF_STR(s)
 #define _USMF_STR(s) #s
+#define USMF_STR(s) _USMF_STR(s)
+
+
+//////
+#define UOBJCOLL_INFO_T_MAGIC	0xD00DF00D
+#define UOBJCOLL_MAX_UOBJS		32
+
+#define UOBJ_MAX_SENTINELS		8
+
+#define UOBJ_SENTINEL_TYPE_CALL		call
+#define UOBJ_SENTINEL_TYPE_CALL_ID	0xFFFF0000
+
+//////
+
+
+#ifndef __ASSEMBLY__
+
+
+//////
+
+typedef void * uobj_entrystub_t;
+
+typedef struct {
+	uint32_t s_type;
+	uint32_t s_attribute;
+	uint32_t s_load_addr;
+	uint32_t s_load_size;
+} __attribute__((packed)) uobj_sentinel_info_t;
+
+typedef struct {
+	uint32_t total_sentinels;
+	uobj_sentinel_info_t sentinels[UOBJ_MAX_SENTINELS];
+	uint32_t ustack_tos[MAX_PLATFORM_CPUS];
+	uint32_t tstack_tos[MAX_PLATFORM_CPUS];
+} __attribute__((packed)) uobj_info_t;
+
+typedef struct {
+	uint32_t magic;
+	uint32_t total_uobjs;
+	uint32_t sizeof_uobj_info_t;
+	uint32_t load_addr;
+}__attribute__((packed)) uobjcoll_hdr_t;
+
+typedef struct {
+	uobjcoll_hdr_t uobjcoll_hdr;
+	uobj_info_t uobj[UOBJCOLL_MAX_UOBJS];
+} __attribute__((packed)) uobjcoll_info_t;
+
+#define SIZEOF_UOBJCOLL_INFO_T	(sizeof(uobjcoll_info_t))
+#define UOBJ_INFO_T_SIZE		(sizeof(uobj_info_t))
+
+//////
+
+
 
 
 #if defined (__XMHF_VERIFICATION__) && defined (__USPARK_FRAMAC_VA__)
@@ -71,19 +122,19 @@
 // frama-c non-determinism functions
 //////
 
-u32 Frama_C_entropy_source;
+uint32_t Frama_C_entropy_source;
 
 //@ assigns Frama_C_entropy_source \from Frama_C_entropy_source;
 void Frama_C_update_entropy(void);
 
-u32 framac_nondetu32(void){
+uint32_t framac_nondetu32(void){
   Frama_C_update_entropy();
-  return (u32)Frama_C_entropy_source;
+  return (uint32_t)Frama_C_entropy_source;
 }
 
-u32 framac_nondetu32interval(u32 min, u32 max)
+uint32_t framac_nondetu32interval(uint32_t min, uint32_t max)
 {
-  u32 r,aux;
+  uint32_t r,aux;
   Frama_C_update_entropy();
   aux = Frama_C_entropy_source;
   if ((aux>=min) && (aux <=max))
@@ -95,4 +146,7 @@ u32 framac_nondetu32interval(u32 min, u32 max)
 
 #endif //
 
-#endif /* _XMHF_USPARK_H */
+#endif //__ASSEMBLY__
+
+
+#endif //__UBERSPARK_H__

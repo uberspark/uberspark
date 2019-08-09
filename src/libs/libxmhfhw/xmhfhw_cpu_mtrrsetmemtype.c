@@ -56,7 +56,7 @@
 /*@
   assigns \nothing;
 @*/
-bool set_mem_type(u32 base, uint32_t size, uint32_t mem_type)
+bool set_mem_type(uint32_t base, uint32_t size, uint32_t mem_type)
 {
 	uint32_t num_pages;
 	int ndx;
@@ -65,14 +65,14 @@ bool set_mem_type(u32 base, uint32_t size, uint32_t mem_type)
 	mtrr_cap_t mtrr_cap;
 	mtrr_physmask_t mtrr_physmask;
 	mtrr_physbase_t mtrr_physbase;
-	u64 msrval;
+	uint64_t msrval;
 
 	// disable all fixed MTRRs, set default type to UC
 	unpack_mtrr_def_type_t(&mtrr_def_type, CASM_FUNCCALL(rdmsr64,MSR_MTRRdefType));
 	mtrr_def_type.fe = 0;
 	mtrr_def_type.type = MTRR_TYPE_UNCACHABLE;
 	msrval = pack_mtrr_def_type_t(&mtrr_def_type);
-	CASM_FUNCCALL(wrmsr64,MSR_MTRRdefType, (u32)msrval, (u32)((u64)msrval >> 32) );
+	CASM_FUNCCALL(wrmsr64,MSR_MTRRdefType, (uint32_t)msrval, (uint32_t)((uint64_t)msrval >> 32) );
 
 	// initially disable all variable MTRRs (we'll enable the ones we use)
 	unpack_mtrr_cap_t(&mtrr_cap, CASM_FUNCCALL(rdmsr64,MSR_MTRRcap));
@@ -90,7 +90,7 @@ bool set_mem_type(u32 base, uint32_t size, uint32_t mem_type)
 		unpack_mtrr_physmask_t(&mtrr_physmask, CASM_FUNCCALL(rdmsr64,MTRR_PHYS_MASK0_MSR + ndx*2));
 		mtrr_physmask.v = 0;
 		msrval = pack_mtrr_physmask_t(&mtrr_physmask);
-		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_MASK0_MSR + ndx*2, (u32)msrval, (u32)((u64)msrval >> 32) );
+		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_MASK0_MSR + ndx*2, (uint32_t)msrval, (uint32_t)((uint64_t)msrval >> 32) );
 	}
 
 	// map all pages as mem_type
@@ -111,18 +111,18 @@ bool set_mem_type(u32 base, uint32_t size, uint32_t mem_type)
 		mtrr_physbase.type = mem_type;
 		mtrr_physbase.reserved2 = 0;
 		msrval = pack_mtrr_physbase_t(&mtrr_physbase);
-		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_BASE0_MSR + ndx*2, (u32)msrval, (u32)((u64)msrval >> 32));
+		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_BASE0_MSR + ndx*2, (uint32_t)msrval, (uint32_t)((uint64_t)msrval >> 32));
 
 		// calculate MTRR mask: MTRRs can map pages in power of 2, may need to use multiple MTRRS to map all of region
 		pages_in_range = 1 << ((uint32_t)fls(num_pages) - 1);
 
 		unpack_mtrr_physmask_t(&mtrr_physmask, CASM_FUNCCALL(rdmsr64,MTRR_PHYS_MASK0_MSR + ndx*2));
 		mtrr_physmask.reserved1 = 0;
-		mtrr_physmask.mask = (u32) ~(pages_in_range - 1);
+		mtrr_physmask.mask = (uint32_t) ~(pages_in_range - 1);
 		mtrr_physmask.v = 1;
 		mtrr_physmask.reserved2 = 0;
 		msrval = pack_mtrr_physmask_t(&mtrr_physmask);
-		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_MASK0_MSR + ndx*2, (u32)msrval, (u32)((u64)msrval >> 32));
+		CASM_FUNCCALL(wrmsr64,MTRR_PHYS_MASK0_MSR + ndx*2, (uint32_t)msrval, (uint32_t)((uint64_t)msrval >> 32));
 
 
 		// prepare for the next loop depending on number of pages

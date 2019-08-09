@@ -52,19 +52,19 @@
 /*@
 	assigns \nothing;
 @*/
-u32 xmhf_baseplatform_arch_x86_getcpulapicid(void){
-	u32 eax, edx, lapic_reg;
-	u64 msr_value;
-	u32 lapic_id;
+uint32_t xmhf_baseplatform_arch_x86_getcpulapicid(void){
+	uint32_t eax, edx, lapic_reg;
+	uint64_t msr_value;
+	uint32_t lapic_id;
 
 	//read LAPIC id of this core
 	msr_value = CASM_FUNCCALL(rdmsr64, MSR_APIC_BASE);
-	eax = (u32)msr_value;
-	edx = (u32)(msr_value >> 32);
+	eax = (uint32_t)msr_value;
+	edx = (uint32_t)(msr_value >> 32);
 
-	eax &= (u32)0xFFFFF000UL;
-	lapic_reg = ((u32)eax+ (u32)LAPIC_ID);
-	lapic_id = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu32, (u32)lapic_reg);
+	eax &= (uint32_t)0xFFFFF000UL;
+	lapic_reg = ((uint32_t)eax+ (uint32_t)LAPIC_ID);
+	lapic_id = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu32, (uint32_t)lapic_reg);
 	lapic_id = lapic_id >> 24;
 
 	return lapic_id;

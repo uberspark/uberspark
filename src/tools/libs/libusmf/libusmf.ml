@@ -7,6 +7,10 @@ open Yojson.Basic.Util
 open Yojson.Basic
 open Yojson
 
+open Usconfig
+open Usosservices
+open Usextbinutils
+
 module Libusmf = 
 	struct
 

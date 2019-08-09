@@ -6,7 +6,13 @@ open Unix
 open Filename
 
 open Uslog
+open Usconfig
+open Usosservices
 open Libusmf
+open Usuobjlib
+open Usuobj
+open Usuobjcollection
+open Usbin
 
 let log_mpf = "uberSpark";;
 
@@ -20,89 +26,154 @@ let g_uberspark_install_libsdir = "/usr/local/uberspark/libs";;
 let g_uberspark_install_libsincludesdir = "/usr/local/uberspark/libs/include";;
 let g_uberspark_install_toolsdir = "/usr/local/uberspark/tools";;
 
-(* standard definitions *)
-let g_uberspark_pp_std_defines = [ "-D"; "__XMHF_TARGET_CPU_X86__"; 
-																	"-D"; "__XMHF_TARGET_CONTAINER_VMX__";
-																	"-D"; "__XMHF_TARGET_PLATFORM_X86PC__";
-																	"-D"; "__XMHF_TARGET_TRIAD_X86_VMX_X86PC__"
-																	];;
+let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)";;
+let usage_msg = "Usage:";;
 
-let g_uberspark_pp_std_define_assembly = ["-D"; "__ASSEMBLY__"];;
-
-
-(* external tools *)
-let g_uberspark_exttool_pp = "gcc";;
-let g_uberspark_exttool_cc = "gcc";;
-let g_uberspark_exttool_ld = "ld";;
-
-let copt_builduobj = ref false;;
-
+(*----------------------------------------------------------------------------*)
+(* command line options setters *)
+(*----------------------------------------------------------------------------*)
 let cmdopt_invalid opt = 
 	Uslog.logf log_mpf Uslog.Info "invalid option: '%s'; use -help to see available options" opt;
 	ignore(exit 1);
 	;;
 
-let cmdopt_uobjlist = ref "";;
-let cmdopt_uobjlist_set value = cmdopt_uobjlist := value;;
+let copt_builduobj = ref false;;
 
-let cmdopt_uobjmanifest = ref "";;
-let cmdopt_uobjmanifest_set value = cmdopt_uobjmanifest := value;;
+let copt_install = ref false;;
+
+let cmdopt_uobjcollmf = ref "";;
+let cmdopt_uobjcollmf_set value = cmdopt_uobjcollmf := value;;
+
+let cmdopt_uobjmf = ref "";;
+let cmdopt_uobjmf_set value = cmdopt_uobjmf := value;;
+
+let cmdopt_loadaddr_specified = ref false;;
+let cmdopt_loadaddr = ref "";;
+let cmdopt_loadaddr_set 
+	(value : string) = 
+	cmdopt_loadaddr_specified := true;
+	cmdopt_loadaddr := value;
+	;;
+
+let cmdopt_uobjsize_specified = ref false;;
+let cmdopt_uobjsize = ref "";;
+let cmdopt_uobjsize_set 
+	(value : string) = 
+	cmdopt_uobjsize_specified := true;
+	cmdopt_uobjsize := value;
+	;;
+
+let cmdopt_platform_specified = ref false;;
+let cmdopt_platform = ref "";;
+let cmdopt_platform_set 
+	(value : string) = 
+	cmdopt_platform_specified := true;
+	cmdopt_platform := value;
+	;;
+
+let cmdopt_cpu_specified = ref false;;
+let cmdopt_cpu = ref "";;
+let cmdopt_cpu_set 
+	(value : string) = 
+	cmdopt_cpu_specified := true;
+	cmdopt_cpu := value;
+	;;
+
+let cmdopt_arch_specified = ref false;;
+let cmdopt_arch = ref "";;
+let cmdopt_arch_set 
+	(value : string) = 
+	cmdopt_arch_specified := true;
+	cmdopt_arch := value;
+	;;
 
 
-let file_copy input_name output_name =
-	let buffer_size = 8192 in
-	let buffer = Bytes.create buffer_size in
-  let fd_in = openfile input_name [O_RDONLY] 0 in
-  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
-  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
-    |  0 -> ()
-    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
-  in
-  copy_loop ();
-  close fd_in;
-  close fd_out;
-	()
-;;
+let cmdopt_section_alignment_specified = ref false;;
+let cmdopt_section_alignment = ref "";;
+let cmdopt_section_alignment_set 
+	(value : string) = 
+	cmdopt_section_alignment_specified := true;
+	cmdopt_section_alignment := value;
+	;;
+
+(* page size *)
+let cmdopt_page_size_specified = ref false;;
+let cmdopt_page_size = ref "";;
+let cmdopt_page_size_set 
+	(value : string) = 
+	cmdopt_page_size_specified := true;
+	cmdopt_page_size := value;
+	;;
 
 
-(* execute a process and print its output if verbose is set to true *)
-(* return the error code of the process and the output as a list of lines *)
-let exec_process_withlog p_name cmdline verbose =
-	let readme, writeme = Unix.pipe () in
-	let pid = Unix.create_process
-		p_name (Array.of_list ([p_name] @ cmdline))
-    Unix.stdin writeme writeme in
-  Unix.close writeme;
-  let in_channel = Unix.in_channel_of_descr readme in
-  let p_output = ref [] in
-	let p_singleoutputline = ref "" in
-	let p_exitstatus = ref 0 in
-	let p_exitsignal = ref false in
-  begin
-    try
-      while true do
-				p_singleoutputline := input_line in_channel;
-				if verbose then
-					Uslog.logf log_mpf Uslog.Info "%s" !p_singleoutputline;
-										
-				p_output := p_singleoutputline :: !p_output 
-	    done
-    with End_of_file -> 
-			match	(Unix.waitpid [] pid) with
-    	| (wpid, Unix.WEXITED status) ->
-        	p_exitstatus := status;
-					p_exitsignal := false;
-    	| (wpid, Unix.WSIGNALED signal) ->
-        	p_exitsignal := true;
-    	| (wpid, Unix.WSTOPPED signal) ->
-        	p_exitsignal := true;
-			;
-			()
-  end;
+let cmdopt_info = ref false;;
 
-	Unix.close readme;
-	(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
-;;
+let cmdopt_uobjcoll_specified = ref false;;
+let cmdopt_uobjcoll = ref "";;
+let cmdopt_uobjcoll_set 
+	(value : string) = 
+	cmdopt_uobjcoll_specified := true;
+	cmdopt_uobjcoll := value;
+	;;
+
+let cmdopt_uobj_specified = ref false;;
+let cmdopt_uobj = ref "";;
+let cmdopt_uobj_set 
+	(value : string) = 
+	cmdopt_uobj_specified := true;
+	cmdopt_uobj := value;
+	;;
+
+let cmdopt_get_includedir = ref false;;
+
+let cmdopt_get_libdir = ref false;;
+
+let cmdopt_get_libsentinels = ref false;;
+
+let cmdopt_get_installrootdir = ref false;;
+
+let cmdopt_get_buildshimsdir = ref false;;
+
+
+(*----------------------------------------------------------------------------*)
+(* command line options *)
+(*----------------------------------------------------------------------------*)
+
+let cmdline_speclist = [
+	("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
+	
+	("--uobjcollmf", Arg.String (cmdopt_uobjcollmf_set), "uobj collection manifest filename");
+	("--uobjmf", Arg.String (cmdopt_uobjmf_set), "uobj manifest filename");
+	
+	("--load-addr", Arg.String (cmdopt_loadaddr_set), "load address");
+	("--uobjsize", Arg.String (cmdopt_uobjsize_set), "uobj size (in bytes)");
+	("--install", Arg.Set copt_install, "Install uobj/uobj collection");
+
+	("--platform", Arg.String (cmdopt_platform_set), "set hardware platform");
+	("--cpu", Arg.String (cmdopt_cpu_set), "set hardware CPU type");
+	("--arch", Arg.String (cmdopt_arch_set), "set hardware CPU architecture");
+
+	("--section-alignment", Arg.String (cmdopt_section_alignment_set), "set section alignment (4K, 2M or 4M)");
+	("--page-size", Arg.String (cmdopt_page_size_set), "set page size (4K or 2M)");
+
+	("--uobjcoll", Arg.String (cmdopt_uobjcoll_set), "uobj collection name/identifier");
+	("--uobj", Arg.String (cmdopt_uobj_set), "uobj name/identifier");
+
+	("--info", Arg.Set cmdopt_info, "Get information on uberSpark, installed uobj collection, or uobj");
+	("--get-includedir", Arg.Set cmdopt_get_includedir, "get uobj include directory");
+	("--get-libdir", Arg.Set cmdopt_get_libdir, "get uobj library directory");
+	("--get-libsentinels", Arg.Set cmdopt_get_libsentinels, "get uobj sentinels library");
+	("--get-installrootdir", Arg.Set cmdopt_get_installrootdir, "get installation root directory");
+	("--get-buildshimsdir", Arg.Set cmdopt_get_buildshimsdir, "get installation build shims directory");
+
+
+	];;
+
+
+
+
+(*----------------------------------------------------------------------------*)
 
 
 let uberspark_build_includedirs_base () = 
@@ -124,89 +195,9 @@ let uberspark_build_includedirs uobj_id uobj_hashtbl_includedirs =
 ;;	
 
 
-let uberspark_generate_uobj_mf_forpreprocessing uobj_id uobj_manifest_filename uobj_hashtbl_includes =
-  let uobj_out_manifest_filename = (uobj_manifest_filename ^ ".c") in
-	let fd_in = openfile uobj_manifest_filename [O_RDONLY] 0 in
-  let fd_out = openfile uobj_out_manifest_filename [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
-	let uobj_hashtbl_includes_list = (Hashtbl.find_all uobj_hashtbl_includes uobj_id) in 
-	let uobj_includes_str = ref "" in
-
-		List.iter (fun x -> uobj_includes_str := !uobj_includes_str ^ "#include <" ^ x ^ ">\r\n") uobj_hashtbl_includes_list;
-		uobj_includes_str := !uobj_includes_str ^ "\r\n";
-		ignore(write_substring fd_out !uobj_includes_str 0 (String.length !uobj_includes_str));
-
-	let buffer_size = 8192 in
-	let buffer = Bytes.create buffer_size in
-  let rec copy_loop () = match read fd_in buffer 0 buffer_size with
-    |  0 -> ()
-    | r -> ignore (write fd_out buffer 0 r); copy_loop ()
-  in
-  copy_loop ();
-	
-  close fd_in;
-  close fd_out;
-	(uobj_out_manifest_filename)
-;;
 
 
-let uberspark_generate_uobj_mf_preprocessed 
-	uobj_id uobj_manifest_filename_forpreprocessing uobj_includedirs_list =
-	  let uobj_mf_filename_preprocessed = 
-			((Filename.basename uobj_manifest_filename_forpreprocessing) ^ ".pp") in
-		let pp_cmdline = ref [] in
-			pp_cmdline := !pp_cmdline @ [ "-E" ];
-			pp_cmdline := !pp_cmdline @ [ "-P" ];
-			pp_cmdline := !pp_cmdline @ g_uberspark_pp_std_defines;
-			pp_cmdline := !pp_cmdline @ g_uberspark_pp_std_define_assembly;
-			pp_cmdline := !pp_cmdline @ uobj_includedirs_list;
-			pp_cmdline := !pp_cmdline @ [ uobj_manifest_filename_forpreprocessing ];
-			pp_cmdline := !pp_cmdline @ [ "-o" ];
-			pp_cmdline := !pp_cmdline @ [ uobj_mf_filename_preprocessed ];
-			ignore(exec_process_withlog g_uberspark_exttool_pp !pp_cmdline true);
-	(uobj_mf_filename_preprocessed)
-;;
-
-
-
-let uberspark_compile_uobj_cfile uobj_cfile_name uobj_includedirs_list = 
-		let cc_cmdline = ref [] in
-			cc_cmdline := !cc_cmdline @ [ "-c" ];
-			cc_cmdline := !cc_cmdline @ [ "-m32" ];
-			cc_cmdline := !cc_cmdline @ [ "-fno-common" ];
-			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_defines;
-(*			cc_cmdline := !cc_cmdline @ g_uberspark_pp_std_define_assembly; *)
-			cc_cmdline := !cc_cmdline @ uobj_includedirs_list;
-			cc_cmdline := !cc_cmdline @ [ uobj_cfile_name ];
-			cc_cmdline := !cc_cmdline @ [ "-o" ];
-			cc_cmdline := !cc_cmdline @ [ (uobj_cfile_name ^ ".o") ];
-			(exec_process_withlog g_uberspark_exttool_cc !cc_cmdline true)
-;;
-
-
-let uberspark_compile_uobj_cfiles uobj_cfile_list uobj_includedirs_list = 
-	List.iter (fun x ->  
-							Uslog.logf log_mpf Uslog.Info "Compiling: %s" x;
-							let (pestatus, pesignal, poutput) = 
-								(uberspark_compile_uobj_cfile x uobj_includedirs_list) in
-									begin
-										if (pesignal == true) || (pestatus != 0) then
-											begin
-													(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
-													(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
-													(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
-													Uslog.logf log_mpf Uslog.Error "in compiling %s!" x;
-													ignore(exit 1);
-											end
-										else
-											begin
-													Uslog.logf log_mpf Uslog.Info "Compiled %s successfully" x;
-											end
-									end
-						) uobj_cfile_list;
-	()
-;;
-
-								
+(*								
 let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list 
 		uobj_linker_script uobj_bin_name = 
 		let ld_cmdline = ref [] in
@@ -237,155 +228,227 @@ let uberspark_link_uobj uobj_cfile_list uobj_libdirs_list uobj_libs_list
 ;;
 
 																
-let uberspark_generate_uobj_linker_script uobj_name uobj_load_addr 
-	uobj_sections_list = 
-	let uobj_linker_script_filename = (uobj_name ^ ".lscript") in
-	let uobj_section_load_addr = ref 0 in
-	let oc = open_out uobj_linker_script_filename in
-		Printf.fprintf oc "\n/* autogenerated uberSpark uobj linker script */";
-		Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\nOUTPUT_ARCH(\"i386\")";
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\nMEMORY";
-		Printf.fprintf oc "\n{";
+								
+																
+*)
+																								
 
-		uobj_section_load_addr := uobj_load_addr;
-		
-		List.iter (fun x ->
-			(* new section *)
-			let memregion_name = ("uobjmem_" ^ (List.nth x 0)) in
-			let memregion_attrs = ( (List.nth x 1) ^ "ail") in
-			let memregion_origin = !uobj_section_load_addr in
-			let memregion_size =  int_of_string (List.nth x 2) in
-				Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
-					memregion_name memregion_attrs memregion_origin memregion_size;
-			uobj_section_load_addr := !uobj_section_load_addr + memregion_size;
-			()
-		)  uobj_sections_list;
-				
-		(* Printf.fprintf oc "\n  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */"; *)
-		Printf.fprintf oc "\n}";
-		Printf.fprintf oc "\n";
-		
-		
-		Printf.fprintf oc "\nSECTIONS";
-		Printf.fprintf oc "\n{";
-		Printf.fprintf oc "\n";
+(*----------------------------------------------------------------------------*)
+let handle_option_info () =
+		let handle_option_info_error = ref false in
+		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 
-		uobj_section_load_addr := uobj_load_addr;
-		
-		List.iter (fun x ->
-			(* new section *)
-			Printf.fprintf oc "\n	. = 0x%08x;" !uobj_section_load_addr;
-	    Printf.fprintf oc "\n %s : {" (List.nth x 0);
-			let section_size= (List.nth x 2) in
-			let elem_index = ref 0 in
-			elem_index := 0;
-			List.iter (fun y ->
-				if (!elem_index > 2) then
+		if !cmdopt_get_includedir == true then
+			begin
+				if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == false then
 					begin
-				    Printf.fprintf oc "\n *(%s)" y;
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
 					end
-				; 
-				elem_index := !elem_index + 1;
-				()
-			) x;
-	
-			Printf.fprintf oc "\n . = %s;" section_size;
-	    Printf.fprintf oc "\n	} >uobjmem_%s =0x9090" (List.nth x 0);
-	    Printf.fprintf oc "\n";
-			uobj_section_load_addr := !uobj_section_load_addr + 
-					int_of_string(section_size);
-			()
-		) uobj_sections_list;
+				else if !cmdopt_uobjcoll_specified == true && !cmdopt_uobj_specified == true then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_prefix;
+					end
+				else if !cmdopt_uobjcoll_specified == false && !cmdopt_uobj_specified == false then
+					begin
+						Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+							Usconfig.get_uberspark_config_install_includedir;
+					end
+				else
+					begin
+						handle_option_info_error := true;
+					end
+				;
+			end
+			
+		else if !cmdopt_get_libdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(Usconfig.get_uberspark_config_install_uobjcolldir ^	"/" ^ 
+					!cmdopt_uobjcoll ^ "/" ^ !cmdopt_uobj);
+			end
+			
+		else if !cmdopt_get_libsentinels == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					(!cmdopt_uobj ^ "-" ^ 	!cmdopt_platform ^ "-" ^ !cmdopt_cpu ^ 
+					"-" ^ !cmdopt_arch);
+			end
+		
+		else if !cmdopt_get_installrootdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_rootdir;
+			end
 
+		else if !cmdopt_get_buildshimsdir == true then
+			begin
+				Uslog.logf log_mpf Uslog.Stdoutput "%s" 
+					Usconfig.get_uberspark_config_install_buildshimsdir;
+			end
+		
+		;
+		
+		
+		if !handle_option_info_error == true then
+			begin
+				Uslog.logf log_mpf Uslog.Error "invalid --info arguments";
+				Arg.usage cmdline_speclist usage_msg;
+				ignore(exit 1);
+		  end
+		;
 
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";
-		Printf.fprintf oc "\n	* anything we didn't explicitly place.";
-		Printf.fprintf oc "\n	* when this does cause link to fail, temporarily comment";
-		Printf.fprintf oc "\n	* this part out to see what sections end up in the output";
-		Printf.fprintf oc "\n	* which are not handled above, and handle them.";
-		Printf.fprintf oc "\n	*/";
-		Printf.fprintf oc "\n	/DISCARD/ : {";
-		Printf.fprintf oc "\n	*(*)";
-		Printf.fprintf oc "\n	}";
-		Printf.fprintf oc "\n}";
-		Printf.fprintf oc "\n";
-																																																																																																																								
-		close_out oc;
+						
 		()
 ;;
 
-								
-																
-let uberspark_generate_uobj_hdr uobj_name uobj_load_addr 
-	uobj_sections_list =
-	let uobj_hdr_filename = (uobj_name ^ ".hdr.c") in
-	let oc = open_out uobj_hdr_filename in
-		Printf.fprintf oc "\n/* autogenerated uberSpark uobj header */";
-		Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\n";
+(*----------------------------------------------------------------------------*)
 
-		Printf.fprintf oc "\n#include <uberspark.h>";
-		Printf.fprintf oc "\n";
-
-		List.iter (fun x ->
-			(* new section *)
-			let section_name_var = ("__uobjsection_filler_" ^ (List.nth x 0)) in
-			let section_name = (List.nth x 3) in
-			  if (compare section_name ".text") <> 0 then
-					begin
-						Printf.fprintf oc "\n__attribute__((section (\"%s\"))) uint8_t %s[1]={ 0 };"
-							section_name section_name_var;
-					end
-				;
-			()
-		)  uobj_sections_list;
-
-		Printf.fprintf oc "\n";
-		Printf.fprintf oc "\n";
-			
-		close_out oc;
-	(uobj_hdr_filename)
-;; 
-																								
-																																
-																																																
+																												
+																																																								
+(*----------------------------------------------------------------------------*)
 let main () =
-	begin
-		let speclist = [
-			("--builduobj", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("-b", Arg.Set copt_builduobj, "Build uobj binary by compiling and linking");
-			("--uobjlist", Arg.String (cmdopt_uobjlist_set), "uobj list filename with path");
-			("--uobjmanifest", Arg.String (cmdopt_uobjmanifest_set), "uobj list filename with path");
-
-			] in
-		let banner = "uberSpark driver tool by Amit Vasudevan (amitvasudevan@acm.org)" in
-		let usage_msg = "Usage:" in
 		let uobj_id = ref 0 in
 		let uobj_manifest_filename = ref "" in
 		let uobj_name = ref "" in
 		let uobj_mf_filename_forpreprocessing = ref "" in	
 		let uobj_mf_filename_preprocessed = ref "" in  
+
+		(* parse command line arguments *)
+		Arg.parse cmdline_speclist cmdopt_invalid usage_msg;
 			
-			Uslog.current_level := Uslog.ord Uslog.Debug; 
+		(* set debug verbosity accordingly *)
+		if !cmdopt_info == true then
+			begin
+				Uslog.current_level := Uslog.ord Uslog.Stdoutput;
+			end
+		else
+			begin
+				Uslog.current_level := Uslog.ord Uslog.Debug;
+			end
+		;
+		
+	  (* print banner and parse command line args *)
+		Uslog.logf log_mpf Uslog.Info "%s" banner;
+		Uslog.logf log_mpf Uslog.Info ">>>>>>";
 
-			Uslog.logf log_mpf Uslog.Info "%s" banner;
-			Uslog.logf log_mpf Uslog.Info ">>>>>>";
-			Arg.parse speclist cmdopt_invalid usage_msg;
+		(* load up default platform, cpu and arch if not specified on command line*)
+		if !cmdopt_platform_specified == false then
+			begin
+				cmdopt_platform := Usconfig.get_uberspark_config_hw_platform_default;
+			end
+		;
+		if !cmdopt_cpu_specified == false then
+			begin
+				cmdopt_cpu := Usconfig.get_uberspark_config_hw_cpu_default;
+			end
+		;
+		if !cmdopt_arch_specified == false then
+			begin
+				cmdopt_arch := Usconfig.get_uberspark_config_hw_arch_default;
+			end
+		;
 
-			Uslog.logf log_mpf Uslog.Info "Parsing uobj list using: %s..." !cmdopt_uobjlist;
-			Libusmf.usmf_parse_uobj_list (!cmdopt_uobjlist) ((Filename.dirname !cmdopt_uobjlist) ^ "/");
-			Uslog.logf log_mpf Uslog.Info "Parsed uobj list, total uobjs=%u" !Libusmf.g_totalslabs;
+		Uslog.logf log_mpf Uslog.Info "Target platform='%s', CPU='%s', arch='%s'"
+			!cmdopt_platform !cmdopt_cpu !cmdopt_arch;
 
-			uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
-			uobj_name := Filename.chop_extension !uobj_manifest_filename;
-			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);
+		(* sanity check command line arguments *)
+		if(!cmdopt_loadaddr_specified == false) then
+				cmdopt_loadaddr := (Usconfig.get_default_load_addr());
+		;
 
+		(* sanity check uobj size command line argument *)
+		if(!cmdopt_uobjsize_specified == false) then
+				cmdopt_uobjsize := (Usconfig.get_default_uobjsize());
+		;
+
+
+		(* setup defaults *)
+		if (String.compare !cmdopt_uobjcollmf "") == 0 then
+			begin
+				cmdopt_uobjcollmf := Usconfig.default_uobjcoll_usmf_name;
+			end
+		;
+
+
+		(* check if information requested *)
+		if !cmdopt_info == true then 
+			begin
+				handle_option_info ();
+			end
+		else
+		begin
+				
+
+		(* setup section alignment *)
+		if !cmdopt_section_alignment_specified == true then
+			begin
+				Usconfig.section_alignment := int_of_string(!cmdopt_section_alignment);
+			end
+		;
+
+		Uslog.logf log_mpf Uslog.Info "setting page size...";
+
+		(* setup page size *)
+		if !cmdopt_page_size_specified == true then
+			begin
+				Usconfig.page_size := (int_of_string(!cmdopt_page_size));
+			end
+		;
+
+
+		(* create uobj collection *)
+		Uslog.logf log_mpf Uslog.Info "Proceeding to initialize uobj collection using: %s..." !cmdopt_uobjcollmf;
+		Usuobjcollection.init_build_configuration !cmdopt_uobjcollmf "" true;
+		Usuobjcollection.collect_uobjs_with_manifest_parsing ();
+		Usuobjcollection.compute_memory_map (int_of_string(!cmdopt_loadaddr)) (int_of_string(!cmdopt_uobjsize));
+		Uslog.logf log_mpf Uslog.Info "Initialized uobj collection, total uobjs=%u" !Usuobjcollection.total_uobjs;
+
+	
+
+
+		(* if we are building *)
+		if !copt_builduobj == true then
+			begin
+				Uslog.logf log_mpf Uslog.Info "Proceeding to compile uobj collection...";
+				Usuobjcollection.compile "" true;
+				Uslog.logf log_mpf Uslog.Info "Successfully compiled uobj collection.";
+				Uslog.logf log_mpf Uslog.Info "Collection binary filename: %s" !Usuobjcollection.o_binary_image_filename;
+				Usbin.generate_uobjcoll_bin_image (!Usuobjcollection.o_binary_image_filename);		
+			end
+		;
+
+		(* install uobj collection and uobjs if specified *)
+		if !copt_install == true then
+			begin
+				Usuobjcollection.install (Usconfig.get_default_install_uobjcolldir ());
+			end
+		;
+
+		end
+		;
+
+(*
+		(* grab uobj manifest filename and derive uobj name *)
+		uobj_manifest_filename := (Filename.basename !cmdopt_uobjmanifest);
+		uobj_name := Filename.chop_extension !uobj_manifest_filename;
+*)
+
+(*
+		(* check options and do the task *)
+		if (!copt_builduobj == true ) then
+			begin
+				let uobj = new Usuobj.uobject in
+					uobj#build !uobj_manifest_filename "" true	
+			end
+		;
+*)
+
+
+(*			uobj_id := (Hashtbl.find Libusmf.slab_nametoid !uobj_name);*)
+
+(*
 			Uslog.logf log_mpf Uslog.Info "Parsing uobj manifest using: %s..." !cmdopt_uobjmanifest;
 			Uslog.logf log_mpf Uslog.Info "uobj_name='%s', uobj_id=%u" !uobj_name !uobj_id;
 
@@ -472,12 +535,12 @@ let main () =
 					!uobj_libdirs_list !uobj_libs_list 
 					(!uobj_name ^ ".lscript") !uobj_name;
 
-						
-			Uslog.logf log_mpf Uslog.Info "Done.\r\n";
+*)
+			
+(*							
+			Usuobjlib.build !uobj_manifest_filename "" true;*)
+ ;;
 
-		end
-	;;
- 
 		
 main ();;
 

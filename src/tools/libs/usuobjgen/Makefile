@@ -1,0 +1,24 @@
+######
+# Makefile for UberSpark tools (common)
+# author: amit vasudevan (amitvasudevan@acm.org)
+######
+
+include ../../../uberspark-common.mk
+
+
+###### targets
+
+.PHONY: all
+all: 
+	$(OCAMLC) -o usuobjgen.o -package str -package yojson -package unix -package ustypes -package usconfig -package uslog -package usosservices -package usextbinutils -package usmanifest -linkpkg usuobjgen.ml
+	ocamlfind remove usuobjgen 
+	ocamlfind install usuobjgen META usuobjgen.cmi usuobjgen.cmo usuobjgen.o 
+
+
+.PHONY: clean
+clean:
+	$(RM) -f usuobjgen.cmi
+	$(RM) -f usuobjgen.cmo
+	$(RM) -f usuobjgen.o
+	
+	

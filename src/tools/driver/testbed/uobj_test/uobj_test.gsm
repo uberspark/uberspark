@@ -4,7 +4,29 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 */
 
+#include <uberspark.h>
+
 {
+	/* manifest header */
+	/* "usmf-type" --> manifest type: uobj list, uobj lib, uobj
+	*/
+
+	"usmf-type" : "uobjlib",
+
+	/* following are the manifest nodes for uobj usmf-type = uobj lib */
+	/*
+		"uobjlib-deps" --> dependencies (addl includedirs, addl libdirs, libs)
+		"uobjlib-sources" --> sources (casm, c)
+		"uobjlib-vharness" --> verification harness	
+	*/
+
+
+	/* manifest dependencies node */
+	"usmf-deps": {
+		"addl-includedirs": [],
+		"addl-libdirs": []
+
+	},
 
 	/* uobj sources node */	
 	"uobj-sources" : {
@@ -54,7 +76,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* uobj binary node */	
 	"uobj-binary" : {
 		"uobj-sections": {
-			"uobj_code" 	: [ "rx", "0x200000", ".text" ],
+			"uobj_code" 	: [ "rx", USMF_STR(0x200000), ".text" ],
 			"uobj_data" 	: [ "rw", "0x200000", ".data", ".rodata*" ],
 			"uobj_stack" 	: [ "rw", "0x200000", ".stack" ],
 			"uobj_dmadata" 	: [ "rw", "0x200000", ".dmadata" ]
