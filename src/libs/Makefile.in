@@ -44,6 +44,7 @@ verify-ubersparklibs:
 	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w verify	
 	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w verify
 	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w verify
+	@echo uberSpark RTL verification success!
 
 .PHONY: build-ubersparklibs
 build-ubersparklibs:
@@ -92,6 +93,8 @@ clean:
 	cd $(USPARK_LIBSDIR)/libxmhfc && make -f libubersparkc.mk -w clean	
 	cd $(USPARK_LIBSDIR)/libxmhfcrypto && make -f libubersparkcrypto.mk -w clean	
 	cd $(USPARK_LIBSDIR)/libxmhfhw && make -f libubersparkhw.mk -w clean	
+	cd $(USPARK_LIBSDIR)/libxmhfgeec && make -f libxmhfgeec.mk -w clean	
+	cd $(USPARK_LIBSDIR)/libxmhfdebug && make -f libxmhfdebug.mk -w clean	
 	
 
 # http://www.gnu.org/software/automake/manual/automake.html#Clean

@@ -21,7 +21,7 @@ export USPARK_SENTINELSDIR := $(USPARK_DIR)/sentinels
 ###### targets
 
 .PHONY: all
-all: build-tools build-loaders
+all: build-tools 
 
 .PHONY: build-loaders
 build-loaders:
@@ -85,7 +85,7 @@ install-hwm:
 	$(CP) -rf $(USPARK_HWMDIR)/* $(USPARK_INSTALL_HWMDIR)/.
 
 .PHONY: install
-install: install-tools install-buildshims install-loaders install-sentinels install-uobjcoll install-hdrs install-hwm
+install: install-tools install-buildshims install-uobjcoll install-hdrs install-hwm
 
 
 .PHONY: clean

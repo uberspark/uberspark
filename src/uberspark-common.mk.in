@@ -33,7 +33,6 @@ export OCAMLC = ocamlfind @OCAMLC@
 export FRAMAC = @FRAMAC@
 export CCERT = @CCERT@
 export CC = @CC@
-export CPP = @CPP@
 export AS = @AS@
 export AR = @AR@
 export LD = @LD@
