@@ -13,9 +13,6 @@ export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_HWMDIR := $(USPARK_DIR)/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/tools
-export USPARK_BUILDSHIMSDIR := $(USPARK_DIR)/buildshims
-export USPARK_LOADERSDIR := $(USPARK_DIR)/loaders
-export USPARK_SENTINELSDIR := $(USPARK_DIR)/sentinels
 
 
 ###### targets
@@ -23,28 +20,6 @@ export USPARK_SENTINELSDIR := $(USPARK_DIR)/sentinels
 .PHONY: all
 all: build-tools 
 
-.PHONY: build-loaders
-build-loaders:
-	cd $(USPARK_LOADERSDIR) && $(MAKE) -w build
-
-
-.PHONY: install-buildshims
-install-buildshims:
-	$(MKDIR) -p $(USPARK_INSTALL_BUILDSHIMSDIR)
-	cp -R -f $(USPARK_BUILDSHIMSDIR)/*  $(USPARK_INSTALL_BUILDSHIMSDIR)/.
-
-.PHONY: install-loaders
-install-loaders:
-	cd $(USPARK_LOADERSDIR) && $(MAKE) -w install
-
-.PHONY: install-sentinels
-install-sentinels:
-	$(MKDIR) -p $(USPARK_INSTALL_SENTINELSDIR)
-	cp -f $(USPARK_SENTINELSDIR)/*  $(USPARK_INSTALL_SENTINELSDIR)/.
-
-.PHONY: install-uobjcoll
-install-uobjcoll:
-	$(MKDIR) -p $(USPARK_INSTALL_UOBJCOLLDIR)
 
 .PHONY: build-tools
 build-tools:
@@ -56,16 +31,12 @@ install-tools:
 	$(MKDIR) -p $(USPARK_INSTALL_TOOLSDIR)
 	$(MKDIR) -p $(USPARK_INSTALL_BINDIR)
 	$(CP) -f $(USPARK_TOOLSDIR)/ubersparkconfig $(USPARK_INSTALL_BINDIR)/.
-	$(CP) -f $(USPARK_TOOLSDIR)/driver/uberspark $(USPARK_INSTALL_BINDIR)/.
-	#$(CP) -f $(USPARK_TOOLSDIR)/umf/top/* $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/umf/umf $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/umf/umf.cmi $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/umf/umf.cmo $(USPARK_INSTALL_TOOLSDIR)/.
-	#$(CP) -f $(USPARK_TOOLSDIR)/ubp/top/* $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/ubp/ubp $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/ubp/ubp.cmi $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/ubp/ubp.cmo $(USPARK_INSTALL_TOOLSDIR)/.
-	#$(CP) -f $(USPARK_TOOLSDIR)/uccomp/top/* $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/uccomp/uccomp $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/uccomp/uccomp.cmi $(USPARK_INSTALL_TOOLSDIR)/.
 	$(CP) -f $(USPARK_TOOLSDIR)/uccomp/uccomp.cmo $(USPARK_INSTALL_TOOLSDIR)/.
@@ -85,7 +56,7 @@ install-hwm:
 	$(CP) -rf $(USPARK_HWMDIR)/* $(USPARK_INSTALL_HWMDIR)/.
 
 .PHONY: install
-install: install-tools install-buildshims install-uobjcoll install-hdrs install-hwm
+install: install-tools install-hdrs install-hwm
 
 
 .PHONY: clean
