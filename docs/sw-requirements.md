@@ -30,22 +30,32 @@ opam switch 4.02.3
 
 * Menhir Parser (20170712)
 {% highlight bash %}
-opam install menhir
+opam install menhir.20170712
 {% endhighlight %}
 
 * ocamlgraph (1.8.7)
 {% highlight bash %}
-opam install ocamlgraph
+opam install ocamlgraph.1.8.7
 {% endhighlight %}
 
 * ocamlfind (1.7.3) 
 {% highlight bash %}
-opam install ocamlfind
+opam install ocamlfind.1.7.3
 {% endhighlight %}
 
 * coq proof assistant (8.6.1)
 {% highlight bash %}
-opam install coq
+opam install coq.8.6.1
+{% endhighlight %}
+
+* zarith
+{% highlight bash %}
+opam install zarith
+{% endhighlight %}
+
+* yojson
+{% highlight bash %}
+opam install yojson
 {% endhighlight %}
 
 * Compcert (3.0.1)
@@ -72,7 +82,10 @@ cd ..
 
 * Install CVC3, Alt-Ergo and Z3 as backend theorem provers. The WP Frama-C plugin 
 manual (available [here](http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf)) 
-contains a chapter on installing the theorem provers.
+contains a chapter on installing the theorem provers. Note that you will need to 
+install the correct versions of Why3 and the provers as described in the 
+aforementioned Frama-C WP plugin manual (e.g., Why3 0.87.3 and 
+Alt-ergo 1.30). This can be done via opam (e.g., `opam install why3.0.87.3`).
 
 <br>
 <hr>
