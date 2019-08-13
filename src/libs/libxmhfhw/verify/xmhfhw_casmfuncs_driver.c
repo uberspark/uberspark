@@ -53,13 +53,13 @@
 #include <uberspark.h>
 #include <xmhfhw.h>
 
-u32 cpuid = 0;	//BSP cpu
+uint32_t cpuid = 0;	//BSP cpu
 
 
 //////
-u32 saved_cpu_gprs_ebx=0;
-u32 saved_cpu_gprs_esi=0;
-u32 saved_cpu_gprs_edi=0;
+uint32_t saved_cpu_gprs_ebx=0;
+uint32_t saved_cpu_gprs_esi=0;
+uint32_t saved_cpu_gprs_edi=0;
 
 void cabi_establish(void){
 	xmhfhwm_cpu_gprs_ebx = 5UL;
@@ -86,11 +86,11 @@ void drv_bsrl(void){
 }
 
 void drv_cpuid(void){
-	u32 eax = framac_nondetu32();
-	u32 ebx = framac_nondetu32();
-	u32 ecx = framac_nondetu32();
-	u32 edx = framac_nondetu32();
-	u32 op = framac_nondetu32();
+	uint32_t eax = framac_nondetu32();
+	uint32_t ebx = framac_nondetu32();
+	uint32_t ecx = framac_nondetu32();
+	uint32_t edx = framac_nondetu32();
+	uint32_t op = framac_nondetu32();
 	cabi_establish();
 	CASM_FUNCCALL(xmhfhw_cpu_cpuid, op, &eax, &ebx, &ecx, &edx);
 	cabi_check();
@@ -109,44 +109,44 @@ void drv_enableintr(void){
 }
 
 void drv_getgdtbase(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhf_baseplatform_arch_x86_getgdtbase, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_getidtbase(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhf_baseplatform_arch_x86_getidtbase, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_getsec(void){
-	u32 eax=0, ebx=0, ecx=0, edx=0;
+	uint32_t eax=0, ebx=0, ecx=0, edx=0;
 	cabi_establish();
 	CASM_FUNCCALL(xmhfhw_cpu_getsec, &eax, &ebx, &ecx, &edx);
 	cabi_check();
 }
 
 void drv_gettssbase(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhf_baseplatform_arch_x86_gettssbase, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_inb(void){
-	u8 result;
-	u32 port=framac_nondetu32();
+	uint8_t result;
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	result = CASM_FUNCCALL(inb, port);
 	cabi_check();
 }
 
 void drv_inl(void){
-	u32 result;
-	u32 port=framac_nondetu32();
+	uint32_t result;
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	result = CASM_FUNCCALL(inl, port);
 	cabi_check();
@@ -165,8 +165,8 @@ void drv_invvpid(void){
 }
 
 void drv_inw(void){
-	u16 result;
-	u32 port=framac_nondetu32();
+	uint16_t result;
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	result = CASM_FUNCCALL(inw, port);
 	cabi_check();
@@ -191,28 +191,28 @@ void drv_loadidt(void){
 }
 
 void drv_loadtr(void){
-	u32 trsel=0;
+	uint32_t trsel=0;
 	cabi_establish();
 	CASM_FUNCCALL(xmhfhw_cpu_loadTR, trsel);
 	cabi_check();
 }
 
 void drv_outb(void){
-	u32 port=framac_nondetu32();
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	CASM_FUNCCALL(outb, framac_nondetu32(), port);
 	cabi_check();
 }
 
 void drv_outl(void){
-	u32 port=framac_nondetu32();
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	CASM_FUNCCALL(outl, framac_nondetu32(), port);
 	cabi_check();
 }
 
 void drv_outw(void){
-	u32 port=framac_nondetu32();
+	uint32_t port=framac_nondetu32();
 	cabi_establish();
 	CASM_FUNCCALL(outw, framac_nondetu32(), port);
 	cabi_check();
@@ -225,42 +225,42 @@ void drv_pause(void){
 }
 
 void drv_rdmsr(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(rdmsr64, framac_nondetu32());
 	cabi_check();
 }
 
 void drv_rdtsc(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(rdtsc64, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readcr0(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_cr0, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readcr2(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_cr2, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readcr3(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_cr3, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readcr4(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_cr4, CASM_NOPARAM);
 	cabi_check();
@@ -268,63 +268,63 @@ void drv_readcr4(void){
 
 
 void drv_readcs(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_cs, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readds(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_ds, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_reades(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_es, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readfs(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_fs, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readgs(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_gs, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readss(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_segreg_ss, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readeflags(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_eflags, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readesp(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_esp, CASM_NOPARAM);
 	cabi_check();
 }
 
 void drv_readrsp(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_rsp, CASM_NOPARAM);
 	cabi_check();
@@ -332,14 +332,14 @@ void drv_readrsp(void){
 
 
 void drv_readtr(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(read_tr_sel, CASM_NOPARAM);
 	cabi_check();
 }
 
 
-static u32 smplock = 1;
+static uint32_t smplock = 1;
 
 void drv_spinlock(void){
 	cabi_establish();
@@ -353,23 +353,23 @@ void drv_spinunlock(void){
 	cabi_check();
 }
 
-u8 buf_vmcs[128];
-u8 buf_vmxon[128];
+uint8_t buf_vmcs[128];
+uint8_t buf_vmxon[128];
 
 void drv_vmclear(void){
 	cabi_establish();
-	CASM_FUNCCALL(__vmx_vmclear, (u64)&buf_vmcs);
+	CASM_FUNCCALL(__vmx_vmclear, (uint64_t)&buf_vmcs);
 	cabi_check();
 }
 
 void drv_vmptrld(void){
 	cabi_establish();
-	CASM_FUNCCALL(__vmx_vmptrld, (u64)&buf_vmcs);
+	CASM_FUNCCALL(__vmx_vmptrld, (uint64_t)&buf_vmcs);
 	cabi_check();
 }
 
 void drv_vmread(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhfhw_cpu_x86vmx_vmread, framac_nondetu32());
 	cabi_check();
@@ -383,7 +383,7 @@ void drv_vmwrite(void){
 
 void drv_vmxon(void){
 	cabi_establish();
-	CASM_FUNCCALL(__vmx_vmxon, (u64)&buf_vmxon);
+	CASM_FUNCCALL(__vmx_vmxon, (uint64_t)&buf_vmxon);
 	cabi_check();
 }
 
@@ -425,7 +425,7 @@ void drv_wrmsr(void){
 }
 
 void drv_xgetbv(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xgetbv, 1);
 	cabi_check();
@@ -437,7 +437,7 @@ void drv_xsetbv(void){
 	cabi_check();
 }
 
-u8 sysmem_src[128], sysmem_dst[128];
+uint8_t sysmem_src[128], sysmem_dst[128];
 
 void drv_sysmemaccess_bcopy(void){
 	cabi_establish();
@@ -446,28 +446,28 @@ void drv_sysmemaccess_bcopy(void){
 }
 
 void drv_sysmemaccess_readu8(void){
-	u8 result;
+	uint8_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu8, &sysmem_dst);
 	cabi_check();
 }
 
 void drv_sysmemaccess_readu16(void){
-	u16 result;
+	uint16_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu16, &sysmem_dst);
 	cabi_check();
 }
 
 void drv_sysmemaccess_readu32(void){
-	u32 result;
+	uint32_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu32, &sysmem_dst);
 	cabi_check();
 }
 
 void drv_sysmemaccess_readu64(void){
-	u64 result;
+	uint64_t result;
 	cabi_establish();
 	result = CASM_FUNCCALL(xmhfhw_sysmemaccess_readu64, &sysmem_dst);
 	cabi_check();
@@ -476,13 +476,13 @@ void drv_sysmemaccess_readu64(void){
 
 void drv_sysmemaccess_writeu8(void){
 	cabi_establish();
-	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu8, &sysmem_dst, (u8)framac_nondetu32());
+	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu8, &sysmem_dst, (uint8_t)framac_nondetu32());
 	cabi_check();
 }
 
 void drv_sysmemaccess_writeu16(void){
 	cabi_establish();
-	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu16, &sysmem_dst, (u16)framac_nondetu32());
+	CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu16, &sysmem_dst, (uint16_t)framac_nondetu32());
 	cabi_check();
 }
 
@@ -498,10 +498,10 @@ void drv_sysmemaccess_writeu64(void){
 	cabi_check();
 }
 
-u8 uobj_stack[4096];
+uint8_t uobj_stack[4096];
 
 void main(void){
-	u32 check_esp, check_eip = CASM_RET_EIP;
+	uint32_t check_esp, check_eip = CASM_RET_EIP;
 
 	//populate hardware model stack and program counter
 	xmhfhwm_cpu_gprs_esp = &uobj_stack[4096];

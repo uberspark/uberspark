@@ -158,185 +158,185 @@
 
 struct regs
 {
-  u64 edi;
-  u64 esi;
-  u64 ebp;
-  u64 esp;
-  u64 ebx;
-  u64 edx;
-  u64 ecx;
-  u64 eax;
+  uint64_t edi;
+  uint64_t esi;
+  uint64_t ebp;
+  uint64_t esp;
+  uint64_t ebx;
+  uint64_t edx;
+  uint64_t ecx;
+  uint64_t eax;
 }__attribute__ ((packed));
 
 typedef struct
 {
-  u32 edi;
-  u32 esi;
-  u32 ebp;
-  u32 esp;
-  u32 ebx;
-  u32 edx;
-  u32 ecx;
-  u32 eax;
+  uint32_t edi;
+  uint32_t esi;
+  uint32_t ebp;
+  uint32_t esp;
+  uint32_t ebx;
+  uint32_t edx;
+  uint32_t ecx;
+  uint32_t eax;
 }__attribute__ ((packed)) x86regs_t;
 
 typedef struct {
-  u64 r8;
-  u64 r9;
-  u64 r10;
-  u64 r11;
-  u64 r12;
-  u64 r13;
-  u64 r14;
-  u64 r15;
-  u64 rax;
-  u64 rbx;
-  u64 rcx;
-  u64 rdx;
-  u64 rsi;
-  u64 rdi;
-  u64 rbp;
-  u64 rsp;
+  uint64_t r8;
+  uint64_t r9;
+  uint64_t r10;
+  uint64_t r11;
+  uint64_t r12;
+  uint64_t r13;
+  uint64_t r14;
+  uint64_t r15;
+  uint64_t rax;
+  uint64_t rbx;
+  uint64_t rcx;
+  uint64_t rdx;
+  uint64_t rsi;
+  uint64_t rdi;
+  uint64_t rbp;
+  uint64_t rsp;
 }__attribute__ ((packed)) x86regs64_t;
 
 
 typedef struct {
-    u64 rip;
-    u64 cs;
-    u64 rflags;
-    u64 rsp;
-    u64 ss;
+    uint64_t rip;
+    uint64_t cs;
+    uint64_t rflags;
+    uint64_t rsp;
+    uint64_t ss;
 }__attribute__ ((packed)) x86idt64_stackframe_t;
 
 
 typedef struct {
-  u16 isrLow;
-  u16 isrSelector;
-  u8  count;
-  u8  type;
-  u16 isrHigh;
+  uint16_t isrLow;
+  uint16_t isrSelector;
+  uint8_t  count;
+  uint8_t  type;
+  uint16_t isrHigh;
 } __attribute__ ((packed)) idtentry_t;
 
 
 typedef struct {
-  u16 limit0_15;
-  u16 baseAddr0_15;
-  u8 baseAddr16_23;
-  u8 attributes1;
-  u8 limit16_19attributes2;
-  u8 baseAddr24_31;
+  uint16_t limit0_15;
+  uint16_t baseAddr0_15;
+  uint8_t baseAddr16_23;
+  uint8_t attributes1;
+  uint8_t limit16_19attributes2;
+  uint8_t baseAddr24_31;
 } __attribute__ ((packed)) TSSENTRY;
 
 
 typedef struct {
-	u32 selector;
-	u32 base;
-	u32 limit;
-	u32 access_rights;
+	uint32_t selector;
+	uint32_t base;
+	uint32_t limit;
+	uint32_t access_rights;
 } x86desc_t;
 
 
 typedef struct {
-  u32 eip;
-  u32 cs;
-  u32 eflags;
+  uint32_t eip;
+  uint32_t cs;
+  uint32_t eflags;
 } __attribute__((packed)) INTR_SAMEPRIVILEGE_STACKFRAME_NOERRORCODE;
 
 typedef struct {
-  u32 errorcode;
-  u32 eip;
-  u32 cs;
-  u32 eflags;
+  uint32_t errorcode;
+  uint32_t eip;
+  uint32_t cs;
+  uint32_t eflags;
 } __attribute__((packed)) INTR_SAMEPRIVILEGE_STACKFRAME_ERRORCODE;
 
 
 typedef struct {
-    u32 edi;
-    u32 esi;
-    u32 ebp;
-    u32 esp;
-    u32 ebx;
-    u32 edx;
-    u32 ecx;
-    u32 eax;
-    u32 vector;
-    u32 error_code;
-    u32 orig_rip;
-    u32 orig_cs;
-    u32 orig_rflags;
-    u32 orig_rsp;
-    u32 orig_ss;
+    uint32_t edi;
+    uint32_t esi;
+    uint32_t ebp;
+    uint32_t esp;
+    uint32_t ebx;
+    uint32_t edx;
+    uint32_t ecx;
+    uint32_t eax;
+    uint32_t vector;
+    uint32_t error_code;
+    uint32_t orig_rip;
+    uint32_t orig_cs;
+    uint32_t orig_rflags;
+    uint32_t orig_rsp;
+    uint32_t orig_ss;
 } __attribute__((packed)) x86vmx_exception_frame_t;
 
 
 typedef struct {
-    u64 r8;
-    u64 r9;
-    u64 r10;
-    u64 r11;
-    u64 r12;
-    u64 r13;
-    u64 r14;
-    u64 r15;
-    u64 rax;
-    u64 rbx;
-    u64 rcx;
-    u64 rdx;
-    u64 rsi;
-    u64 rdi;
-    u64 rbp;
-    u64 rsp;
-    u64 vector;
-    u64 errorcode;
-    u64 orig_rip;
-    u64 orig_cs;
-    u64 orig_rflags;
-    u64 orig_rsp;
-    u64 orig_ss;
+    uint64_t r8;
+    uint64_t r9;
+    uint64_t r10;
+    uint64_t r11;
+    uint64_t r12;
+    uint64_t r13;
+    uint64_t r14;
+    uint64_t r15;
+    uint64_t rax;
+    uint64_t rbx;
+    uint64_t rcx;
+    uint64_t rdx;
+    uint64_t rsi;
+    uint64_t rdi;
+    uint64_t rbp;
+    uint64_t rsp;
+    uint64_t vector;
+    uint64_t errorcode;
+    uint64_t orig_rip;
+    uint64_t orig_cs;
+    uint64_t orig_rflags;
+    uint64_t orig_rsp;
+    uint64_t orig_ss;
 } __attribute__((packed)) x86vmx_exception_frame_errcode_t;
 
 
 //x86 GDT descriptor type
 typedef struct {
-		u16 size;
-		u32 base;
+		uint16_t size;
+		uint32_t base;
 } __attribute__((packed)) arch_x86_gdtdesc_t;
 
 //x86 IDT descriptor type
 typedef struct {
-		u16 size;
-		u32 base;
+		uint16_t size;
+		uint32_t base;
 } __attribute__((packed)) arch_x86_idtdesc_t;
 
 //TSS descriptor (partial)
 typedef struct __tss {
-	u32 reserved;
-	u32 esp0;
-	u32 ss0;
-	u32 esp1;
-	u32 ss1;
-	u32 esp2;
-	u32 ss2;
-	u32 cr3;
-	u32 eip;
-	u32 eflags;
-	u32 eax;
-	u32 ecx;
-	u32 edx;
-	u32 ebx;
-	u32 esp;
-	u32 ebp;
-	u32 esi;
-	u32 edi;
-	u32 es;
-	u32 cs;
-	u32 ss;
-	u32 ds;
-	u32 fs;
-	u32 gs;
-	u32 ldt_sel;
-	u16 t_bit;
-	u16 iotbl_addr;
+	uint32_t reserved;
+	uint32_t esp0;
+	uint32_t ss0;
+	uint32_t esp1;
+	uint32_t ss1;
+	uint32_t esp2;
+	uint32_t ss2;
+	uint32_t cr3;
+	uint32_t eip;
+	uint32_t eflags;
+	uint32_t eax;
+	uint32_t ecx;
+	uint32_t edx;
+	uint32_t ebx;
+	uint32_t esp;
+	uint32_t ebp;
+	uint32_t esi;
+	uint32_t edi;
+	uint32_t es;
+	uint32_t cs;
+	uint32_t ss;
+	uint32_t ds;
+	uint32_t fs;
+	uint32_t gs;
+	uint32_t ldt_sel;
+	uint16_t t_bit;
+	uint16_t iotbl_addr;
 } __attribute__((packed)) tss_t;
 
 
@@ -557,107 +557,107 @@ enum var_mtrr_t {
 
 
 typedef struct {
-    u32 vcnt        ; //: 8;    // num variable MTRR pairs
-    u32 fix         ; //: 1;    // fixed range MTRRs are supported
-    u32 reserved1   ; //: 1;
-    u32 wc          ; //: 1;    // write-combining mem type supported
-    u32 reserved2   ; //: 32;
-    u32 reserved3   ; //: 21;
+    uint32_t vcnt        ; //: 8;    // num variable MTRR pairs
+    uint32_t fix         ; //: 1;    // fixed range MTRRs are supported
+    uint32_t reserved1   ; //: 1;
+    uint32_t wc          ; //: 1;    // write-combining mem type supported
+    uint32_t reserved2   ; //: 32;
+    uint32_t reserved3   ; //: 21;
 } __attribute__((packed)) mtrr_cap_t;
 
 #define pack_mtrr_cap_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved3 & 0x00000000001FFFFFULL) << 43) | \
-    (((u64)(s)->reserved2 & 0x00000000FFFFFFFFULL) << 11) | \
-    (((u64)(s)->wc & 0x0000000000000001ULL) << 10) | \
-    (((u64)(s)->reserved1 & 0x0000000000000001ULL) << 9) | \
-    (((u64)(s)->fix & 0x0000000000000001ULL) << 8) | \
-    (((u64)(s)->vcnt & 0x00000000000000FFULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved3 & 0x00000000001FFFFFULL) << 43) | \
+    (((uint64_t)(s)->reserved2 & 0x00000000FFFFFFFFULL) << 11) | \
+    (((uint64_t)(s)->wc & 0x0000000000000001ULL) << 10) | \
+    (((uint64_t)(s)->reserved1 & 0x0000000000000001ULL) << 9) | \
+    (((uint64_t)(s)->fix & 0x0000000000000001ULL) << 8) | \
+    (((uint64_t)(s)->vcnt & 0x00000000000000FFULL) << 0) \
     )
 
 #define unpack_mtrr_cap_t(s, value) \
-    (s)->reserved3 = (u32)(((u64)value >> 43) & 0x00000000001FFFFFULL); \
-    (s)->reserved2 = (u32)(((u64)value >> 11) & 0x00000000FFFFFFFFULL); \
-    (s)->wc = (u32)(((u64)value >> 10) & 0x0000000000000001ULL); \
-    (s)->reserved1 = (u32)(((u64)value >> 9) & 0x0000000000000001ULL); \
-    (s)->fix = (u32)(((u64)value >> 8) & 0x0000000000000001ULL); \
-    (s)->vcnt = (u32)(((u64)value >> 0) & 0x00000000000000FFULL);
+    (s)->reserved3 = (uint32_t)(((uint64_t)value >> 43) & 0x00000000001FFFFFULL); \
+    (s)->reserved2 = (uint32_t)(((uint64_t)value >> 11) & 0x00000000FFFFFFFFULL); \
+    (s)->wc = (uint32_t)(((uint64_t)value >> 10) & 0x0000000000000001ULL); \
+    (s)->reserved1 = (uint32_t)(((uint64_t)value >> 9) & 0x0000000000000001ULL); \
+    (s)->fix = (uint32_t)(((uint64_t)value >> 8) & 0x0000000000000001ULL); \
+    (s)->vcnt = (uint32_t)(((uint64_t)value >> 0) & 0x00000000000000FFULL);
 
 
 typedef struct {
-    u32 type        ; //: 8;
-    u32 reserved1   ; //: 2;
-    u32 fe          ; //: 1;    // fixed MTRR enable
-    u32 e           ; //: 1;    // (all) MTRR enable
-    u32 reserved2   ; //: 32;
-    u32 reserved3   ; //: 20;
+    uint32_t type        ; //: 8;
+    uint32_t reserved1   ; //: 2;
+    uint32_t fe          ; //: 1;    // fixed MTRR enable
+    uint32_t e           ; //: 1;    // (all) MTRR enable
+    uint32_t reserved2   ; //: 32;
+    uint32_t reserved3   ; //: 20;
 } __attribute__((packed)) mtrr_def_type_t;
 
 #define pack_mtrr_def_type_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved3 & 0x00000000000FFFFFULL) << 44) | \
-    (((u64)(s)->reserved2 & 0x00000000FFFFFFFFULL) << 12) | \
-    (((u64)(s)->e & 0x0000000000000001ULL) << 11) | \
-    (((u64)(s)->fe & 0x0000000000000001ULL) << 10) | \
-    (((u64)(s)->reserved1 & 0x0000000000000003ULL) << 8) | \
-    (((u64)(s)->type & 0x00000000000000FFULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved3 & 0x00000000000FFFFFULL) << 44) | \
+    (((uint64_t)(s)->reserved2 & 0x00000000FFFFFFFFULL) << 12) | \
+    (((uint64_t)(s)->e & 0x0000000000000001ULL) << 11) | \
+    (((uint64_t)(s)->fe & 0x0000000000000001ULL) << 10) | \
+    (((uint64_t)(s)->reserved1 & 0x0000000000000003ULL) << 8) | \
+    (((uint64_t)(s)->type & 0x00000000000000FFULL) << 0) \
     )
 
 #define unpack_mtrr_def_type_t(s, value) \
-    (s)->reserved3 = (u32)(((u64)value >> 44) & 0x00000000000FFFFFULL); \
-    (s)->reserved2 = (u32)(((u64)value >> 12) & 0x00000000FFFFFFFFULL); \
-    (s)->e = (u32)(((u64)value >> 11) & 0x0000000000000001ULL); \
-    (s)->fe = (u32)(((u64)value >> 10) & 0x0000000000000001ULL); \
-    (s)->reserved1 = (u32)(((u64)value >> 8) & 0x0000000000000003ULL); \
-    (s)->type = (u32)(((u64)value >> 0) & 0x00000000000000FFULL);
+    (s)->reserved3 = (uint32_t)(((uint64_t)value >> 44) & 0x00000000000FFFFFULL); \
+    (s)->reserved2 = (uint32_t)(((uint64_t)value >> 12) & 0x00000000FFFFFFFFULL); \
+    (s)->e = (uint32_t)(((uint64_t)value >> 11) & 0x0000000000000001ULL); \
+    (s)->fe = (uint32_t)(((uint64_t)value >> 10) & 0x0000000000000001ULL); \
+    (s)->reserved1 = (uint32_t)(((uint64_t)value >> 8) & 0x0000000000000003ULL); \
+    (s)->type = (uint32_t)(((uint64_t)value >> 0) & 0x00000000000000FFULL);
 
 
 typedef struct {
-    u32 type      ; //: 8;
-    u32 reserved1 ; //: 4;
+    uint32_t type      ; //: 8;
+    uint32_t reserved1 ; //: 4;
     // TBD: the end of base really depends on MAXPHYADDR, but since
     // the MTRRs are set for SINIT and it must be <4GB, can use 24b
-    u32 base      ; //: 24;
-    u32 reserved2 ; //: 28;
+    uint32_t base      ; //: 24;
+    uint32_t reserved2 ; //: 28;
 } __attribute__((packed)) mtrr_physbase_t;
 
 #define pack_mtrr_physbase_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved2 & 0x000000000FFFFFFFULL) << 36) | \
-    (((u64)(s)->base & 0x0000000000FFFFFFULL) << 12) | \
-    (((u64)(s)->reserved1 & 0x000000000000000FULL) << 8) | \
-    (((u64)(s)->type & 0x00000000000000FFULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved2 & 0x000000000FFFFFFFULL) << 36) | \
+    (((uint64_t)(s)->base & 0x0000000000FFFFFFULL) << 12) | \
+    (((uint64_t)(s)->reserved1 & 0x000000000000000FULL) << 8) | \
+    (((uint64_t)(s)->type & 0x00000000000000FFULL) << 0) \
     )
 
 #define unpack_mtrr_physbase_t(s, value) \
-    (s)->reserved2 = (u32)(((u64)value >> 36) & 0x000000000FFFFFFFULL); \
-    (s)->base = (u32)(((u64)value >> 12) & 0x0000000000FFFFFFULL); \
-    (s)->reserved1 = (u32)(((u64)value >> 8) & 0x000000000000000FULL); \
-    (s)->type = (u32)(((u64)value >> 0) & 0x00000000000000FFULL);
+    (s)->reserved2 = (uint32_t)(((uint64_t)value >> 36) & 0x000000000FFFFFFFULL); \
+    (s)->base = (uint32_t)(((uint64_t)value >> 12) & 0x0000000000FFFFFFULL); \
+    (s)->reserved1 = (uint32_t)(((uint64_t)value >> 8) & 0x000000000000000FULL); \
+    (s)->type = (uint32_t)(((uint64_t)value >> 0) & 0x00000000000000FFULL);
 
 
 typedef struct {
-    u32 reserved1 ; //: 11;
-    u32 v         ; //: 1;      // valid
+    uint32_t reserved1 ; //: 11;
+    uint32_t v         ; //: 1;      // valid
     // TBD: the end of mask really depends on MAXPHYADDR, but since
     // the MTRRs are set for SINIT and it must be <4GB, can use 24b
-    u32 mask      ; //: 24;
-    u32 reserved2 ; //: 28;
+    uint32_t mask      ; //: 24;
+    uint32_t reserved2 ; //: 28;
 } __attribute__((packed)) mtrr_physmask_t;
 
 #define pack_mtrr_physmask_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved2 & 0x000000000FFFFFFFULL) << 36) | \
-    (((u64)(s)->mask & 0x0000000000FFFFFFULL) << 12) | \
-    (((u64)(s)->v & 0x0000000000000001ULL) << 11) | \
-    (((u64)(s)->reserved1 & 0x00000000000007FFULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved2 & 0x000000000FFFFFFFULL) << 36) | \
+    (((uint64_t)(s)->mask & 0x0000000000FFFFFFULL) << 12) | \
+    (((uint64_t)(s)->v & 0x0000000000000001ULL) << 11) | \
+    (((uint64_t)(s)->reserved1 & 0x00000000000007FFULL) << 0) \
     )
 
 #define unpack_mtrr_physmask_t(s, value) \
-    (s)->reserved2 = (u32)(((u64)value >> 36) & 0x000000000FFFFFFFULL); \
-    (s)->mask = (u32)(((u64)value >> 12) & 0x0000000000FFFFFFULL); \
-    (s)->v = (u32)(((u64)value >> 11) & 0x0000000000000001ULL); \
-    (s)->reserved1 = (u32)(((u64)value >> 0) & 0x00000000000007FFULL);
+    (s)->reserved2 = (uint32_t)(((uint64_t)value >> 36) & 0x000000000FFFFFFFULL); \
+    (s)->mask = (uint32_t)(((uint64_t)value >> 12) & 0x0000000000FFFFFFULL); \
+    (s)->v = (uint32_t)(((uint64_t)value >> 11) & 0x0000000000000001ULL); \
+    (s)->reserved1 = (uint32_t)(((uint64_t)value >> 0) & 0x00000000000007FFULL);
 
 
 #endif //__ASSEMBLY__
@@ -821,146 +821,146 @@ typedef struct {
 
 #ifndef __ASSEMBLY__
 
-typedef u64 pml4te_t;
-typedef u64 pdpte_t;
-typedef u64 pdte_t;
-typedef u64 pte_t;
+typedef uint64_t pml4te_t;
+typedef uint64_t pdpte_t;
+typedef uint64_t pdte_t;
+typedef uint64_t pte_t;
 
 typedef pml4te_t *pml4t_t;
 typedef pdpte_t *pdpt_t;
 typedef pdte_t *pdt_t;
 typedef pte_t *pt_t;
 
-typedef u32 *npdt_t;
-typedef u32 *npt_t;
+typedef uint32_t *npdt_t;
+typedef uint32_t *npt_t;
 
 /* make a pml4 entry from individual fields */
 #define pae_make_pml4e(paddr, flags) \
-  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (u64)(flags)
+  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (uint64_t)(flags)
 
 /* make a page directory pointer entry from individual fields */
 //#define pae_make_pdpe(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (uint64_t)(flags)
 
 #define pae_make_pdpe(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 
 /* make a page directory entry for a 2MB page from individual fields */
 //#define pae_make_pde_big(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_2M - 1) | _PAGE_NX))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_2M - 1) | _PAGE_NX))) | (uint64_t)(flags)
 
 #define pae_make_pde_big(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFE00000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFE00000ULL)) | (uint64_t)(flags)
 
 
 /* make a page directory entry for a 4KB page from individual fields */
 //#define pae_make_pde(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (uint64_t)(flags)
 
 #define pae_make_pde(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 
 /* make a page table entry from individual fields */
 //#define pae_make_pte(paddr, flags) \
-//  ((u64)(paddr) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (u64)(flags)
+//  ((uint64_t)(paddr) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))) | (uint64_t)(flags)
 
 #define pae_make_pte(paddr, flags) \
-  ((u64)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (u64)(flags)
+  ((uint64_t)(paddr) & (0x7FFFFFFFFFFFF000ULL)) | (uint64_t)(flags)
 
 
 /* get address field from 32-bit cr3 (page directory pointer) in PAE mode */
 #define pae_get_addr_from_32bit_cr3(entry) \
-  ((u32)(entry) & (~((1UL << 5) - 1)))
+  ((uint32_t)(entry) & (~((1UL << 5) - 1)))
 
 /* get flags field from 32-bit cr3 (page directory pointer) in PAE mode */
 #define pae_get_flags_from_32bit_cr3(entry) \
-  ((u32)(entry) & ((1UL << 5) - 1))
+  ((uint32_t)(entry) & ((1UL << 5) - 1))
 
 /* get address field of a pdpe (page directory pointer entry) */
 #define pae_get_addr_from_pdpe(entry) \
-  ((u64)(entry) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX)))
+  ((uint64_t)(entry) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX)))
 
 /* get flags field of a pdpe (page directory pointer entry) */
 #define pae_get_flags_from_pdpe(entry) \
-  ((u64)(entry) & (((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))
+  ((uint64_t)(entry) & (((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))
 
 /* get address field of a 2MB pdte (page directory entry) */
 #define pae_get_addr_from_pde_big(entry) \
-  ((u64)(entry) & (~(((u64)PAGE_SIZE_2M - 1) | _PAGE_NX)))
+  ((uint64_t)(entry) & (~(((uint64_t)PAGE_SIZE_2M - 1) | _PAGE_NX)))
 
 /* get flags field of a 2MB pdte (page directory entry) */
 #define pae_get_flags_from_pde_big(entry) \
-  ((u64)(entry) & (((u64)PAGE_SIZE_2M - 1) | _PAGE_NX))
+  ((uint64_t)(entry) & (((uint64_t)PAGE_SIZE_2M - 1) | _PAGE_NX))
 
 /* get address field of a 4K pdte (page directory entry) */
 #define pae_get_addr_from_pde(entry) \
-  ((u64)(entry) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX)))
+  ((uint64_t)(entry) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX)))
 
 /* get flags field of a 4K pdte (page directory entry) */
 #define pae_get_flags_from_pde(entry) \
-  ((u64)(entry) & (((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))
+  ((uint64_t)(entry) & (((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))
 
 /* get address field of a pte (page table entry) */
 #define pae_get_addr_from_pte(entry) \
-  ((u64)(entry) & (~(((u64)PAGE_SIZE_4K - 1) | _PAGE_NX)))
+  ((uint64_t)(entry) & (~(((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX)))
 
 /* get flags field of a pte (page table entry) */
 #define pae_get_flags_from_pte(entry) \
-  ((u64)(entry) & (((u64)PAGE_SIZE_4K - 1) | _PAGE_NX))
+  ((uint64_t)(entry) & (((uint64_t)PAGE_SIZE_4K - 1) | _PAGE_NX))
 
 /* make a page directory entry for a 4MB page from individual fields */
 #define npae_make_pde_big(paddr, flags) \
-  ((u32)(paddr) & (~(((u32)PAGE_SIZE_4M - 1)))) | (u32)(flags)
+  ((uint32_t)(paddr) & (~(((uint32_t)PAGE_SIZE_4M - 1)))) | (uint32_t)(flags)
 
 /* make a page directory entry for a 4KB page from individual fields */
 #define npae_make_pde(paddr, flags) \
-  ((u32)(paddr) & (~(((u32)PAGE_SIZE_4K - 1)))) | (u32)(flags)
+  ((uint32_t)(paddr) & (~(((uint32_t)PAGE_SIZE_4K - 1)))) | (uint32_t)(flags)
 
 /* get address field from NON-PAE cr3 (page directory pointer) */
 #define npae_get_addr_from_32bit_cr3(entry) \
-  ((u32)(entry) & (~((u32)PAGE_SIZE_4K - 1)))
+  ((uint32_t)(entry) & (~((uint32_t)PAGE_SIZE_4K - 1)))
 
 /* get address field of a 4K non-PAE pdte (page directory entry) */
 #define npae_get_addr_from_pde(entry) \
-  ((u32)(entry) & (~((u32)PAGE_SIZE_4K - 1)))
+  ((uint32_t)(entry) & (~((uint32_t)PAGE_SIZE_4K - 1)))
 
 /* get flags field of a 4K non-PAE pdte (page directory entry) */
 #define npae_get_flags_from_pde(entry) \
-  ((u32)(entry) & ((u32)PAGE_SIZE_4K - 1))
+  ((uint32_t)(entry) & ((uint32_t)PAGE_SIZE_4K - 1))
 
 /* get address field of a 4M (non-PAE) pdte (page directory entry) */
 #define npae_get_addr_from_pde_big(entry) \
-  ((u32)(entry) & (~((u32)PAGE_SIZE_4M - 1)))
+  ((uint32_t)(entry) & (~((uint32_t)PAGE_SIZE_4M - 1)))
 
 /* get flags field of a 4M (non-PAE) pdte (page directory entry) */
 #define npae_get_flags_from_pde_big(entry) \
-  ((u32)(entry) & ((u32)PAGE_SIZE_4M - 1))
+  ((uint32_t)(entry) & ((uint32_t)PAGE_SIZE_4M - 1))
 
 /* get flags field of a pte (page table entry) */
 #define npae_get_flags_from_pte(entry) \
-  ((u32)(entry) & (((u32)PAGE_SIZE_4K - 1)))
+  ((uint32_t)(entry) & (((uint32_t)PAGE_SIZE_4K - 1)))
 
 /* get address field of a 4K (non-PAE) pte (page table entry) */
 #define npae_get_addr_from_pte(entry) \
-  ((u32)(entry) & (~((u32)PAGE_SIZE_4K - 1)))
+  ((uint32_t)(entry) & (~((uint32_t)PAGE_SIZE_4K - 1)))
 
 /* get page offset field of a vaddr in a 4K page (PAE mode) */
 #define pae_get_offset_4K_page(entry) \
-  ((u32)(entry) & ((u32)PAGE_SIZE_4K - 1))
+  ((uint32_t)(entry) & ((uint32_t)PAGE_SIZE_4K - 1))
 
 /* get page offset field of a vaddr in a 2M page */
 #define pae_get_offset_big(entry) \
-  ((u32)(entry) & ((u32)PAGE_SIZE_2M - 1))
+  ((uint32_t)(entry) & ((uint32_t)PAGE_SIZE_2M - 1))
 
 /* get offset field of a vaddr in a 4K page (non-PAE mode) */
 #define npae_get_offset_4K_page(vaddr) \
-  ((u32)(vaddr) & ((u32)PAGE_SIZE_4K - 1))
+  ((uint32_t)(vaddr) & ((uint32_t)PAGE_SIZE_4K - 1))
 
 /* get offset field of a vaddr in a 4M page */
 #define npae_get_offset_big(vaddr) \
-  ((u32)(vaddr) & ((u32)PAGE_SIZE_4M - 1))
+  ((uint32_t)(vaddr) & ((uint32_t)PAGE_SIZE_4M - 1))
 
 
 /* get index field of a paddr in a pml4t level */
@@ -992,14 +992,14 @@ typedef u32 *npt_t;
 
 /* returns 1 if addr is 4k page aligned */
 #define is_page_4K_aligned(paddr)\
-    ((((u32)PAGE_SIZE_4K - 1) & ((u32)paddr)) == 0)
+    ((((uint32_t)PAGE_SIZE_4K - 1) & ((uint32_t)paddr)) == 0)
 
-#define set_exec(entry) (((u64)entry) &= (~((u64)_PAGE_NX)))
-#define set_nonexec(entry) (((u64)entry) |= ((u64)_PAGE_NX))
-#define set_readonly(entry) (((u64)entry) &= (~((u64)_PAGE_RW)))
-#define set_readwrite(entry) (((u64)entry) |= ((u64)_PAGE_RW))
-#define set_present(entry) (((u64)entry) |= ((u64)_PAGE_PRESENT))
-#define set_not_present(entry) (((u64)entry) &= (~((u64)_PAGE_PRESENT)))
+#define set_exec(entry) (((uint64_t)entry) &= (~((uint64_t)_PAGE_NX)))
+#define set_nonexec(entry) (((uint64_t)entry) |= ((uint64_t)_PAGE_NX))
+#define set_readonly(entry) (((uint64_t)entry) &= (~((uint64_t)_PAGE_RW)))
+#define set_readwrite(entry) (((uint64_t)entry) |= ((uint64_t)_PAGE_RW))
+#define set_present(entry) (((uint64_t)entry) |= ((uint64_t)_PAGE_PRESENT))
+#define set_not_present(entry) (((uint64_t)entry) &= (~((uint64_t)_PAGE_PRESENT)))
 
 #define SAME_PAGE_PAE(addr1, addr2)		\
     (((addr1) >> PAE_PT_SHIFT) == ((addr2) >> PAE_PT_SHIFT))
@@ -1065,22 +1065,22 @@ typedef u32 *npt_t;
 * format of ERRORCODE register
 */
 typedef struct {
-        u32   type       ;//: 30;    //external-specific error code
-        u32   external   ;//: 1;     // 0=from proc, 1=from external SW
-        u32   valid      ;//: 1;     // 1=valid
+        uint32_t   type       ;//: 30;    //external-specific error code
+        uint32_t   external   ;//: 1;     // 0=from proc, 1=from external SW
+        uint32_t   valid      ;//: 1;     // 1=valid
 } __attribute__((packed)) txt_errorcode_t;
 
 #define pack_txt_errorcode_t(s) \
-    (u64)( \
-    (((u64)(s)->valid               & 0x000000003FFFFFFFULL) << 31) | \
-    (((u64)(s)->external            & 0x0000000000000001ULL) << 1 ) | \
-    (((u64)(s)->type                & 0x0000000000000001ULL) << 0 ) \
+    (uint64_t)( \
+    (((uint64_t)(s)->valid               & 0x000000003FFFFFFFULL) << 31) | \
+    (((uint64_t)(s)->external            & 0x0000000000000001ULL) << 1 ) | \
+    (((uint64_t)(s)->type                & 0x0000000000000001ULL) << 0 ) \
     )
 
 #define unpack_txt_errorcode_t(s, value) \
-    (s)->valid     = (u32)(((u64)value >> 31) & 0x000000003FFFFFFFULL); \
-    (s)->external  = (u32)(((u64)value >> 1 ) & 0x0000000000000001ULL); \
-    (s)->type      = (u32)(((u64)value >> 0 ) & 0x0000000000000001ULL);
+    (s)->valid     = (uint32_t)(((uint64_t)value >> 31) & 0x000000003FFFFFFFULL); \
+    (s)->external  = (uint32_t)(((uint64_t)value >> 1 ) & 0x0000000000000001ULL); \
+    (s)->type      = (uint32_t)(((uint64_t)value >> 0 ) & 0x0000000000000001ULL);
 
 
 
@@ -1088,25 +1088,25 @@ typedef struct {
  * format of ESTS register
  */
 typedef struct {
-        u32   txt_reset_sts      ;//: 1;
-        u32   reserved1          ;//: 5;
-        u32   txt_wake_error_sts ;//: 1;
-        u32   reserved2          ;//: 1;
+        uint32_t   txt_reset_sts      ;//: 1;
+        uint32_t   reserved1          ;//: 5;
+        uint32_t   txt_wake_error_sts ;//: 1;
+        uint32_t   reserved2          ;//: 1;
 } __attribute__((packed)) txt_ests_t;
 
 #define pack_txt_ests_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved2           & 0x0000000000000001ULL) << 7) | \
-    (((u64)(s)->txt_wake_error_sts  & 0x0000000000000001ULL) << 6) | \
-    (((u64)(s)->reserved1           & 0x000000000000001FULL) << 1) | \
-    (((u64)(s)->txt_reset_sts       & 0x0000000000000001ULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved2           & 0x0000000000000001ULL) << 7) | \
+    (((uint64_t)(s)->txt_wake_error_sts  & 0x0000000000000001ULL) << 6) | \
+    (((uint64_t)(s)->reserved1           & 0x000000000000001FULL) << 1) | \
+    (((uint64_t)(s)->txt_reset_sts       & 0x0000000000000001ULL) << 0) \
     )
 
 #define unpack_txt_ests_t(s, value) \
-   (s)->reserved2             = (u32)(((u64)value >> 7) & 0x0000000000000001ULL); \
-   (s)->txt_wake_error_sts    = (u32)(((u64)value >> 6) & 0x0000000000000001ULL); \
-   (s)->reserved1             = (u32)(((u64)value >> 1) & 0x000000000000001FULL); \
-   (s)->txt_reset_sts         = (u32)(((u64)value >> 0) & 0x0000000000000001ULL);
+   (s)->reserved2             = (uint32_t)(((uint64_t)value >> 7) & 0x0000000000000001ULL); \
+   (s)->txt_wake_error_sts    = (uint32_t)(((uint64_t)value >> 6) & 0x0000000000000001ULL); \
+   (s)->reserved1             = (uint32_t)(((uint64_t)value >> 1) & 0x000000000000001FULL); \
+   (s)->txt_reset_sts         = (uint32_t)(((uint64_t)value >> 0) & 0x0000000000000001ULL);
 
 
 /*
@@ -1114,90 +1114,90 @@ typedef struct {
  */
 
 typedef struct {
-        u32   slp_entry_error_sts  ;//: 1;
-        u32   secrets_sts          ;//: 1;
-        u32   block_mem_sts        ;//: 1;
-        u32   reset_sts            ;//: 1;
+        uint32_t   slp_entry_error_sts  ;//: 1;
+        uint32_t   secrets_sts          ;//: 1;
+        uint32_t   block_mem_sts        ;//: 1;
+        uint32_t   reset_sts            ;//: 1;
 } __attribute__((packed)) txt_e2sts_t;
 
 #define pack_txt_e2sts_t(s) \
-    (u64)( \
-    (((u64)(s)->reset_sts           & 0x0000000000000001ULL) << 3) | \
-    (((u64)(s)->block_mem_sts       & 0x0000000000000001ULL) << 2) | \
-    (((u64)(s)->secrets_sts         & 0x0000000000000001ULL) << 1) | \
-    (((u64)(s)->slp_entry_error_sts & 0x0000000000000001ULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reset_sts           & 0x0000000000000001ULL) << 3) | \
+    (((uint64_t)(s)->block_mem_sts       & 0x0000000000000001ULL) << 2) | \
+    (((uint64_t)(s)->secrets_sts         & 0x0000000000000001ULL) << 1) | \
+    (((uint64_t)(s)->slp_entry_error_sts & 0x0000000000000001ULL) << 0) \
     )
 
 #define unpack_txt_e2sts_t(s, value) \
-    (s)->reset_sts             = (u32)(((u64)value >> 3) & 0x0000000000000001ULL); \
-    (s)->block_mem_sts         = (u32)(((u64)value >> 2) & 0x0000000000000001ULL); \
-    (s)->secrets_sts           = (u32)(((u64)value >> 1) & 0x0000000000000001ULL); \
-    (s)->slp_entry_error_sts   = (u32)(((u64)value >> 0) & 0x0000000000000001ULL);
+    (s)->reset_sts             = (uint32_t)(((uint64_t)value >> 3) & 0x0000000000000001ULL); \
+    (s)->block_mem_sts         = (uint32_t)(((uint64_t)value >> 2) & 0x0000000000000001ULL); \
+    (s)->secrets_sts           = (uint32_t)(((uint64_t)value >> 1) & 0x0000000000000001ULL); \
+    (s)->slp_entry_error_sts   = (uint32_t)(((uint64_t)value >> 0) & 0x0000000000000001ULL);
 
 
 /*
  * format of STS register
  */
 typedef struct {
-    u32   senter_done_sts         ; //: 1;
-    u32   sexit_done_sts          ; //: 1;
-    u32   reserved1               ; //: 2;
-    u32   mem_unlock_sts          ; //: 1;
-    u32   reserved2               ; //: 1;
-    u32   mem_config_lock_sts     ; //: 1;
-    u32   private_open_sts        ; //: 1;
-    u32   reserved3               ; //: 3;
-    u32   mem_config_ok_sts       ; //: 1;
+    uint32_t   senter_done_sts         ; //: 1;
+    uint32_t   sexit_done_sts          ; //: 1;
+    uint32_t   reserved1               ; //: 2;
+    uint32_t   mem_unlock_sts          ; //: 1;
+    uint32_t   reserved2               ; //: 1;
+    uint32_t   mem_config_lock_sts     ; //: 1;
+    uint32_t   private_open_sts        ; //: 1;
+    uint32_t   reserved3               ; //: 3;
+    uint32_t   mem_config_ok_sts       ; //: 1;
 } __attribute__((packed)) txt_sts_t;
 
 #define pack_txt_sts_t(s) \
-    (u64)( \
-    (((u64)(s)->mem_config_ok_sts & 0x0000000000000001ULL) << 11) | \
-    (((u64)(s)->reserved3 & 0x0000000000000007ULL) << 8) | \
-    (((u64)(s)->private_open_sts & 0x0000000000000001ULL) << 7) | \
-    (((u64)(s)->mem_config_lock_sts & 0x0000000000000001ULL) << 6) | \
-    (((u64)(s)->reserved2 & 0x0000000000000001ULL) << 5) | \
-    (((u64)(s)->mem_unlock_sts & 0x0000000000000001ULL) << 4) | \
-    (((u64)(s)->reserved1 & 0x0000000000000003ULL) << 2) | \
-    (((u64)(s)->sexit_done_sts & 0x0000000000000001ULL) << 1) | \
-    (((u64)(s)->senter_done_sts & 0x0000000000000001ULL) << 0) \
+    (uint64_t)( \
+    (((uint64_t)(s)->mem_config_ok_sts & 0x0000000000000001ULL) << 11) | \
+    (((uint64_t)(s)->reserved3 & 0x0000000000000007ULL) << 8) | \
+    (((uint64_t)(s)->private_open_sts & 0x0000000000000001ULL) << 7) | \
+    (((uint64_t)(s)->mem_config_lock_sts & 0x0000000000000001ULL) << 6) | \
+    (((uint64_t)(s)->reserved2 & 0x0000000000000001ULL) << 5) | \
+    (((uint64_t)(s)->mem_unlock_sts & 0x0000000000000001ULL) << 4) | \
+    (((uint64_t)(s)->reserved1 & 0x0000000000000003ULL) << 2) | \
+    (((uint64_t)(s)->sexit_done_sts & 0x0000000000000001ULL) << 1) | \
+    (((uint64_t)(s)->senter_done_sts & 0x0000000000000001ULL) << 0) \
     )
 
 #define unpack_txt_sts_t(s, value) \
-    (s)->mem_config_ok_sts = (u32)(((u64)value >> 11) & 0x0000000000000001ULL); \
-    (s)->reserved3 = (u32)(((u64)value >> 8) & 0x0000000000000007ULL); \
-    (s)->private_open_sts = (u32)(((u64)value >> 7) & 0x0000000000000001ULL); \
-    (s)->mem_config_lock_sts = (u32)(((u64)value >> 6) & 0x0000000000000001ULL); \
-    (s)->reserved2 = (u32)(((u64)value >> 5) & 0x0000000000000001ULL); \
-    (s)->mem_unlock_sts = (u32)(((u64)value >> 4) & 0x0000000000000001ULL); \
-    (s)->reserved1 = (u32)(((u64)value >> 2) & 0x0000000000000003ULL); \
-    (s)->sexit_done_sts = (u32)(((u64)value >> 1) & 0x0000000000000001ULL); \
-    (s)->senter_done_sts = (u32)(((u64)value >> 0) & 0x0000000000000001ULL);
+    (s)->mem_config_ok_sts = (uint32_t)(((uint64_t)value >> 11) & 0x0000000000000001ULL); \
+    (s)->reserved3 = (uint32_t)(((uint64_t)value >> 8) & 0x0000000000000007ULL); \
+    (s)->private_open_sts = (uint32_t)(((uint64_t)value >> 7) & 0x0000000000000001ULL); \
+    (s)->mem_config_lock_sts = (uint32_t)(((uint64_t)value >> 6) & 0x0000000000000001ULL); \
+    (s)->reserved2 = (uint32_t)(((uint64_t)value >> 5) & 0x0000000000000001ULL); \
+    (s)->mem_unlock_sts = (uint32_t)(((uint64_t)value >> 4) & 0x0000000000000001ULL); \
+    (s)->reserved1 = (uint32_t)(((uint64_t)value >> 2) & 0x0000000000000003ULL); \
+    (s)->sexit_done_sts = (uint32_t)(((uint64_t)value >> 1) & 0x0000000000000001ULL); \
+    (s)->senter_done_sts = (uint32_t)(((uint64_t)value >> 0) & 0x0000000000000001ULL);
 
 
 /*
  * format of DIDVID register
  */
 typedef struct {
-        u32  vendor_id; //16
-        u32  device_id; //16
-        u32  revision_id; //16
-        u32  reserved; //16
+        uint32_t  vendor_id; //16
+        uint32_t  device_id; //16
+        uint32_t  revision_id; //16
+        uint32_t  reserved; //16
 } __attribute__((packed)) txt_didvid_t;
 
 #define pack_txt_didvid_t(s) \
-    (u64)( \
-    (((u64)(s)->reserved    & 0x000000000000FFFFULL) << 48) | \
-    (((u64)(s)->revision_id & 0x000000000000FFFFULL) << 32) | \
-    (((u64)(s)->device_id   & 0x000000000000FFFFULL) << 16) | \
-    (((u64)(s)->vendor_id   & 0x000000000000FFFFULL) << 0 ) \
+    (uint64_t)( \
+    (((uint64_t)(s)->reserved    & 0x000000000000FFFFULL) << 48) | \
+    (((uint64_t)(s)->revision_id & 0x000000000000FFFFULL) << 32) | \
+    (((uint64_t)(s)->device_id   & 0x000000000000FFFFULL) << 16) | \
+    (((uint64_t)(s)->vendor_id   & 0x000000000000FFFFULL) << 0 ) \
     )
 
 #define unpack_txt_didvid_t(s, value) \
-    (s)->reserved       = (u32)(((u64)value >> 48) & 0x000000000000FFFFULL); \
-    (s)->revision_id    = (u32)(((u64)value >> 32) & 0x000000000000FFFFULL); \
-    (s)->device_id      = (u32)(((u64)value >> 16) & 0x000000000000FFFFULL); \
-    (s)->vendor_id      = (u32)(((u64)value >> 0 ) & 0x000000000000FFFFULL);
+    (s)->reserved       = (uint32_t)(((uint64_t)value >> 48) & 0x000000000000FFFFULL); \
+    (s)->revision_id    = (uint32_t)(((uint64_t)value >> 32) & 0x000000000000FFFFULL); \
+    (s)->device_id      = (uint32_t)(((uint64_t)value >> 16) & 0x000000000000FFFFULL); \
+    (s)->vendor_id      = (uint32_t)(((uint64_t)value >> 0 ) & 0x000000000000FFFFULL);
 
 
 
@@ -1205,19 +1205,19 @@ typedef struct {
  * format of VER.FSBIF and VER.EMIF registers
  */
 typedef struct {
-    u32  reserved       ;//: 31;
-    u32  prod_fused     ;//: 1;
+    uint32_t  reserved       ;//: 31;
+    uint32_t  prod_fused     ;//: 1;
 } __attribute__((packed)) txt_ver_fsbif_emif_t;
 
 #define pack_txt_ver_fsbif_emif_t(s) \
-    (u64)( \
-    (((u64)(s)->prod_fused  & 0x0000000000000001ULL) << 31) | \
-    (((u64)(s)->reserved    & 0x000000007FFFFFFFULL) << 0 ) \
+    (uint64_t)( \
+    (((uint64_t)(s)->prod_fused  & 0x0000000000000001ULL) << 31) | \
+    (((uint64_t)(s)->reserved    & 0x000000007FFFFFFFULL) << 0 ) \
     )
 
 #define unpack_txt_ver_fsbif_emif_t(s, value) \
-    (s)->prod_fused     = (u32)(((u64)value >> 31) & 0x0000000000000001ULL); \
-    (s)->reserved       = (u32)(((u64)value >> 0 ) & 0x000000007FFFFFFFULL);
+    (s)->prod_fused     = (uint32_t)(((uint64_t)value >> 31) & 0x0000000000000001ULL); \
+    (s)->reserved       = (uint32_t)(((uint64_t)value >> 0 ) & 0x000000007FFFFFFFULL);
 
 
 
@@ -1259,16 +1259,16 @@ typedef struct {
 
 
 #define pack_txt_errorcode_sw_t(s) \
-    (u32)( \
-    (((u32)(s)->err2    & 0x00003FFFUL) << 16) | \
-    (((u32)(s)->src     & 0x00000001UL) << 15) | \
-    (((u32)(s)->err1    & 0x00007FFFUL) << 0 ) \
+    (uint32_t)( \
+    (((uint32_t)(s)->err2    & 0x00003FFFUL) << 16) | \
+    (((uint32_t)(s)->src     & 0x00000001UL) << 15) | \
+    (((uint32_t)(s)->err1    & 0x00007FFFUL) << 0 ) \
     )
 
 #define unpack_txt_errorcode_sw_t(s, value) \
-    (s)->err2    = (u32)(((u32)value >> 16) & 0x00003FFFUL); \
-    (s)->src     = (u32)(((u32)value >> 15) & 0x00000001UL); \
-    (s)->err1    = (u32)(((u32)value >> 0 ) & 0x00007FFFUL);
+    (s)->err2    = (uint32_t)(((uint32_t)value >> 16) & 0x00003FFFUL); \
+    (s)->src     = (uint32_t)(((uint32_t)value >> 15) & 0x00000001UL); \
+    (s)->err1    = (uint32_t)(((uint32_t)value >> 0 ) & 0x00007FFFUL);
 
 
 
@@ -1287,22 +1287,22 @@ typedef struct {
 } __attribute__((packed)) acmod_error_t;
 
 #define pack_acmod_error_t(s) \
-    (u32)( \
-    (((u32)(s)->error2      & 0x00000001UL) << 16) | \
-    (((u32)(s)->src         & 0x00000001UL) << 15) | \
-    (((u32)(s)->reserved    & 0x00000001UL) << 14) | \
-    (((u32)(s)->error       & 0x0000000FUL) << 10) | \
-    (((u32)(s)->progress    & 0x0000003FUL) << 4 ) | \
-    (((u32)(s)->acm_type    & 0x0000000FUL) << 0 ) \
+    (uint32_t)( \
+    (((uint32_t)(s)->error2      & 0x00000001UL) << 16) | \
+    (((uint32_t)(s)->src         & 0x00000001UL) << 15) | \
+    (((uint32_t)(s)->reserved    & 0x00000001UL) << 14) | \
+    (((uint32_t)(s)->error       & 0x0000000FUL) << 10) | \
+    (((uint32_t)(s)->progress    & 0x0000003FUL) << 4 ) | \
+    (((uint32_t)(s)->acm_type    & 0x0000000FUL) << 0 ) \
     )
 
 #define unpack_acmod_error_t(s, value) \
-    (s)->error2     = (u32)(((u32)value >> 16) & 0x00000001UL); \
-    (s)->src        = (u32)(((u32)value >> 15) & 0x00000001UL); \
-    (s)->reserved   = (u32)(((u32)value >> 14) & 0x00000001UL); \
-    (s)->error      = (u32)(((u32)value >> 10) & 0x0000000FUL); \
-    (s)->progress   = (u32)(((u32)value >> 4 ) & 0x0000003FUL); \
-    (s)->acm_type   = (u32)(((u32)value >> 0 ) & 0x0000000FUL);
+    (s)->error2     = (uint32_t)(((uint32_t)value >> 16) & 0x00000001UL); \
+    (s)->src        = (uint32_t)(((uint32_t)value >> 15) & 0x00000001UL); \
+    (s)->reserved   = (uint32_t)(((uint32_t)value >> 14) & 0x00000001UL); \
+    (s)->error      = (uint32_t)(((uint32_t)value >> 10) & 0x0000000FUL); \
+    (s)->progress   = (uint32_t)(((uint32_t)value >> 4 ) & 0x0000003FUL); \
+    (s)->acm_type   = (uint32_t)(((uint32_t)value >> 0 ) & 0x0000000FUL);
 
 
 
@@ -1420,32 +1420,32 @@ typedef struct {
 } __attribute__((packed)) capabilities_t;
 
 #define pack_capabilities_t(s) \
-    (u32)( \
-    (((u32)(s)->extended_leafs      & 0x00000001UL) << 31) | \
-    (((u32)(s)->undefined9          & 0x003FFFFFUL) << 9 ) | \
-    (((u32)(s)->wakeup              & 0x00000001UL) << 8 ) | \
-    (((u32)(s)->smctrl              & 0x00000001UL) << 7 ) | \
-    (((u32)(s)->parameters          & 0x00000001UL) << 6 ) | \
-    (((u32)(s)->sexit               & 0x00000001UL) << 5 ) | \
-    (((u32)(s)->senter              & 0x00000001UL) << 4 ) | \
-    (((u32)(s)->exitac              & 0x00000001UL) << 3 ) | \
-    (((u32)(s)->enteraccs           & 0x00000001UL) << 2 ) | \
-    (((u32)(s)->undefined1          & 0x00000001UL) << 1 ) | \
-    (((u32)(s)->chipset_present     & 0x00000001UL) << 0 ) \
+    (uint32_t)( \
+    (((uint32_t)(s)->extended_leafs      & 0x00000001UL) << 31) | \
+    (((uint32_t)(s)->undefined9          & 0x003FFFFFUL) << 9 ) | \
+    (((uint32_t)(s)->wakeup              & 0x00000001UL) << 8 ) | \
+    (((uint32_t)(s)->smctrl              & 0x00000001UL) << 7 ) | \
+    (((uint32_t)(s)->parameters          & 0x00000001UL) << 6 ) | \
+    (((uint32_t)(s)->sexit               & 0x00000001UL) << 5 ) | \
+    (((uint32_t)(s)->senter              & 0x00000001UL) << 4 ) | \
+    (((uint32_t)(s)->exitac              & 0x00000001UL) << 3 ) | \
+    (((uint32_t)(s)->enteraccs           & 0x00000001UL) << 2 ) | \
+    (((uint32_t)(s)->undefined1          & 0x00000001UL) << 1 ) | \
+    (((uint32_t)(s)->chipset_present     & 0x00000001UL) << 0 ) \
     )
 
 #define unpack_capabilities_t(s, value) \
-    (s)->extended_leafs      = (u32)(((u32)value >> 31) & 0x00000001UL); \
-    (s)->undefined9          = (u32)(((u32)value >> 9 ) & 0x003FFFFFUL); \
-    (s)->wakeup              = (u32)(((u32)value >> 8 ) & 0x00000001UL); \
-    (s)->smctrl              = (u32)(((u32)value >> 7 ) & 0x00000001UL); \
-    (s)->parameters          = (u32)(((u32)value >> 6 ) & 0x00000001UL); \
-    (s)->sexit               = (u32)(((u32)value >> 5 ) & 0x00000001UL); \
-    (s)->senter              = (u32)(((u32)value >> 4 ) & 0x00000001UL); \
-    (s)->exitac              = (u32)(((u32)value >> 3 ) & 0x00000001UL); \
-    (s)->enteraccs           = (u32)(((u32)value >> 2 ) & 0x00000001UL); \
-    (s)->undefined1          = (u32)(((u32)value >> 1 ) & 0x00000001UL); \
-    (s)->chipset_present     = (u32)(((u32)value >> 0 ) & 0x00000001UL);
+    (s)->extended_leafs      = (uint32_t)(((uint32_t)value >> 31) & 0x00000001UL); \
+    (s)->undefined9          = (uint32_t)(((uint32_t)value >> 9 ) & 0x003FFFFFUL); \
+    (s)->wakeup              = (uint32_t)(((uint32_t)value >> 8 ) & 0x00000001UL); \
+    (s)->smctrl              = (uint32_t)(((uint32_t)value >> 7 ) & 0x00000001UL); \
+    (s)->parameters          = (uint32_t)(((uint32_t)value >> 6 ) & 0x00000001UL); \
+    (s)->sexit               = (uint32_t)(((uint32_t)value >> 5 ) & 0x00000001UL); \
+    (s)->senter              = (uint32_t)(((uint32_t)value >> 4 ) & 0x00000001UL); \
+    (s)->exitac              = (uint32_t)(((uint32_t)value >> 3 ) & 0x00000001UL); \
+    (s)->enteraccs           = (uint32_t)(((uint32_t)value >> 2 ) & 0x00000001UL); \
+    (s)->undefined1          = (uint32_t)(((uint32_t)value >> 1 ) & 0x00000001UL); \
+    (s)->chipset_present     = (uint32_t)(((uint32_t)value >> 0 ) & 0x00000001UL);
 
 
 /* helper fn. for getsec_capabilities */
@@ -1476,7 +1476,7 @@ typedef struct {
 #define NR_MMIO_PCICFG_PAGES    1
 
 
-typedef u8   txt_heap_t;
+typedef uint8_t   txt_heap_t;
 
 /*
  * data-passing structures contained in TXT heap:
@@ -1702,24 +1702,24 @@ typedef struct {
 
 
 typedef struct {
-  u32 writable;
-  u32 encoding;
-  u32 addressofvariable;
+  uint32_t writable;
+  uint32_t encoding;
+  uint32_t addressofvariable;
 } __attribute__ ((packed)) VMCSENCODINGS;
 
 
 typedef struct {
-	u32 type: 4;
-	u32 desctype: 1; //0=system, 1=code or data
-	u32 dpl: 2;
-	u32 p: 1;
-	u32 res1: 4;
-	u32 avl: 1;
-	u32 csmode: 1;
-	u32 s: 1; //0=16-bit segment, 1=32-bit segment
-	u32 g: 1;
-	u32 usable: 1; //0=usable, 1=unusable
-	u32 res2: 15;
+	uint32_t type: 4;
+	uint32_t desctype: 1; //0=system, 1=code or data
+	uint32_t dpl: 2;
+	uint32_t p: 1;
+	uint32_t res1: 4;
+	uint32_t avl: 1;
+	uint32_t csmode: 1;
+	uint32_t s: 1; //0=16-bit segment, 1=32-bit segment
+	uint32_t g: 1;
+	uint32_t usable: 1; //0=usable, 1=unusable
+	uint32_t res2: 15;
 } __attribute__ ((packed)) segment_desc_accessrights;
 
 
@@ -1892,38 +1892,38 @@ enum {
 
 
 typedef struct {
-	u16 sel;
-	u64 base;
-	u32 limit;
+	uint16_t sel;
+	uint64_t base;
+	uint32_t limit;
 	union{
 		segment_desc_accessrights ar;
-		u32 aru32;
+		uint32_t aru32;
 	};
 } __attribute__ ((packed)) segment_desc;
 
 
 typedef struct msr_entry {
-	u32 index;
-	u32 reserved;
-	u64 data;
+	uint32_t index;
+	uint32_t reserved;
+	uint64_t data;
 } __attribute__((packed)) msr_entry_t;
 
 
 typedef struct {
-  u32 id;
-  u32 vmxonSize;
-  u32 physicalAddressWidth;
-  u32 vmcsMemoryType;
-  u32 ioCapability;
-  u64 cr0fixed0;
-  u64 cr0fixed1;
-  u64 cr4fixed0;
-  u64 cr4fixed1;
-  u64 pinbasedctls;
-  u64 procbasedctls;
-  u64 procbasedctls2;
-u64 exitctls;
-u64 entryctls;
+  uint32_t id;
+  uint32_t vmxonSize;
+  uint32_t physicalAddressWidth;
+  uint32_t vmcsMemoryType;
+  uint32_t ioCapability;
+  uint64_t cr0fixed0;
+  uint64_t cr0fixed1;
+  uint64_t cr4fixed0;
+  uint64_t cr4fixed1;
+  uint64_t pinbasedctls;
+  uint64_t procbasedctls;
+  uint64_t procbasedctls2;
+uint64_t exitctls;
+uint64_t entryctls;
 }__attribute__ ((packed)) VMXINFO;
 
 
@@ -2301,74 +2301,74 @@ extern void xmhfhwm_vdriver_sentinel(void);
 extern void xmhfhwm_vdriver_slabep(void);
 extern void xmhfhwm_vdriver_vhslabretaddr(void);
 extern void xmhfhwm_vdriver_uhslabretaddr(void);
-extern void hwm_vdriver_cpu_vmwrite(u32 encoding, u32 value);
-extern void xmhfhwm_vdriver_writeesp(u32 oldval, u32 newval);
-extern void xmhfhwm_vdriver_cpu_writecr3(u32 oldval, u32 newval);
+extern void hwm_vdriver_cpu_vmwrite(uint32_t encoding, uint32_t value);
+extern void xmhfhwm_vdriver_writeesp(uint32_t oldval, uint32_t newval);
+extern void xmhfhwm_vdriver_cpu_writecr3(uint32_t oldval, uint32_t newval);
 
 //////
 // cpu model variables and instruction implementations
 //////
-extern u32 xmhfhwm_cpu_gprs_eip;
-extern u32 xmhfhwm_cpu_gprs_esp;
-extern u32 xmhfhwm_cpu_gprs_ebp;
+extern uint32_t xmhfhwm_cpu_gprs_eip;
+extern uint32_t xmhfhwm_cpu_gprs_esp;
+extern uint32_t xmhfhwm_cpu_gprs_ebp;
 
-extern u32 xmhfhwm_cpu_gprs_eax;
-extern u32 xmhfhwm_cpu_gprs_ebx;
-extern u32 xmhfhwm_cpu_gprs_edx;
-extern u32 xmhfhwm_cpu_gprs_ecx;
-extern u32 xmhfhwm_cpu_gprs_esi;
-extern u32 xmhfhwm_cpu_gprs_edi;
+extern uint32_t xmhfhwm_cpu_gprs_eax;
+extern uint32_t xmhfhwm_cpu_gprs_ebx;
+extern uint32_t xmhfhwm_cpu_gprs_edx;
+extern uint32_t xmhfhwm_cpu_gprs_ecx;
+extern uint32_t xmhfhwm_cpu_gprs_esi;
+extern uint32_t xmhfhwm_cpu_gprs_edi;
 
-extern u32 xmhfhwm_cpu_eflags;
+extern uint32_t xmhfhwm_cpu_eflags;
 
-extern u16 xmhfhwm_cpu_gdtr_limit;
-extern u32 xmhfhwm_cpu_gdtr_base;
-extern u16 xmhfhwm_cpu_idtr_limit;
-extern u32 xmhfhwm_cpu_idtr_base;
+extern uint16_t xmhfhwm_cpu_gdtr_limit;
+extern uint32_t xmhfhwm_cpu_gdtr_base;
+extern uint16_t xmhfhwm_cpu_idtr_limit;
+extern uint32_t xmhfhwm_cpu_idtr_base;
 
-extern u16 xmhfhwm_cpu_tr_selector;
+extern uint16_t xmhfhwm_cpu_tr_selector;
 
-extern u32 xmhfhwm_cpu_cr0;
-extern u32 xmhfhwm_cpu_cr2;
-extern u32 xmhfhwm_cpu_cr3;
-extern u32 xmhfhwm_cpu_cr4;
+extern uint32_t xmhfhwm_cpu_cr0;
+extern uint32_t xmhfhwm_cpu_cr2;
+extern uint32_t xmhfhwm_cpu_cr3;
+extern uint32_t xmhfhwm_cpu_cr4;
 
-extern u32 xmhfhwm_cpu_cs_selector;
-extern u32 xmhfhwm_cpu_ds_selector;
-extern u32 xmhfhwm_cpu_es_selector;
-extern u32 xmhfhwm_cpu_fs_selector;
-extern u32 xmhfhwm_cpu_gs_selector;
-extern u32 xmhfhwm_cpu_ss_selector;
+extern uint32_t xmhfhwm_cpu_cs_selector;
+extern uint32_t xmhfhwm_cpu_ds_selector;
+extern uint32_t xmhfhwm_cpu_es_selector;
+extern uint32_t xmhfhwm_cpu_fs_selector;
+extern uint32_t xmhfhwm_cpu_gs_selector;
+extern uint32_t xmhfhwm_cpu_ss_selector;
 
-extern u64 xmhfhwm_cpu_xcr0;
+extern uint64_t xmhfhwm_cpu_xcr0;
 extern xmhfhwm_cpu_state_t xmhfhwm_cpu_state;
 
 extern physmem_extent_t xmhfhwm_sysmemaccess_physmem_extents[32];
-extern u32 xmhfhwm_sysmemaccess_physmem_extents_total;
+extern uint32_t xmhfhwm_sysmemaccess_physmem_extents_total;
 
-extern u64 xmhfhwm_cpu_msr_efer;
-extern u64 xmhfhwm_cpu_msr_apic_base;
-extern u64 xmhfhwm_cpu_msr_sysenter_cs;
-extern u64 xmhfhwm_cpu_msr_sysenter_eip;
-extern u32 xmhfhwm_cpu_msr_sysenter_esp_hi;
-extern u32 xmhfhwm_cpu_msr_sysenter_esp_lo;
+extern uint64_t xmhfhwm_cpu_msr_efer;
+extern uint64_t xmhfhwm_cpu_msr_apic_base;
+extern uint64_t xmhfhwm_cpu_msr_sysenter_cs;
+extern uint64_t xmhfhwm_cpu_msr_sysenter_eip;
+extern uint32_t xmhfhwm_cpu_msr_sysenter_esp_hi;
+extern uint32_t xmhfhwm_cpu_msr_sysenter_esp_lo;
 
-extern u32 xmhfhwm_cpu_vmcs_host_rip;
-extern u32 xmhfhwm_cpu_vmcs_host_rsp;
-extern u32 xmhfhwm_cpu_vmcs_host_cr3;
+extern uint32_t xmhfhwm_cpu_vmcs_host_rip;
+extern uint32_t xmhfhwm_cpu_vmcs_host_rsp;
+extern uint32_t xmhfhwm_cpu_vmcs_host_cr3;
 
 
 
 extern void _impl_xmhfhwm_cpu_insn_hlt(void);
 extern void _impl_xmhfhwm_cpu_insn_pushl_mesp(int index);
-extern void _impl_xmhfhwm_cpu_insn_pushl_mem(u32 value);
-extern u32 _impl_xmhfhwm_cpu_insn_popl_mem(void);
+extern void _impl_xmhfhwm_cpu_insn_pushl_mem(uint32_t value);
+extern uint32_t _impl_xmhfhwm_cpu_insn_popl_mem(void);
 
-extern void _impl_xmhfhwm_cpu_insn_addl_imm_esp(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_mesp_eax(u32 index);
+extern void _impl_xmhfhwm_cpu_insn_addl_imm_esp(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_mesp_eax(uint32_t index);
 extern void _impl_xmhfhwm_cpu_insn_movl_mesp_ebx(int index);
-extern void _impl_xmhfhwm_cpu_insn_cmpl_imm_meax(u32 value, int index);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_meax(u32 value, int index);
+extern void _impl_xmhfhwm_cpu_insn_cmpl_imm_meax(uint32_t value, int index);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_meax(uint32_t value, int index);
 extern void _impl_xmhfhwm_cpu_insn_movl_meax_edx(int index);
 extern void _impl_xmhfhwm_cpu_insn_movl_meax_ecx(int index);
 extern void _impl_xmhfhwm_cpu_insn_movl_ecx_meax(int index);
@@ -2396,7 +2396,7 @@ extern void _impl_xmhfhwm_cpu_insn_popl_esi(void);
 extern void _impl_xmhfhwm_cpu_insn_popl_ebx(void);
 extern void _impl_xmhfhwm_cpu_insn_cli(void);
 extern void _impl_xmhfhwm_cpu_insn_sti(void);
-extern void _impl_xmhfhwm_cpu_insn_subl_imm_esp(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_subl_imm_esp(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_sgdt_mesp(int index);
 extern void _impl_xmhfhwm_cpu_insn_xorl_eax_eax(void);
 extern void _impl_xmhfhwm_cpu_insn_xorl_edx_edx(void);
@@ -2408,29 +2408,29 @@ extern void _impl_xmhfhwm_cpu_insn_addl_eax_esp(void);
 
 extern void _impl_xmhfhwm_cpu_insn_movl_mecx_eax(int index);
 extern void _impl_xmhfhwm_cpu_insn_movl_mecx_edx(int index);
-extern void _impl_xmhfhwm_cpu_insn_addl_imm_ecx(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_addl_imm_ecx(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_movl_edx_ecx(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_eax_ecx(void);
-extern void _impl_xmhfhwm_cpu_insn_andl_imm_edx(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_andl_imm_ecx(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_shl_imm_ecx(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_shr_imm_eax(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_orl_imm_eax(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_andl_imm_edx(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_andl_imm_ecx(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_shl_imm_ecx(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_shr_imm_eax(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_orl_imm_eax(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_orl_ecx_eax(void);
 extern void _impl_xmhfhwm_cpu_insn_orl_edx_eax(void);
 extern void _impl_xmhfhwm_cpu_insn_inb_dx_al(void);
 extern void _impl_xmhfhwm_cpu_insn_inl_dx_eax(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_eax_mesp(int index);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_mesp(u32 value, int index);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_mesp(uint32_t value, int index);
 extern void _impl_xmhfhwm_cpu_insn_invept_mesp_edx(int index);
 extern void _impl_xmhfhwm_cpu_insn_invvpid_mesp_edx(int index);
 extern void _impl_xmhfhwm_cpu_insn_movw_mesp_ax(int index);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_eax(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_esp(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_esi(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_ecx(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_edx(u32 value);
-extern void _impl_xmhfhwm_cpu_insn_movl_imm_ebx(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_eax(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_esp(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_esi(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_ecx(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_edx(uint32_t value);
+extern void _impl_xmhfhwm_cpu_insn_movl_imm_ebx(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_invvpid_mesp_ecx(int index);
 extern void _impl_xmhfhwm_cpu_insn_inw_dx_ax(void);
 extern void _impl_xmhfhwm_cpu_insn_lgdt_mecx(int index);
@@ -2457,9 +2457,9 @@ extern void _impl_xmhfhwm_cpu_insn_movl_gs_eax(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_ss_eax(void);
 
 
-extern void _impl_xmhfhwm_cpu_insn_btl_imm_mecx(u32 value, int index);
-extern void _impl_xmhfhwm_cpu_insn_btrl_imm_mecx(u32 value, int index);
-extern void _impl_xmhfhwm_cpu_insn_btsl_imm_mecx(u32 value, int index);
+extern void _impl_xmhfhwm_cpu_insn_btl_imm_mecx(uint32_t value, int index);
+extern void _impl_xmhfhwm_cpu_insn_btrl_imm_mecx(uint32_t value, int index);
+extern void _impl_xmhfhwm_cpu_insn_btsl_imm_mecx(uint32_t value, int index);
 
 
 extern void _impl_xmhfhwm_cpu_insn_vmxon_mesp(int index);
@@ -2487,10 +2487,10 @@ extern void _impl_xmhfhwm_cpu_insn_cld(void);
 extern void _impl_xmhfhwm_cpu_insn_rep_movsb(void);
 extern void _impl_xmhfhwm_cpu_insn_popl_edi(void);
 
-extern void _impl_xmhfhwm_cpu_insn_andl_imm_eax(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_andl_imm_eax(uint32_t value);
 
 extern void _impl_xmhfhwm_cpu_insn_movl_mesi_eax(int index);
-extern void _impl_xmhfhwm_cpu_insn_movl_mesi_edx(u32 index);
+extern void _impl_xmhfhwm_cpu_insn_movl_mesi_edx(uint32_t index);
 extern void _impl_xmhfhwm_cpu_insn_movb_al_mesi(int index);
 extern void _impl_xmhfhwm_cpu_insn_movw_ax_mesi(int index);
 
@@ -2505,13 +2505,13 @@ extern void _impl_xmhfhwm_cpu_insn_popl_ebp(void);
 extern void _impl_xmhfhwm_cpu_insn_pushl_ecx(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_eax_esp(void);
 extern void _impl_xmhfhwm_cpu_insn_pushl_esp(void);
-extern void _impl_xmhfhwm_cpu_insn_pushl_imm(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_pushl_imm(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_popl_edx(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_esp_ecx(void);
 
 extern void _impl_xmhfhwm_cpu_insn_vmlaunch(void);
 extern void _impl_xmhfhwm_cpu_insn_pushal(void);
-extern void _impl_xmhfhwm_cpu_insn_movw_imm_ax(u16 value);
+extern void _impl_xmhfhwm_cpu_insn_movw_imm_ax(uint16_t value);
 extern void  _impl_xmhfhwm_cpu_insn_movw_ax_ds(void);
 extern void  _impl_xmhfhwm_cpu_insn_movw_ax_es(void);
 extern void  _impl_xmhfhwm_cpu_insn_movw_ax_fs(void);
@@ -2529,7 +2529,7 @@ extern void  _impl_xmhfhwm_cpu_insn_vmresume(void);
 extern void _impl_xmhfhwm_cpu_insn_movl_meax_esi(int index);
 extern void _impl_xmhfhwm_cpu_insn_iretl(void);
 extern void  _impl_xmhfhwm_cpu_insn_movw_ds_ax(void);
-extern void _impl_xmhfhwm_cpu_insn_addl_imm_eax(u32 value);
+extern void _impl_xmhfhwm_cpu_insn_addl_imm_eax(uint32_t value);
 extern void _impl_xmhfhwm_cpu_insn_rep_movsb_sysmem(sysmem_copy_t sysmemcopy_type);
 extern void _impl_xmhfhwm_cpu_insn_mull_ecx(void);
 extern void _impl_xmhfhwm_cpu_insn_addl_ecx_eax(void);
@@ -2544,7 +2544,7 @@ extern void _impl_xmhfhwm_cpu_insn_addl_ecx_eax(void);
 
 #if defined (__XMHF_VERIFICATION__)
 	#define CASM_FUNCCALL_PARAMSETUP(X)    ( \
-		_impl_xmhfhwm_cpu_insn_pushl_mem((u32)X) \
+		_impl_xmhfhwm_cpu_insn_pushl_mem((uint32_t)X) \
 		), \
 
 	#define CASM_FUNCCALL_PARAMTEARDOWN(X)    ( \
@@ -2553,18 +2553,18 @@ extern void _impl_xmhfhwm_cpu_insn_addl_ecx_eax(void);
 
 	#define CASM_FUNCCALL(fn_name, ...)   (\
 	    PP_FOREACH(CASM_FUNCCALL_PARAMSETUP, (PP_REVERSEARGS(__VA_ARGS__))) \
-	    (_impl_xmhfhwm_cpu_insn_pushl_mem((u32)CASM_RET_EIP)), \
+	    (_impl_xmhfhwm_cpu_insn_pushl_mem((uint32_t)CASM_RET_EIP)), \
 	    fn_name(__VA_ARGS__), \
 	    PP_FOREACH(CASM_FUNCCALL_PARAMTEARDOWN, (PP_REVERSEARGS(__VA_ARGS__))) \
-	    (u64)(((u64)xmhfhwm_cpu_gprs_edx << 32) | xmhfhwm_cpu_gprs_eax) \
+	    (uint64_t)(((uint64_t)xmhfhwm_cpu_gprs_edx << 32) | xmhfhwm_cpu_gprs_eax) \
 	    )\
 
 	#define CASM_FUNCCALL32(fn_name, ...)   (\
 	    PP_FOREACH(CASM_FUNCCALL_PARAMSETUP, (PP_REVERSEARGS(__VA_ARGS__))) \
-	    (_impl_xmhfhwm_cpu_insn_pushl_mem((u32)CASM_RET_EIP)), \
+	    (_impl_xmhfhwm_cpu_insn_pushl_mem((uint32_t)CASM_RET_EIP)), \
 	    fn_name(__VA_ARGS__), \
 	    PP_FOREACH(CASM_FUNCCALL_PARAMTEARDOWN, (PP_REVERSEARGS(__VA_ARGS__))) \
-	    (u32)(xmhfhwm_cpu_gprs_eax) \
+	    (uint32_t)(xmhfhwm_cpu_gprs_eax) \
 	    )\
 
 
@@ -2647,40 +2647,40 @@ extern void _impl_xmhfhwm_cpu_insn_addl_ecx_eax(void);
 #define xmhfhwm_cpu_insn_call_c_1p(fn_name, fn_p1_type) \
 	__builtin_annot("call "#fn_name" "); \
 	_impl_xmhfhwm_cpu_insn_pushl_mem(CASM_RET_EIP); \
-	fn_name( (fn_p1_type) *((u32 *)(xmhfhwm_cpu_gprs_esp+4)) ); \
+	fn_name( (fn_p1_type) *((uint32_t *)(xmhfhwm_cpu_gprs_esp+4)) ); \
 
 #define xmhfhwm_cpu_insn_call_c_2p(fn_name, fn_p1_type, fn_p2_type) \
 	__builtin_annot("call "#fn_name" "); \
 	_impl_xmhfhwm_cpu_insn_pushl_mem(CASM_RET_EIP); \
-	fn_name( (fn_p1_type) *((u32 *)(xmhfhwm_cpu_gprs_esp+4)) , (fn_p2_type) *((u32 *)(xmhfhwm_cpu_gprs_esp+8)) ); \
+	fn_name( (fn_p1_type) *((uint32_t *)(xmhfhwm_cpu_gprs_esp+4)) , (fn_p2_type) *((uint32_t *)(xmhfhwm_cpu_gprs_esp+8)) ); \
 
 
 
 
 #define xmhfhwm_cpu_insn_ret() \
 	__builtin_annot("ret "); \
-        xmhfhwm_cpu_gprs_eip = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
+        xmhfhwm_cpu_gprs_eip = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
 	return; \
 
 #define xmhfhwm_cpu_insn_retu32() \
 	__builtin_annot("ret "); \
-        xmhfhwm_cpu_gprs_eip = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
+        xmhfhwm_cpu_gprs_eip = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
 	return xmhfhwm_cpu_gprs_eax; \
 
 #define xmhfhwm_cpu_insn_retu64() \
 	__builtin_annot("ret "); \
-        xmhfhwm_cpu_gprs_eip = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
-	return (u64)(((u64)xmhfhwm_cpu_gprs_edx << 32) | xmhfhwm_cpu_gprs_eax); \
+        xmhfhwm_cpu_gprs_eip = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
+	return (uint64_t)(((uint64_t)xmhfhwm_cpu_gprs_edx << 32) | xmhfhwm_cpu_gprs_eax); \
 
 #define xmhfhwm_cpu_insn_lret() \
 	__builtin_annot("lret "); \
-        xmhfhwm_cpu_gprs_eip = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
-        xmhfhwm_cpu_cs_selector = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
+        xmhfhwm_cpu_gprs_eip = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
+        xmhfhwm_cpu_cs_selector = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
 	return; \
 
 
@@ -2719,8 +2719,8 @@ extern void _impl_xmhfhwm_cpu_insn_addl_ecx_eax(void);
 #define xmhfhwm_cpu_insn_jmpvhslabretaddr() \
 	__builtin_annot("ret "); \
 	__builtin_annot("hlt "); \
-	xmhfhwm_cpu_gprs_eip = *(u32 *)xmhfhwm_cpu_gprs_esp; \
-	xmhfhwm_cpu_gprs_esp += sizeof(u32); \
+	xmhfhwm_cpu_gprs_eip = *(uint32_t *)xmhfhwm_cpu_gprs_esp; \
+	xmhfhwm_cpu_gprs_esp += sizeof(uint32_t); \
 	xmhfhwm_vdriver_vhslabretaddr(); \
 	_impl_xmhfhwm_cpu_insn_hlt(); \
 

@@ -63,11 +63,11 @@
 	requires \valid(drhd);
 	assigns \nothing;
 @*/
-bool xmhfhw_platform_x86pc_vtd_drhd_set_root_entry_table(VTD_DRHD *drhd,  u64 ret_addr){
+bool xmhfhw_platform_x86pc_vtd_drhd_set_root_entry_table(VTD_DRHD *drhd,  uint64_t ret_addr){
 	VTD_RTADDR_REG rtaddr;
 	VTD_GCMD_REG gcmd;
 	VTD_GSTS_REG gsts;
-	u32 retbuffer_paddr = (u32)ret_addr;
+	uint32_t retbuffer_paddr = (uint32_t)ret_addr;
 
 	//sanity check
 	if (drhd == NULL)

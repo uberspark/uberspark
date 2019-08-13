@@ -1,0 +1,6 @@
+name="usosservices"
+description="uberSpark OS services interface"
+version="1.0"
+requires=""
+archive(byte)="usosservices.cmo"
+archive(native)="usosservices.cmx"

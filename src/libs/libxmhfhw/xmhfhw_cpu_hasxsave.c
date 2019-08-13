@@ -56,7 +56,7 @@
   assigns \nothing;
 @*/
 bool xmhf_baseplatform_arch_x86_cpuhasxsavefeature(void){
-	u32 eax, ebx, ecx, edx;
+	uint32_t eax, ebx, ecx, edx;
 
 	//bit 26 of ECX is 1 in CPUID function 0x00000001 if
 	//XSAVE/XRSTOR feature is available

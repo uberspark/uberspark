@@ -52,7 +52,7 @@
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_bios_data_size(u32 heap_memaddr, uint32_t heap_size)
+uint64_t get_bios_data_size(uint32_t heap_memaddr, uint32_t heap_size)
 {
 	return CASM_FUNCCALL(xmhfhw_sysmemaccess_readu64, heap_memaddr);
 }

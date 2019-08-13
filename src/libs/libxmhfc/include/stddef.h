@@ -32,7 +32,10 @@
 #ifndef __STDDEF_H__
 #define __STDDEF_H__
 
-#include <stdint.h>
+//#include <stdint.h>
+
+#ifndef __ASSEMBLY__
+
 
 #ifndef NULL
 
@@ -52,5 +55,8 @@ typedef __ptrdiff_t     ptrdiff_t;
 #else
     #define offsetof(type,field) (int)&(((type *)0)->field)
 #endif
+
+#endif //__ASSEMBLY__
+
 
 #endif // __STDDEF_H__

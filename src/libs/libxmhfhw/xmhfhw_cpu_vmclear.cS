@@ -52,7 +52,7 @@
 
 
 
-CASM_FUNCDEF(u32, __vmx_vmclear,
+CASM_FUNCDEF(uint32_t, __vmx_vmclear,
 {
     xmhfhwm_cpu_insn_vmclear_mesp(0x4);
     xmhfhwm_cpu_insn_jbe(vmclear_error);
@@ -63,6 +63,6 @@ CASM_FUNCDEF(u32, __vmx_vmclear,
     CASM_LABEL(vmclear_done);
     xmhfhwm_cpu_insn_retu32();
 },
-u64 vmcs)
+uint64_t vmcs)
 
 

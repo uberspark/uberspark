@@ -58,8 +58,8 @@
 	requires \valid(dmardevice);
 	assigns \nothing;
 @*/
-void _vtd_reg_write(VTD_DRHD *dmardevice, u32 reg, u64 value){
-  u32 regtype=VTD_REG_32BITS, regaddr=0;
+void _vtd_reg_write(VTD_DRHD *dmardevice, uint32_t reg, uint64_t value){
+  uint32_t regtype=VTD_REG_32BITS, regaddr=0;
 
 	//obtain register type and base address
   switch(reg){
@@ -107,11 +107,11 @@ void _vtd_reg_write(VTD_DRHD *dmardevice, u32 reg, u64 value){
   //perform the actual read or write request
 	switch(regtype){
     case VTD_REG_32BITS:	//32-bit write
-      CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu32, regaddr, (u32)value);
+      CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu32, regaddr, (uint32_t)value);
       break;
 
     case VTD_REG_64BITS:	//64-bit write
-      CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu64, regaddr, (u32)value, (u32)((u64)value >> 32) );
+      CASM_FUNCCALL(xmhfhw_sysmemaccess_writeu64, regaddr, (uint32_t)value, (uint32_t)((uint64_t)value >> 32) );
       break;
 
     default:

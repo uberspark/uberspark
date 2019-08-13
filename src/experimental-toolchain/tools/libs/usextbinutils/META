@@ -1,0 +1,6 @@
+name="usextbinutils"
+description="uberSpark external binary generation utilities interface"
+version="1.0"
+requires=""
+archive(byte)="usextbinutils.cmo"
+archive(native)="usextbinutils.cmx"

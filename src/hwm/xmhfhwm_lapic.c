@@ -52,10 +52,10 @@
 
 #include <uberspark.h>
 
-u32 xmhfhwm_lapic_reg_id=0;
+uint32_t xmhfhwm_lapic_reg_id=0;
 
 
-bool _impl_xmhfhwm_lapic_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result){
+bool _impl_xmhfhwm_lapic_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result){
 	bool retval = false;
 
 	if(sysmemaddr == XMHFHWM_LAPIC_REG_ID){
@@ -70,7 +70,7 @@ bool _impl_xmhfhwm_lapic_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_
 	return retval;
 }
 
-bool _impl_xmhfhwm_lapic_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value){
+bool _impl_xmhfhwm_lapic_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value){
 	bool retval = false;
 
 	//if(sysmemaddr == ){

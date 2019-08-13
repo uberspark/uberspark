@@ -1,0 +1,6 @@
+name="usuobjlib"
+description="uberSpark uberobject library verification and build interface"
+version="1.0"
+requires=""
+archive(byte)="usuobjlib.cmo"
+archive(native)="usuobjlib.cmx"

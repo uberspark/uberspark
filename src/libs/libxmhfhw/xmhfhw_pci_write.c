@@ -160,8 +160,8 @@
 /*@
 	assigns \nothing;
 @*/
-void xmhf_baseplatform_arch_x86_pci_type1_write(u32 bus, u32 device, u32 function, u32 index, u32 len,
-	u32 value){
+void xmhf_baseplatform_arch_x86_pci_type1_write(uint32_t bus, uint32_t device, uint32_t function, uint32_t index, uint32_t len,
+	uint32_t value){
 
 	//sanity checks
 	if( bus > 255 || PCI_DEVICE_FN(device,function) > 255 || index > 4095)
@@ -173,15 +173,15 @@ void xmhf_baseplatform_arch_x86_pci_type1_write(u32 bus, u32 device, u32 functio
 	//write a byte, word or dword depending on len
 	switch (len) {
 		case 1:	//byte
-		CASM_FUNCCALL(outb,(u8)value, PCI_CONFIG_DATA_PORT + (index & 3));
+		CASM_FUNCCALL(outb,(uint8_t)value, PCI_CONFIG_DATA_PORT + (index & 3));
 		break;
 
 		case 2:	//word
-		CASM_FUNCCALL(outw,(u16)value, PCI_CONFIG_DATA_PORT + (index & 2));
+		CASM_FUNCCALL(outw,(uint16_t)value, PCI_CONFIG_DATA_PORT + (index & 2));
 		break;
 
 		case 4:	//dword
-		CASM_FUNCCALL(outl,(u32)value, PCI_CONFIG_DATA_PORT);
+		CASM_FUNCCALL(outl,(uint32_t)value, PCI_CONFIG_DATA_PORT);
 		break;
 
 		default:

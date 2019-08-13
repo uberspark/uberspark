@@ -1,0 +1,6 @@
+name="usbin"
+description="uberSpark binary generation interface"
+version="1.0"
+requires=""
+archive(byte)="usbin.cmo"
+archive(native)="usbin.cmx"
