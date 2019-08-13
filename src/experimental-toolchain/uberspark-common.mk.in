@@ -41,9 +41,9 @@ export CAT = @CAT@
 
 
 ###### release variables
-export USPARK_RELEASE_VERSION_MAJOR	:= 4
-export USPARK_RELEASE_VERSION_MINOR := 1
-export USPARK_RELEASE_CODENAME := Eject
+export USPARK_RELEASE_VERSION_MAJOR	:= 5
+export USPARK_RELEASE_VERSION_MINOR := 0
+export USPARK_RELEASE_CODENAME := Chase
 
 
 ###### local paths
