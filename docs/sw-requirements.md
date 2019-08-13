@@ -9,8 +9,8 @@ We assume your are working in: `/home/<home-dir>/<work-dir>`
 Replace `<home-dir>` with your home-directory name and `<work-dir>` with 
 any working directory of your choice.
 
-* Ubuntu 14.04.2 LTS 64-bit for development and verification 
-(available [here](http://old-releases.ubuntu.com/releases/14.04.2/ubuntu-14.04.2-desktop-amd64.iso)):
+* Ubuntu 16.04.x LTS 64-bit (VM or Windows WSL) for development and verification 
+(VM ISO available [here](http://releases.ubuntu.com/16.04/ubuntu-16.04.6-desktop-amd64.iso)):
 You will need to install the following packages after doing an update:
 {% highlight bash %}
 sudo apt-get update
@@ -18,6 +18,7 @@ sudo apt-get install git gcc binutils autoconf
 sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 gcc-multilib
 sudo apt-get install ocaml ocaml-findlib ocaml-native-compilers
 sudo apt-get install graphviz libzarith-ocaml-dev libfindlib-ocaml-dev
+sudo apt-get install make unzip
 {% endhighlight %}
 
 * OPAM (OCaml Package Manager)
