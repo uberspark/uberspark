@@ -33,8 +33,8 @@ RUN opam switch 4.02 && eval `opam config env` && \
     cd frama-c-Phosphorus-20170501 && ./configure && \
     make && sudo make install && cd ..
 RUN wget http://www.cs.nyu.edu/acsys/cvc3/releases/2.4.1/linux64/cvc3-2.4.1-optimized-static.tar.gz
-RUN sudo cp -R cvc3-2.4.1-optimized-static/* /usr/local/
 RUN tar -xzf cvc3-2.4.1-optimized-static.tar.gz
+RUN sudo cp -R cvc3-2.4.1-optimized-static/* /usr/local/
 RUN wget https://github.com/Z3Prover/z3/releases/download/z3-4.4.1/z3-4.4.1-x64-ubuntu-14.04.zip
 RUN unzip z3-4.4.1-x64-ubuntu-14.04.zip
 RUN sudo cp z3-4.4.1-x64-ubuntu-14.04/bin/z3 /usr/local/bin
