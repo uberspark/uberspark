@@ -39,5 +39,12 @@ RUN wget https://github.com/Z3Prover/z3/releases/download/z3-4.4.1/z3-4.4.1-x64-
 RUN unzip z3-4.4.1-x64-ubuntu-14.04.zip
 RUN sudo cp z3-4.4.1-x64-ubuntu-14.04/bin/z3 /usr/local/bin
 RUN git clone https://github.com/hypcode/uberspark.git
+RUN opam switch 4.02 && eval `opam config env` && \
+    cd uberspark/src && ./bsconfigure.sh && ./configure && \
+    make && sudo make install && cd ../..
+RUN opam switch 4.02 && eval `opam config env` && \
+    cd uberspark/src/libs && ./bsconfigure.sh && ./configure && \
+    make verify-ubersparklibs && make build-ubersparklibs && \
+    sudo make install && cd ../../..
 
 ENTRYPOINT /bin/bash
