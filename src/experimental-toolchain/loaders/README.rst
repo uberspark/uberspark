@@ -1,11 +1,10 @@
-uberspark loader libraries -- to load uobj collections
-author: amit vasudevan (amitvasudevan@acm.org)
+namespace for uberSpark operating environment runtime loaders, which are used to load uobj collections
 
-
-folder organization:
+namespace organization:
 
 ``os``
-    home to OS specific uobj runtime loaders (e.g., linux user mode)
+    namespace for OS specific uobj runtime loaders (e.g., linux user mode)
 
 ``baremetal``
-    home to baremetal environment uobj runtime loaders (e.g., grub-based)
+    namespace for baremetal environment uobj runtime loaders (e.g., grub, uboot)
+
