@@ -1,9 +1,22 @@
-home for device agnostic platform-level modeling. e.g., for pc platform BIOS and option ROM functionality.
+namespace for cpu and device agnostic platform-level modeling. 
+e.g., for pc platform, the BIOS and option ROM functionality.
 
-folders here are of the form:
+example namespace node:
 
-``platform-name``
-    where platform-name is the name of the platform (e.g., pc, rpi3)
+``pc``
+    PC computing platform
+    contains namespace development recipe (e.g., pc_32 or pc_64)
 
-    ``platform-id``
-        where platform-id is a specific platform qualifier. e.g., pc_32 for 32-bit pc
+    ``common``
+        common pc platform modeling
+
+    ``pc_16``
+        pc 16-bit computing platform
+
+    ``pc_32``
+        pc 32-bit computing platform
+        includes logic within ``common``
+
+    ``pc_64``
+        pc 64-bit computing platform
+        includes logic within ``common``

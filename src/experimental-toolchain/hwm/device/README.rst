@@ -1,7 +1,8 @@
-home for various supported devices and their internal state modeling (e.g., what the device does in response
-to a particular input). interacts with ``arch-cpu`` via a general device interface abstraction
+namespace for various supported devices and their internal state modeling 
+(e.g., what the device does in response to a particular input). interacts 
+with ``cpu`` namespace via a general device interface abstraction
 
-folders here are of the form:
+namespace organization:
 
 ``device-class``
     type of function that the device performs (e.g., network controller)
