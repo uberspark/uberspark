@@ -1,4 +1,4 @@
-home to uobject C runtime library providing basic facilities such as memory and string manipulation
+namespace for uobject C runtime library providing basic facilities such as memory and string manipulation
 
 organization of this folder is as below:
 

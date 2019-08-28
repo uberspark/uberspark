@@ -1,4 +1,4 @@
-home for various uobject collections (group of uobjects)
+namespace for various uobject collections (group of uobjects)
 
 notes:
 
@@ -12,7 +12,7 @@ notes:
 uobject collection target specification is a triad: ``platform``- ``cpu-subarch`` - ``cpu-type``
 
 ``platform``
-    refers to one of the platforms within ``targets`` namespace
+    refers to one of the platforms within ``platforms`` namespace
 
 ``cpu-subarch``
     refers to one of the ``hwm/cpu`` namespace ``cpu-subarch`` values (e.g., armv8_32)

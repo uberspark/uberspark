@@ -1,4 +1,4 @@
-home for uberobject verification and compilation bridges along with integration shims
+namespace for uberobject verification and compilation bridges along with integration shims
 
 ``vbridge``
     verification bridges to interface with verification tools to verify uobjects (e.g., frama-c, coq)
