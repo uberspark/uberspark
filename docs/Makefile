@@ -5,8 +5,8 @@
 
 UBERSPARK_DOC_PATH := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SPHINXBUILD   ?= sphinx-build
-UBERSPARK_DOC_SOURCEDIR     = $(UBERSPARK_DOC_PATH)/.
-UBERSPARK_DOC_BUILDDIR      = $(UBERSPARK_DOC_PATH)/build
+UBERSPARK_DOC_SOURCEDIR     = $(UBERSPARK_DOC_PATH).
+UBERSPARK_DOC_BUILDDIR      = $(UBERSPARK_DOC_PATH)_build
 
 ###### targets
 
@@ -18,4 +18,4 @@ all:
 
 .PHONY: clean
 clean:
-	rm -rf $(USPARK_DOC_PATH)/build
+	rm -rf $(USPARK_DOC_PATH)/_build
