@@ -17,10 +17,10 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'uberSpark'
+project = 'uberSpark Documentation'
 copyright = '2019, Amit Vasudevan'
-author = 'Amit Vasudevan [Creator and Maintainer]'
-
+author = 'https://uberspark.org'
+release = 'Version: 5.0; Release Series: Chase'
 
 # -- General configuration ---------------------------------------------------
 
