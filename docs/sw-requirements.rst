@@ -1,3 +1,5 @@
+.. include:: macros.hrst
+
 Software Requirements and Dependencies
 ======================================
 
@@ -81,7 +83,7 @@ CompCert Certified Compiler
 ---------------------------
 
 The CompCert compiler is used to compile the C code for verified uberobjects within 
-uberSpark. The Compcert version currently supported is v3.0.1 and can be installed 
+|uspark|. The Compcert version currently supported is v3.0.1 and can be installed 
 as shown below:
 
 ::
@@ -99,7 +101,7 @@ Frama-C Verification Framework
 ------------------------------
 
 The Frama-C verification framework is used to discharge uberobject invariants and
-properties within uberSpark. The Frama-C version currently supported is 
+properties within |uspark|. The Frama-C version currently supported is 
 ``Phosphorus-20170501`` and can be installed as shown below:
 
 ::

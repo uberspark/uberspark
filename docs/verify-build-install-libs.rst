@@ -1,7 +1,9 @@
-Verifying, Building and Installing uberSpark Libraries
+.. include:: macros.hrst
+
+Verifying, Building and Installing |uspark| Libraries
 ======================================================
 
-The uberSpark core libraries provide commonly used runtime functionality
+The |uspark| core libraries provide commonly used runtime functionality
 for a uberobject. The core libraries current comprise a tiny C runtime 
 library, a fledging crypto library (currently SHA-1 supported) and a 
 library for platform hardware access. 
@@ -9,13 +11,13 @@ library for platform hardware access.
 This section of the documentation will describe how you 
 can verify, build and install the aforementioned libraries. For the
 subsections that follow, you need to be in the top-level of the
-uberSpark source repository.
+|uspark| source repository.
 
 
-Verifying uberSpark Libraries
+Verifying |uspark| Libraries
 -----------------------------
 
-To verify the uberSpark libraries first switch to the uberSpark 
+To verify the |uspark| libraries first switch to the |uspark| 
 library sources:
 
 ::
@@ -41,22 +43,22 @@ Note: The verification typically takes a few minutes to complete and should fina
 terminate with a success message.
 
 
-Building uberSpark Libraries
+Building |uspark| Libraries
 ----------------------------
 
-uberSpark uobject runtime libraries are built using the certified CompCert compiler
-in combination with uberSpark tools (to handle Assembly as CASM). To build the 
-uberSpark libraries you need to use the following command:
+|uspark| uobject runtime libraries are built using the certified CompCert compiler
+in combination with |uspark| tools (to handle Assembly as CASM). To build the 
+|uspark| libraries you need to use the following command:
 
 ::
 
    make build-ubersparklibs 
    
 
-Installing uberSpark Libraries
+Installing |uspark| Libraries
 ------------------------------
 
-uberSpark libraries are installed to the development system using the following
+|uspark| libraries are installed to the development system using the following
 command:
 
 ::

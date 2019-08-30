@@ -1,12 +1,14 @@
-Building and Installing uberSpark
+.. include:: macros.hrst
+
+Building and Installing |uspark|
 =================================
 
-Building uberSpark Tools
+Building |uspark| Tools
 ------------------------
 
-You will need to build the uberSpark toolchain before any other tasks.
-For this purpose, While in the top-level directory of the uberSpark repository,
-switch directory to uberSpark sources:
+You will need to build the |uspark| toolchain before any other tasks.
+For this purpose, While in the top-level directory of the |uspark| repository,
+switch directory to |uspark| sources:
 
 ::
 
@@ -31,12 +33,12 @@ And finally, build the toolchain:
 
 
 
-Installing uberSpark
+Installing |uspark|
 --------------------
 
-Upon a successful build, you will need to install the uberSpark toolchain, 
+Upon a successful build, you will need to install the |uspark| toolchain, 
 system headers and hardware-model related files. You can do this using the
-following command (while in the same directory of uberSpark sources ``src/``):
+following command (while in the same directory of |uspark| sources ``src/``):
 
 ::
 
