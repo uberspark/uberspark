@@ -16,7 +16,7 @@ verification. This can either be a Virtual Machine (VM) (e.g., VirtualBox) or a
 container (e.g., Windows WSL). As of this writing, the Ubuntu 16.04.x LTS VM ISO 
 image is available at:
 
-::
+.. parsed-literal::
 
     http://releases.ubuntu.com/16.04/ubuntu-16.04.6-desktop-amd64.iso
 
@@ -118,7 +118,7 @@ You will also need to install Frama-C backend theorem provers such as
 CVC3, Alt-Ergo and Z3. The WP Frama-C plugin manual referenced below
 contains a chapter on installing the theorem provers:
 
-::
+.. parsed-literal::
 
     http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf
 
