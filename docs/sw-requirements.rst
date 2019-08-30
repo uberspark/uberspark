@@ -39,6 +39,22 @@ packages required for development as shown below:
    sudo apt-get install make unzip 
 
 
+Packages for Generating Documentation
+-------------------------------------
+
+Optionally, you will need to install Latex, Python and Sphinx in order to 
+generate the documentation locally for |uspark|. More specifically, you will need 
+to perform the following operations:
+
+::
+
+    sudo apt install python3 python3-pip 
+    sudo apt install texlive-latex-recommended texlive-fonts-recommended 
+    sudo apt install texlive-latex-extra latexmk
+	pip3 install -U 'Sphinx==2.2.0'
+
+
+
 OCaml Compiler and Base Packages
 --------------------------------
 

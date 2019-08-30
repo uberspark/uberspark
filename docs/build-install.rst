@@ -32,7 +32,6 @@ And finally, build the toolchain:
     make
 
 
-
 Installing |uspark|
 --------------------
 
