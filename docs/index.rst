@@ -1,11 +1,13 @@
 .. uberSpark documentation master index
    author: Amit Vasudevan (amitvasudevan@acm.org)
 
-Welcome to uberSpark's documentation!
+.. include:: macros.hrst
+
+Welcome to |uspark|'s documentation!
 =====================================
 
 Described below are details on the software requirements and
-dependencies, build, verification and intallation of the uberSpark core
+dependencies, build, verification and intallation of the |uspark| core
 libraries and hardware model
 
 .. toctree::
@@ -16,9 +18,3 @@ libraries and hardware model
    build-install
    verify-build-install-libs
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
