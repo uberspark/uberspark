@@ -46,7 +46,7 @@ terminate with a success message.
 Building |uspark| Libraries
 ----------------------------
 
-|uspark| uobject runtime libraries are built using the certified CompCert compiler
+|uspark| |uobj| runtime libraries are built using the certified CompCert compiler
 in combination with |uspark| tools (to handle Assembly as CASM). To build the 
 |uspark| libraries you need to use the following command:
 

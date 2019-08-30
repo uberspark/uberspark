@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'uberSpark Documentation'
+project = 'überSpark Documentation'
 copyright = '2019, Amit Vasudevan'
 author = 'https://uberspark.org'
 release = 'Version: 5.0; Release Series: Chase'
