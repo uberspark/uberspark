@@ -156,35 +156,67 @@ After the opam environment switch, install the following opam packages in order:
 \PYG{n}{opam} \PYG{n}{install} \PYG{n}{zarith}
 \PYG{n}{opam} \PYG{n}{install} \PYG{n}{yojson}
 \end{sphinxVerbatim}
-\begin{itemize}
-\item {} 
-coq proof assistant (8.6.1) \{\% highlight bash \%\} opam install
-coq.8.6.1 \{\% endhighlight \%\}
 
-\item {} 
-Compcert (3.0.1) \{\% highlight bash \%\} wget
-\sphinxurl{http://compcert.inria.fr/release/compcert-3.1.tgz} tar -xvzf
-compcert-3.1.tgz cd CompCert-3.1 ./configure x86\_32-linux make all
-sudo make install cd .. \{\% endhighlight \%\}
 
-\item {} 
-Frama-C (version Phosphorus-20170501) \{\% highlight bash \%\} wget
-\sphinxurl{http://frama-c.com/download/frama-c-Phosphorus-20170501.tar.gz} tar
--xvzf frama-c-Phosphorus-20170501.tar.gz cd
-frama-c-Phosphorus-20170501 ./configure make sudo make install cd ..
-\{\% endhighlight \%\}
+\section{Coq Proof Assistant}
+\label{\detokenize{sw-requirements:coq-proof-assistant}}
+The Coq Proof Assistant is a required package for both CompCert as well as Frama-C.
+You need to install the Coq Proof Assistant via opam as shown below:
 
-\item {} 
-Install CVC3, Alt-Ergo and Z3 as backend theorem provers. The WP
-Frama-C plugin manual (available
-\sphinxhref{http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf}{here})
-contains a chapter on installing the theorem provers. Note that you
-will need to install the correct versions of Why3 and the provers as
-described in the aforementioned Frama-C WP plugin manual (e.g., Why3
-0.87.3 and Alt-ergo 1.30). This can be done via opam (e.g.,
-\sphinxcode{\sphinxupquote{opam install why3.0.87.3}}).
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{coq}\PYG{o}{.}\PYG{l+m+mf}{8.6}\PYG{o}{.}\PYG{l+m+mi}{1}
+\end{sphinxVerbatim}
 
-\end{itemize}
+
+\section{CompCert Certified Compiler}
+\label{\detokenize{sw-requirements:compcert-certified-compiler}}
+The CompCert compiler is used to compile the C code for verified uberobjects within
+uberSpark. The Compcert version currently supported is v3.0.1 and can be installed
+as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{wget} \PYG{n}{http}\PYG{p}{:}\PYG{o}{/}\PYG{o}{/}\PYG{n}{compcert}\PYG{o}{.}\PYG{n}{inria}\PYG{o}{.}\PYG{n}{fr}\PYG{o}{/}\PYG{n}{release}\PYG{o}{/}\PYG{n}{compcert}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{3.1}\PYG{o}{.}\PYG{n}{tgz}
+\PYG{n}{tar} \PYG{o}{\PYGZhy{}}\PYG{n}{xvzf} \PYG{n}{compcert}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{3.1}\PYG{o}{.}\PYG{n}{tgz}
+\PYG{n}{cd} \PYG{n}{CompCert}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{3.1}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{configure} \PYG{n}{x86\PYGZus{}32}\PYG{o}{\PYGZhy{}}\PYG{n}{linux}
+\PYG{n}{make} \PYG{n+nb}{all}
+\PYG{n}{sudo} \PYG{n}{make} \PYG{n}{install}
+\PYG{n}{cd} \PYG{o}{.}\PYG{o}{.}
+\end{sphinxVerbatim}
+
+
+\section{Frama-C Verification Framework}
+\label{\detokenize{sw-requirements:frama-c-verification-framework}}
+The Frama-C verification framework is used to discharge uberobject invariants and
+properties within uberSpark. The Frama-C version currently supported is
+\sphinxcode{\sphinxupquote{Phosphorus-20170501}} and can be installed as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{wget} \PYG{n}{http}\PYG{p}{:}\PYG{o}{/}\PYG{o}{/}\PYG{n}{frama}\PYG{o}{\PYGZhy{}}\PYG{n}{c}\PYG{o}{.}\PYG{n}{com}\PYG{o}{/}\PYG{n}{download}\PYG{o}{/}\PYG{n}{frama}\PYG{o}{\PYGZhy{}}\PYG{n}{c}\PYG{o}{\PYGZhy{}}\PYG{n}{Phosphorus}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{20170501.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
+\PYG{n}{tar} \PYG{o}{\PYGZhy{}}\PYG{n}{xvzf} \PYG{n}{frama}\PYG{o}{\PYGZhy{}}\PYG{n}{c}\PYG{o}{\PYGZhy{}}\PYG{n}{Phosphorus}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{20170501.}\PYG{n}{tar}\PYG{o}{.}\PYG{n}{gz}
+\PYG{n}{cd} \PYG{n}{frama}\PYG{o}{\PYGZhy{}}\PYG{n}{c}\PYG{o}{\PYGZhy{}}\PYG{n}{Phosphorus}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{20170501}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{configure}
+\PYG{n}{make}
+\PYG{n}{sudo} \PYG{n}{make} \PYG{n}{install}
+\PYG{n}{cd} \PYG{o}{.}\PYG{o}{.}
+\end{sphinxVerbatim}
+
+You will also need to install Frama-C backend theorem provers such as
+CVC3, Alt-Ergo and Z3. The WP Frama-C plugin manual referenced below
+contains a chapter on installing the theorem provers:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{http}\PYG{p}{:}\PYG{o}{/}\PYG{o}{/}\PYG{n}{frama}\PYG{o}{\PYGZhy{}}\PYG{n}{c}\PYG{o}{.}\PYG{n}{com}\PYG{o}{/}\PYG{n}{download}\PYG{o}{/}\PYG{n}{wp}\PYG{o}{\PYGZhy{}}\PYG{n}{manual}\PYG{o}{\PYGZhy{}}\PYG{n}{Phosphorus}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{20170501.}\PYG{n}{pdf}
+\end{sphinxVerbatim}
+
+Note that you will need to install the correct versions of Why3 and the
+provers as described in the aforementioned Frama-C WP plugin manual.
+For example,  Why3 version 0.87.3 and Alt-ergo version 1.30. This can be
+done via opam as shown below in the context of Why3:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{why3}\PYG{o}{.}\PYG{l+m+mf}{0.87}\PYG{o}{.}\PYG{l+m+mi}{3}
+\end{sphinxVerbatim}
 
 
 \chapter{Indices and tables}

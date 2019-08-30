@@ -66,28 +66,67 @@ After the opam environment switch, install the following opam packages in order:
     opam install yojson 
  
 
+Coq Proof Assistant 
+-------------------
 
--  coq proof assistant (8.6.1) {% highlight bash %} opam install
-   coq.8.6.1 {% endhighlight %}
+The Coq Proof Assistant is a required package for both CompCert as well as Frama-C. 
+You need to install the Coq Proof Assistant via opam as shown below:
+
+::
+
+    opam install coq.8.6.1
 
 
--  Compcert (3.0.1) {% highlight bash %} wget
-   http://compcert.inria.fr/release/compcert-3.1.tgz tar -xvzf
-   compcert-3.1.tgz cd CompCert-3.1 ./configure x86\_32-linux make all
-   sudo make install cd .. {% endhighlight %}
+CompCert Certified Compiler 
+---------------------------
 
--  Frama-C (version Phosphorus-20170501) {% highlight bash %} wget
-   http://frama-c.com/download/frama-c-Phosphorus-20170501.tar.gz tar
-   -xvzf frama-c-Phosphorus-20170501.tar.gz cd
-   frama-c-Phosphorus-20170501 ./configure make sudo make install cd ..
-   {% endhighlight %}
+The CompCert compiler is used to compile the C code for verified uberobjects within 
+uberSpark. The Compcert version currently supported is v3.0.1 and can be installed 
+as shown below:
 
--  Install CVC3, Alt-Ergo and Z3 as backend theorem provers. The WP
-   Frama-C plugin manual (available
-   `here <http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf>`__)
-   contains a chapter on installing the theorem provers. Note that you
-   will need to install the correct versions of Why3 and the provers as
-   described in the aforementioned Frama-C WP plugin manual (e.g., Why3
-   0.87.3 and Alt-ergo 1.30). This can be done via opam (e.g.,
-   ``opam install why3.0.87.3``).
+::
+
+    wget http://compcert.inria.fr/release/compcert-3.1.tgz 
+    tar -xvzf compcert-3.1.tgz 
+    cd CompCert-3.1 
+    ./configure x86_32-linux 
+    make all
+    sudo make install 
+    cd ..
+
+
+Frama-C Verification Framework 
+------------------------------
+
+The Frama-C verification framework is used to discharge uberobject invariants and
+properties within uberSpark. The Frama-C version currently supported is 
+``Phosphorus-20170501`` and can be installed as shown below:
+
+::
+
+    wget http://frama-c.com/download/frama-c-Phosphorus-20170501.tar.gz 
+    tar -xvzf frama-c-Phosphorus-20170501.tar.gz 
+    cd frama-c-Phosphorus-20170501 
+    ./configure 
+    make 
+    sudo make install 
+    cd ..
+   
+You will also need to install Frama-C backend theorem provers such as
+CVC3, Alt-Ergo and Z3. The WP Frama-C plugin manual referenced below
+contains a chapter on installing the theorem provers:
+
+::
+
+    http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf
+
+Note that you will need to install the correct versions of Why3 and the 
+provers as described in the aforementioned Frama-C WP plugin manual.
+For example,  Why3 version 0.87.3 and Alt-ergo version 1.30. This can be 
+done via opam as shown below in the context of Why3:
+
+::
+
+    opam install why3.0.87.3
+
 
