@@ -17,6 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
+
+# The master toctree document.
+master_doc = 'index'
+
 project = 'überSpark Documentation'
 copyright = '2019, Amit Vasudevan'
 author = 'https://uberspark.org'
@@ -52,5 +58,25 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+
+
+# -- Options for LaTeX output ---------------------------------------------
+
+latex_engine = 'pdflatex'
+latex_elements = {
+    'papersize': 'letterpaper',
+    'figure_align':'htbp',
+    'pointsize': '12pt',
+}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'uberspark_documentation.tex', project,
+     author, 'manual')
+]
+
 
 
