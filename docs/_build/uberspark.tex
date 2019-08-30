@@ -101,8 +101,8 @@ Replace \sphinxcode{\sphinxupquote{\textless{}home-dir\textgreater{}}} with your
 with any working directory of your choice.
 
 
-\section{Base OS and packages}
-\label{\detokenize{sw-requirements:base-os-and-packages}}
+\section{Development OS and Base Packages}
+\label{\detokenize{sw-requirements:development-os-and-base-packages}}
 You will need a working Ubuntu 16.04.x LTS 64-bit environment for development and
 verification. This can either be a Virtual Machine (VM) (e.g., VirtualBox) or a
 container (e.g., Windows WSL). As of this writing, the Ubuntu 16.04.x LTS VM ISO
@@ -129,34 +129,37 @@ packages required for development as shown below:
 \PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{graphviz} \PYG{n}{libzarith}\PYG{o}{\PYGZhy{}}\PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{dev} \PYG{n}{libfindlib}\PYG{o}{\PYGZhy{}}\PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{dev}
 \PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{make} \PYG{n}{unzip}
 \end{sphinxVerbatim}
+
+
+\section{OCaml Compiler and Base Packages}
+\label{\detokenize{sw-requirements:ocaml-compiler-and-base-packages}}
+You will then need to install the OCaml Package manager as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{wget} \PYG{n}{https}\PYG{p}{:}\PYG{o}{/}\PYG{o}{/}\PYG{n}{raw}\PYG{o}{.}\PYG{n}{github}\PYG{o}{.}\PYG{n}{com}\PYG{o}{/}\PYG{n}{ocaml}\PYG{o}{/}\PYG{n}{opam}\PYG{o}{/}\PYG{n}{master}\PYG{o}{/}\PYG{n}{shell}\PYG{o}{/}\PYG{n}{opam}\PYGZbs{}\PYG{n}{\PYGZus{}installer}\PYG{o}{.}\PYG{n}{sh} \PYG{o}{\PYGZhy{}}\PYG{n}{O} \PYG{o}{\PYGZhy{}} \PYGZbs{}\PYG{o}{\textbar{}} \PYG{n}{sh} \PYG{o}{\PYGZhy{}}\PYG{n}{s} \PYG{o}{/}\PYG{n}{usr}\PYG{o}{/}\PYG{n}{local}\PYG{o}{/}\PYG{n+nb}{bin}
+\end{sphinxVerbatim}
+
+After the OCaml Package Manager installs successfully, configure the opam environment and switch to
+the appropriate OCaml compiler version as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+eval {}`{}`opam config env{}`{}`
+opam switch 4.02.3
+\end{sphinxVerbatim}
+
+After the opam environment switch, install the following opam packages in order:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{menhir}\PYG{o}{.}\PYG{l+m+mi}{20170712}
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{ocamlgraph}\PYG{o}{.}\PYG{l+m+mf}{1.8}\PYG{o}{.}\PYG{l+m+mi}{7}
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{ocamlfind}\PYG{o}{.}\PYG{l+m+mf}{1.7}\PYG{o}{.}\PYG{l+m+mi}{3}
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{zarith}
+\PYG{n}{opam} \PYG{n}{install} \PYG{n}{yojson}
+\end{sphinxVerbatim}
 \begin{itemize}
-\item {} 
-OPAM (OCaml Package Manager) \{\% highlight bash \%\} wget
-\sphinxurl{https://raw.github.com/ocaml/opam/master/shell/opam\_installer.sh} -O
-- \textbar{} sh -s /usr/local/bin eval \sphinxcode{\sphinxupquote{opam config env}} opam switch 4.02.3
-\{\% endhighlight \%\}
-
-\item {} 
-Menhir Parser (20170712) \{\% highlight bash \%\} opam install
-menhir.20170712 \{\% endhighlight \%\}
-
-\item {} 
-ocamlgraph (1.8.7) \{\% highlight bash \%\} opam install ocamlgraph.1.8.7
-\{\% endhighlight \%\}
-
-\item {} 
-ocamlfind (1.7.3) \{\% highlight bash \%\} opam install ocamlfind.1.7.3
-\{\% endhighlight \%\}
-
 \item {} 
 coq proof assistant (8.6.1) \{\% highlight bash \%\} opam install
 coq.8.6.1 \{\% endhighlight \%\}
-
-\item {} 
-zarith \{\% highlight bash \%\} opam install zarith \{\% endhighlight \%\}
-
-\item {} 
-yojson \{\% highlight bash \%\} opam install yojson \{\% endhighlight \%\}
 
 \item {} 
 Compcert (3.0.1) \{\% highlight bash \%\} wget
@@ -182,8 +185,6 @@ described in the aforementioned Frama-C WP plugin manual (e.g., Why3
 \sphinxcode{\sphinxupquote{opam install why3.0.87.3}}).
 
 \end{itemize}
-
-
 
 
 \chapter{Indices and tables}

@@ -35,28 +35,41 @@ packages required for development as shown below:
    sudo apt-get install ocaml ocaml-findlib ocaml-native-compilers 
    sudo apt-get install graphviz libzarith-ocaml-dev libfindlib-ocaml-dev 
    sudo apt-get install make unzip 
-   
 
--  OPAM (OCaml Package Manager) {% highlight bash %} wget
-   https://raw.github.com/ocaml/opam/master/shell/opam\_installer.sh -O
-   - \| sh -s /usr/local/bin eval ``opam config env`` opam switch 4.02.3
-   {% endhighlight %}
 
--  Menhir Parser (20170712) {% highlight bash %} opam install
-   menhir.20170712 {% endhighlight %}
+OCaml Compiler and Base Packages
+--------------------------------
 
--  ocamlgraph (1.8.7) {% highlight bash %} opam install ocamlgraph.1.8.7
-   {% endhighlight %}
+You will then need to install the OCaml Package manager as shown below:
 
--  ocamlfind (1.7.3) {% highlight bash %} opam install ocamlfind.1.7.3
-   {% endhighlight %}
+::
+
+    wget https://raw.github.com/ocaml/opam/master/shell/opam\_installer.sh -O - \| sh -s /usr/local/bin
+
+
+After the OCaml Package Manager installs successfully, configure the opam environment and switch to
+the appropriate OCaml compiler version as shown below:
+
+::
+
+    eval ``opam config env`` 
+    opam switch 4.02.3
+
+After the opam environment switch, install the following opam packages in order:
+
+::
+
+    opam install menhir.20170712
+    opam install ocamlgraph.1.8.7
+    opam install ocamlfind.1.7.3
+    opam install zarith
+    opam install yojson 
+ 
+
 
 -  coq proof assistant (8.6.1) {% highlight bash %} opam install
    coq.8.6.1 {% endhighlight %}
 
--  zarith {% highlight bash %} opam install zarith {% endhighlight %}
-
--  yojson {% highlight bash %} opam install yojson {% endhighlight %}
 
 -  Compcert (3.0.1) {% highlight bash %} wget
    http://compcert.inria.fr/release/compcert-3.1.tgz tar -xvzf
@@ -78,6 +91,3 @@ packages required for development as shown below:
    0.87.3 and Alt-ergo 1.30). This can be done via opam (e.g.,
    ``opam install why3.0.87.3``).
 
-.. raw:: html
-
-   <hr>

@@ -1,4 +1,5 @@
 \select@language {english}
 \contentsline {chapter}{\numberline {1}Software Requirements and Dependencies}{3}{chapter.1}
-\contentsline {section}{\numberline {1.1}Base OS and packages}{3}{section.1.1}
+\contentsline {section}{\numberline {1.1}Development OS and Base Packages}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}OCaml Compiler and Base Packages}{3}{section.1.2}
 \contentsline {chapter}{\numberline {2}Indices and tables}{5}{chapter.2}
