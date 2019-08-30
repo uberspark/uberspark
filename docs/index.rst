@@ -12,7 +12,9 @@ libraries and hardware model
    :maxdepth: 2
    :caption: Contents:
    
-
+   sw-requirements
+   build-install
+   verify-build-install-libs
 
 Indices and tables
 ==================
