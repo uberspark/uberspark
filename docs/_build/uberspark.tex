@@ -93,6 +93,99 @@ dependencies, build, verification and intallation of the uberSpark core
 libraries and hardware model
 
 
+\chapter{Software Requirements and Dependencies}
+\label{\detokenize{sw-requirements:software-requirements-and-dependencies}}\label{\detokenize{sw-requirements::doc}}
+We assume your are working in: \sphinxcode{\sphinxupquote{/home/\textless{}home-dir\textgreater{}/\textless{}work-dir\textgreater{}}}
+
+Replace \sphinxcode{\sphinxupquote{\textless{}home-dir\textgreater{}}} with your home-directory name and \sphinxcode{\sphinxupquote{\textless{}work-dir\textgreater{}}}
+with any working directory of your choice.
+
+
+\section{Base OS and packages}
+\label{\detokenize{sw-requirements:base-os-and-packages}}
+You will need a working Ubuntu 16.04.x LTS 64-bit environment for development and
+verification. This can either be a Virtual Machine (VM) (e.g., VirtualBox) or a
+container (e.g., Windows WSL). As of this writing, the Ubuntu 16.04.x LTS VM ISO
+image is available at:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{http}\PYG{p}{:}\PYG{o}{/}\PYG{o}{/}\PYG{n}{releases}\PYG{o}{.}\PYG{n}{ubuntu}\PYG{o}{.}\PYG{n}{com}\PYG{o}{/}\PYG{l+m+mf}{16.04}\PYG{o}{/}\PYG{n}{ubuntu}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{16.04}\PYG{o}{.}\PYG{l+m+mi}{6}\PYG{o}{\PYGZhy{}}\PYG{n}{desktop}\PYG{o}{\PYGZhy{}}\PYG{n}{amd64}\PYG{o}{.}\PYG{n}{iso}
+\end{sphinxVerbatim}
+
+You will need to first perform an \sphinxcode{\sphinxupquote{update}} to download the latest package
+lists from the repositories as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{update}
+\end{sphinxVerbatim}
+
+After the update completes, you will need to install the following base
+packages required for development as shown below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{git} \PYG{n}{gcc} \PYG{n}{binutils} \PYG{n}{autoconf}
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{lib32z1} \PYG{n}{lib32ncurses5} \PYG{n}{lib32bz2}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.0} \PYG{n}{gcc}\PYG{o}{\PYGZhy{}}\PYG{n}{multilib}
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{ocaml} \PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{findlib} \PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{native}\PYG{o}{\PYGZhy{}}\PYG{n}{compilers}
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{graphviz} \PYG{n}{libzarith}\PYG{o}{\PYGZhy{}}\PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{dev} \PYG{n}{libfindlib}\PYG{o}{\PYGZhy{}}\PYG{n}{ocaml}\PYG{o}{\PYGZhy{}}\PYG{n}{dev}
+\PYG{n}{sudo} \PYG{n}{apt}\PYG{o}{\PYGZhy{}}\PYG{n}{get} \PYG{n}{install} \PYG{n}{make} \PYG{n}{unzip}
+\end{sphinxVerbatim}
+\begin{itemize}
+\item {} 
+OPAM (OCaml Package Manager) \{\% highlight bash \%\} wget
+\sphinxurl{https://raw.github.com/ocaml/opam/master/shell/opam\_installer.sh} -O
+- \textbar{} sh -s /usr/local/bin eval \sphinxcode{\sphinxupquote{opam config env}} opam switch 4.02.3
+\{\% endhighlight \%\}
+
+\item {} 
+Menhir Parser (20170712) \{\% highlight bash \%\} opam install
+menhir.20170712 \{\% endhighlight \%\}
+
+\item {} 
+ocamlgraph (1.8.7) \{\% highlight bash \%\} opam install ocamlgraph.1.8.7
+\{\% endhighlight \%\}
+
+\item {} 
+ocamlfind (1.7.3) \{\% highlight bash \%\} opam install ocamlfind.1.7.3
+\{\% endhighlight \%\}
+
+\item {} 
+coq proof assistant (8.6.1) \{\% highlight bash \%\} opam install
+coq.8.6.1 \{\% endhighlight \%\}
+
+\item {} 
+zarith \{\% highlight bash \%\} opam install zarith \{\% endhighlight \%\}
+
+\item {} 
+yojson \{\% highlight bash \%\} opam install yojson \{\% endhighlight \%\}
+
+\item {} 
+Compcert (3.0.1) \{\% highlight bash \%\} wget
+\sphinxurl{http://compcert.inria.fr/release/compcert-3.1.tgz} tar -xvzf
+compcert-3.1.tgz cd CompCert-3.1 ./configure x86\_32-linux make all
+sudo make install cd .. \{\% endhighlight \%\}
+
+\item {} 
+Frama-C (version Phosphorus-20170501) \{\% highlight bash \%\} wget
+\sphinxurl{http://frama-c.com/download/frama-c-Phosphorus-20170501.tar.gz} tar
+-xvzf frama-c-Phosphorus-20170501.tar.gz cd
+frama-c-Phosphorus-20170501 ./configure make sudo make install cd ..
+\{\% endhighlight \%\}
+
+\item {} 
+Install CVC3, Alt-Ergo and Z3 as backend theorem provers. The WP
+Frama-C plugin manual (available
+\sphinxhref{http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf}{here})
+contains a chapter on installing the theorem provers. Note that you
+will need to install the correct versions of Why3 and the provers as
+described in the aforementioned Frama-C WP plugin manual (e.g., Why3
+0.87.3 and Alt-ergo 1.30). This can be done via opam (e.g.,
+\sphinxcode{\sphinxupquote{opam install why3.0.87.3}}).
+
+\end{itemize}
+
+
+
+
 \chapter{Indices and tables}
 \label{\detokenize{index:indices-and-tables}}\begin{itemize}
 \item {} 

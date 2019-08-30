@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.8.30)  30 AUG 2019 10:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.8.30)  30 AUG 2019 10:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -352,11 +352,8 @@ Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
-)
-! I can't write on file `uberspark.pdf'.
-(Press Enter to retry, or Control-D to exit; default file extension is `.pdf')
-Please type another file name for output: 
-<<t1.cmap>>) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+)<<t1.cmap>>)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2016/03/03 v2.15a AMS math features
 \@mathmargin=\skip43
 
@@ -1155,37 +1152,46 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 
 ]
 Chapter 1.
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 98.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 98.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 133.
+
+
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) (./uberspark.ind)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 113.
+) [3] [4]
+Chapter 2.
+(./uberspark.ind)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 206.
+ [5
 
-[3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 113.
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 206.
  (./uberspark.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 113.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 113.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 206.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 206.
 Package rerunfilecheck Info: File `uberspark.out' has not changed.
-(rerunfilecheck)             Checksum: E81C69F63AD497B126C77C1297BE8A5D;139.
+(rerunfilecheck)             Checksum: 9B6D4445B3DFC4A4782273FEEB70D1DB;544.
  ) 
 Here is how much of TeX's memory you used:
- 13734 strings out of 494953
- 189038 string characters out of 6180977
- 273909 words of memory out of 5000000
- 16736 multiletter control sequences out of 15000+600000
- 37059 words of font info for 50 fonts, out of 8000000 for 9000
+ 13811 strings out of 494953
+ 190092 string characters out of 6180977
+ 284078 words of memory out of 5000000
+ 16785 multiletter control sequences out of 15000+600000
+ 41558 words of font info for 62 fonts, out of 8000000 for 9000
  15 hyphenation exceptions out of 8191
- 37i,11n,45p,779b,388s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,11n,45p,779b,425s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utm
-r8a.pfb>
-Output written on uberspark.pdf (7 pages, 47154 bytes).
+e/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on uberspark.pdf (9 pages, 73141 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 50 compressed objects within 1 object stream
- 9 named destinations out of 1000 (max. 500000)
- 29 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 98 PDF objects out of 1000 (max. 8388607)
+ 76 compressed objects within 1 object stream
+ 13 named destinations out of 1000 (max. 500000)
+ 45 words of extra memory for PDF output out of 10000 (max. 10000000)
 
