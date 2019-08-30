@@ -17,4 +17,4 @@ all:
 
 .PHONY: clean
 clean:
-	rm -rf $(USPARK_DOC_PATH)/_build
+	rm -rf $(UBERSPARK_DOC_PATH)/_build
