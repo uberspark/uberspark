@@ -4,6 +4,9 @@ tocref: uberSpark (Composable Verification of Commodity System Software) Documen
 title: Verifying, Building and Installing uberSpark Libraries
 ---
 
+Verifying, Building and Installing uberSpark Libraries
+======================================================
+
 While in the top-level directory of the uberSpark source-tree, perform the
 following tasks in order:
 
