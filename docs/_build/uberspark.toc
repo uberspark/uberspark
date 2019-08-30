@@ -9,4 +9,7 @@
 \contentsline {section}{\numberline {2.1}Building uberSpark Tools}{7}{section.2.1}
 \contentsline {section}{\numberline {2.2}Installing uberSpark}{7}{section.2.2}
 \contentsline {chapter}{\numberline {3}Verifying, Building and Installing uberSpark Libraries}{9}{chapter.3}
+\contentsline {section}{\numberline {3.1}Verify uberSpark Libraries}{9}{section.3.1}
+\contentsline {section}{\numberline {3.2}Build uberSpark Libraries}{9}{section.3.2}
+\contentsline {section}{\numberline {3.3}Installing uberSpark Libraries}{9}{section.3.3}
 \contentsline {chapter}{\numberline {4}Indices and tables}{11}{chapter.4}
