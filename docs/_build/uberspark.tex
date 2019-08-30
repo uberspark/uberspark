@@ -219,6 +219,74 @@ done via opam as shown below in the context of Why3:
 \end{sphinxVerbatim}
 
 
+\chapter{Building and Installing uberSpark}
+\label{\detokenize{build-install:building-and-installing-uberspark}}\label{\detokenize{build-install::doc}}
+
+\section{Building uberSpark Tools}
+\label{\detokenize{build-install:building-uberspark-tools}}
+You will need to build the uberSpark toolchain before any other tasks.
+For this purpose, While in the top-level directory of the uberSpark repository,
+switch directory to uberSpark sources:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{cd} \PYG{n}{src}
+\end{sphinxVerbatim}
+
+Then prepare for the build as below:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{bsconfigure}\PYG{o}{.}\PYG{n}{sh}
+\PYG{o}{.}\PYG{o}{/}\PYG{n}{configure}
+\end{sphinxVerbatim}
+
+And finally, build the toolchain:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{make}
+\end{sphinxVerbatim}
+
+
+\section{Installing uberSpark}
+\label{\detokenize{build-install:installing-uberspark}}
+Upon a successful build, you will need to install the uberSpark toolchain,
+system headers and hardware-model related files. You can do this using the
+following command (while in the same directory of uberSpark sources \sphinxcode{\sphinxupquote{src/}}):
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sudo} \PYG{n}{make} \PYG{n}{install}
+\end{sphinxVerbatim}
+
+
+\chapter{Verifying, Building and Installing uberSpark Libraries}
+\label{\detokenize{verify-build-install-libs:verifying-building-and-installing-uberspark-libraries}}\label{\detokenize{verify-build-install-libs::doc}}
+While in the top-level directory of the uberSpark source-tree, perform
+the following tasks in order:
+\begin{itemize}
+\item {} 
+Switch directory to UberSpark libraries sources \{\% highlight bash \%\}
+cd src/libs \{\% endhighlight \%\}
+
+\item {} 
+Prepare for build \{\% highlight bash \%\} ./bsconfigure.sh ./configure
+\{\% endhighlight \%\}
+
+\item {} 
+Verify UberSpark libraries \{\% highlight bash \%\} make
+verify-ubersparklibs \{\% endhighlight \%\}
+
+\item {} 
+Build UberSpark libraries \{\% highlight bash \%\} make
+build-ubersparklibs \{\% endhighlight \%\}
+
+\item {} 
+Install UberSpark libraries \{\% highlight bash \%\} sudo make install \{\%
+endhighlight \%\}
+
+\end{itemize}
+
+
+
+
 \chapter{Indices and tables}
 \label{\detokenize{index:indices-and-tables}}\begin{itemize}
 \item {} 

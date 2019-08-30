@@ -1,20 +1,44 @@
 Building and Installing uberSpark
 =================================
 
-While in the top-level directory of the uberSpark source-tree, perform
-the following tasks in order:
+Building uberSpark Tools
+------------------------
 
--  Switch directory to UberSpark sources {% highlight bash %} cd src {%
-   endhighlight %}
+You will need to build the uberSpark toolchain before any other tasks.
+For this purpose, While in the top-level directory of the uberSpark repository,
+switch directory to uberSpark sources:
 
--  Prepare for build {% highlight bash %} ./bsconfigure.sh ./configure
-   {% endhighlight %}
+::
 
--  Build UberSpark sources {% highlight bash %} make {% endhighlight %}
+    cd src
 
--  Install UberSpark binaries {% highlight bash %} sudo make install {%
-   endhighlight %}
 
-.. raw:: html
+Then prepare for the build as below:
 
-   <hr>
+
+::
+
+    ./bsconfigure.sh
+    ./configure
+
+
+And finally, build the toolchain:
+
+
+::
+
+    make
+
+
+
+Installing uberSpark
+--------------------
+
+Upon a successful build, you will need to install the uberSpark toolchain, 
+system headers and hardware-model related files. You can do this using the
+following command (while in the same directory of uberSpark sources ``src/``):
+
+::
+
+    sudo make install
+
