@@ -140,10 +140,10 @@ contains a chapter on installing the theorem provers:
 
     http://frama-c.com/download/wp-manual-Phosphorus-20170501.pdf
 
-Note that you will need to install the correct versions of Why3 and the 
-provers as described in the aforementioned Frama-C WP plugin manual.
-For example,  Why3 version 0.87.3 and Alt-ergo version 1.30. This can be 
-done via opam as shown below in the context of Why3:
+.. note:: You will need to install the correct versions of Why3 and the 
+          provers as described in the aforementioned Frama-C WP plugin manual.
+          For example,  Why3 version 0.87.3 and Alt-ergo version 1.30. This can be 
+          done via opam as shown below in the context of Why3:
 
 ::
 

@@ -39,8 +39,8 @@ And, finally verify the libraries using:
     make verify-ubersparklibs
 
 
-Note: The verification typically takes a few minutes to complete and should finally 
-terminate with a success message.
+.. note:: The verification typically takes a few minutes to complete and should finally 
+          terminate with a success message.
 
 
 Building |uspark| Libraries
@@ -66,7 +66,7 @@ command:
     sudo make install
 
 
-Note: The libraries are installed to the default location ``/usr/local/uberspark`` but can
-be over-ridden by the ``--prefix`` option during configuration using the ``configure``
-utility.
+.. note:: The libraries are installed to the default location ``/usr/local/uberspark`` but can
+          be over-ridden by the ``--prefix`` option during configuration using the ``configure``
+          utility.
 
