@@ -39,6 +39,8 @@ packages required for development as shown below:
    sudo apt-get install make unzip 
 
 
+.. _swreqs_documentation:
+
 Packages for Generating Documentation
 -------------------------------------
 

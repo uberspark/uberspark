@@ -35,7 +35,7 @@ And finally, build the toolchain:
 Building |uspark| Documentation
 -------------------------------
 
-You can (optionally) build this documentation locally.
+You can (optionally) build this documentation locally. 
 For this purpose, While in the top-level directory of the |uspark| repository,
 switch directory to |uspark| sources:
 
@@ -53,6 +53,10 @@ Now, build the documentation using the following command:
 Upon a successful build, the generated `.pdf` of the documentation can be 
 found at ``docs/_build/uberspark_documentation.pdf``,
 relative to the top-level directory of the |uspark| repository.
+
+Note: For ``make docs`` to work successfuly, you will
+need to install the packages required for generating documents locally as 
+described in :ref:`swreqs_documentation`.
 
 
 Installing |uspark|
