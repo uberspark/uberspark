@@ -1,18 +1,34 @@
 AC_INIT([uberspark], [5.0])
 
 # simple configuration of tools. (just looks for matching binary on PATH)
-AC_CHECK_PROG([MAKE], [make], [make])
-AC_CHECK_PROG([OCAMLC], [ocamlc], [ocamlc])
-AC_CHECK_PROG([FRAMAC], [frama-c], [frama-c])
-AC_CHECK_PROG([CCERT], [ccomp], [ccomp])
-AC_CHECK_PROG([CC], [gcc -m32], [gcc -m32])
-AC_CHECK_PROG([AS], [as], [as])
-AC_CHECK_PROG([AR], [ar], [ar])
-AC_CHECK_PROG([LD], [ld], [ld])
-AC_CHECK_PROG([RM], [rm -f], [rm -f])
-AC_CHECK_PROG([CP], [cp], [cp])
-AC_CHECK_PROG([MKDIR], [mkdir], [mkdir])
-AC_CHECK_PROG([CAT], [cat], [cat])
+
+# required tools
+AC_CHECK_PROG([MAKE], [make], [make], [no])
+AC_CHECK_PROG([OCAMLC], [ocamlc], [ocamlc], [no])
+AC_CHECK_PROG([FRAMAC], [frama-c], [frama-c], [no])
+AC_CHECK_PROG([CCERT], [ccomp], [ccomp], [no])
+AC_CHECK_PROG([CC], [gcc -m32], [gcc -m32], [no])
+AC_CHECK_PROG([AS], [as], [as], [no])
+AC_CHECK_PROG([AR], [ar], [ar], [no])
+AC_CHECK_PROG([LD], [ld], [ld], [no])
+AC_CHECK_PROG([RM], [rm -f], [rm -f], [no])
+AC_CHECK_PROG([CP], [cp], [cp], [no])
+AC_CHECK_PROG([MKDIR], [mkdir], [mkdir], [no])
+AC_CHECK_PROG([CAT], [cat], [cat], [no])
+
+if test x"${CAT}" == x"no" || test x"${MKDIR}" == x"no" || test x"${CP}" == x"no" || \ 
+        test x"${RM}" == x"no"  || test x"${LD}" == x"no"  || test x"${AR}" == x"no" || \
+        test x"${AS}" == x"no"  || test x"${CC}" == x"no"   || test x"${CCERT}" == x"no" || \
+        test x"${FRAMAC}" == x"no" || test x"${OCAMLC}" == x"no"  || test x"${MAKE}" == x"no" ; then
+    AC_MSG_ERROR([Required dependency unmet. Please install the missing package(s) above.])
+fi
+
+#optional tools
+AC_CHECK_PROG([SPHINXBUILD], [sphinx-build], [sphinx-build], [no])
+
+if test x"${SPHINXBUILD}" == x"no" ; then
+    AC_MSG_WARN([sphinx-build not found; you will not be able to build documentation locally.])
+fi
 
 # target cpu
 AC_SUBST([TARGET_CPU])

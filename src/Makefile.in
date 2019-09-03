@@ -13,7 +13,7 @@ export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_HWMDIR := $(USPARK_DIR)/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/tools
-
+export USPARK_DOCSDIR := $(realpath $(USPARK_DIR)/../docs)
 
 ###### targets
 
@@ -25,6 +25,14 @@ all: build-tools
 build-tools:
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w all
 	
+.PHONY: docs_html
+docs_html:
+	cd $(USPARK_DOCSDIR) && $(MAKE) -w docs_html
+
+.PHONY: docs_pdf
+docs_pdf:
+	cd $(USPARK_DOCSDIR) && $(MAKE) -w docs_pdf
+
 
 .PHONY: install-tools
 install-tools:
@@ -61,6 +69,7 @@ install: install-tools install-hdrs install-hwm
 
 .PHONY: clean
 clean:
+	cd $(USPARK_DOCSDIR) && $(MAKE) -w clean
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w clean
 	
 
