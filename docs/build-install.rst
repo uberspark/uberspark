@@ -48,13 +48,13 @@ Now, build the documentation using the following command:
 
 ::
 
-    make docs
+    make docs_pdf
 
 Upon a successful build, the generated `.pdf` of the documentation can be 
 found at ``docs/_build/uberspark_documentation.pdf``,
 relative to the top-level directory of the |uspark| repository.
 
-.. note:: For ``make docs`` to work successfuly, you will need to install the 
+.. note:: For ``make docs_pdf`` to work successfuly, you will need to install the 
           packages required for generating documents locally as described 
           in :ref:`swreqs_documentation`.
 

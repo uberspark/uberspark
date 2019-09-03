@@ -10,8 +10,8 @@ UBERSPARK_DOC_BUILDDIR      = $(UBERSPARK_DOC_PATH)_build
 
 ###### targets
 
-.PHONY: all
-all:
+.PHONY: docs_pdf
+docs_pdf:
 	@$(SPHINXBUILD) -b latex "$(UBERSPARK_DOC_SOURCEDIR)" "$(UBERSPARK_DOC_BUILDDIR)"
 	@cd $(UBERSPARK_DOC_BUILDDIR) && make 
 
