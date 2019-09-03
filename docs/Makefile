@@ -15,6 +15,10 @@ docs_pdf:
 	@$(SPHINXBUILD) -b latex "$(UBERSPARK_DOC_SOURCEDIR)" "$(UBERSPARK_DOC_BUILDDIR)"
 	@cd $(UBERSPARK_DOC_BUILDDIR) && make 
 
+.PHONY: docs_html
+docs_html:
+	@$(SPHINXBUILD) -b html "$(UBERSPARK_DOC_SOURCEDIR)" "$(UBERSPARK_DOC_BUILDDIR)"
+
 .PHONY: clean
 clean:
 	rm -rf $(UBERSPARK_DOC_PATH)_build

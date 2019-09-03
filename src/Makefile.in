@@ -25,9 +25,14 @@ all: build-tools
 build-tools:
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w all
 	
+.PHONY: docs_html
+docs_html:
+	cd $(USPARK_DOCSDIR) && $(MAKE) -w docs_html
+
 .PHONY: docs_pdf
 docs_pdf:
 	cd $(USPARK_DOCSDIR) && $(MAKE) -w docs_pdf
+
 
 .PHONY: install-tools
 install-tools:

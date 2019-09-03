@@ -44,7 +44,7 @@ switch directory to |uspark| sources:
     cd src
 
 
-Now, build the documentation using the following command:
+Now, build the `.pdf` documentation using the following command:
 
 ::
 
@@ -57,6 +57,17 @@ relative to the top-level directory of the |uspark| repository.
 .. note:: For ``make docs_pdf`` to work successfuly, you will need to install the 
           packages required for generating documents locally as described 
           in :ref:`swreqs_documentation`.
+
+
+You can also build the `.html` version of the document using the following command:
+
+::
+
+    make docs_html
+
+In this case, upon a successful build, the generated `.html` documentation can be 
+found at ``docs/_build/index.html``,
+relative to the top-level directory of the |uspark| repository.
 
 
 Installing |uspark|
