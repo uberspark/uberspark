@@ -25,6 +25,7 @@ export UBERSPARK_TARGET_TRIAD := $(UBERSPARK_TARGET_CPU)-$(UBERSPARK_TARGET_CONT
 
 export MAKE = @MAKE@
 export OCAMLC = ocamlfind @OCAMLC@
+export OCAMLOPT = ocamlfind @OCAMLOPT@
 export FRAMAC = @FRAMAC@
 export CCERT = @CCERT@
 export CC = @CC@

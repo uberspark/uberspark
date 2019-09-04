@@ -10,15 +10,15 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o usmanifest.o -package str -package yojson -package unix -package ustypes -package usconfig -package uslog -package usosservices -package usextbinutils -linkpkg usmanifest.ml
+	$(OCAMLOPT) -c -package str -package yojson -package unix -package ustypes -package usconfig -package uslog -package usosservices -package usextbinutils -linkpkg usmanifest.ml
 	ocamlfind remove usmanifest 
-	ocamlfind install usmanifest META usmanifest.cmi usmanifest.cmo usmanifest.o 
+	ocamlfind install usmanifest META usmanifest.cmi usmanifest.cmx usmanifest.o 
 
 
 .PHONY: clean
 clean:
 	$(RM) -f usmanifest.cmi
-	$(RM) -f usmanifest.cmo
+	$(RM) -f usmanifest.cmx
 	$(RM) -f usmanifest.o
 	
 	

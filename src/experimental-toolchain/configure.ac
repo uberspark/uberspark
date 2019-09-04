@@ -5,6 +5,7 @@ AC_INIT([uberspark], [5.0])
 ######
 AC_CHECK_PROG([MAKE], [make], [make])
 AC_CHECK_PROG([OCAMLC], [ocamlc], [ocamlc])
+AC_CHECK_PROG([OCAMLOPT], [ocamlopt], [ocamlopt])
 AC_CHECK_PROG([FRAMAC], [frama-c], [frama-c])
 AC_CHECK_PROG([CCERT], [ccomp], [ccomp])
 AC_CHECK_PROG([CC], [gcc -m32], [gcc -m32])

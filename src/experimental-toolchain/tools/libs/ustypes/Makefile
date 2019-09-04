@@ -10,15 +10,15 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o ustypes.o ustypes.ml
+	$(OCAMLOPT) -c ustypes.ml
 	ocamlfind remove ustypes 
-	ocamlfind install ustypes META ustypes.cmi ustypes.cmo ustypes.o 
+	ocamlfind install ustypes META ustypes.cmi ustypes.cmx ustypes.o 
 
 
 .PHONY: clean
 clean:
 	$(RM) -f ustypes.cmi
-	$(RM) -f ustypes.cmo
+	$(RM) -f ustypes.cmx
 	$(RM) -f ustypes.o
 	
 	

@@ -10,15 +10,15 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLC) -o usconfig.o usconfig.ml
+	$(OCAMLOPT) -c usconfig.ml
 	ocamlfind remove usconfig 
-	ocamlfind install usconfig META usconfig.cmi usconfig.cmo usconfig.o 
+	ocamlfind install usconfig META usconfig.cmi usconfig.cmx usconfig.o 
 
 
 .PHONY: clean
 clean:
 	$(RM) -f usconfig.cmi
-	$(RM) -f usconfig.cmo
+	$(RM) -f usconfig.cmx
 	$(RM) -f usconfig.o
 	
 	

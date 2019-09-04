@@ -10,7 +10,7 @@ include ../../uberspark-common.mk
 
 .PHONY: all
 all:  
-	$(OCAMLC) -package unix -package str -package yojson -package usconfig -package uslog -package usosservices -package usextbinutils -package libusmf -package usmanifest -package usuobjgen -package usuobjlib -package usuobj -package usuobjcollection -package usbin -linkpkg -o uberspark uberspark.ml	
+	$(OCAMLOPT) -package unix -package str -package yojson -package usconfig -package uslog -package usosservices -package usextbinutils -package libusmf -package usmanifest -package usuobjgen -package usuobjlib -package usuobj -package usuobjcollection -package usbin -linkpkg -o uberspark uberspark.ml	
 
 .PHONY: clean
 clean:
