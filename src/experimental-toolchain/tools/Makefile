@@ -15,7 +15,7 @@ all: build-tools
 .PHONY: build-tools
 build-tools:
 	cd ./libs && $(MAKE) -w all
-	$(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
+	#$(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
 	cd ./driver && $(MAKE) -w all
 	
 
@@ -24,5 +24,5 @@ clean:
 	cd ./libs && $(MAKE) -w clean
 	cd ./driver && $(MAKE) -w clean
 	$(RM) *_DEP
-	$(RM) ubersparkconfig ubersparkconfig.cmi ubersparkconfig.cmo
+	#$(RM) ubersparkconfig ubersparkconfig.cmi ubersparkconfig.cmo
 	
