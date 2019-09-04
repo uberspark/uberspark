@@ -33,7 +33,7 @@ packages required for development as shown below:
 ::
 
    sudo apt-get install git gcc binutils autoconf 
-   sudo apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 gcc-multilib 
+   sudo apt-get install lib32z1 lib32ncurses5 gcc-multilib
    sudo apt-get install ocaml ocaml-findlib ocaml-native-compilers 
    sudo apt-get install graphviz libzarith-ocaml-dev libfindlib-ocaml-dev 
    sudo apt-get install make unzip 
@@ -64,26 +64,25 @@ You will then need to install the OCaml Package manager as shown below:
 
 ::
 
-    wget https://raw.github.com/ocaml/opam/master/shell/opam\_installer.sh -O - \| sh -s /usr/local/bin
-
+    wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh -O - | sh -s /usr/local/bin
 
 After the OCaml Package Manager installs successfully, configure the opam environment and switch to
 the appropriate OCaml compiler version as shown below:
 
 ::
 
-    eval ``opam config env`` 
+    eval `opam config env` 
     opam switch 4.02.3
 
 After the opam environment switch, install the following opam packages in order:
 
 ::
 
+    opam install zarith.1.3
+    opam install yojson.1.2.1 
     opam install menhir.20170712
-    opam install ocamlgraph.1.8.7
+    opam install ocamlgraph.1.8.8
     opam install ocamlfind.1.7.3
-    opam install zarith
-    opam install yojson 
  
 
 Coq Proof Assistant 
@@ -149,4 +148,14 @@ contains a chapter on installing the theorem provers:
 
     opam install why3.0.87.3
 
+.. note:: Opam might show instructions on how to install additional OS dependencies if
+          needed during the installation of Why3 and the provers. Usually such 
+          dependencies are satisfied by using opam depext prior to installing Why3 and 
+          the provers. An example is shown below in the context of Why3:
+
+::
+
+    opam depext camlzip.1.07
+    opam depext conf-pkg-config.1.1
+    opam depext conf-gtksourceview.2
 
