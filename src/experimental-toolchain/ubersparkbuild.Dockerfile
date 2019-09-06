@@ -1,4 +1,4 @@
-FROM amd64/ubuntu:16.04
+FROM amd64/ubuntu:18.04
 LABEL author="Amit Vasudevan <amitvasudevan@acm.org>"
 
 # update package repositories
@@ -23,15 +23,18 @@ RUN sudo apt-get -y install wget
 RUN sudo apt-get -y install patch
 RUN sudo apt-get -y install unzip
 RUN sudo apt-get -y install gcc binutils
-RUN sudo add-apt-repository -y -u ppa:ansible/bubblewrap
-RUN sudo apt-get update
+RUN sudo apt-get -y install bubblewrap
+#RUN sudo add-apt-repository -y -u ppa:ansible/bubblewrap
+#RUN sudo apt-get update
 
-
+RUN sudo chmod u+s /usr/bin/bwrap
 RUN wget https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh
 RUN sudo chmod +x /home/docker/install.sh
 RUN printf "/usr/local/bin\n" | sudo /home/docker/install.sh
 RUN printf "y" | opam init
-
+RUN eval $(opam env)
+RUN opam install -y ocamlfind
+RUN opam install -y yojson
 #RUN opam init && opam switch 4.02.3 && eval `opam config env`
 #RUN opam install yojson
 
