@@ -5,6 +5,8 @@
 
 include ../uberspark-common.mk
 
+###### opam libraries
+export OPAM_LIBRARIES := -I $(OCAML_TOPLEVEL_PATH)/../yojson
 
 ###### targets
 
@@ -14,9 +16,10 @@ all: build-tools
 
 .PHONY: build-tools
 build-tools:
+	@echo $(OPAM_LIBRARIES)
 	cd ./libs && $(MAKE) -w all
 	#$(OCAMLC) -o ubersparkconfig unix.cma ubersparkconfig.ml
-	cd ./driver && $(MAKE) -w all
+	#cd ./driver && $(MAKE) -w all
 	
 
 .PHONY: clean

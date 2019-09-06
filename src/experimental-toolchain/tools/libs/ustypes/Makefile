@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLOPT) -c ustypes.ml
+	$(OCAMLOPT) $(OPAM_LIBRARIES) -c ustypes.ml
 	ocamlfind remove ustypes 
 	ocamlfind install ustypes META ustypes.cmi ustypes.cmx ustypes.o 
 

@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLOPT) -c unix.cmxa uslog.ml
+	$(OCAMLOPT) $(OPAM_LIBRARIES) -c unix.cmxa uslog.ml
 	ocamlfind remove uslog 
 	ocamlfind install uslog META uslog.cmi uslog.cmx uslog.o 
 

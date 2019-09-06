@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM amd64/ubuntu:16.04
 LABEL author="Amit Vasudevan <amitvasudevan@acm.org>"
 
 # update package repositories
@@ -10,6 +10,7 @@ RUN adduser --disabled-password --gecos '' docker
 RUN adduser docker sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER docker
+#RUN chown -R docker:docker /usr/lib/
 
 # switch to working directory within container
 RUN mkdir -p /home/docker/uberspark
@@ -20,7 +21,7 @@ RUN sudo apt-get -y install autoconf
 RUN sudo apt-get -y install make
 #RUN sudo apt-get -y install ocaml ocaml-findlib ocaml-native-compilers
 RUN sudo apt-get -y install opam
-RUN opam init && opam switch 4.07.0 && eval `opam config env`
+RUN opam init && opam switch 4.02.3 && eval `opam config env`
 RUN opam install yojson
 
 # persist opam configuration when we run this container
@@ -28,8 +29,10 @@ RUN opam install yojson
 
 #COPY configure.ac /home/docker/.
 
-ENTRYPOINT /bin/bash
+#ENTRYPOINT /bin/bash
 
-#CMD /home/docker/bsconfigure.sh && \
-#    /home/docker/configure && \
-#    sudo make
+CMD ./bsconfigure.sh && \
+    ./configure && \
+    opam switch 4.02.3 && \
+    eval `opam config env` && \
+    sudo make OCAML_TOPLEVEL_PATH="${OCAML_TOPLEVEL_PATH}"
