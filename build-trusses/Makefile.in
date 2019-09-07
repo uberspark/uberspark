@@ -10,6 +10,7 @@ include ./uberspark-common.mk
 ###### paths
 
 export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+export USPARK_DOCS := $(USPARK_DIR)/docs
 export USPARK_HWMDIR := $(USPARK_DIR)/src/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/src/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/src/tools
@@ -73,6 +74,21 @@ install-hdrs:
 #install: install-tools install-buildshims install-uobjcoll install-hdrs install-hwm
 #install: install-tools install-buildshims install-uobjcoll install-hdrs
 install: install-tools 
+
+.PHONY: docs_pdf
+docs_pdf:
+	sphinx-build -b latex "$(USPARK_DOCSDIR)" "$(USPARK_DOCSDIR)"/_build
+	@cd "$(USPARK_DOCSDIR)"/_build && make 
+
+.PHONY: docs_html
+docs_html:
+	sphinx-build -b html "$(USPARK_DOCSDIR)" "$(USPARK_DOCSDIR)"/_build
+
+.PHONY: clean
+clean:
+	rm -rf $(UBERSPARK_DOC_PATH)_build
+
+
 
 
 .PHONY: clean
