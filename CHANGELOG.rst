@@ -1,7 +1,8 @@
-# uberSpark: Composable Verification of Commodity System Software
+uberSpark: Composable Verification of Commodity System Software
+===============================================================
 
-
-## Changelog
+Changelog
+---------
 
 * Version 5.0 (Release Series: Chase)
 	* move to Ubuntu 16.04.x LTS VM/WSL development environment
