@@ -3,8 +3,6 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
-include ../../uberspark-common.mk
-
 ###### targets
 
 

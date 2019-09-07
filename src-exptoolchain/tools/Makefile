@@ -3,8 +3,6 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
-#include ../uberspark-common.mk
-
 
 ###### targets
 
@@ -15,7 +13,7 @@ all: build-tools
 .PHONY: build-tools
 build-tools:
 	cd ./libs && $(MAKE) -w all
-	#cd ./driver && $(MAKE) -w all
+	cd ./driver && $(MAKE) -w all
 	
 
 .PHONY: clean
