@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLOPT) $(OPAM_LIBRARIES) -c -package unix -package uslog -linkpkg usosservices.ml
+	$(OCAMLOPT) -ccopt -static -c -package unix -package uslog -linkpkg usosservices.ml
 	ocamlfind remove usosservices 
 	ocamlfind install usosservices META usosservices.cmi usosservices.cmx usosservices.o 
 

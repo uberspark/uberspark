@@ -10,7 +10,7 @@ include ../../../uberspark-common.mk
 
 .PHONY: all
 all: 
-	$(OCAMLOPT) $(OPAM_LIBRARIES) -c usconfig.ml
+	$(OCAMLOPT) -ccopt -static -c usconfig.ml
 	ocamlfind remove usconfig 
 	ocamlfind install usconfig META usconfig.cmi usconfig.cmx usconfig.o 
 
