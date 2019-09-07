@@ -8,14 +8,18 @@
 export USPARK_SRCROOTDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_BUILDTRUSSESDIR := $(USPARK_SRCROOTDIR)/build-trusses
 export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-exptoolchain
+export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 
 ###### targets
 
 .PHONY: all
 all: 
 	docker run --rm -i -v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  -t local/ubersparkbuild
+		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+		-t local/ubersparkbuild
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
 .PHONY: bldcontainer-x86_64
 bldcontainer-x86_64: 
