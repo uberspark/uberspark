@@ -3,7 +3,7 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
-include ../../uberspark-common.mk
+#include ../../uberspark-common.mk
 
 
 ###### targets
@@ -11,17 +11,17 @@ include ../../uberspark-common.mk
 .PHONY: all
 all: 
 	cd ustypes && $(MAKE) -w all
-	cd usconfig && $(MAKE) -w all
-	cd libuslog && $(MAKE) -w all
-	cd usosservices && $(MAKE) -w all 
-	cd usextbinutils && $(MAKE) -w all 
-	cd usmanifest && $(MAKE) -w all
-	cd libusmf && $(MAKE) -w all
-	cd usuobjgen && $(MAKE) -w all
-	cd usuobjlib && $(MAKE) -w all
-	cd usuobj && $(MAKE) -w all
-	cd usuobjcollection && $(MAKE) -w all
-	cd usbin && $(MAKE) -w all
+	#cd usconfig && $(MAKE) -w all
+	#cd libuslog && $(MAKE) -w all
+	#cd usosservices && $(MAKE) -w all 
+	#cd usextbinutils && $(MAKE) -w all 
+	#cd usmanifest && $(MAKE) -w all
+	#cd libusmf && $(MAKE) -w all
+	#cd usuobjgen && $(MAKE) -w all
+	#cd usuobjlib && $(MAKE) -w all
+	#cd usuobj && $(MAKE) -w all
+	#cd usuobjcollection && $(MAKE) -w all
+	#cd usbin && $(MAKE) -w all
 
 .PHONY: clean
 clean:
