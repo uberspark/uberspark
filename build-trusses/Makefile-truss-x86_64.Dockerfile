@@ -35,6 +35,18 @@ RUN eval $(opam env)
 RUN opam install -y ocamlfind
 RUN opam install -y yojson
 
+# documentation dependencies
+RUN export DEBIAN_FRONTEND=noninteractive &&\
+    sudo -E apt-get -y install texlive-latex-recommended &&\
+    sudo -E apt-get -y install texlive-fonts-recommended &&\
+    sudo -E apt-get -y install texlive-latex-extra &&\
+    sudo -E apt-get -y install latexmk &&\
+    sudo -E apt-get -y install python3 &&\
+    sudo -E apt-get -y install python3-pip
+
+RUN pip3 install -U 'Sphinx==2.2.0'  
+
+
 
 # switch to working directory within container
 WORKDIR "/home/docker/uberspark"
