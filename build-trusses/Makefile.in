@@ -10,7 +10,7 @@ include ./uberspark-common.mk
 ###### paths
 
 export USPARK_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-export USPARK_DOCS := $(USPARK_DIR)/docs
+export USPARK_DOCSDIR := $(USPARK_DIR)/docs
 export USPARK_HWMDIR := $(USPARK_DIR)/src/hwm
 export USPARK_INCLUDEDIR := $(USPARK_DIR)/src/include
 export USPARK_TOOLSDIR := $(USPARK_DIR)/src/tools

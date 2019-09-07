@@ -41,10 +41,11 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
     sudo -E apt-get -y install texlive-fonts-recommended &&\
     sudo -E apt-get -y install texlive-latex-extra &&\
     sudo -E apt-get -y install latexmk &&\
-    sudo -E apt-get -y install python3 &&\
-    sudo -E apt-get -y install python3-pip
+    sudo -E apt-get -y install python3-sphinx 
+#    sudo -E apt-get -y install python3 &&\
+#    sudo -E apt-get -y install python3-pip
 
-RUN pip3 install -U 'Sphinx==2.2.0'  
+#RUN pip3 install -U 'Sphinx==2.2.0'  
 
 
 
