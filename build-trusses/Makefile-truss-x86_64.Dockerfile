@@ -39,10 +39,10 @@ RUN opam install -y yojson
 # switch to working directory within container
 WORKDIR "/home/docker/uberspark"
 
-#ENTRYPOINT /bin/bash
+ENTRYPOINT /bin/bash
 
-CMD opam switch 4.08.1+musl+static+flambda && \
-    eval $(opam env) && \
-    ./bsconfigure.sh && \
-    ./configure && \
-    make
+#CMD opam switch 4.08.1+musl+static+flambda && \
+#    eval $(opam env) && \
+#    ./bsconfigure.sh && \
+#    ./configure && \
+#    make

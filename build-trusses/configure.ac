@@ -73,7 +73,7 @@ AC_SUBST([uberspark_config_hw_cpu_default], ['generic'])
 AC_CONFIG_FILES(
 			[uberspark-common.mk]
 			[Makefile]
-			[src-exptoolchain/tools/libs/usconfig/usconfig.ml]
+			[src/tools/libs/usconfig/usconfig.ml]
 			)
 
 
