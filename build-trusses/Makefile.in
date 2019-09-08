@@ -77,11 +77,15 @@ install: install-tools
 
 .PHONY: docs_pdf
 docs_pdf:
+	rm -rf "$(USPARK_DOCSDIR)"/_build
+	mkdir -p "$(USPARK_DOCSDIR)"/_build
 	sphinx-build -b latex "$(USPARK_DOCSDIR)" "$(USPARK_DOCSDIR)"/_build
 	@cd "$(USPARK_DOCSDIR)"/_build && make 
 
 .PHONY: docs_html
 docs_html:
+	rm -rf "$(USPARK_DOCSDIR)"/_build
+	mkdir -p "$(USPARK_DOCSDIR)"/_build
 	sphinx-build -b html "$(USPARK_DOCSDIR)" "$(USPARK_DOCSDIR)"/_build
 
 .PHONY: clean
