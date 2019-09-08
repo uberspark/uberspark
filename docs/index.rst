@@ -26,9 +26,14 @@ libraries
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Current Generation Toolkit:
    
    sw-requirements
    build-install
    verify-build-install-libs
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Next Generation (Experimental) Toolkit:
+
+   nextgen-toolkit/sw-requirements
