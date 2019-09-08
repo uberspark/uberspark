@@ -1,6 +1,10 @@
 FROM amd64/ubuntu:18.04
 LABEL author="Amit Vasudevan <amitvasudevan@acm.org>"
 
+# runtime arguments
+ENV MAKE_TARGET all
+
+
 # update package repositories
 RUN apt-get update && \
     # setup default user 
@@ -52,10 +56,10 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
 # switch to working directory within container
 WORKDIR "/home/docker/uberspark"
 
-ENTRYPOINT /bin/bash
+#ENTRYPOINT /bin/bash
 
-#CMD opam switch 4.08.1+musl+static+flambda && \
-#    eval $(opam env) && \
-#    ./bsconfigure.sh && \
-#    ./configure && \
-#    make docs_html
+CMD opam switch 4.08.1+musl+static+flambda && \
+    eval $(opam env) && \
+    ./bsconfigure.sh && \
+    ./configure && \
+    make ${MAKE_TARGET}

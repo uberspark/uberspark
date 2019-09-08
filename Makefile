@@ -14,7 +14,9 @@ export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 
 .PHONY: all
 all: 
-	docker run --rm -i -v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+	docker run --rm -i \
+		-e MAKE_TARGET=all \
+		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
 		-t local/ubersparkbuild
