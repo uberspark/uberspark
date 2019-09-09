@@ -14,7 +14,7 @@ has the following pre-requisites:
 
 
 .. _swreqs_dockerbaremetal:
-s
+
 Docker Installation on Baremetal System or VM
 ---------------------------------------------
 
