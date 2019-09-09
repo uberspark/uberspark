@@ -28,6 +28,18 @@ all:
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
+
+
+.PHONY: bldcontainer-x86_64
+bldcontainer-x86_64: 
+	@echo building x86_64 build truss...
+	docker build -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t local/ubersparkbuild $(USPARK_BUILDTRUSSESDIR)/.
+	@echo successfully built x86_64 build truss!
+
+
+###### documentation targets
+
+### target to generate html documentation
 .PHONY: docs_html
 docs_html: 
 	docker run --rm -i \
@@ -39,7 +51,7 @@ docs_html:
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
-
+### target to generate pdf documentation
 .PHONY: docs_pdf
 docs_pdf: 
 	docker run --rm -i \
@@ -51,12 +63,6 @@ docs_pdf:
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
-
-.PHONY: bldcontainer-x86_64
-bldcontainer-x86_64: 
-	@echo building x86_64 build truss...
-	docker build -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t local/ubersparkbuild $(USPARK_BUILDTRUSSESDIR)/.
-	@echo successfully built x86_64 build truss!
 
 
 ###### installation targets
