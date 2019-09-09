@@ -15,7 +15,7 @@ export USPARK_INSTALL_BINDIR := /usr/bin
 
 export SUDO := sudo
 
-###### targets
+###### default target
 
 .PHONY: all
 all: 
@@ -30,11 +30,18 @@ all:
 
 
 
+###### build truss generation targets
+
+### generate x86_64 build truss
 .PHONY: bldcontainer-x86_64
 bldcontainer-x86_64: 
 	@echo building x86_64 build truss...
 	docker build -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t local/ubersparkbuild $(USPARK_BUILDTRUSSESDIR)/.
 	@echo successfully built x86_64 build truss!
+
+### arch independent build truss target
+.PHONY: generate_buildtruss
+generate_buildtruss: bldcontainer-x86_64
 
 
 ###### documentation targets
