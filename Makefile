@@ -18,7 +18,8 @@ export SUDO := sudo
 ###### default target
 
 .PHONY: all
-all: 
+all: generate_buildtruss
+	@echo building uberspark toolkit...
 	docker run --rm -i \
 		-e MAKE_TARGET=all \
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
@@ -27,6 +28,7 @@ all:
 		-t local/ubersparkbuild
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	@echo uberspark toolkit build success!
 
 
 
