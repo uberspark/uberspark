@@ -51,6 +51,7 @@ generate_buildtruss: bldcontainer-x86_64
 ### target to generate html documentation
 .PHONY: docs_html
 docs_html: 
+	rm -rf $(USPARK_DOCSDIR)/_build
 	docker run --rm -i \
 		-e MAKE_TARGET=docs_html \
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
@@ -63,6 +64,7 @@ docs_html:
 ### target to generate pdf documentation
 .PHONY: docs_pdf
 docs_pdf: 
+	rm -rf $(USPARK_DOCSDIR)/_build
 	docker run --rm -i \
 		-e MAKE_TARGET=docs_pdf \
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \

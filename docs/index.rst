@@ -38,3 +38,4 @@ libraries
 
    nextgen-toolkit/intro
    nextgen-toolkit/sw-requirements
+   nextgen-toolkit/build-install
