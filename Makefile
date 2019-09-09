@@ -18,7 +18,7 @@ export SUDO := sudo
 ###### default target
 
 .PHONY: all
-all: generate_buildtruss
+all: generate_buildtruss docs_html
 	@echo building uberspark toolkit...
 	docker run --rm -i \
 		-e MAKE_TARGET=all \
