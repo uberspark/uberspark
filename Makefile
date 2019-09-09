@@ -135,3 +135,16 @@ clean:
 		-t local/ubersparkbuild
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+
+
+.PHONY: distclean
+distclean: 
+	rm -rf $(USPARK_DOCSDIR)/_build
+	docker run --rm -i \
+		-e MAKE_TARGET=distclean \
+		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+		-t local/ubersparkbuild
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs

@@ -16,6 +16,7 @@ all:
 clean:
 	$(RM) -f usconfig.cmi
 	$(RM) -f usconfig.cmx
+	$(RM) -f usconfig.ml
 	$(RM) -f usconfig.o
 	
 	

@@ -104,7 +104,6 @@ clean:
 .PHONY: distclean
 distclean: clean
 	$(RM) config.log config.status
-	$(RM) uberspark.mk
 	$(RM) uberspark-common.mk
 
 ###### autoconf rules

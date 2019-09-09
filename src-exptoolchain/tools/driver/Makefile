@@ -13,6 +13,7 @@ all:
 .PHONY: clean
 clean:
 	$(RM) -f uberspark.cmi
-	$(RM) -f uberspark.cmo
+	$(RM) -f uberspark.cmx
+	$(RM) -f uberspark.o
 	$(RM) -f uberspark
 

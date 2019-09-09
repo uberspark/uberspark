@@ -14,7 +14,7 @@ all:
 .PHONY: clean
 clean:
 	$(RM) -f uslog.cmi
-	$(RM) -f uslog.cmo
+	$(RM) -f uslog.cmx
 	$(RM) -f uslog.o
 	
 	
