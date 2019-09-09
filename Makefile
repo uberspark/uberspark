@@ -120,3 +120,18 @@ install: install_createnamespace install_populateamespace
 	@echo Note: You may need to enter your sudo password. 
 	$(SUDO) cp -f $(USPARK_SRCDIR)/tools/driver/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
 	@echo Installation success! Use uberspark --version to check.
+
+
+
+###### cleanup targets
+.PHONY: clean
+clean: 
+	rm -rf $(USPARK_DOCSDIR)/_build
+	docker run --rm -i \
+		-e MAKE_TARGET=clean \
+		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+		-t local/ubersparkbuild
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
