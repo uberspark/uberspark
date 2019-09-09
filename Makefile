@@ -25,7 +25,7 @@ all: generate_buildtruss docs_html
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t local/ubersparkbuild
+		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 	@echo uberspark toolkit build success!
@@ -38,7 +38,7 @@ all: generate_buildtruss docs_html
 .PHONY: bldcontainer-x86_64
 bldcontainer-x86_64: 
 	@echo building x86_64 build truss...
-	docker build -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t local/ubersparkbuild $(USPARK_BUILDTRUSSESDIR)/.
+	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
 	@echo successfully built x86_64 build truss!
 
 ### arch independent build truss target
@@ -57,7 +57,7 @@ docs_html:
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t local/ubersparkbuild
+		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
@@ -70,7 +70,7 @@ docs_pdf:
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t local/ubersparkbuild
+		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
@@ -132,7 +132,7 @@ clean:
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t local/ubersparkbuild
+		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
 
@@ -145,6 +145,6 @@ distclean:
 		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
 		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
 		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t local/ubersparkbuild
+		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
