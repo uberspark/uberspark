@@ -36,4 +36,5 @@ libraries
    :maxdepth: 2
    :caption: Next Generation (Experimental) Toolkit:
 
+   nextgen-toolkit/intro
    nextgen-toolkit/sw-requirements
