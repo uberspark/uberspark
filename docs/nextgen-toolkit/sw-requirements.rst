@@ -3,7 +3,7 @@
 Software Requirements and Dependencies
 ======================================
 
-The |uspark| toolkit relies extensively on ``docker`` with the goal of supporting a wide variety of CoSS 
+The |uspark| toolkit relies on the ``docker`` independent container platform, with the goal of supporting a wide variety of CoSS 
 development environments and architectures (e.g., Ubuntu, Debian, Fedora, Windows WSL. etc.). The toolkit
 has the following pre-requisites:
 
@@ -80,11 +80,11 @@ to use Linux Containers within a Hyper-V light-weight VM.
 
 After Docker installs successfully, and the Docker Desktop application starts up,
 right-click on the Docker Desktop tray icon. Then proceed to 
-click ``Settings``->``General`` and ``check`` the 
+click ``Settings``-> ``General`` and ``check`` the 
 *expose daemon on tcp://localhost:2375 without TLS* option. 
 
 You may also want to share any drives you plan on having your source
-code on. This can be accomplished via ``Settings``-->``Shared Drives`` dialog.
+code on. This can be accomplished via ``Settings``--> ``Shared Drives`` dialog.
 
 At this point, you need to start a WSL instance and install Docker as
 described in the previous section: :ref:`swreqs_dockerbaremetal`.
