@@ -15,19 +15,25 @@ export USPARK_INSTALL_BINDIR := /usr/bin
 
 export SUDO := sudo
 
+###### helper functions
+
+define docker_run
+	docker run --rm -i \
+		-e MAKE_TARGET=$(1) \
+		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+		-t hypcode/uberspark-build-x86_64 
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+endef
+
 ###### default target
 
 .PHONY: all
 all: generate_buildtruss docs_html
 	@echo building uberspark toolkit...
-	docker run --rm -i \
-		-e MAKE_TARGET=all \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	$(call docker_run,all)
 	@echo uberspark toolkit build success!
 
 
@@ -52,27 +58,13 @@ generate_buildtruss: bldcontainer-x86_64
 .PHONY: docs_html
 docs_html: 
 	rm -rf $(USPARK_DOCSDIR)/_build
-	docker run --rm -i \
-		-e MAKE_TARGET=docs_html \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	$(call docker_run,docs_html)
 
 ### target to generate pdf documentation
 .PHONY: docs_pdf
 docs_pdf: 
 	rm -rf $(USPARK_DOCSDIR)/_build
-	docker run --rm -i \
-		-e MAKE_TARGET=docs_pdf \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	$(call docker_run,docs_pdf)
 
 
 
@@ -127,14 +119,7 @@ install: install_createnamespace install_populateamespace
 .PHONY: clean
 clean: generate_buildtruss
 	rm -rf $(USPARK_DOCSDIR)/_build
-	docker run --rm -i \
-		-e MAKE_TARGET=clean \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	$(call docker_run,clean)
 
 
 .PHONY: distclean
