@@ -57,9 +57,11 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
 WORKDIR "/home/docker/uberspark"
 
 #ENTRYPOINT /bin/bash
+#    find  -type f  -exec touch {} + &&\
 
 CMD opam switch 4.08.1+musl+static+flambda && \
     eval $(opam env) && \
+    chmod +x ./bsconfigure.sh && \
     ./bsconfigure.sh && \
     ./configure && \
     make ${MAKE_TARGET}

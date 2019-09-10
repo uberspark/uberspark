@@ -88,23 +88,12 @@ docs_html:
 	mkdir -p "$(USPARK_DOCSDIR)"/_build
 	sphinx-build -b html "$(USPARK_DOCSDIR)" "$(USPARK_DOCSDIR)"/_build
 
-.PHONY: clean
-clean:
-	rm -rf $(UBERSPARK_DOC_PATH)_build
-
-
-
 
 .PHONY: clean
 clean:
+	rm -rf $(USPARK_DOCSDIR)/_build
 	cd $(USPARK_TOOLSDIR) && $(MAKE) -w clean
 	
-
-# http://www.gnu.org/software/automake/manual/automake.html#Clean
-.PHONY: distclean
-distclean: clean
-	$(RM) config.log config.status
-	$(RM) uberspark-common.mk
 
 ###### autoconf rules
 
@@ -115,5 +104,5 @@ config.status: configure
 	./config.status --recheck
 
 configure: configure.ac
-	./bsconfigure
+	./bsconfigure.sh
 

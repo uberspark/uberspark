@@ -140,11 +140,12 @@ clean:
 .PHONY: distclean
 distclean: 
 	rm -rf $(USPARK_DOCSDIR)/_build
-	docker run --rm -i \
-		-e MAKE_TARGET=distclean \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	# http://www.gnu.org/software/automake/manual/automake.html#Clean
+	rm -rf $(USPARK_BUILDTRUSSESDIR)/autom4te.cache 
+	rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile 
+	rm -f $(USPARK_BUILDTRUSSESDIR)/config.log 
+	rm -f $(USPARK_BUILDTRUSSESDIR)/config.status
+	rm -f $(USPARK_BUILDTRUSSESDIR)/configure
+	rm -f $(USPARK_BUILDTRUSSESDIR)/uberspark-common.mk
