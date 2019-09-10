@@ -29,14 +29,34 @@ define docker_run
 	find  -type f  -exec touch {} + 
 endef
 
+define docker_runv2
+	@echo $(1)
+	@echo $(2)
+#	docker run --rm -i \
+#		-e MAKE_TARGET=$(1) \
+#		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+#		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+#		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+#		-t hypcode/uberspark-build-x86_64 
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+#	find  -type f  -exec touch {} + 
+endef
+
+
 ###### default target
 
-.PHONY: all
-all: generate_buildtruss docs_html
-	@echo building uberspark toolkit...
-	$(call docker_run,all)
-	@echo uberspark toolkit build success!
+#.PHONY: all
+#all: generate_buildtruss docs_html
+#	@echo building uberspark toolkit...
+#	$(call docker_run,all)
+#	@echo uberspark toolkit build success!
 
+.PHONY: all
+all: generate_buildtruss
+	@echo building uberspark toolkit...
+	$(call docker_runv2,make -f build-docs.mk,-w all)
+	@echo uberspark toolkit build success!
 
 
 ###### build truss generation targets
