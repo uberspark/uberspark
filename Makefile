@@ -125,7 +125,7 @@ install: install_createnamespace install_populateamespace
 
 ###### cleanup targets
 .PHONY: clean
-clean: 
+clean: generate_buildtruss
 	rm -rf $(USPARK_DOCSDIR)/_build
 	docker run --rm -i \
 		-e MAKE_TARGET=clean \

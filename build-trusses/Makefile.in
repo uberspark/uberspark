@@ -105,4 +105,3 @@ config.status: configure
 
 configure: configure.ac
 	./bsconfigure.sh
-
