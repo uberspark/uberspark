@@ -26,6 +26,7 @@ define docker_run
 		-t hypcode/uberspark-build-x86_64 
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
 	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+	find  -type f  -exec touch {} + 
 endef
 
 ###### default target

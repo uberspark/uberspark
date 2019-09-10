@@ -64,4 +64,5 @@ CMD opam switch 4.08.1+musl+static+flambda && \
     chmod +x ./bsconfigure.sh && \
     ./bsconfigure.sh && \
     ./configure && \
+    find  -type f  -exec touch {} + &&\
     make ${MAKE_TARGET}
