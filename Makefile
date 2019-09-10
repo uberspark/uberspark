@@ -68,9 +68,18 @@ bldcontainer-x86_64:
 	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
 	@echo successfully built x86_64 build truss!
 
+### generate x86_64 build truss
+.PHONY: buildcontainer-x86_64
+buildcontainer-x86_64: 
+	@echo building x86_64 build truss...
+	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/build-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
+	@echo successfully built x86_64 build truss!
+
+
 ### arch independent build truss target
 .PHONY: generate_buildtruss
-generate_buildtruss: bldcontainer-x86_64
+#generate_buildtruss: bldcontainer-x86_64
+generate_buildtruss: buildcontainer-x86_64
 
 
 ###### documentation targets
