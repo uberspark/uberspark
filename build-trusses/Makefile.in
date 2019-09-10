@@ -97,11 +97,11 @@ clean:
 
 ###### autoconf rules
 
-Makefile: Makefile.in config.status
-	./config.status $@
+#Makefile: Makefile.in config.status
+#	./config.status $@
 
-config.status: configure
-	./config.status --recheck
+#config.status: configure
+#	./config.status --recheck
 
-configure: configure.ac
-	./bsconfigure.sh
+#configure: configure.ac
+#	./bsconfigure.sh
