@@ -160,19 +160,20 @@ install: install_createnamespace install_populateamespace
 ###### cleanup targets
 .PHONY: clean
 clean: generate_buildtruss
-	rm -rf $(USPARK_DOCSDIR)/_build
-	$(call docker_run,clean)
+	$(call docker_run,make -f build-docs.mk, -w docs_clean)
+	$(call docker_run,make -f build-frontend.mk, -w clean)
 
 
-.PHONY: distclean
-distclean: 
-	rm -rf $(USPARK_DOCSDIR)/_build
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
-	# http://www.gnu.org/software/automake/manual/automake.html#Clean
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/autom4te.cache 
-	rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile 
-	rm -f $(USPARK_BUILDTRUSSESDIR)/config.log 
-	rm -f $(USPARK_BUILDTRUSSESDIR)/config.status
-	rm -f $(USPARK_BUILDTRUSSESDIR)/configure
-	rm -f $(USPARK_BUILDTRUSSESDIR)/uberspark-common.mk
+
+#.PHONY: distclean
+#distclean: 
+#	rm -rf $(USPARK_DOCSDIR)/_build
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+#	# http://www.gnu.org/software/automake/manual/automake.html#Clean
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/autom4te.cache 
+#	rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile 
+#	rm -f $(USPARK_BUILDTRUSSESDIR)/config.log 
+#	rm -f $(USPARK_BUILDTRUSSESDIR)/config.status
+#	rm -f $(USPARK_BUILDTRUSSESDIR)/configure
+#	rm -f $(USPARK_BUILDTRUSSESDIR)/uberspark-common.mk
