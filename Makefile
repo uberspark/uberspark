@@ -17,18 +17,6 @@ export SUDO := sudo
 
 ###### helper functions
 
-#define docker_run
-#	docker run --rm -i \
-#		-e MAKE_TARGET=$(1) \
-#		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-#		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-#		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-#		-t hypcode/uberspark-build-x86_64 
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
-#	find  -type f  -exec touch {} + 
-#endef
-
 define docker_run
 	docker run --rm -i \
 		-e MAKE_COMMAND="$(1)" \
@@ -41,25 +29,12 @@ endef
 
 ###### default target
 
-#.PHONY: all
-#all: generate_buildtruss docs_html
-#	@echo building uberspark toolkit...
-#	$(call docker_run,all)
-#	@echo uberspark toolkit build success!
-
 .PHONY: all
 all: generate_buildtruss docs_html frontend
 	@echo uberspark toolkit build success!
 
 
 ###### build truss generation targets
-
-### generate x86_64 build truss
-#.PHONY: bldcontainer-x86_64
-#bldcontainer-x86_64: 
-#	@echo building x86_64 build truss...
-#	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
-#	@echo successfully built x86_64 build truss!
 
 ### generate x86_64 build truss
 .PHONY: buildcontainer-x86_64
@@ -71,26 +46,15 @@ buildcontainer-x86_64:
 
 ### arch independent build truss target
 .PHONY: generate_buildtruss
-#generate_buildtruss: bldcontainer-x86_64
 generate_buildtruss: buildcontainer-x86_64
 
 
 ###### documentation targets
 
-### target to generate html documentation
-#.PHONY: docs_html
-#docs_html: 
-#	rm -rf $(USPARK_DOCSDIR)/_build
-#	$(call docker_run,docs_html)
 .PHONY: docs_html
 docs_html: generate_buildtruss
 	$(call docker_run,make -f build-docs.mk, -w docs_html)
 
-### target to generate pdf documentation
-#.PHONY: docs_pdf
-#docs_pdf: 
-#	rm -rf $(USPARK_DOCSDIR)/_build
-#	$(call docker_run,docs_pdf)
 .PHONY: docs_pdf
 docs_pdf: generate_buildtruss
 	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
@@ -165,15 +129,3 @@ clean: generate_buildtruss
 
 
 
-#.PHONY: distclean
-#distclean: 
-#	rm -rf $(USPARK_DOCSDIR)/_build
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
-#	# http://www.gnu.org/software/automake/manual/automake.html#Clean
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/autom4te.cache 
-#	rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile 
-#	rm -f $(USPARK_BUILDTRUSSESDIR)/config.log 
-#	rm -f $(USPARK_BUILDTRUSSESDIR)/config.status
-#	rm -f $(USPARK_BUILDTRUSSESDIR)/configure
-#	rm -f $(USPARK_BUILDTRUSSESDIR)/uberspark-common.mk
