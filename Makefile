@@ -17,19 +17,19 @@ export SUDO := sudo
 
 ###### helper functions
 
-define docker_run
-	docker run --rm -i \
-		-e MAKE_TARGET=$(1) \
-		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-		-t hypcode/uberspark-build-x86_64 
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
-	find  -type f  -exec touch {} + 
-endef
+#define docker_run
+#	docker run --rm -i \
+#		-e MAKE_TARGET=$(1) \
+#		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
+#		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
+#		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
+#		-t hypcode/uberspark-build-x86_64 
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
+#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
+#	find  -type f  -exec touch {} + 
+#endef
 
-define docker_runv2
+define docker_run
 	docker run --rm -i \
 		-e MAKE_COMMAND="$(1)" \
 		-e MAKE_TARGET="$(2)" \
@@ -55,11 +55,11 @@ all: generate_buildtruss docs_html frontend
 ###### build truss generation targets
 
 ### generate x86_64 build truss
-.PHONY: bldcontainer-x86_64
-bldcontainer-x86_64: 
-	@echo building x86_64 build truss...
-	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
-	@echo successfully built x86_64 build truss!
+#.PHONY: bldcontainer-x86_64
+#bldcontainer-x86_64: 
+#	@echo building x86_64 build truss...
+#	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/Makefile-truss-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
+#	@echo successfully built x86_64 build truss!
 
 ### generate x86_64 build truss
 .PHONY: buildcontainer-x86_64
@@ -84,7 +84,7 @@ generate_buildtruss: buildcontainer-x86_64
 #	$(call docker_run,docs_html)
 .PHONY: docs_html
 docs_html: generate_buildtruss
-	$(call docker_runv2,make -f build-docs.mk, -w docs_html)
+	$(call docker_run,make -f build-docs.mk, -w docs_html)
 
 ### target to generate pdf documentation
 #.PHONY: docs_pdf
@@ -93,7 +93,7 @@ docs_html: generate_buildtruss
 #	$(call docker_run,docs_pdf)
 .PHONY: docs_pdf
 docs_pdf: generate_buildtruss
-	$(call docker_runv2,make -f build-docs.mk, -w docs_pdf)
+	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
 
 
 ###### common modules build targets
@@ -101,13 +101,13 @@ docs_pdf: generate_buildtruss
 ### build common modules
 .PHONY: commonmods
 commonmods:
-	$(call docker_runv2,make -f build-commonmods.mk, -w all)
+	$(call docker_run,make -f build-commonmods.mk, -w all)
 
 
 ###### frontend build targets
 .PHONY: frontend
 frontend:
-	$(call docker_runv2,make -f build-frontend.mk, -w all)
+	$(call docker_run,make -f build-frontend.mk, -w all)
 
 
 ###### installation targets
