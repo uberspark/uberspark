@@ -26,4 +26,4 @@ docs_html: docs_clean docs_build_prep
 ### cleanup documentation build
 .PHONY: docs_clean
 docs_clean:
-	mkdir -p $(UBERSPARK_DOCSDIR)/_build
+	rm -rf $(UBERSPARK_DOCSDIR)/_build
