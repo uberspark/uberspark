@@ -39,6 +39,7 @@ RUN opam switch 4.08.1+musl+static+flambda
 RUN eval $(opam env)
 RUN opam install -y ocamlfind
 RUN opam install -y yojson
+RUN opam install -y cmdliner.1.0.4 
 
 # documentation dependencies
 RUN export DEBIAN_FRONTEND=noninteractive &&\

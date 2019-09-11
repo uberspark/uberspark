@@ -16,6 +16,17 @@ open Usbin
 
 let log_mpf = "uberSpark";;
 
+
+(*----------------------------------------------------------------------------*)
+let main () =
+		
+		()
+	;;
+
+main ();;
+
+
+(*
 let g_install_prefix = "/usr/local";;
 let g_uberspark_install_bindir = "/usr/local/bin";;
 let g_uberspark_install_homedir = "/usr/local/uberspark";;
@@ -601,4 +612,5 @@ main ();;
 						end
 					done;
 				end
+*)
 *)
