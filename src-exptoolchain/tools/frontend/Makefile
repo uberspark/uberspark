@@ -5,15 +5,31 @@
 
 ###### targets
 
+MODULE_PACKAGES := -package unix
+MODULE_PACKAGES += -package str 
+MODULE_PACKAGES += -package yojson 
+MODULE_PACKAGES += -package usconfig  
+MODULE_PACKAGES += -package uslog 
+MODULE_PACKAGES += -package usosservices  
+MODULE_PACKAGES += -package usextbinutils 
+MODULE_PACKAGES += -package libusmf 
+MODULE_PACKAGES += -package usmanifest  
+MODULE_PACKAGES += -package usuobjgen
+MODULE_PACKAGES += -package usuobjlib 
+MODULE_PACKAGES += -package usuobj 
+MODULE_PACKAGES += -package usuobjcollection
+MODULE_PACKAGES += -package usbin
+
+
+MODULE_SOURCES := uberspark.ml
+MODULE_SOURCES += cmd_uobj.ml
 
 .PHONY: all
 all:  
-	$(OCAMLOPT) -ccopt -static -package unix -package str -package yojson -package usconfig -package uslog -package usosservices -package usextbinutils -package libusmf -package usmanifest -package usuobjgen -package usuobjlib -package usuobj -package usuobjcollection -package usbin -linkpkg -o uberspark uberspark.ml	
+	$(OCAMLOPT) -ccopt -static $(MODULE_PACKAGES) -linkpkg -o uberspark $(MODULE_SOURCES)
 
 .PHONY: clean
 clean:
-	$(RM) -f uberspark.cmi
-	$(RM) -f uberspark.cmx
-	$(RM) -f uberspark.o
+	$(RM) -f *.cmi *.cmx *.o
 	$(RM) -f uberspark
 
