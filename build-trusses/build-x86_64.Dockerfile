@@ -51,12 +51,13 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
 
 
 # switch to working directory within container
-WORKDIR "/home/docker/uberspark"
+WORKDIR "/home/docker/uberspark/build-trusses"
+
+#    chmod +x ./bsconfigure.sh && \
+#    ./bsconfigure.sh && \
+#    ./configure && \
 
 CMD opam switch 4.08.1+musl+static+flambda && \
     eval $(opam env) && \
-    chmod +x ./bsconfigure.sh && \
-    ./bsconfigure.sh && \
-    ./configure && \
     find  -type f  -exec touch {} + &&\
-    $(MAKE_COMMAND) ${MAKE_TARGET}
+    ${MAKE_COMMAND} ${MAKE_TARGET}

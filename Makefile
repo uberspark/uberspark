@@ -30,17 +30,12 @@ define docker_run
 endef
 
 define docker_runv2
-	@echo $(1)
-	@echo $(2)
-#	docker run --rm -i \
-#		-e MAKE_TARGET=$(1) \
-#		-v $(USPARK_BUILDTRUSSESDIR):/home/docker/uberspark \
-#		-v $(USPARK_DOCSDIR):/home/docker/uberspark/docs \
-#		-v $(USPARK_SRCDIR):/home/docker/uberspark/src  \
-#		-t hypcode/uberspark-build-x86_64 
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/src
-#	rm -rf $(USPARK_BUILDTRUSSESDIR)/docs
-#	find  -type f  -exec touch {} + 
+	docker run --rm -i \
+		-e MAKE_COMMAND="$(1)" \
+		-e MAKE_TARGET="$(2)" \
+		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
+		-t hypcode/uberspark-build-x86_64 
+	find  -type f  -exec touch {} + 
 endef
 
 
@@ -85,10 +80,13 @@ generate_buildtruss: buildcontainer-x86_64
 ###### documentation targets
 
 ### target to generate html documentation
+#.PHONY: docs_html
+#docs_html: 
+#	rm -rf $(USPARK_DOCSDIR)/_build
+#	$(call docker_run,docs_html)
 .PHONY: docs_html
-docs_html: 
-	rm -rf $(USPARK_DOCSDIR)/_build
-	$(call docker_run,docs_html)
+docs_html: generate_buildtruss
+	$(call docker_runv2,make -f build-docs.mk, -w docs_html)
 
 ### target to generate pdf documentation
 .PHONY: docs_pdf
