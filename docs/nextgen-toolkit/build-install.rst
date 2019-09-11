@@ -19,7 +19,7 @@ This will generate the required build truss to build the toolkit and documentati
 build the toolkit binaries, and additionally build the ``.html`` version of the documentation.
 
 .. note:: If you are re-building the tools after a prior build, you can perform a cleanup by
-          issuing the commands ``make clean`` or ``make distclean`` before issuing the 
+          issuing the command: ``make clean`` before issuing the 
           command ``make`` as above.
 
 

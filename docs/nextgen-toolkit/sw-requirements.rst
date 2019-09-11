@@ -8,7 +8,7 @@ development environments and architectures (e.g., Ubuntu, Debian, Fedora, Window
 has the following pre-requisites:
 
 -   a x86_64 Linux-based development environment (e.g., Ubuntu). This can be a baremetal 
-    system, a VM or Windows Subsystem for Linux.
+    system, a VM or Windows Subsystem for Linux (Windows 10, 18.03, Spring 2018 or newer).
 -   the ``docker`` independent container platform (see https://docker.com)
 -   a ``make`` utility capable of reading Makefiles with ``GNU make`` compatible syntax.  
 
@@ -102,6 +102,33 @@ time you open your WSL terminal.
 
 .. note:: The source command in the one-liner above reloads your bash configuration so you do not
           have to open a new terminal right now for it to take effect.
+
+The last thing we need to do is set things up so that volume mounts work.
+When using WSL, Docker for Windows expects you to supply your volume paths in a 
+format that matches this: ``/c/Users/<user>/myapp``.
+But, WSL instead uses the ``/mnt/c/Users/<user>/myapp`` format.
+
+To get things to work, you can configure WSL to mount with the ``/`` prefix instead 
+of the ``/mnt`` prefix as below:
+
+::
+
+    # Create and modify the new WSL configuration file:
+    sudo nano /etc/wsl.conf
+
+    # Now make it look like this and save the file when you're done:
+    [automount]
+    root = /
+    options = "metadata"
+
+
+.. note:: We set ``root = /`` to ensure that drives are mounted at ``/c`` or ``/e`` instead of ``/mnt/c`` or ``/mnt/e``.
+
+.. note:: The ``options = "metadata"`` line is optional but will fix folder and file permissions
+          on WSL mounts so everything is not displayed with ``777`` all the time within the WSL mounts.
+
+
+You will need to perform a full system restart to ensure the changes take effect. 
 
 
 GNU Make Installation
