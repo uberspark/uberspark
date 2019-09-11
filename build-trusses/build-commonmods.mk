@@ -7,16 +7,18 @@ include ./commondefs.mk
 
 ###### targets
 
-### common modules build prep
-.PHONY: commonmods_build_prep
-commonmods_build_prep:
-	mkdir -p $(UBERSPARK_BUILDDIR)
-	mkdir -p $(UBERSPARK_BUILDDIR)/commonmods
-
-
 ### build common modules
 .PHONY: commonmods
-commonmods: commonmods_build_prep
-	mkdir -p $(UBERSPARK_BUILDDIR)/commonmods/ustypes && \
-		cd $(UBERSPARK_BUILDDIR)/commonmods/ustypes && \
-		make -f $(UBERSPARK_SRCDIR)/tools/libs/ustypes/build.mk -w all
+commonmods: 
+	cd $(UBERSPARK_SRCDIR)/tools/libs/ustypes && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usconfig && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/libuslog && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usosservices && $(MAKE) -w all 
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usextbinutils && $(MAKE) -w all 
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usmanifest && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/libusmf && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usuobjgen && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usuobjlib && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usuobj && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usuobjcollection && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/libs/usbin && $(MAKE) -w all

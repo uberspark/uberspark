@@ -98,6 +98,13 @@ docs_pdf: generate_buildtruss
 	$(call docker_runv2,make -f build-docs.mk, -w docs_pdf)
 
 
+###### common modules build targets
+
+### build common modules
+.PHONY: commonmods
+commonmods:
+	$(call docker_runv2,make -f build-commonmods.mk, -w commonmods)
+
 
 ###### installation targets
 
