@@ -89,10 +89,13 @@ docs_html: generate_buildtruss
 	$(call docker_runv2,make -f build-docs.mk, -w docs_html)
 
 ### target to generate pdf documentation
+#.PHONY: docs_pdf
+#docs_pdf: 
+#	rm -rf $(USPARK_DOCSDIR)/_build
+#	$(call docker_run,docs_pdf)
 .PHONY: docs_pdf
-docs_pdf: 
-	rm -rf $(USPARK_DOCSDIR)/_build
-	$(call docker_run,docs_pdf)
+docs_pdf: generate_buildtruss
+	$(call docker_runv2,make -f build-docs.mk, -w docs_pdf)
 
 
 
