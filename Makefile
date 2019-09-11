@@ -152,7 +152,7 @@ install_populateamespace:
 install: install_createnamespace install_populateamespace
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
-	$(SUDO) cp -f $(USPARK_SRCDIR)/tools/driver/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
+	$(SUDO) cp -f $(USPARK_SRCDIR)/tools/frontend/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
 	@echo Installation success! Use uberspark --version to check.
 
 
