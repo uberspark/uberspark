@@ -19,6 +19,7 @@ MODULE_PACKAGES += -package usuobjlib
 MODULE_PACKAGES += -package usuobj 
 MODULE_PACKAGES += -package usuobjcollection
 MODULE_PACKAGES += -package usbin
+MODULE_PACKAGES += -package cmdliner
 
 
 MODULE_SOURCES := uberspark.ml
