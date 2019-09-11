@@ -103,7 +103,7 @@ docs_pdf: generate_buildtruss
 ### build common modules
 .PHONY: commonmods
 commonmods:
-	$(call docker_runv2,make -f build-commonmods.mk, -w commonmods)
+	$(call docker_runv2,make -f build-commonmods.mk, -w all)
 
 
 ###### installation targets
