@@ -15,13 +15,13 @@ docs_build_prep:
 ### generate .pdf documentation
 .PHONY: docs_pdf
 docs_pdf: docs_clean docs_build_prep
-	sphinx-build -b latex "$(UBERSPARK_DOCSDIR)" "$(UBERSPARK_DOCSDIR)"/docs
+	sphinx-build -b latex "$(UBERSPARK_DOCSDIR)" "$(UBERSPARK_DOCSDIR)"/_build
 	@cd "$(UBERSPARK_BUILDDIR)"/docs && make 
 
 ### generate .html documentation
 .PHONY: docs_html
 docs_html: docs_clean docs_build_prep
-	sphinx-build -b html "$(UBERSPARK_DOCSDIR)" "$(UBERSPARK_DOCSDIR)"/docs
+	sphinx-build -b html "$(UBERSPARK_DOCSDIR)" "$(UBERSPARK_DOCSDIR)"/_build
 
 ### cleanup documentation build
 .PHONY: docs_clean
