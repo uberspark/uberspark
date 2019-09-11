@@ -48,9 +48,7 @@ endef
 #	@echo uberspark toolkit build success!
 
 .PHONY: all
-all: generate_buildtruss
-	@echo building uberspark toolkit...
-	$(call docker_runv2,make -f build-docs.mk,-w all)
+all: generate_buildtruss docs_html frontend
 	@echo uberspark toolkit build success!
 
 
