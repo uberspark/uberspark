@@ -106,6 +106,12 @@ commonmods:
 	$(call docker_runv2,make -f build-commonmods.mk, -w all)
 
 
+###### frontend build targets
+.PHONY: frontend
+frontend:
+	$(call docker_runv2,make -f build-frontend.mk, -w all)
+
+
 ###### installation targets
 
 ### installation helper target to create namespace
