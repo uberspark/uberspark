@@ -2,6 +2,7 @@ FROM amd64/ubuntu:18.04
 LABEL author="Amit Vasudevan <amitvasudevan@acm.org>"
 
 # runtime arguments
+ENV MAKE_COMMAND make
 ENV MAKE_TARGET all
 
 
@@ -58,4 +59,4 @@ CMD opam switch 4.08.1+musl+static+flambda && \
     ./bsconfigure.sh && \
     ./configure && \
     find  -type f  -exec touch {} + &&\
-    make ${MAKE_TARGET}
+    $(MAKE_COMMAND) ${MAKE_TARGET}
