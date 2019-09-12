@@ -21,23 +21,26 @@ let log_mpf = "uberspark";;
 
 
 
-type verb = Normal | Quiet | Verbose
+(* type verb = Normal | Quiet | Verbose
 type copts = { debug : bool; verb : verb; prehook : string option }
+*)
 
 type g_copts = { log_level : Uslog.log_level}
 
+(*
 let str = Printf.sprintf
 let opt_str sv = function None -> "None" | Some v -> str "Some(%s)" (sv v)
 let opt_str_str = opt_str (fun s -> s)
 let verb_str = function
   | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
-
+*)
 
 let pr_g_copts oc copts = 
 	Printf.fprintf oc "log_level = %u\n" (Uslog.ord copts.log_level);
 	();
 ;;
 
+(*
 let pr_copts oc copts = Printf.fprintf oc
     "debug = %B\nverbosity = %s\nprehook = %s\n"
     copts.debug (verb_str copts.verb) (opt_str_str copts.prehook)
@@ -57,15 +60,19 @@ let record copts name email all ask_deps files = Printf.printf
     "%aname = %s\nemail = %s\nall = %B\nask-deps = %B\nfiles = %s\n"
     pr_copts copts (opt_str_str name) (opt_str_str email) all ask_deps
     (String.concat ", " files)
+*)
 
-let help copts man_format cmds topic = match topic with
+
+(* handler for help command *)
+let handler_help copts man_format cmds topic = match topic with
 | None -> `Help (`Pager, None) (* help about the program. *)
 | Some topic ->
-    let topics = "topics" :: "patterns" :: "environment" :: cmds in
-    let conv, _ = Cmdliner.Arg.enum (List.rev_map (fun s -> (s, s)) topics) in
+		(* let topics = "topics" :: "patterns" :: "environment" :: cmds in *)
+		let topics = "topics" :: cmds in 
+		let conv, _ = Cmdliner.Arg.enum (List.rev_map (fun s -> (s, s)) topics) in
     match conv topic with
     | `Error e -> `Error (false, e)
-    | `Ok t when t = "topics" -> List.iter print_endline topics; `Ok ()
+    | `Ok t when t = "topics" -> List.iter print_endline cmds; `Ok ()
     | `Ok t when List.mem t cmds -> `Help (man_format, Some t)
     | `Ok t ->
         let page = (topic, 7, "", "", ""), [`S topic; `P "Say something";] in
@@ -84,11 +91,12 @@ let help_secs = [
 
 (* options common to all commands *)
 
-let copts debug verb prehook = { debug; verb; prehook };;
+(* let copts debug verb prehook = { debug; verb; prehook };;
+*)
 
 let g_copts log_level = { log_level };;
 
-
+(*
 let copts_t =
   let docs = Manpage.s_common_options in
   let debug =
@@ -107,7 +115,7 @@ let copts_t =
     Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
   in
   Term.(const copts $ debug $ verb $ prehook)
-
+*)
 
 let g_copts_t =
   let docs = Manpage.s_common_options in
@@ -126,6 +134,7 @@ let g_copts_t =
 
 (* Commands *)
 
+(*
 let initialize_cmd =
   let repodir =
     let doc = "Run the program in repository directory $(docv)." in
@@ -142,7 +151,9 @@ let initialize_cmd =
   in
   Term.(const initialize $ copts_t $ repodir),
   Term.info "initialize" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+*)
 
+	(*
 let record_cmd =
   let pname =
     let doc = "Name of the patch." in
@@ -173,36 +184,40 @@ let record_cmd =
   in
   Term.(const record $ copts_t $ pname $ author $ all $ ask_deps $ files),
   Term.info "record" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+*)
 
-let help_cmd =
+(* kicks in when uberspark --help or uberspark help --help is issued *)
+let cmd_help =
   let topic =
     let doc = "The topic to get help on. `topics' lists the topics." in
     Arg.(value & pos 0 (some string) None & info [] ~docv:"TOPIC" ~doc)
   in
-  let doc = "display help about darcs and darcs commands" in
+  let doc = "display help about uberspark and uberspark commands" in
   let exits = Term.default_exits in
   let man =
     [`S Manpage.s_description;
-     `P "Prints help about darcs commands and other subjects...";
+     `P "Prints help about uberspark commands and other subjects...";
      `Blocks help_secs; ]
   in
-  Term.(ret (const help $ copts_t $ Arg.man_format $ Term.choice_names $topic)),
+  Term.(ret (const handler_help $ g_copts_t $ Arg.man_format $ Term.choice_names $topic)),
   Term.info "help" ~doc ~exits ~man
 
-let default_cmd =
-  let doc = "a revision control system" in
+(* kicks in when user just issues uberspark without any parameters *)
+let cmd_default =
+  let doc = "enforcing verifiable object abstractions for commodity system software stacks" in
   let sdocs = Manpage.s_common_options in
   let exits = Term.default_exits in
   let man = help_secs in
-  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ copts_t)),
+  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ g_copts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
-let cmds = [initialize_cmd; record_cmd; help_cmd]
+(* all our additional commands *)	
+let cmd_additions = [cmd_help]
 
 
 (*----------------------------------------------------------------------------*)
 let main () =
-	Term.(exit @@ eval_choice default_cmd cmds);
+	Term.(exit @@ eval_choice cmd_default cmd_additions);
 		()
 	;;
 
