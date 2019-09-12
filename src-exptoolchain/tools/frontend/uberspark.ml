@@ -16,11 +16,15 @@ open Usbin
 
 open Cmdliner
 
-let log_mpf = "uberSpark";;
+let log_mpf = "uberspark";;
+
+
 
 
 type verb = Normal | Quiet | Verbose
 type copts = { debug : bool; verb : verb; prehook : string option }
+
+type g_copts = { log_level : Uslog.log_level}
 
 let str = Printf.sprintf
 let opt_str sv = function None -> "None" | Some v -> str "Some(%s)" (sv v)
@@ -28,12 +32,26 @@ let opt_str_str = opt_str (fun s -> s)
 let verb_str = function
   | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
 
+
+let pr_g_copts oc copts = 
+	Printf.fprintf oc "log_level = %u\n" (Uslog.ord copts.log_level);
+	();
+;;
+
 let pr_copts oc copts = Printf.fprintf oc
     "debug = %B\nverbosity = %s\nprehook = %s\n"
     copts.debug (verb_str copts.verb) (opt_str_str copts.prehook)
 
+
+
+
 let initialize copts repodir = Printf.printf
     "%arepodir = %s\n" pr_copts copts repodir
+
+let initialize_new g_copts repodir = 
+	Printf.printf "%arepodir = %s\n" pr_g_copts g_copts repodir;
+	()
+;;
 
 let record copts name email all ask_deps files = Printf.printf
     "%aname = %s\nemail = %s\nall = %B\nask-deps = %B\nfiles = %s\n"
@@ -54,20 +72,23 @@ let help copts man_format cmds topic = match topic with
         `Ok (Cmdliner.Manpage.print man_format Format.std_formatter page)
 
 
-(* Help sections common to all commands *)
+(* help sections common to all commands *)
 
 let help_secs = [
  `S Manpage.s_common_options;
  `P "These options are common to all commands.";
  `S "MORE HELP";
- `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command.";`Noblank;
- `P "Use `$(mname) help patterns' for help on patch matching."; `Noblank;
- `P "Use `$(mname) help environment' for help on environment variables.";
- `S Manpage.s_bugs; `P "Check bug reports at http://bugs.example.org.";]
+ `P "Use `$(mname) $(i,COMMAND) --help' or ``$(mname) help $(i,COMMAND)' for help on a single command.";`Noblank;
+ `P "E.g., `$(mname) uobj --help' or `$(mname) help uobj' for help on uobject related options.";
+ `S "ISSUES"; `P "Visit https://forums.uberspark.org to discuss issues and find potential solutions.";]
 
-(* Options common to all commands *)
+(* options common to all commands *)
 
-let copts debug verb prehook = { debug; verb; prehook }
+let copts debug verb prehook = { debug; verb; prehook };;
+
+let g_copts log_level = { log_level };;
+
+
 let copts_t =
   let docs = Manpage.s_common_options in
   let debug =
@@ -86,6 +107,22 @@ let copts_t =
     Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
   in
   Term.(const copts $ debug $ verb $ prehook)
+
+
+let g_copts_t =
+  let docs = Manpage.s_common_options in
+  let verb =
+    let doc = "Suppress all informational output." in
+    let quiet = Uslog.None, Arg.info ["q"; "quiet"] ~docs ~doc in
+    (*let doc = "Give verbose output." in
+    Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
+		*)
+		let doc = "Give verbose output." in
+    let verbose = Uslog.Debug, Arg.info ["v"; "verbose"] ~docs ~doc in
+    Arg.(last & vflag_all [Uslog.Info] [quiet; verbose])
+  in
+  Term.(const g_copts $ verb)
+
 
 (* Commands *)
 
@@ -158,15 +195,14 @@ let default_cmd =
   let exits = Term.default_exits in
   let man = help_secs in
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ copts_t)),
-  Term.info "darcs" ~version:"%%VERSION%%" ~doc ~sdocs ~exits ~man
+  Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 let cmds = [initialize_cmd; record_cmd; help_cmd]
 
 
-
 (*----------------------------------------------------------------------------*)
 let main () =
-		Term.(exit @@ eval_choice default_cmd cmds);
+	Term.(exit @@ eval_choice default_cmd cmds);
 		()
 	;;
 
