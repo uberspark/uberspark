@@ -27,10 +27,11 @@ type copts = { debug : bool; verb : verb; prehook : string option }
 
 type g_copts = { log_level : Uslog.log_level}
 
-(*
+
 let str = Printf.sprintf
 let opt_str sv = function None -> "None" | Some v -> str "Some(%s)" (sv v)
 let opt_str_str = opt_str (fun s -> s)
+(*
 let verb_str = function
   | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
 *)
@@ -55,12 +56,13 @@ let initialize_new g_copts repodir =
 	Printf.printf "%arepodir = %s\n" pr_g_copts g_copts repodir;
 	()
 ;;
+*)
 
 let record copts name email all ask_deps files = Printf.printf
     "%aname = %s\nemail = %s\nall = %B\nask-deps = %B\nfiles = %s\n"
-    pr_copts copts (opt_str_str name) (opt_str_str email) all ask_deps
+    pr_g_copts copts (opt_str_str name) (opt_str_str email) all ask_deps
     (String.concat ", " files)
-*)
+
 
 
 
@@ -140,38 +142,25 @@ let initialize_cmd =
   Term.info "initialize" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 *)
 
-	(*
-let record_cmd =
-  let pname =
-    let doc = "Name of the patch." in
-    Arg.(value & opt (some string) None & info ["m"; "patch-name"] ~docv:"NAME"
-           ~doc)
+(* kicks in when uberspark uobj ... is issued *)
+let cmd_uobj =
+  let build =
+    let doc = "Build the uobj binary." in
+    Arg.(value & flag & info ["b"; "build"] ~doc)
   in
-  let author =
-    let doc = "Specifies the author's identity." in
-    Arg.(value & opt (some string) None & info ["A"; "author"] ~docv:"EMAIL"
-           ~doc)
+  let path =
+    let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
+    Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
   in
-  let all =
-    let doc = "Answer yes to all patches." in
-    Arg.(value & flag & info ["a"; "all"] ~doc)
-  in
-  let ask_deps =
-    let doc = "Ask for extra dependencies." in
-    Arg.(value & flag & info ["ask-deps"] ~doc)
-  in
-  let files = Arg.(value & (pos_all file) [] & info [] ~docv:"FILE or DIR") in
-  let doc = "create a patch from unrecorded changes" in
+  let doc = "verify, build and/or manage uobjs" in
   let exits = Term.default_exits in
   let man =
     [`S Manpage.s_description;
-     `P "Creates a patch from changes in the working tree. If you specify
-         a set of files ...";
+     `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
-  Term.(const record $ copts_t $ pname $ author $ all $ ask_deps $ files),
-  Term.info "record" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
-*)
+  Term.(const Cmd_uobj.handler_uobj $ g_copts_t $ build $ path),
+  Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when uberspark --help or uberspark help --help is issued *)
 let cmd_help =
@@ -199,7 +188,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* all our additional commands *)	
-let cmd_additions = [cmd_help]
+let cmd_additions = [cmd_uobj; cmd_help]
 
 
 (*----------------------------------------------------------------------------*)
