@@ -1,4 +1,4 @@
-(* uberspark front-end common types *)
+(* uberspark front-end (command agnostic) common options handling *)
 (* author: amit vasudevan (amitvasudevan@acm.org) *)
 
 

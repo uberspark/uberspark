@@ -16,7 +16,7 @@ let pr_g_copts oc copts =
 
 let handler_uobj copts build path = 
   Printf.printf "build=%B" build; print_newline ();
-  (*Printf.printf "%a"  pr_g_copts copts; print_newline();*)
+  Printf.printf "%a"  Commonopts.pr_g_copts copts; print_newline();
   (*Printf.printf "path = %s\n" path;*)
   match path with
   | None -> Printf.printf "none"; print_newline ();
