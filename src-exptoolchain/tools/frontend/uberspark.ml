@@ -121,6 +121,13 @@ let g_copts_t =
   Term.(const g_copts $ verb)
 
 
+let exits = [ 
+							Term.exit_info ~doc:"on success." Cmdliner.Term.exit_status_success;
+							Term.exit_info ~doc:"on general errors." 1;
+							Term.exit_info ~doc:"on command line parsing errors." Cmdliner.Term.exit_status_cli_error;
+							Term.exit_info ~doc:"on unexpected internal errors." Cmdliner.Term.exit_status_internal_error;
+		];;
+
 (* Commands *)
 
 (*
@@ -153,7 +160,7 @@ let cmd_uobj =
     Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
   in
   let doc = "verify, build and/or manage uobjs" in
-  let exits = Term.default_exits in
+  (*let exits = Term.default_exits in*)
   let man =
     [`S Manpage.s_description;
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -169,7 +176,7 @@ let cmd_help =
     Arg.(value & pos 0 (some string) None & info [] ~docv:"TOPIC" ~doc)
   in
   let doc = "display help about uberspark and uberspark commands" in
-  let exits = Term.default_exits in
+  (*let exits = Term.default_exits in*)
   let man =
     [`S Manpage.s_description;
      `P "Prints help about uberspark commands and other subjects...";
@@ -182,7 +189,7 @@ let cmd_help =
 let cmd_default =
   let doc = "enforcing verifiable object abstractions for commodity system software stacks" in
   let sdocs = Manpage.s_common_options in
-  let exits = Term.default_exits in
+  (* let exits = Term.default_exits in *)
   let man = help_secs in
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ g_copts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
