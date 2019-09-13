@@ -1,18 +1,10 @@
 (*
-	uberspark log module
+	uberspark logging module
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
 module Uslog =
 	struct
-  (*
-		let uslog_testnum = ref 0
-
-		let uslog_log () = 
-			print_int !uslog_testnum;
-			print_newline ();
-			()
-		*)
 		
 	type log_level =
   	  | None
@@ -57,5 +49,43 @@ module Uslog =
 						end
 		in
     Printf.ksprintf do_log
+
+
+	let log ?(tag = "") ?(lvl = Info) =
+		let do_log str =
+				if (ord lvl) >= !current_level then
+						begin
+							if (ord lvl) == (ord Stdoutput) then
+								begin
+									print_string str;
+									print_newline ();							
+								end
+							else
+								begin
+									if (tag <> "") then
+										begin
+											print_string "[";
+											print_string tag;
+											print_string "] ";
+										end
+									;
+									
+									if (ord lvl) == !error_level then
+											print_string "[ERROR] ";
+									
+									print_string str;
+									print_newline ();
+
+									if (ord lvl) == !error_level then
+										begin
+											print_string " ";
+											print_newline ();
+										end
+									;
+								end
+						end
+		in
+		Printf.ksprintf do_log
+	
 
 	end
