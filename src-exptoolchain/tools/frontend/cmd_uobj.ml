@@ -7,12 +7,18 @@ open Cmdliner
 (* handler for uobj command *)
 
 let handler_uobj copts build path = 
-  Printf.printf "build=%B\n" build;
+  Printf.printf "build=%B" build; print_newline ();
   (*Printf.printf "log_level = %u\n"  (Uslog.ord copts.log_level);*)
   (*Printf.printf "path = %s\n" path;*)
   match path with
-  | None -> Printf.printf "none\n"
-  | Some p -> Printf.printf "specified: %s\n" p
+  | None -> Printf.printf "none"; print_newline ();
+      `Error (true, "one of build, verify must be specified")
+
+  | Some p -> Printf.printf "specified: %s" p; print_newline();
+      `Ok ()
   ;
-  ()
+(* )  let page = ("RESULT", 7, "", "", ""), [`S "RESULT"; `P "Say something";] in
+  `Ok (Cmdliner.Manpage.print `Plain Format.std_formatter page)
+*)
+(* `Error (false, "Whatcha") *)
 ;;

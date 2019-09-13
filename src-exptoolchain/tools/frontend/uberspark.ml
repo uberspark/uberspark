@@ -159,7 +159,7 @@ let cmd_uobj =
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
-  Term.(const Cmd_uobj.handler_uobj $ g_copts_t $ build $ path),
+  Term.(ret (const Cmd_uobj.handler_uobj $ g_copts_t $ build $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when uberspark --help or uberspark help --help is issued *)
