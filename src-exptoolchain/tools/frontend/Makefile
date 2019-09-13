@@ -22,7 +22,8 @@ MODULE_PACKAGES += -package usbin
 MODULE_PACKAGES += -package cmdliner
 
 
-MODULE_SOURCES := cmd_help.ml
+MODULE_SOURCES := commonopts.ml
+MODULE_SOURCES += cmd_help.ml
 MODULE_SOURCES += cmd_uobj.ml
 MODULE_SOURCES += uberspark.ml
 

@@ -25,7 +25,6 @@ let log_mpf = "uberspark";;
 type copts = { debug : bool; verb : verb; prehook : string option }
 *)
 
-type g_copts = { log_level : Uslog.log_level}
 
 
 let str = Printf.sprintf
@@ -36,10 +35,6 @@ let verb_str = function
   | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
 *)
 
-let pr_g_copts oc copts = 
-	Printf.fprintf oc "log_level = %u\n" (Uslog.ord copts.log_level);
-	();
-;;
 
 (*
 let pr_copts oc copts = Printf.fprintf oc
@@ -57,12 +52,12 @@ let initialize_new g_copts repodir =
 	()
 ;;
 *)
-
+(*
 let record copts name email all ask_deps files = Printf.printf
     "%aname = %s\nemail = %s\nall = %B\nask-deps = %B\nfiles = %s\n"
     pr_g_copts copts (opt_str_str name) (opt_str_str email) all ask_deps
     (String.concat ", " files)
-
+*)
 
 
 
@@ -83,7 +78,6 @@ let help_secs = [
 (* let copts debug verb prehook = { debug; verb; prehook };;
 *)
 
-let g_copts log_level = { log_level };;
 
 (*
 let copts_t =
@@ -106,19 +100,6 @@ let copts_t =
   Term.(const copts $ debug $ verb $ prehook)
 *)
 
-let g_copts_t =
-  let docs = Manpage.s_common_options in
-  let verb =
-    let doc = "Suppress all informational output." in
-    let quiet = Uslog.None, Arg.info ["q"; "quiet"] ~docs ~doc in
-    (*let doc = "Give verbose output." in
-    Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
-		*)
-		let doc = "Give verbose output." in
-    let verbose = Uslog.Debug, Arg.info ["v"; "verbose"] ~docs ~doc in
-    Arg.(last & vflag_all [Uslog.Info] [quiet; verbose])
-  in
-  Term.(const g_copts $ verb)
 
 
 let exits = [ 
@@ -166,7 +147,7 @@ let cmd_uobj =
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_uobj.handler_uobj $ g_copts_t $ build $ path)),
+  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.g_copts_t $ build $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when uberspark --help or uberspark help --help is issued *)
@@ -182,7 +163,7 @@ let cmd_help =
      `P "Prints help about uberspark commands and other subjects...";
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_help.handler_help $ g_copts_t $ Arg.man_format $ Term.choice_names $topic)),
+  Term.(ret (const Cmd_help.handler_help $ Commonopts.g_copts_t $ Arg.man_format $ Term.choice_names $topic)),
   Term.info "help" ~doc ~exits ~man
 
 (* kicks in when user just issues uberspark without any parameters *)
@@ -191,7 +172,7 @@ let cmd_default =
   let sdocs = Manpage.s_common_options in
   (* let exits = Term.default_exits in *)
   let man = help_secs in
-  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ g_copts_t)),
+  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.g_copts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* all our additional commands *)	
