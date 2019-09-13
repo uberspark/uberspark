@@ -14,7 +14,11 @@ let pr_g_copts oc copts =
 
 (* handler for uobj command *)
 
-let handler_uobj copts build path = 
+let handler_uobj 
+  (copts : Commonopts.g_copts)
+  (build : bool)
+  (path : 'a option) = 
+  Uslog.current_level := (Uslog.ord copts.log_level);
   Printf.printf "build=%B" build; print_newline ();
   Uslog.log "build=%B" build;
   Printf.printf "%a"  Commonopts.pr_g_copts copts; print_newline();
