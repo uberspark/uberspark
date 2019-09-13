@@ -3,12 +3,20 @@
 
 open Uslog
 open Cmdliner
+(*
+type g_copts = { log_level : Uslog.log_level}
+
+let pr_g_copts oc copts = 
+	Printf.fprintf oc "log_level = %u\n" (Uslog.ord copts.log_level);
+	();
+;;
+*)
 
 (* handler for uobj command *)
 
 let handler_uobj copts build path = 
   Printf.printf "build=%B" build; print_newline ();
-  (*Printf.printf "log_level = %u\n"  (Uslog.ord copts.log_level);*)
+  (*Printf.printf "%a"  pr_g_copts copts; print_newline();*)
   (*Printf.printf "path = %s\n" path;*)
   match path with
   | None -> Printf.printf "none"; print_newline ();
