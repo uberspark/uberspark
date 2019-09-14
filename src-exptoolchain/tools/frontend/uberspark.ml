@@ -16,55 +16,7 @@ open Usbin
 
 open Cmdliner
 
-let log_mpf = "uberspark";;
-
-
-
-
-(* type verb = Normal | Quiet | Verbose
-type copts = { debug : bool; verb : verb; prehook : string option }
-*)
-
-
-
-let str = Printf.sprintf
-let opt_str sv = function None -> "None" | Some v -> str "Some(%s)" (sv v)
-let opt_str_str = opt_str (fun s -> s)
-(*
-let verb_str = function
-  | Normal -> "normal" | Quiet -> "quiet" | Verbose -> "verbose"
-*)
-
-
-(*
-let pr_copts oc copts = Printf.fprintf oc
-    "debug = %B\nverbosity = %s\nprehook = %s\n"
-    copts.debug (verb_str copts.verb) (opt_str_str copts.prehook)
-
-
-
-
-let initialize copts repodir = Printf.printf
-    "%arepodir = %s\n" pr_copts copts repodir
-
-let initialize_new g_copts repodir = 
-	Printf.printf "%arepodir = %s\n" pr_g_copts g_copts repodir;
-	()
-;;
-*)
-(*
-let record copts name email all ask_deps files = Printf.printf
-    "%aname = %s\nemail = %s\nall = %B\nask-deps = %B\nfiles = %s\n"
-    pr_g_copts copts (opt_str_str name) (opt_str_str email) all ask_deps
-    (String.concat ", " files)
-*)
-
-
-
-
-
 (* help sections common to all commands *)
-
 let help_secs = [
  `S Manpage.s_common_options;
  `P "These options are common to all commands.";
@@ -73,35 +25,8 @@ let help_secs = [
  `P "E.g., `$(mname) uobj --help' for help on uobject related options.";
  `S "ISSUES"; `P "Visit https://forums.uberspark.org to discuss issues and find potential solutions.";]
 
-(* options common to all commands *)
 
-(* let copts debug verb prehook = { debug; verb; prehook };;
-*)
-
-
-(*
-let copts_t =
-  let docs = Manpage.s_common_options in
-  let debug =
-    let doc = "Give only debug output." in
-    Arg.(value & flag & info ["debug"] ~docs ~doc)
-  in
-  let verb =
-    let doc = "Suppress informational output." in
-    let quiet = Quiet, Arg.info ["q"; "quiet"] ~docs ~doc in
-    let doc = "Give verbose output." in
-    let verbose = Verbose, Arg.info ["v"; "verbose"] ~docs ~doc in
-    Arg.(last & vflag_all [Normal] [quiet; verbose])
-  in
-  let prehook =
-    let doc = "Specify command to run before this $(mname) command." in
-    Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
-  in
-  Term.(const copts $ debug $ verb $ prehook)
-*)
-
-
-
+(* exit codes *)
 let exits = [ 
 							Term.exit_info ~doc:"on success." Cmdliner.Term.exit_status_success;
 							Term.exit_info ~doc:"on general errors." 1;
@@ -110,25 +35,6 @@ let exits = [
 		];;
 
 (* Commands *)
-
-(*
-let initialize_cmd =
-  let repodir =
-    let doc = "Run the program in repository directory $(docv)." in
-    Arg.(value & opt file Filename.current_dir_name & info ["repodir"]
-           ~docv:"DIR" ~doc)
-  in
-  let doc = "make the current directory a repository" in
-  let exits = Term.default_exits in
-  let man = [
-    `S Manpage.s_description;
-    `P "Turns the current directory into a Darcs repository. Any
-       existing files and subdirectories become ...";
-    `Blocks help_secs; ]
-  in
-  Term.(const initialize $ copts_t $ repodir),
-  Term.info "initialize" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
-*)
 
 (* kicks in when uberspark uobj ... is issued *)
 let cmd_uobj =
@@ -141,7 +47,6 @@ let cmd_uobj =
     Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
   in
   let doc = "verify, build and/or manage uobjs" in
-  (*let exits = Term.default_exits in*)
   let man =
     [`S Manpage.s_description;
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -150,33 +55,15 @@ let cmd_uobj =
   Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
-(* kicks in when uberspark --help or uberspark help --help is issued *)
-(*let cmd_help =
-  let topic =
-    let doc = "The topic to get help on. `topics' lists the topics." in
-    Arg.(value & pos 0 (some string) None & info [] ~docv:"TOPIC" ~doc)
-  in
-  let doc = "display help about uberspark and uberspark commands" in
-  (*let exits = Term.default_exits in*)
-  let man =
-    [`S Manpage.s_description;
-     `P "Prints help about uberspark commands and other subjects...";
-     `Blocks help_secs; ]
-  in
-  Term.(ret (const Cmd_help.handler_help $ Commonopts.opts_t $ Arg.man_format $ Term.choice_names $topic)),
-  Term.info "help" ~doc ~exits ~man
-*)
-
 (* kicks in when user just issues uberspark without any parameters *)
 let cmd_default =
   let doc = "enforcing verifiable object abstractions for commodity system software stacks" in
   let sdocs = Manpage.s_common_options in
-  (* let exits = Term.default_exits in *)
   let man = help_secs in
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.opts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
-(* all our additional commands *)	
+(* additional commands *)	
 let cmd_additions = [cmd_uobj]
 
 
