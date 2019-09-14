@@ -69,8 +69,8 @@ let help_secs = [
  `S Manpage.s_common_options;
  `P "These options are common to all commands.";
  `S "MORE HELP";
- `P "Use `$(mname) $(i,COMMAND) --help' or ``$(mname) help $(i,COMMAND)' for help on a single command.";`Noblank;
- `P "E.g., `$(mname) uobj --help' or `$(mname) help uobj' for help on uobject related options.";
+ `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command.";`Noblank;
+ `P "E.g., `$(mname) uobj --help' for help on uobject related options.";
  `S "ISSUES"; `P "Visit https://forums.uberspark.org to discuss issues and find potential solutions.";]
 
 (* options common to all commands *)
@@ -151,7 +151,7 @@ let cmd_uobj =
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when uberspark --help or uberspark help --help is issued *)
-let cmd_help =
+(*let cmd_help =
   let topic =
     let doc = "The topic to get help on. `topics' lists the topics." in
     Arg.(value & pos 0 (some string) None & info [] ~docv:"TOPIC" ~doc)
@@ -165,6 +165,7 @@ let cmd_help =
   in
   Term.(ret (const Cmd_help.handler_help $ Commonopts.opts_t $ Arg.man_format $ Term.choice_names $topic)),
   Term.info "help" ~doc ~exits ~man
+*)
 
 (* kicks in when user just issues uberspark without any parameters *)
 let cmd_default =
@@ -176,7 +177,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* all our additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_help]
+let cmd_additions = [cmd_uobj]
 
 
 (*----------------------------------------------------------------------------*)
