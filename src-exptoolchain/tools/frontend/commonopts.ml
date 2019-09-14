@@ -5,17 +5,12 @@
 open Uslog
 open Cmdliner
 
-type g_copts = { log_level : Uslog.log_level}
+type opts = { log_level : Uslog.log_level}
 
 
-let g_copts log_level = { log_level };;
+let opts log_level = { log_level };;
 
-let pr_g_copts oc copts = 
-	Printf.fprintf oc "log_level = %u\n" (Uslog.ord copts.log_level);
-	();
-;;
-
-let g_copts_t =
+let opts_t =
   let docs = Manpage.s_common_options in
   let verb =
     let doc = "Suppress all informational output." in
@@ -27,4 +22,4 @@ let g_copts_t =
     let verbose = Uslog.Debug, Arg.info ["v"; "verbose"] ~docs ~doc in
     Arg.(last & vflag_all [Uslog.Info] [quiet; verbose])
   in
-  Term.(const g_copts $ verb)
+  Term.(const opts $ verb)

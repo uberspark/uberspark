@@ -147,7 +147,7 @@ let cmd_uobj =
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.g_copts_t $ build $ path)),
+  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when uberspark --help or uberspark help --help is issued *)
@@ -163,7 +163,7 @@ let cmd_help =
      `P "Prints help about uberspark commands and other subjects...";
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_help.handler_help $ Commonopts.g_copts_t $ Arg.man_format $ Term.choice_names $topic)),
+  Term.(ret (const Cmd_help.handler_help $ Commonopts.opts_t $ Arg.man_format $ Term.choice_names $topic)),
   Term.info "help" ~doc ~exits ~man
 
 (* kicks in when user just issues uberspark without any parameters *)
@@ -172,7 +172,7 @@ let cmd_default =
   let sdocs = Manpage.s_common_options in
   (* let exits = Term.default_exits in *)
   let man = help_secs in
-  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.g_copts_t)),
+  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.opts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* all our additional commands *)	
