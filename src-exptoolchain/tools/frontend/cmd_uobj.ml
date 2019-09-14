@@ -18,7 +18,7 @@ let handler_uobj
   (copts : Commonopts.opts)
   (build : bool)
   (path : 'a option) = 
-  Uslog.current_level := (Uslog.ord copts.log_level);
+  Commoninit.initialize copts;
   Printf.printf "build=%B" build; print_newline ();
   Uslog.log "build=%B" build;
   (*Printf.printf "path = %s\n" path;*)
