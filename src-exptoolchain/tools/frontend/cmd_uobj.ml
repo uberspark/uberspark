@@ -19,14 +19,13 @@ let handler_uobj
   (build : bool)
   (path : 'a option) = 
   Commoninit.initialize copts;
-  Printf.printf "build=%B" build; print_newline ();
   Uslog.log "build=%B" build;
   (*Printf.printf "path = %s\n" path;*)
   match path with
-  | None -> Printf.printf "none"; print_newline ();
+  | None -> Uslog.log "path=none";
       `Error (true, "one of build, verify must be specified")
 
-  | Some p -> Printf.printf "specified: %s" p; print_newline();
+  | Some p -> Uslog.log "path: %s" p;
       `Ok ()
   ;
 (* )  let page = ("RESULT", 7, "", "", ""), [`S "RESULT"; `P "Say something";] in
