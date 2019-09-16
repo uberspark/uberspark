@@ -7,7 +7,7 @@ open Cmdliner
 let initialize 
   (copts : Commonopts.opts) = 
   
-  Uslog.current_level := (Uslog.ord copts.log_level);
+  Uslog.current_level := copts.log_level;
 
   Uslog.log "enforcing verifiable object abstractions for commodity system software stacks";
   Uslog.log "front-end tool";

@@ -5,21 +5,38 @@
 open Uslog
 open Cmdliner
 
-type opts = { log_level : Uslog.log_level}
+type opts = { log_level : int} 
 
+(* fold verbosity and log level into a single logging level *)
+let handler_opts 
+  (verb : int)
+  (loglvl : int)
+  : opts = 
+  if verb > loglvl then
+    begin
+      let log_level = verb in
+        { log_level }
+    end
+  else
+    begin
+      let log_level = loglvl in
+        { log_level }
+    end
+  ;
+;;
 
-let opts log_level = { log_level };;
-
+(* handle common options *)
 let opts_t =
   let docs = Manpage.s_common_options in
   let verb =
-    let doc = "Suppress all informational output." in
-    let quiet = Uslog.None, Arg.info ["q"; "quiet"] ~docs ~doc in
-    (*let doc = "Give verbose output." in
-    Arg.(value & opt (some string) None & info ["prehook"] ~docs ~doc)
-		*)
-		let doc = "Give verbose output." in
-    let verbose = Uslog.Debug, Arg.info ["v"; "verbose"] ~docs ~doc in
-    Arg.(last & vflag_all [Uslog.Info] [quiet; verbose])
+    let doc = "Suppress all output logging. Same as `$(b,--log-level)=100'" in
+    let quiet = (Uslog.ord Uslog.None), Arg.info ["q"; "quiet"] ~docs ~doc in
+		let doc = "Give verbose output. Same as `$(b,--log-level)=20'" in
+    let verbose = (Uslog.ord Uslog.Debug), Arg.info ["v"; "verbose"] ~docs ~doc in
+      Arg.(last & vflag_all [(Uslog.ord Uslog.Info)] [quiet; verbose])
   in
-  Term.(const opts $ verb)
+  let loglvl =
+    let doc = "Set output logging level to $(docv). All output log messages smaller than $(docv) will be printed to the standard output."  in
+      Arg.(value & opt int (Uslog.ord Uslog.Info) & info ["log-level"] ~docs ~docv:"VAL" ~doc)
+  in
+  Term.(const handler_opts $ verb $ loglvl)
