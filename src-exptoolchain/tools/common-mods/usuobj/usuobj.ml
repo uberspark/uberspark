@@ -8,7 +8,7 @@ open Usconfig
 open Uslog
 open Usmanifest
 open Usosservices
-open Usextbinutils
+(*open Usextbinutils*)
 (*open Usuobjgen*)
 
 module Usuobj =
@@ -254,7 +254,10 @@ class uobject = object(self)
 		(* usmf_filename = canonical uobj manifest filename *)
 		(* keep_temp_files = true if temporary files need to be preserved *)
 		(*--------------------------------------------------------------------------*)
-		method parse_manifest usmf_filename keep_temp_files =
+		method parse_manifest 
+			(usmf_filename : string)
+			(keep_temp_files : bool) 
+			: bool =
 			
 				
 			(* store filename and uobj dir absolute pathname *)
@@ -575,7 +578,7 @@ class uobject = object(self)
 		method compile_cfile_list cfile_list cc_includedirs_list cc_defines_list =
 			List.iter (fun x ->  
 									Uslog.logf log_tag Uslog.Info "Compiling: %s" x;
-									let (pestatus, pesignal, cc_outputfilename) = 
+									(*let (pestatus, pesignal, cc_outputfilename) = 
 										(Usextbinutils.compile_cfile x (x ^ ".o") cc_includedirs_list cc_defines_list) in
 											begin
 												if (pesignal == true) || (pestatus != 0) then
@@ -590,8 +593,9 @@ class uobject = object(self)
 													begin
 															Uslog.logf log_tag Uslog.Info "Compiled %s successfully" x;
 													end
-											end
+											end*)
 								) cfile_list;
+								
 			()
 		;
 
@@ -698,6 +702,7 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		(* generate uobj sentinels *)
 		(*--------------------------------------------------------------------------*)
+		(*
 		method generate_sentinels 
 			() = 
 			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
@@ -743,7 +748,7 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "Generated sentinels.";
 			()
 		;
-
+		
 
 		(*--------------------------------------------------------------------------*)
 		(* generate uobj sentinels lib *)
@@ -795,7 +800,7 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
 			()
 		;
-
+		*)
 
 		(*--------------------------------------------------------------------------*)
 		(* compile uobj sentinels *)
@@ -885,10 +890,12 @@ class uobject = object(self)
 			self#generate_uobj_hfile ();
 	
 			(* generate sentinels *)
-			self#generate_sentinels ();
+			(* TBD: hook in later *)
+			(* self#generate_sentinels (); *)
 
 			(* generate sentinels lib *)
-			self#generate_sentinels_lib ();
+			(* TBD: hook in later *)
+			(* self#generate_sentinels_lib (); *)
 
 			(* compile all sentinels *)							
 			self#compile_sentinels ();
@@ -896,10 +903,13 @@ class uobject = object(self)
 			(* compile sentinels lib *)
 			self#compile_sentinels_lib ();						
 
-			(* compile all the cfiles *)							
+			(* compile all the cfiles *)
+			(* TBD: hook in later *)
+			(*							
 			self#compile_cfile_list (!o_usmf_sources_c_files) 
 					(Usconfig.get_std_incdirs ())
 					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
+			*)			
 
 			Uslog.logf log_tag Uslog.Info "Compilation finished.\r\n";
 			()

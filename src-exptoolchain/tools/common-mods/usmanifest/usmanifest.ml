@@ -10,7 +10,7 @@ open Ustypes
 open Usconfig
 open Uslog
 open Usosservices
-open Usextbinutils
+(*open Usextbinutils*)
 
 
 module Usmanifest =
@@ -22,7 +22,7 @@ module Usmanifest =
 	(* read manifest file into json object *)
 	(*--------------------------------------------------------------------------*)
 
-	let read_manifest usmf_filename keep_temp_files = 
+(*	let read_manifest usmf_filename keep_temp_files = 
 		let retval = ref false in
 	  let retjson = ref `Null in
 		let usmf_filename_in_pp = (usmf_filename ^ ".c") in
@@ -58,6 +58,26 @@ module Usmanifest =
 	
 		(!retval, !retjson)
 	;;
+*)
+
+
+	let read_manifest usmf_filename keep_temp_files = 
+		let retval = ref false in
+	  let retjson = ref `Null in
+					try
+				
+						 let uobj_mf_json = Yojson.Basic.from_file usmf_filename in
+								retval := true;
+								retjson := uobj_mf_json;
+								
+					with Yojson.Json_error s -> 
+							Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
+							retval := false;
+					;
+	
+		(!retval, !retjson)
+	;;
+
 
 
 	(*--------------------------------------------------------------------------*)

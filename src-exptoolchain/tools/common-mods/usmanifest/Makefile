@@ -7,7 +7,7 @@
 
 .PHONY: all
 all: 
-	$(OCAMLOPT) -ccopt -static -c -package yojson -package str -package unix -package ustypes -package usconfig -package uslog -package usosservices -package usextbinutils -linkpkg usmanifest.ml
+	$(OCAMLOPT) -ccopt -static -c -package yojson -package str -package unix -package ustypes -package usconfig -package uslog -package usosservices -linkpkg usmanifest.ml
 	ocamlfind remove usmanifest 
 	ocamlfind install usmanifest META usmanifest.cmi usmanifest.cmx usmanifest.o 
 

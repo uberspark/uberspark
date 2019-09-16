@@ -8,11 +8,13 @@ open Filename
 open Uslog
 open Usconfig
 open Usosservices
-open Libusmf
+(*open Libusmf
 open Usuobjlib
+*)
 open Usuobj
-open Usuobjcollection
+(*open Usuobjcollection
 open Usbin
+*)
 
 open Cmdliner
 
