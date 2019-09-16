@@ -16,19 +16,19 @@ module Uslog =
 
 	let ord lvl =
     match lvl with
-		| None      -> 100
-		| Stdoutput -> 60
-		| Error     -> 50
-    | Warn      -> 40
-    | Info      -> 30
-		| Debug     -> 20
+		| None      -> 0
+		| Stdoutput -> 1
+		| Error     -> 2
+    | Warn      -> 3
+    | Info      -> 4
+		| Debug     -> 5
 
 	let current_level = ref (ord Info)
 	let error_level = ref (ord Error)
 	
 	let logf name lvl =
     let do_log str =
-        if (ord lvl) >= !current_level then
+        if (ord lvl) <= !current_level then
             begin
 							if (ord lvl) == (ord Stdoutput) then
 								begin
@@ -53,7 +53,7 @@ module Uslog =
 
 	let log ?(tag = "uberspark") ?(lvl = Info) =
 		let do_log str =
-				if (ord lvl) >= !current_level then
+				if (ord lvl) <= !current_level then
 						begin
 							if (ord lvl) == (ord Stdoutput) then
 								begin
