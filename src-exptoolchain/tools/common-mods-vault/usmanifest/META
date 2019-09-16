@@ -1,0 +1,6 @@
+name="usmanifest"
+description="uberSpark manifest interface"
+version="1.0"
+requires=""
+archive(byte)="usmanifest.cmo"
+archive(native)="usmanifest.cmx"
