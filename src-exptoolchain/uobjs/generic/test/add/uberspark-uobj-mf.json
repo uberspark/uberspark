@@ -1,0 +1,62 @@
+/*
+add uobj json manifest
+author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+	/* header */
+	"hdr":{
+		"type" : "uobj",
+		"subtype" : "",
+		"namespace" : "/uberspark/uobjs/generic/test/add",
+		"platform" : "generic",
+		"cpu" : "generic",
+		"arch" : "generic"
+	},
+
+	/* sources */
+	"uobj-sources" : {
+		"h-files": [ "typedefs.h", "constdefs.h" ],
+		"c-files": [ "main.c" ],
+		"casm-files": [ ]
+	},
+	
+	/* public methods */
+	"uobj-publicmethods" : {
+		"add" : [
+			"uint32_t",
+			"(uint32_t param1, uint32_t param2)", 
+			"2" 
+		]
+	},
+
+	"uobj-callees" : {
+		/* "myuobj": ["one", "two", "three"] */
+	},
+	
+	"uobj-exitcallees": [
+		"untrusted_func_1"
+	] 
+
+/*
+	,
+		
+	"uobj-binary" : {
+		"uobj-sections": {
+			"uobj_hdr" 		: [ "rw", USMF_STR(0x1000), ".hdr" ],
+			"uobj_ustack" 	: [ "rw", USMF_STR(0x100000), ".ustack" ],
+			"uobj_tstack" 	: [ "rw", USMF_STR(0x100000), ".tstack" ],
+			"uobj_code" 	: [ "rx", USMF_STR(0x1000), ".text" ],
+			"uobj_data" 	: [ "rw", USMF_STR(0x1000), ".data", ".rodata*" ],
+			"uobj_stack" 	: [ "rw", USMF_STR(0x1000), ".stack" ],
+			"uobj_dmadata" 	: [ "rw", USMF_STR(0x1000), ".dmadata" ]
+		}
+
+	}
+*/	
+
+	
+}
+
+
+
