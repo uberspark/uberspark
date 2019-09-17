@@ -50,16 +50,23 @@ class uobject = object(self)
 		val d_path_ns = ref "";
 		method get_d_path_ns = !d_path_ns;
 
-		
+		val d_hdr: Usmanifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
+		method get_d_hdr = d_hdr;
+
+
+		val d_sources_h_file_list: string list ref = ref [];
+		method get_d_sources_h_file_list = !d_sources_h_file_list;
+
+		val d_sources_c_file_list: string list ref = ref [];
+		method get_d_sources_c_file_list = !d_sources_c_file_list;
+
+		val d_sources_casm_file_list: string list ref = ref [];
+		method get_d_sources_casm_file_list = !d_sources_casm_file_list;
+
+
+
 		val usmf_type_usuobj = "uobj";
 
-	  val o_hdr: Usmanifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
-
-		method set_hdr 
-			(hdr : Usmanifest.hdr_t) =
-				o_hdr = hdr;
-			()
-		;
 
 	
 	
@@ -81,12 +88,6 @@ class uobject = object(self)
 		val o_usmf_hdr_arch = ref "";
 		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
 
-		val o_usmf_sources_h_files: string list ref = ref [];
-		method get_o_usmf_sources_h_files = !o_usmf_sources_h_files;
-		val o_usmf_sources_c_files: string list ref = ref [];
-		method get_o_usmf_sources_c_files = !o_usmf_sources_c_files;
-		val o_usmf_sources_casm_files: string list ref = ref [];
-		method get_o_usmf_sources_casm_files = !o_usmf_sources_casm_files;
 
 	
 
@@ -155,6 +156,67 @@ class uobject = object(self)
 		val o_calleemethods_hashtbl = ref ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 
 		val o_exitcallees_list : string list ref = ref [];
+
+
+		
+		(*--------------------------------------------------------------------------*)
+		(* parse manifest node "uobj-sources" *)
+		(* return true on successful parse, false if not *)
+		(* return: if true then store lists of h-files, c-files and casm files *)
+		(*--------------------------------------------------------------------------*)
+		method parse_node_mf_uobj_sources mf_json =
+			let retval = ref true in
+			try
+				let open Yojson.Basic.Util in
+					let mf_uobj_sources_json = mf_json |> member "uobj-sources" in
+					if mf_uobj_sources_json != `Null then
+							begin
+
+								let mf_hfiles_json = mf_uobj_sources_json |> member "h-files" in
+									if mf_hfiles_json != `Null then
+										begin
+											let hfiles_json_list = mf_hfiles_json |> 
+													to_list in 
+												List.iter (fun x -> d_sources_h_file_list := 
+														!d_sources_h_file_list @ [(x |> to_string)]
+													) hfiles_json_list;
+										end
+									;
+
+								let mf_cfiles_json = mf_uobj_sources_json |> member "c-files" in
+									if mf_cfiles_json != `Null then
+										begin
+											let cfiles_json_list = mf_cfiles_json |> 
+													to_list in 
+												List.iter (fun x -> d_sources_c_file_list := 
+														!d_sources_c_file_list @ [(x |> to_string)]
+													) cfiles_json_list;
+										end
+									;
+
+								let mf_casmfiles_json = mf_uobj_sources_json |> member "casm-files" in
+									if mf_casmfiles_json != `Null then
+										begin
+											let casmfiles_json_list = mf_casmfiles_json |> 
+													to_list in 
+												List.iter (fun x -> d_sources_casm_file_list := 
+														!d_sources_casm_file_list @ [(x |> to_string)]
+													) casmfiles_json_list;
+										end
+									;
+									
+							end
+						;
+						
+			with Yojson.Basic.Util.Type_error _ -> 
+					retval := false;
+			;
+		
+			(!retval)
+		;
+	
+	
+
 
 
 		(*--------------------------------------------------------------------------*)
@@ -283,40 +345,39 @@ class uobject = object(self)
 			
 			if (rval == false) then (false)
 			else
+
 			(* parse hdr node *)
 			let (rval, hdr) =
 								Usmanifest.parse_node_hdr mf_json in
-(*
 			if (rval == false) then (false)
 			else
-			
-			(* sanity check type to be uobj *)
-			if (compare usmf_hdr_type usmf_type_usuobj) <> 0 then (false)
+
+			(* sanity check type to be uobj and store hdr*)
+			if (compare hdr.f_type usmf_type_usuobj) <> 0 then (false)
 			else
 			let dummy = 0 in
 				begin
-					o_usmf_hdr_type := usmf_hdr_type;								
-					o_usmf_hdr_subtype := usmf_hdr_subtype;
-					o_usmf_hdr_id := usmf_hdr_id;
-					o_usmf_hdr_platform := usmf_hdr_platform;
-					o_usmf_hdr_cpu := usmf_hdr_cpu;
-					o_usmf_hdr_arch := usmf_hdr_arch;
+					d_hdr.f_type <- hdr.f_type;								
+					d_hdr.f_namespace <- hdr.f_namespace;
+					d_hdr.f_platform <- hdr.f_platform;
+					d_hdr.f_arch <- hdr.f_arch;
+					d_hdr.f_cpu <- hdr.f_cpu;
 				end;
 
-			(* parse usmf-sources node *)
-			let(rval, usmf_sources_h_files, usmf_source_c_files, usmf_sources_casm_files) = 
-				Usmanifest.parse_node_usmf_sources	mf_json in
+			(* parse uobj-sources node *)
+			let rval = (self#parse_node_mf_uobj_sources mf_json) in
 	
 			if (rval == false) then (false)
 			else
 			let dummy = 0 in
 				begin
-					o_usmf_sources_h_files := usmf_sources_h_files;
-					o_usmf_sources_c_files := usmf_source_c_files;
-					o_usmf_sources_casm_files := usmf_sources_casm_files;
+					Uslog.log "total sources: h files=%u, c files=%u, casm files=%u" 
+						(List.length self#get_d_sources_h_file_list)
+						(List.length self#get_d_sources_c_file_list)
+						(List.length self#get_d_sources_casm_file_list);
 				end;
 
-
+(*
 			(* parse uobj-publicmethods node *)
 			let (rval, uobj_publicmethods_list) = 
 										Usmanifest.parse_node_uobj_publicmethods mf_json in
@@ -658,7 +719,7 @@ class uobject = object(self)
 				Printf.fprintf oc "\n#endif //__%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
 				Printf.fprintf oc "\n";
 				Printf.fprintf oc "\n";
-			) self#get_o_usmf_sources_h_files;
+			) self#get_d_sources_h_file_list;
 
 		  (* plug in sentinel declarations *)
 			Printf.fprintf oc "\n/* sentinel declarations follow */";
@@ -895,8 +956,8 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "Starting compilation in '%s' [%b]\n" build_dir keep_temp_files;
 			
 			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
-						(List.length !o_usmf_sources_c_files) 
-						(List.length !o_usmf_sources_casm_files);
+						(List.length !d_sources_c_file_list) 
+						(List.length !d_sources_casm_file_list);
 
 			(* generate uobj top-level header *)
 			self#generate_uobj_hfile ();

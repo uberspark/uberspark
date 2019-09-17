@@ -11,7 +11,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic"
-=	},
+	},
 
 	/* sources */
 	"uobj-sources" : {

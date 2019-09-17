@@ -81,7 +81,7 @@ module Usmanifest =
 								retjson := mf_json;
 								
 					with Yojson.Json_error s -> 
-							Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
+							Uslog.log ~lvl:Uslog.Error "usmf_read_manifest: ERROR:%s" s;
 							retval := false;
 					;
 	
