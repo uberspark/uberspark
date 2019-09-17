@@ -21,7 +21,7 @@ all:
 	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobjlib && $(MAKE) -w all
 	cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobj && $(MAKE) -w all
 	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobjcollection && $(MAKE) -w all
-	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usbin && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/common-mods/usbin && $(MAKE) -w all
 
 ### cleanup
 .PHONY: clean
@@ -37,4 +37,4 @@ clean:
 	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobjlib && $(MAKE) -w clean
 	cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobj && $(MAKE) -w clean
 	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usuobjcollection && $(MAKE) -w clean
-	#cd $(UBERSPARK_SRCDIR)/tools/common-mods/usbin && $(MAKE) -w clean
+	cd $(UBERSPARK_SRCDIR)/tools/common-mods/usbin && $(MAKE) -w clean

@@ -16,6 +16,16 @@ open Usosservices
 module Usmanifest =
 	struct
 
+	type hdr_t =
+		{
+			f_type         : string;			
+			f_namespace    : string;			
+			f_platform	   : string;
+			f_arch	       : string;
+			f_cpu				   : string;
+		};;
+
+
 	let log_tag = "Usmanifest";;
 
 	(*--------------------------------------------------------------------------*)
@@ -79,9 +89,52 @@ module Usmanifest =
 	;;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* parse common manifest header node; "hdr" *)
+	(* return: true if successfully parsed header node, false if not *)
+	(* if true also return: manifest header node as hdr_t *)
+	(*--------------------------------------------------------------------------*)
+
+	let parse_node_hdr mf_json =
+		let retval = ref false in
+		let mf_hdr_type = ref "" in
+		let mf_hdr_namespace = ref "" in
+		let mf_hdr_platform = ref "" in
+		let mf_hdr_arch = ref "" in
+		let mf_hdr_cpu = ref "" in
+		try
+			let open Yojson.Basic.Util in
+				let json_mf_hdr = mf_json |> member "hdr" in
+				if(json_mf_hdr <> `Null) then
+					begin
+						mf_hdr_type := json_mf_hdr |> member "type" |> to_string;
+						mf_hdr_namespace := json_mf_hdr |> member "namespace" |> to_string;
+						mf_hdr_platform := json_mf_hdr |> member "platform" |> to_string;
+						mf_hdr_arch := json_mf_hdr |> member "arch" |> to_string;
+						mf_hdr_cpu := json_mf_hdr |> member "cpu" |> to_string;
+						retval := true;
+					end
+				;
+
+		with Yojson.Basic.Util.Type_error _ -> 
+				retval := false;
+		;
+
+		{
+			f_type = !mf_hdr_type;
+			f_namespace = !mf_hdr_namespace;
+			f_platform = !mf_hdr_platform;
+			f_arch = !mf_hdr_arch;
+			f_cpu = !mf_hdr_cpu;
+		}
+	;;
+
+
+
+
 
 	(*--------------------------------------------------------------------------*)
-	(* parse manifest node "usmf-hdr" *)
+	(* parse common manifest node "usmf-hdr" *)
 	(* return: true if successfully parsed usmf-hdr, false if not *)
 	(* if true also return: manifest type string; manifest subtype string; *)
 	(* id as string *)
