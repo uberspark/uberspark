@@ -71,14 +71,14 @@ module Usmanifest =
 *)
 
 
-	let read_manifest usmf_filename keep_temp_files = 
+	let read_manifest mf_filename keep_temp_files = 
 		let retval = ref false in
 	  let retjson = ref `Null in
 					try
 				
-						 let uobj_mf_json = Yojson.Basic.from_file usmf_filename in
+						 let mf_json = Yojson.Basic.from_file mf_filename in
 								retval := true;
-								retjson := uobj_mf_json;
+								retjson := mf_json;
 								
 					with Yojson.Json_error s -> 
 							Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
@@ -120,13 +120,13 @@ module Usmanifest =
 				retval := false;
 		;
 
-		{
+		(!retval, {
 			f_type = !mf_hdr_type;
 			f_namespace = !mf_hdr_namespace;
 			f_platform = !mf_hdr_platform;
 			f_arch = !mf_hdr_arch;
 			f_cpu = !mf_hdr_cpu;
-		}
+		})
 	;;
 
 

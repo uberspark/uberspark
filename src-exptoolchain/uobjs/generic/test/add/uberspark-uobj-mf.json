@@ -29,10 +29,12 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		]
 	},
 
+	/* public methods of other uobjs that this uobj invokes */
 	"uobj-callees" : {
 		/* "myuobj": ["one", "two", "three"] */
 	},
 	
+	/* legacy CoSS functions/code that this uobj invokes */
 	"uobj-exitcallees": [
 		"untrusted_func_1"
 	] 

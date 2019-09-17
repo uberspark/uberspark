@@ -40,8 +40,16 @@ struct
 		
 
 class uobject = object(self)
-			
+
 		val log_tag = "Usuobj";
+		val d_ltag = "Usuobj";
+
+		val d_mf_filename = ref "";
+		method get_d_mf_filename = !d_mf_filename;
+
+		val d_path_ns = ref "";
+		method get_d_path_ns = !d_path_ns;
+
 		
 		val usmf_type_usuobj = "uobj";
 
@@ -53,7 +61,8 @@ class uobject = object(self)
 			()
 		;
 
-
+	
+	
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
 		
@@ -95,12 +104,7 @@ class uobject = object(self)
 
 
 
-		val o_usmf_filename = ref "";
-		method get_o_usmf_filename = !o_usmf_filename;
-
-		val o_uobj_dir_abspathname = ref "";
-		method get_o_uobj_dir_abspathname = !o_uobj_dir_abspathname;
-
+	
 
 
 		val o_uobj_build_dirname = ref ".";
@@ -264,27 +268,25 @@ class uobject = object(self)
 		(* keep_temp_files = true if temporary files need to be preserved *)
 		(*--------------------------------------------------------------------------*)
 		method parse_manifest 
-			(usmf_filename : string)
+			(uobj_mf_filename : string)
 			(keep_temp_files : bool) 
 			: bool =
 			
-				
-			(* store filename and uobj dir absolute pathname *)
-			o_usmf_filename := Filename.basename usmf_filename;
-			o_uobj_dir_abspathname := Filename.dirname usmf_filename;
+			(* store filename and uobj path/namespace *)
+			d_mf_filename := Filename.basename uobj_mf_filename;
+			d_path_ns := Filename.dirname uobj_mf_filename;
 			
 
 			(* read manifest JSON *)
 			let (rval, mf_json) = Usmanifest.read_manifest 
-																usmf_filename keep_temp_files in
+																self#get_d_mf_filename keep_temp_files in
 			
 			if (rval == false) then (false)
 			else
-			(* parse usmf-hdr node *)
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
-					usmf_hdr_platform, usmf_hdr_cpu, usmf_hdr_arch) =
-								Usmanifest.parse_node_usmf_hdr mf_json in
-
+			(* parse hdr node *)
+			let (rval, hdr) =
+								Usmanifest.parse_node_hdr mf_json in
+(*
 			if (rval == false) then (false)
 			else
 			
@@ -419,7 +421,8 @@ class uobject = object(self)
 			(* initialize uobj sentinels lib name *)
 			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
-									
+	
+				*)
 			(true)
 		;
 		
@@ -617,7 +620,7 @@ class uobject = object(self)
 
 			(* create uobj hfile *)
 			let uobj_hfilename = 
-					(self#get_o_uobj_dir_abspathname ^ "/" ^ 
+					(self#get_d_path_ns ^ "/" ^ 
 						(Usconfig.get_uobj_hfilename ()) ^ ".h") in
 			let oc = open_out uobj_hfilename in
 			
@@ -633,7 +636,7 @@ class uobject = object(self)
 
 			(* bring in all the contents of the individual h-files *)
 			List.iter (fun x ->
-				let hfilename = (self#get_o_uobj_dir_abspathname ^ "/" ^ x) in 
+				let hfilename = (self#get_d_path_ns ^ "/" ^ x) in 
 				(* Uslog.logf log_tag Uslog.Info "h-file: %s" x; *)
 
 				Printf.fprintf oc "\n#ifndef __%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
@@ -727,7 +730,7 @@ class uobject = object(self)
 					
 				let (pp_retval, _) = Usextbinutils.preprocess 
 											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
-											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_fname) 
+											(self#get_d_path_ns ^ "/" ^ target_sentinel_fname) 
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
 												Usconfig.get_std_define_asm () @
@@ -778,7 +781,7 @@ class uobject = object(self)
 				
 				let (pp_retval, _) = Usextbinutils.preprocess 
 											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
-											(self#get_o_uobj_dir_abspathname ^ "/" ^ target_sentinel_libfname) 
+											(self#get_d_path_ns ^ "/" ^ target_sentinel_libfname) 
 											(Usconfig.get_std_incdirs ())
 											(Usconfig.get_std_defines () @ 
 												Usconfig.get_std_define_asm () @
@@ -1059,16 +1062,16 @@ class uobject = object(self)
 				;
 
 			(* copy uobj manifest *)
-			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ !o_usmf_filename)
+			Usosservices.file_copy (!d_path_ns ^ "/" ^ !d_mf_filename)
 				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
 			
 			(* copy uobj header file *)
-			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+			Usosservices.file_copy (!d_path_ns ^ "/" ^ 
 															Usconfig.uobj_hfilename ^ ".h")
 				(install_dir ^ "/" ^ !o_usmf_hdr_id ^ ".h"); 
 	
 			(* copy sentinels lib *)
-			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
+			Usosservices.file_copy (!d_path_ns ^ "/" ^ 
 															self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
 				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_libname ^ ".a"); 
 			
