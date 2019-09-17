@@ -18,11 +18,11 @@ module Usmanifest =
 
 	type hdr_t =
 		{
-			f_type         : string;			
-			f_namespace    : string;			
-			f_platform	   : string;
-			f_arch	       : string;
-			f_cpu				   : string;
+			mutable f_type         : string;			
+			mutable f_namespace    : string;			
+			mutable f_platform	   : string;
+			mutable f_arch	       : string;
+			mutable f_cpu				   : string;
 		};;
 
 

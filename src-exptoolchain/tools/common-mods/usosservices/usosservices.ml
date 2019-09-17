@@ -103,6 +103,8 @@ module Usosservices =
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
 				retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				Unix.chdir !retval_abspath;
+				retval_abspath := Unix.getcwd ();
 				Unix.chdir curdir;
 				
 			with Unix.Unix_error (ecode, fname, fparam) -> 

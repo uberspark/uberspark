@@ -45,6 +45,15 @@ class uobject = object(self)
 		
 		val usmf_type_usuobj = "uobj";
 
+	  val o_hdr: Usmanifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
+
+		method set_hdr 
+			(hdr : Usmanifest.hdr_t) =
+				o_hdr = hdr;
+			()
+		;
+
+
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
 		
