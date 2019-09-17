@@ -51,7 +51,7 @@ module Uslog =
     Printf.ksprintf do_log
 
 
-	let log ?(tag = "uberspark") ?(lvl = Info) =
+	let log ?(tag = "uberspark") ?(stag = "") ?(lvl = Info) =
 		let do_log str =
 				if (ord lvl) <= !current_level then
 						begin
@@ -64,14 +64,21 @@ module Uslog =
 								begin
 									if (tag <> "") then
 										begin
-											print_string ">> [";
 											print_string tag;
+											print_string " >> ";
+										end
+									;
+									
+									if (stag <> "") then
+										begin
+											print_string "[";
+											print_string stag;
 											print_string "] ";
 										end
 									;
 									
 									if (ord lvl) == !error_level then
-											print_string "[ERROR] ";
+											print_string "ERROR: ";
 									
 									print_string str;
 									print_newline ();
