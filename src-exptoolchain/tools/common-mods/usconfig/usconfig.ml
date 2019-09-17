@@ -7,6 +7,19 @@ module Usconfig =
 	struct
 
 	(*------------------------------------------------------------------------*)
+	(* environment related configuration settings *)	
+	(*------------------------------------------------------------------------*)
+	let env_path_seperator = "/";;
+
+
+
+	(*------------------------------------------------------------------------*)
+	(* namespace related configuration settings *)	
+	(*------------------------------------------------------------------------*)
+	let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
+
+
+	(*------------------------------------------------------------------------*)
 	(* uberspark installation configuration information *)	
 	(*------------------------------------------------------------------------*)
 	let get_uberspark_config_install_prefix = 
