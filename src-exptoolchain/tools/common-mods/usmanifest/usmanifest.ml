@@ -286,7 +286,7 @@ module Usmanifest =
 		(!retval, !usmf_vharness_list)
 	;;
 
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-binary" *)
 	(* return true on successful parse, false if not *)
@@ -337,6 +337,8 @@ module Usmanifest =
 								
 		(!retval, !uobj_sections_list)
 	;;
+*)
+
 
 (*
 	(*--------------------------------------------------------------------------*)
