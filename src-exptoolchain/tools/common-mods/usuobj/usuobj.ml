@@ -69,6 +69,12 @@ class uobject = object(self)
 		val d_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 		method get_d_callees_hashtbl = d_callees_hashtbl;
 
+		val d_exitcallees_list : string list ref = ref [];
+		method get_d_exitcallees_list = !d_exitcallees_list;
+
+
+
+
 
 		val usmf_type_usuobj = "uobj";
 
@@ -157,8 +163,7 @@ class uobject = object(self)
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 
 		
-		val o_exitcallees_list : string list ref = ref [];
-
+	
 
 		
 		(*--------------------------------------------------------------------------*)
@@ -309,6 +314,180 @@ class uobject = object(self)
 		;
 
 
+
+		(*--------------------------------------------------------------------------*)
+		(* parse manifest node "uobj-exitcallees" *)
+		(* return true on successful parse, false if not *)
+		(* return: if true then populate list of exitcallees function names *)
+		(*--------------------------------------------------------------------------*)
+		method parse_node_mf_uobj_exitcallees mf_json =
+			let retval = ref true in
+
+			try
+				let open Yojson.Basic.Util in
+					let uobj_exitcallees_json = mf_json |> member "uobj-exitcallees" in
+						if uobj_exitcallees_json != `Null then
+							begin
+								let uobj_exitcallees_json_list = uobj_exitcallees_json |> 
+										to_list in 
+									List.iter (fun x -> d_exitcallees_list := 
+											!d_exitcallees_list @ [(x |> to_string)]
+										) uobj_exitcallees_json_list;
+							end
+						;
+		
+			with Yojson.Basic.Util.Type_error _ -> 
+					retval := false;
+			;
+		
+			(!retval)
+		;
+
+
+		(*--------------------------------------------------------------------------*)
+		(* parse uobj manifest *)
+		(* usmf_filename = canonical uobj manifest filename *)
+		(* keep_temp_files = true if temporary files need to be preserved *)
+		(*--------------------------------------------------------------------------*)
+		method parse_manifest 
+			(uobj_mf_filename : string)
+			(keep_temp_files : bool) 
+			: bool =
+			
+			(* store filename and uobj path/namespace *)
+			d_mf_filename := Filename.basename uobj_mf_filename;
+			d_path_ns := Filename.dirname uobj_mf_filename;
+			
+
+			(* read manifest JSON *)
+			let (rval, mf_json) = Usmanifest.read_manifest 
+																self#get_d_mf_filename keep_temp_files in
+			
+			if (rval == false) then (false)
+			else
+
+			(* parse hdr node *)
+			let (rval, hdr) =
+								Usmanifest.parse_node_hdr mf_json in
+			if (rval == false) then (false)
+			else
+
+			(* sanity check type to be uobj and store hdr*)
+			if (compare hdr.f_type usmf_type_usuobj) <> 0 then (false)
+			else
+			let dummy = 0 in
+				begin
+					d_hdr.f_type <- hdr.f_type;								
+					d_hdr.f_namespace <- hdr.f_namespace;
+					d_hdr.f_platform <- hdr.f_platform;
+					d_hdr.f_arch <- hdr.f_arch;
+					d_hdr.f_cpu <- hdr.f_cpu;
+				end;
+
+			(* parse uobj-sources node *)
+			let rval = (self#parse_node_mf_uobj_sources mf_json) in
+	
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					Uslog.log "total sources: h files=%u, c files=%u, casm files=%u" 
+						(List.length self#get_d_sources_h_file_list)
+						(List.length self#get_d_sources_c_file_list)
+						(List.length self#get_d_sources_casm_file_list);
+				end;
+
+
+			(* parse uobj-publicmethods node *)
+			let rval = (self#parse_node_mf_uobj_publicmethods mf_json) in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					Uslog.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
+				end;
+
+			(* parse uobj-calles node *)
+			let rval = (self#parse_node_mf_uobj_callees mf_json) in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					Uslog.log "list of uobj-callees follows:";
+
+					Hashtbl.iter (fun key value  ->
+						Uslog.log "uobj=%s; callees=%u" key (List.length value);
+					) self#get_d_callees_hashtbl;
+				end;
+
+			(* parse uobj-exitcallees node *)
+			let rval = (self#parse_node_mf_uobj_exitcallees mf_json) in
+
+			if (rval == false) then (false)
+			else
+			let dummy = 0 in
+				begin
+					Uslog.log "total exitcallees=%u" (List.length self#get_d_exitcallees_list);
+				end;
+
+(*
+			(* parse uobj-sections node *)
+			let (rval, uobj_sections_list) = 
+										Usmanifest.parse_node_uobj_binary mf_json in
+
+			(*if (rval == false) then (false)
+			else
+			let dummy = 0 in*)
+			if (rval == true) then
+				begin
+
+					List.iter (fun x ->
+						(* compute subsection list *)
+						let elem_index = ref 0 in
+						let subsections_list = ref [] in
+						while (!elem_index < List.length x) do
+								if (!elem_index > 2) then
+									begin
+								    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
+									end
+								; 
+								elem_index := !elem_index + 1;
+						done;
+
+						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
+						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
+							{ f_name = (List.nth x 0);	
+							 	f_subsection_list = !subsections_list;	
+								usbinformat = { f_type=0; f_prot=0; 
+																f_addr_start=0; 
+																f_size = int_of_string (List.nth x 2);
+																f_addr_file = 0;
+																f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+															};
+							};
+
+							
+					) uobj_sections_list;
+
+								
+				end;
+	
+																											
+			(* initialize uobj preprocess definition *)
+			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
+
+			(* initialize uobj sentinels lib name *)
+			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
+	
+				*)
+			(true)
+		;
+		
+
+
 		(*--------------------------------------------------------------------------*)
 		(* initialize *)
 		(* sentineltypes_hashtbl = hash table of sentinel types *)
@@ -411,159 +590,6 @@ class uobject = object(self)
 			
 			()	
 		;
-
-
-
-		(*--------------------------------------------------------------------------*)
-		(* parse uobj manifest *)
-		(* usmf_filename = canonical uobj manifest filename *)
-		(* keep_temp_files = true if temporary files need to be preserved *)
-		(*--------------------------------------------------------------------------*)
-		method parse_manifest 
-			(uobj_mf_filename : string)
-			(keep_temp_files : bool) 
-			: bool =
-			
-			(* store filename and uobj path/namespace *)
-			d_mf_filename := Filename.basename uobj_mf_filename;
-			d_path_ns := Filename.dirname uobj_mf_filename;
-			
-
-			(* read manifest JSON *)
-			let (rval, mf_json) = Usmanifest.read_manifest 
-																self#get_d_mf_filename keep_temp_files in
-			
-			if (rval == false) then (false)
-			else
-
-			(* parse hdr node *)
-			let (rval, hdr) =
-								Usmanifest.parse_node_hdr mf_json in
-			if (rval == false) then (false)
-			else
-
-			(* sanity check type to be uobj and store hdr*)
-			if (compare hdr.f_type usmf_type_usuobj) <> 0 then (false)
-			else
-			let dummy = 0 in
-				begin
-					d_hdr.f_type <- hdr.f_type;								
-					d_hdr.f_namespace <- hdr.f_namespace;
-					d_hdr.f_platform <- hdr.f_platform;
-					d_hdr.f_arch <- hdr.f_arch;
-					d_hdr.f_cpu <- hdr.f_cpu;
-				end;
-
-			(* parse uobj-sources node *)
-			let rval = (self#parse_node_mf_uobj_sources mf_json) in
-	
-			if (rval == false) then (false)
-			else
-			let dummy = 0 in
-				begin
-					Uslog.log "total sources: h files=%u, c files=%u, casm files=%u" 
-						(List.length self#get_d_sources_h_file_list)
-						(List.length self#get_d_sources_c_file_list)
-						(List.length self#get_d_sources_casm_file_list);
-				end;
-
-
-			(* parse uobj-publicmethods node *)
-			let rval = (self#parse_node_mf_uobj_publicmethods mf_json) in
-
-			if (rval == false) then (false)
-			else
-			let dummy = 0 in
-				begin
-					Uslog.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
-				end;
-
-			(* parse uobj-calles node *)
-			let rval = (self#parse_node_mf_uobj_callees mf_json) in
-
-			if (rval == false) then (false)
-			else
-			let dummy = 0 in
-				begin
-					Uslog.log "list of uobj-callees follows:";
-
-					Hashtbl.iter (fun key value  ->
-						Uslog.log "uobj=%s; callees=%u" key (List.length value);
-					) self#get_d_callees_hashtbl;
-				end;
-
-(*
-			(* parse uobj-exitcallees node *)
-			let (rval, uobj_exitcallees_list) = 
-										Usmanifest.parse_node_usmf_uobj_exitcallees mf_json in
-
-			if (rval == false) then (false)
-			else
-			let dummy = 0 in
-				begin
-					o_exitcallees_list := uobj_exitcallees_list;
-					List.iter (fun v  ->
-						Uslog.logf log_tag Uslog.Info "exitcallee=%s" v;
-					) !o_exitcallees_list;
-
-					Uslog.logf log_tag Uslog.Info "successfully parsed uobj-exitcallees";
-				end;
-
-
-			(* parse uobj-sections node *)
-			let (rval, uobj_sections_list) = 
-										Usmanifest.parse_node_uobj_binary mf_json in
-
-			(*if (rval == false) then (false)
-			else
-			let dummy = 0 in*)
-			if (rval == true) then
-				begin
-
-					List.iter (fun x ->
-						(* compute subsection list *)
-						let elem_index = ref 0 in
-						let subsections_list = ref [] in
-						while (!elem_index < List.length x) do
-								if (!elem_index > 2) then
-									begin
-								    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
-									end
-								; 
-								elem_index := !elem_index + 1;
-						done;
-
-						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
-						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
-							{ f_name = (List.nth x 0);	
-							 	f_subsection_list = !subsections_list;	
-								usbinformat = { f_type=0; f_prot=0; 
-																f_addr_start=0; 
-																f_size = int_of_string (List.nth x 2);
-																f_addr_file = 0;
-																f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
-															};
-							};
-
-							
-					) uobj_sections_list;
-
-								
-				end;
-	
-																											
-			(* initialize uobj preprocess definition *)
-			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
-
-			(* initialize uobj sentinels lib name *)
-			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
-				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
-	
-				*)
-			(true)
-		;
-		
-
 
 
 
