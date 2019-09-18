@@ -28,12 +28,12 @@ struct
 			};;
 
 
-		type uobj_publicmethods_info_t = 
+		type uobj_publicmethods_t = 
 			{
-				pm_fname: string;
-				pm_retvaldecl : string;
-				pm_fparamdecl: string;
-				pm_fparamdwords : int;
+				f_name: string;
+				f_retvaldecl : string;
+				f_paramdecl: string;
+				f_paramdwords : int;
 			};;
 
 
@@ -63,6 +63,8 @@ class uobject = object(self)
 		val d_sources_casm_file_list: string list ref = ref [];
 		method get_d_sources_casm_file_list = !d_sources_casm_file_list;
 
+		val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_t)  Hashtbl.t)); 
+		method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
 
 		val usmf_type_usuobj = "uobj";
@@ -91,9 +93,7 @@ class uobject = object(self)
 
 	
 
-		val o_uobj_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_info_t)  Hashtbl.t)); 
-		method get_o_uobj_publicmethods_hashtbl = o_uobj_publicmethods_hashtbl;
-
+	
 		val o_uobj_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_publicmethods_sentinels_hashtbl = o_uobj_publicmethods_sentinels_hashtbl;
 
@@ -215,8 +215,57 @@ class uobject = object(self)
 			(!retval)
 		;
 	
-	
 
+	  (*--------------------------------------------------------------------------*)
+		(* parse manifest node "uobj-publicmethods" *)
+		(* return true on successful parse, false if not *)
+		(* return: if true then list public methods *)
+		(*--------------------------------------------------------------------------*)
+		method parse_node_mf_uobj_publicmethods mf_json =
+			let retval = ref false in
+
+			try
+				let open Yojson.Basic.Util in
+					let uobj_publicmethods_json = mf_json |> member "uobj-publicmethods" in
+						if uobj_publicmethods_json != `Null then
+							begin
+
+								let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
+									retval := true;
+									
+									List.iter (fun (x,y) ->
+										let uobj_publicmethods_inner_list = (Yojson.Basic.Util.to_list y) in 
+										if (List.length uobj_publicmethods_inner_list) <> 3 then
+											begin
+												retval := false;
+											end
+										else
+											begin
+												Hashtbl.add d_publicmethods_hashtbl (x) 
+												{
+													f_name = x;
+													f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
+													f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
+													f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
+												};
+														
+												retval := true; 
+											end
+										;
+							
+										()
+									) uobj_publicmethods_assoc_list;
+
+							end
+						;
+																
+			with Yojson.Basic.Util.Type_error _ -> 
+					retval := false;
+			;
+
+									
+			(!retval)
+		;
 
 
 		(*--------------------------------------------------------------------------*)
@@ -234,25 +283,25 @@ class uobject = object(self)
 
 			(* iterate over sentineltypes hash table to construct sentinels hash table*)
 			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_info_t) ->
+						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
 				
 						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.pm_fname; 
+							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.f_name; 
 
 						Hashtbl.add o_uobj_publicmethods_sentinels_hashtbl !sentinel_name 
 							{
 								s_type = st.s_type;
 								s_type_id = st.s_type_id;
-								s_retvaldecl = pm.pm_retvaldecl;
-								s_fname = pm.pm_fname;
-								s_fparamdecl = pm.pm_fparamdecl;
-								s_fparamdwords = pm.pm_fparamdwords;
+								s_retvaldecl = pm.f_retvaldecl;
+								s_fname = pm.f_name;
+								s_fparamdecl = pm.f_paramdecl;
+								s_fparamdwords = pm.f_paramdwords;
 								s_attribute = (Usconfig.get_sentinel_prot ());
 								s_origin = 0;
 								s_length = !Usconfig.section_size_sentinel;
 							};
 			
-						) o_uobj_publicmethods_hashtbl;
+						) d_publicmethods_hashtbl;
 			) o_sentineltypes_hashtbl;
 
 
@@ -377,29 +426,18 @@ class uobject = object(self)
 						(List.length self#get_d_sources_casm_file_list);
 				end;
 
-(*
+
 			(* parse uobj-publicmethods node *)
-			let (rval, uobj_publicmethods_list) = 
-										Usmanifest.parse_node_uobj_publicmethods mf_json in
+			let rval = (self#parse_node_mf_uobj_publicmethods mf_json) in
 
 			if (rval == false) then (false)
 			else
 			let dummy = 0 in
 				begin
-					List.iter (fun x ->
-
-						Hashtbl.add o_uobj_publicmethods_hashtbl (List.nth x 0) 
-							{
-								pm_fname = (List.nth x 0);
-								pm_retvaldecl = (List.nth x 1);
-								pm_fparamdecl = (List.nth x 2);
-								pm_fparamdwords = int_of_string (List.nth x 3);
-							};
-						
-					) uobj_publicmethods_list;
+					Uslog.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
 				end;
 
-
+(*
 			(* parse uobj-callemethods node *)
 			let (rval, uobj_calleemethods_hashtbl) = 
 										Usmanifest.parse_node_uobj_calleemethods mf_json in
