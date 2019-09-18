@@ -99,7 +99,9 @@ class uobject = object(self)
 		val o_usmf_hdr_arch = ref "";
 		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
 
-
+		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		method get_d_sections_hashtbl = d_sections_hashtbl;
+		
 	
 
 	
@@ -345,6 +347,77 @@ class uobject = object(self)
 
 
 		(*--------------------------------------------------------------------------*)
+		(* parse manifest node "uobj-binary/uobj-sections" *)
+		(* return true on successful parse, false if not *)
+		(* return: if true then populate list of sections *)
+		(*--------------------------------------------------------------------------*)
+		method parse_node_mf_uobj_binary mf_json =
+		let retval = ref false in
+
+		try
+		let open Yojson.Basic.Util in
+			let uobj_binary_json = mf_json |> member "uobj-binary" in
+				if uobj_binary_json != `Null then
+					begin
+
+						let uobj_sections_json = uobj_binary_json |> member "uobj-sections" in
+							if uobj_sections_json != `Null then
+								begin
+									
+									let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
+										retval := true;
+										List.iter (fun (x,y) ->
+												(* x = section name, y = list of section attributes *)
+												let uobj_sections_attribute_list = (Yojson.Basic.Util.to_list y) in
+													if (List.length uobj_sections_attribute_list  < 6 ) then
+														begin
+															Uslog.log ~lvl:Uslog.Error "insufficient entries within section attribute list for section: %s" x;															retval := false;
+														end
+													else
+														begin
+															let subsection_list = ref [] in 
+															for index = 5 to ((List.length uobj_sections_attribute_list)-1) do 
+																subsection_list := !subsection_list @	[ ((List.nth uobj_sections_attribute_list index) |> to_string) ]
+															done;
+
+															Hashtbl.add d_sections_hashtbl (x) 
+															{ 
+																f_name = (x);	
+															 	f_subsection_list = !subsection_list;	
+																usbinformat = { f_type = int_of_string ((List.nth uobj_sections_attribute_list 0) |> to_string); 
+																								f_prot = int_of_string ((List.nth uobj_sections_attribute_list 1) |> to_string); 
+																								f_size = int_of_string ((List.nth uobj_sections_attribute_list 2) |> to_string);
+																								f_aligned_at = int_of_string ((List.nth uobj_sections_attribute_list 3) |> to_string); 
+																								f_pad_to = int_of_string ((List.nth uobj_sections_attribute_list 4) |> to_string); 
+																								f_addr_start=0; 
+																								f_addr_file = 0;
+																								f_reserved = 0;
+																							};
+															};
+								
+															retval := true;
+														end
+													;
+												()
+											) uobj_sections_assoc_list;
+								end
+							;		
+				
+					end
+				;
+														
+		with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+		;
+
+							
+		(!retval)
+		;
+
+
+
+
+		(*--------------------------------------------------------------------------*)
 		(* parse uobj manifest *)
 		(* usmf_filename = canonical uobj manifest filename *)
 		(* keep_temp_files = true if temporary files need to be preserved *)
@@ -432,49 +505,19 @@ class uobject = object(self)
 					Uslog.log "total exitcallees=%u" (List.length self#get_d_exitcallees_list);
 				end;
 
-(*
-			(* parse uobj-sections node *)
-			let (rval, uobj_sections_list) = 
-										Usmanifest.parse_node_uobj_binary mf_json in
 
-			(*if (rval == false) then (false)
+			(* parse uobj-binary/uobj-sections node *)
+			let rval = (self#parse_node_mf_uobj_binary mf_json) in
+
+			if (rval == false) then (false)
 			else
-			let dummy = 0 in*)
+			let dummy = 0 in
 			if (rval == true) then
 				begin
-
-					List.iter (fun x ->
-						(* compute subsection list *)
-						let elem_index = ref 0 in
-						let subsections_list = ref [] in
-						while (!elem_index < List.length x) do
-								if (!elem_index > 2) then
-									begin
-								    subsections_list := !subsections_list @  [(List.nth x !elem_index)];
-									end
-								; 
-								elem_index := !elem_index + 1;
-						done;
-
-						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
-						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
-							{ f_name = (List.nth x 0);	
-							 	f_subsection_list = !subsections_list;	
-								usbinformat = { f_type=0; f_prot=0; 
-																f_addr_start=0; 
-																f_size = int_of_string (List.nth x 2);
-																f_addr_file = 0;
-																f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
-															};
-							};
-
-							
-					) uobj_sections_list;
-
-								
+					Uslog.log "binary sections override:%u" (Hashtbl.length self#get_d_sections_hashtbl);								
 				end;
 	
-																											
+(*																											
 			(* initialize uobj preprocess definition *)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
 
@@ -483,6 +526,7 @@ class uobject = object(self)
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
 	
 				*)
+				
 			(true)
 		;
 		
