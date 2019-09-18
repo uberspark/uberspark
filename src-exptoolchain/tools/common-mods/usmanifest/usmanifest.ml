@@ -172,7 +172,7 @@ module Usmanifest =
 	;;
 
 
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobjlib-sources" *)
 	(* return true on successful parse, false if not *)
@@ -235,7 +235,7 @@ module Usmanifest =
 	
 		(!retval, !usmf_hfiles_list, !usmf_cfiles_list, !usmf_casmfiles_list)
 	;;
-
+*)
 
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "usmf-vharness" *)
@@ -338,7 +338,7 @@ module Usmanifest =
 		(!retval, !uobj_sections_list)
 	;;
 
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "uobj-publicmethods" *)
 	(* return true on successful parse, false if not *)
@@ -456,7 +456,7 @@ module Usmanifest =
 		(!retval, !uobj_exitcallees_list)
 	;;
 						
-												
+*)												
 																		
 																								
 																																				
