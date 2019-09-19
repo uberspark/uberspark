@@ -529,111 +529,103 @@ class uobject = object(self)
 				
 			(true)
 		;
-		
 
+		
 
 		(*--------------------------------------------------------------------------*)
 		(* initialize *)
-		(* sentineltypes_hashtbl = hash table of sentinel types *)
 		(*--------------------------------------------------------------------------*)
-		method initialize 
-			(sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
-			= 
+		method initialize	= 
 				
-			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
-			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-					Hashtbl.add o_sentineltypes_hashtbl key st;
-			) sentineltypes_hashtbl;
-
-			(* iterate over sentineltypes hash table to construct sentinels hash table*)
-			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
-						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
-				
-						let sentinel_name = ref "" in
-							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.f_name; 
-
-						Hashtbl.add o_uobj_publicmethods_sentinels_hashtbl !sentinel_name 
-							{
-								s_type = st.s_type;
-								s_type_id = st.s_type_id;
-								s_retvaldecl = pm.f_retvaldecl;
-								s_fname = pm.f_name;
-								s_fparamdecl = pm.f_paramdecl;
-								s_fparamdwords = pm.f_paramdwords;
-								s_attribute = (Usconfig.get_sentinel_prot ());
-								s_origin = 0;
-								s_length = !Usconfig.section_size_sentinel;
-							};
-			
-						) d_publicmethods_hashtbl;
-			) o_sentineltypes_hashtbl;
-
 
 			(* add default uobj sections *)
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
+			Hashtbl.add d_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment; 
+													f_pad_to = !Usconfig.section_alignment; 
+													f_addr_start=0; 
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
+
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment;
+													f_pad_to = !Usconfig.section_alignment; 
+													f_addr_start=0; 
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
+
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment;
+													f_pad_to = !Usconfig.section_alignment; 
+													f_addr_start=0; 
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
+
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment; 
+													f_pad_to = !Usconfig.section_alignment; 
+													f_addr_start=0; 
 													f_addr_file = 0;
-								f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
+
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment; 
+													f_pad_to = !Usconfig.section_alignment;
+													f_addr_start=0; 
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
 				
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
-													f_addr_start=0; 
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
+													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
+													f_aligned_at = !Usconfig.section_alignment; 
+													f_pad_to = !Usconfig.section_alignment;
+													f_addr_start=0; 
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_reserved = 0;
 												};
 				};
 			
 			()	
 		;
+
 
 
 
@@ -1294,6 +1286,122 @@ end
 (*---------------------------------------------------------------------------*)
 (* potpourri *)
 (*---------------------------------------------------------------------------*)
+
+
+
+(*
+
+
+		(*--------------------------------------------------------------------------*)
+		(* initialize *)
+		(* sentineltypes_hashtbl = hash table of sentinel types *)
+		(*--------------------------------------------------------------------------*)
+		method initialize 
+			(sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			= 
+				
+			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
+			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+					Hashtbl.add o_sentineltypes_hashtbl key st;
+			) sentineltypes_hashtbl;
+
+			(* iterate over sentineltypes hash table to construct sentinels hash table*)
+			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
+				
+						let sentinel_name = ref "" in
+							sentinel_name := "sentinel_" ^ st.s_type ^ "_" ^ pm.f_name; 
+
+						Hashtbl.add o_uobj_publicmethods_sentinels_hashtbl !sentinel_name 
+							{
+								s_type = st.s_type;
+								s_type_id = st.s_type_id;
+								s_retvaldecl = pm.f_retvaldecl;
+								s_fname = pm.f_name;
+								s_fparamdecl = pm.f_paramdecl;
+								s_fparamdwords = pm.f_paramdwords;
+								s_attribute = (Usconfig.get_sentinel_prot ());
+								s_origin = 0;
+								s_length = !Usconfig.section_size_sentinel;
+							};
+			
+						) d_publicmethods_hashtbl;
+			) o_sentineltypes_hashtbl;
+
+
+			(* add default uobj sections *)
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
+				{ f_name = "uobj_hdr";	
+				 	f_subsection_list = [ ".hdr" ];	
+					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
+				{ f_name = "uobj_ustack";	
+				 	f_subsection_list = [ ".ustack" ];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
+				{ f_name = "uobj_tstack";	
+				 	f_subsection_list = [ ".tstack"; ".stack" ];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
+				{ f_name = "uobj_code";	
+				 	f_subsection_list = [ ".text" ];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+								f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
+				{ f_name = "uobj_data";	
+				 	f_subsection_list = [".data"; ".rodata"];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+				
+			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
+				{ f_name = "uobj_dmadata";	
+				 	f_subsection_list = [".dmadata"];	
+					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
+													f_addr_start=0; 
+													f_size = !Usconfig.section_size_general;
+													f_addr_file = 0;
+													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+												};
+				};
+			
+			()	
+		;
+
+
+
+*)
+
+
+
+
 (*		
 						(*slab_tos*)
     Printf.fprintf oc "\n\t{";
