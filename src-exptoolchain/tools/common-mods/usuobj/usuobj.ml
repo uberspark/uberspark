@@ -629,6 +629,22 @@ class uobject = object(self)
 
 
 
+
+end
+
+
+
+
+(*---------------------------------------------------------------------------*)
+(* to be absorbed *)
+(*---------------------------------------------------------------------------*)
+
+
+(*
+
+
+
+
 		(*--------------------------------------------------------------------------*)
 		(* consolidate sections with memory map *)
 		(* uobj_load_addr = load address of uobj *)
@@ -910,10 +926,13 @@ class uobject = object(self)
 		;
 
 
+
+
+
+
 		(*--------------------------------------------------------------------------*)
 		(* generate uobj sentinels *)
 		(*--------------------------------------------------------------------------*)
-		(*
 		method generate_sentinels 
 			() = 
 			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
@@ -1011,7 +1030,10 @@ class uobject = object(self)
 			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
 			()
 		;
-		*)
+
+
+
+
 
 		(*--------------------------------------------------------------------------*)
 		(* compile uobj sentinels *)
@@ -1075,12 +1097,6 @@ class uobject = object(self)
 
 
 
-				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
-
-				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
-					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
-				*)
-
 
 		(*--------------------------------------------------------------------------*)
 		(* compile a uobj *)
@@ -1126,7 +1142,8 @@ class uobject = object(self)
 			()
 		;
 
-(*
+
+
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj info table *)
 	(*--------------------------------------------------------------------------*)
@@ -1189,9 +1206,6 @@ class uobject = object(self)
 		()
 	;
 
-*)
-
-(*
 	(*--------------------------------------------------------------------------*)
 	(* generate uobj header *)
 	(*--------------------------------------------------------------------------*)
@@ -1241,7 +1255,8 @@ class uobject = object(self)
 			close_out oc;
 		(uobj_hdr_filename)
 	; 
-*)
+
+
 
 	(*--------------------------------------------------------------------------*)
 	(* install uobj *)
@@ -1280,12 +1295,20 @@ class uobject = object(self)
 
 end ;;
 
-end
+
+*)
 
 
 (*---------------------------------------------------------------------------*)
 (* potpourri *)
 (*---------------------------------------------------------------------------*)
+
+
+				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
+
+				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
+					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
+				*)
 
 
 
