@@ -76,6 +76,14 @@ class uobject = object(self)
 		method get_d_sections_hashtbl = d_sections_hashtbl;
 
 
+		val d_target_def: Ustypes.target_def_t = {
+			f_platform = ""; 
+			f_arch = ""; 
+			f_cpu = "";
+		};
+		method get_d_target_def = d_target_def;
+
+
 (*
 		val usmf_type_usuobj = "uobj";
 
