@@ -17,6 +17,7 @@ module Usconfig =
 	(* namespace related configuration settings *)	
 	(*------------------------------------------------------------------------*)
 	let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
+	let namespace_uobj_mf_hdr_type = "uobj";;
 
 
 	(*------------------------------------------------------------------------*)

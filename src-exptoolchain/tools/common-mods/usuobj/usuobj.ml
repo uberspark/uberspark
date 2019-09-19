@@ -41,7 +41,7 @@ struct
 
 class uobject = object(self)
 
-		val log_tag = "Usuobj";
+		(*val log_tag = "Usuobj";*)
 		val d_ltag = "Usuobj";
 
 		val d_mf_filename = ref "";
@@ -72,10 +72,11 @@ class uobject = object(self)
 		val d_exitcallees_list : string list ref = ref [];
 		method get_d_exitcallees_list = !d_exitcallees_list;
 
+		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		method get_d_sections_hashtbl = d_sections_hashtbl;
 
 
-
-
+(*
 		val usmf_type_usuobj = "uobj";
 
 
@@ -98,13 +99,12 @@ class uobject = object(self)
 
 		val o_usmf_hdr_arch = ref "";
 		method get_o_usmf_hdr_arch = !o_usmf_hdr_arch;
+*)
 
-		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
-		method get_d_sections_hashtbl = d_sections_hashtbl;
 		
 	
 
-	
+(*	
 		val o_uobj_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_publicmethods_sentinels_hashtbl = o_uobj_publicmethods_sentinels_hashtbl;
 
@@ -163,7 +163,7 @@ class uobject = object(self)
 
 		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
-
+*)
 		
 	
 
@@ -446,7 +446,7 @@ class uobject = object(self)
 			else
 
 			(* sanity check type to be uobj and store hdr*)
-			if (compare hdr.f_type usmf_type_usuobj) <> 0 then (false)
+			if (compare hdr.f_type Usconfig.namespace_uobj_mf_hdr_type) <> 0 then (false)
 			else
 			let dummy = 0 in
 				begin
@@ -553,7 +553,7 @@ class uobject = object(self)
 												};
 				};
 
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
+			Hashtbl.add d_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
@@ -567,7 +567,7 @@ class uobject = object(self)
 												};
 				};
 
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
+			Hashtbl.add d_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
@@ -581,7 +581,7 @@ class uobject = object(self)
 												};
 				};
 
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
+			Hashtbl.add d_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
@@ -595,7 +595,7 @@ class uobject = object(self)
 												};
 				};
 
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
+			Hashtbl.add d_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
@@ -609,7 +609,7 @@ class uobject = object(self)
 												};
 				};
 				
-			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
+			Hashtbl.add d_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
