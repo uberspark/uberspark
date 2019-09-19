@@ -557,6 +557,12 @@ class uobject
 			(* set target definition *)
 			self#set_d_target_def target_def;	
 
+			(* debug dump the target spec and definition *)		
+			Uslog.log ~lvl:Uslog.Debug "uobj target spec => %s:%s:%s" 
+					(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
+			Uslog.log ~lvl:Uslog.Debug "uobj target definition => %s:%s:%s" 
+					(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
+
 
 			(* add default uobj sections *)
 			Hashtbl.add d_sections_hashtbl "uobj_hdr" 

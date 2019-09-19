@@ -43,8 +43,21 @@ let cmd_uobj =
   let build =
     let doc = "Build the uobj binary." in
     Arg.(value & flag & info ["b"; "build"] ~doc)
+	in
+	let platform =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
   in
-  let path =
+	let arch =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
+  in
+	let cpu =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
+  in
+
+	let path =
     let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
     Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
   in
@@ -54,7 +67,7 @@ let cmd_uobj =
      `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ path)),
+  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ platform $ arch $ cpu $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 (* kicks in when user just issues uberspark without any parameters *)

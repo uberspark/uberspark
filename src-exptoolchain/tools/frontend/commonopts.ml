@@ -12,15 +12,17 @@ let handler_opts
   (verb : int)
   (loglvl : int)
   : opts = 
-  if verb <= loglvl then
+  if verb == 0 then 
     begin
-      let log_level = verb in
-        { log_level }
+      { log_level=0 }
+    end
+  else if verb > loglvl then
+    begin
+      { log_level=verb }
     end
   else
     begin
-      let log_level = loglvl in
-        { log_level }
+      { log_level=loglvl }
     end
   ;
 ;;
