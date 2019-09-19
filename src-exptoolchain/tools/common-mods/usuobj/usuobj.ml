@@ -39,7 +39,8 @@ struct
 
 		
 
-class uobject = object(self)
+class uobject 
+		= object(self)
 
 		(*val log_tag = "Usuobj";*)
 		val d_ltag = "Usuobj";
@@ -82,7 +83,14 @@ class uobject = object(self)
 			f_cpu = "";
 		};
 		method get_d_target_def = d_target_def;
-
+		method set_d_target_def 
+			(target_def: Ustypes.target_def_t) = 
+			d_target_def.f_platform <- target_def.f_platform;
+			d_target_def.f_arch <- target_def.f_arch;
+			d_target_def.f_cpu <- target_def.f_cpu;
+			()
+		;
+			
 
 (*
 		val usmf_type_usuobj = "uobj";
@@ -543,8 +551,12 @@ class uobject = object(self)
 		(*--------------------------------------------------------------------------*)
 		(* initialize *)
 		(*--------------------------------------------------------------------------*)
-		method initialize	= 
-				
+		method initialize	
+			(target_def: Ustypes.target_def_t)
+			= 
+			(* set target definition *)
+			self#set_d_target_def target_def;	
+
 
 			(* add default uobj sections *)
 			Hashtbl.add d_sections_hashtbl "uobj_hdr" 

@@ -10,6 +10,7 @@ MODULE_PACKAGES += -package str
 MODULE_PACKAGES += -package yojson 
 MODULE_PACKAGES += -package cmdliner
 
+MODULE_PACKAGES += -package ustypes  
 MODULE_PACKAGES += -package usconfig  
 MODULE_PACKAGES += -package uslog 
 MODULE_PACKAGES += -package usosservices  

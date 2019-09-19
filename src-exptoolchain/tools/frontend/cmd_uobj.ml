@@ -1,6 +1,7 @@
 (* uberspark front-end command processing logic for command: uobj *)
 (* author: amit vasudevan (amitvasudevan@acm.org) *)
 
+open Ustypes
 open Usconfig
 open Uslog
 open Cmdliner
@@ -35,6 +36,7 @@ let handler_uobj_build
   ;
 
   Uslog.log "successfully parsed uobj manifest";
+  uobj#initialize {f_platform = ""; f_arch = ""; f_cpu = ""};
 
 `Ok ()
 

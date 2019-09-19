@@ -23,9 +23,9 @@ struct
 		(* local type definitions *)
 		type target_def_t = 
 			{
-				f_platform: string;
-				f_arch : string;
-				f_cpu : string;
+				mutable f_platform: string;
+				mutable f_arch : string;
+				mutable f_cpu : string;
 			};;
 		
 
