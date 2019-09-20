@@ -98,6 +98,12 @@ class uobject
 			()
 		;
 
+		val d_slt_trampolinedata : string ref = ref "";
+		method get_d_slt_trampolinedata = !d_slt_trampolinedata;
+		method set_d_slt_trampolinedata (trampolinedata : string)= 
+			d_slt_trampolinedata := trampolinedata;
+			()
+		;
 
 
 (*
@@ -594,9 +600,11 @@ class uobject
 									let uobjslt_trampolinedata_json = mf_json |> member "uobjslt-trampolinedata" in
 									if uobjslt_trampolinecode_json != `Null && uobjslt_trampolinedata_json != `Null then
 									begin
+										self#set_d_slt_trampolinecode (uobjslt_trampolinecode_json |> to_string);
+										self#set_d_slt_trampolinedata (uobjslt_trampolinedata_json |> to_string);
 										retval := true;
-										Uslog.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
-										Uslog.log "data=%s" (uobjslt_trampolinedata_json |> to_string);								
+										(*Uslog.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
+										Uslog.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
 									end;
 
 								with Yojson.Basic.Util.Type_error _ -> 
