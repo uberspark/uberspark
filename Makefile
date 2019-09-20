@@ -91,6 +91,7 @@ install_createnamespace:
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/sentinels
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjcoll
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjrtl
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjslt
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjs
 	@echo Namespace created.
 
@@ -107,6 +108,7 @@ install_populateamespace:
 	cp -rf $(USPARK_SRCDIR)/sentinels/* $(USPARK_NAMESPACEROOTDIR)/sentinels/.
 	cp -rf $(USPARK_SRCDIR)/uobjcoll/* $(USPARK_NAMESPACEROOTDIR)/uobjcoll/.
 	cp -rf $(USPARK_SRCDIR)/uobjrtl/* $(USPARK_NAMESPACEROOTDIR)/uobjrtl/.
+	cp -rf $(USPARK_SRCDIR)/uobjslt/* $(USPARK_NAMESPACEROOTDIR)/uobjslt/.
 	cp -rf $(USPARK_SRCDIR)/uobjs/* $(USPARK_NAMESPACEROOTDIR)/uobjs/.
 	@echo Namespace populated.
 

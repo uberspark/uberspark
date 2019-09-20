@@ -4,16 +4,23 @@
 */
 
 {
+    	/* header */
+	"hdr":{
+		"type" : "uobjslt",
+		"namespace" : "/uberspark/uobjslt/x86_32/generic",
+		"platform" : "generic",
+		"arch" : "x86_32",
+		"cpu" : "generic"
+	},
+
     /*  trampoline code template 
 
         parameters: 
         TRAMPOLINE_FN_INDEX = 0 based index of the ubj callee/exitcallee function
     */ 
     "uobjslt-trampolinecode": "
-
-        movl $(TRAMPOLINE_FN_INDEX), %eax\r\n
+        movl $(TRAMPOLINE_FN_INDEX), %eax
         jmpl *%eax
-    
     ",
 
 
@@ -24,10 +31,7 @@
         SIZEOF_TRAMPOLINE_ENTRY = size in bytes of trampoline entry
     */
     "uobjslt-trampolinedata": "
-        
         .byte $(TOTAL_TRAMPOLINES) * $(SIZEOF_TRAMPOLINE_ENTRY) \r\n
-    
-    ",
-
+    "
 
 }

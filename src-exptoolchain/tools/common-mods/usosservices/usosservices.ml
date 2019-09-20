@@ -6,6 +6,7 @@
 open Unix
 open Sys
 open Uslog
+open Usconfig
 
 module Usosservices =
 	struct
@@ -102,12 +103,14 @@ module Usosservices =
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
-				retval_abspath := !retval_abspath ^ "/" ^ path_filename;
-				Unix.chdir !retval_abspath;
+				retval_abspath := !retval_abspath ^ Usconfig.env_path_seperator ^ path_filename;
+				(*Unix.chdir !retval_abspath;
 				retval_abspath := Unix.getcwd ();
+				*)
 				Unix.chdir curdir;
 				
 			with Unix.Unix_error (ecode, fname, fparam) -> 
+				Uslog.log ~lvl:Uslog.Error "%s" (Unix.error_message ecode);
 				retval := false;
 			;
 	

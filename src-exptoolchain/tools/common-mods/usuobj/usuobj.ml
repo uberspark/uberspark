@@ -91,6 +91,14 @@ class uobject
 			()
 		;
 			
+		val d_slt_trampolinecode : string ref = ref "";
+		method get_d_slt_trampolinecode = !d_slt_trampolinecode;
+		method set_d_slt_trampolinecode (trampolinecode : string)= 
+			d_slt_trampolinecode := trampolinecode;
+			()
+		;
+
+
 
 (*
 		val usmf_type_usuobj = "uobj";
@@ -547,6 +555,123 @@ class uobject
 		;
 
 		
+		(*--------------------------------------------------------------------------*)
+		(* parse sentinel linkage manifest *)
+		(*--------------------------------------------------------------------------*)
+		method parse_manifest_slt	
+			(*(fn_list: string list)*)
+				= 
+				let retval = ref false in 	
+				let target_def = 	self#get_d_target_def in	
+				let uobjslt_filename = (Usconfig.namespace_uobjslt ^ Usconfig.env_path_seperator ^
+					target_def.f_arch ^ Usconfig.env_path_seperator ^ target_def.f_cpu ^ Usconfig.env_path_seperator ^
+					Usconfig.namespace_uobjslt_mf_filename) in 
+
+				let (rval, abs_uobjslt_filename) = (Usosservices.abspath uobjslt_filename) in
+				if(rval == true) then
+				begin
+					(*Uslog.log ~lvl:Uslog.Debug "fn_list length=%u" (List.length fn_list);*)
+					Uslog.log "reading slt manifest from:%s" abs_uobjslt_filename;
+	
+					(* read manifest JSON *)
+					let (rval, mf_json) = (Usmanifest.read_manifest abs_uobjslt_filename true) in
+					if(rval == true) then
+					begin
+
+						(* parse hdr node *)
+						let (rval, hdr) =	Usmanifest.parse_node_hdr mf_json in
+						if(rval == true) then
+						begin
+
+							(* sanity check uobjslt header type*)
+							if (compare hdr.f_type Usconfig.namespace_uobjslt_mf_hdr_type) == 0 then 
+							begin
+
+								(* read node for trampoline code *)
+								try
+									let open Yojson.Basic.Util in
+									let uobjslt_trampolinecode_json = mf_json |> member "uobjslt-trampolinecode" in
+									let uobjslt_trampolinedata_json = mf_json |> member "uobjslt-trampolinedata" in
+									if uobjslt_trampolinecode_json != `Null && uobjslt_trampolinedata_json != `Null then
+									begin
+										retval := true;
+										Uslog.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
+										Uslog.log "data=%s" (uobjslt_trampolinedata_json |> to_string);								
+									end;
+
+								with Yojson.Basic.Util.Type_error _ -> 
+										retval := false;
+								;
+
+							end;
+						end;
+					end;
+				end;
+
+
+(*								
+
+				
+
+				else
+
+				let dummy = 0 in
+				begin
+					(* read node for trampoline code *)
+					try
+						let open Yojson.Basic.Util in
+						let uobj_binary_json = mf_json |> member "uobj-binary" in
+						if uobj_binary_json != `Null then
+
+					Uslog.log "success";
+				end;
+
+				(* read node for trampoline code *)
+				try
+				let open Yojson.Basic.Util in
+					let uobj_binary_json = usmf_json |> member "uobj-binary" in
+						if uobj_binary_json != `Null then
+							begin
+	
+								let uobj_sections_json = uobj_binary_json |> member "uobj-sections" in
+									if uobj_sections_json != `Null then
+										begin
+											let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
+												retval := true;
+												List.iter (fun (x,y) ->
+														Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+														let uobj_section_attribute_list = ref [] in
+															uobj_section_attribute_list := !uobj_section_attribute_list @
+																						[ x ];
+															List.iter (fun z ->
+																uobj_section_attribute_list := !uobj_section_attribute_list @
+																						[ (z |> to_string) ];
+																()
+															)(Yojson.Basic.Util.to_list y);
+															
+															uobj_sections_list := !uobj_sections_list @	[ !uobj_section_attribute_list ];
+															if (List.length (Yojson.Basic.Util.to_list y)) < 3 then
+																retval:=false;
+														()
+													) uobj_sections_assoc_list;
+												Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
+										end
+									;		
+						
+							end
+						;
+																
+			with Yojson.Basic.Util.Type_error _ -> 
+					retval := false;
+			;
+	
+	*)			
+
+
+		(!retval)
+		;
+
+
 
 		(*--------------------------------------------------------------------------*)
 		(* initialize *)
@@ -563,6 +688,14 @@ class uobject
 			Uslog.log ~lvl:Uslog.Debug "uobj target definition => %s:%s:%s" 
 					(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 
+			(* parse uobj slt manifest *)
+			let rval = (self#parse_manifest_slt) in	
+			if (rval == false) then
+				begin
+					Uslog.log ~lvl:Uslog.Error "unable to stat/parse uobj slt manifest!";
+					ignore (exit 1);
+				end
+			;
 
 			(* add default uobj sections *)
 			Hashtbl.add d_sections_hashtbl "uobj_hdr" 

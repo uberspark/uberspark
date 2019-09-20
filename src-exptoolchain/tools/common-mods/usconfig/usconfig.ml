@@ -2,6 +2,7 @@
 	uberSpark configuration data interface
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
+open Unix
 
 module Usconfig =
 	struct
@@ -10,14 +11,20 @@ module Usconfig =
 	(* environment related configuration settings *)	
 	(*------------------------------------------------------------------------*)
 	let env_path_seperator = "/";;
+	let env_home_dir = Unix.getenv "HOME";;
+
 
 
 
 	(*------------------------------------------------------------------------*)
 	(* namespace related configuration settings *)	
 	(*------------------------------------------------------------------------*)
+	let namespace_root = (env_home_dir ^ env_path_seperator ^ "uberspark");;
+	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
 	let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
+	let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
 	let namespace_uobj_mf_hdr_type = "uobj";;
+	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
 
 
 	(*------------------------------------------------------------------------*)
