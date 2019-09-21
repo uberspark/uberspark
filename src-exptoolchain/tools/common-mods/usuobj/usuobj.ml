@@ -317,7 +317,7 @@ class uobject
 
 			try
 				let open Yojson.Basic.Util in
-					let uobj_callees_json = mf_json |> member "uobj-callees" in
+					let uobj_callees_json = mf_json |> member "intrauobjcoll-callees" in
 						if uobj_callees_json != `Null then
 							begin
 
@@ -357,7 +357,7 @@ class uobject
 
 			try
 				let open Yojson.Basic.Util in
-					let uobj_exitcallees_json = mf_json |> member "uobj-exitcallees" in
+					let uobj_exitcallees_json = mf_json |> member "interuobjcoll-callees" in
 						if uobj_exitcallees_json != `Null then
 							begin
 								let uobj_exitcallees_json_list = uobj_exitcallees_json |> 

@@ -30,12 +30,12 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	},
 
 	/* public methods of other uobjs that this uobj invokes */
-	"uobj-callees" : {
+	"intrauobjcoll-callees" : {
 		"testuobj": ["one", "two", "three"]
 	},
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"uobj-exitcallees": [
+	"interuobjcoll-callees": [
 		"untrusted_func_1",
 		"untrusted_func_2"
 	] 
