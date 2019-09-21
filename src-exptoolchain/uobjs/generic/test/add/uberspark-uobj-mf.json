@@ -36,7 +36,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	
 	/* legacy CoSS functions/code that this uobj invokes */
 	"uobj-exitcallees": [
-		"untrusted_func_1"
+		"untrusted_func_1",
+		"untrusted_func_2"
 	] 
 
 
