@@ -819,7 +819,7 @@ class uobject
 
 
 			(* generate slt for exitcallees *)
-			let rval = (self#generate_slt self#get_d_exitcallees_list ".uobjslt_exitcalles_tcode" ".uobjslt_exitcalles_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
+			let rval = (self#generate_slt self#get_d_exitcallees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
 			if (rval == false) then
 				begin
 					Uslog.log ~lvl:Uslog.Error "unable to generate slt for exitcallees!";
