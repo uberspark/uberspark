@@ -26,8 +26,7 @@ module Usconfig =
 	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
 	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
 	let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
-	let namespace_uobjslt_output_code_filename = "uobjslt-trampolinecode.S";;
-	let namespace_uobjslt_output_data_filename = "uobjslt-trampolinedata.S";;
+	let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 	let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
