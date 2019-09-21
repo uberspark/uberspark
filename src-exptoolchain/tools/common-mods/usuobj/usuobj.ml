@@ -801,6 +801,23 @@ class uobject
 				end
 			;
 
+
+			(* generate slt for callees *)
+			let callees_list = ref [] in 
+			Hashtbl.iter (fun key value  ->
+				callees_list := !callees_list @ value;
+			) self#get_d_callees_hashtbl;
+			Uslog.log "total callees=%u" (List.length !callees_list);
+
+			let rval = (self#generate_slt !callees_list ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" Usconfig.namespace_uobjslt_callees_output_filename) in	
+			if (rval == false) then
+				begin
+					Uslog.log ~lvl:Uslog.Error "unable to generate slt for callees!";
+					ignore (exit 1);
+				end
+			;
+
+
 			(* generate slt for exitcallees *)
 			let rval = (self#generate_slt self#get_d_exitcallees_list ".uobjslt_exitcalles_tcode" ".uobjslt_exitcalles_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
 			if (rval == false) then
