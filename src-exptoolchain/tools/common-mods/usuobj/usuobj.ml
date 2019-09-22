@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 ------------------------------------------------------------------------------*)
 
+open Str
 open Ustypes
 open Usconfig
 open Uslog
@@ -631,21 +632,26 @@ class uobject
 					Printf.fprintf oc "\n.section %s" output_section_name_data;
 					Printf.fprintf oc "\n.global uobjslt_trampolinedata";
 					Printf.fprintf oc "\nuobjslt_trampolinedata:";
-					Printf.fprintf oc "\n%s" (self#get_d_slt_trampolinedata);
+					let tdata_0 = Str.global_replace (Str.regexp "TOTAL_TRAMPOLINES") "2" (self#get_d_slt_trampolinedata) in
+					let tdata = Str.global_replace (Str.regexp "SIZEOF_TRAMPOLINE_ENTRY") "4" tdata_0 in
+					Printf.fprintf oc "\n%s" (tdata);
 					Printf.fprintf oc "\n";
 					Printf.fprintf oc "\n";
 					Printf.fprintf oc "\n/* --- trampoline code follows --- */";
 					Printf.fprintf oc "\n";
 					Printf.fprintf oc "\n";
 
-					List.iter (fun (x) ->
+
+					for index=0 to (List.length fn_list - 1) do 
 						Printf.fprintf oc "\n";
 						Printf.fprintf oc "\n.section %s" output_section_name_code;
-						Printf.fprintf oc "\n.global %s" x;
-						Printf.fprintf oc "\n%s:" x;
-						Printf.fprintf oc "\n%s" (self#get_d_slt_trampolinecode);
+						Printf.fprintf oc "\n.global %s" (List.nth fn_list index);
+						Printf.fprintf oc "\n%s:" (List.nth fn_list index);
+						let tcode = Str.global_replace (Str.regexp "TRAMPOLINE_FN_INDEX") (string_of_int index) (self#get_d_slt_trampolinecode) in
+						Printf.fprintf oc "\n%s" tcode;
+	
 						Printf.fprintf oc "\n";
-					)fn_list;
+					done;
 
 				close_out oc;	
 
