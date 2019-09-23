@@ -1428,7 +1428,7 @@ class uobject
 
 			(* generate uobj binary linker script *)
 			Uslog.log ~crlf:false "Generating uobj binary linker script...";
-			(*self#generate_linker_script 0 100000 self#get_d_sections_hashtbl;*)
+			self#generate_linker_script self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
 			Uslog.log ~tag:"" "[OK]";
 
 
