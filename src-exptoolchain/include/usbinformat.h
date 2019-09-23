@@ -171,6 +171,23 @@ typedef struct {
 
 
 
+//////
+// uobj interuobjcoll callees info type definition
+//////
+
+typedef struct {
+	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//uobj namespace/ legacy code identifier
+	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint32_t slt_ordinal;									//index into sentinal linkage table
+} __attribute__((packed)) __usbinformat_uobj_interuobjcoll_callees_info_t;
+
+typedef struct {
+	uint32_t num_interuobjcoll_callees;	//total number of interuobjcoll callees
+	__usbinformat_uobj_interuobjcoll_callees_info_t interuobjcoll_callees[USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES];
+} __attribute__((packed)) usbinformat_uobj_interuobjcoll_callees_info_t;
+
+
+
 #endif //__ASSEMBLY__
 
 

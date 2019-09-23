@@ -26,6 +26,7 @@ module Usconfig =
 	let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
 	let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 	let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
+	let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
 
 	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
 	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
@@ -43,6 +44,7 @@ module Usconfig =
 	let binary_uobj_max_publicmethods = ref 16;;
 	let binary_uobj_namespace_max_length = ref 256;;
 	let binary_uobj_max_intrauobjcoll_callees = ref 16;;
+	let binary_uobj_max_interuobjcoll_callees = ref 16;;
 
 
 
