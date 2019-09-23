@@ -71,9 +71,6 @@ class uobject
 		val d_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 		method get_d_callees_hashtbl = d_callees_hashtbl;
 
-		val d_exitcallees_list : string list ref = ref [];
-		method get_d_exitcallees_list = !d_exitcallees_list;
-
 		val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
@@ -1032,8 +1029,14 @@ class uobject
 			;
 
 
-			(* generate slt for exitcallees *)
-			let rval = (self#generate_slt self#get_d_exitcallees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
+			(* generate slt for interuobjcoll callees *)
+			let interuobjcoll_callees_list = ref [] in
+			Hashtbl.iter (fun key value ->
+				interuobjcoll_callees_list := !interuobjcoll_callees_list @ value;
+			)self#get_d_interuobjcoll_callees_hashtbl;
+			Uslog.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
+
+			let rval = (self#generate_slt !interuobjcoll_callees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
 			if (rval == false) then
 				begin
 					Uslog.log ~lvl:Uslog.Error "unable to generate slt for exitcallees!";
