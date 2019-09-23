@@ -945,7 +945,7 @@ class uobject
 			Printf.fprintf oc "\n";
 			Printf.fprintf oc "\n";
 
-			Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_publicmethod_info_t uobj_pminfo = {";
+			Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_intrauobjcoll_callees_info_t uobj_intrauobjcoll_callees = {";
 
 			(*num_intrauobjcoll_callees*)
 			let num_intrauobjcoll_callees = ref 0 in
