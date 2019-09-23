@@ -74,6 +74,9 @@ class uobject
 		val d_exitcallees_list : string list ref = ref [];
 		method get_d_exitcallees_list = !d_exitcallees_list;
 
+		val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
+
 		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_hashtbl = d_sections_hashtbl;
 
@@ -360,30 +363,40 @@ class uobject
 
 
 		(*--------------------------------------------------------------------------*)
-		(* parse manifest node "uobj-exitcallees" *)
+		(* parse manifest node "interuobjcoll-callees" *)
 		(* return true on successful parse, false if not *)
 		(* return: if true then populate list of exitcallees function names *)
 		(*--------------------------------------------------------------------------*)
-		method parse_node_mf_uobj_exitcallees mf_json =
+		method parse_node_mf_uobj_interuobjcoll_callees mf_json =
 			let retval = ref true in
 
 			try
 				let open Yojson.Basic.Util in
-					let uobj_exitcallees_json = mf_json |> member "interuobjcoll-callees" in
-						if uobj_exitcallees_json != `Null then
+					let uobj_callees_json = mf_json |> member "interuobjcoll-callees" in
+						if uobj_callees_json != `Null then
 							begin
-								let uobj_exitcallees_json_list = uobj_exitcallees_json |> 
-										to_list in 
-									List.iter (fun x -> d_exitcallees_list := 
-											!d_exitcallees_list @ [(x |> to_string)]
-										) uobj_exitcallees_json_list;
+
+								let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
+									retval := true;
+									List.iter (fun (x,y) ->
+											let uobj_callees_attribute_list = ref [] in
+												List.iter (fun z ->
+													uobj_callees_attribute_list := !uobj_callees_attribute_list @
+																			[ (z |> to_string) ];
+													()
+												)(Yojson.Basic.Util.to_list y);
+												
+												Hashtbl.add d_interuobjcoll_callees_hashtbl x !uobj_callees_attribute_list;
+											()
+										) uobj_callees_assoc_list;
 							end
 						;
-		
+																
 			with Yojson.Basic.Util.Type_error _ -> 
 					retval := false;
 			;
-		
+
+									
 			(!retval)
 		;
 
@@ -538,13 +551,13 @@ class uobject
 				end;
 
 			(* parse uobj-exitcallees node *)
-			let rval = (self#parse_node_mf_uobj_exitcallees mf_json) in
+			let rval = (self#parse_node_mf_uobj_interuobjcoll_callees mf_json) in
 
 			if (rval == false) then (false)
 			else
 			let dummy = 0 in
 				begin
-					Uslog.log "total exitcallees=%u" (List.length self#get_d_exitcallees_list);
+					Uslog.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
 				end;
 
 

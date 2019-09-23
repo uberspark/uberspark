@@ -35,10 +35,10 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	},
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"interuobjcoll-callees": [
-		"untrusted_func_1",
-		"untrusted_func_2"
-	] 
+	"interuobjcoll-callees": {
+		"/uberspark/uobjcoll/test/testuobj1" : ["one", "two" ],
+		"legacy" : ["untrusted_func_1",	"untrusted_func_2"]
+	} 
 
 
 	,
