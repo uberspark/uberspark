@@ -139,6 +139,21 @@ typedef struct {
 } __attribute__((packed)) usbinformat_uobj_hdr_t;
 
 
+//////
+// uobj public method info definition
+//////
+
+typedef struct {
+	uint8_t name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint64_t vaddr;											//virtual address of the public method
+} __attribute__((packed)) __usbinformat_uobj_publicmethod_info_t;
+
+typedef struct {
+	uint32_t num_publicmethods;	//total number of public method definitions
+	__usbinformat_uobj_publicmethod_info_t publicmethods[USCONFIG_UOBJ_MAX_PUBLICMETHODS];
+} __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
+
+
 
 #endif //__ASSEMBLY__
 

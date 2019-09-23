@@ -24,6 +24,7 @@ module Usconfig =
 	let namespace_uobj_mf_hdr_type = "uobj";;
 
 	let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
+	let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 
 
 	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
@@ -38,7 +39,8 @@ module Usconfig =
 	(* uobj/uobjcoll binary related configuration settings *)	
 	(*------------------------------------------------------------------------*)
 	let binary_page_size = ref 0x00200000;;
-
+	let binary_uobj_publicmethod_max_length = ref 128;;
+	let binary_uobj_max_publicmethods = ref 16;;
 
 
 
