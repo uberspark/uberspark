@@ -23,6 +23,9 @@ module Usconfig =
 	let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
 	let namespace_uobj_mf_hdr_type = "uobj";;
 
+	let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
+
+
 	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
 	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
 	let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
@@ -34,6 +37,9 @@ module Usconfig =
 	(*------------------------------------------------------------------------*)
 	(* uobj/uobjcoll binary related configuration settings *)	
 	(*------------------------------------------------------------------------*)
+	let binary_page_size = ref 0x00200000;;
+
+
 
 
 	(*------------------------------------------------------------------------*)
@@ -132,8 +138,6 @@ module Usconfig =
 	(* section alignment *)
 	let section_alignment = ref 0x00200000;;
 		
-	(* memory page size *)
-	let page_size = ref 0x00200000;;
 
 	(* default general section size *)
 	let section_size_general = ref 0x00200000;;
