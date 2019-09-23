@@ -51,14 +51,15 @@ module Uslog =
     Printf.ksprintf do_log
 
 
-	let log ?(tag = "uberspark") ?(stag = "") ?(lvl = Info) =
+	let log ?(tag = "uberspark") ?(stag = "") ?(lvl = Info) ?(crlf = true)=
 		let do_log str =
 				if (ord lvl) <= !current_level then
 						begin
 							if (ord lvl) == (ord Stdoutput) then
 								begin
 									print_string str;
-									print_newline ();							
+									if crlf then
+										print_newline ();							
 								end
 							else
 								begin
@@ -81,12 +82,14 @@ module Uslog =
 											print_string "ERROR: ";
 									
 									print_string str;
-									print_newline ();
+									if crlf then
+										print_newline ();
 
 									if (ord lvl) == !error_level then
 										begin
 											print_string " ";
-											print_newline ();
+											if crlf then
+												print_newline ();
 										end
 									;
 								end

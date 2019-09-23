@@ -1114,19 +1114,19 @@ class uobject
 				};
  
 			(* generate uobj binary header source *)
-			Uslog.log "Generating uobj binary header source...";
+			Uslog.log ~crlf:false "Generating uobj binary header source...";
 			self#generate_src_binhdr;
-			Uslog.log "Successfully generated uobj binary header source.";
+			Uslog.log ~tag:"" "[OK]";
 
 			(* generate uobj binary public methods info source *)
-			Uslog.log "Generating uobj binary public methods info source...";
+			Uslog.log ~crlf:false "Generating uobj binary public methods info source...";
 			self#generate_src_publicmethods_info;
-			Uslog.log "Successfully generated binary uobj public methods info source.";
+			Uslog.log ~tag:"" "[OK]";
 
 			(* generate uobj binary intrauobjcoll callees info source *)
-			Uslog.log "Generating uobj binary intrauobjcoll callees info source...";
+			Uslog.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 			self#generate_src_intrauobjcoll_callees_info;
-			Uslog.log "Successfully generated uobj binary intrauobjcoll callees info source.";
+			Uslog.log ~tag:"" "[OK]";
 
 
 			()	
