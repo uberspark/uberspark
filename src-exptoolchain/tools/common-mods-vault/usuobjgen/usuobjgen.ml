@@ -13,7 +13,7 @@ module Usuobjgen =
 	struct
 
 	let log_tag = "Usuobjgen";;
-
+(*
 	let hashtbl_keys h = Hashtbl.fold (fun key _ l -> key :: l) h [];;
 	
 	let generate_linker_script 
@@ -132,7 +132,9 @@ module Usuobjgen =
 			close_out oc;
 			(linker_script_filename)
 	;;
-																
+*)
+
+
 (*
 	let generate_linker_script 
 		(fname : string)

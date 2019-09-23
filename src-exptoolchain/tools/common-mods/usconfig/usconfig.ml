@@ -27,6 +27,7 @@ module Usconfig =
 	let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 	let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
 	let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
+	let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 
 	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
 	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
