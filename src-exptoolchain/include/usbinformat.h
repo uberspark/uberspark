@@ -154,6 +154,22 @@ typedef struct {
 } __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
 
 
+//////
+// uobj intrauobjcoll callees info type definition
+//////
+
+typedef struct {
+	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//public method name
+	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint32_t slt_ordinal;									//index into sentinal linkage table
+} __attribute__((packed)) __usbinformat_uobj_intrauobjcoll_callees_info_t;
+
+typedef struct {
+	uint32_t num_intraobjcoll_callees;	//total number of intrauobjcoll callees
+	__usbinformat_uobj_intrauobjcoll_callees_info_t intrauobjcoll_callees[USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES];
+} __attribute__((packed)) usbinformat_uobj_intrauobjcoll_callees_info_t;
+
+
 
 #endif //__ASSEMBLY__
 
