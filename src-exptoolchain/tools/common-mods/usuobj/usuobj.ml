@@ -74,8 +74,17 @@ class uobject
 		val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
+		(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
 		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_hashtbl = d_sections_hashtbl;
+
+		(* hashtbl of uobj sections with memory map info; indexed by section name *)
+		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		method get_d_sections_memory_map_hashtbl = (d_sections_memory_map_hashtbl);
+
+		(* hashtbl of uobj sections with memory map info; indexed by section virtual address*)
+		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
+		method get_d_sections_memory_map_hashtbl_byorigin = (d_sections_memory_map_hashtbl_byorigin);
 
 
 		val d_target_def: Ustypes.target_def_t = {
@@ -107,12 +116,12 @@ class uobject
 		;
 
 		(* uobj load address base *)
-		val d_load_addr = ref 0;
+		val d_load_addr = ref !Usconfig.binary_uobj_default_load_addr;
 		method get_d_load_addr = !d_load_addr;
 		method set_d_load_addr load_addr = (d_load_addr := load_addr);
 		
 		(* uobj size *)
-		val d_size = ref 0; 
+		val d_size = ref !Usconfig.binary_uobj_default_size; 
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
@@ -1144,6 +1153,114 @@ class uobject
 
 
 		(*--------------------------------------------------------------------------*)
+		(* consolidate sections with memory map *)
+		(* uobj_load_addr = load address of uobj *)
+		(*--------------------------------------------------------------------------*)
+		method consolidate_sections_with_memory_map
+			(uobj_load_addr : int)
+			(uobjsize : int)  
+			=
+
+			let uobj_section_load_addr = ref 0 in
+			self#set_d_load_addr uobj_load_addr;
+			uobj_section_load_addr := uobj_load_addr;
+
+			(* iterate over all the sections *)
+			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
+				(* compute and round up section size to section alignment *)
+				let remainder_size = (x.usbinformat.f_size mod !Usconfig.binary_uobj_section_alignment) in
+				let padding_size = ref 0 in
+					if remainder_size > 0 then
+						begin
+							padding_size := !Usconfig.binary_uobj_section_alignment - remainder_size;
+						end
+					else
+						begin
+							padding_size := 0;
+						end
+					;
+				let section_size = (x.usbinformat.f_size + !padding_size) in 
+
+
+				Hashtbl.add d_sections_memory_map_hashtbl key 
+					{ f_name = x.f_name;	
+					 	f_subsection_list = x.f_subsection_list;	
+						usbinformat = { f_type=x.usbinformat.f_type; 
+														f_prot=0; 
+														f_size = section_size;
+														f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+														f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+														f_addr_start = !uobj_section_load_addr; 
+														f_addr_file = 0;
+														f_reserved = 0;
+													};
+					};
+				Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+					{ f_name = x.f_name;	
+					 	f_subsection_list = x.f_subsection_list;	
+						usbinformat = { f_type=x.usbinformat.f_type; 
+														f_prot=0; 
+														f_size = section_size;
+														f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+														f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+														f_addr_start = !uobj_section_load_addr; 
+														f_addr_file = 0;
+														f_reserved = 0;
+												};
+					};
+
+				Uslog.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				uobj_section_load_addr := !uobj_section_load_addr + section_size;
+			)  self#get_d_sections_hashtbl;
+
+			(* check to see if the uobj sections fit neatly into uobj size *)
+			(* if not, add a filler section to pad it to uobj size *)
+			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
+				begin
+					Uslog.log ~lvl:Uslog.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
+					ignore(exit 1);
+				end
+			;	
+
+			if (!uobj_section_load_addr - uobj_load_addr) < uobjsize then
+				begin
+					(* add padding section *)
+					Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
+						{ f_name = "usuobj_padding";	
+						 	f_subsection_list = [ ];	
+							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+															f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_addr_file = 0;
+															f_reserved = 0;
+														};
+						};
+					Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+						{ f_name = "usuobj_padding";	
+						 	f_subsection_list = [ ];	
+							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+															f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_addr_file = 0;
+															f_reserved = 0;
+														};
+						};
+				end
+			;	
+						
+			self#set_d_size uobjsize;
+			()
+		;
+
+
+
+		(*--------------------------------------------------------------------------*)
 		(* initialize *)
 		(*--------------------------------------------------------------------------*)
 		method initialize	
@@ -1206,8 +1323,8 @@ class uobject
 					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment; 
-													f_pad_to = !Usconfig.section_alignment; 
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1220,8 +1337,8 @@ class uobject
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment;
-													f_pad_to = !Usconfig.section_alignment; 
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment;
+													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1234,8 +1351,8 @@ class uobject
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment;
-													f_pad_to = !Usconfig.section_alignment; 
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment;
+													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1248,8 +1365,8 @@ class uobject
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment; 
-													f_pad_to = !Usconfig.section_alignment; 
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1262,8 +1379,8 @@ class uobject
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment; 
-													f_pad_to = !Usconfig.section_alignment;
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+													f_pad_to = !Usconfig.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1276,14 +1393,19 @@ class uobject
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 													f_prot=0; 
 													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.section_alignment; 
-													f_pad_to = !Usconfig.section_alignment;
+													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
+													f_pad_to = !Usconfig.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
 												};
 				};
- 
+
+			(* consolidate uboj section memory map *)
+			Uslog.log "Consolidating uobj section memory map...";
+			self#consolidate_sections_with_memory_map self#get_d_load_addr self#get_d_size;
+			Uslog.log "uobj section memory map initialized";
+
 			(* generate uobj binary header source *)
 			Uslog.log ~crlf:false "Generating uobj binary header source...";
 			self#generate_src_binhdr;
