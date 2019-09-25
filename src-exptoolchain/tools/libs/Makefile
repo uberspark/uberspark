@@ -3,8 +3,16 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
-###### targets
+
+###### variables
 BUILDDIR = _build
+LIB_NAME = uberspark
+
+LIB_SOURCES := uberspark_log.ml
+LIB_SOURCES += uberspark.ml
+
+
+###### targets
 
 
 .PHONY: prep
@@ -15,11 +23,11 @@ prep:
 
 .PHONY: all
 all: prep
-	cd $(BUILDDIR) && $(OCAMLC) -a uberspark_log.ml uberspark.ml -o uberspark.cma
-	cd $(BUILDDIR) && $(OCAMLOPT) -a -ccopt -static uberspark_log.ml uberspark.ml -o uberspark.cmxa
-	cd $(BUILDDIR) && $(OCAMLFIND) remove uberspark 
-	cd $(BUILDDIR) && $(OCAMLFIND) install uberspark META uberspark.cma uberspark.cmxa uberspark.a
-	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static -package unix -package uberspark -linkpkg -o test test.ml
+	cd $(BUILDDIR) && $(OCAMLC) -a $(LIB_SOURCES) -o $(LIB_NAME).cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -ccopt -static $(LIB_SOURCES) -o $(LIB_NAME).cmxa
+	cd $(BUILDDIR) && $(OCAMLFIND) remove $(LIB_NAME) 
+	cd $(BUILDDIR) && $(OCAMLFIND) install $(LIB_NAME) META $(LIB_NAME).cma $(LIB_NAME).cmxa $(LIB_NAME).a
+	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static -package unix -package $(LIB_NAME) -linkpkg -o test test.ml
 
 
 .PHONY: clean
