@@ -60,12 +60,12 @@ docs_pdf: generate_buildtruss
 	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
 
 
-###### common modules build targets
+###### libraries targets
 
-### build common modules
-.PHONY: commonmods
-commonmods:
-	$(call docker_run,make -f build-commonmods.mk, -w all)
+### build libraries
+.PHONY: libs
+libs:
+	$(call docker_run,make -f build-libs.mk, -w all)
 
 
 ###### frontend build targets

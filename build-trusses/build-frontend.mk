@@ -10,11 +10,11 @@ include ./commondefs.mk
 ### build uberspark frontend
 .PHONY: all
 all: 
-	$(MAKE) -f build-commonmods.mk -w all
+	$(MAKE) -f build-libs.mk -w all
 	cd $(UBERSPARK_SRCDIR)/tools/frontend && $(MAKE) -w all
 
 ### cleanup
 .PHONY: clean
 clean: 
-	$(MAKE) -f build-commonmods.mk -w clean
+	$(MAKE) -f build-libs.mk -w clean
 	cd $(UBERSPARK_SRCDIR)/tools/frontend && $(MAKE) -w clean
