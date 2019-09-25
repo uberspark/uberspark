@@ -4,8 +4,6 @@
 *)
 open Unix
 
-module Usconfig =
-	struct
 
 	(*------------------------------------------------------------------------*)
 	(* environment related configuration settings *)	
@@ -254,6 +252,3 @@ module Usconfig =
 	let sizeof_uobjcoll_info_t = 0x21000;;
 	let get_sizeof_uobjcoll_info_t () = (sizeof_uobjcoll_info_t) ;;
 
-;;
-								
-	end

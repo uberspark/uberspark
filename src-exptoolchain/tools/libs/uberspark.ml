@@ -1,7 +1,15 @@
-(* main library interface *)
+(* uberSpark: main library interface *)
+(* author: amit vasudevan <amitvasudevan@acm.org> *)
 
-(*module Logger = Uberspark_log*)
+module Config = Uberspark_config
+module Basetypes = Uberspark_basetypes
+module Logger = Uberspark_logger
+module Osservices = Uberspark_osservices
+module Manifest = Uberspark_manifest
+module Binary = Uberspark_binary
+module Uobj = Uberspark_uobj
 
+(*
 module Usuobj =
 struct
 
@@ -13,3 +21,4 @@ struct
     let my_method = Uberspark_log.log "hello there";
     
     end
+*)

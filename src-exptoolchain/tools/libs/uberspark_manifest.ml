@@ -6,15 +6,6 @@
 open Yojson
 
 
-open Ustypes
-open Usconfig
-open Uslog
-open Usosservices
-(*open Usextbinutils*)
-
-
-module Usmanifest =
-	struct
 
 	type hdr_t =
 		{
@@ -53,7 +44,7 @@ module Usmanifest =
 								retjson := uobj_mf_json;
 								
 					with Yojson.Json_error s -> 
-							Uslog.logf "libusmf" Uslog.Debug "usmf_read_manifest: ERROR:%s" s;
+							Uberspark_logger.logf "libusmf" Uberspark_logger.Debug "usmf_read_manifest: ERROR:%s" s;
 							retval := false;
 					;
 					
@@ -81,7 +72,7 @@ module Usmanifest =
 								retjson := mf_json;
 								
 					with Yojson.Json_error s -> 
-							Uslog.log ~lvl:Uslog.Error "usmf_read_manifest: ERROR:%s" s;
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "usmf_read_manifest: ERROR:%s" s;
 							retval := false;
 					;
 	
@@ -258,7 +249,7 @@ module Usmanifest =
 								
 								retval := true;
 								List.iter (fun (x,y) ->
-									Uslog.logf "usmanifest" Uslog.Debug "%s: key=%s" __LOC__ x;
+									Uberspark_logger.logf "usmanifest" Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 									let usmf_vharness_attribute_list = ref [] in
 										usmf_vharness_attribute_list := !usmf_vharness_attribute_list @
 																	[ x ];
@@ -274,7 +265,7 @@ module Usmanifest =
 										*)
 									()
 								) usmf_vharness_assoc_list;
-							Uslog.logf "usmanifests" Uslog.Debug "%s: list length=%u" __LOC__ (List.length !usmf_vharness_list);
+							Uberspark_logger.logf "usmanifests" Uberspark_logger.Debug "%s: list length=%u" __LOC__ (List.length !usmf_vharness_list);
 
 						end
 					;
@@ -308,7 +299,7 @@ module Usmanifest =
 										let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
 											retval := true;
 											List.iter (fun (x,y) ->
-													Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+													Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 													let uobj_section_attribute_list = ref [] in
 														uobj_section_attribute_list := !uobj_section_attribute_list @
 																					[ x ];
@@ -323,7 +314,7 @@ module Usmanifest =
 															retval:=false;
 													()
 												) uobj_sections_assoc_list;
-											Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
+											Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
 									end
 								;		
 					
@@ -359,7 +350,7 @@ module Usmanifest =
 							let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
 								retval := true;
 								List.iter (fun (x,y) ->
-										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 										let uobj_publicmethods_attribute_list = ref [] in
 											uobj_publicmethods_attribute_list := !uobj_publicmethods_attribute_list @
 																		[ x ];
@@ -374,7 +365,7 @@ module Usmanifest =
 												retval:=false;
 										()
 									) uobj_publicmethods_assoc_list;
-								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_publicmethods_list);
+								Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: list length=%u" __LOC__ (List.length !uobj_publicmethods_list);
 
 						end
 					;
@@ -406,7 +397,7 @@ module Usmanifest =
 							let uobj_calleemethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_calleemethods_json in
 								retval := true;
 								List.iter (fun (x,y) ->
-										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 										let uobj_calleemethods_attribute_list = ref [] in
 											List.iter (fun z ->
 												uobj_calleemethods_attribute_list := !uobj_calleemethods_attribute_list @
@@ -512,12 +503,12 @@ module Usmanifest =
 								retval := true;
 								List.iter (fun (s_type, s_type_id_json) ->
 										let s_type_id = Yojson.Basic.Util.to_string s_type_id_json in
-										Uslog.logf log_tag Uslog.Debug "%s: type=%s type_id=%s" __LOC__ 
+										Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: type=%s type_id=%s" __LOC__ 
 												s_type s_type_id;
 											uobjcoll_sentineltypes_list := !uobjcoll_sentineltypes_list @	[ [s_type; s_type_id ] ];
 										()
 									) uobjcoll_sentineltypes_assoc_list;
-								Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobjcoll_sentineltypes_list);
+								Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: list length=%u" __LOC__ (List.length !uobjcoll_sentineltypes_list);
 
 						end
 					;
@@ -549,7 +540,7 @@ module Usmanifest =
 							let uobjcoll_entrycallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_entrycallees_json in
 								retval := true;
 								List.iter (fun (x,y) ->
-										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 										let uobjcoll_entrycallees_attribute_list = ref [] in
 											List.iter (fun z ->
 												uobjcoll_entrycallees_attribute_list := !uobjcoll_entrycallees_attribute_list @
@@ -579,7 +570,7 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	let parse_node_usmf_uobjcoll_exitcallees usmf_json =
 		let retval = ref true in
-		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_exitcallee_t)  Hashtbl.t)) in
+		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.uobjcoll_exitcallee_t)  Hashtbl.t)) in
 
 		try
 			let open Yojson.Basic.Util in
@@ -590,7 +581,7 @@ module Usmanifest =
 							let uobjcoll_exitcallees_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_exitcallees_json in
 								retval := true;
 								List.iter (fun (x,y) ->
-										Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+										Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 										
 										Hashtbl.add uobjcoll_exitcallees_hashtbl x 
 										{
@@ -614,5 +605,4 @@ module Usmanifest =
 	;;
 																																																																																																																																																																																				
 																																																																																																																																																																																				
-																																																																																							
-	end
+		

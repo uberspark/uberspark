@@ -1,12 +1,7 @@
-open Unix
 open Uberspark
 
-let myval : Uberspark.Usuobj.sentinel_info_t = {s_type="sample"};;
-
 let main () = 
-  (*Uberspark.Logger.log "sample";*)
-  Uberspark.Usuobj.my_method;
-  print_string "Hello world!\n";
+  Uberspark.Logger.log "hello world: %s" Uberspark.Config.env_home_dir;
   ()
 ;;
 

@@ -2,14 +2,7 @@
 	uberSpark OS services interface
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
-
 open Unix
-open Sys
-open Uslog
-open Usconfig
-
-module Usosservices =
-	struct
 		
 	let file_copy input_name output_name =
 		let buffer_size = 8192 in
@@ -72,7 +65,7 @@ module Usosservices =
 	      while true do
 					p_singleoutputline := input_line in_channel;
 					if verbose then
-						Uslog.logf verbose_mod_tag Uslog.Info "%s" !p_singleoutputline;
+						Uberspark_logger.logf verbose_mod_tag Uberspark_logger.Info "%s" !p_singleoutputline;
 											
 					p_output := p_singleoutputline :: !p_output 
 		    done
@@ -103,14 +96,14 @@ module Usosservices =
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
-				retval_abspath := !retval_abspath ^ Usconfig.env_path_seperator ^ path_filename;
+				retval_abspath := !retval_abspath ^ Uberspark_config.env_path_seperator ^ path_filename;
 				(*Unix.chdir !retval_abspath;
 				retval_abspath := Unix.getcwd ();
 				*)
 				Unix.chdir curdir;
 				
 			with Unix.Unix_error (ecode, fname, fparam) -> 
-				Uslog.log ~lvl:Uslog.Error "%s" (Unix.error_message ecode);
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" (Unix.error_message ecode);
 				retval := false;
 			;
 	
@@ -150,14 +143,13 @@ module Usosservices =
 		(!retval, !retecode, !reterrmsg)
 	;;
 
-	end
 	
 (*	
 				let info =
     			try Unix.stat uobj_binary_filename
     			with Unix.Unix_error (e, _, _) ->
-						Uslog.logf log_tag Uslog.Error "no %s: %s!" uobj_binary_filename
+						Uberspark_logger.logf log_tag Uberspark_logger.Error "no %s: %s!" uobj_binary_filename
 								(Unix.error_message e);
       			exit 1 in
-		   		Uslog.logf log_tag Uslog.Info "filesize=%u" info.Unix.st_size;
+		   		Uberspark_logger.logf log_tag Uberspark_logger.Info "filesize=%u" info.Unix.st_size;
 *)

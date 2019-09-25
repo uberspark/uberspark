@@ -3,8 +3,6 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
-module Ustypes =
-struct
 
 		(* from usbinformat.h *)
 		type usbinformat_section_info_t =
@@ -54,5 +52,3 @@ struct
 			};;
 				
 
-
-end

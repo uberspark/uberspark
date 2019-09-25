@@ -4,16 +4,7 @@
 ------------------------------------------------------------------------------*)
 
 open Str
-open Ustypes
-open Usconfig
-open Uslog
-open Usmanifest
-open Usosservices
-(*open Usextbinutils*)
-(*open Usuobjgen*)
 
-module Usuobj =
-struct
 
 		type sentinel_info_t = 
 			{
@@ -52,7 +43,7 @@ class uobject
 		val d_path_ns = ref "";
 		method get_d_path_ns = !d_path_ns;
 
-		val d_hdr: Usmanifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
+		val d_hdr: Uberspark_manifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 		method get_d_hdr = d_hdr;
 
 
@@ -75,26 +66,26 @@ class uobject
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
 		(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
-		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_hashtbl = d_sections_hashtbl;
 
 		(* hashtbl of uobj sections with memory map info; indexed by section name *)
-		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl = (d_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info; indexed by section virtual address*)
-		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl_byorigin = (d_sections_memory_map_hashtbl_byorigin);
 
 
-		val d_target_def: Ustypes.target_def_t = {
+		val d_target_def: Uberspark_basetypes.target_def_t = {
 			f_platform = ""; 
 			f_arch = ""; 
 			f_cpu = "";
 		};
 		method get_d_target_def = d_target_def;
 		method set_d_target_def 
-			(target_def: Ustypes.target_def_t) = 
+			(target_def: Uberspark_basetypes.target_def_t) = 
 			d_target_def.f_platform <- target_def.f_platform;
 			d_target_def.f_arch <- target_def.f_arch;
 			d_target_def.f_cpu <- target_def.f_cpu;
@@ -116,16 +107,16 @@ class uobject
 		;
 
 		(* uobj load address base *)
-		val d_load_addr = ref !Usconfig.binary_uobj_default_load_addr;
+		val d_load_addr = ref !Uberspark_config.binary_uobj_default_load_addr;
 		method get_d_load_addr = !d_load_addr;
 		method set_d_load_addr load_addr = (d_load_addr := load_addr);
 		
 		(* uobj size *)
-		val d_size = ref !Usconfig.binary_uobj_default_size; 
+		val d_size = ref !Uberspark_config.binary_uobj_default_size; 
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
-		method hashtbl_keys (h : (int, Ustypes.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
+		method hashtbl_keys (h : (int, Uberspark_basetypes.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
 
 
 (*
@@ -192,16 +183,16 @@ class uobject
 *)
 
 		(* base uobj sections hashtbl indexed by section name *)		
-		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = (o_uobj_sections_hashtbl);
 		method get_o_uobj_sections_hashtbl_length = (Hashtbl.length o_uobj_sections_hashtbl);
 		
 		(* hashtbl of uobj sections with memory map info indexed by section name *)
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl = (uobj_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info indexed by section va*)
-		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl_byorigin = (uobj_sections_memory_map_hashtbl_byorigin);
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
@@ -213,7 +204,7 @@ class uobject
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
 
-		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Ustypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
+		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 *)
 		
@@ -433,7 +424,7 @@ class uobject
 												let uobj_sections_attribute_list = (Yojson.Basic.Util.to_list y) in
 													if (List.length uobj_sections_attribute_list  < 6 ) then
 														begin
-															Uslog.log ~lvl:Uslog.Error "insufficient entries within section attribute list for section: %s" x;															retval := false;
+															Uberspark_logger.log ~lvl:Uberspark_logger.Error "insufficient entries within section attribute list for section: %s" x;															retval := false;
 														end
 													else
 														begin
@@ -495,7 +486,7 @@ class uobject
 			
 
 			(* read manifest JSON *)
-			let (rval, mf_json) = Usmanifest.read_manifest 
+			let (rval, mf_json) = Uberspark_manifest.read_manifest 
 																self#get_d_mf_filename keep_temp_files in
 			
 			if (rval == false) then (false)
@@ -503,12 +494,12 @@ class uobject
 
 			(* parse hdr node *)
 			let (rval, hdr) =
-								Usmanifest.parse_node_hdr mf_json in
+								Uberspark_manifest.parse_node_hdr mf_json in
 			if (rval == false) then (false)
 			else
 
 			(* sanity check type to be uobj and store hdr*)
-			if (compare hdr.f_type Usconfig.namespace_uobj_mf_hdr_type) <> 0 then (false)
+			if (compare hdr.f_type Uberspark_config.namespace_uobj_mf_hdr_type) <> 0 then (false)
 			else
 			let dummy = 0 in
 				begin
@@ -526,7 +517,7 @@ class uobject
 			else
 			let dummy = 0 in
 				begin
-					Uslog.log "total sources: h files=%u, c files=%u, casm files=%u" 
+					Uberspark_logger.log "total sources: h files=%u, c files=%u, casm files=%u" 
 						(List.length self#get_d_sources_h_file_list)
 						(List.length self#get_d_sources_c_file_list)
 						(List.length self#get_d_sources_casm_file_list);
@@ -540,7 +531,7 @@ class uobject
 			else
 			let dummy = 0 in
 				begin
-					Uslog.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
+					Uberspark_logger.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
 				end;
 
 			(* parse uobj-calles node *)
@@ -550,10 +541,10 @@ class uobject
 			else
 			let dummy = 0 in
 				begin
-					Uslog.log "list of uobj-callees follows:";
+					Uberspark_logger.log "list of uobj-callees follows:";
 
 					Hashtbl.iter (fun key value  ->
-						Uslog.log "uobj=%s; callees=%u" key (List.length value);
+						Uberspark_logger.log "uobj=%s; callees=%u" key (List.length value);
 					) self#get_d_callees_hashtbl;
 				end;
 
@@ -564,7 +555,7 @@ class uobject
 			else
 			let dummy = 0 in
 				begin
-					Uslog.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
+					Uberspark_logger.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
 				end;
 
 
@@ -576,7 +567,7 @@ class uobject
 			let dummy = 0 in
 			if (rval == true) then
 				begin
-					Uslog.log "binary sections override:%u" (Hashtbl.length self#get_d_sections_hashtbl);								
+					Uberspark_logger.log "binary sections override:%u" (Hashtbl.length self#get_d_sections_hashtbl);								
 				end;
 	
 (*																											
@@ -601,7 +592,7 @@ class uobject
 			: bool	= 
 				let retval = ref false in
 
-				let oc = open_out Usconfig.namespace_uobjslt_output_symbols_filename in
+				let oc = open_out Uberspark_config.namespace_uobjslt_output_symbols_filename in
 					Printf.fprintf oc "\n/* --- this file is autogenerated --- */";
 					Printf.fprintf oc "\n/* uberSpark sentinel linkage table - symbols */";
 					Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
@@ -652,7 +643,7 @@ class uobject
 			: bool	= 
 				let retval = ref false in
 				
-				Uslog.log ~lvl:Uslog.Debug "fn_list length=%u" (List.length fn_list);
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "fn_list length=%u" (List.length fn_list);
 				let oc = open_out output_filename in
 					Printf.fprintf oc "\n/* --- this file is autogenerated --- */";
 					Printf.fprintf oc "\n/* uberSpark sentinel linkage table */";
@@ -702,28 +693,28 @@ class uobject
 				= 
 				let retval = ref false in 	
 				let target_def = 	self#get_d_target_def in	
-				let uobjslt_filename = (Usconfig.namespace_uobjslt ^ Usconfig.env_path_seperator ^
-					target_def.f_arch ^ Usconfig.env_path_seperator ^ target_def.f_cpu ^ Usconfig.env_path_seperator ^
-					Usconfig.namespace_uobjslt_mf_filename) in 
+				let uobjslt_filename = (Uberspark_config.namespace_uobjslt ^ Uberspark_config.env_path_seperator ^
+					target_def.f_arch ^ Uberspark_config.env_path_seperator ^ target_def.f_cpu ^ Uberspark_config.env_path_seperator ^
+					Uberspark_config.namespace_uobjslt_mf_filename) in 
 
-				let (rval, abs_uobjslt_filename) = (Usosservices.abspath uobjslt_filename) in
+				let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
 				if(rval == true) then
 				begin
-					(*Uslog.log ~lvl:Uslog.Debug "fn_list length=%u" (List.length fn_list);*)
-					Uslog.log "reading slt manifest from:%s" abs_uobjslt_filename;
+					(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "fn_list length=%u" (List.length fn_list);*)
+					Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
 	
 					(* read manifest JSON *)
-					let (rval, mf_json) = (Usmanifest.read_manifest abs_uobjslt_filename true) in
+					let (rval, mf_json) = (Uberspark_manifest.read_manifest abs_uobjslt_filename true) in
 					if(rval == true) then
 					begin
 
 						(* parse hdr node *)
-						let (rval, hdr) =	Usmanifest.parse_node_hdr mf_json in
+						let (rval, hdr) =	Uberspark_manifest.parse_node_hdr mf_json in
 						if(rval == true) then
 						begin
 
 							(* sanity check uobjslt header type*)
-							if (compare hdr.f_type Usconfig.namespace_uobjslt_mf_hdr_type) == 0 then 
+							if (compare hdr.f_type Uberspark_config.namespace_uobjslt_mf_hdr_type) == 0 then 
 							begin
 
 								(* read node for trampoline code *)
@@ -736,8 +727,8 @@ class uobject
 										self#set_d_slt_trampolinecode (uobjslt_trampolinecode_json |> to_string);
 										self#set_d_slt_trampolinedata (uobjslt_trampolinedata_json |> to_string);
 										retval := true;
-										(*Uslog.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
-										Uslog.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
+										(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
+										Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
 									end;
 
 								with Yojson.Basic.Util.Type_error _ -> 
@@ -764,7 +755,7 @@ class uobject
 						let uobj_binary_json = mf_json |> member "uobj-binary" in
 						if uobj_binary_json != `Null then
 
-					Uslog.log "success";
+					Uberspark_logger.log "success";
 				end;
 
 				(* read node for trampoline code *)
@@ -780,7 +771,7 @@ class uobject
 											let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
 												retval := true;
 												List.iter (fun (x,y) ->
-														Uslog.logf log_tag Uslog.Debug "%s: key=%s" __LOC__ x;
+														Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: key=%s" __LOC__ x;
 														let uobj_section_attribute_list = ref [] in
 															uobj_section_attribute_list := !uobj_section_attribute_list @
 																						[ x ];
@@ -795,7 +786,7 @@ class uobject
 																retval:=false;
 														()
 													) uobj_sections_assoc_list;
-												Uslog.logf log_tag Uslog.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
+												Uberspark_logger.logf log_tag Uberspark_logger.Debug "%s: list length=%u" __LOC__ (List.length !uobj_sections_list);
 										end
 									;		
 						
@@ -819,7 +810,7 @@ class uobject
 			method generate_src_binhdr = 
 
 				(* open binary header source file *)
-				let oc = open_out Usconfig.namespace_uobj_binhdr_src_filename in
+				let oc = open_out Uberspark_config.namespace_uobj_binhdr_src_filename in
 				
 				(* generate prologue *)
 				Printf.fprintf oc "\n/* autogenerated uberSpark uobj binary header source */";
@@ -840,11 +831,11 @@ class uobject
 				(*num_sections*)
 				Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length self#get_d_sections_hashtbl);
 				(*page_size*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Usconfig.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
 				(*aligned_at*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Usconfig.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
 				(*pad_to*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Usconfig.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
 				(*size*)
 				Printf.fprintf oc "\n\t\t0x%08xULL," (self#get_d_size); 
 				Printf.fprintf oc "\n\t},"; 
@@ -856,7 +847,7 @@ class uobject
 				(* generate uobj section defs *)
 				Printf.fprintf oc "\n\t{"; 
 				
-				Hashtbl.iter (fun key (section_info:Ustypes.section_info_t) ->  
+				Hashtbl.iter (fun key (section_info:Uberspark_basetypes.section_info_t) ->  
 					Printf.fprintf oc "\n\t\t{"; 
 					(* type *)
 					Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_type); 
@@ -896,7 +887,7 @@ class uobject
 			method generate_src_publicmethods_info = 
 
 				(* open public methods info source file *)
-				let oc = open_out Usconfig.namespace_uobj_publicmethods_info_src_filename in
+				let oc = open_out Uberspark_config.namespace_uobj_publicmethods_info_src_filename in
 				
 				(* generate prologue *)
 				Printf.fprintf oc "\n/* autogenerated uberSpark uobj public methods info source */";
@@ -944,7 +935,7 @@ class uobject
 		method generate_src_intrauobjcoll_callees_info = 
 
 			(* open public methods info source file *)
-			let oc = open_out Usconfig.namespace_uobj_intrauobjcoll_callees_info_src_filename in
+			let oc = open_out Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename in
 			
 			(* generate prologue *)
 			Printf.fprintf oc "\n/* autogenerated uberSpark uobj intrauobjcoll callees info source */";
@@ -1004,7 +995,7 @@ class uobject
 		method generate_src_interuobjcoll_callees_info = 
 
 			(* open interuobjcoll callees info source file *)
-			let oc = open_out Usconfig.namespace_uobj_interuobjcoll_callees_info_src_filename in
+			let oc = open_out Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename in
 			
 			(* generate prologue *)
 			Printf.fprintf oc "\n/* autogenerated uberSpark uobj interuobjcoll callees info source */";
@@ -1062,10 +1053,10 @@ class uobject
 		method generate_linker_script 
 			(binary_origin : int)
 			(binary_size : int)
-			(sections_hashtbl : (int, Ustypes.section_info_t) Hashtbl.t) 
+			(sections_hashtbl : (int, Uberspark_basetypes.section_info_t) Hashtbl.t) 
 	 		 =
 		
-			let oc = open_out Usconfig.namespace_uobj_linkerscript_filename in
+			let oc = open_out Uberspark_config.namespace_uobj_linkerscript_filename in
 				Printf.fprintf oc "\n/* autogenerated uberSpark uobj linker script */";
 				Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
 				Printf.fprintf oc "\n";
@@ -1166,13 +1157,13 @@ class uobject
 			uobj_section_load_addr := uobj_load_addr;
 
 			(* iterate over all the sections *)
-			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Uberspark_basetypes.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.usbinformat.f_size mod !Usconfig.binary_uobj_section_alignment) in
+				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.binary_uobj_section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Usconfig.binary_uobj_section_alignment - remainder_size;
+							padding_size := !Uberspark_config.binary_uobj_section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1188,8 +1179,8 @@ class uobject
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_size = section_size;
-														f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-														f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+														f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+														f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 														f_addr_start = !uobj_section_load_addr; 
 														f_addr_file = 0;
 														f_reserved = 0;
@@ -1201,15 +1192,15 @@ class uobject
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_size = section_size;
-														f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-														f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+														f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+														f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 														f_addr_start = !uobj_section_load_addr; 
 														f_addr_file = 0;
 														f_reserved = 0;
 												};
 					};
 
-				Uslog.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  self#get_d_sections_hashtbl;
 
@@ -1217,7 +1208,7 @@ class uobject
 			(* if not, add a filler section to pad it to uobj size *)
 			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
 				begin
-					Uslog.log ~lvl:Uslog.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
 					ignore(exit 1);
 				end
 			;	
@@ -1228,11 +1219,11 @@ class uobject
 					Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-															f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+															f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -1241,11 +1232,11 @@ class uobject
 					Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-															f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+															f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -1264,22 +1255,22 @@ class uobject
 		(* initialize *)
 		(*--------------------------------------------------------------------------*)
 		method initialize	
-			(target_def: Ustypes.target_def_t)
+			(target_def: Uberspark_basetypes.target_def_t)
 			= 
 			(* set target definition *)
 			self#set_d_target_def target_def;	
 
 			(* debug dump the target spec and definition *)		
-			Uslog.log ~lvl:Uslog.Debug "uobj target spec => %s:%s:%s" 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
 					(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
-			Uslog.log ~lvl:Uslog.Debug "uobj target definition => %s:%s:%s" 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
 					(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 
 			(* parse uobj slt manifest *)
 			let rval = (self#parse_manifest_slt) in	
 			if (rval == false) then
 				begin
-					Uslog.log ~lvl:Uslog.Error "unable to stat/parse uobj slt manifest!";
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
 					ignore (exit 1);
 				end
 			;
@@ -1290,12 +1281,12 @@ class uobject
 			Hashtbl.iter (fun key value  ->
 				callees_list := !callees_list @ value;
 			) self#get_d_callees_hashtbl;
-			Uslog.log "total callees=%u" (List.length !callees_list);
+			Uberspark_logger.log "total callees=%u" (List.length !callees_list);
 
-			let rval = (self#generate_slt !callees_list ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" Usconfig.namespace_uobjslt_callees_output_filename) in	
+			let rval = (self#generate_slt !callees_list ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" Uberspark_config.namespace_uobjslt_callees_output_filename) in	
 			if (rval == false) then
 				begin
-					Uslog.log ~lvl:Uslog.Error "unable to generate slt for callees!";
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for callees!";
 					ignore (exit 1);
 				end
 			;
@@ -1306,12 +1297,12 @@ class uobject
 			Hashtbl.iter (fun key value ->
 				interuobjcoll_callees_list := !interuobjcoll_callees_list @ value;
 			)self#get_d_interuobjcoll_callees_hashtbl;
-			Uslog.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
+			Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
 
-			let rval = (self#generate_slt !interuobjcoll_callees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Usconfig.namespace_uobjslt_exitcallees_output_filename) in	
+			let rval = (self#generate_slt !interuobjcoll_callees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Uberspark_config.namespace_uobjslt_exitcallees_output_filename) in	
 			if (rval == false) then
 				begin
-					Uslog.log ~lvl:Uslog.Error "unable to generate slt for exitcallees!";
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for exitcallees!";
 					ignore (exit 1);
 				end
 			;
@@ -1320,11 +1311,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
+					usbinformat = { f_type= Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1334,11 +1325,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment;
-													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1348,11 +1339,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment;
-													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1362,11 +1353,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-													f_pad_to = !Usconfig.binary_uobj_section_alignment; 
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1376,11 +1367,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-													f_pad_to = !Usconfig.binary_uobj_section_alignment;
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1390,11 +1381,11 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 													f_prot=0; 
-													f_size = !Usconfig.section_size_general;
-													f_aligned_at = !Usconfig.binary_uobj_section_alignment; 
-													f_pad_to = !Usconfig.binary_uobj_section_alignment;
+													f_size = !Uberspark_config.section_size_general;
+													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
+													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1402,34 +1393,34 @@ class uobject
 				};
 
 			(* consolidate uboj section memory map *)
-			Uslog.log "Consolidating uobj section memory map...";
+			Uberspark_logger.log "Consolidating uobj section memory map...";
 			self#consolidate_sections_with_memory_map self#get_d_load_addr self#get_d_size;
-			Uslog.log "uobj section memory map initialized";
+			Uberspark_logger.log "uobj section memory map initialized";
 
 			(* generate uobj binary header source *)
-			Uslog.log ~crlf:false "Generating uobj binary header source...";
+			Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 			self#generate_src_binhdr;
-			Uslog.log ~tag:"" "[OK]";
+			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary public methods info source *)
-			Uslog.log ~crlf:false "Generating uobj binary public methods info source...";
+			Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 			self#generate_src_publicmethods_info;
-			Uslog.log ~tag:"" "[OK]";
+			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary intrauobjcoll callees info source *)
-			Uslog.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
+			Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 			self#generate_src_intrauobjcoll_callees_info;
-			Uslog.log ~tag:"" "[OK]";
+			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary interuobjcoll callees info source *)
-			Uslog.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
+			Uberspark_logger.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
 			self#generate_src_interuobjcoll_callees_info;
-			Uslog.log ~tag:"" "[OK]";
+			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary linker script *)
-			Uslog.log ~crlf:false "Generating uobj binary linker script...";
+			Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
 			self#generate_linker_script self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
-			Uslog.log ~tag:"" "[OK]";
+			Uberspark_logger.log ~tag:"" "[OK]";
 
 
 			()	
@@ -1438,8 +1429,6 @@ class uobject
 
 end;;
 
-
-end
 
 
 
@@ -1470,11 +1459,11 @@ end
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.s_length mod !Usconfig.section_alignment) in
+				let remainder_size = (x.s_length mod !Uberspark_config.section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Usconfig.section_alignment - remainder_size;
+							padding_size := !Uberspark_config.section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1492,7 +1481,7 @@ end
 														(*f_size = x.s_length;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -1504,23 +1493,23 @@ end
 														(* f_size = x.s_length; *)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 					};
 			
 				(* uobj_section_load_addr := !uobj_section_load_addr + x.s_length; *)
-				Uslog.logf log_tag Uslog.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Uberspark_basetypes.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.usbinformat.f_size mod !Usconfig.section_alignment) in
+				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Usconfig.section_alignment - remainder_size;
+							padding_size := !Uberspark_config.section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1539,7 +1528,7 @@ end
 														(*f_size = x.usbinformat.f_size;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -1551,12 +1540,12 @@ end
 														(*f_size = x.usbinformat.f_size;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 					};
 
 				(*uobj_section_load_addr := !uobj_section_load_addr + x.usbinformat.f_size;*)
-				Uslog.logf log_tag Uslog.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 				uobj_section_load_addr := !uobj_section_load_addr + section_size;
 			)  o_uobj_sections_hashtbl;
 
@@ -1564,7 +1553,7 @@ end
 			(* if not, add a filler section to pad it to uobj size *)
 			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
 				begin
-					Uslog.logf log_tag Uslog.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
+					Uberspark_logger.logf log_tag Uberspark_logger.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
 					ignore(exit 1);
 				end
 			;	
@@ -1575,23 +1564,23 @@ end
 					Hashtbl.add uobj_sections_memory_map_hashtbl "usuobj_padding" 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_addr_file = 0;
-															f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+															f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 														};
 						};
 					Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_addr_file = 0;
-															f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+															f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 														};
 						};
 				end
@@ -1613,21 +1602,21 @@ end
 		(*--------------------------------------------------------------------------*)
 		method compile_cfile_list cfile_list cc_includedirs_list cc_defines_list =
 			List.iter (fun x ->  
-									Uslog.logf log_tag Uslog.Info "Compiling: %s" x;
+									Uberspark_logger.logf log_tag Uberspark_logger.Info "Compiling: %s" x;
 									(*let (pestatus, pesignal, cc_outputfilename) = 
 										(Usextbinutils.compile_cfile x (x ^ ".o") cc_includedirs_list cc_defines_list) in
 											begin
 												if (pesignal == true) || (pestatus != 0) then
 													begin
-															(* Uslog.logf log_mpf Uslog.Info "output lines:%u" (List.length poutput); *)
-															(* List.iter (fun y -> Uslog.logf log_mpf Uslog.Info "%s" !y) poutput; *) 
-															(* Uslog.logf log_mpf Uslog.Info "%s" !(List.nth poutput 0); *)
-															Uslog.logf log_tag Uslog.Error "in compiling %s!" x;
+															(* Uberspark_logger.logf log_mpf Uberspark_logger.Info "output lines:%u" (List.length poutput); *)
+															(* List.iter (fun y -> Uberspark_logger.logf log_mpf Uberspark_logger.Info "%s" !y) poutput; *) 
+															(* Uberspark_logger.logf log_mpf Uberspark_logger.Info "%s" !(List.nth poutput 0); *)
+															Uberspark_logger.logf log_tag Uberspark_logger.Error "in compiling %s!" x;
 															ignore(exit 1);
 													end
 												else
 													begin
-															Uslog.logf log_tag Uslog.Info "Compiled %s successfully" x;
+															Uberspark_logger.logf log_tag Uberspark_logger.Info "Compiled %s successfully" x;
 													end
 											end*)
 								) cfile_list;
@@ -1640,12 +1629,12 @@ end
 		(*--------------------------------------------------------------------------*)
 		method generate_uobj_hfile
 			() = 
-			Uslog.logf log_tag Uslog.Info "Generating uobj hfile...";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generating uobj hfile...";
 
 			(* create uobj hfile *)
 			let uobj_hfilename = 
 					(self#get_d_path_ns ^ "/" ^ 
-						(Usconfig.get_uobj_hfilename ()) ^ ".h") in
+						(Uberspark_config.get_uobj_hfilename ()) ^ ".h") in
 			let oc = open_out uobj_hfilename in
 			
 			(* generate hfile prologue *)
@@ -1661,7 +1650,7 @@ end
 			(* bring in all the contents of the individual h-files *)
 			List.iter (fun x ->
 				let hfilename = (self#get_d_path_ns ^ "/" ^ x) in 
-				(* Uslog.logf log_tag Uslog.Info "h-file: %s" x; *)
+				(* Uberspark_logger.logf log_tag Uberspark_logger.Info "h-file: %s" x; *)
 
 				Printf.fprintf oc "\n#ifndef __%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
 				Printf.fprintf oc "\n#define __%s_%s_h__" self#get_o_usmf_hdr_id (Filename.chop_extension x);
@@ -1690,7 +1679,7 @@ end
 			Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
-				Uslog.logf log_tag Uslog.Info "key=%s" key;
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "key=%s" key;
 				let sentinel_fname = x.s_fname ^ 
 													"_" ^	x.s_type ^ "_" ^ !o_usmf_hdr_platform ^ "_" ^
 													!o_usmf_hdr_cpu ^ "_" ^ !o_usmf_hdr_arch in
@@ -1701,7 +1690,7 @@ end
 						x.s_fparamdecl;	
 				Printf.fprintf oc "\n#else";
 				let sentinel_type_definition_string = 
-					List.assoc x.s_type (Usconfig.get_sentinel_types ()) in	
+					List.assoc x.s_type (Uberspark_config.get_sentinel_types ()) in	
 				Printf.fprintf oc "\n";
 				Printf.fprintf oc "\n\t%s %s %s;" x.s_retvaldecl sentinel_fname
 						x.s_fparamdecl;
@@ -1730,7 +1719,7 @@ end
 				
 			(* close uobj hfile *)	
 			close_out oc;
-			Uslog.logf log_tag Uslog.Info "Generated uobj hfile.";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generated uobj hfile.";
 			(uobj_hfilename)
 		;
 
@@ -1744,7 +1733,7 @@ end
 		(*--------------------------------------------------------------------------*)
 		method generate_sentinels 
 			() = 
-			Uslog.logf log_tag Uslog.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generating sentinels for target (%s-%s-%s)...\r\n"
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
@@ -1756,11 +1745,11 @@ end
 						!o_usmf_hdr_arch ^ ".S" in
 					
 				let (pp_retval, _) = Usextbinutils.preprocess 
-											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
+											((Uberspark_config.get_sentinel_dir ()) ^ "/" ^ sentinel_fname) 
 											(self#get_d_path_ns ^ "/" ^ target_sentinel_fname) 
-											(Usconfig.get_std_incdirs ())
-											(Usconfig.get_std_defines () @ 
-												Usconfig.get_std_define_asm () @
+											(Uberspark_config.get_std_incdirs ())
+											(Uberspark_config.get_std_defines () @ 
+												Uberspark_config.get_std_define_asm () @
 												[ self#get_o_pp_definition ] @
 												[ "UOBJ_ENTRY_POINT_FNAME=" ^ x.s_fname 
 												] @
@@ -1772,7 +1761,7 @@ end
 												]) in
 					if (pp_retval != 0) then
 						begin
-								Uslog.logf log_tag Uslog.Error "in generating sentinel: %s"
+								Uberspark_logger.logf log_tag Uberspark_logger.Error "in generating sentinel: %s"
 									target_sentinel_fname;
 								ignore(exit 1);
 						end
@@ -1784,7 +1773,7 @@ end
 
 			) o_uobj_publicmethods_sentinels_hashtbl;
 
-			Uslog.logf log_tag Uslog.Info "Generated sentinels.";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generated sentinels.";
 			()
 		;
 		
@@ -1794,7 +1783,7 @@ end
 		(*--------------------------------------------------------------------------*)
 		method generate_sentinels_lib 
 			() = 
-			Uslog.logf log_tag Uslog.Info "Generating sentinels lib for target (%s-%s-%s)..."
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generating sentinels lib for target (%s-%s-%s)..."
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
@@ -1807,11 +1796,11 @@ end
 				let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 				
 				let (pp_retval, _) = Usextbinutils.preprocess 
-											((Usconfig.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
+											((Uberspark_config.get_sentinel_dir ()) ^ "/" ^ sentinel_libfname) 
 											(self#get_d_path_ns ^ "/" ^ target_sentinel_libfname) 
-											(Usconfig.get_std_incdirs ())
-											(Usconfig.get_std_defines () @ 
-												Usconfig.get_std_define_asm () @
+											(Uberspark_config.get_std_incdirs ())
+											(Uberspark_config.get_std_defines () @ 
+												Uberspark_config.get_std_define_asm () @
 												[ self#get_o_pp_definition ] @
 												[ "UOBJ_SENTINEL_ENTRY_POINT=" ^ 
 													(Printf.sprintf "0x%08x" x_v.usbinformat.f_addr_start)
@@ -1824,7 +1813,7 @@ end
 												]) in
 					if (pp_retval != 0) then
 						begin
-								Uslog.logf log_tag Uslog.Error "in generating sentinel lib: %s"
+								Uberspark_logger.logf log_tag Uberspark_logger.Error "in generating sentinel lib: %s"
 									target_sentinel_libfname;
 								ignore(exit 1);
 						end
@@ -1836,7 +1825,7 @@ end
 						
 			) o_uobj_publicmethods_sentinels_hashtbl;
 
-			Uslog.logf log_tag Uslog.Info "Generated sentinels lib.";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Generated sentinels lib.";
 			()
 		;
 
@@ -1849,17 +1838,17 @@ end
 		(*--------------------------------------------------------------------------*)
 		method compile_sentinels 
 			() = 
-			Uslog.logf log_tag Uslog.Info "Building sentinels for target (%s-%s-%s)...\r\n"
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Building sentinels for target (%s-%s-%s)...\r\n"
 				!o_usmf_hdr_platform !o_usmf_hdr_cpu !o_usmf_hdr_arch;
 
 			(* compile all the sentinel source files *)							
 			self#compile_cfile_list !o_sentinels_source_file_list
-					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines () @ 
+					(Uberspark_config.get_std_incdirs ())
+					(Uberspark_config.get_std_defines () @ 
 					[ self#get_o_pp_definition ] @
-								Usconfig.get_std_define_asm ());
+								Uberspark_config.get_std_define_asm ());
 
-			Uslog.logf log_tag Uslog.Info "Built sentinels.";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Built sentinels.";
 			()
 		;
 
@@ -1872,15 +1861,15 @@ end
 			(*let uobj_sentinels_lib_name = "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
-			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Building sentinels lib: %s...\r\n"
 				self#get_o_uobj_publicmethods_sentinels_libname;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_uobj_publicmethods_sentinels_lib_source_file_list
-					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines () @
+					(Uberspark_config.get_std_incdirs ())
+					(Uberspark_config.get_std_defines () @
 					[ self#get_o_pp_definition ] @ 
-								Usconfig.get_std_define_asm ());
+								Uberspark_config.get_std_define_asm ());
 
 (*						
 			(* now create the lib archive *)
@@ -1891,12 +1880,12 @@ end
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
-								Uslog.logf log_tag Uslog.Error "in building sentinel lib!";
+								Uberspark_logger.logf log_tag Uberspark_logger.Error "in building sentinel lib!";
 								ignore(exit 1);
 						end
 					else
 						begin
-								Uslog.logf log_tag Uslog.Info "Built sentinels lib.";
+								Uberspark_logger.logf log_tag Uberspark_logger.Info "Built sentinels lib.";
 						end
 					;
 *)
@@ -1916,9 +1905,9 @@ end
 			(build_dir : string)
 			(keep_temp_files : bool) = 
 	
-			Uslog.logf log_tag Uslog.Info "Starting compilation in '%s' [%b]\n" build_dir keep_temp_files;
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Starting compilation in '%s' [%b]\n" build_dir keep_temp_files;
 			
-			Uslog.logf log_tag Uslog.Info "cfiles_count=%u, casmfiles_count=%u\n"
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "cfiles_count=%u, casmfiles_count=%u\n"
 						(List.length !d_sources_c_file_list) 
 						(List.length !d_sources_casm_file_list);
 
@@ -1943,11 +1932,11 @@ end
 			(* TBD: hook in later *)
 			(*							
 			self#compile_cfile_list (!o_usmf_sources_c_files) 
-					(Usconfig.get_std_incdirs ())
-					(Usconfig.get_std_defines () @ [ self#get_o_pp_definition ]);
+					(Uberspark_config.get_std_incdirs ())
+					(Uberspark_config.get_std_defines () @ [ self#get_o_pp_definition ]);
 			*)			
 
-			Uslog.logf log_tag Uslog.Info "Compilation finished.\r\n";
+			Uberspark_logger.logf log_tag Uberspark_logger.Info "Compilation finished.\r\n";
 			()
 		;
 
@@ -1981,13 +1970,13 @@ end
 
 		(*ustack_tos*)
     let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
-			(Usconfig.get_section_name_ustack()) in
-		let ustack_size = (Usconfig.get_sizeof_uobj_ustack()) in
+			(Uberspark_config.get_section_name_ustack()) in
+		let ustack_size = (Uberspark_config.get_sizeof_uobj_ustack()) in
 		let ustack_tos = ref 0 in
 		ustack_tos := info.usbinformat.f_va_offset + ustack_size;
 		Printf.fprintf ochannel "\n\t{";
 		i := 0;
-		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		while (!i < (Uberspark_config.get_std_max_platform_cpus ())) do
 		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !ustack_tos;
 				i := !i + 1;
 				ustack_tos := !ustack_tos + ustack_size;
@@ -1996,13 +1985,13 @@ end
 
 		(*tstack_tos*)
     let info = Hashtbl.find uobj_sections_memory_map_hashtbl 
-			(Usconfig.get_section_name_tstack()) in
-		let tstack_size = (Usconfig.get_sizeof_uobj_tstack()) in
+			(Uberspark_config.get_section_name_tstack()) in
+		let tstack_size = (Uberspark_config.get_sizeof_uobj_tstack()) in
 		let tstack_tos = ref 0 in
 		tstack_tos := info.usbinformat.f_va_offset + tstack_size;
 		Printf.fprintf ochannel "\n\t{";
 		i := 0;
-		while (!i < (Usconfig.get_std_max_platform_cpus ())) do
+		while (!i < (Uberspark_config.get_std_max_platform_cpus ())) do
 		    Printf.fprintf ochannel "\n\t\t0x%08xUL," !tstack_tos;
 				i := !i + 1;
 				tstack_tos := !tstack_tos + tstack_size;
@@ -2027,25 +2016,25 @@ end
 			
 			(* create uobj installation folder if not already existing *)
 			let uobj_install_dir = (install_dir ^ "/" ^ !o_usmf_hdr_id) in
-				Uslog.logf log_tag Uslog.Info "Installing uobj: '%s'..." uobj_install_dir;
-			let (retval, retecode, retemsg) = Usosservices.mkdir uobj_install_dir 0o755 in
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "Installing uobj: '%s'..." uobj_install_dir;
+			let (retval, retecode, retemsg) = Uberspark_osservices.mkdir uobj_install_dir 0o755 in
 				if (retval == false) && (retecode != Unix.EEXIST) then 
 				begin
-					Uslog.logf log_tag Uslog.Error "error in creating directory: %s" retemsg;
+					Uberspark_logger.logf log_tag Uberspark_logger.Error "error in creating directory: %s" retemsg;
 				end
 				;
 
 			(* copy uobj manifest *)
-			Usosservices.file_copy (!d_path_ns ^ "/" ^ !d_mf_filename)
-				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
+			Uberspark_osservices.file_copy (!d_path_ns ^ "/" ^ !d_mf_filename)
+				(uobj_install_dir ^ "/" ^ Uberspark_config.std_uobj_usmf_name); 
 			
 			(* copy uobj header file *)
-			Usosservices.file_copy (!d_path_ns ^ "/" ^ 
-															Usconfig.uobj_hfilename ^ ".h")
+			Uberspark_osservices.file_copy (!d_path_ns ^ "/" ^ 
+															Uberspark_config.uobj_hfilename ^ ".h")
 				(install_dir ^ "/" ^ !o_usmf_hdr_id ^ ".h"); 
 	
 			(* copy sentinels lib *)
-			Usosservices.file_copy (!d_path_ns ^ "/" ^ 
+			Uberspark_osservices.file_copy (!d_path_ns ^ "/" ^ 
 															self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
 				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_libname ^ ".a"); 
 			
@@ -2066,8 +2055,8 @@ end ;;
 
 				(*let x_v = Hashtbl.find uobj_sections_memory_map_hashtbl key in
 
-				Uslog.logf log_tag Uslog.Info "%s/%s at 0x%08x" 
-					(Usconfig.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "%s/%s at 0x%08x" 
+					(Uberspark_config.get_sentinel_dir ()) sentinel_fname x_v.s_origin;
 				*)
 
 
@@ -2080,16 +2069,16 @@ end ;;
 		(* sentineltypes_hashtbl = hash table of sentinel types *)
 		(*--------------------------------------------------------------------------*)
 		method initialize 
-			(sentineltypes_hashtbl : ((string, Ustypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			(sentineltypes_hashtbl : ((string, Uberspark_basetypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
 			= 
 				
 			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
-			Hashtbl.iter (fun key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun key (st:Uberspark_basetypes.uobjcoll_sentineltypes_t)  ->
 					Hashtbl.add o_sentineltypes_hashtbl key st;
 			) sentineltypes_hashtbl;
 
 			(* iterate over sentineltypes hash table to construct sentinels hash table*)
-			Hashtbl.iter (fun st_key (st:Ustypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun st_key (st:Uberspark_basetypes.uobjcoll_sentineltypes_t)  ->
 						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
 				
 						let sentinel_name = ref "" in
@@ -2103,9 +2092,9 @@ end ;;
 								s_fname = pm.f_name;
 								s_fparamdecl = pm.f_paramdecl;
 								s_fparamdwords = pm.f_paramdwords;
-								s_attribute = (Usconfig.get_sentinel_prot ());
+								s_attribute = (Uberspark_config.get_sentinel_prot ());
 								s_origin = 0;
-								s_length = !Usconfig.section_size_sentinel;
+								s_length = !Uberspark_config.section_size_sentinel;
 							};
 			
 						) d_publicmethods_hashtbl;
@@ -2116,62 +2105,62 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
+					usbinformat = { f_type= Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-								f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+								f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 				
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
+					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Usconfig.section_size_general;
+													f_size = !Uberspark_config.section_size_general;
 													f_addr_file = 0;
-													f_aligned_at = !Usconfig.section_alignment; f_pad_to = !Usconfig.section_alignment; f_reserved = 0;
+													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
 				};
 			
@@ -2189,7 +2178,7 @@ end ;;
 						(*slab_tos*)
     Printf.fprintf oc "\n\t{";
 		i := 0;
-		while (!i < Usconfig.get_std_max_platform_cpus) do
+		while (!i < Uberspark_config.get_std_max_platform_cpus) do
 		    (* Printf.fprintf oc "\n\t\t   %s + (1*XMHF_SLAB_STACKSIZE)," (Hashtbl.find slab_idtostack_addrstart !i);*)
 		    Printf.fprintf oc "\n\t\t0x00000000UL,";
 				i := !i + 1;
@@ -2254,5 +2243,5 @@ end ;;
 	
 			Hashtbl.add uobj_sections_hashtbl "sample" { origin=0; length=0; subsection_list = ["one"; "two"; "three"]};
 			let mysection = Hashtbl.find uobj_sections_hashtbl "sample" in
-				Uslog.logf log_tag Uslog.Info "origin=%u" mysection.origin;
+				Uberspark_logger.logf log_tag Uberspark_logger.Info "origin=%u" mysection.origin;
 *)
