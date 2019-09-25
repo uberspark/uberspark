@@ -15,3 +15,4 @@ export UBERSPARK_BUILDDIR := $(UBERSPARK_ROOTDIR)/_build
 export MAKE := make
 export OCAMLFIND := ocamlfind
 export OCAMLOPT := $(OCAMLFIND) ocamlopt
+export OCAMLC := $(OCAMLFIND) ocamlc

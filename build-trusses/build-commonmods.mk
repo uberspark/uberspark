@@ -7,9 +7,14 @@ include ./commondefs.mk
 
 ###### targets
 
-### build common modules
 .PHONY: all
 all: 
+	cd $(UBERSPARK_SRCDIR)/tools/libs && $(MAKE) -w all
+
+
+### build common modules
+.PHONY: ball
+ball: 
 	cd $(UBERSPARK_SRCDIR)/tools/common-mods/ustypes && $(MAKE) -w all
 	cd $(UBERSPARK_SRCDIR)/tools/common-mods/usconfig && $(MAKE) -w all
 	cd $(UBERSPARK_SRCDIR)/tools/common-mods/uslog && $(MAKE) -w all

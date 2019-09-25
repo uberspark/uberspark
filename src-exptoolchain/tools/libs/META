@@ -1,0 +1,6 @@
+name="uberspark"
+description="uberspark base library"
+version="5.1"
+requires="unix str yojson"
+archive(byte)="uberspark.cma"
+archive(native)="uberspark.cmxa"
