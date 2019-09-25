@@ -5,22 +5,20 @@
 
 
 ###### variables
-BUILDDIR = _build
-LIB_NAME = uberspark
 
-LIB_EXT_PACKAGES := -package unix
-LIB_EXT_PACKAGES += -package str 
-LIB_EXT_PACKAGES += -package yojson 
+UBERSPARK_LIB_EXT_PACKAGES := -package unix
+UBERSPARK_LIB_EXT_PACKAGES += -package str 
+UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
 
-LIB_SOURCES := uberspark_basetypes.ml
-LIB_SOURCES += uberspark_config.ml
-LIB_SOURCES += uberspark_logger.ml
-LIB_SOURCES += uberspark_osservices.ml
-LIB_SOURCES += uberspark_manifest.ml
-LIB_SOURCES += uberspark_binary.ml
-LIB_SOURCES += uberspark_uobj.ml
-LIB_SOURCES += uberspark.ml
+UBERSPARK_LIB_SOURCES := uberspark_basetypes.ml
+UBERSPARK_LIB_SOURCES += uberspark_config.ml
+UBERSPARK_LIB_SOURCES += uberspark_logger.ml
+UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
+UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
+UBERSPARK_LIB_SOURCES += uberspark_binary.ml
+UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
+UBERSPARK_LIB_SOURCES += uberspark.ml
 
 
 ###### targets
@@ -34,11 +32,11 @@ prep:
 
 .PHONY: all
 all: prep
-	cd $(BUILDDIR) && $(OCAMLC) -a $(LIB_SOURCES) $(LIB_EXT_PACKAGES) -o $(LIB_NAME).cma
-	cd $(BUILDDIR) && $(OCAMLOPT) -a -ccopt -static $(LIB_SOURCES) $(LIB_EXT_PACKAGES) -o $(LIB_NAME).cmxa
-	cd $(BUILDDIR) && $(OCAMLFIND) remove $(LIB_NAME) 
-	cd $(BUILDDIR) && $(OCAMLFIND) install $(LIB_NAME) META $(LIB_NAME).cma $(LIB_NAME).cmxa $(LIB_NAME).a
-	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static -package $(LIB_NAME) -linkpkg -o test test.ml
+	cd $(BUILDDIR) && $(OCAMLC) -a $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
+	cd $(BUILDDIR) && $(OCAMLFIND) remove $(UBERSPARK_LIB_NAME) 
+	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_NAME).cma $(UBERSPARK_LIB_NAME).cmxa $(UBERSPARK_LIB_NAME).a
+	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static -package $(UBERSPARK_LIB_NAME) -linkpkg -o test test.ml
 
 
 .PHONY: clean

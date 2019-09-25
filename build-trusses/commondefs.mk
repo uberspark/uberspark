@@ -19,3 +19,7 @@ export OCAMLC := $(OCAMLFIND) ocamlc
 export RM := rm
 export MKDIR := mkdir
 export CP := cp
+
+###### variables
+export BUILDDIR := _build
+export UBERSPARK_LIB_NAME := uberspark
