@@ -16,3 +16,6 @@ export MAKE := make
 export OCAMLFIND := ocamlfind
 export OCAMLOPT := $(OCAMLFIND) ocamlopt
 export OCAMLC := $(OCAMLFIND) ocamlc
+export RM := rm
+export MKDIR := mkdir
+export CP := cp
