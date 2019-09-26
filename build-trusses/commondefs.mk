@@ -23,3 +23,5 @@ export CP := cp
 ###### variables
 export BUILDDIR := _build
 export UBERSPARK_LIB_NAME := uberspark
+export UBERSPARK_BIN_NAME := uberspark
+

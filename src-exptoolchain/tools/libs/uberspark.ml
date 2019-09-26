@@ -1,14 +1,15 @@
 (* uberSpark: main library interface *)
 (* author: amit vasudevan <amitvasudevan@acm.org> *)
 
-module Config = Uberspark_config
+(*module Config = Uberspark_config
 module Basetypes = Uberspark_basetypes
+*)
 module Logger = Uberspark_logger
-module Osservices = Uberspark_osservices
+(*module Osservices = Uberspark_osservices
 module Manifest = Uberspark_manifest
 module Binary = Uberspark_binary
 module Uobj = Uberspark_uobj
-
+*)
 (*
 module Usuobj =
 struct

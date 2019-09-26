@@ -3,38 +3,42 @@
 # author: amit vasudevan (amitvasudevan@acm.org)
 ######
 
+
+###### variables
+
+UBERSPARK_FRONTEND_EXT_PACKAGES := -package unix
+UBERSPARK_FRONTEND_EXT_PACKAGES += -package str 
+UBERSPARK_FRONTEND_EXT_PACKAGES += -package yojson 
+UBERSPARK_FRONTEND_EXT_PACKAGES += -package cmdliner
+UBERSPARK_FRONTEND_EXT_PACKAGES += -package $(UBERSPARK_LIB_NAME)
+
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package usextbinutils 
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package libusmf 
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package usuobjgen
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package usuobjlib 
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package usuobjcollection
+#UBERSPARK_FRONTEND_EXT_PACKAGES += -package usbin
+
+
+UBERSPARK_FRONTEND_SOURCES := commonopts.ml
+UBERSPARK_FRONTEND_SOURCES += commoninit.ml
+UBERSPARK_FRONTEND_SOURCES += cmd_uobj.ml
+UBERSPARK_FRONTEND_SOURCES += uberspark_frontend.ml
+
+
 ###### targets
 
-MODULE_PACKAGES := -package unix
-MODULE_PACKAGES += -package str 
-MODULE_PACKAGES += -package yojson 
-MODULE_PACKAGES += -package cmdliner
+.PHONY: prep
+prep:
+	$(MKDIR) -p $(BUILDDIR)
+	$(CP) -f *.ml $(BUILDDIR)/.
 
-MODULE_PACKAGES += -package ustypes  
-MODULE_PACKAGES += -package usconfig  
-MODULE_PACKAGES += -package uslog 
-MODULE_PACKAGES += -package usosservices  
-#MODULE_PACKAGES += -package usextbinutils 
-#MODULE_PACKAGES += -package libusmf 
-MODULE_PACKAGES += -package usmanifest  
-#MODULE_PACKAGES += -package usuobjgen
-#MODULE_PACKAGES += -package usuobjlib 
-MODULE_PACKAGES += -package usuobj 
-#MODULE_PACKAGES += -package usuobjcollection
-#MODULE_PACKAGES += -package usbin
-
-
-MODULE_SOURCES := commonopts.ml
-MODULE_SOURCES += commoninit.ml
-MODULE_SOURCES += cmd_uobj.ml
-MODULE_SOURCES += uberspark.ml
 
 .PHONY: all
-all:  
-	$(OCAMLOPT) -ccopt -static $(MODULE_PACKAGES) -linkpkg -o uberspark $(MODULE_SOURCES)
+all:  prep
+	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static $(UBERSPARK_FRONTEND_EXT_PACKAGES) -linkpkg -o $(UBERSPARK_BIN_NAME) $(UBERSPARK_FRONTEND_SOURCES)
 
 .PHONY: clean
 clean:
-	$(RM) -f *.cmi *.cmx *.o
-	$(RM) -f uberspark
+	$(RM) -rf $(BUILDDIR)
 

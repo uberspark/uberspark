@@ -1,12 +1,16 @@
 (* uberspark front-end command processing logic for command: uobj *)
 (* author: amit vasudevan (amitvasudevan@acm.org) *)
 
-open Ustypes
+(*open Ustypes
 open Usconfig
 open Uslog
 open Cmdliner
 open Usosservices
 open Usuobj
+*)
+
+open Uberspark
+open Cmdliner
 
 
 (* -b, --build option handler *)
@@ -34,27 +38,27 @@ let handler_uobj_build
     
       | Some str_cpu ->
   
-          let (rval, abs_uobj_path_ns) = (Usosservices.abspath uobj_path_ns) in
+          let (rval, abs_uobj_path_ns) = (Uberspark.Osservices.abspath uobj_path_ns) in
           if(rval == false) then
           begin
-            Uslog.log ~lvl:Uslog.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
+            Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
             ignore (exit 1);
           end
           ;
 
           (* create uobj instance and parse manifest *)
-          let uobj = new Usuobj.uobject in
-          let uobj_mf_filename = (abs_uobj_path_ns ^ Usconfig.env_path_seperator ^ Usconfig.namespace_default_uobj_mf_filename) in
-          Uslog.log "parsing uobj manifest: %s" uobj_mf_filename;
+          let uobj = new Uberspark.Uobj.uobject in
+          let uobj_mf_filename = (abs_uobj_path_ns ^ Uberspark.Config.env_path_seperator ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
+          Uberspark.Logger.log "parsing uobj manifest: %s" uobj_mf_filename;
           let rval = (uobj#parse_manifest uobj_mf_filename true) in	
           if (rval == false) then
             begin
-              Uslog.log ~lvl:Uslog.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
+              Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
               ignore (exit 1);
             end
           ;
 
-          Uslog.log "successfully parsed uobj manifest";
+          Uberspark.Logger.log "successfully parsed uobj manifest";
           (*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
           uobj#initialize {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu};
