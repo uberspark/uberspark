@@ -1,0 +1,37 @@
+/*
+    uberspark uobj sentinel linkage table manifest (x86_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+    	/* header */
+	"hdr":{
+		"type" : "uobjslt",
+		"namespace" : "/uberspark/uobjslt/x86_32/generic",
+		"platform" : "generic",
+		"arch" : "x86_32",
+		"cpu" : "generic"
+	},
+
+    /*  trampoline code template 
+
+        parameters: 
+        TRAMPOLINE_FN_INDEX = 0 based index of the ubj callee/exitcallee function
+    */ 
+    "uobjslt-trampolinecode": "
+        movl $(TRAMPOLINE_FN_INDEX), %eax
+        jmpl *%eax
+    ",
+
+
+    /*  trampoline data template
+
+        parameters:
+        TOTAL_TRAMPOLINES = total number of trampolines
+        SIZEOF_TRAMPOLINE_ENTRY = size in bytes of trampoline entry
+    */
+    "uobjslt-trampolinedata": "
+        .byte $(TOTAL_TRAMPOLINES) * $(SIZEOF_TRAMPOLINE_ENTRY) \r\n
+    "
+
+}

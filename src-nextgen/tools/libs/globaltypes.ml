@@ -1,33 +1,41 @@
 (*
-	uberSpark type definitions
+	uberSpark global type definitions
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
-module Ustypes =
-struct
 
 		(* from usbinformat.h *)
 		type usbinformat_section_info_t =
 			{
 				f_type         : int;			
 				f_prot         : int;			
-				f_addr_start   : int;
 				f_size         : int;
-				f_addr_file    : int;
         f_aligned_at   : int;
 	      f_pad_to       : int;
+				f_addr_start   : int;
+				f_addr_file    : int;
         f_reserved     : int; 
 			};;
 
 
 		(* local type definitions *)
+		type target_def_t = 
+			{
+				mutable f_platform: string;
+				mutable f_arch : string;
+				mutable f_cpu : string;
+			};;
+		
+
 		type section_info_t = 
 			{
 				f_name: string;
 				f_subsection_list : string list;
 				usbinformat : usbinformat_section_info_t;
 			};;
-		
+
+			
+
 
 		type uobjcoll_sentineltypes_t = 
 			{
@@ -43,5 +51,4 @@ struct
 				s_fparamdwords : int;
 			};;
 				
-												
-end
+

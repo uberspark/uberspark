@@ -39,6 +39,8 @@ RUN opam switch 4.08.1+musl+static+flambda
 RUN eval $(opam env)
 RUN opam install -y ocamlfind
 RUN opam install -y yojson
+RUN opam install -y cmdliner.1.0.4 
+RUN opam install -y dune.1.11.3
 
 # documentation dependencies
 RUN export DEBIAN_FRONTEND=noninteractive &&\
@@ -61,3 +63,6 @@ CMD opam switch 4.08.1+musl+static+flambda && \
     eval $(opam env) && \
     find  -type f  -exec touch {} + &&\
     ${MAKE_COMMAND} ${MAKE_TARGET}
+
+# for debugging only
+#ENTRYPOINT [ "/bin/bash"]

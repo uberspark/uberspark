@@ -60,12 +60,12 @@ docs_pdf: generate_buildtruss
 	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
 
 
-###### common modules build targets
+###### libraries targets
 
-### build common modules
-.PHONY: commonmods
-commonmods:
-	$(call docker_run,make -f build-commonmods.mk, -w all)
+### build libraries
+.PHONY: libs
+libs:
+	$(call docker_run,make -f build-libs.mk, -w all)
 
 
 ###### frontend build targets
@@ -91,6 +91,7 @@ install_createnamespace:
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/sentinels
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjcoll
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjrtl
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjslt
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/uobjs
 	@echo Namespace created.
 
@@ -107,6 +108,7 @@ install_populateamespace:
 	cp -rf $(USPARK_SRCDIR)/sentinels/* $(USPARK_NAMESPACEROOTDIR)/sentinels/.
 	cp -rf $(USPARK_SRCDIR)/uobjcoll/* $(USPARK_NAMESPACEROOTDIR)/uobjcoll/.
 	cp -rf $(USPARK_SRCDIR)/uobjrtl/* $(USPARK_NAMESPACEROOTDIR)/uobjrtl/.
+	cp -rf $(USPARK_SRCDIR)/uobjslt/* $(USPARK_NAMESPACEROOTDIR)/uobjslt/.
 	cp -rf $(USPARK_SRCDIR)/uobjs/* $(USPARK_NAMESPACEROOTDIR)/uobjs/.
 	@echo Namespace populated.
 
@@ -116,7 +118,7 @@ install_populateamespace:
 install: install_createnamespace install_populateamespace
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
-	$(SUDO) cp -f $(USPARK_SRCDIR)/tools/frontend/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
+	$(SUDO) cp -f $(USPARK_SRCDIR)/tools/frontend/_build/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
 	@echo Installation success! Use uberspark --version to check.
 
 

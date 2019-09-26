@@ -104,11 +104,11 @@ typedef struct {
 typedef struct {
 	uint32_t type;			//section type
 	uint32_t prot;			//section protections
-	uint64_t addr_start;	//start address
 	uint64_t size;			//end address
-	uint64_t addr_file;		//file pointer address of section within binary file
 	uint32_t aligned_at;	//boundary that section is aligned at
 	uint32_t pad_to;		//boundary that section is padded to
+	uint64_t addr_start;	//start address
+	uint64_t addr_file;		//file pointer address of section within binary file
 	uint64_t reserved;		//reserved
 } __attribute__((packed)) usbinformat_section_info_t;
 
@@ -137,6 +137,54 @@ typedef struct {
 	//uobj section descriptions
 	usbinformat_section_info_t sections[USCONFIG_UOBJ_MAX_SECTIONS];
 } __attribute__((packed)) usbinformat_uobj_hdr_t;
+
+
+//////
+// uobj public method info definition
+//////
+
+typedef struct {
+	uint8_t name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint64_t vaddr;											//virtual address of the public method
+} __attribute__((packed)) __usbinformat_uobj_publicmethod_info_t;
+
+typedef struct {
+	uint32_t num_publicmethods;	//total number of public method definitions
+	__usbinformat_uobj_publicmethod_info_t publicmethods[USCONFIG_UOBJ_MAX_PUBLICMETHODS];
+} __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
+
+
+//////
+// uobj intrauobjcoll callees info type definition
+//////
+
+typedef struct {
+	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//public method name
+	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint32_t slt_ordinal;									//index into sentinal linkage table
+} __attribute__((packed)) __usbinformat_uobj_intrauobjcoll_callees_info_t;
+
+typedef struct {
+	uint32_t num_intraobjcoll_callees;	//total number of intrauobjcoll callees
+	__usbinformat_uobj_intrauobjcoll_callees_info_t intrauobjcoll_callees[USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES];
+} __attribute__((packed)) usbinformat_uobj_intrauobjcoll_callees_info_t;
+
+
+
+//////
+// uobj interuobjcoll callees info type definition
+//////
+
+typedef struct {
+	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//uobj namespace/ legacy code identifier
+	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
+	uint32_t slt_ordinal;									//index into sentinal linkage table
+} __attribute__((packed)) __usbinformat_uobj_interuobjcoll_callees_info_t;
+
+typedef struct {
+	uint32_t num_interuobjcoll_callees;	//total number of interuobjcoll callees
+	__usbinformat_uobj_interuobjcoll_callees_info_t interuobjcoll_callees[USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES];
+} __attribute__((packed)) usbinformat_uobj_interuobjcoll_callees_info_t;
 
 
 
