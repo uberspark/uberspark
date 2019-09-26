@@ -1,0 +1,99 @@
+type sentinel_info_t = 
+  {
+    s_type: string;
+    s_type_id : string;
+    s_retvaldecl : string;
+    s_fname: string;
+    s_fparamdecl: string;
+    s_fparamdwords : int;
+    s_attribute : string;
+    s_origin: int;
+    s_length: int;	
+  }
+
+
+type uobj_publicmethods_t = 
+  {
+    f_name: string;
+    f_retvaldecl : string;
+    f_paramdecl: string;
+    f_paramdwords : int;
+  }
+
+  class uobject :
+  object
+    val d_callees_hashtbl : (string, string list) Hashtbl.t
+    val d_hdr : Uberspark_manifest.hdr_t
+    val d_interuobjcoll_callees_hashtbl :
+      (string, string list) Hashtbl.t
+    val d_load_addr : int ref
+    val d_ltag : string
+    val d_mf_filename : string ref
+    val d_path_ns : string ref
+    val d_publicmethods_hashtbl :
+      (string, uobj_publicmethods_t) Hashtbl.t
+    val d_sections_hashtbl :
+      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+    val d_sections_memory_map_hashtbl :
+      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+    val d_sections_memory_map_hashtbl_byorigin :
+      (int, Uberspark_basetypes.section_info_t) Hashtbl.t
+    val d_size : int ref
+    val d_slt_trampolinecode : string ref
+    val d_slt_trampolinedata : string ref
+    val d_sources_c_file_list : string list ref
+    val d_sources_casm_file_list : string list ref
+    val d_sources_h_file_list : string list ref
+    val d_target_def : Basetypes.target_def_t
+    method consolidate_sections_with_memory_map : int -> int -> unit
+    method generate_linker_script :
+      int ->
+      int ->
+      (int, Uberspark_basetypes.section_info_t) Hashtbl.t -> unit
+    method generate_slt :
+      string list -> string -> string -> string -> bool
+    method generate_src_binhdr : unit
+    method generate_src_interuobjcoll_callees_info : unit
+    method generate_src_intrauobjcoll_callees_info : unit
+    method generate_src_publicmethods_info : unit
+    method get_d_callees_hashtbl : (string, string list) Hashtbl.t
+    method get_d_hdr : Uberspark_manifest.hdr_t
+    method get_d_interuobjcoll_callees_hashtbl :
+      (string, string list) Hashtbl.t
+    method get_d_load_addr : int
+    method get_d_mf_filename : string
+    method get_d_path_ns : string
+    method get_d_publicmethods_hashtbl :
+      (string, uobj_publicmethods_t) Hashtbl.t
+    method get_d_sections_hashtbl :
+      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+    method get_d_sections_memory_map_hashtbl :
+      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+    method get_d_sections_memory_map_hashtbl_byorigin :
+      (int, Uberspark_basetypes.section_info_t) Hashtbl.t
+    method get_d_size : int
+    method get_d_slt_trampolinecode : string
+    method get_d_slt_trampolinedata : string
+    method get_d_sources_c_file_list : string list
+    method get_d_sources_casm_file_list : string list
+    method get_d_sources_h_file_list : string list
+    method get_d_target_def : Uberspark_basetypes.target_def_t
+    method hashtbl_keys :
+      (int, Uberspark_basetypes.section_info_t) Hashtbl.t ->
+      int list
+    method initialize : Uberspark_basetypes.target_def_t -> unit
+    method parse_manifest : string -> bool -> bool
+    method parse_manifest_slt : bool
+    method parse_node_mf_uobj_binary : Yojson.Basic.t -> bool
+    method parse_node_mf_uobj_callees : Yojson.Basic.t -> bool
+    method parse_node_mf_uobj_interuobjcoll_callees :
+      Yojson.Basic.t -> bool
+    method parse_node_mf_uobj_publicmethods : Yojson.Basic.t -> bool
+    method parse_node_mf_uobj_sources : Yojson.Basic.t -> bool
+    method set_d_load_addr : int -> unit
+    method set_d_size : int -> unit
+    method set_d_slt_trampolinecode : string -> unit
+    method set_d_slt_trampolinedata : string -> unit
+    method set_d_target_def :
+      Uberspark_basetypes.target_def_t -> unit
+  end

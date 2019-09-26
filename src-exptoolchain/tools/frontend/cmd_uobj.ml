@@ -12,7 +12,6 @@ open Usuobj
 open Uberspark
 open Cmdliner
 
-
 (* -b, --build option handler *)
 let handler_uobj_build
   (platform : 'a option)
@@ -61,7 +60,8 @@ let handler_uobj_build
           Uberspark.Logger.log "successfully parsed uobj manifest";
           (*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
-          uobj#initialize {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu};
+          let target_def: Uberspark.Basetypes.target_def_t = {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu} in
+            uobj#initialize target_def;
 
       ;
     ;
