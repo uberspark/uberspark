@@ -11,9 +11,10 @@ UBERSPARK_LIB_EXT_PACKAGES += -package str
 UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
 
-#UBERSPARK_LIB_SOURCES := uberspark_basetypes.ml
-#UBERSPARK_LIB_SOURCES += uberspark_config.ml
-UBERSPARK_LIB_SOURCES := uberspark_logger.ml
+
+UBERSPARK_LIB_SOURCES := uberspark_basetypes.ml
+UBERSPARK_LIB_SOURCES += uberspark_config.ml
+UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 #UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
 #UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
 #UBERSPARK_LIB_SOURCES += uberspark_binary.ml
@@ -37,14 +38,20 @@ UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).mli
 
 .PHONY: prep
 prep:
+	$(RM) -rf $(BUILDDIR)
 	$(MKDIR) -p $(BUILDDIR)
 	$(CP) -f *.ml $(BUILDDIR)/.
 	$(CP) -f ./META $(BUILDDIR)/.
-	$(CP) -f *.mli $(BUILDDIR)/.
+	#$(CP) -f *.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_basetypes.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_config.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_logger.mli $(BUILDDIR)/.
+	$(CP) -f uberspark.mli $(BUILDDIR)/.
+
 
 .PHONY: all
 all: prep
-	#cd $(BUILDDIR) && $(OCAMLOPT) -i -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES)
+#	cd $(BUILDDIR) && $(OCAMLC) -i $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) > test.mli
 	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
 	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
 	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
