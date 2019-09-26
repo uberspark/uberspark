@@ -7,9 +7,87 @@ open Unix
 open Sys
 open Yojson
 
+
 let main () = 
-  let root_dir = Sys.getcwd () in
-  Printf.printf "Current directory:%s" root_dir;
+ 
+  (* sanity check usage *)
+  if (Array.length Sys.argv) < 2 then
+  begin
+    Printf.printf "Usage: uberspark_confpp <input_json>\n\n";
+  end;
+   
+  (* get json file and open it *)  
+  let input_json_filename = Sys.argv.(1) in 
+    Printf.printf "Using configuration json file: %s\n" input_json_filename;
+
+  (* read input json file *)  
+  let config_mf_json = ref `Null in
+  try
+
+    let mf_json = Yojson.Basic.from_file input_json_filename in
+      config_mf_json := mf_json;
+        
+  with Yojson.Json_error s -> 
+      Printf.printf "ERROR in reading manifest: %s" s;
+      ignore(exit 1);
+  ;
+
+  Printf.printf "Successfully read json\n";
+
+
+  try
+  let open Yojson.Basic.Util in
+      if !config_mf_json != `Null then
+        begin
+
+          let mf_assoc_list = Yojson.Basic.Util.to_assoc !config_mf_json in
+            
+            List.iter (fun (x,y) ->
+             Printf.printf "%s:\n" x;
+
+             let mf_files_json = y |> member "files" in
+              if mf_files_json != `Null then
+                begin
+                  Printf.printf "files:\n";
+                  let files_json_list = mf_files_json |> 
+                      to_list in 
+                    List.iter (fun x -> 
+                        Printf.printf "%s\n" (x |> to_string);
+                      ) files_json_list;
+                end
+              ;
+
+              let mf_constdef_nodes_json = y |> member "constdef-nodes" in
+              if mf_constdef_nodes_json != `Null then
+                begin
+                  Printf.printf "constdef-nodes:\n";
+                  let constdef_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_constdef_nodes_json in
+                  List.iter (fun (x,y) ->
+                    Printf.printf "%s:\n" x;
+                    let constdef_nodes_inner_assoc_list = Yojson.Basic.Util.to_assoc y in
+                    List.iter (fun (m,n) ->
+                      Printf.printf "id=%s, val=%s\n" m (n |> to_string);
+                    ) constdef_nodes_inner_assoc_list;
+                  )constdef_nodes_assoc_list;
+                end
+              ;
+
+              ()
+            ) mf_assoc_list;
+             
+             Printf.printf "converted to associative list!\n";     
+        end
+      ;
+                          
+with Yojson.Basic.Util.Type_error _ -> 
+  Printf.printf "ERROR in reading manifest: type error\n";
+  ignore(exit 1);
+;
+
+
+
+
+
 ;;
 
 

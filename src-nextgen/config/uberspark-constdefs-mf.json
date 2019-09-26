@@ -1,0 +1,50 @@
+/* 
+    uberSpark configuration constant definitions 
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+
+    "constdef_binary": 
+    {  
+        "files": [
+            "filename1.ext1",
+            "filename2.ext2",
+            "filename3.ext3"
+        ],
+
+        "constdef-nodes" : 
+        {
+            "node1": 
+            {
+                "id1_name": "id1_value",
+                "id2_name": "id2_value"
+            }
+        }
+    },
+    
+    "constdef_general": 
+    {  
+        "files": [
+            "filename1.ext1",
+            "filename2.ext2"
+        ],
+
+        "constdef-nodes" : 
+        {
+            "node1": 
+            {
+                "id1_name": "id1_value"
+            },
+            "node2": 
+            {
+                "id1_name": "id1_value",
+                "id2_name": "id2_value",
+                "id3_name": "id3_value"
+            }
+        }
+    }     
+
+
+
+}
