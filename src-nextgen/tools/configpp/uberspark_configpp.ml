@@ -35,6 +35,7 @@ let main () =
   Printf.printf "Successfully read json\n";
 
   (*parse json *)  
+  let outer_json_node_index = ref 0 in 
   try
   let open Yojson.Basic.Util in
       if !config_mf_json != `Null then
@@ -45,41 +46,61 @@ let main () =
             List.iter (fun (x,y) ->
              Printf.printf "%s:\n" x;
 
-             let mf_files_json = y |> member "files" in
-              if mf_files_json != `Null then
-                begin
-                  Printf.printf "files:\n";
-                  let files_json_list = mf_files_json |> 
-                      to_list in 
-                    List.iter (fun x -> 
-                        Printf.printf "%s\n" (x |> to_string);
-                      ) files_json_list;
-                end
+             if(!outer_json_node_index == 0) then 
+             begin
+              if (x <> "hdr") then 
+              begin
+                Printf.printf "ERROR in manifest: expected first entry to be header, got: %s\n" x;
+                ignore(exit 1);
+              end
               ;
+              Printf.printf "TODO: sanity check hdr\n";
+             end
 
-              let mf_def_nodes_json = y |> member "def-nodes" in
-              if mf_def_nodes_json != `Null then
-                begin
-                  Printf.printf "def-nodes:\n";
-                  let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
-                  List.iter (fun (x,y) ->
-                    Printf.printf "%s:\n" x;
-                    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
-                    List.iter (fun (m,n) ->
-                      Printf.printf "%s:\n" m;
-                      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
-                      List.iter (fun (a,b) ->
-                        Printf.printf "id:%s, val:%s\n" a (b |> to_string);
-                      ) def_nodes_types_inner_assoc_list;
-                    ) def_nodes_types_assoc_list;
-                  )def_nodes_assoc_list;
-                end
-              ;
+             else
+             begin
 
-              ()
-            ) mf_assoc_list;
-             
-             Printf.printf "converted to associative list!\n";     
+              
+
+              let mf_files_json = y |> member "files" in
+                if mf_files_json != `Null then
+                  begin
+                    Printf.printf "files:\n";
+                    let files_json_list = mf_files_json |> 
+                        to_list in 
+                      List.iter (fun x -> 
+                          Printf.printf "%s\n" (x |> to_string);
+                        ) files_json_list;
+                  end
+                ;
+
+                let mf_def_nodes_json = y |> member "def-nodes" in
+                if mf_def_nodes_json != `Null then
+                  begin
+                    Printf.printf "def-nodes:\n";
+                    let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
+                    List.iter (fun (x,y) ->
+                      Printf.printf "%s:\n" x;
+                      let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
+                      List.iter (fun (m,n) ->
+                        Printf.printf "%s:\n" m;
+                        let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
+                        List.iter (fun (a,b) ->
+                          Printf.printf "id:%s, val:%s\n" a (b |> to_string);
+                        ) def_nodes_types_inner_assoc_list;
+                      ) def_nodes_types_assoc_list;
+                    )def_nodes_assoc_list;
+                  end
+                ;
+                end;
+
+                outer_json_node_index := !outer_json_node_index + 1;
+                ()
+              ) mf_assoc_list;
+            
+
+            
+
         end
       ;
                           

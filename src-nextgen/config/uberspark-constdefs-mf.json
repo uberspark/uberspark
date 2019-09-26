@@ -4,6 +4,15 @@
 */
 
 {
+	/* header */
+	"hdr":{
+		"type" : "configdefs",
+		"namespace" : "/uberspark/config",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
 
     "constdef_binary": 
     {  
