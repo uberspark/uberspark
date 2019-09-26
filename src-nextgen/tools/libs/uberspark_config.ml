@@ -40,6 +40,7 @@ open Unix
 	(*------------------------------------------------------------------------*)
 	let binary_page_size = ref 0x00200000;;
 	let binary_uobj_section_alignment = ref 0x00200000;;
+	let binary_uobj_default_section_size = ref 0x00200000;;
 	
 	let binary_uobj_default_load_addr = ref 0x60000000;;
 	let binary_uobj_default_size = ref 0x01000000;;
@@ -72,7 +73,7 @@ open Unix
 
 
 
-
+(*
 	(*------------------------------------------------------------------------*)
 	(* uberspark installation configuration information *)	
 	(*------------------------------------------------------------------------*)
@@ -252,3 +253,4 @@ open Unix
 	let sizeof_uobjcoll_info_t = 0x21000;;
 	let get_sizeof_uobjcoll_info_t () = (sizeof_uobjcoll_info_t) ;;
 
+*)
