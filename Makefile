@@ -122,6 +122,11 @@ install: install_createnamespace install_populateamespace
 	@echo Installation success! Use uberspark --version to check.
 
 
+###### (debug) shell target
+.PHONY: dbgshell
+dbgshell: generate_buildtruss
+	$(call docker_run,/bin/bash,)
+
 
 ###### cleanup targets
 .PHONY: clean
