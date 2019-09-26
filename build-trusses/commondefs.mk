@@ -16,6 +16,7 @@ export MAKE := make
 export OCAMLFIND := ocamlfind
 export OCAMLOPT := $(OCAMLFIND) ocamlopt
 export OCAMLC := $(OCAMLFIND) ocamlc
+export OCAML := ocaml
 export RM := rm
 export MKDIR := mkdir
 export CP := cp
@@ -24,4 +25,5 @@ export CP := cp
 export BUILDDIR := _build
 export UBERSPARK_LIB_NAME := uberspark
 export UBERSPARK_BIN_NAME := uberspark
+export UBERSPARK_CONFIGPP_BIN_NAME := uberspark_configpp
 

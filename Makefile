@@ -34,6 +34,17 @@ all: generate_buildtruss docs_html frontend
 	@echo uberspark toolkit build success!
 
 
+### pre-process sources with configuration
+.PHONY: build_configpp
+build_configpp: generate_buildtruss
+	$(call docker_run,make -f configpp.mk, -w all)
+
+.PHONY: run_configpp
+run_configpp: build_configpp
+	$(call docker_run,make -f configpp.mk, -w run)
+
+
+
 ###### build truss generation targets
 
 ### generate x86_64 build truss
