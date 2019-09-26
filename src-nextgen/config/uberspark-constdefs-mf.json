@@ -13,12 +13,15 @@
             "filename3.ext3"
         ],
 
-        "constdef-nodes" : 
+        "def-nodes" : 
         {
             "node1": 
             {
-                "id1_name": "id1_value",
-                "id2_name": "id2_value"
+                "constdef": 
+                {
+                    "id1_name": "id1_value",
+                    "id2_name": "id2_value"
+                }
             }
         }
     },
@@ -30,17 +33,23 @@
             "filename2.ext2"
         ],
 
-        "constdef-nodes" : 
+        "def-nodes" : 
         {
             "node1": 
             {
-                "id1_name": "id1_value"
+                "constdef" :
+                {
+                    "id1_name": "id1_value"
+                }
             },
             "node2": 
             {
-                "id1_name": "id1_value",
-                "id2_name": "id2_value",
-                "id3_name": "id3_value"
+                "constdef" : 
+                {
+                    "id1_name": "id1_value",
+                    "id2_name": "id2_value",
+                    "id3_name": "id3_value"
+                }
             }
         }
     }     

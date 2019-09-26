@@ -34,7 +34,7 @@ let main () =
 
   Printf.printf "Successfully read json\n";
 
-
+  (*parse json *)  
   try
   let open Yojson.Basic.Util in
       if !config_mf_json != `Null then
@@ -57,18 +57,22 @@ let main () =
                 end
               ;
 
-              let mf_constdef_nodes_json = y |> member "constdef-nodes" in
-              if mf_constdef_nodes_json != `Null then
+              let mf_def_nodes_json = y |> member "def-nodes" in
+              if mf_def_nodes_json != `Null then
                 begin
-                  Printf.printf "constdef-nodes:\n";
-                  let constdef_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_constdef_nodes_json in
+                  Printf.printf "def-nodes:\n";
+                  let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
                   List.iter (fun (x,y) ->
                     Printf.printf "%s:\n" x;
-                    let constdef_nodes_inner_assoc_list = Yojson.Basic.Util.to_assoc y in
+                    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
                     List.iter (fun (m,n) ->
-                      Printf.printf "id=%s, val=%s\n" m (n |> to_string);
-                    ) constdef_nodes_inner_assoc_list;
-                  )constdef_nodes_assoc_list;
+                      Printf.printf "%s:\n" m;
+                      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
+                      List.iter (fun (a,b) ->
+                        Printf.printf "id:%s, val:%s\n" a (b |> to_string);
+                      ) def_nodes_types_inner_assoc_list;
+                    ) def_nodes_types_assoc_list;
+                  )def_nodes_assoc_list;
                 end
               ;
 
