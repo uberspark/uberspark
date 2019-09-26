@@ -8,6 +8,42 @@ open Sys
 open Yojson
 
 
+let uberspark_srcdir = ref "";;
+
+(* hashtbl of defnodes index by defnode name: string and the value is a string 
+ that will replace defnode in the processed file
+ *)
+let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
+
+
+let process_configpp_file 
+  (input_filename : string) 
+  (output_filename : string)
+  (defnodes_hashtbl : (string, string) Hashtbl.t)
+  =
+
+  let ic = open_in input_filename in
+  let oc = open_out output_filename in
+  try
+    while true do
+      let line = input_line ic in
+      let output_line = ref "" in
+      output_line := line;
+
+      Hashtbl.iter (fun key value  ->
+        let t_line = Str.global_replace (Str.regexp key) value (!output_line) in
+        output_line := t_line;
+      ) defnodes_hashtbl;
+
+      Printf.fprintf oc "%s\n" !output_line;
+    done
+  with End_of_file -> ();				
+  close_in ic;
+  close_out oc;  
+
+  ()
+;;
+
 let main () = 
  
   (* sanity check usage *)
