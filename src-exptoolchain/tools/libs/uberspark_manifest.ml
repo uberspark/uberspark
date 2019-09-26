@@ -62,7 +62,9 @@ open Yojson
 *)
 
 
-	let read_manifest mf_filename keep_temp_files = 
+	let read_manifest 
+		(mf_filename : string)
+		(keep_temp_files : bool) = 
 		let retval = ref false in
 	  let retjson = ref `Null in
 					try

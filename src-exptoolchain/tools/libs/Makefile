@@ -15,10 +15,10 @@ UBERSPARK_LIB_EXT_PACKAGES += -package yojson
 UBERSPARK_LIB_SOURCES := uberspark_basetypes.ml
 UBERSPARK_LIB_SOURCES += uberspark_config.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
-#UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
-#UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
-#UBERSPARK_LIB_SOURCES += uberspark_binary.ml
-#UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
+UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
+UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
+UBERSPARK_LIB_SOURCES += uberspark_binary.ml
+UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
 UBERSPARK_LIB_SOURCES += uberspark.ml
 
 
@@ -46,6 +46,10 @@ prep:
 	$(CP) -f uberspark_basetypes.mli $(BUILDDIR)/.
 	$(CP) -f uberspark_config.mli $(BUILDDIR)/.
 	$(CP) -f uberspark_logger.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_osservices.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_manifest.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_binary.mli $(BUILDDIR)/.
+	$(CP) -f uberspark_uobj.mli $(BUILDDIR)/.
 	$(CP) -f uberspark.mli $(BUILDDIR)/.
 
 

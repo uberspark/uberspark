@@ -1,0 +1,1 @@
+val abspath : string -> bool * string
