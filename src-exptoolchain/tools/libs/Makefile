@@ -42,15 +42,7 @@ prep:
 	$(MKDIR) -p $(BUILDDIR)
 	$(CP) -f *.ml $(BUILDDIR)/.
 	$(CP) -f ./META $(BUILDDIR)/.
-	#$(CP) -f *.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_basetypes.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_config.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_logger.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_osservices.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_manifest.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_binary.mli $(BUILDDIR)/.
-	$(CP) -f uberspark_uobj.mli $(BUILDDIR)/.
-	$(CP) -f uberspark.mli $(BUILDDIR)/.
+	$(CP) -f *.mli $(BUILDDIR)/.
 
 
 .PHONY: all
@@ -61,7 +53,7 @@ all: prep
 	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
 	cd $(BUILDDIR) && $(OCAMLFIND) remove $(UBERSPARK_LIB_NAME) 
 	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX)
-	$(OCAMLOPT) -ccopt -static -package $(UBERSPARK_LIB_NAME) -linkpkg -o test test.ml
+#	$(OCAMLOPT) -ccopt -static -package $(UBERSPARK_LIB_NAME) -linkpkg -o test test.ml
 
 
 .PHONY: clean
