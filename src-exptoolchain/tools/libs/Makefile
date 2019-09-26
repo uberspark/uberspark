@@ -11,8 +11,7 @@ UBERSPARK_LIB_EXT_PACKAGES += -package str
 UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
 
-
-UBERSPARK_LIB_SOURCES := uberspark_basetypes.ml
+UBERSPARK_LIB_SOURCES := globaltypes.ml
 UBERSPARK_LIB_SOURCES += uberspark_config.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 UBERSPARK_LIB_SOURCES += uberspark_osservices.ml

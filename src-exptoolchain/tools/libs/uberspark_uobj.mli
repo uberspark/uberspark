@@ -33,23 +33,23 @@ type uobj_publicmethods_t =
     val d_publicmethods_hashtbl :
       (string, uobj_publicmethods_t) Hashtbl.t
     val d_sections_hashtbl :
-      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (string, Globaltypes.section_info_t) Hashtbl.t
     val d_sections_memory_map_hashtbl :
-      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (string, Globaltypes.section_info_t) Hashtbl.t
     val d_sections_memory_map_hashtbl_byorigin :
-      (int, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (int, Globaltypes.section_info_t) Hashtbl.t
     val d_size : int ref
     val d_slt_trampolinecode : string ref
     val d_slt_trampolinedata : string ref
     val d_sources_c_file_list : string list ref
     val d_sources_casm_file_list : string list ref
     val d_sources_h_file_list : string list ref
-    val d_target_def : Basetypes.target_def_t
+    val d_target_def : Globaltypes.target_def_t
     method consolidate_sections_with_memory_map : int -> int -> unit
     method generate_linker_script :
       int ->
       int ->
-      (int, Uberspark_basetypes.section_info_t) Hashtbl.t -> unit
+      (int, Globaltypes.section_info_t) Hashtbl.t -> unit
     method generate_slt :
       string list -> string -> string -> string -> bool
     method generate_src_binhdr : unit
@@ -66,22 +66,22 @@ type uobj_publicmethods_t =
     method get_d_publicmethods_hashtbl :
       (string, uobj_publicmethods_t) Hashtbl.t
     method get_d_sections_hashtbl :
-      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (string, Globaltypes.section_info_t) Hashtbl.t
     method get_d_sections_memory_map_hashtbl :
-      (string, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (string, Globaltypes.section_info_t) Hashtbl.t
     method get_d_sections_memory_map_hashtbl_byorigin :
-      (int, Uberspark_basetypes.section_info_t) Hashtbl.t
+      (int, Globaltypes.section_info_t) Hashtbl.t
     method get_d_size : int
     method get_d_slt_trampolinecode : string
     method get_d_slt_trampolinedata : string
     method get_d_sources_c_file_list : string list
     method get_d_sources_casm_file_list : string list
     method get_d_sources_h_file_list : string list
-    method get_d_target_def : Uberspark_basetypes.target_def_t
+    method get_d_target_def : Globaltypes.target_def_t
     method hashtbl_keys :
-      (int, Uberspark_basetypes.section_info_t) Hashtbl.t ->
+      (int, Globaltypes.section_info_t) Hashtbl.t ->
       int list
-    method initialize : Uberspark_basetypes.target_def_t -> unit
+    method initialize : Globaltypes.target_def_t -> unit
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method parse_node_mf_uobj_binary : Yojson.Basic.t -> bool
@@ -95,5 +95,5 @@ type uobj_publicmethods_t =
     method set_d_slt_trampolinecode : string -> unit
     method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def :
-      Uberspark_basetypes.target_def_t -> unit
+      Globaltypes.target_def_t -> unit
   end

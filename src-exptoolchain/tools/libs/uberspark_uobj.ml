@@ -66,26 +66,26 @@ class uobject
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
 		(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
-		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_hashtbl = d_sections_hashtbl;
 
 		(* hashtbl of uobj sections with memory map info; indexed by section name *)
-		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl = (d_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info; indexed by section virtual address*)
-		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl_byorigin = (d_sections_memory_map_hashtbl_byorigin);
 
 
-		val d_target_def: Uberspark_basetypes.target_def_t = {
+		val d_target_def: Globaltypes.target_def_t = {
 			f_platform = ""; 
 			f_arch = ""; 
 			f_cpu = "";
 		};
 		method get_d_target_def = d_target_def;
 		method set_d_target_def 
-			(target_def: Uberspark_basetypes.target_def_t) = 
+			(target_def: Globaltypes.target_def_t) = 
 			d_target_def.f_platform <- target_def.f_platform;
 			d_target_def.f_arch <- target_def.f_arch;
 			d_target_def.f_cpu <- target_def.f_cpu;
@@ -116,7 +116,7 @@ class uobject
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
-		method hashtbl_keys (h : (int, Uberspark_basetypes.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
+		method hashtbl_keys (h : (int, Globaltypes.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
 
 
 (*
@@ -183,16 +183,16 @@ class uobject
 *)
 
 		(* base uobj sections hashtbl indexed by section name *)		
-		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = (o_uobj_sections_hashtbl);
 		method get_o_uobj_sections_hashtbl_length = (Hashtbl.length o_uobj_sections_hashtbl);
 		
 		(* hashtbl of uobj sections with memory map info indexed by section name *)
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl = (uobj_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info indexed by section va*)
-		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Uberspark_basetypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Globaltypes.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl_byorigin = (uobj_sections_memory_map_hashtbl_byorigin);
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
@@ -204,7 +204,7 @@ class uobject
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
 
-		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_basetypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
+		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 *)
 		
@@ -847,7 +847,7 @@ class uobject
 				(* generate uobj section defs *)
 				Printf.fprintf oc "\n\t{"; 
 				
-				Hashtbl.iter (fun key (section_info:Uberspark_basetypes.section_info_t) ->  
+				Hashtbl.iter (fun key (section_info:Globaltypes.section_info_t) ->  
 					Printf.fprintf oc "\n\t\t{"; 
 					(* type *)
 					Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_type); 
@@ -1053,7 +1053,7 @@ class uobject
 		method generate_linker_script 
 			(binary_origin : int)
 			(binary_size : int)
-			(sections_hashtbl : (int, Uberspark_basetypes.section_info_t) Hashtbl.t) 
+			(sections_hashtbl : (int, Globaltypes.section_info_t) Hashtbl.t) 
 	 		 =
 		
 			let oc = open_out Uberspark_config.namespace_uobj_linkerscript_filename in
@@ -1157,7 +1157,7 @@ class uobject
 			uobj_section_load_addr := uobj_load_addr;
 
 			(* iterate over all the sections *)
-			Hashtbl.iter (fun key (x:Uberspark_basetypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Globaltypes.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
 				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.binary_uobj_section_alignment) in
 				let padding_size = ref 0 in
@@ -1255,7 +1255,7 @@ class uobject
 		(* initialize *)
 		(*--------------------------------------------------------------------------*)
 		method initialize	
-			(target_def: Uberspark_basetypes.target_def_t)
+			(target_def: Globaltypes.target_def_t)
 			= 
 			(* set target definition *)
 			self#set_d_target_def target_def;	
@@ -1503,7 +1503,7 @@ end;;
 			)  o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Uberspark_basetypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Globaltypes.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
 				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.section_alignment) in
 				let padding_size = ref 0 in
@@ -2069,16 +2069,16 @@ end ;;
 		(* sentineltypes_hashtbl = hash table of sentinel types *)
 		(*--------------------------------------------------------------------------*)
 		method initialize 
-			(sentineltypes_hashtbl : ((string, Uberspark_basetypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			(sentineltypes_hashtbl : ((string, Globaltypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
 			= 
 				
 			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
-			Hashtbl.iter (fun key (st:Uberspark_basetypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun key (st:Globaltypes.uobjcoll_sentineltypes_t)  ->
 					Hashtbl.add o_sentineltypes_hashtbl key st;
 			) sentineltypes_hashtbl;
 
 			(* iterate over sentineltypes hash table to construct sentinels hash table*)
-			Hashtbl.iter (fun st_key (st:Uberspark_basetypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun st_key (st:Globaltypes.uobjcoll_sentineltypes_t)  ->
 						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
 				
 						let sentinel_name = ref "" in

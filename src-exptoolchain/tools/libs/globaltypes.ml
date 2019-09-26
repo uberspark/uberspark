@@ -1,5 +1,5 @@
 (*
-	uberSpark type definitions
+	uberSpark global type definitions
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 

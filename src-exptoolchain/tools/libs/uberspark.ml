@@ -2,7 +2,7 @@
 (* author: amit vasudevan <amitvasudevan@acm.org> *)
 
 module Config = Uberspark_config
-module Basetypes = Uberspark_basetypes
+module Globaltypes = Globaltypes
 module Logger = Uberspark_logger
 module Osservices = Uberspark_osservices
 module Manifest = Uberspark_manifest
