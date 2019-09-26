@@ -1,5 +1,0 @@
-name="ustypes"
-description="uberSpark type definitions"
-version="1.0"
-requires=""
-archive(native)="ustypes.cmx"

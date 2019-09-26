@@ -1,6 +1,0 @@
-name="usconfig"
-description="uberSpark configuration data interface"
-version="1.0"
-requires=""
-archive(byte)="usconfig.cmo"
-archive(native)="usconfig.cmx"

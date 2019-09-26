@@ -1,6 +1,0 @@
-name="usuobj"
-description="uberSpark uberobject verification and build interface"
-version="1.0"
-requires=""
-archive(byte)="usuobj.cmo"
-archive(native)="usuobj.cmx"
