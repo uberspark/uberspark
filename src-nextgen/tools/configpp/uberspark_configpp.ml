@@ -6,7 +6,7 @@
 open Unix
 open Sys
 open Yojson
-
+open Filename
 
 let uberspark_srcdir = ref "";;
 
@@ -14,6 +14,28 @@ let uberspark_srcdir = ref "";;
  that will replace defnode in the processed file
  *)
 let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
+
+
+let abspath path =
+  let curdir = Unix.getcwd () in
+  let retval = ref true in
+  let path_filename = (Filename.basename path) in
+  let path_dirname = (Filename.dirname path) in
+  let retval_abspath = ref "" in
+    try
+      Unix.chdir path_dirname;
+      retval_abspath := Unix.getcwd ();
+      retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+      Unix.chdir curdir;
+      
+    with Unix.Unix_error (ecode, fname, fparam) -> 
+      Printf.printf "Error: %s" (Unix.error_message ecode);
+      retval := false;
+    ;
+
+  (!retval, !retval_abspath)
+;;
+
 
 
 let process_configpp_file 
@@ -146,7 +168,7 @@ with Yojson.Basic.Util.Type_error _ ->
   ()
 ;;
 
-
+(*
 let main () = 
  
   (* sanity check usage *)
@@ -163,7 +185,58 @@ let main () =
   (* parse config json *)
   parse_config_json input_json_filename;  
 
+;;
+*)
 
+
+let main () = 
+ 
+  (* sanity check usage *)
+  if (Array.length Sys.argv) < 2 then
+  begin
+    Printf.printf "Usage: uberspark_confpp <input_json>\n\n";
+  end;
+   
+
+  (* populate defnodes hashtbl *)
+  Hashtbl.add  g_defnodes_hashtbl "leo" "leader";
+  Hashtbl.add  g_defnodes_hashtbl "mikey" "goofhead";
+  Hashtbl.add  g_defnodes_hashtbl "raph" "rage-monster";
+  Hashtbl.add  g_defnodes_hashtbl "donnie" "techy";
+  
+
+  (* get input filename *)  
+  let input_filename = Sys.argv.(1) in 
+  let output_filename = (Filename.chop_suffix_opt ~suffix:".us" input_filename) in
+  match output_filename with
+  | None -> 
+    Printf.printf "invalid input file suffix, only .us supported!\n" ;
+    ignore(exit 1);
+
+  | Some output_filename_final ->
+
+    Printf.printf "input file: %s\n" input_filename;
+    Printf.printf "output file: %s\n" output_filename_final;
+
+    let (rval, input_filename_abspath) = abspath input_filename in
+    if (rval == false) then 
+    begin
+      Printf.printf "could not obtain absollute path of input file\n" ;
+      ignore(exit 1);
+    end;
+
+    let (rval, output_filename_abspath) = abspath output_filename_final in
+    if (rval == false) then 
+    begin
+      Printf.printf "could not obtain absollute path of output file\n" ;
+      ignore(exit 1);
+    end;
+
+    Printf.printf "input file abspath: %s\n" input_filename_abspath;
+    Printf.printf "output file abspath: %s\n" output_filename_abspath;
+
+    process_configpp_file input_filename_abspath output_filename_abspath g_defnodes_hashtbl;
+  ;  
 
 ;;
 
