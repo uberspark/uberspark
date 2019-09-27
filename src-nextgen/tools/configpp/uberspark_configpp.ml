@@ -44,17 +44,14 @@ let process_configpp_file
   ()
 ;;
 
-let main () = 
- 
-  (* sanity check usage *)
-  if (Array.length Sys.argv) < 2 then
-  begin
-    Printf.printf "Usage: uberspark_confpp <input_json>\n\n";
-  end;
-   
-  (* get json file and open it *)  
-  let input_json_filename = Sys.argv.(1) in 
-    Printf.printf "Using configuration json file: %s\n" input_json_filename;
+
+(* 
+   parse a configuration json manifest and populate relevant 
+   hash tables and lists
+*)
+let parse_config_json
+    (input_json_filename : string)
+    =
 
   (* read input json file *)  
   let config_mf_json = ref `Null in
@@ -146,6 +143,25 @@ with Yojson.Basic.Util.Type_error _ ->
 ;
 
 
+  ()
+;;
+
+
+let main () = 
+ 
+  (* sanity check usage *)
+  if (Array.length Sys.argv) < 2 then
+  begin
+    Printf.printf "Usage: uberspark_confpp <input_json>\n\n";
+  end;
+   
+  (* get json file and open it *)  
+  let input_json_filename = Sys.argv.(1) in 
+    Printf.printf "Using configuration json file: %s\n" input_json_filename;
+
+
+  (* parse config json *)
+  parse_config_json input_json_filename;  
 
 
 
