@@ -1,4 +1,28 @@
-# ignore patterns for git
+# git tracking setup
 
+# blacklist everything
+*
+
+# whitelist the .gitignore
+!.gitignore
+
+# whitelist all directories
+!*/
+
+# blacklist select directories
 **/_build
+.vscode/
+
+# whitelist the extensions we care about
+!Makefile
+!META
+!*.rst
+!*.ml
+!*.mli
+!*.c
+!*.cS
+!*.json
+!*.us
+
+
 
