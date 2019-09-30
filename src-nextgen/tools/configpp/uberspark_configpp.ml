@@ -68,6 +68,42 @@ let process_configpp_file
 ;;
 
 
+(*
+  split a given filename into source, source suffix
+  return false if unable to
+*)
+let deconstruct_filename
+  (input_filename : string)
+  : (bool * string * string) =
+  let o_source = ref "" in
+  let o_source_suffix = ref "" in
+  let retval = ref false in
+
+  let l_source = Filename.chop_suffix_opt ~suffix:".us" input_filename in
+  match l_source with
+
+    | Some l_source ->
+      o_source := l_source;
+
+      if (Filename.check_suffix !o_source ".c") then
+        begin
+          o_source_suffix := ".c";
+          retval := true;
+        end
+      else 
+        begin
+          o_source_suffix := "";
+          retval := false;
+        end
+      ;
+
+      (!retval, !o_source, !o_source_suffix)
+
+
+    | None -> 
+      Printf.printf "invalid input file suffix, only .us supported!\n" ;
+      (!retval, !o_source, !o_source_suffix)
+;;
 
 
 
