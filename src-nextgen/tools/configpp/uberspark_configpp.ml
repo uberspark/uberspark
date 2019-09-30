@@ -60,7 +60,7 @@ let process_configpp_file
       output_line := line;
 
       Hashtbl.iter (fun key value  ->
-        let t_line = Str.global_replace (Str.regexp key) value (!output_line) in
+        let t_line = Str.global_replace (Str.regexp ("@@" ^ key ^ "@@")) value (!output_line) in
         output_line := t_line;
       ) defnodes_strings_hashtbl;
 
@@ -295,9 +295,10 @@ let main () =
     end
   ;
 
- 
-  (* process all files and associated defnodes *)
-  (*process_filenames_defnodes ();*)
+ (* create output file with defnode substitutions *)
+  Printf.printf "Generating output file...";
+  process_configpp_file (Sys.argv.(1)) (Sys.argv.(2)) g_defnodes_strings_hashtbl;
+  Printf.printf "Done!\n\n";
 
 ;;
 
