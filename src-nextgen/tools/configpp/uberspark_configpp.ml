@@ -127,7 +127,7 @@ let process_defnode_list_output_c_h
       if (defnode_list_node_name = "constdef") then 
         begin
           List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-              Printf.printf "id:%s val=%s\n" id_name (Yojson.Basic.Util.to_string id_def);
+              ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
             ) def_nodes_types_inner_assoc_list;
         end
       else
@@ -138,9 +138,6 @@ let process_defnode_list_output_c_h
       ;
 
     ) def_nodes_types_assoc_list;
-
-
-    ret_str := "success";
 
   (!ret_str)
 ;;
@@ -167,7 +164,7 @@ let process_filenames_defnodes () =
                 if (source_filename_suffix = ".c" || source_filename_suffix = ".h") then 
                   begin
                     let source_output = process_defnode_list_output_c_h defnode_alist in
-                      Printf.printf "source output:%s" source_output;
+                      Printf.printf "source output:\n%s\n" source_output;
                   end
                 else
                   begin
