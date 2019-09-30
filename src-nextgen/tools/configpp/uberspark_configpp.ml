@@ -116,17 +116,13 @@ let parse_config_json
              else
              begin
 
-              
-
+              (* grab list of files for this defnode *)
+              let files_json_list : Yojson.Basic.t list ref = ref [] in
               let mf_files_json = y |> member "files" in
                 if mf_files_json != `Null then
                   begin
                     Printf.printf "files:\n";
-                    let files_json_list = mf_files_json |> 
-                        to_list in 
-                      List.iter (fun x -> 
-                          Printf.printf "%s\n" (x |> to_string);
-                        ) files_json_list;
+                    files_json_list := mf_files_json |> to_list;
                   end
                 else
                   begin
@@ -135,11 +131,26 @@ let parse_config_json
                   end
                 ;
 
-                let mf_def_nodes_json = y |> member "def-nodes" in
+              (* grab list of defnodes *)
+              let def_nodes_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
+              let mf_def_nodes_json = y |> member "def-nodes" in
+              if mf_def_nodes_json != `Null then
+                begin
+                    def_nodes_assoc_list := Yojson.Basic.Util.to_assoc mf_def_nodes_json;
+                end
+              ;
+
+              List.iter (fun x -> 
+                 Printf.printf "%s\n" (x |> to_string);
+              ) !files_json_list;
+
+
+                (*let mf_def_nodes_json = y |> member "def-nodes" in
                 if mf_def_nodes_json != `Null then
                   begin
                     Printf.printf "def-nodes:\n";
                     let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
+                  *)
                     List.iter (fun (x,y) ->
                       Printf.printf "%s:\n" x;
                       let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
@@ -150,9 +161,9 @@ let parse_config_json
                           Printf.printf "id:%s, val:%s\n" a (b |> to_string);
                         ) def_nodes_types_inner_assoc_list;
                       ) def_nodes_types_assoc_list;
-                    )def_nodes_assoc_list;
-                  end
-                ;
+                    )!def_nodes_assoc_list;
+                  (*end
+                ;*)
                 end;
 
                 outer_json_node_index := !outer_json_node_index + 1;
