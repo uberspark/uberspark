@@ -267,9 +267,29 @@ let main () =
   (* parse config json *)
   parse_config_json input_json_filename;  
 
-  (* create defnode strings hashtbl *)
-  create_defnode_strings defnode_string_output_c_h;
 
+  (* determine the source file type and suffix *)
+  let (rval, source_filename, source_filename_suffix) = (deconstruct_filename Sys.argv.(1)) in
+  if (rval == false) then 
+    begin
+      Printf.printf "Unsupported file source/extension:%s" Sys.argv.(1); 
+      ignore(exit 1);
+    end;
+
+ (* create defnode strings hashtbl based on source file type *)
+  if (source_filename_suffix = ".c" || source_filename_suffix = ".h") then 
+    begin
+      Printf.printf "source is c code; using c output..\n";
+      create_defnode_strings defnode_string_output_c_h;
+    end
+  else
+    begin
+      Printf.printf "ERROR: unknown source file type!";
+      ignore(exit 1);
+    end
+  ;
+
+ 
   (* process all files and associated defnodes *)
   (*process_filenames_defnodes ();*)
 
@@ -365,28 +385,3 @@ main ();;
 *)
 
 
-
-(*
-
-    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_list in
-    List.iter (fun (defnode_list_node_name, (defnode_list_node_json : Yojson.Basic.t)) ->
-      Printf.printf "%s:\n" defnode_list_node_name;
-      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc defnode_list_node_json in
-
-      if (defnode_list_node_name = "constdef") then 
-        begin
-          List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-              ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
-            ) def_nodes_types_inner_assoc_list;
-        end
-      else
-        begin
-          Printf.printf "ERROR: unknown defnode list node name=%s\n" defnode_list_node_name;
-          ignore (exit 1);
-        end
-      ;
-
-    ) def_nodes_types_assoc_list;
-
-
-*)
