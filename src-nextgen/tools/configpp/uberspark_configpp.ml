@@ -68,6 +68,32 @@ let process_configpp_file
 ;;
 
 
+(*
+  process filenames and defnodes
+*)
+let process_filenames_defnodes () =
+
+			Hashtbl.iter (fun target_filename (defnode_list : (string * Yojson.Basic.t) list)  ->
+					Printf.printf "filename:%s\n" target_filename;
+
+          List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
+                  Printf.printf "%s:\n" defnode_name;
+                  let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_alist in
+                  List.iter (fun (m,n) ->
+                    Printf.printf "%s:\n" m;
+                    let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
+                    Printf.printf "success";
+                    List.iter (fun (a, (b:Yojson.Basic.t) ) ->
+                      Printf.printf "id:%s val=%s\n" a (Yojson.Basic.Util.to_string b);
+                    ) def_nodes_types_inner_assoc_list;
+                  ) def_nodes_types_assoc_list;
+          )defnode_list;
+
+			) g_filename_defnodes_hashtbl;
+
+
+;;
+
 (* 
    parse a configuration json manifest and populate relevant 
    hash tables and lists
@@ -100,7 +126,7 @@ let parse_config_json
           let mf_assoc_list = Yojson.Basic.Util.to_assoc !config_mf_json in
             
             List.iter (fun (x,y) ->
-             Printf.printf "%s:\n" x;
+             (*Printf.printf "%s:\n" x;*)
 
              if(!outer_json_node_index == 0) then 
              begin
@@ -121,7 +147,7 @@ let parse_config_json
               let mf_files_json = y |> member "files" in
                 if mf_files_json != `Null then
                   begin
-                    Printf.printf "files:\n";
+                    (*Printf.printf "files:\n";*)
                     files_json_list := mf_files_json |> to_list;
                   end
                 else
@@ -143,7 +169,7 @@ let parse_config_json
               (* populate filenames_defnode hashtbl *)
               List.iter (fun x -> 
                 let target_filename = (x |> to_string) in 
-                Printf.printf "filename: %s\n" target_filename;
+                (*Printf.printf "filename: %s\n" target_filename;*)
                 if (Hashtbl.mem g_filename_defnodes_hashtbl target_filename) then
                   begin
                     let cur_def_nodes_assoc_list = (Hashtbl.find g_filename_defnodes_hashtbl target_filename) in
@@ -206,6 +232,9 @@ let main () =
 
   (* parse config json *)
   parse_config_json input_json_filename;  
+
+  (* process all files and associated defnodes *)
+  process_filenames_defnodes ();
 
 ;;
 
