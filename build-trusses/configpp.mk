@@ -17,7 +17,7 @@ all:
 .PHONY: run
 run:
 	#@"$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json
-	@"$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp test.ml.us 
+	@cd temp && "$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp test.ml.us 
 	
 ### cleanup
 .PHONY: clean

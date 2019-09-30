@@ -12,6 +12,7 @@
 # blacklist select directories
 **/_build
 .vscode/
+temp/
 
 # whitelist the extensions we care about
 !Makefile
