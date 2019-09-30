@@ -90,6 +90,11 @@ let deconstruct_filename
           o_source_suffix := ".c";
           retval := true;
         end
+      else if (Filename.check_suffix !o_source ".h") then
+        begin
+          o_source_suffix := ".h";
+          retval := true;
+        end
       else 
         begin
           o_source_suffix := "";
@@ -110,7 +115,7 @@ let deconstruct_filename
 (*
   process defnode list for C code output
 *)
-let process_defnode_list_output_c
+let process_defnode_list_output_c_h
   (defnode_list : Yojson.Basic.t) 
   : string =
   let ret_str = ref "" in
@@ -159,9 +164,9 @@ let process_filenames_defnodes () =
               List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
                 Printf.printf "defnode name=%s, src suffix=%s\n" defnode_name source_filename_suffix; (* target we need to substitute within target_filane *)
 
-                if (source_filename_suffix = ".c") then 
+                if (source_filename_suffix = ".c" || source_filename_suffix = ".h") then 
                   begin
-                    let source_output = process_defnode_list_output_c defnode_alist in
+                    let source_output = process_defnode_list_output_c_h defnode_alist in
                       Printf.printf "source output:%s" source_output;
                   end
                 else
