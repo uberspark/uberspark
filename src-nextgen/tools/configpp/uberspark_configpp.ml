@@ -119,7 +119,7 @@ let process_defnode_list_output_c
       Printf.printf "%s:\n" defnode_list_node_name;
       let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc defnode_list_node_json in
 
-      if (defnode_list_node_name == "constdef") then 
+      if (defnode_list_node_name = "constdef") then 
         begin
           List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
               Printf.printf "id:%s val=%s\n" id_name (Yojson.Basic.Util.to_string id_def);
@@ -152,11 +152,32 @@ let process_filenames_defnodes () =
 
 			Hashtbl.iter (fun target_filename (defnode_list : (string * Yojson.Basic.t) list)  ->
 					Printf.printf "filename:%s\n" target_filename;
+          let (rval, source_filename, source_filename_suffix) = (deconstruct_filename target_filename) in
+          if (rval == true) then 
+            begin
+            
+              List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
+                Printf.printf "defnode name=%s, src suffix=%s\n" defnode_name source_filename_suffix; (* target we need to substitute within target_filane *)
 
-          List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
-                  Printf.printf "%s:\n" defnode_name; (* target we need to substitute within target_filane *)
-                  
-          )defnode_list;
+                if (source_filename_suffix = ".c") then 
+                  begin
+                    let source_output = process_defnode_list_output_c defnode_alist in
+                      Printf.printf "source output:%s" source_output;
+                  end
+                else
+                  begin
+                    Printf.printf "ERROR: unknown, we should never be here!";
+                    ignore(exit 1);
+                  end
+                ;
+                      
+              )defnode_list;
+
+            end
+          else
+            begin
+              Printf.printf "Unsupported file source/extension:%s, ignoring\n" target_filename; 
+            end;
 
 			) g_filename_defnodes_hashtbl;
 
