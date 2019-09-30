@@ -101,6 +101,11 @@ let deconstruct_filename
           o_source_suffix := ".h";
           retval := true;
         end
+      else if (Filename.check_suffix !o_source ".ml") then
+        begin
+          o_source_suffix := ".ml";
+          retval := true;
+        end
       else 
         begin
           o_source_suffix := "";
@@ -150,6 +155,43 @@ let defnode_string_output_c_h
   
   (!ret_str)
 ;;
+
+
+
+(*
+  create defnode string output for Ocaml code (.ml)
+*)
+let defnode_string_output_ml
+  (defnode_assoc_list : (string * Yojson.Basic.t) list) 
+  : string =
+  let ret_str = ref "" in
+  
+  List.iter (fun (defnode_type, (defnode_list : Yojson.Basic.t)) ->
+    (*Printf.printf "defnode type=%s\n" defnode_type; *)
+
+    if (defnode_type = "constdef") then 
+      begin
+        let defnode_constdef_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
+          defnode_constdef_assoc_list := Yojson.Basic.Util.to_assoc defnode_list;
+
+        List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
+            ret_str := !ret_str ^ "let " ^  "const_" ^ id_name ^ " = \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\";;\r\n";
+          ) !defnode_constdef_assoc_list;
+      end
+    else
+      begin
+        Printf.printf "ERROR: unknown defnode type=%s\n" defnode_type;
+        ignore (exit 1);
+      end
+    ;
+
+  ) defnode_assoc_list;
+
+  
+  (!ret_str)
+;;
+
+
 
 
 (*
@@ -287,6 +329,11 @@ let main () =
     begin
       Printf.printf "source is c code; using c output..\n";
       create_defnode_strings defnode_string_output_c_h;
+    end
+  else if (source_filename_suffix = ".ml") then 
+    begin
+      Printf.printf "source is Ocaml code; using ocaml output..\n";
+      create_defnode_strings defnode_string_output_ml;
     end
   else
     begin
