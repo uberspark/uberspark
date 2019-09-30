@@ -13,9 +13,12 @@ let uberspark_srcdir = ref "";;
 (* hashtbl of defnodes index by defnode name: string and the value is a string 
  that will replace defnode in the processed file
  *)
-let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
+(*let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
 
 let g_filename_defnodes_hashtbl = ((Hashtbl.create 32) : ( (string, ((string * Yojson.Basic.t) list) )  Hashtbl.t));;
+*)
+
+let g_defnodes_hashtbl = ((Hashtbl.create 32) : ( (string, ((string * Yojson.Basic.t) list) )  Hashtbl.t));;
 
 let abspath path =
   let curdir = Unix.getcwd () in
@@ -113,78 +116,54 @@ let deconstruct_filename
 
 
 (*
-  process defnode list for C code output
+  create defnode string output for C code (.c, .h)
 *)
-let process_defnode_list_output_c_h
-  (defnode_list : Yojson.Basic.t) 
+let defnode_string_output_c_h
+  (defnode_assoc_list : (string * Yojson.Basic.t) list) 
   : string =
   let ret_str = ref "" in
-    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_list in
-    List.iter (fun (defnode_list_node_name, (defnode_list_node_json : Yojson.Basic.t)) ->
-      Printf.printf "%s:\n" defnode_list_node_name;
-      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc defnode_list_node_json in
+  
+  List.iter (fun (defnode_type, (defnode_list : Yojson.Basic.t)) ->
+    (*Printf.printf "defnode type=%s\n" defnode_type; *)
 
-      if (defnode_list_node_name = "constdef") then 
-        begin
-          List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-              ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
-            ) def_nodes_types_inner_assoc_list;
-        end
-      else
-        begin
-          Printf.printf "ERROR: unknown defnode list node name=%s\n" defnode_list_node_name;
-          ignore (exit 1);
-        end
-      ;
+    if (defnode_type = "constdef") then 
+      begin
+        let defnode_constdef_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
+          defnode_constdef_assoc_list := Yojson.Basic.Util.to_assoc defnode_list;
 
-    ) def_nodes_types_assoc_list;
+        List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
+            ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
+          ) !defnode_constdef_assoc_list;
+      end
+    else
+      begin
+        Printf.printf "ERROR: unknown defnode type=%s\n" defnode_type;
+        ignore (exit 1);
+      end
+    ;
 
+  ) defnode_assoc_list;
+
+  
   (!ret_str)
 ;;
 
 
-
-
-
-
 (*
-  process filenames and defnodes
+  create defnode string equivalent
 *)
-let process_filenames_defnodes () =
+let create_defnode_strings 
+  (defnode_string_output_function: (string * Yojson.Basic.t) list -> string) 
+  =
 
-			Hashtbl.iter (fun target_filename (defnode_list : (string * Yojson.Basic.t) list)  ->
-					Printf.printf "filename:%s\n" target_filename;
-          let (rval, source_filename, source_filename_suffix) = (deconstruct_filename target_filename) in
-          if (rval == true) then 
-            begin
-            
-              List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
-                Printf.printf "defnode name=%s, src suffix=%s\n" defnode_name source_filename_suffix; (* target we need to substitute within target_filane *)
+  Hashtbl.iter (fun (defnode_name:string) (defnode_json_assoc_list : (string * Yojson.Basic.t) list)  ->
+      Printf.printf "defnode:%s\n" defnode_name;
+      Printf.printf "defnode output:\n%s\n" (defnode_string_output_function defnode_json_assoc_list);
+  ) g_defnodes_hashtbl;
 
-                if (source_filename_suffix = ".c" || source_filename_suffix = ".h") then 
-                  begin
-                    let source_output = process_defnode_list_output_c_h defnode_alist in
-                      Printf.printf "source output:\n%s\n" source_output;
-                  end
-                else
-                  begin
-                    Printf.printf "ERROR: unknown, we should never be here!";
-                    ignore(exit 1);
-                  end
-                ;
-                      
-              )defnode_list;
-
-            end
-          else
-            begin
-              Printf.printf "Unsupported file source/extension:%s, ignoring\n" target_filename; 
-            end;
-
-			) g_filename_defnodes_hashtbl;
-
-
+  ();
 ;;
+
 
 (* 
    parse a configuration json manifest and populate relevant 
@@ -217,14 +196,13 @@ let parse_config_json
 
           let mf_assoc_list = Yojson.Basic.Util.to_assoc !config_mf_json in
             
-            List.iter (fun (x,y) ->
-             (*Printf.printf "%s:\n" x;*)
+            List.iter (fun ( (defnode_name:string),(defnode_json:Yojson.Basic.t)) ->
 
              if(!outer_json_node_index == 0) then 
              begin
-              if (x <> "hdr") then 
+              if (defnode_name <> "hdr") then 
               begin
-                Printf.printf "ERROR in manifest: expected first entry to be header, got: %s\n" x;
+                Printf.printf "ERROR in manifest: expected first entry to be header, got: %s\n" defnode_name;
                 ignore(exit 1);
               end
               ;
@@ -234,63 +212,27 @@ let parse_config_json
              else
              begin
 
-              (* grab list of files for this defnode *)
-              let files_json_list : Yojson.Basic.t list ref = ref [] in
-              let mf_files_json = y |> member "files" in
-                if mf_files_json != `Null then
-                  begin
-                    (*Printf.printf "files:\n";*)
-                    files_json_list := mf_files_json |> to_list;
-                  end
-                else
-                  begin
-                    Printf.printf "ERROR in manifest: 'files' node missing within defnodes\n";
-                    ignore(exit 1);
-                  end
-                ;
+              (* grab associative list of defnode json *)
+              let defnode_json_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
+                defnode_json_assoc_list := Yojson.Basic.Util.to_assoc defnode_json;
 
-              (* grab associative list of defnodes *)
-              let def_nodes_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
-              let mf_def_nodes_json = y |> member "def-nodes" in
-              if mf_def_nodes_json != `Null then
+              (* populate defnodes hashtbl *) 
+              if (Hashtbl.mem g_defnodes_hashtbl defnode_name) then
                 begin
-                    def_nodes_assoc_list := Yojson.Basic.Util.to_assoc mf_def_nodes_json;
+                  let cur_defnode_json_assoc_list = (Hashtbl.find g_defnodes_hashtbl defnode_name) in
+                    Hashtbl.replace g_defnodes_hashtbl defnode_name (cur_defnode_json_assoc_list @ !defnode_json_assoc_list);              
+                end
+              else
+                begin
+                  Hashtbl.add g_defnodes_hashtbl defnode_name !defnode_json_assoc_list;              
                 end
               ;
 
-              (* populate filenames_defnode hashtbl *)
-              List.iter (fun x -> 
-                let target_filename = (x |> to_string) in 
-                (*Printf.printf "filename: %s\n" target_filename;*)
-                if (Hashtbl.mem g_filename_defnodes_hashtbl target_filename) then
-                  begin
-                    let cur_def_nodes_assoc_list = (Hashtbl.find g_filename_defnodes_hashtbl target_filename) in
-                      Hashtbl.replace g_filename_defnodes_hashtbl target_filename (cur_def_nodes_assoc_list @ !def_nodes_assoc_list);              
-                  end
-                else
-                  begin
-                    Hashtbl.add g_filename_defnodes_hashtbl target_filename !def_nodes_assoc_list;              
-                  end
-                ;
-              ) !files_json_list;
+              end;
 
-
-                (*let mf_def_nodes_json = y |> member "def-nodes" in
-                if mf_def_nodes_json != `Null then
-                  begin
-                    Printf.printf "def-nodes:\n";
-                    let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
-                  *)
-                                      (*end
-                ;*)
-                end;
-
-                outer_json_node_index := !outer_json_node_index + 1;
-                ()
-              ) mf_assoc_list;
-            
-
-            
+              outer_json_node_index := !outer_json_node_index + 1;
+              ()
+            ) mf_assoc_list;
 
         end
       ;
@@ -302,7 +244,7 @@ with Yojson.Basic.Util.Type_error _ ->
 
 
 (*debug print out filenames_defnodes hashtbl *)
- Printf.printf "total elements within filenames_defnodes hashtbl: %u\n" (Hashtbl.length g_filename_defnodes_hashtbl);
+ Printf.printf "total elements within filenames_defnodes hashtbl: %u\n" (Hashtbl.length g_defnodes_hashtbl);
  
 
   ()
@@ -312,21 +254,24 @@ with Yojson.Basic.Util.Type_error _ ->
 let main () = 
  
   (* sanity check usage *)
-  if (Array.length Sys.argv) < 2 then
+  if (Array.length Sys.argv) < 4 then
   begin
-    Printf.printf "Usage: uberspark_confpp <input_json>\n\n";
+    Printf.printf "Usage: uberspark_configpp <input_file> <output_file> <config_json>\n";
+    ignore (exit 1);
   end;
    
   (* get json file and open it *)  
-  let input_json_filename = Sys.argv.(1) in 
+  let input_json_filename = Sys.argv.(3) in 
     Printf.printf "Using configuration json file: %s\n" input_json_filename;
-
 
   (* parse config json *)
   parse_config_json input_json_filename;  
 
+  (* create defnode strings hashtbl *)
+  create_defnode_strings defnode_string_output_c_h;
+
   (* process all files and associated defnodes *)
-  process_filenames_defnodes ();
+  (*process_filenames_defnodes ();*)
 
 ;;
 
@@ -390,16 +335,58 @@ main ();;
 
 (*
 
-                List.iter (fun (x,y) ->
-                        Printf.printf "%s:\n" x;
-                        let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
-                        List.iter (fun (m,n) ->
-                          Printf.printf "%s:\n" m;
-                          let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
-                          List.iter (fun (a,b) ->
-                            Printf.printf "id:%s, val:%s\n" a (b |> to_string);
-                          ) def_nodes_types_inner_assoc_list;
-                        ) def_nodes_types_assoc_list;
-                )!def_nodes_assoc_list;
+
+          let (rval, source_filename, source_filename_suffix) = (deconstruct_filename target_filename) in
+          if (rval == true) then 
+            begin
+            
+              List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
+                Printf.printf "defnode name=%s, src suffix=%s\n" defnode_name source_filename_suffix; (* target we need to substitute within target_filane *)
+
+                if (source_filename_suffix = ".c" || source_filename_suffix = ".h") then 
+                  begin
+                    let source_output = process_defnode_list_output_c_h defnode_alist in
+                      Printf.printf "source output:\n%s\n" source_output;
+                  end
+                else
+                  begin
+                    Printf.printf "ERROR: unknown, we should never be here!";
+                    ignore(exit 1);
+                  end
+                ;
+                      
+              )defnode_list;
+
+            end
+          else
+            begin
+              Printf.printf "Unsupported file source/extension:%s, ignoring\n" target_filename; 
+            end;
+*)
+
+
+
+(*
+
+    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_list in
+    List.iter (fun (defnode_list_node_name, (defnode_list_node_json : Yojson.Basic.t)) ->
+      Printf.printf "%s:\n" defnode_list_node_name;
+      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc defnode_list_node_json in
+
+      if (defnode_list_node_name = "constdef") then 
+        begin
+          List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
+              ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
+            ) def_nodes_types_inner_assoc_list;
+        end
+      else
+        begin
+          Printf.printf "ERROR: unknown defnode list node name=%s\n" defnode_list_node_name;
+          ignore (exit 1);
+        end
+      ;
+
+    ) def_nodes_types_assoc_list;
+
 
 *)

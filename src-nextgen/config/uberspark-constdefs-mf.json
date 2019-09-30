@@ -14,54 +14,32 @@
 	},
 
 
-    "constdef_binary": 
-    {  
-        "files": [
-            "filename1.c.us",
-            "filename2.ml.us",
-            "filename3.mli.us"
-        ],
-
-        "def-nodes" : 
+    "defnode_1": 
+    {
+        "constdef": 
         {
-            "node1": 
-            {
-                "constdef": 
-                {
-                    "id1_name": "id1_value",
-                    "id2_name": "id2_value"
-                }
-            }
+            "id1_name": "id1_value",
+            "id2_name": "id2_value"
         }
     },
-    
-    "constdef_general": 
-    {  
-        "files": [
-            "filename1.c.us",
-            "filename2.h.us"
-        ],
 
-        "def-nodes" : 
+
+    "def_node2": 
+    {
+        "constdef" :
         {
-            "node1": 
-            {
-                "constdef" :
-                {
-                    "id1_name": "id1_value"
-                }
-            },
-            "node2": 
-            {
-                "constdef" : 
-                {
-                    "id1_name": "id1_value",
-                    "id2_name": "id2_value",
-                    "id3_name": "id3_value"
-                }
-            }
+            "id1_name": "id1_value"
         }
-    }     
+    },
+
+    "defnode_1": 
+    {
+        "constdef": 
+        {
+            "id8_name": "id8_value",
+            "id9_name": "id9_value"
+        }
+    }
 
 
 
