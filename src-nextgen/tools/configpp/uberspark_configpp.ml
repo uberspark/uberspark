@@ -15,6 +15,7 @@ let uberspark_srcdir = ref "";;
  *)
 let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
 
+let g_filename_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, Yojson.Basic.t)  Hashtbl.t));;
 
 let abspath path =
   let curdir = Unix.getcwd () in
@@ -127,6 +128,11 @@ let parse_config_json
                           Printf.printf "%s\n" (x |> to_string);
                         ) files_json_list;
                   end
+                else
+                  begin
+                    Printf.printf "ERROR in manifest: 'files' node missing within defnodes\n";
+                    ignore(exit 1);
+                  end
                 ;
 
                 let mf_def_nodes_json = y |> member "def-nodes" in
@@ -168,7 +174,7 @@ with Yojson.Basic.Util.Type_error _ ->
   ()
 ;;
 
-(*
+
 let main () = 
  
   (* sanity check usage *)
@@ -186,9 +192,9 @@ let main () =
   parse_config_json input_json_filename;  
 
 ;;
-*)
 
 
+(*
 let main () = 
  
   (* sanity check usage *)
@@ -239,7 +245,7 @@ let main () =
   ;  
 
 ;;
-
+*)
 
 main ();;
 

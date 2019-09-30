@@ -16,7 +16,7 @@
 
     "constdef_binary": 
     {  
-        "files": [
+        "xfiles": [
             "filename1.ext1",
             "filename2.ext2",
             "filename3.ext3"
