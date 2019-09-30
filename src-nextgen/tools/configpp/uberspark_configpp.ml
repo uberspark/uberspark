@@ -68,6 +68,47 @@ let process_configpp_file
 ;;
 
 
+
+
+
+(*
+  process defnode list for C code output
+*)
+let process_defnode_list_output_c
+  (defnode_list : Yojson.Basic.t) 
+  : string =
+  let ret_str = ref "" in
+    let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_list in
+    List.iter (fun (defnode_list_node_name, (defnode_list_node_json : Yojson.Basic.t)) ->
+      Printf.printf "%s:\n" defnode_list_node_name;
+      let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc defnode_list_node_json in
+
+      if (defnode_list_node_name == "constdef") then 
+        begin
+          List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
+              Printf.printf "id:%s val=%s\n" id_name (Yojson.Basic.Util.to_string id_def);
+            ) def_nodes_types_inner_assoc_list;
+        end
+      else
+        begin
+          Printf.printf "ERROR: unknown defnode list node name=%s\n" defnode_list_node_name;
+          ignore (exit 1);
+        end
+      ;
+
+    ) def_nodes_types_assoc_list;
+
+
+    ret_str := "success";
+
+  (!ret_str)
+;;
+
+
+
+
+
+
 (*
   process filenames and defnodes
 *)
@@ -77,16 +118,8 @@ let process_filenames_defnodes () =
 					Printf.printf "filename:%s\n" target_filename;
 
           List.iter (fun (defnode_name, (defnode_alist : Yojson.Basic.t)) ->
-                  Printf.printf "%s:\n" defnode_name;
-                  let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc defnode_alist in
-                  List.iter (fun (m,n) ->
-                    Printf.printf "%s:\n" m;
-                    let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
-                    Printf.printf "success";
-                    List.iter (fun (a, (b:Yojson.Basic.t) ) ->
-                      Printf.printf "id:%s val=%s\n" a (Yojson.Basic.Util.to_string b);
-                    ) def_nodes_types_inner_assoc_list;
-                  ) def_nodes_types_assoc_list;
+                  Printf.printf "%s:\n" defnode_name; (* target we need to substitute within target_filane *)
+                  
           )defnode_list;
 
 			) g_filename_defnodes_hashtbl;
