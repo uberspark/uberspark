@@ -15,7 +15,7 @@ let uberspark_srcdir = ref "";;
  *)
 let g_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
 
-let g_filename_defnodes_hashtbl = ((Hashtbl.create 32) : ((string, Yojson.Basic.t)  Hashtbl.t));;
+let g_filename_defnodes_hashtbl = ((Hashtbl.create 32) : ( (string, ((string * Yojson.Basic.t) list) )  Hashtbl.t));;
 
 let abspath path =
   let curdir = Unix.getcwd () in
@@ -131,7 +131,7 @@ let parse_config_json
                   end
                 ;
 
-              (* grab list of defnodes *)
+              (* grab associative list of defnodes *)
               let def_nodes_assoc_list : (string * Yojson.Basic.t) list ref = ref [] in 
               let mf_def_nodes_json = y |> member "def-nodes" in
               if mf_def_nodes_json != `Null then
@@ -140,8 +140,20 @@ let parse_config_json
                 end
               ;
 
+              (* populate filenames_defnode hashtbl *)
               List.iter (fun x -> 
-                 Printf.printf "%s\n" (x |> to_string);
+                let target_filename = (x |> to_string) in 
+                Printf.printf "filename: %s\n" target_filename;
+                if (Hashtbl.mem g_filename_defnodes_hashtbl target_filename) then
+                  begin
+                    let cur_def_nodes_assoc_list = (Hashtbl.find g_filename_defnodes_hashtbl target_filename) in
+                      Hashtbl.replace g_filename_defnodes_hashtbl target_filename (cur_def_nodes_assoc_list @ !def_nodes_assoc_list);              
+                  end
+                else
+                  begin
+                    Hashtbl.add g_filename_defnodes_hashtbl target_filename !def_nodes_assoc_list;              
+                  end
+                ;
               ) !files_json_list;
 
 
@@ -151,18 +163,7 @@ let parse_config_json
                     Printf.printf "def-nodes:\n";
                     let def_nodes_assoc_list = Yojson.Basic.Util.to_assoc mf_def_nodes_json in
                   *)
-                    List.iter (fun (x,y) ->
-                      Printf.printf "%s:\n" x;
-                      let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
-                      List.iter (fun (m,n) ->
-                        Printf.printf "%s:\n" m;
-                        let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
-                        List.iter (fun (a,b) ->
-                          Printf.printf "id:%s, val:%s\n" a (b |> to_string);
-                        ) def_nodes_types_inner_assoc_list;
-                      ) def_nodes_types_assoc_list;
-                    )!def_nodes_assoc_list;
-                  (*end
+                                      (*end
                 ;*)
                 end;
 
@@ -181,6 +182,10 @@ with Yojson.Basic.Util.Type_error _ ->
   ignore(exit 1);
 ;
 
+
+(*debug print out filenames_defnodes hashtbl *)
+ Printf.printf "total elements within filenames_defnodes hashtbl: %u\n" (Hashtbl.length g_filename_defnodes_hashtbl);
+ 
 
   ()
 ;;
@@ -260,3 +265,20 @@ let main () =
 
 main ();;
 
+(* TBA *)
+
+(*
+
+                List.iter (fun (x,y) ->
+                        Printf.printf "%s:\n" x;
+                        let def_nodes_types_assoc_list = Yojson.Basic.Util.to_assoc y in
+                        List.iter (fun (m,n) ->
+                          Printf.printf "%s:\n" m;
+                          let def_nodes_types_inner_assoc_list = Yojson.Basic.Util.to_assoc n in
+                          List.iter (fun (a,b) ->
+                            Printf.printf "id:%s, val:%s\n" a (b |> to_string);
+                          ) def_nodes_types_inner_assoc_list;
+                        ) def_nodes_types_assoc_list;
+                )!def_nodes_assoc_list;
+
+*)
