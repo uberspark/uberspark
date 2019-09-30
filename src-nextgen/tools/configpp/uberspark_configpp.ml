@@ -20,6 +20,9 @@ let g_filename_defnodes_hashtbl = ((Hashtbl.create 32) : ( (string, ((string * Y
 
 let g_defnodes_hashtbl = ((Hashtbl.create 32) : ( (string, ((string * Yojson.Basic.t) list) )  Hashtbl.t));;
 
+let g_defnodes_strings_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t));; 
+
+
 let abspath path =
   let curdir = Unix.getcwd () in
   let retval = ref true in
@@ -45,7 +48,7 @@ let abspath path =
 let process_configpp_file 
   (input_filename : string) 
   (output_filename : string)
-  (defnodes_hashtbl : (string, string) Hashtbl.t)
+  (defnodes_strings_hashtbl : (string, string) Hashtbl.t)
   =
 
   let ic = open_in input_filename in
@@ -59,7 +62,7 @@ let process_configpp_file
       Hashtbl.iter (fun key value  ->
         let t_line = Str.global_replace (Str.regexp key) value (!output_line) in
         output_line := t_line;
-      ) defnodes_hashtbl;
+      ) defnodes_strings_hashtbl;
 
       Printf.fprintf oc "%s\n" !output_line;
     done
@@ -157,8 +160,11 @@ let create_defnode_strings
   =
 
   Hashtbl.iter (fun (defnode_name:string) (defnode_json_assoc_list : (string * Yojson.Basic.t) list)  ->
+      let defnode_string_output = (defnode_string_output_function defnode_json_assoc_list) in
       Printf.printf "defnode:%s\n" defnode_name;
-      Printf.printf "defnode output:\n%s\n" (defnode_string_output_function defnode_json_assoc_list);
+      Printf.printf "defnode output:\n%s\n" defnode_string_output;
+      Hashtbl.remove g_defnodes_strings_hashtbl defnode_name;
+      Hashtbl.add g_defnodes_strings_hashtbl defnode_name defnode_string_output;
   ) g_defnodes_hashtbl;
 
   ();
