@@ -34,14 +34,14 @@ all: generate_buildtruss docs_html frontend
 	@echo uberspark toolkit build success!
 
 
-### pre-process sources with configuration
-.PHONY: build_configpp
-build_configpp: generate_buildtruss
-	$(call docker_run,make -f configpp.mk, -w all)
+### shared definitions pre-processing tool
+.PHONY: build_sdefpp
+build_sdefpp: generate_buildtruss
+	$(call docker_run,make -f sdefpp.mk, -w all)
 
-.PHONY: run_configpp
-run_configpp: build_configpp
-	$(call docker_run,make -f configpp.mk, -w run)
+.PHONY: run_sdefpp
+run_sdefpp: build_sdefpp
+	$(call docker_run,make -f sdefpp.mk, -w run)
 
 
 
