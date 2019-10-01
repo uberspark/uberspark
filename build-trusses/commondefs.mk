@@ -20,6 +20,7 @@ export OCAML := ocaml
 export RM := rm
 export MKDIR := mkdir
 export CP := cp
+export UBERSPARK_CONFIGPP := $(UBERSPARK_SRCDIR)/tools/configpp/_build/uberspark_configpp
 
 ###### variables
 export BUILDDIR := _build
