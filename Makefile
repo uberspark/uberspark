@@ -7,7 +7,7 @@
 
 export USPARK_SRCROOTDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_BUILDTRUSSESDIR := $(USPARK_SRCROOTDIR)/build-trusses
-export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-exptoolchain
+export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-nextgen
 export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 
 export USPARK_NAMESPACEROOTDIR := ~/uberspark
@@ -76,13 +76,13 @@ docs_pdf: generate_buildtruss
 
 ### build libraries
 .PHONY: libs
-libs:
+libs: generate_buildtruss
 	$(call docker_run,make -f build-libs.mk, -w all)
 
 
 ###### frontend build targets
 .PHONY: frontend
-frontend:
+frontend: generate_buildtruss
 	$(call docker_run,make -f build-frontend.mk, -w all)
 
 
