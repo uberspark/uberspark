@@ -19,8 +19,9 @@ export SUDO := sudo
 
 define docker_run
 	docker run --rm -i \
-		-e MAKE_COMMAND="$(1)" \
-		-e MAKE_TARGET="$(2)" \
+		-e D_CMD="$(1)" \
+		-e D_CMDARGS="$(2)" \
+		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
 		-t hypcode/uberspark-build-x86_64 
 	find  -type f  -exec touch {} + 
