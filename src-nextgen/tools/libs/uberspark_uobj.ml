@@ -693,8 +693,8 @@ class uobject
 				= 
 				let retval = ref false in 	
 				let target_def = 	self#get_d_target_def in	
-				let uobjslt_filename = (Uberspark_config.namespace_uobjslt ^ Uberspark_config.env_path_seperator ^
-					target_def.f_arch ^ Uberspark_config.env_path_seperator ^ target_def.f_cpu ^ Uberspark_config.env_path_seperator ^
+				let uobjslt_filename = (Uberspark_config.namespace_uobjslt ^ !Uberspark_config.env_path_seperator ^
+					target_def.f_arch ^ !Uberspark_config.env_path_seperator ^ target_def.f_cpu ^ !Uberspark_config.env_path_seperator ^
 					Uberspark_config.namespace_uobjslt_mf_filename) in 
 
 				let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in

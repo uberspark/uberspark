@@ -96,7 +96,7 @@ open Unix
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
-				retval_abspath := !retval_abspath ^ Uberspark_config.env_path_seperator ^ path_filename;
+				retval_abspath := !retval_abspath ^ !Uberspark_config.env_path_seperator ^ path_filename;
 				(*Unix.chdir !retval_abspath;
 				retval_abspath := Unix.getcwd ();
 				*)
