@@ -1,25 +1,35 @@
-FROM ocaml/opam2:alpine-3.9
+FROM ocaml/opam2:alpine-3.9-opam
 MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 
 # runtime arguments
 ENV D_CMD=make
 ENV D_CMDARGS=all
+ENV OPAMYES 1
 
-RUN sudo apk update 
-RUN sudo apk upgrade
-RUN sudo apk add m4
-RUN sudo adduser -S docker 
-RUN  sudo touch /etc/sudoers.d/docker
-RUN sudo sh -c "echo 'docker ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker"
-RUN sudo chmod 440 /etc/sudoers.d/docker
-RUN  sudo chown root:root /etc/sudoers.d/docker
-RUN  sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
+RUN sudo apk update &&\
+    sudo apk upgrade &&\
+    sudo apk add m4 &&\
+    sudo adduser -S docker &&\ 
+    sudo touch /etc/sudoers.d/docker &&\
+    sudo sh -c "echo 'docker ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker" &&\
+    sudo chmod 440 /etc/sudoers.d/docker &&\
+    sudo chown root:root /etc/sudoers.d/docker &&\
+    sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
 USER docker
 WORKDIR "/home/docker"
 
-RUN opam init -a --disable-sandboxing && \
+# install sphinx documentation generator and related packages
+RUN sudo apk add python3 &&\
+    sudo apk add py3-pip &&\
+    sudo pip3 install --upgrade pip &&\
+    sudo pip3 install sphinx==2.2.0
+
+# install ocaml compiler and related packages
+RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     eval $(opam env) && \
+    opam install -y depext &&\
+    opam install -y depext &&\
     opam install -y ocamlfind && \
     opam install -y yojson && \
     opam install -y cmdliner.1.0.4 && \
@@ -31,7 +41,7 @@ RUN opam init -a --disable-sandboxing && \
 WORKDIR "/home/docker/uberspark/build-trusses"
 
 
-CMD opam switch default && \
+CMD opam switch 4.09.0+flambda && \
     eval $(opam env) && \
     find  -type f  -exec touch {} + &&\
     ${D_CMD} ${D_CMDARGS}
