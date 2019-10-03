@@ -13,14 +13,9 @@ all:
 	cd $(UBERSPARK_SRCDIR)/tools/sdefpp && $(MAKE) -w all
 
 ### (debug) run tool 
-##.PHONY: run
-##run:
-	#@"$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json
-	#@cd temp && "$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp test.ml.us 
-	#@cd temp && "$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json
-	#@cd temp && "$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp test.c.us test.c $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json
-	#@cd temp && "$(UBERSPARK_SRCDIR)"/tools/configpp/_build/uberspark_configpp test.ml.us test.ml $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json	
-##	@cd temp && "$(UBERSPARK_SRCDIR)"/tools/sdefpp/_build/uberspark_sdefpp test.mli.us test.mli $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json	
+.PHONY: dbgrun
+dbgrun:
+	@cd $(UBERSPARK_SRCDIR)/tools/sdefpp/temp && $(UBERSPARK_SDEFPP) test.h.us test.h test.json	
 
 ### cleanup
 .PHONY: clean

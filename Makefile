@@ -48,9 +48,9 @@ build_bootstrap: generate_buildtruss build_sdefpp
 build_sdefpp: generate_buildtruss
 	$(call docker_run,make -f sdefpp.mk, -w all)
 
-#.PHONY: run_sdefpp
-#run_sdefpp: build_sdefpp
-#	$(call docker_run,make -f sdefpp.mk, -w run)
+.PHONY: dbgrun_sdefpp
+dbgrun_sdefpp: build_sdefpp
+	$(call docker_run,make -f sdefpp.mk, -w dbgrun)
 
 
 
@@ -123,6 +123,7 @@ clean: generate_buildtruss
 	$(call docker_run,make -f sdefpp.mk, -w clean)
 	$(call docker_run,make -f build-docs.mk, -w docs_clean)
 	$(call docker_run,make -f build-frontend.mk, -w clean)
+	$(call docker_run,make -f install.mk, -w clean)
 
 
 

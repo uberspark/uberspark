@@ -18,32 +18,14 @@
     {
         "constdef": 
         {
-            "USCONFIG_SIZEOF_UOBJ_TSTACK": "4096",
-            "USCONFIG_SIZEOF_UOBJ_USTACK": "4096",
-            "USCONFIG_UOBJ_MAX_SECTIONS": "32",
-            "USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH": "128",
-            "USCONFIG_UOBJ_MAX_PUBLICMETHODS": "16",
-            "USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES": "16",
-            "USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH": "256",
-            "USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES": "16"
-        }
-    },
-
-
-    "def_node2": 
-    {
-        "constdef" :
-        {
-            "id1_name": "id1_value"
-        }
-    },
-
-    "defnode_1": 
-    {
-        "constdef": 
-        {
-            "id8_name": "id8_value",
-            "id9_name": "id9_value"
+            "USCONFIG_SIZEOF_UOBJ_TSTACK": ["int", "4096"],
+            "USCONFIG_SIZEOF_UOBJ_USTACK": ["int", "4096"],
+            "USCONFIG_UOBJ_MAX_SECTIONS": ["int", "32"],
+            "USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH": ["int", "128"],
+            "USCONFIG_UOBJ_MAX_PUBLICMETHODS": ["int", "16"],
+            "USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES": ["int", "16"],
+            "USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH": ["int", "256"],
+            "USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES": ["int", "16"]
         }
     }
 

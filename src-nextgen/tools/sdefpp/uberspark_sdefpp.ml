@@ -145,7 +145,23 @@ let defnode_string_output_c_h
           defnode_constdef_assoc_list := Yojson.Basic.Util.to_assoc defnode_list;
 
         List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-            ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\"\r\n";
+            let id_def_list = (Yojson.Basic.Util.to_list id_def) in  
+						let id_type = Yojson.Basic.Util.to_string (List.nth id_def_list 0) in 
+            let id_value = Yojson.Basic.Util.to_string (List.nth id_def_list 1) in 
+            if (id_type = "string") then
+              begin
+                ret_str := !ret_str ^ "#define " ^  id_name ^ " \"" ^ id_value ^ "\"\r\n";
+              end
+            else if (id_type = "int" || id_type = "verbatim") then
+              begin
+                ret_str := !ret_str ^ "#define " ^  id_name ^ " " ^ id_value ^ "\r\n";
+              end
+            else 
+              begin
+                Printf.printf "ERROR in constdef type: %s\n" id_type;
+                ignore(exit 1);
+              end
+            ;
           ) !defnode_constdef_assoc_list;
       end
     else
@@ -180,7 +196,26 @@ let defnode_string_output_ml
           defnode_constdef_assoc_list := Yojson.Basic.Util.to_assoc defnode_list;
 
         List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-            ret_str := !ret_str ^ "let " ^  "const_" ^ id_name ^ " = \"" ^ (Yojson.Basic.Util.to_string id_def) ^ "\";;\r\n";
+
+            let id_def_list = (Yojson.Basic.Util.to_list id_def) in  
+						let id_type = Yojson.Basic.Util.to_string (List.nth id_def_list 0) in 
+            let id_value = Yojson.Basic.Util.to_string (List.nth id_def_list 1) in 
+            if (id_type = "string") then
+              begin
+                ret_str := !ret_str ^ "let " ^  "const_" ^ id_name ^ " = \"" ^ id_value ^ "\";;\r\n";
+              end
+            else if (id_type = "int") then
+              begin
+                ret_str := !ret_str ^ "let " ^  "const_" ^ id_name ^ " = " ^ id_value ^ ";;\r\n";
+              end
+            else 
+              begin
+                Printf.printf "ERROR in constdef type: %s\n" id_type;
+                ignore(exit 1);
+              end
+            ;
+
+
           ) !defnode_constdef_assoc_list;
       end
     else
@@ -214,7 +249,26 @@ let defnode_string_output_mli
           defnode_constdef_assoc_list := Yojson.Basic.Util.to_assoc defnode_list;
 
         List.iter (fun (id_name, (id_def:Yojson.Basic.t) ) ->
-            ret_str := !ret_str ^ "val " ^  "const_" ^ id_name ^ " : string\r\n";
+
+            let id_def_list = (Yojson.Basic.Util.to_list id_def) in  
+						let id_type = Yojson.Basic.Util.to_string (List.nth id_def_list 0) in 
+            let id_value = Yojson.Basic.Util.to_string (List.nth id_def_list 1) in 
+            if (id_type = "string") then
+              begin
+                ret_str := !ret_str ^ "val " ^  "const_" ^ id_name ^ " : string\r\n";
+              end
+            else if (id_type = "int") then
+              begin
+                ret_str := !ret_str ^ "val " ^  "const_" ^ id_name ^ " : int\r\n";
+              end
+            else 
+              begin
+                Printf.printf "ERROR in constdef type: %s\n" id_type;
+                ignore(exit 1);
+              end
+            ;
+
+
           ) !defnode_constdef_assoc_list;
       end
     else
@@ -242,8 +296,9 @@ let create_defnode_strings
 
   Hashtbl.iter (fun (defnode_name:string) (defnode_json_assoc_list : (string * Yojson.Basic.t) list)  ->
       let defnode_string_output = (defnode_string_output_function defnode_json_assoc_list) in
-      Printf.printf "defnode:%s\n" defnode_name;
+      (*Printf.printf "defnode:%s\n" defnode_name;
       Printf.printf "defnode output:\n%s\n" defnode_string_output;
+      *)
       Hashtbl.remove g_defnodes_strings_hashtbl defnode_name;
       Hashtbl.add g_defnodes_strings_hashtbl defnode_name defnode_string_output;
   ) g_defnodes_hashtbl;
@@ -293,7 +348,7 @@ let parse_config_json
                 ignore(exit 1);
               end
               ;
-              Printf.printf "TODO: sanity check hdr\n";
+              (*Printf.printf "TODO: sanity check hdr\n";*)
              end
 
              else
@@ -331,7 +386,7 @@ with Yojson.Basic.Util.Type_error _ ->
 
 
 (*debug print out filenames_defnodes hashtbl *)
- Printf.printf "total elements within filenames_defnodes hashtbl: %u\n" (Hashtbl.length g_defnodes_hashtbl);
+ (*Printf.printf "total elements within filenames_defnodes hashtbl: %u\n" (Hashtbl.length g_defnodes_hashtbl);*)
  
 
   ()
