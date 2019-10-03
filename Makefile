@@ -28,11 +28,18 @@ define docker_run
 endef
 
 
+
+
 ###### default target
 
 .PHONY: all
-all: generate_buildtruss docs_html frontend
+all: build_bootstrap docs_html frontend
 	@echo uberspark toolkit build success!
+
+
+###### build bootstrap target
+.PHONY: build_bootstrap
+build_bootstrap: generate_buildtruss build_sdefpp
 
 
 ### shared definitions pre-processing tool
@@ -40,9 +47,9 @@ all: generate_buildtruss docs_html frontend
 build_sdefpp: generate_buildtruss
 	$(call docker_run,make -f sdefpp.mk, -w all)
 
-.PHONY: run_sdefpp
-run_sdefpp: build_sdefpp
-	$(call docker_run,make -f sdefpp.mk, -w run)
+#.PHONY: run_sdefpp
+#run_sdefpp: build_sdefpp
+#	$(call docker_run,make -f sdefpp.mk, -w run)
 
 
 
@@ -64,11 +71,11 @@ generate_buildtruss: buildcontainer-x86_64
 ###### documentation targets
 
 .PHONY: docs_html
-docs_html: generate_buildtruss
+docs_html: build_bootstrap
 	$(call docker_run,make -f build-docs.mk, -w docs_html)
 
 .PHONY: docs_pdf
-docs_pdf: generate_buildtruss
+docs_pdf: build_bootstrap
 	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
 
 
@@ -76,13 +83,13 @@ docs_pdf: generate_buildtruss
 
 ### build libraries
 .PHONY: libs
-libs: generate_buildtruss
+libs: build_bootstrap
 	$(call docker_run,make -f build-libs.mk, -w all)
 
 
 ###### frontend build targets
 .PHONY: frontend
-frontend: generate_buildtruss
+frontend: build_bootstrap
 	$(call docker_run,make -f build-frontend.mk, -w all)
 
 
@@ -143,6 +150,7 @@ dbgshell: generate_buildtruss
 ###### cleanup targets
 .PHONY: clean
 clean: generate_buildtruss
+	$(call docker_run,make -f sdefpp.mk, -w all)
 	$(call docker_run,make -f build-docs.mk, -w docs_clean)
 	$(call docker_run,make -f build-frontend.mk, -w clean)
 

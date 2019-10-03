@@ -42,6 +42,7 @@ prep:
 	$(CP) -f $(UBERSPARK_LIB_SOURCES) $(BUILDDIR)/.
 	$(CP) -f ./META $(BUILDDIR)/.
 	$(CP) -f $(UBERSPARK_LIB_SOURCES_MLI) $(BUILDDIR)/.
+	#@cd temp && $(UBERSPARK_SDEFPP) test.mli.us test.mli $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json	
 
 
 .PHONY: all
