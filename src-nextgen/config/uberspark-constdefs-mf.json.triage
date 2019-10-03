@@ -1,0 +1,68 @@
+/* 
+    uberSpark configuration constant definitions 
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+	/* header */
+	"hdr":{
+		"type" : "configdefs",
+		"namespace" : "/uberspark/config",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+
+    "constdef_binary": 
+    {  
+        "files": [
+            "filename1.c.us",
+            "filename2.ml.us",
+            "filename3.mli.us"
+        ],
+
+        "def-nodes" : 
+        {
+            "node1": 
+            {
+                "constdef": 
+                {
+                    "id1_name": "id1_value",
+                    "id2_name": "id2_value"
+                }
+            }
+        }
+    },
+    
+    "constdef_general": 
+    {  
+        "files": [
+            "filename1.c.us",
+            "filename2.h.us"
+        ],
+
+        "def-nodes" : 
+        {
+            "node1": 
+            {
+                "constdef" :
+                {
+                    "id1_name": "id1_value"
+                }
+            },
+            "node2": 
+            {
+                "constdef" : 
+                {
+                    "id1_name": "id1_value",
+                    "id2_name": "id2_value",
+                    "id3_name": "id3_value"
+                }
+            }
+        }
+    }     
+
+
+
+}

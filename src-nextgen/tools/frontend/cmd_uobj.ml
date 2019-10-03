@@ -60,7 +60,7 @@ let handler_uobj_build
           Uberspark.Logger.log "successfully parsed uobj manifest";
           (*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
-          let target_def: Uberspark.Globaltypes.target_def_t = {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu} in
+          let target_def: Uberspark.Defs.Basedefs.target_def_t = {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu} in
             uobj#initialize target_def;
 
       ;

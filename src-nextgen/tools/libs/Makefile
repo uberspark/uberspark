@@ -11,14 +11,20 @@ UBERSPARK_LIB_EXT_PACKAGES += -package str
 UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
 
-UBERSPARK_LIB_SOURCES := globaltypes.ml
+UBERSPARK_LIB_SOURCES := 
 UBERSPARK_LIB_SOURCES += uberspark_config.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
 UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
 UBERSPARK_LIB_SOURCES += uberspark_binary.ml
 UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
-UBERSPARK_LIB_SOURCES += uberspark.ml
+
+UBERSPARK_LIB_SOURCES_MAIN := uberspark.ml
+UBERSPARK_LIB_SOURCES_MAIN_MLI := uberspark.mli
+UBERSPARK_LIB_SOURCES_MAIN_CMX := uberspark.cmx
+UBERSPARK_LIB_SOURCES_MAIN_CMI := uberspark.cmi
+UBERSPARK_LIB_SOURCES_MAIN_CMT := uberspark.cmt
+UBERSPARK_LIB_SOURCES_MAIN_CMTI := uberspark.cmti
 
 
 UBERSPARK_LIB_SOURCES_MLI := $(patsubst %.ml, %.mli, $(UBERSPARK_LIB_SOURCES))
@@ -27,6 +33,7 @@ UBERSPARK_LIB_INSTALL_CMI := $(patsubst %.ml, %.cmi, $(UBERSPARK_LIB_SOURCES))
 UBERSPARK_LIB_INSTALL_CMT := $(patsubst %.ml, %.cmt, $(UBERSPARK_LIB_SOURCES))
 UBERSPARK_LIB_INSTALL_CMTI := $(patsubst %.ml, %.cmti, $(UBERSPARK_LIB_SOURCES))
 
+
 UBERSPARK_LIB_INSTALL := $(UBERSPARK_LIB_NAME).a 
 UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).cma 
 UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).cmxa
@@ -34,23 +41,41 @@ UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).mli
 
 ###### targets
 
-
-.PHONY: prep
-prep:
+.PHONY: prep_base
+prep_base: 
 	$(RM) -rf $(BUILDDIR)
 	$(MKDIR) -p $(BUILDDIR)
+
+
+.PHONY: prep_defs
+prep_defs: prep_base
+	$(MKDIR) -p $(BUILDDIR)/defs
+	$(UBERSPARK_SDEFPP) defs/basedefs.ml.us $(BUILDDIR)/defs/basedefs.ml $(UBERSPARK_SDEFSDIR)/basedefs.json	
+	$(UBERSPARK_SDEFPP) defs/basedefs.mli.us $(BUILDDIR)/defs/basedefs.mli $(UBERSPARK_SDEFSDIR)/basedefs.json	
+	$(UBERSPARK_SDEFPP) defs/binformat.ml.us $(BUILDDIR)/defs/binformat.ml $(UBERSPARK_SDEFSDIR)/binformat.json	
+	$(UBERSPARK_SDEFPP) defs/binformat.mli.us $(BUILDDIR)/defs/binformat.mli $(UBERSPARK_SDEFSDIR)/binformat.json	
+	$(CP) defs.ml.cppo $(BUILDDIR)/.
+	$(CP) defs.mli.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n defs.ml.cppo -o defs.ml
+	cd $(BUILDDIR) && $(CPPO) -n defs.mli.cppo -o defs.mli
+	
+
+.PHONY: prep_sources
+prep_sources: prep_base prep_defs
 	$(CP) -f $(UBERSPARK_LIB_SOURCES) $(BUILDDIR)/.
+	$(CP) -f $(UBERSPARK_LIB_SOURCES_MAIN) $(BUILDDIR)/.
 	$(CP) -f ./META $(BUILDDIR)/.
 	$(CP) -f $(UBERSPARK_LIB_SOURCES_MLI) $(BUILDDIR)/.
-
+	$(CP) uberspark.mli.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
 
 .PHONY: all
-all: prep
-	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
-	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
-	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
+all: prep_sources
+	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot defs.mli $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_SOURCES_MAIN_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
+	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot defs.ml $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static defs.ml $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
 	cd $(BUILDDIR) && $(OCAMLFIND) remove $(UBERSPARK_LIB_NAME) 
-	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_INSTALL_CMTI)
+	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_SOURCES_MAIN_CMX) defs.cmx $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_SOURCES_MAIN_CMI) defs.cmi $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_SOURCES_MAIN_CMT) defs.cmt $(UBERSPARK_LIB_INSTALL_CMTI) $(UBERSPARK_LIB_SOURCES_MAIN_CMTI) defs.cmti
 
 
 .PHONY: clean

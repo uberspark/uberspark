@@ -14,31 +14,16 @@ val namespace_uobjslt_mf_filename : string
 val namespace_uobjslt_callees_output_filename : string
 val namespace_uobjslt_exitcallees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
+
+
 val binary_page_size : int ref
 val binary_uobj_section_alignment : int ref
+val binary_uobj_default_section_size : int ref
 val binary_uobj_default_load_addr : int ref
 val binary_uobj_default_size : int ref
-val binary_uobj_publicmethod_max_length : int ref
-val binary_uobj_max_publicmethods : int ref
-val binary_uobj_namespace_max_length : int ref
-val binary_uobj_max_intrauobjcoll_callees : int ref
-val binary_uobj_max_interuobjcoll_callees : int ref
-val def_USBINFORMAT_SECTION_TYPE_PADDING : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS : int
-val def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA : int
-val get_uberspark_config_install_prefix : string
+
+
+(*val get_uberspark_config_install_prefix : string
 val get_uberspark_config_install_rootdir : string
 val get_uberspark_config_install_includedir : string
 val get_uberspark_config_install_buildshimsdir : string
@@ -95,3 +80,4 @@ val sizeof_uobj_ustack : int
 val get_sizeof_uobj_ustack : unit -> int
 val sizeof_uobjcoll_info_t : int
 val get_sizeof_uobjcoll_info_t : unit -> int
+*)

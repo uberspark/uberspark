@@ -1,68 +1,50 @@
-FROM amd64/ubuntu:18.04
-LABEL author="Amit Vasudevan <amitvasudevan@acm.org>"
+FROM ocaml/opam2:alpine-3.9-opam
+MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 
 # runtime arguments
-ENV MAKE_COMMAND make
-ENV MAKE_TARGET all
+ENV D_CMD=make
+ENV D_CMDARGS=all
+ENV OPAMYES 1
 
-
-# update package repositories
-RUN apt-get update && \
-    # setup default user 
-    apt-get -y install sudo && \
-    adduser --disabled-password --gecos '' docker && \
-    adduser docker sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN sudo apk update &&\
+    sudo apk upgrade &&\
+    sudo apk add m4 &&\
+    sudo adduser -S docker &&\ 
+    sudo touch /etc/sudoers.d/docker &&\
+    sudo sh -c "echo 'docker ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker" &&\
+    sudo chmod 440 /etc/sudoers.d/docker &&\
+    sudo chown root:root /etc/sudoers.d/docker &&\
+    sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
 USER docker
 WORKDIR "/home/docker"
 
-# install dependencies
-RUN sudo apt-get -y install software-properties-common && \
-    sudo apt-get -y install autoconf && \
-    sudo apt-get -y install make && \
-    sudo apt-get -y install wget && \
-    sudo apt-get -y install patch && \
-    sudo apt-get -y install unzip && \
-    sudo apt-get -y install gcc binutils &&\
-    sudo apt-get -y install bubblewrap
+# install sphinx documentation generator and related packages
+RUN sudo apk add python3 &&\
+    sudo apk add py3-pip &&\
+    sudo pip3 install --upgrade pip &&\
+    sudo pip3 install sphinx==2.2.0
 
-RUN sudo chmod u+s /usr/bin/bwrap
-RUN wget https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh
-RUN sudo chmod +x /home/docker/install.sh
-RUN printf "/usr/local/bin\n" | sudo /home/docker/install.sh
-RUN opam init -a --disable-sandboxing
-RUN eval $(opam env)
-RUN sudo apt-get -y install musl-tools
-RUN opam switch install 4.08.1+musl+static+flambda
-RUN opam switch 4.08.1+musl+static+flambda
-RUN eval $(opam env)
-RUN opam install -y ocamlfind
-RUN opam install -y yojson
-RUN opam install -y cmdliner.1.0.4 
-RUN opam install -y dune.1.11.3
-
-# documentation dependencies
-RUN export DEBIAN_FRONTEND=noninteractive &&\
-    sudo -E apt-get -y install texlive-latex-recommended &&\
-    sudo -E apt-get -y install texlive-fonts-recommended &&\
-    sudo -E apt-get -y install texlive-latex-extra &&\
-    sudo -E apt-get -y install latexmk &&\
-    sudo -E apt-get -y install python3-sphinx 
-
+# install ocaml compiler and related packages
+RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
+    eval $(opam env) && \
+    opam install -y depext &&\
+    opam install -y depext &&\
+    opam install -y ocamlfind && \
+    opam install -y yojson && \
+    opam install -y cmdliner.1.0.4 && \
+    opam install -y dune.1.11.3 && \
+    opam install -y cppo.1.6.6 
 
 
 # switch to working directory within container
 WORKDIR "/home/docker/uberspark/build-trusses"
 
-#    chmod +x ./bsconfigure.sh && \
-#    ./bsconfigure.sh && \
-#    ./configure && \
 
-CMD opam switch 4.08.1+musl+static+flambda && \
+CMD opam switch 4.09.0+flambda && \
     eval $(opam env) && \
     find  -type f  -exec touch {} + &&\
-    ${MAKE_COMMAND} ${MAKE_TARGET}
+    ${D_CMD} ${D_CMDARGS}
 
 # for debugging only
 #ENTRYPOINT [ "/bin/bash"]

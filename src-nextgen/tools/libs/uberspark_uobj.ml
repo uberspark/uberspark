@@ -66,26 +66,26 @@ class uobject
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
 		(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
-		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_hashtbl = d_sections_hashtbl;
 
 		(* hashtbl of uobj sections with memory map info; indexed by section name *)
-		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl = (d_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info; indexed by section virtual address*)
-		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_d_sections_memory_map_hashtbl_byorigin = (d_sections_memory_map_hashtbl_byorigin);
 
 
-		val d_target_def: Globaltypes.target_def_t = {
+		val d_target_def: Defs.Basedefs.target_def_t = {
 			f_platform = ""; 
 			f_arch = ""; 
 			f_cpu = "";
 		};
 		method get_d_target_def = d_target_def;
 		method set_d_target_def 
-			(target_def: Globaltypes.target_def_t) = 
+			(target_def: Defs.Basedefs.target_def_t) = 
 			d_target_def.f_platform <- target_def.f_platform;
 			d_target_def.f_arch <- target_def.f_arch;
 			d_target_def.f_cpu <- target_def.f_cpu;
@@ -116,7 +116,7 @@ class uobject
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
-		method hashtbl_keys (h : (int, Globaltypes.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
+		method hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
 
 
 (*
@@ -183,16 +183,16 @@ class uobject
 *)
 
 		(* base uobj sections hashtbl indexed by section name *)		
-		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val o_uobj_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_o_uobj_sections_hashtbl = (o_uobj_sections_hashtbl);
 		method get_o_uobj_sections_hashtbl_length = (Hashtbl.length o_uobj_sections_hashtbl);
 		
 		(* hashtbl of uobj sections with memory map info indexed by section name *)
-		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl = (uobj_sections_memory_map_hashtbl);
 
 		(* hashtbl of uobj sections with memory map info indexed by section va*)
-		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Globaltypes.section_info_t)  Hashtbl.t)); 
+		val uobj_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 		method get_uobj_sections_memory_map_hashtbl_byorigin = (uobj_sections_memory_map_hashtbl_byorigin);
 		
 		(* val mutable slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t)); *)
@@ -204,7 +204,7 @@ class uobject
 		val o_pp_definition = ref "";
 		method get_o_pp_definition = !o_pp_definition;
 
-		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.uobjcoll_sentineltypes_t)  Hashtbl.t));
+		val o_sentineltypes_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentineltypes_t)  Hashtbl.t));
 		method get_o_sentineltypes_hashtbl = o_sentineltypes_hashtbl;
 *)
 		
@@ -847,7 +847,7 @@ class uobject
 				(* generate uobj section defs *)
 				Printf.fprintf oc "\n\t{"; 
 				
-				Hashtbl.iter (fun key (section_info:Globaltypes.section_info_t) ->  
+				Hashtbl.iter (fun key (section_info:Defs.Basedefs.section_info_t) ->  
 					Printf.fprintf oc "\n\t\t{"; 
 					(* type *)
 					Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_type); 
@@ -1053,7 +1053,7 @@ class uobject
 		method generate_linker_script 
 			(binary_origin : int)
 			(binary_size : int)
-			(sections_hashtbl : (int, Globaltypes.section_info_t) Hashtbl.t) 
+			(sections_hashtbl : (int, Defs.Basedefs.section_info_t) Hashtbl.t) 
 	 		 =
 		
 			let oc = open_out Uberspark_config.namespace_uobj_linkerscript_filename in
@@ -1157,7 +1157,7 @@ class uobject
 			uobj_section_load_addr := uobj_load_addr;
 
 			(* iterate over all the sections *)
-			Hashtbl.iter (fun key (x:Globaltypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
 				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.binary_uobj_section_alignment) in
 				let padding_size = ref 0 in
@@ -1219,7 +1219,7 @@ class uobject
 					Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
@@ -1232,7 +1232,7 @@ class uobject
 					Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
@@ -1255,7 +1255,7 @@ class uobject
 		(* initialize *)
 		(*--------------------------------------------------------------------------*)
 		method initialize	
-			(target_def: Globaltypes.target_def_t)
+			(target_def: Defs.Basedefs.target_def_t)
 			= 
 			(* set target definition *)
 			self#set_d_target_def target_def;	
@@ -1311,9 +1311,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
+					usbinformat = { f_type= Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
@@ -1325,9 +1325,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
@@ -1339,9 +1339,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
@@ -1353,9 +1353,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
 													f_addr_start=0; 
@@ -1367,9 +1367,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
 													f_addr_start=0; 
@@ -1381,9 +1381,9 @@ class uobject
 			Hashtbl.add d_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 													f_prot=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
 													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
 													f_addr_start=0; 
@@ -1503,7 +1503,7 @@ end;;
 			)  o_uobj_publicmethods_sentinels_hashtbl;
 
 			(* iterate over regular sections *)
-			Hashtbl.iter (fun key (x:Globaltypes.section_info_t)  ->
+			Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
 				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.section_alignment) in
 				let padding_size = ref 0 in
@@ -1564,7 +1564,7 @@ end;;
 					Hashtbl.add uobj_sections_memory_map_hashtbl "usuobj_padding" 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
@@ -1575,7 +1575,7 @@ end;;
 					Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
 						{ f_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
-							usbinformat = { f_type = Uberspark_config.def_USBINFORMAT_SECTION_TYPE_PADDING;
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
@@ -2069,16 +2069,16 @@ end ;;
 		(* sentineltypes_hashtbl = hash table of sentinel types *)
 		(*--------------------------------------------------------------------------*)
 		method initialize 
-			(sentineltypes_hashtbl : ((string, Globaltypes.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
+			(sentineltypes_hashtbl : ((string, Defs.Basedefs.uobjcoll_sentineltypes_t) Hashtbl.t) ) 
 			= 
 				
 			(* copy over sentineltypes hash table into uobj sentineltypes hash table*)
-			Hashtbl.iter (fun key (st:Globaltypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun key (st:Defs.Basedefs.uobjcoll_sentineltypes_t)  ->
 					Hashtbl.add o_sentineltypes_hashtbl key st;
 			) sentineltypes_hashtbl;
 
 			(* iterate over sentineltypes hash table to construct sentinels hash table*)
-			Hashtbl.iter (fun st_key (st:Globaltypes.uobjcoll_sentineltypes_t)  ->
+			Hashtbl.iter (fun st_key (st:Defs.Basedefs.uobjcoll_sentineltypes_t)  ->
 						Hashtbl.iter (fun pm_key (pm: uobj_publicmethods_t) ->
 				
 						let sentinel_name = ref "" in
@@ -2105,9 +2105,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
 				{ f_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
-					usbinformat = { f_type= Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
+					usbinformat = { f_type= Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
@@ -2115,9 +2115,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
 				{ f_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
@@ -2125,9 +2125,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
 				{ f_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
@@ -2135,9 +2135,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
 				{ f_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 								f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
@@ -2145,9 +2145,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
 				{ f_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
@@ -2156,9 +2156,9 @@ end ;;
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
 				{ f_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
-					usbinformat = { f_type=Uberspark_config.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
+					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.section_size_general;
+													f_size = !Uberspark_config.binary_uobj_default_section_size;
 													f_addr_file = 0;
 													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
 												};
