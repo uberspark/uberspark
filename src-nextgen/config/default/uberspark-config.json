@@ -1,0 +1,35 @@
+/*
+    uberSpark default configuration settings
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+
+    /* header */
+    "hdr":{
+        "type" : "uberspark-config",
+        "namespace" : "uberspark/config/default",
+        "platform" : "generic",
+        "arch" : "generic",
+        "cpu" : "generic"
+    },
+
+    "from" : "",
+
+    "settings" : {
+
+        /* environment related configuration settings */
+        "env_path_seperator" : "/",
+        "env_home_dir" : "HOME",
+    
+        /* uobj/uobjcoll binary related configuration settings */
+        "binary_page_size" : "0x00200000",
+        "binary_uobj_section_alignment" : "0x00200000",
+        "binary_uobj_default_section_size" : "0x00200000",
+        "binary_uobj_default_load_addr" : "0x60000000",
+        "binary_uobj_default_size" : "0x01000000"
+    
+    }    
+
+
+}
