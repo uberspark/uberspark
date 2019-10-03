@@ -572,7 +572,7 @@ open Yojson
 	(*--------------------------------------------------------------------------*)
 	let parse_node_usmf_uobjcoll_exitcallees usmf_json =
 		let retval = ref true in
-		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Globaltypes.uobjcoll_exitcallee_t)  Hashtbl.t)) in
+		let uobjcoll_exitcallees_hashtbl = ((Hashtbl.create 32) : ((string, Basedefs.uobjcoll_exitcallee_t)  Hashtbl.t)) in
 
 		try
 			let open Yojson.Basic.Util in
