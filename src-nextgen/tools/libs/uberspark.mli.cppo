@@ -1,8 +1,8 @@
 (* uberSpark library module interface *)
 
-module Basedefs : sig
+module Defs : sig
 
-#include "basedefs.mli"
+#include "defs.mli"
 
 end
 

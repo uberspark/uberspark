@@ -52,13 +52,7 @@
 			};;
 				
 
-	(* TBA: basedefs *)
-	let binary_uobj_publicmethod_max_length = ref 128;;
-	let binary_uobj_max_publicmethods = ref 16;;
-	let binary_uobj_namespace_max_length = ref 256;;
-	let binary_uobj_max_intrauobjcoll_callees = ref 16;;
-	let binary_uobj_max_interuobjcoll_callees = ref 16;;
-
+	@@basedefs_uobj@@
 
 	(*TBA: basedefs *)
 	(*--------------------------------------------------------------------------*)

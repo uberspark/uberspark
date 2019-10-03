@@ -1,0 +1,8 @@
+(* uberSpark constant and type definitions module *)
+(* author: amit vasudevan <amitvasudevan@acm.org> *)
+
+module Basedefs : sig
+
+#include "defs/basedefs.mli"
+
+end

@@ -11,7 +11,7 @@ UBERSPARK_LIB_EXT_PACKAGES += -package str
 UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
 
-UBERSPARK_LIB_SOURCES := basedefs.ml
+UBERSPARK_LIB_SOURCES := 
 UBERSPARK_LIB_SOURCES += uberspark_config.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
@@ -41,27 +41,39 @@ UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).mli
 
 ###### targets
 
-
-
-.PHONY: prep
-prep:
+.PHONY: prep_base
+prep_base: 
 	$(RM) -rf $(BUILDDIR)
 	$(MKDIR) -p $(BUILDDIR)
+
+
+.PHONY: prep_defs
+prep_defs: prep_base
+	$(MKDIR) -p $(BUILDDIR)/defs
+	$(UBERSPARK_SDEFPP) defs/basedefs.ml.us $(BUILDDIR)/defs/basedefs.ml $(UBERSPARK_SDEFSDIR)/basedefs.json	
+	$(UBERSPARK_SDEFPP) defs/basedefs.mli.us $(BUILDDIR)/defs/basedefs.mli $(UBERSPARK_SDEFSDIR)/basedefs.json	
+	$(CP) defs.ml.cppo $(BUILDDIR)/.
+	$(CP) defs.mli.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n defs.ml.cppo -o defs.ml
+	cd $(BUILDDIR) && $(CPPO) -n defs.mli.cppo -o defs.mli
+	
+
+.PHONY: prep_sources
+prep_sources: prep_base prep_defs
 	$(CP) -f $(UBERSPARK_LIB_SOURCES) $(BUILDDIR)/.
 	$(CP) -f $(UBERSPARK_LIB_SOURCES_MAIN) $(BUILDDIR)/.
 	$(CP) -f ./META $(BUILDDIR)/.
 	$(CP) -f $(UBERSPARK_LIB_SOURCES_MLI) $(BUILDDIR)/.
-	$(CPPO) -n uberspark.mli.cppo -o $(BUILDDIR)/uberspark.mli
-	#@cd temp && $(UBERSPARK_SDEFPP) test.mli.us test.mli $(UBERSPARK_SRCDIR)/config/uberspark-constdefs-mf.json	
-	#cppo -n inputfile -o outputfile
+	$(CP) uberspark.mli.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
 
 .PHONY: all
-all: prep
-	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_SOURCES_MAIN_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
-	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
-	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
+all: prep_sources
+	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot defs.mli $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_SOURCES_MAIN_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
+	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot defs.ml $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static defs.ml $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
 	cd $(BUILDDIR) && $(OCAMLFIND) remove $(UBERSPARK_LIB_NAME) 
-	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_SOURCES_MAIN_CMX) $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_SOURCES_MAIN_CMI) $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_SOURCES_MAIN_CMT) $(UBERSPARK_LIB_INSTALL_CMTI) $(UBERSPARK_LIB_SOURCES_MAIN_CMTI)
+	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_SOURCES_MAIN_CMX) defs.cmx $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_SOURCES_MAIN_CMI) defs.cmi $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_SOURCES_MAIN_CMT) defs.cmt $(UBERSPARK_LIB_INSTALL_CMTI) $(UBERSPARK_LIB_SOURCES_MAIN_CMTI) defs.cmti
 
 
 .PHONY: clean

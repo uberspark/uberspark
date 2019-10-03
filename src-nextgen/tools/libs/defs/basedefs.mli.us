@@ -26,12 +26,7 @@ type uobjcoll_exitcallee_t = {
   s_fparamdwords : int;
 }
 
-(* TBA: basedefs *)
-val binary_uobj_publicmethod_max_length : int ref
-val binary_uobj_max_publicmethods : int ref
-val binary_uobj_namespace_max_length : int ref
-val binary_uobj_max_intrauobjcoll_callees : int ref
-val binary_uobj_max_interuobjcoll_callees : int ref
+@@basedefs_uobj@@
 
 (* TBA: basedefs *)
 val def_USBINFORMAT_SECTION_TYPE_PADDING : int
