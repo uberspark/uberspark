@@ -39,7 +39,11 @@ install_createnamespace:
 ### installation helper target to populate include namespace
 .PHONY: install_populatenamespace_include
 install_populateamespace_include: 
-	cp -rf $(UBERSPARK_SRCDIR)/include/* $(UBERSPARK_INSTALLDIR)/include/.
+	cp -rf $(UBERSPARK_SRCDIR)/include/uberspark.h $(UBERSPARK_INSTALLDIR)/include/.
+	$(UBERSPARK_SDEFPP) $(UBERSPARK_SRCDIR)/include/basedefs.h.us $(UBERSPARK_INSTALLDIR)/include/basedefs.h $(UBERSPARK_SDEFSDIR)/basedefs.json
+	$(UBERSPARK_SDEFPP) $(UBERSPARK_SRCDIR)/include/binformat.h.us $(UBERSPARK_INSTALLDIR)/include/binformat.h $(UBERSPARK_SDEFSDIR)/binformat.json
+
+
 
 
 ### installation helper target to populate namespace
