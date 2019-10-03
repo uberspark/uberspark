@@ -22,6 +22,7 @@ export RM := rm
 export MKDIR := mkdir
 export CP := cp
 export UBERSPARK_SDEFPP := $(UBERSPARK_SRCDIR)/tools/sdefpp/_build/uberspark_sdefpp
+export CPPO := cppo
 
 ###### variables
 export BUILDDIR := _build
