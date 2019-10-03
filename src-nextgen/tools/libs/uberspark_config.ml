@@ -45,31 +45,8 @@ open Unix
 	let binary_uobj_default_load_addr = ref 0x60000000;;
 	let binary_uobj_default_size = ref 0x01000000;;
 
-	let binary_uobj_publicmethod_max_length = ref 128;;
-	let binary_uobj_max_publicmethods = ref 16;;
-	let binary_uobj_namespace_max_length = ref 256;;
-	let binary_uobj_max_intrauobjcoll_callees = ref 16;;
-	let binary_uobj_max_interuobjcoll_callees = ref 16;;
 
 
-	(*--------------------------------------------------------------------------*)
-	(* usbinformat.h constant defs; c.f. include/usbinformat.h for binary definitions *)
-	(*--------------------------------------------------------------------------*)
-	let def_USBINFORMAT_SECTION_TYPE_PADDING = 0x0;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ =	0x1;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL = 0x2;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL = 0x3;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL = 0x4;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL = 0x5;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR =	0x6;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE = 0x7;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA = 0x8;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA = 0x9;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK = 0xa;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK = 0xb;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS = 0xc;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS = 0xd;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA = 0xe;;
 
 
 

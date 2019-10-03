@@ -25,3 +25,27 @@ type uobjcoll_exitcallee_t = {
   s_fparamdecl : string;
   s_fparamdwords : int;
 }
+
+(* TBA: basedefs *)
+val binary_uobj_publicmethod_max_length : int ref
+val binary_uobj_max_publicmethods : int ref
+val binary_uobj_namespace_max_length : int ref
+val binary_uobj_max_intrauobjcoll_callees : int ref
+val binary_uobj_max_interuobjcoll_callees : int ref
+
+(* TBA: basedefs *)
+val def_USBINFORMAT_SECTION_TYPE_PADDING : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS : int
+val def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA : int
