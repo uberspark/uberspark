@@ -9,6 +9,7 @@ export UBERSPARK_ROOTDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))/.. )
 export UBERSPARK_DOCSDIR := $(UBERSPARK_ROOTDIR)/docs
 export UBERSPARK_SRCDIR := $(UBERSPARK_ROOTDIR)/src-nextgen
 export UBERSPARK_BUILDDIR := $(UBERSPARK_ROOTDIR)/_build
+export UBERSPARK_INSTALLDIR := $(UBERSPARK_ROOTDIR)/_install
 export UBERSPARK_SDEFSDIR := $(UBERSPARK_SRCDIR)/sdefs
 
 ###### tools
