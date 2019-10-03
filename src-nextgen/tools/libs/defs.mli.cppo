@@ -6,3 +6,9 @@ module Basedefs : sig
 #include "defs/basedefs.mli"
 
 end
+
+module Binformat : sig
+
+#include "defs/binformat.mli"
+
+end

@@ -1,0 +1,39 @@
+/* 
+    uberSpark binary format definitions 
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+	/* header */
+	"hdr":{
+		"type" : "shareddefs",
+		"namespace" : "",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+
+    "binformat_section": 
+    {
+        "constdef": 
+        {
+            "USBINFORMAT_SECTION_TYPE_PADDING": "0x0",
+            "USBINFORMAT_SECTION_TYPE_UOBJ": "0x1",
+            "USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL": "0x2",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL": "0x3",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL": "0x4",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL": "0x5",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_HDR": "0x6",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_CODE": "0x7",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA": "0x8",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_RODATA": "0x9",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_USTACK": "0xa",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK": "0xb",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS": "0xc",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS": "0xd",
+            "USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA": "0xe"
+         }
+    }
+
+}

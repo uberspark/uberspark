@@ -7,3 +7,10 @@ struct
 #include "defs/basedefs.ml"
 
 end
+
+module Binformat =
+struct
+
+#include "defs/binformat.ml"
+
+end

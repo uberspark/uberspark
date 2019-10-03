@@ -52,6 +52,8 @@ prep_defs: prep_base
 	$(MKDIR) -p $(BUILDDIR)/defs
 	$(UBERSPARK_SDEFPP) defs/basedefs.ml.us $(BUILDDIR)/defs/basedefs.ml $(UBERSPARK_SDEFSDIR)/basedefs.json	
 	$(UBERSPARK_SDEFPP) defs/basedefs.mli.us $(BUILDDIR)/defs/basedefs.mli $(UBERSPARK_SDEFSDIR)/basedefs.json	
+	$(UBERSPARK_SDEFPP) defs/binformat.ml.us $(BUILDDIR)/defs/binformat.ml $(UBERSPARK_SDEFSDIR)/binformat.json	
+	$(UBERSPARK_SDEFPP) defs/binformat.mli.us $(BUILDDIR)/defs/binformat.mli $(UBERSPARK_SDEFSDIR)/binformat.json	
 	$(CP) defs.ml.cppo $(BUILDDIR)/.
 	$(CP) defs.mli.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n defs.ml.cppo -o defs.ml
