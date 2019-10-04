@@ -6,19 +6,19 @@ module Defs : sig
 
 end
 
- 
-module Config : sig
-
-#include "uberspark_config.mli"  
-
-end
-
 
 module Logger : sig
   
 #include "uberspark_logger.mli"
 
 end
+
+module Config : sig
+
+#include "uberspark_config.mli"  
+
+end
+
 
 module Osservices : sig
   

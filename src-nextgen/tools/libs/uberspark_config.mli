@@ -6,7 +6,7 @@
 (*------------------------------------------------------------------------*)
 (* environment related configuration settings *)	
 (*------------------------------------------------------------------------*)
-val env_path_seperator : string ref
+(*val env_path_seperator : string ref*)
 val env_home_dir : string ref
 
 (*------------------------------------------------------------------------*)
@@ -42,3 +42,5 @@ val binary_uobj_default_load_addr : int ref
 val binary_uobj_default_size : int ref
 
 
+
+val switch : string -> bool

@@ -47,7 +47,7 @@ let handler_uobj_build
 
           (* create uobj instance and parse manifest *)
           let uobj = new Uberspark.Uobj.uobject in
-          let uobj_mf_filename = (abs_uobj_path_ns ^ !Uberspark.Config.env_path_seperator ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
+          let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
           Uberspark.Logger.log "parsing uobj manifest: %s" uobj_mf_filename;
           let rval = (uobj#parse_manifest uobj_mf_filename true) in	
           if (rval == false) then
