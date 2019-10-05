@@ -66,8 +66,11 @@ let switch
 		let config_json = Yojson.Basic.from_file config_ns_json_path in
 		(*parse header*)
 		let config_json_hdr = Yojson.Basic.Util.member "hdr" config_json in
-			let hdr_type = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr) in
-			let hdr_namespace = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr) in
+			hdr_type := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr);
+			hdr_namespace := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr);
+			hdr_platform := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "platform" config_json_hdr);
+			hdr_arch := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" config_json_hdr);
+			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" config_json_hdr);
 			(* TBD: sanity check header *)
 		
 		let config_json_from = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "from" config_json) in
