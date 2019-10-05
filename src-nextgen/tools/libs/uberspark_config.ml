@@ -73,9 +73,6 @@ let switch
 			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" config_json_hdr);
 			(* TBD: sanity check header *)
 		
-		let config_json_from = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "from" config_json) in
-			(*TBD: sanity check from to be null *)
-
 		let config_json_settings = 	Yojson.Basic.Util.member "settings" config_json in
 
 			binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
