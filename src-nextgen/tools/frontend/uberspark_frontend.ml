@@ -17,6 +17,7 @@ open Usbin
 *)
 
 open Cmdliner
+open Astring
 open Uberspark
 
 
@@ -61,7 +62,7 @@ let cmd_uobj =
 
 	let path =
     let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
-    Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+    Arg.(required & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
   in
   let doc = "verify, build and/or manage uobjs" in
   let man =
@@ -77,35 +78,41 @@ let cmd_uobj =
 
 (* kicks in when uberspark config ... is issued *)
 let cmd_config =
+	let action = 
+	let action = [ 	"create", `Create; 
+					"dump", `Dump; 
+					"get", `Get;
+					"set", `Set;
+					"remove", `Remove
+				] in
+  	let doc = strf "The action to perform. $(docv) must be one of %s."
+      (Arg.doc_alts_enum action) in
+  	let action = Arg.enum action in
+  		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
+	in
+
+	let config_ns =
+    let doc = "The config namespace uri." in
+    Arg.(required & pos 1 (some string) None & info [] ~docv:"NAMESPACE" ~doc)
+	in
+  
   let build =
     let doc = "Build the uobj binary." in
     Arg.(value & flag & info ["b"; "build"] ~doc)
 	in
-	let platform =
+  let platform =
     let doc = "Specify uobj target $(docv)." in
     Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
   in
-	let arch =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
-  in
-	let cpu =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
-  in
 
-	let path =
-    let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
-    Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
-  in
   let doc = "Manage uberspark configuration" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    `P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION)";
+    `P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) $(i,NAMESPACE)";
 		`S Manpage.s_description;
      `P "The $(tname) command provides several actions to manage the
-	 uberspark configuration namespace specified by $(i,PATH) or $(i,NAMESPACE).";
+	 uberspark configuration namespace specified by $(i,NAMESPACE).";
     `S "ACTIONS";
     `I ("$(b,switch)",
         "switch to a given configuration. See the $(b,--help) option for details.");
@@ -114,8 +121,9 @@ let cmd_config =
          uberspark-uobj(1) or the $(b,--help) option.");
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ platform $ arch $ cpu $ path)),
+  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ action $ config_ns )),
   Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+  
 
 
 (* kicks in when user just issues uberspark without any parameters *)

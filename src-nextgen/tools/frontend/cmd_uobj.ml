@@ -80,28 +80,31 @@ let handler_uobj
   (platform : 'a option) 
   (arch : 'a option) 
   (cpu : 'a option) 
-  (path : 'a option) = 
+ (* (path : 'a option) = *)
+  path = 
+
 
   (* perform common initialization *)
   Commoninit.initialize copts;
 
 
   (* check for required argument PATH/NAMESPACE *)
-  match path with
+  (*match path with
   | None -> 
       `Error (true, "uobj PATH or NAMESPACE must be specified")
 
-  | Some p -> 
+  | Some p -> *)
     if( build == true ) then
       begin
-          (handler_uobj_build platform arch cpu p)
+          (*(handler_uobj_build platform arch cpu p)*)
+          (handler_uobj_build platform arch cpu path)
       end
     else
       begin
         `Error (true, "--build must be specified")
       end
     ;
-  ;
+ (* ;*)
 
 
 
