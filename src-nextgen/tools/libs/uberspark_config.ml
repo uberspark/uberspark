@@ -3,7 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 open Unix
-
+open Yojson
 
 (*------------------------------------------------------------------------*)
 (* environment related configuration settings *)	
@@ -48,10 +48,42 @@ let binary_uobj_default_size = ref 0x01000000;;
 let switch 
 	(config_ns : string)
 	: bool =
+	let retval = ref false in
 	let config_ns_json_path = namespace_root ^ config_ns ^ "/uberspark-config.json" in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
-	(false)
+	try
+		let config_json = Yojson.Basic.from_file config_ns_json_path in
+		(*parse header*)
+		let config_json_hdr = Yojson.Basic.Util.member "hdr" config_json in
+			let hdr_type = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr) in
+			let hdr_namespace = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr) in
+			(* TBD: sanity check header *)
+		
+		let config_json_from = Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "from" config_json) in
+			(*TBD: sanity check from to be null *)
+
+		let config_json_settings = 	Yojson.Basic.Util.member "settings" config_json in
+
+			binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
+			binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
+			binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
+			binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
+			binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
+
+
+		Uberspark_logger.log "binary_page_size=0x%08x" !binary_page_size;
+		
+
+		retval := true;							
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+					
+
+
+	(!retval)
 ;;
 
 

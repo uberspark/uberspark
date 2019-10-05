@@ -18,10 +18,7 @@
 
     "settings" : {
 
-        /* environment related configuration settings */
-        "env_path_seperator" : "/",
-        "env_home_dir" : "HOME",
-    
+   
         /* uobj/uobjcoll binary related configuration settings */
         "binary_page_size" : "0x00200000",
         "binary_uobj_section_alignment" : "0x00200000",
