@@ -65,12 +65,58 @@ let cmd_uobj =
   in
   let doc = "verify, build and/or manage uobjs" in
   let man =
-    [`S Manpage.s_description;
-     `P "Verify, build and manage (install, remove, and query) uobj specified by $(i,PATH) or $(i,NAMESPACE).";
+    [
+		`S Manpage.s_description;
+     `P "The $(tname) command provides several actions to verify, build 
+	 and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
      `Blocks help_secs; ]
   in
   Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ platform $ arch $ cpu $ path)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
+
+(* kicks in when uberspark config ... is issued *)
+let cmd_config =
+  let build =
+    let doc = "Build the uobj binary." in
+    Arg.(value & flag & info ["b"; "build"] ~doc)
+	in
+	let platform =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
+  in
+	let arch =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
+  in
+	let cpu =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
+  in
+
+	let path =
+    let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
+    Arg.(value & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+  in
+  let doc = "Manage uberspark configuration" in
+  let man =
+    [
+		`S Manpage.s_synopsis;
+    `P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION)";
+		`S Manpage.s_description;
+     `P "The $(tname) command provides several actions to manage the
+	 uberspark configuration namespace specified by $(i,PATH) or $(i,NAMESPACE).";
+    `S "ACTIONS";
+    `I ("$(b,switch)",
+        "switch to a given configuration. See the $(b,--help) option for details.");
+    `I ("$(b,create)",
+        "create a new configuration, see
+         uberspark-uobj(1) or the $(b,--help) option.");
+     `Blocks help_secs; ]
+  in
+  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ platform $ arch $ cpu $ path)),
+  Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
 
 (* kicks in when user just issues uberspark without any parameters *)
 let cmd_default =
@@ -81,7 +127,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj]
+let cmd_additions = [cmd_uobj; cmd_config]
 
 
 (*----------------------------------------------------------------------------*)
