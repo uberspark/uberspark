@@ -96,15 +96,6 @@ let cmd_config =
     Arg.(required & pos 1 (some string) None & info [] ~docv:"NAMESPACE" ~doc)
 	in
   
-  let build =
-    let doc = "Build the uobj binary." in
-    Arg.(value & flag & info ["b"; "build"] ~doc)
-	in
-  let platform =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
-  in
-
   let doc = "Manage uberspark configuration" in
   let man =
     [
@@ -121,7 +112,7 @@ let cmd_config =
          uberspark-uobj(1) or the $(b,--help) option.");
      `Blocks help_secs; ]
   in
-  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ action $ config_ns )),
+  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ config_ns )),
   Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
   
 
