@@ -70,7 +70,10 @@ let handler_config
 
     | `Set -> 
       Uberspark.Logger.log "config set";
-      `Ok()
+      if ( Uberspark.Config.settings_set "another" "val" ) then
+        `Ok()
+      else
+        `Error (true, "invalid configuration setting")
   in
 
   retval

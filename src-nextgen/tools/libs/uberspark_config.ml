@@ -130,5 +130,24 @@ let dump
 ;;
 
 
+let settings_set 
+	(setting_name : string)
+	(setting_value : string)
+	: bool =
+
+	let retval = ref true in
+	match setting_name with
+		| "binary_page_size" -> binary_page_size := int_of_string setting_value;
+		| "binary_uobj_section_alignment" -> binary_uobj_section_alignment := int_of_string setting_value;
+		| "binary_uobj_default_section_size" -> binary_uobj_default_section_size := int_of_string setting_value;
+		| "binary_uobj_default_load_addr" -> binary_uobj_default_load_addr := int_of_string setting_value;
+		| "binary_uobj_default_size" -> binary_uobj_default_size := int_of_string setting_value;
+		| _ -> retval := false;
+	;
+	
+	!retval
+;;
+
+
 
 

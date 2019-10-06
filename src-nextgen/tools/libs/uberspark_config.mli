@@ -44,3 +44,5 @@ val binary_uobj_default_size : int ref
 
 
 val switch : string -> bool
+
+val settings_set : string -> string -> bool
