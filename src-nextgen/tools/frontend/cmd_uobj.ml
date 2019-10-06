@@ -49,15 +49,15 @@ let cmd_uobj_opts_t =
   let docs = "ACTION OPTIONS" in
 	let platform =
     let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
+    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc ~docs)
   in
 	let arch =
     let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
+    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc ~docs)
   in
 	let cpu =
     let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
+    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc ~docs)
   in
   Term.(const cmd_uobj_opts_handler $ platform $ arch $ cpu)
 
@@ -70,55 +70,43 @@ let handler_uobj_build
   (uobj_path_ns : string)
   =
 
-(*  
-  match platform with
-  | None -> 
+  if cmd_uobj_opts.platform = "" then
       `Error (true, "uobj PLATFORM must be specified.")
-
-  | Some str_platform ->
-    match arch with
-    | None -> 
-        `Error (true, "uobj ARCH must be specified.")
-
-    | Some str_arch ->
-      match cpu with
-      | None -> 
-          `Error (true, "uobj CPU must be specified.")
-    
-      | Some str_cpu ->
-  
-          let (rval, abs_uobj_path_ns) = (Uberspark.Osservices.abspath uobj_path_ns) in
-          if(rval == false) then
-          begin
-            Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
-            ignore (exit 1);
-          end
-          ;
-
-          (* create uobj instance and parse manifest *)
-          let uobj = new Uberspark.Uobj.uobject in
-          let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
-          Uberspark.Logger.log "parsing uobj manifest: %s" uobj_mf_filename;
-          let rval = (uobj#parse_manifest uobj_mf_filename true) in	
-          if (rval == false) then
-            begin
-              Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
-              ignore (exit 1);
-            end
-          ;
-
-          Uberspark.Logger.log "successfully parsed uobj manifest";
-          (*TBD: validate platform, arch, cpu target def with uobj target spec*)
-
-          let target_def: Uberspark.Defs.Basedefs.target_def_t = {f_platform = str_platform; f_arch = str_arch; f_cpu = str_cpu} in
-            uobj#initialize target_def;
-
+  else if cmd_uobj_opts.arch = "" then
+      `Error (true, "uobj ARCH must be specified.")
+  else if cmd_uobj_opts.cpu = "" then
+      `Error (true, "uobj CPU must be specified.")
+  else
+    begin
+      let (rval, abs_uobj_path_ns) = (Uberspark.Osservices.abspath uobj_path_ns) in
+      if(rval == false) then
+      begin
+        Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
+        ignore (exit 1);
+      end
       ;
-    ;
-  ;            
-*)
 
-`Ok ()
+      (* create uobj instance and parse manifest *)
+      let uobj = new Uberspark.Uobj.uobject in
+      let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
+      Uberspark.Logger.log "parsing uobj manifest: %s" uobj_mf_filename;
+      let rval = (uobj#parse_manifest uobj_mf_filename true) in	
+      if (rval == false) then
+        begin
+          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
+          ignore (exit 1);
+        end
+      ;
+
+      Uberspark.Logger.log "successfully parsed uobj manifest";
+      (*TBD: validate platform, arch, cpu target def with uobj target spec*)
+
+      let target_def: Uberspark.Defs.Basedefs.target_def_t = {f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
+        uobj#initialize target_def;
+
+      `Ok ()
+    end
+  ;
 
 ;;
 
@@ -134,12 +122,12 @@ let handler_uobj
   (* perform common initialization *)
   Commoninit.initialize copts;
 
+  let retval = 
   match action with
   | `Build -> 
     (handler_uobj_build cmd_uobj_opts path_ns)
-  ;
+  in
 
-  `Error (true, "invalid action specification")
-
+  retval
 
 ;;

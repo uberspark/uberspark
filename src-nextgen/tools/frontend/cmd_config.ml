@@ -50,28 +50,29 @@ let handler_config
 
   Uberspark.Logger.log "config_ns=%s" config_ns;
 
- match action with
-  | `Create -> 
-    Uberspark.Logger.log "config create";
-    `Ok()
-  
-  | `Dump ->
-    Uberspark.Logger.log "config dump";
-    `Ok()
+  let retval = 
+  match action with
+    | `Create -> 
+      Uberspark.Logger.log "config create";
+      `Ok()
+    
+    | `Dump ->
+      Uberspark.Logger.log "config dump";
+      `Ok()
 
-  | `Get -> 
-    Uberspark.Logger.log "config get";
-    `Ok()
+    | `Get -> 
+      Uberspark.Logger.log "config get";
+      `Ok()
 
-  | `Remove -> 
-    Uberspark.Logger.log "config remove";
-    `Ok()
+    | `Remove -> 
+      Uberspark.Logger.log "config remove";
+      `Ok()
 
-  | `Set -> 
-    Uberspark.Logger.log "config set";
-    `Ok()
-  ;
+    | `Set -> 
+      Uberspark.Logger.log "config set";
+      `Ok()
+  in
 
+  retval
 
-  `Ok ()
 ;;
