@@ -105,6 +105,9 @@ install: build_bootstrap
 	rm -rf $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
 	cp -Rf $(USPARK_INSTALLPREPDIR)/* $(USPARK_NAMESPACEROOTDIR)/ 
+	@echo Setting up default configuration...
+	ln -sf $(USPARK_NAMESPACEROOTDIR)/config/default $(USPARK_NAMESPACEROOTDIR)/config/current
+	@echo Default configuration setup.
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
 	$(SUDO) cp -f $(USPARK_INSTALLPREPDIR)/bin/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
