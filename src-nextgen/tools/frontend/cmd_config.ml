@@ -21,7 +21,7 @@ let cmd_config_opts_handler
 
 (* handle config command options *)
 let cmd_config_opts_t =
-  let docs = "COMMAND OPTIONS" in
+  let docs = "ACTION OPTIONS" in
  	let arch =
     let doc = "Specify uobj target $(docv)." in
     Arg.(value & opt (some string) None & info ["a"; "arch"] ~docs ~docv:"ARCH" ~doc)

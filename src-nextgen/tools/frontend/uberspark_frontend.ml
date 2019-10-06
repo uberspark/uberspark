@@ -104,12 +104,15 @@ let cmd_config =
 		`S Manpage.s_description;
      `P "The $(tname) command provides several actions to manage the
 	 uberspark configuration namespace specified by $(i,NAMESPACE).";
-    `S "ACTIONS";
+    `S Manpage.s_arguments;
+ 	`S "ACTIONS";
     `I ("$(b,switch)",
         "switch to a given configuration. See the $(b,--help) option for details.");
     `I ("$(b,create)",
         "create a new configuration, see
          uberspark-uobj(1) or the $(b,--help) option.");
+	 `S "ACTION OPTIONS";
+	  `P "These options qualify the aforementioned actions.";
      `Blocks help_secs; ]
   in
   Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ config_ns )),
