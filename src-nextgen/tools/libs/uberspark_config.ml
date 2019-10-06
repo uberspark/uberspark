@@ -149,5 +149,24 @@ let settings_set
 ;;
 
 
+let settings_get 
+	(setting_name : string)
+	: (bool * string) =
+
+	let retstatus = ref true in
+	let settings_value = ref "" in
+	match setting_name with
+		| "binary_page_size" -> settings_value := string_of_int !binary_page_size;
+		| "binary_uobj_section_alignment" -> settings_value := string_of_int !binary_uobj_section_alignment;
+		| "binary_uobj_default_section_size" -> settings_value := string_of_int !binary_uobj_default_section_size;
+		| "binary_uobj_default_load_addr" -> settings_value := string_of_int !binary_uobj_default_load_addr;
+		| "binary_uobj_default_size" -> settings_value := string_of_int !binary_uobj_default_size;
+		| _ -> retstatus := false;
+	;
+	
+	(!retstatus, !settings_value)
+;;
+
+
 
 
