@@ -20,8 +20,25 @@ open Cmdliner
 open Astring
 open Uberspark
 
+(* common manpage sections *)
 
-(* help sections common to all commands *)
+let manpage_sec_common_options = [
+ `S Manpage.s_common_options;
+ `P "These options are common to all commands.";
+]
+
+let manpage_sec_more_help = [
+ `S "MORE HELP";
+ `P "Use `$(mname) $(i,COMMAND) --help' for help on a single command.";`Noblank;
+ `P "E.g., `$(mname) uobj --help' for help on uobject related options.";
+]
+
+let manpage_sec_issues = [
+ `S "ISSUES"; 
+ `P "Visit https://forums.uberspark.org to discuss issues and find potential solutions.";
+]
+
+
 let help_secs = [
  `S Manpage.s_common_options;
  `P "These options are common to all commands.";
@@ -100,21 +117,23 @@ let cmd_config =
   let man =
     [
 		`S Manpage.s_synopsis;
-    `P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION OPTION)]... $(i,NAMESPACE)";
 		`S Manpage.s_description;
-     `P "The $(tname) command provides several actions to manage the
-	 uberspark configuration namespace specified by $(i,NAMESPACE).";
-    `S Manpage.s_arguments;
- 	`S "ACTIONS";
-    `I ("$(b,switch)",
-        "switch to a given configuration. See the $(b,--help) option for details.");
-    `I ("$(b,create)",
-        "create a new configuration, see
-         uberspark-uobj(1) or the $(b,--help) option.");
-	 `S "ACTION OPTIONS";
-	  `P "These options qualify the aforementioned actions.";
-     `Blocks help_secs; ]
-  in
+     	`P "The $(tname) command provides several actions to manage the
+	 		uberspark configuration namespace specified by $(i,NAMESPACE).";
+    	`S Manpage.s_arguments;
+ 		`S "ACTIONS";
+    	`I ("$(b,switch)",
+        	"switch to a given configuration. See the $(b,--help) option for details.");
+    	`I ("$(b,create)",
+        	"create a new configuration, see
+         	uberspark-uobj(1) or the $(b,--help) option.");
+	 	`S "ACTION OPTIONS";
+	  	`P "These options qualify the aforementioned actions.";
+		`Blocks manpage_sec_common_options;
+		`Blocks manpage_sec_issues;
+		`S Manpage.s_exit_status;
+	] in
   Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ config_ns )),
   Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
   
@@ -124,7 +143,15 @@ let cmd_config =
 let cmd_default =
   let doc = "enforcing verifiable object abstractions for commodity system software stacks" in
   let sdocs = Manpage.s_common_options in
-  let man = help_secs in
+  let man = [
+	`S Manpage.s_synopsis;
+    `P "$(mname) [$(i,OPTION)]... $(i,COMMAND)...";
+	`S Manpage.s_commands;
+	`Blocks manpage_sec_common_options;
+	`Blocks manpage_sec_more_help;
+	`Blocks manpage_sec_issues;
+	`S Manpage.s_exit_status;
+  ] in
   Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.opts_t)),
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
