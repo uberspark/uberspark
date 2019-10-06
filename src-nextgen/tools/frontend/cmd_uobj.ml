@@ -1,26 +1,76 @@
 (* uberspark front-end command processing logic for command: uobj *)
 (* author: amit vasudevan (amitvasudevan@acm.org) *)
 
-(*open Ustypes
-open Usconfig
-open Uslog
-open Cmdliner
-open Usosservices
-open Usuobj
-*)
-
 open Uberspark
 open Cmdliner
 
-(* -b, --build option handler *)
+type opts = { 
+  platform : string; 
+  arch : string;
+  cpu: string;
+};;
+
+(* fold all uobj options into type opts *)
+let cmd_uobj_opts_handler 
+  (platform : string option)
+  (arch : string option)
+  (cpu : string option)
+  : opts = 
+  let l_platform = ref "" in
+  let l_arch = ref "" in
+  let l_cpu = ref "" in
+
+  match platform with
+  | None -> 
+    l_platform := "";
+  | Some l_str ->
+    l_platform := l_str;
+  ;
+
+  match arch with
+  | None -> 
+    l_arch := "";
+  | Some l_str ->
+    l_arch := l_str;
+  ;
+
+  match cpu with
+  | None -> 
+    l_cpu := "";
+  | Some l_str ->
+    l_cpu := l_str;
+  ;
+
+  { platform = !l_platform; arch = !l_arch; cpu = !l_cpu}
+;;
+
+(* handle uobj command options *)
+let cmd_uobj_opts_t =
+  let docs = "ACTION OPTIONS" in
+	let platform =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
+  in
+	let arch =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
+  in
+	let cpu =
+    let doc = "Specify uobj target $(docv)." in
+    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
+  in
+  Term.(const cmd_uobj_opts_handler $ platform $ arch $ cpu)
+
+
+
+
+(* build action handler *)
 let handler_uobj_build
-  (platform : 'a option)
-  (arch : 'a option)
-  (cpu : 'a option)
+  (cmd_uobj_opts: opts)
   (uobj_path_ns : string)
   =
 
-
+(*  
   match platform with
   | None -> 
       `Error (true, "uobj PLATFORM must be specified.")
@@ -66,7 +116,7 @@ let handler_uobj_build
       ;
     ;
   ;            
-
+*)
 
 `Ok ()
 
@@ -76,36 +126,20 @@ let handler_uobj_build
 (* main handler for uobj command *)
 let handler_uobj 
   (copts : Commonopts.opts)
-  (build : bool)
-  (platform : 'a option) 
-  (arch : 'a option) 
-  (cpu : 'a option) 
- (* (path : 'a option) = *)
-  path = 
-
+  (cmd_uobj_opts: opts)
+  (action : [> `Build ] as 'a)
+  (path_ns : string)
+  = 
 
   (* perform common initialization *)
   Commoninit.initialize copts;
 
+  match action with
+  | `Build -> 
+    (handler_uobj_build cmd_uobj_opts path_ns)
+  ;
 
-  (* check for required argument PATH/NAMESPACE *)
-  (*match path with
-  | None -> 
-      `Error (true, "uobj PATH or NAMESPACE must be specified")
-
-  | Some p -> *)
-    if( build == true ) then
-      begin
-          (*(handler_uobj_build platform arch cpu p)*)
-          (handler_uobj_build platform arch cpu path)
-      end
-    else
-      begin
-        `Error (true, "--build must be specified")
-      end
-    ;
- (* ;*)
-
+  `Error (true, "invalid action specification")
 
 
 ;;

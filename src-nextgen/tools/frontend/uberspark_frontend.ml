@@ -60,36 +60,39 @@ let exits = [
 
 (* kicks in when uberspark uobj ... is issued *)
 let cmd_uobj =
-  let build =
-    let doc = "Build the uobj binary." in
-    Arg.(value & flag & info ["b"; "build"] ~doc)
+ 	let action = 
+	let action = [ 	"build", `Build; 
+				] in
+  	let doc = strf "The action to perform. $(docv) must be one of %s."
+      (Arg.doc_alts_enum action) in
+  	let action = Arg.enum action in
+  		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
 	in
-	let platform =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc)
-  in
-	let arch =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc)
-  in
-	let cpu =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc)
-  in
 
-	let path =
-    let doc = "The path to the uobj sources or a uobj namespace. Omitting the path defaults to the current working directory." in
-    Arg.(required & pos 0 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
-  in
+	let path_ns =
+    let doc = "The path to the uobj sources or a uobj namespace." in
+    Arg.(required & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+	in
+
   let doc = "verify, build and/or manage uobjs" in
   let man =
     [
+		`S Manpage.s_synopsis;
+    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION OPTION)]... $(i,PATH) or $(i,NAMESPACE)";
 		`S Manpage.s_description;
-     `P "The $(tname) command provides several actions to verify, build 
-	 and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
-     `Blocks help_secs; ]
-  in
-  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ build $ platform $ arch $ cpu $ path)),
+		`P "The $(tname) command provides several actions to verify, build 
+			and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
+    	`S Manpage.s_arguments;
+ 		`S "ACTIONS";
+    	`I ("$(b,build)",
+        	"build the uobj binary.");
+	 	`S "ACTION OPTIONS";
+	  	`P "These options qualify the aforementioned actions.";
+		`Blocks manpage_sec_common_options;
+		`Blocks manpage_sec_issues;
+		`S Manpage.s_exit_status;
+ 	] in
+  Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ Cmd_uobj.cmd_uobj_opts_t $ action $ path_ns)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
