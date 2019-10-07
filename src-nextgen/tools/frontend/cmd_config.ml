@@ -8,6 +8,8 @@ type opts = {
   arch : string option; 
   build : bool;
   lvl: int;
+  setting_name: string option;
+  setting_value: string option;
 };;
 
 (* fold all config options into type opts *)
@@ -15,8 +17,10 @@ let cmd_config_opts_handler
   (arch : string option)
   (build: bool)
   (lvl : int)
+  (setting_name: string option)
+  (setting_value: string option)
   : opts = 
-  { arch=arch; build=build; lvl=lvl}
+  { arch=arch; build=build; lvl=lvl; setting_name=setting_name; setting_value=setting_value}
 ;;
 
 (* handle config command options *)
@@ -34,7 +38,17 @@ let cmd_config_opts_t =
     let doc = "Set output logging level to $(docv). All output log messages less than or equal to $(docv) will be printed to the standard output. $(docv) can be `5' (Debug), `4' (Info), `3' (Warn), `2' (Error), `1' (Stdoutput), or `0' (None)"  in
       Arg.(value & opt int (Uberspark.Logger.ord Uberspark.Logger.Info) & info ["lvl"] ~docs ~docv:"VAL" ~doc)
   in
-  Term.(const cmd_config_opts_handler $ arch $ build $ lvl)
+  let setting_name =
+    let doc = "Select configuration setting with $(docv)."  in
+      Arg.(value & opt (some string) None & info ["setting-name"] ~docs ~docv:"NAME" ~doc)
+  in
+  let setting_value =
+    let doc = "Set configuration setting specified by $(b,--setting-name) to $(docv). $(docv) can be a string or integer."  in
+      Arg.(value & opt (some string) None & info ["setting-value"] ~docs ~docv:"VALUE" ~doc)
+  in
+ 
+ 
+  Term.(const cmd_config_opts_handler $ arch $ build $ lvl $ setting_name $ setting_value)
 
 
 (* main handler for config command *)
@@ -69,11 +83,25 @@ let handler_config
       `Ok()
 
     | `Set -> 
+      let setting_name = ref "" in
+      let setting_value = ref "" in
+
       Uberspark.Logger.log "config set";
-      if ( Uberspark.Config.settings_set "another" "val" ) then
-        `Ok()
-      else
-        `Error (false, "invalid configuration setting")
+      match cmd_config_opts.setting_name with
+      | None -> `Error (true, "need setting name")
+      | Some sname -> 
+          setting_name := sname;
+          match cmd_config_opts.setting_value with
+          | None -> `Error (true, "need setting value")
+          | Some sname -> 
+            setting_value := sname;
+            if ( Uberspark.Config.settings_set !setting_name !setting_value) then
+              `Ok()
+            else
+              `Error (false, "invalid configuration setting")
+          ;
+      ;
+        
   in
 
   retval
