@@ -52,3 +52,5 @@ val settings_set : string -> string -> bool
 val settings_get : string ->  (bool * string)
 
 val create_from_existing_ns : string -> string -> (bool * string)
+
+val create_from_file : string -> string -> (bool * string)

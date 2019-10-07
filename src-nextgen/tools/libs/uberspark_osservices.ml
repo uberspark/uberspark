@@ -143,6 +143,13 @@ open Unix
 		(!retval, !retecode, !reterrmsg)
 	;;
 
+
+	let rmdir path =
+    	Unix.rmdir path;
+		()
+	;;
+
+
 	
 (*	
 				let info =
