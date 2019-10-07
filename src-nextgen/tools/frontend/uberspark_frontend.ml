@@ -105,6 +105,7 @@ let cmd_config =
 	let action = 
 	let action = [ 	"create", `Create; 
 					"dump", `Dump; 
+					"switch", `Switch;
 					"get", `Get;
 					"set", `Set;
 					"remove", `Remove
@@ -140,7 +141,7 @@ let cmd_config =
         	"change a configuration setting within the current configuration namespace. 
 			Uses the following action options: $(b,--setting-name), and $(b,--setting-value)");
      	`I ("$(b,switch)",
-        	"switch to a given configuration. See the $(b,--help) option for details.");
+        	"switch to a configuration specified by the $(i,NAMESPACE) argument.");
     	`I ("$(b,create)",
         	"create a new configuration, see
          	uberspark-uobj(1) or the $(b,--help) option.");

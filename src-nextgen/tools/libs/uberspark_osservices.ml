@@ -150,6 +150,14 @@ open Unix
 	;;
 
 
+	let symlink 
+		(source_path : string)
+		(symlink_path : string) =
+    	Unix.symlink ~to_dir:false source_path symlink_path;
+		()
+	;;
+
+
 	
 (*	
 				let info =

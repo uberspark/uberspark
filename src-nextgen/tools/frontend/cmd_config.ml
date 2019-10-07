@@ -56,7 +56,7 @@ let cmd_config_opts_t =
 let handler_config 
   (copts : Commonopts.opts)
   (cmd_config_opts: opts)
-  (action : [> `Create | `Dump | `Get | `Remove | `Set ] as 'a)
+  (action : [> `Create | `Switch | `Dump | `Get | `Remove | `Set ] as 'a)
   (path_ns : string option)
   = 
 
@@ -125,7 +125,19 @@ let handler_config
             `Error (false, "invalid configuration setting")
       )
        
- 
+    | `Switch ->
+      Uberspark.Logger.log "config switch";
+      let src_path_ns = ref "" in
+      (match path_ns with
+      | None -> `Error (true, "need NAMESPACE argument")
+      | Some sname -> 
+        src_path_ns := sname;
+        Uberspark.Config.switch !src_path_ns;
+        `Ok()
+      )
+      
+
+
     | `Remove -> 
       Uberspark.Logger.log "config remove";
       `Ok()
