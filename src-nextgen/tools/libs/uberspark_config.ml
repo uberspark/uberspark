@@ -110,6 +110,34 @@ let switch
 ;;
 
 
+let remove 
+	(config_ns : string)
+	: bool =
+	let retval = ref false in
+	
+	if (config_ns <> "uberspark/config/default") then 
+		begin
+			let config_ns_path = namespace_root ^ config_ns in 
+			let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
+			
+			Uberspark_osservices.file_remove config_ns_json_path;
+			Uberspark_osservices.rmdir config_ns_path;
+
+			(* check if we removed the current config, if so reload the default *)
+			if !hdr_namespace = config_ns then
+				ignore(switch "uberspark/config/default");
+			;
+
+			retval := true;
+		end 
+	;
+
+	(!retval)
+;;
+
+
+
+
 let dump 
 	(output_config_filename : string)
 	=

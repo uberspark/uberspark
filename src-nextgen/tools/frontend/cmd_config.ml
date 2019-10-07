@@ -140,7 +140,14 @@ let handler_config
 
     | `Remove -> 
       Uberspark.Logger.log "config remove";
-      `Ok()
+      let src_path_ns = ref "" in
+      (match path_ns with
+      | None -> `Error (true, "need NAMESPACE argument")
+      | Some sname -> 
+        src_path_ns := sname;
+        Uberspark.Config.remove !src_path_ns;
+        `Ok()
+      )
 
     | `Set -> 
       let setting_name = ref "" in
