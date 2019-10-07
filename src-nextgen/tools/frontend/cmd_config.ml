@@ -5,39 +5,28 @@ open Uberspark
 open Cmdliner
 
 type opts = { 
-  arch : string option; 
-  build : bool;
-  lvl: int;
   setting_name: string option;
   setting_value: string option;
+  new_ns : string;
+  from_ns : bool;
+  from_file : bool;
 };;
 
 (* fold all config options into type opts *)
 let cmd_config_opts_handler 
-  (arch : string option)
-  (build: bool)
-  (lvl : int)
   (setting_name: string option)
   (setting_value: string option)
+  (new_ns : string)
+  (from_ns: bool)
+  (from_file: bool)
   : opts = 
-  { arch=arch; build=build; lvl=lvl; setting_name=setting_name; setting_value=setting_value}
+  { setting_name=setting_name; setting_value=setting_value;
+    new_ns=new_ns; from_ns=from_ns; from_file=from_file}
 ;;
 
 (* handle config command options *)
 let cmd_config_opts_t =
   let docs = "ACTION OPTIONS" in
- 	let arch =
-    let doc = "Specify uobj target $(docv)." in
-    Arg.(value & opt (some string) None & info ["a"; "arch"] ~docs ~docv:"ARCH" ~doc)
-  in
-  let build =
-    let doc = "Build the uobj binary." in
-    Arg.(value & flag & info ["b"; "build"] ~doc ~docs)
-  in
-  let lvl =
-    let doc = "Set output logging level to $(docv). All output log messages less than or equal to $(docv) will be printed to the standard output. $(docv) can be `5' (Debug), `4' (Info), `3' (Warn), `2' (Error), `1' (Stdoutput), or `0' (None)"  in
-      Arg.(value & opt int (Uberspark.Logger.ord Uberspark.Logger.Info) & info ["lvl"] ~docs ~docv:"VAL" ~doc)
-  in
   let setting_name =
     let doc = "Select configuration setting with $(docv)."  in
       Arg.(value & opt (some string) None & info ["setting-name"] ~docs ~docv:"NAME" ~doc)
@@ -46,9 +35,20 @@ let cmd_config_opts_t =
     let doc = "Set configuration setting specified by $(b,--setting-name) to $(docv). $(docv) can be a string or integer."  in
       Arg.(value & opt (some string) None & info ["setting-value"] ~docs ~docv:"VALUE" ~doc)
   in
+  let new_ns =
+    let doc = "A new namespace specified by $(docv)."  in
+      Arg.(value & opt (some string) None & info ["newns"; "new-namespace"] ~docs ~docv:"NAME" ~doc)
+  let from_ns =
+    let doc = "Create a new namespace from an existing namespace." in
+    Arg.(value & flag & info ["from-ns"] ~doc ~docs )
+  in
+  let from_file =
+    let doc = "Create a new namespace from a given (json) configuration file." in
+    Arg.(value & flag & info ["from-file"] ~doc ~docs )
+  in
  
  
-  Term.(const cmd_config_opts_handler $ arch $ build $ lvl $ setting_name $ setting_value)
+  Term.(const cmd_config_opts_handler $ arch $ build $ lvl $ setting_name $ setting_value $ new_ns $ from_ns $ from_file)
 
 
 (* main handler for config command *)
