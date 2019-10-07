@@ -8,5 +8,8 @@ val rmdir : string -> unit
 
 val file_copy : string -> string -> unit
 
-val symlink : string -> string -> unit
+val file_remove : string -> unit
+
+
+val symlink : bool -> string -> string -> unit
     

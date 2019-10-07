@@ -151,9 +151,10 @@ open Unix
 
 
 	let symlink 
+		(isdir : bool)
 		(source_path : string)
 		(symlink_path : string) =
-    	Unix.symlink ~to_dir:false source_path symlink_path;
+		Unix.symlink ~to_dir:isdir source_path symlink_path;
 		()
 	;;
 

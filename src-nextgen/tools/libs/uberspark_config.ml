@@ -54,17 +54,6 @@ let binary_uobj_default_load_addr = ref 0x60000000;;
 let binary_uobj_default_size = ref 0x01000000;;
 
 
-let switch 
-	(config_ns : string)
-	: bool =
-	let retval = ref true in
-	let config_ns_json_path = namespace_root ^ config_ns ^ "/uberspark-config.json" in
-	let config_current_json_path = namespace_root ^ "uberspark/config/current" in
-
-	Uberspark_osservices.symlink config_ns_json_path config_current_json_path;
-
-	(!retval)
-;;
 
 
 let load 
@@ -101,6 +90,21 @@ let load
 	;
 					
 
+
+	(!retval)
+;;
+
+let switch 
+	(config_ns : string)
+	: bool =
+	let retval = ref true in
+	let config_ns_path = namespace_root ^ config_ns in 
+	let config_ns_current_path = namespace_root ^ "uberspark/config/current" in
+	let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
+
+	Uberspark_osservices.file_remove config_ns_current_path;
+	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
+	load "uberspark/config/current";
 
 	(!retval)
 ;;
