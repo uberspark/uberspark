@@ -115,7 +115,6 @@ let handler_config
       let setting_name = ref "" in
  
       (* perform common initialization *)
-      copts.log_level = (Uberspark.Logger.ord Uberspark.Logger.Stdoutput);
       Commoninit.initialize copts;
 
       (match cmd_config_opts.setting_name with
