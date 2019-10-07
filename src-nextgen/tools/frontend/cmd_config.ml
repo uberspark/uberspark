@@ -75,9 +75,24 @@ let handler_config
       `Ok()
 
     | `Get -> 
+      let setting_name = ref "" in
+ 
       Uberspark.Logger.log "config get";
-      `Ok()
-
+      (match cmd_config_opts.setting_name with
+        | None -> `Error (true, "need setting name")
+        | Some sname -> 
+          setting_name := sname;
+          let(rval, setting_value) = Uberspark.Config.settings_get !setting_name in
+          if rval == true then
+            begin
+              Uberspark.Logger.log ~lvl:Uberspark.Logger.Stdoutput "%s" setting_value;
+              `Ok()
+            end
+          else
+            `Error (false, "invalid configuration setting")
+      )
+       
+ 
     | `Remove -> 
       Uberspark.Logger.log "config remove";
       `Ok()
@@ -87,11 +102,11 @@ let handler_config
       let setting_value = ref "" in
 
       Uberspark.Logger.log "config set";
-      match cmd_config_opts.setting_name with
+      (match cmd_config_opts.setting_name with
       | None -> `Error (true, "need setting name")
       | Some sname -> 
           setting_name := sname;
-          match cmd_config_opts.setting_value with
+          (match cmd_config_opts.setting_value with
           | None -> `Error (true, "need setting value")
           | Some sname -> 
             setting_value := sname;
@@ -99,8 +114,8 @@ let handler_config
               `Ok()
             else
               `Error (false, "invalid configuration setting")
-          ;
-      ;
+          )
+      )
         
   in
 
