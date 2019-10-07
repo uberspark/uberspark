@@ -82,9 +82,6 @@ let switch
 			binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
 
 
-		Uberspark_logger.log "binary_page_size=0x%08x" !binary_page_size;
-		
-
 		retval := true;							
 	with Yojson.Json_error s -> 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
@@ -177,14 +174,21 @@ let create_from_existing_ns
 
 	let output_config_dir = (namespace_root ^ output_config_ns) in
 	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
-	let input_config_json_pathname = (namespace_root ^ input_config_ns) ^ "/uberspark-config.json" in
 
-	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o640 in
+	(* switch to the input config ns *)
+	switch input_config_ns;
+
+	(* change namespace field *)
+	hdr_namespace := output_config_ns;
+
+	(* make the output config directory *)
+	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o777 in
 	if(rval == true) then 
 		begin
 			retval := true;
 			reterrmsg := "";
-			Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
+			(* dump the config namespace *)
+			dump output_config_json_pathname;
 		end
 	else
 		reterrmsg := remsg;
