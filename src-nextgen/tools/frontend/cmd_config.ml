@@ -42,13 +42,13 @@ let handler_config
   (copts : Commonopts.opts)
   (cmd_config_opts: opts)
   (action : [> `Create | `Dump | `Get | `Remove | `Set ] as 'a)
-  (config_ns : string)
+  (path_ns : string option)
   = 
 
   (* perform common initialization *)
   Commoninit.initialize copts;
 
-  Uberspark.Logger.log "config_ns=%s" config_ns;
+  (*Uberspark.Logger.log "config_ns=%s" config_ns;*)
 
   let retval = 
   match action with
@@ -73,7 +73,7 @@ let handler_config
       if ( Uberspark.Config.settings_set "another" "val" ) then
         `Ok()
       else
-        `Error (true, "invalid configuration setting")
+        `Error (false, "invalid configuration setting")
   in
 
   retval

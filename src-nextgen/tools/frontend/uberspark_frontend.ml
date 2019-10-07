@@ -78,7 +78,7 @@ let cmd_uobj =
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION OPTION)]... $(i,PATH) or $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION_OPTION)]... $(i,PATH) or $(i,NAMESPACE)";
 		`S Manpage.s_description;
 		`P "The $(tname) command provides several actions to verify, build 
 			and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -96,6 +96,10 @@ let cmd_uobj =
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
+
+
+
+
 (* kicks in when uberspark config ... is issued *)
 let cmd_config =
 	let action = 
@@ -111,19 +115,19 @@ let cmd_config =
   		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
 	in
 
-	let config_ns =
+	let path_ns =
     let doc = "The config namespace uri." in
-    Arg.(required & pos 1 (some string) None & info [] ~docv:"NAMESPACE" ~doc)
+    Arg.(value & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
 	in
   
   let doc = "Manage uberspark configuration" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION OPTION)]... $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION_OPTION)]... [$(i, PATH) or $(i,NAMESPACE)]";
 		`S Manpage.s_description;
      	`P "The $(tname) command provides several actions to manage the
-	 		uberspark configuration namespace specified by $(i,NAMESPACE).";
+	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
     	`S Manpage.s_arguments;
  		`S "ACTIONS";
     	`I ("$(b,switch)",
@@ -137,7 +141,7 @@ let cmd_config =
 		`Blocks manpage_sec_issues;
 		`S Manpage.s_exit_status;
 	] in
-  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ config_ns )),
+  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ path_ns )),
   Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
   
 
