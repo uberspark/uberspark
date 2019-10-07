@@ -56,21 +56,19 @@ let cmd_config_opts_t =
 let handler_config 
   (copts : Commonopts.opts)
   (cmd_config_opts: opts)
-  (action : [> `Create | `Switch | `Dump | `Get | `Remove | `Set ] as 'a)
+  (action : [> `Create | `Dump | `Get | `Switch | `Set | `Remove] as 'a)
   (path_ns : string option)
   = 
-
-  (* perform common initialization *)
-  Commoninit.initialize copts;
-
-  (*Uberspark.Logger.log "config_ns=%s" config_ns;*)
 
   let retval = 
   match action with
     | `Create -> 
         let new_ns = ref "" in
         let src_path_ns = ref "" in
-        Uberspark.Logger.log "config create";
+
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
        (match cmd_config_opts.new_ns with
         | None -> `Error (true, "need new namespace specification")
         | Some sname -> 
@@ -81,13 +79,14 @@ let handler_config
             src_path_ns := sname;
             if cmd_config_opts.from_file then
               begin
-                Uberspark.Logger.log "src_path_ns=%s new_ns=%s" !src_path_ns !new_ns;
                 Uberspark.Config.create_from_file !src_path_ns !new_ns;
+                Uberspark.Logger.log "created configuration namespace '%s'" !new_ns;
                 `Ok()
               end  
             else if cmd_config_opts.from_ns then
               begin
                 Uberspark.Config.create_from_existing_ns !src_path_ns !new_ns;
+                Uberspark.Logger.log "created configuration namespace '%s'" !new_ns;
                 `Ok()
               end
             else
@@ -95,22 +94,30 @@ let handler_config
           )
        ) 
     
+
     | `Dump ->
       let output_filename = ref "" in
-      Uberspark.Logger.log "config dump";
+
+      (* perform common initialization *)
+      Commoninit.initialize copts;
+
       (match path_ns with
         | None -> `Error (true, "need output file PATH")
         | Some sname -> 
           output_filename := sname;
           Uberspark.Config.dump !output_filename;
-          Uberspark.Logger.log "Wrote current configuration to file: %s" !output_filename;
+          Uberspark.Logger.log "wrote current configuration to file: %s" !output_filename;
           `Ok()
       )
+
 
     | `Get -> 
       let setting_name = ref "" in
  
-      Uberspark.Logger.log "config get";
+      (* perform common initialization *)
+      copts.log_level = (Uberspark.Logger.ord Uberspark.Logger.Stdoutput);
+      Commoninit.initialize copts;
+
       (match cmd_config_opts.setting_name with
         | None -> `Error (true, "need setting name")
         | Some sname -> 
@@ -125,35 +132,30 @@ let handler_config
             `Error (false, "invalid configuration setting")
       )
        
+
     | `Switch ->
-      Uberspark.Logger.log "config switch";
+
+      (* perform common initialization *)
+      Commoninit.initialize copts;
+
       let src_path_ns = ref "" in
       (match path_ns with
       | None -> `Error (true, "need NAMESPACE argument")
       | Some sname -> 
         src_path_ns := sname;
         Uberspark.Config.switch !src_path_ns;
+        Uberspark.Logger.log "switched to configuration namespace '%s'" !src_path_ns;
         `Ok()
       )
       
-
-
-    | `Remove -> 
-      Uberspark.Logger.log "config remove";
-      let src_path_ns = ref "" in
-      (match path_ns with
-      | None -> `Error (true, "need NAMESPACE argument")
-      | Some sname -> 
-        src_path_ns := sname;
-        Uberspark.Config.remove !src_path_ns;
-        `Ok()
-      )
 
     | `Set -> 
       let setting_name = ref "" in
       let setting_value = ref "" in
 
-      Uberspark.Logger.log "config set";
+      (* perform common initialization *)
+      Commoninit.initialize copts;
+
       (match cmd_config_opts.setting_name with
       | None -> `Error (true, "need setting name")
       | Some sname -> 
@@ -162,12 +164,33 @@ let handler_config
           | None -> `Error (true, "need setting value")
           | Some sname -> 
             setting_value := sname;
-            if ( Uberspark.Config.settings_set !setting_name !setting_value) then
-              `Ok()
+            let rval = (Uberspark.Config.settings_set !setting_name !setting_value) in 
+            if rval == true then 
+              begin
+                Uberspark.Logger.log "configuration setting '%s' set to '%s'" !setting_name !setting_value;
+                `Ok()  
+              end
             else
               `Error (false, "invalid configuration setting")
           )
       )
+
+
+    | `Remove -> 
+
+      (* perform common initialization *)
+      Commoninit.initialize copts;
+
+      let src_path_ns = ref "" in
+      (match path_ns with
+      | None -> `Error (true, "need NAMESPACE argument")
+      | Some sname -> 
+        src_path_ns := sname;
+        Uberspark.Config.remove !src_path_ns;
+        Uberspark.Logger.log "removed configuration namespace: %s" !src_path_ns;
+        `Ok()
+      )
+
         
   in
 

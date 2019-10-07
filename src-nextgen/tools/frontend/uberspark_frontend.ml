@@ -105,8 +105,8 @@ let cmd_config =
 	let action = 
 	let action = [ 	"create", `Create; 
 					"dump", `Dump; 
-					"switch", `Switch;
 					"get", `Get;
+					"switch", `Switch;
 					"set", `Set;
 					"remove", `Remove
 				] in
