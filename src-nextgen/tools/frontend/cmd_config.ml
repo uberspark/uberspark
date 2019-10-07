@@ -71,8 +71,16 @@ let handler_config
       `Ok()
     
     | `Dump ->
+      let output_filename = ref "" in
       Uberspark.Logger.log "config dump";
-      `Ok()
+      (match path_ns with
+        | None -> `Error (true, "need output file PATH")
+        | Some sname -> 
+          output_filename := sname;
+          Uberspark.Config.dump !output_filename;
+          Uberspark.Logger.log "Wrote current configuration to file: %s" !output_filename;
+          `Ok()
+      )
 
     | `Get -> 
       let setting_name = ref "" in

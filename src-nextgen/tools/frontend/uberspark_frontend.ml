@@ -130,6 +130,9 @@ let cmd_config =
 	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
     	`S Manpage.s_arguments;
  		`S "ACTIONS";
+    	`I ("$(b,dump)",
+        	"store current configuration to a (json) file. 
+			Uses the $(i,PATH) argument");
     	`I ("$(b,get)",
         	"display a configuration setting within the current configuration namespace. 
 			Uses the following action options: $(b,--setting-name)");
