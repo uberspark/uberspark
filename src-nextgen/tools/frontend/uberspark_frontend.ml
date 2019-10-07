@@ -143,8 +143,8 @@ let cmd_config =
      	`I ("$(b,switch)",
         	"switch to a configuration specified by the $(i,NAMESPACE) argument.");
     	`I ("$(b,create)",
-        	"create a new configuration, see
-         	uberspark-uobj(1) or the $(b,--help) option.");
+        	"create a new configuration namespace from a file $(i,PATH) or $(i,NAMESPACE) arguments.
+			Uses the following action options: $(b,--from-ns), $(b,--from-file), and $(b,--new-namespace)");
 	 	`S "ACTION OPTIONS";
 	  	`P "These options qualify the aforementioned actions.";
 		`Blocks manpage_sec_common_options;
