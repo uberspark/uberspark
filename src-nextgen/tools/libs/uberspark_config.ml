@@ -55,7 +55,7 @@ let binary_uobj_default_size = ref 0x01000000;;
 
 
 
-let switch 
+let load 
 	(config_ns : string)
 	: bool =
 	let retval = ref false in
@@ -175,8 +175,8 @@ let create_from_existing_ns
 	let output_config_dir = (namespace_root ^ output_config_ns) in
 	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
 
-	(* switch to the input config ns *)
-	switch input_config_ns;
+	(* load the input config ns *)
+	load input_config_ns;
 
 	(* change namespace field *)
 	hdr_namespace := output_config_ns;
