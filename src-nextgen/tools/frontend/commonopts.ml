@@ -5,7 +5,7 @@
 open Uberspark
 open Cmdliner
 
-type opts = { log_level : int} 
+type opts = { mutable log_level : int} 
 
 (* fold verbosity and log level into a single logging level *)
 let handler_opts 
