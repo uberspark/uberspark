@@ -78,7 +78,7 @@ let cmd_uobj =
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION_OPTION)]... $(i,PATH) or $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
 		`S Manpage.s_description;
 		`P "The $(tname) command provides several actions to verify, build 
 			and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -125,7 +125,7 @@ let cmd_config =
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTION)]... $(i,ACTION) [$(i,ACTION_OPTION)]... [$(i, PATH) or $(i,NAMESPACE)]";
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i, PATH) or $(i,NAMESPACE)]";
 		`S Manpage.s_description;
      	`P "The $(tname) command provides several actions to manage the
 	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
@@ -164,7 +164,7 @@ let cmd_default =
   let sdocs = Manpage.s_common_options in
   let man = [
 	`S Manpage.s_synopsis;
-    `P "$(mname) [$(i,OPTION)]... $(i,COMMAND)...";
+    `P "$(mname) [$(i,COMMAND)...] [$(i,OPTIONS)]... ";*)
 	`S Manpage.s_commands;
 	`Blocks manpage_sec_common_options;
 	`Blocks manpage_sec_more_help;
