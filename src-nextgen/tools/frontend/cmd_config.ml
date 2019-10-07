@@ -7,7 +7,7 @@ open Cmdliner
 type opts = { 
   setting_name: string option;
   setting_value: string option;
-  new_ns : string;
+  new_ns : string option;
   from_ns : bool;
   from_file : bool;
 };;
@@ -16,7 +16,7 @@ type opts = {
 let cmd_config_opts_handler 
   (setting_name: string option)
   (setting_value: string option)
-  (new_ns : string)
+  (new_ns : string option)
   (from_ns: bool)
   (from_file: bool)
   : opts = 
@@ -38,6 +38,7 @@ let cmd_config_opts_t =
   let new_ns =
     let doc = "A new namespace specified by $(docv)."  in
       Arg.(value & opt (some string) None & info ["newns"; "new-namespace"] ~docs ~docv:"NAME" ~doc)
+  in
   let from_ns =
     let doc = "Create a new namespace from an existing namespace." in
     Arg.(value & flag & info ["from-ns"] ~doc ~docs )
@@ -48,7 +49,7 @@ let cmd_config_opts_t =
   in
  
  
-  Term.(const cmd_config_opts_handler $ arch $ build $ lvl $ setting_name $ setting_value $ new_ns $ from_ns $ from_file)
+  Term.(const cmd_config_opts_handler $ setting_name $ setting_value $ new_ns $ from_ns $ from_file)
 
 
 (* main handler for config command *)
@@ -67,8 +68,32 @@ let handler_config
   let retval = 
   match action with
     | `Create -> 
-      Uberspark.Logger.log "config create";
-      `Ok()
+        let new_ns = ref "" in
+        let src_path_ns = ref "" in
+        Uberspark.Logger.log "config create";
+       (match cmd_config_opts.new_ns with
+        | None -> `Error (true, "need new namespace specification")
+        | Some sname -> 
+          new_ns := sname;
+          (match path_ns with
+          | None -> `Error (true, "need PATH or NAMESPACE argument")
+          | Some sname -> 
+            src_path_ns := sname;
+            if cmd_config_opts.from_file then
+              begin
+                Uberspark.Logger.log "src_path_ns=%s new_ns=%s" !src_path_ns !new_ns;
+                Uberspark.Config.create_from_file !src_path_ns !new_ns;
+                `Ok()
+              end  
+            else if cmd_config_opts.from_ns then
+              begin
+                Uberspark.Config.create_from_existing_ns !src_path_ns !new_ns;
+                `Ok()
+              end
+            else
+              `Error (true, "need either --from-ns or --from-file options")
+          )
+       ) 
     
     | `Dump ->
       let output_filename = ref "" in
