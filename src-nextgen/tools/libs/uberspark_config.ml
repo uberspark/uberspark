@@ -94,50 +94,6 @@ let load
 	(!retval)
 ;;
 
-let switch 
-	(config_ns : string)
-	: bool =
-	let retval = ref true in
-	let config_ns_path = namespace_root ^ config_ns in 
-	let config_ns_current_path = namespace_root ^ "uberspark/config/current" in
-	let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
-
-	Uberspark_osservices.file_remove config_ns_current_path;
-	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
-	load "uberspark/config/current";
-
-	(!retval)
-;;
-
-
-let remove 
-	(config_ns : string)
-	: bool =
-	let retval = ref false in
-	
-	if (config_ns <> "uberspark/config/default") then 
-		begin
-			let config_ns_path = namespace_root ^ config_ns in 
-			let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
-			
-			Uberspark_osservices.file_remove config_ns_json_path;
-			Uberspark_osservices.rmdir config_ns_path;
-
-			(* check if we removed the current config, if so reload the default *)
-			if !hdr_namespace = config_ns then
-				ignore(switch "uberspark/config/default");
-			;
-
-			retval := true;
-		end 
-	;
-
-	(!retval)
-;;
-
-
-
-
 let dump 
 	(output_config_filename : string)
 	=
@@ -168,44 +124,6 @@ let dump
 	close_out oc;	
 
 
-;;
-
-
-let settings_set 
-	(setting_name : string)
-	(setting_value : string)
-	: bool =
-
-	let retval = ref true in
-	match setting_name with
-		| "binary_page_size" -> binary_page_size := int_of_string setting_value;
-		| "binary_uobj_section_alignment" -> binary_uobj_section_alignment := int_of_string setting_value;
-		| "binary_uobj_default_section_size" -> binary_uobj_default_section_size := int_of_string setting_value;
-		| "binary_uobj_default_load_addr" -> binary_uobj_default_load_addr := int_of_string setting_value;
-		| "binary_uobj_default_size" -> binary_uobj_default_size := int_of_string setting_value;
-		| _ -> retval := false;
-	;
-	
-	!retval
-;;
-
-
-let settings_get 
-	(setting_name : string)
-	: (bool * string) =
-
-	let retstatus = ref true in
-	let settings_value = ref "" in
-	match setting_name with
-		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" !binary_page_size);
-		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_section_alignment);
-		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_section_size);
-		| "binary_uobj_default_load_addr" -> settings_value := (Printf.sprintf "0x%x"  !binary_uobj_default_load_addr);
-		| "binary_uobj_default_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_size);
-		| _ -> retstatus := false;
-	;
-	
-	(!retstatus, !settings_value)
 ;;
 
 
@@ -265,5 +183,90 @@ let create_from_file
 
 	(!retval, !reterrmsg)
 ;;
+
+
+let settings_get 
+	(setting_name : string)
+	: (bool * string) =
+
+	let retstatus = ref true in
+	let settings_value = ref "" in
+	match setting_name with
+		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" !binary_page_size);
+		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_section_alignment);
+		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_section_size);
+		| "binary_uobj_default_load_addr" -> settings_value := (Printf.sprintf "0x%x"  !binary_uobj_default_load_addr);
+		| "binary_uobj_default_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_size);
+		| _ -> retstatus := false;
+	;
+	
+	(!retstatus, !settings_value)
+;;
+
+
+let settings_set 
+	(setting_name : string)
+	(setting_value : string)
+	: bool =
+
+	let retval = ref true in
+	match setting_name with
+		| "binary_page_size" -> binary_page_size := int_of_string setting_value;
+		| "binary_uobj_section_alignment" -> binary_uobj_section_alignment := int_of_string setting_value;
+		| "binary_uobj_default_section_size" -> binary_uobj_default_section_size := int_of_string setting_value;
+		| "binary_uobj_default_load_addr" -> binary_uobj_default_load_addr := int_of_string setting_value;
+		| "binary_uobj_default_size" -> binary_uobj_default_size := int_of_string setting_value;
+		| _ -> retval := false;
+	;
+	
+	!retval
+;;
+
+
+let switch 
+	(config_ns : string)
+	: bool =
+	let retval = ref true in
+	let config_ns_path = namespace_root ^ config_ns in 
+	let config_ns_current_path = namespace_root ^ "uberspark/config/current" in
+	let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
+
+	Uberspark_osservices.file_remove config_ns_current_path;
+	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
+	load "uberspark/config/current";
+
+	(!retval)
+;;
+
+
+let remove 
+	(config_ns : string)
+	: bool =
+	let retval = ref false in
+	
+	if (config_ns <> "uberspark/config/default") then 
+		begin
+			let config_ns_path = namespace_root ^ config_ns in 
+			let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
+			
+			Uberspark_osservices.file_remove config_ns_json_path;
+			Uberspark_osservices.rmdir config_ns_path;
+
+			(* check if we removed the current config, if so reload the default *)
+			if !hdr_namespace = config_ns then
+				ignore(switch "uberspark/config/default");
+			;
+
+			retval := true;
+		end 
+	;
+
+	(!retval)
+;;
+
+
+
+
+
 
 

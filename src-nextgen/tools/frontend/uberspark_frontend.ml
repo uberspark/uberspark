@@ -131,6 +131,9 @@ let cmd_config =
 	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
     	`S Manpage.s_arguments;
  		`S "ACTIONS";
+    	`I ("$(b,create)",
+        	"create a new configuration namespace from a file $(i,PATH) or $(i,NAMESPACE) arguments.
+			Uses the following action options: $(b,--from-ns), $(b,--from-file), and $(b,--new-namespace)");
     	`I ("$(b,dump)",
         	"store current configuration to a (json) file. 
 			Uses the $(i,PATH) argument");
@@ -142,9 +145,6 @@ let cmd_config =
 			Uses the following action options: $(b,--setting-name), and $(b,--setting-value)");
      	`I ("$(b,switch)",
         	"switch to a configuration specified by the $(i,NAMESPACE) argument.");
-    	`I ("$(b,create)",
-        	"create a new configuration namespace from a file $(i,PATH) or $(i,NAMESPACE) arguments.
-			Uses the following action options: $(b,--from-ns), $(b,--from-file), and $(b,--new-namespace)");
      	`I ("$(b,remove)",
         	"Remove a configuration namespace specified by the $(i,NAMESPACE) argument.");
 	 	`S "ACTION OPTIONS";

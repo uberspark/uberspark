@@ -45,16 +45,20 @@ val binary_uobj_default_size : int ref
 
 val load : string -> bool
 
+val create_from_existing_ns : string -> string -> (bool * string)
+
+val create_from_file : string -> string -> (bool * string)
+
+val dump : string -> unit
+
+val settings_get : string ->  (bool * string)
+
+val settings_set : string -> string -> bool
+
 val switch : string -> bool
 
 val remove : string -> bool
 
-val dump : string -> unit
 
-val settings_set : string -> string -> bool
 
-val settings_get : string ->  (bool * string)
 
-val create_from_existing_ns : string -> string -> (bool * string)
-
-val create_from_file : string -> string -> (bool * string)
