@@ -168,5 +168,29 @@ let settings_get
 ;;
 
 
+let create_from_existing_ns
+	(input_config_ns : string)
+	(output_config_ns : string)
+	: (bool * string) =
+	let retval = ref false in
+	let reterrmsg = ref "" in
+
+	let output_config_dir = (namespace_root ^ output_config_ns) in
+	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
+	let input_config_json_pathname = (namespace_root ^ input_config_ns) ^ "/uberspark-config.json" in
+
+	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o640 in
+	if(rval == true) then 
+		begin
+			retval := true;
+			reterrmsg := "";
+			Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
+		end
+	else
+		reterrmsg := remsg;
+	;
+
+	(!retval, !reterrmsg)
+;;
 
 

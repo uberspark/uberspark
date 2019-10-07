@@ -13,6 +13,13 @@ module Logger : sig
 
 end
 
+module Osservices : sig
+  
+#include "uberspark_osservices.mli"
+
+end
+
+
 module Config : sig
 
 #include "uberspark_config.mli"  
@@ -20,11 +27,6 @@ module Config : sig
 end
 
 
-module Osservices : sig
-  
-#include "uberspark_osservices.mli"
-
-end
 
 module Manifest : sig
   
