@@ -33,7 +33,7 @@ namespace for uberobject verification and compilation bridges along with integra
 source tree organization
 
 ``bldsys-bridge'' will have subdirectories for each build system tool supported
-``v-bridge'' will have the subdirectories: 386, amd64, arm/v7, amd64/v8 etc. as in the docker hub images for ubuntu, alpine, fedora, debian
+``v-bridge'', ``ar-bridge'' and ``pp-bridge'' will have the subdirectories: 386, amd64, arm/v7, amd64/v8 etc. as in the docker hub images for ubuntu, alpine, fedora, debian
 all other bridges will have the following two-level directory structure: 
 
 level-1: 386, amd64, arm/v7, amd64/v8 etc. as in the docker hub images for ubuntu, alpine, fedora, debian
