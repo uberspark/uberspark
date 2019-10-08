@@ -164,7 +164,7 @@ let cmd_default =
   let sdocs = Manpage.s_common_options in
   let man = [
 	`S Manpage.s_synopsis;
-    `P "$(mname) [$(i,COMMAND)...] [$(i,OPTIONS)]... ";*)
+    `P "$(mname) [$(i,COMMAND)...] [$(i,OPTIONS)]... ";
 	`S Manpage.s_commands;
 	`Blocks manpage_sec_common_options;
 	`Blocks manpage_sec_more_help;
