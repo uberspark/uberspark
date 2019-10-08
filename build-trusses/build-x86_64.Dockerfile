@@ -33,6 +33,7 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y ocamlfind && \
     opam install -y yojson && \
     opam install -y cmdliner.1.0.4 && \
+    opam install -y astring.0.8.3 && \
     opam install -y dune.1.11.3 && \
     opam install -y cppo.1.6.6 
 

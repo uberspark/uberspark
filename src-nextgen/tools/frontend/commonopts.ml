@@ -5,18 +5,19 @@
 open Uberspark
 open Cmdliner
 
-type opts = { log_level : int} 
+type opts = { mutable log_level : int} 
 
 (* fold verbosity and log level into a single logging level *)
 let handler_opts 
   (verb : int)
   (loglvl : int)
   : opts = 
+  (*Uberspark.Logger.log "verb=%u, loglvl=%u" verb loglvl;*)
   if verb == 0 then 
     begin
       { log_level=0 }
     end
-  else if verb > loglvl then
+  else if verb < loglvl then
     begin
       { log_level=verb }
     end

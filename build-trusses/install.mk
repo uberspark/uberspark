@@ -51,6 +51,7 @@ install_populateamespace_include:
 install_populateamespace: install_populateamespace_include
 	@echo Populating namespace within: $(UBERSPARK_INSTALLDIR)...
 	cp -rf $(UBERSPARK_SRCDIR)/bridges/* $(UBERSPARK_INSTALLDIR)/bridges/.
+	cp -rf $(UBERSPARK_SRCDIR)/config/* $(UBERSPARK_INSTALLDIR)/config/
 	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/.
 	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/hwm/.
 	cp -rf $(UBERSPARK_SRCDIR)/loaders/* $(UBERSPARK_INSTALLDIR)/loaders/.

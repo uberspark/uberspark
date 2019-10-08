@@ -1,233 +1,272 @@
 (*
-	uberSpark configuration data interface
+	uberSpark configuration module
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 open Unix
+open Yojson
+
+(*------------------------------------------------------------------------*)
+(* header related configuration settings *)	
+(*------------------------------------------------------------------------*)
+let hdr_type = ref "";;
+let hdr_namespace = ref "";;
+let hdr_platform = ref "";;
+let hdr_arch = ref "";;
+let hdr_cpu = ref "";;
 
 
-	(*------------------------------------------------------------------------*)
-	(* environment related configuration settings *)	
-	(*------------------------------------------------------------------------*)
-	let env_path_seperator = "/";;
-	let env_home_dir = Unix.getenv "HOME";;
+(*------------------------------------------------------------------------*)
+(* environment related configuration settings *)	
+(*------------------------------------------------------------------------*)
+(*let env_path_seperator = ref "/";;*)
+let env_home_dir = ref "HOME";;
+
+
+(*------------------------------------------------------------------------*)
+(* namespace related configuration settings *)	
+(*------------------------------------------------------------------------*)
+let namespace_root = ((Unix.getenv !env_home_dir) ^ "/");;
+let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
+let namespace_uobj_mf_hdr_type = "uobj";;
+
+let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
+let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
+let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
+let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
+let namespace_uobj_linkerscript_filename = "uobj.lscript";;
+
+let namespace_uobjslt = (namespace_root ^ "uberspark/uobjslt");;
+let namespace_uobjslt_mf_hdr_type = "uobjslt";;
+let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
+let namespace_uobjslt_callees_output_filename = "uobjslt-callees.S";;
+let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
+let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
+
+
+(*------------------------------------------------------------------------*)
+(* uobj/uobjcoll binary related configuration settings *)	
+(*------------------------------------------------------------------------*)
+let binary_page_size = ref 0x00200000;;
+let binary_uobj_section_alignment = ref 0x00200000;;
+let binary_uobj_default_section_size = ref 0x00200000;;
+
+let binary_uobj_default_load_addr = ref 0x60000000;;
+let binary_uobj_default_size = ref 0x01000000;;
 
 
 
 
-	(*------------------------------------------------------------------------*)
-	(* namespace related configuration settings *)	
-	(*------------------------------------------------------------------------*)
-	let namespace_root = (env_home_dir ^ env_path_seperator ^ "uberspark");;
-	let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
-	let namespace_uobj_mf_hdr_type = "uobj";;
+let load 
+	(config_ns : string)
+	: bool =
+	let retval = ref false in
+	let config_ns_json_path = namespace_root ^ config_ns ^ "/uberspark-config.json" in
+	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
-	let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
-	let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
-	let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
-	let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
-	let namespace_uobj_linkerscript_filename = "uobj.lscript";;
+	try
+		let config_json = Yojson.Basic.from_file config_ns_json_path in
+		(*parse header*)
+		let config_json_hdr = Yojson.Basic.Util.member "hdr" config_json in
+			hdr_type := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr);
+			hdr_namespace := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr);
+			hdr_platform := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "platform" config_json_hdr);
+			hdr_arch := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" config_json_hdr);
+			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" config_json_hdr);
+			(* TBD: sanity check header *)
+		
+		let config_json_settings = 	Yojson.Basic.Util.member "settings" config_json in
 
-	let namespace_uobjslt = (namespace_root ^ env_path_seperator ^ "uobjslt");;
-	let namespace_uobjslt_mf_hdr_type = "uobjslt";;
-	let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
-	let namespace_uobjslt_callees_output_filename = "uobjslt-callees.S";;
-	let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
-	let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
+			binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
+			binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
+			binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
+			binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
+			binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
 
 
-	(*------------------------------------------------------------------------*)
-	(* uobj/uobjcoll binary related configuration settings *)	
-	(*------------------------------------------------------------------------*)
-	let binary_page_size = ref 0x00200000;;
-	let binary_uobj_section_alignment = ref 0x00200000;;
-	let binary_uobj_default_section_size = ref 0x00200000;;
+		retval := true;							
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+					
+
+
+	(!retval)
+;;
+
+let dump 
+	(output_config_filename : string)
+	=
+
+	let oc = open_out output_config_filename in
+		Printf.fprintf oc "\n/* --- this file is autogenerated --- */";
+		Printf.fprintf oc "\n/* uberSpark configuration file */";
+		Printf.fprintf oc "\n";
+		Printf.fprintf oc "\n";
+		Printf.fprintf oc "\n{";
+		Printf.fprintf oc "\n\t\"hdr\":{";
+		Printf.fprintf oc "\n\t\t\"type\" : \"%s\"," !hdr_type;
+		Printf.fprintf oc "\n\t\t\"namespace\" : \"%s\"," !hdr_namespace;
+		Printf.fprintf oc "\n\t\t\"platform\" : \"%s\"," !hdr_platform;
+		Printf.fprintf oc "\n\t\t\"arch\" : \"%s\"," !hdr_arch;
+		Printf.fprintf oc "\n\t\t\"cpu\" : \"%s\"" !hdr_cpu;
+		Printf.fprintf oc "\n\t},";
+		Printf.fprintf oc "\n";
+		Printf.fprintf oc "\n\t\"settings\":{";
+		Printf.fprintf oc "\n\t\t\"binary_page_size\" : \"0x%x\"," !binary_page_size;
+		Printf.fprintf oc "\n\t\t\"binary_uobj_section_alignment\" : \"0x%x\"," !binary_uobj_section_alignment;
+		Printf.fprintf oc "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," !binary_uobj_default_section_size;
+		Printf.fprintf oc "\n\t\t\"binary_uobj_default_load_addr\" : \"0x%x\"," !binary_uobj_default_load_addr;
+		Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"" !binary_uobj_default_size;
+		Printf.fprintf oc "\n\t}";
+		Printf.fprintf oc "\n";
+		Printf.fprintf oc "\n}";
+	close_out oc;	
+
+
+;;
+
+
+let create_from_existing_ns
+	(input_config_ns : string)
+	(output_config_ns : string)
+	: (bool * string) =
+	let retval = ref false in
+	let reterrmsg = ref "" in
+
+	let output_config_dir = (namespace_root ^ output_config_ns) in
+	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
+
+	(* load the input config ns *)
+	load input_config_ns;
+
+	(* change namespace field *)
+	hdr_namespace := output_config_ns;
+
+	(* make the output config directory *)
+	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o777 in
+	if(rval == true) then 
+		begin
+			retval := true;
+			reterrmsg := "";
+			(* dump the config namespace *)
+			dump output_config_json_pathname;
+		end
+	else
+		reterrmsg := remsg;
+	;
+
+	(!retval, !reterrmsg)
+;;
+
+
+let create_from_file
+	(input_config_json_pathname : string)
+	(output_config_ns : string)
+	: (bool * string) =
+	let retval = ref false in
+	let reterrmsg = ref "" in
+
+	let output_config_dir = (namespace_root ^ output_config_ns) in
+	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
+
+	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o777 in
+	if(rval == true) then 
+		begin
+			retval := true;
+			reterrmsg := "";
+			Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
+		end
+	else
+		reterrmsg := remsg;
+	;
+
+	(!retval, !reterrmsg)
+;;
+
+
+let settings_get 
+	(setting_name : string)
+	: (bool * string) =
+
+	let retstatus = ref true in
+	let settings_value = ref "" in
+	match setting_name with
+		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" !binary_page_size);
+		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_section_alignment);
+		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_section_size);
+		| "binary_uobj_default_load_addr" -> settings_value := (Printf.sprintf "0x%x"  !binary_uobj_default_load_addr);
+		| "binary_uobj_default_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_size);
+		| _ -> retstatus := false;
+	;
 	
-	let binary_uobj_default_load_addr = ref 0x60000000;;
-	let binary_uobj_default_size = ref 0x01000000;;
+	(!retstatus, !settings_value)
+;;
 
 
+let settings_set 
+	(setting_name : string)
+	(setting_value : string)
+	: bool =
 
-
-
-
-(*
-	(*------------------------------------------------------------------------*)
-	(* uberspark installation configuration information *)	
-	(*------------------------------------------------------------------------*)
-	let get_uberspark_config_install_prefix = 
-		"@prefix@";;
-
-	let get_uberspark_config_install_rootdir = 
-		"@prefix@@ubersparkhomedir@";;
-
-	let get_uberspark_config_install_includedir = 
-		"@prefix@@ubersparkhomedir@@ubersparkincludedir@";;
-
-	let get_uberspark_config_install_buildshimsdir = 
-		"@prefix@@ubersparkhomedir@@ubersparkbuildshimsdir@";;
-
-
-	let get_uberspark_config_install_uobjcolldir = 
-		"@prefix@@ubersparkhomedir@@ubersparkuobjcolldir@";;
-
-
-	(*------------------------------------------------------------------------*)
-	(* uberspark hardware related configuration information *)	
-	(*------------------------------------------------------------------------*)
-	let get_uberspark_config_hw_platform_default = 
-		"@uberspark_config_hw_platform_default@";;
-
-	let get_uberspark_config_hw_cpu_default = 
-		"@uberspark_config_hw_cpu_default@";;
-
-	let get_uberspark_config_hw_arch_default = 
-		"@uberspark_config_hw_arch_default@";;
-
-
-	(*------------------------------------------------------------------------*)
-
-	(* uobj manifest default filename *)
-	let std_uobj_usmf_name = "UOBJ.USMF";;
+	let retval = ref true in
+	match setting_name with
+		| "binary_page_size" -> binary_page_size := int_of_string setting_value;
+		| "binary_uobj_section_alignment" -> binary_uobj_section_alignment := int_of_string setting_value;
+		| "binary_uobj_default_section_size" -> binary_uobj_default_section_size := int_of_string setting_value;
+		| "binary_uobj_default_load_addr" -> binary_uobj_default_load_addr := int_of_string setting_value;
+		| "binary_uobj_default_size" -> binary_uobj_default_size := int_of_string setting_value;
+		| _ -> retval := false;
+	;
 	
-	(* uobj collection manifest default filename *)
-	let default_uobjcoll_usmf_name = "UOBJCOLL.USMF";;
-
-	(* uobj library manifest default filename *)
-	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
-
-	(* uobj consolidated header filename *)
-	let uobj_hfilename = "uobj";;
-	let get_uobj_hfilename () =	(uobj_hfilename)	;;
-
-	(* uobj collection info default filename *)
-	let std_uobjcoll_info_filename = "uobjcoll_info_table.c";;
-	let get_std_uobjcoll_info_filename () =	(std_uobjcoll_info_filename)	;;
-
-	(* standard include directories *)
-	let std_incdirs = [
-										"/usr/local/uberspark/include";
-										"/usr/local/uberspark/hwm/include";
-										"/usr/local/uberspark/libs/include";
-										"."
-										];;
-
-	let get_std_incdirs () =	(std_incdirs)	;;
-
-	(* sentinel directory *)
-	let sentinel_dir = "/usr/local/uberspark/sentinels";;
-	let get_sentinel_dir () = (sentinel_dir);;
-
-	(* uobjcoll default installation directory *)
-	let default_install_uobjcolldir = "/usr/local/uberspark/uobjcoll";;
-	let get_default_install_uobjcolldir () = (default_install_uobjcolldir);;
+	!retval
+;;
 
 
-	let std_max_sections = 16;;
-	let get_std_max_sections () = (std_max_sections) ;;
+let switch 
+	(config_ns : string)
+	: bool =
+	let retval = ref true in
+	let config_ns_path = namespace_root ^ config_ns in 
+	let config_ns_current_path = namespace_root ^ "uberspark/config/current" in
+	let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
 
-	let section_name_ustack = "uobj_ustack";;
-	let get_section_name_ustack () = (section_name_ustack);;
+	Uberspark_osservices.file_remove config_ns_current_path;
+	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
+	load "uberspark/config/current";
 
-	let section_name_tstack = "uobj_tstack";;
-	let get_section_name_tstack () = (section_name_tstack);;
-
-	let default_load_addr = "0x60000000";;
-	let get_default_load_addr () = (default_load_addr);;
-
-	let default_uobjsize = "0x01000000";;
-	let get_default_uobjsize () = (default_uobjsize);;
-
-	let default_uobjcoll_hdr_size = "0x01000000";;
-	let get_default_uobjcoll_hdr_size () = (default_uobjcoll_hdr_size);;
-
-	(*let default_section_alignment = "0x00200000";;
-	let get_default_section_alignment () = (default_section_alignment);;
-	*)
-(*
-	(* section alignment *)
-	let section_alignment = ref 0x00200000;;
-*)		
-
-	(* default general section size *)
-	let section_size_general = ref 0x00200000;;
-
-	(* default sentinel section size *)
-	let section_size_sentinel = ref 0x00001000;;
-
-	(*--------------------------------------------------------------------------*)
-	(* stuff below needs to be in sync with include/uberspark-config.h *)
-	(* also check include/uberspark.h for sentinel definitions *)
-	(* and include/usbinformat.h for binary definitions *)
-	(*--------------------------------------------------------------------------*)
-(* 	let def_USBINFORMAT_SECTION_TYPE_PADDING = 0x0;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ =	0x1;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJCOLL_ENTRYSENTINEL = 0x2;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RESUMESENTINEL = 0x3;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CALLEESENTINEL = 0x4;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_EXITCALLEESENTINEL = 0x5;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR =	0x6;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE = 0x7;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA = 0x8;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA = 0x9;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK = 0xa;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK = 0xb;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACKTOS = 0xc;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACKTOS = 0xd;;
-	let def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA = 0xe;;
-*)
-
-	let sentinel_types =
-    [ "call", "UOBJ_SENTINEL_TYPE_CALL"; 
-		]
-  ;;
-	let get_sentinel_types () =	(sentinel_types)	;;
-
-	(* sentinel protection and binary size in bytes *)
-	(* TODO: figure out the best place to specify these *)
-	let sentinel_prot = "rx";;
-	let get_sentinel_prot () = (sentinel_prot);;
-
-	let sentinel_size_bytes = "0x1000";;
-	let get_sentinel_size_bytes () = (sentinel_size_bytes);;
+	(!retval)
+;;
 
 
-	(* standard preprocessor definitions *)
-	let std_defines = [ 
-											"__XMHF_TARGET_CPU_X86__"; 
-											"__XMHF_TARGET_CONTAINER_VMX__";
-											"__XMHF_TARGET_PLATFORM_X86PC__";
-											"__XMHF_TARGET_TRIAD_X86_VMX_X86PC__"
-										];;
-
-	let get_std_defines () =	(std_defines)	;;
-
-	let std_define_asm = [
-												"__ASSEMBLY__"
-											];;
-				
-	let get_std_define_asm () =	(std_define_asm)	;;
-
+let remove 
+	(config_ns : string)
+	: bool =
+	let retval = ref false in
 	
-	
-				
-	(* maximum platform CPUs *)
-	(* TBD: this has to be synced with hw model defs *)
-	let std_max_platform_cpus = 8;;
-	let get_std_max_platform_cpus () =	(std_max_platform_cpus)	;;
-									
-	let std_max_incldevlist_entries = 6;;
-	let get_std_max_incldevlist_entries () = (std_max_incldevlist_entries) ;;
+	if (config_ns <> "uberspark/config/default") then 
+		begin
+			let config_ns_path = namespace_root ^ config_ns in 
+			let config_ns_json_path = config_ns_path ^ "/uberspark-config.json" in
+			
+			Uberspark_osservices.file_remove config_ns_json_path;
+			Uberspark_osservices.rmdir config_ns_path;
 
-	let std_max_excldevlist_entries = 6;;
-	let get_std_max_excldevlist_entries () = (std_max_excldevlist_entries) ;;
+			(* check if we removed the current config, if so reload the default *)
+			if !hdr_namespace = config_ns then
+				ignore(switch "uberspark/config/default");
+			;
 
-	let sizeof_uobj_tstack = 4096;;
-	let get_sizeof_uobj_tstack () = (sizeof_uobj_tstack) ;;
+			retval := true;
+		end 
+	;
 
-	let sizeof_uobj_ustack = 4096;;
-	let get_sizeof_uobj_ustack () = (sizeof_uobj_ustack) ;;
- 
-	let sizeof_uobjcoll_info_t = 0x21000;;
-	let get_sizeof_uobjcoll_info_t () = (sizeof_uobjcoll_info_t) ;;
+	(!retval)
+;;
 
-*)
+
+
+
+
+
+

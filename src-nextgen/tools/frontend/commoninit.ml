@@ -16,4 +16,8 @@ let initialize
   Uberspark.Logger.log "creator: amit vasudevan <amitvasudevan@acm.org>";
   Uberspark.Logger.log "";
 
+  Uberspark.Logger.log ~crlf:false "Loading current configuration...";
+  Uberspark.Config.load "uberspark/config/current";
+  Uberspark.Logger.log ~tag:"" "[OK]";
+
 ;;
