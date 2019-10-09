@@ -13,14 +13,15 @@
 	},
 
     "cc-bridge" : {
-        "type" : "container",
+        "btype" : "container",
         "execname" : "gcc.dockerfile",
         "path" : ".",
         "params" : [ "-v" ],
         "extexecname" : "gcc",
         "devenv" : "amd64",
         "arch" : "x86_32",
-        "vresion" : "3.4.5",
+        "cpu" : "generic",
+        "version" : "3.4.5",
         "namespace" : "container/amd64/x86_32/gcc/3.4.5",
 
         "params_prefix_to_obj" : [ "-c" ],
