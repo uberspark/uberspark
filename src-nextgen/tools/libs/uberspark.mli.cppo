@@ -26,6 +26,12 @@ module Config : sig
 
 end
 
+module Bridge : sig
+
+#include "uberspark_bridge.mli"  
+
+end
+
 
 
 module Manifest : sig
