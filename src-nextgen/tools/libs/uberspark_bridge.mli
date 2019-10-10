@@ -18,7 +18,7 @@ type bridge_hdr_t = {
 
 type cc_bridge_t = { 
 	mutable hdr : bridge_hdr_t;
-	mutable params_prefix_to_obj: string list;
-	mutable params_prefix_to_asm: string list;
-	mutable params_prefix_to_output: string list;
+	mutable params_prefix_to_obj: string;
+	mutable params_prefix_to_asm: string;
+	mutable params_prefix_to_output: string;
 }
