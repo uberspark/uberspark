@@ -51,6 +51,8 @@ let cc_bridge_settings : cc_bridge_t = {
 	params_prefix_to_output = "";
 };;
 
+let cc_bridge_settings_loaded = ref false;;
+
 
 let json_list_to_string_list
 	json_list = 
@@ -102,6 +104,8 @@ let load_from_file
 				cc_bridge_settings.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" cc_bridge_json);
 				cc_bridge_settings.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" cc_bridge_json);
 				cc_bridge_settings.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" cc_bridge_json);
+			
+				cc_bridge_settings_loaded := true;
 			end
 		;
 
