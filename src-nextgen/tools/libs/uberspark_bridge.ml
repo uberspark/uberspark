@@ -169,12 +169,12 @@ let store_settings_to_namespace
 				Printf.fprintf oc "\n\t\t\t\"path\" : \"%s\"," cc_bridge_settings.hdr.path;
 				Printf.fprintf oc "\n\t\t\t\"params\" : [ ";
 				let index = ref 0 in
-				while !index < ((List.length cc_bridge_settings.hdr.params)-2) do
+				while !index < ((List.length cc_bridge_settings.hdr.params)-1) do
 					Printf.fprintf oc "\"%s\", " (List.nth cc_bridge_settings.hdr.params !index);
 					index := !index + 1;
 				done;
 				if (List.length cc_bridge_settings.hdr.params) > 0 then
-					Printf.fprintf oc "\"%s\", " (List.nth cc_bridge_settings.hdr.params ((List.length cc_bridge_settings.hdr.params)-1));
+					Printf.fprintf oc "\"%s\" " (List.nth cc_bridge_settings.hdr.params ((List.length cc_bridge_settings.hdr.params)-1));
 				Printf.fprintf oc " ],";
 				Printf.fprintf oc "\n\t\t\t\"extexecname\" : \"%s\"," cc_bridge_settings.hdr.extexecname;
 				Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," cc_bridge_settings.hdr.devenv;
