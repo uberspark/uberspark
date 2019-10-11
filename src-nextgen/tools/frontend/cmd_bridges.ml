@@ -76,6 +76,22 @@ let cmd_bridges_opts_t =
   Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_filename)
 
 
+
+
+(* bridges create action *)
+let handler_bridges_action_create 
+  (copts : Commonopts.opts)
+  (cmd_bridges_opts: opts)
+  (path_ns : string option)
+  = 
+
+    (* perform common initialization *)
+    Commoninit.initialize copts;
+
+    `Ok()
+;;
+
+
 (* main handler for bridges command *)
 let handler_bridges 
   (copts : Commonopts.opts)
@@ -88,9 +104,7 @@ let handler_bridges
   match action with
     | `Create -> 
 
-      (* perform common initialization *)
-      Commoninit.initialize copts;
-      `Ok()
+      (handler_bridges_action_create copts cmd_bridges_opts path_ns)
 
 
     | `Dump ->
