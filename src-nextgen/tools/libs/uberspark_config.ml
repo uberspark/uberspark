@@ -43,6 +43,27 @@ let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
+let namespace_bridges = "uberspark/bridges";;
+
+let namespace_bridges_ar_bridge_name = "ar-bridge";;
+let namespace_bridges_as_bridge_name = "as-bridge";;
+let namespace_bridges_cc_bridge_name = "cc-bridge";;
+let namespace_bridges_ld_bridge_name = "ld-bridge";;
+let namespace_bridges_pp_bridge_name = "pp-bridge";;
+let namespace_bridges_vf_bridge_name = "vf-bridge";;
+let namespace_bridges_bldsys_bridge_name = "bldsys-bridge";;
+
+let namespace_bridges_ar_bridge = namespace_bridges ^ "/" ^ namespace_bridges_ar_bridge_name;;
+let namespace_bridges_as_bridge = namespace_bridges ^ "/" ^ namespace_bridges_as_bridge_name;;
+let namespace_bridges_cc_bridge = namespace_bridges ^ "/" ^ namespace_bridges_cc_bridge_name;;
+let namespace_bridges_ld_bridge = namespace_bridges ^ "/" ^ namespace_bridges_ld_bridge_name;;
+let namespace_bridges_pp_bridge = namespace_bridges ^ "/" ^ namespace_bridges_pp_bridge_name;;
+let namespace_bridges_vf_bridge = namespace_bridges ^ "/" ^ namespace_bridges_vf_bridge_name;;
+let namespace_bridges_bldsys_bridge = namespace_bridges ^ "/" ^ namespace_bridges_bldsys_bridge_name;;
+
+
+
+
 (*------------------------------------------------------------------------*)
 (* uobj/uobjcoll binary related configuration settings *)	
 (*------------------------------------------------------------------------*)

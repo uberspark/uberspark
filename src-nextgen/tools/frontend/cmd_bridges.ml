@@ -88,7 +88,55 @@ let handler_bridges_action_create
     (* perform common initialization *)
     Commoninit.initialize copts;
 
-    `Ok()
+    (* check to see if we have path_ns spcified *)
+    let l_path_ns = ref "" in
+    match path_ns with
+    | None -> `Error (true, "need $(i,PATH) to bridge definition file")
+    | Some sname -> 
+      begin
+          l_path_ns := sname;
+
+          (* load the bridge settings from the file *)
+          Uberspark.Bridges.load_from_file l_path_ns;
+
+          let bridgetypes = ref [] in 
+          
+          if cmd_bridges_opts.ar_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_ar_bridge_name ];
+          ;
+
+          if cmd_bridges_opts.as_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_as_bridge_name ];
+          ;
+
+          if cmd_bridges_opts.cc_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_cc_bridge_name ];
+          ;
+
+          if cmd_bridges_opts.ld_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_ld_bridge_name ];
+          ;
+
+          if cmd_bridges_opts.pp_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_pp_bridge_name ];
+          ;
+
+          if cmd_bridges_opts.vf_bridge then
+            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_vf_bridge_name ];
+          ;
+
+          if ( Length.bridgetypes == 0 ) then
+            bridgetypes := [ Uberspark.Config.namespace_bridges_ar_bridge_name 
+            
+            
+            ];
+          
+          else 
+          
+          ;
+
+         `Ok()
+      end
 ;;
 
 
