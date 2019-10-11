@@ -29,7 +29,7 @@ let cmd_bridges_opts_handler
     cc_bridge=cc_bridge;
     ld_bridge=ld_bridge;
     pp_bridge=pp_bridge;
-    vf_bridge=v_bridge;
+    vf_bridge=vf_bridge;
     output_filename=output_filename
   }
 ;;

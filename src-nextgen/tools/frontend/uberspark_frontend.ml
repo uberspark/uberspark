@@ -104,6 +104,7 @@ let cmd_bridges =
 	let action = [ 	"create", `Create; 
 					"dump", `Dump; 
 					"rebuild", `Rebuild;
+					"remove", `Remove;
 				] in
   	let doc = strf "The action to perform. $(docv) must be one of %s."
       (Arg.doc_alts_enum action) in
@@ -144,7 +145,7 @@ let cmd_bridges =
 		`Blocks manpage_sec_issues;
 		`S Manpage.s_exit_status;
 	] in
-  Term.(ret (const Cmd_bridges.handler_config $ Commonopts.opts_t $ Cmd_bridges.cmd_bridges_opts_t $ action $ path_ns )),
+  Term.(ret (const Cmd_bridges.handler_bridges $ Commonopts.opts_t $ Cmd_bridges.cmd_bridges_opts_t $ action $ path_ns )),
   Term.info "bridges" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
