@@ -99,10 +99,6 @@ let handler_bridges_action_create
           (* load the bridge settings from the file *)
           Uberspark.Bridge.load_from_file !l_path_ns;
 
-          Uberspark.Logger.log "ar=%B, as=%B, cc=%B, ld=%B, pp=%B, vf=%B" cmd_bridges_opts.ar_bridge
-              cmd_bridges_opts.as_bridge cmd_bridges_opts.cc_bridge cmd_bridges_opts.ld_bridge cmd_bridges_opts.pp_bridge
-              cmd_bridges_opts.vf_bridge;
-              
           let bridgetypes = ref [] in 
           
           if cmd_bridges_opts.ar_bridge then
@@ -138,8 +134,6 @@ let handler_bridges_action_create
             Uberspark.Config.namespace_bridges_vf_bridge_name; 
             ];
           
-          Uberspark.Logger.log "length of bridgetypes=%u" (List.length !bridgetypes);
-
           Uberspark.Bridge.store_settings_to_namespace !bridgetypes;
          `Ok()
       end
