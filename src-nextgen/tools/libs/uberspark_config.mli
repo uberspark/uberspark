@@ -32,13 +32,13 @@ val namespace_uobjslt_output_symbols_filename : string
 
 val namespace_bridges : string
 
-val namespace_bridges_ar_bridge_name : string;
-val namespace_bridges_as_bridge_name : string;
-val namespace_bridges_cc_bridge_name : string;
-val namespace_bridges_ld_bridge_name : string;
-val namespace_bridges_pp_bridge_name : string;
-val namespace_bridges_vf_bridge_name : string;
-val namespace_bridges_bldsys_bridge_name : string;
+val namespace_bridges_ar_bridge_name : string
+val namespace_bridges_as_bridge_name : string
+val namespace_bridges_cc_bridge_name : string
+val namespace_bridges_ld_bridge_name : string
+val namespace_bridges_pp_bridge_name : string
+val namespace_bridges_vf_bridge_name : string
+val namespace_bridges_bldsys_bridge_name : string
 
 
 val namespace_bridges_ar_bridge : string

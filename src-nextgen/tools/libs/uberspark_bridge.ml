@@ -138,11 +138,11 @@ let dump
 
 
 let store_settings_to_namespace
-	(bridgetypes: string list ) =
-	let retval = ref false in
-
+	(bridgetypes: string list )
+	: unit =
 
 	List.iter (fun (x) ->
+		Uberspark_logger.log "Iteration for: %s" x;
 		match x with 
 		| "cc-bridge" ->
 			let output_bridge_ns_path = Uberspark_config.namespace_root ^ !hdr_namespace ^ "/" ^ 
@@ -200,13 +200,11 @@ let store_settings_to_namespace
 				end
 			;
 
-			retval := true;
-
 		| _ ->
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid bridgetype '%s'" x;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid bridgetype '%s', ignoring" x;
 		;	
 		
 	) bridgetypes;
 
-	(!retval)
+	()
 ;;

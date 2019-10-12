@@ -97,44 +97,50 @@ let handler_bridges_action_create
           l_path_ns := sname;
 
           (* load the bridge settings from the file *)
-          Uberspark.Bridges.load_from_file l_path_ns;
+          Uberspark.Bridge.load_from_file !l_path_ns;
 
+          Uberspark.Logger.log "ar=%B, as=%B, cc=%B, ld=%B, pp=%B, vf=%B" cmd_bridges_opts.ar_bridge
+              cmd_bridges_opts.as_bridge cmd_bridges_opts.cc_bridge cmd_bridges_opts.ld_bridge cmd_bridges_opts.pp_bridge
+              cmd_bridges_opts.vf_bridge;
+              
           let bridgetypes = ref [] in 
           
           if cmd_bridges_opts.ar_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_ar_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_ar_bridge_name ];
+          
 
           if cmd_bridges_opts.as_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_as_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_as_bridge_name ];
+          
 
           if cmd_bridges_opts.cc_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_cc_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_cc_bridge_name ];
+          
 
           if cmd_bridges_opts.ld_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_ld_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_ld_bridge_name ];
+          
 
           if cmd_bridges_opts.pp_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_pp_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_pp_bridge_name ];
+          
 
           if cmd_bridges_opts.vf_bridge then
-            bridgetypes := bridgetypes @ [ Uberspark.Config.namespace_bridges_vf_bridge_name ];
-          ;
+            bridgetypes := !bridgetypes @ [ Uberspark.Config.namespace_bridges_vf_bridge_name ];
+          
 
-          if ( Length.bridgetypes == 0 ) then
-            bridgetypes := [ Uberspark.Config.namespace_bridges_ar_bridge_name 
-            
-            
+          if ( List.length !bridgetypes == 0 ) then
+            bridgetypes := [ Uberspark.Config.namespace_bridges_ar_bridge_name; 
+            Uberspark.Config.namespace_bridges_as_bridge_name; 
+            Uberspark.Config.namespace_bridges_cc_bridge_name; 
+            Uberspark.Config.namespace_bridges_ld_bridge_name; 
+            Uberspark.Config.namespace_bridges_pp_bridge_name; 
+            Uberspark.Config.namespace_bridges_vf_bridge_name; 
             ];
           
-          else 
-          
-          ;
+          Uberspark.Logger.log "length of bridgetypes=%u" (List.length !bridgetypes);
 
+          Uberspark.Bridge.store_settings_to_namespace !bridgetypes;
          `Ok()
       end
 ;;
