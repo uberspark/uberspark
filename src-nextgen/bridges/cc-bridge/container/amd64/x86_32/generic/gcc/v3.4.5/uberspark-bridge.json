@@ -23,7 +23,7 @@
             "arch" : "x86_32",
             "cpu" : "generic",
             "version" : "3.4.5",
-            "namespace" : "container/amd64/x86_32/gcc/generic/3.4.5"
+            "namespace" : "container/amd64/x86_32/generic/gcc/3.4.5"
         },   
 
         "params_prefix_to_obj" : "-c",

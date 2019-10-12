@@ -3,7 +3,8 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 open Unix
-		
+open FileUtil
+
 	let file_copy input_name output_name =
 		let buffer_size = 8192 in
 		let buffer = Bytes.create buffer_size in
@@ -142,6 +143,12 @@ open Unix
 
 		(!retval, !retecode, !reterrmsg)
 	;;
+
+
+	let mkdir_v2 ?(parent = true) path perm =
+		FileUtil.mkdir ~parent:parent ~mode:perm path;
+	;;
+
 
 
 	let rmdir path =

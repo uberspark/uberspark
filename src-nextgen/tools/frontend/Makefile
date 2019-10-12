@@ -7,6 +7,7 @@
 ###### variables
 
 UBERSPARK_FRONTEND_EXT_PACKAGES := -package unix
+UBERSPARK_FRONTEND_EXT_PACKAGES := -package fileutils
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package str 
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package yojson 
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package cmdliner

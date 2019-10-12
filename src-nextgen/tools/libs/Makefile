@@ -7,6 +7,7 @@
 ###### variables
 
 UBERSPARK_LIB_EXT_PACKAGES := -package unix
+UBERSPARK_LIB_EXT_PACKAGES := -package fileutils
 UBERSPARK_LIB_EXT_PACKAGES += -package str 
 UBERSPARK_LIB_EXT_PACKAGES += -package yojson 
 
