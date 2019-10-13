@@ -140,6 +140,19 @@ let handler_bridges_action_create
 ;;
 
 
+(* bridges dump action *)
+let handler_bridges_action_dump 
+  (copts : Commonopts.opts)
+  (cmd_bridges_opts: opts)
+  (path_ns : string option)
+  = 
+
+    (* perform common initialization *)
+    Commoninit.initialize copts;
+    `Ok()
+;;
+
+
 (* main handler for bridges command *)
 let handler_bridges 
   (copts : Commonopts.opts)
@@ -157,9 +170,7 @@ let handler_bridges
 
     | `Dump ->
 
-      (* perform common initialization *)
-      Commoninit.initialize copts;
-      `Ok()
+      (handler_bridges_action_dump copts cmd_bridges_opts path_ns)
 
 
     | `Rebuild -> 
