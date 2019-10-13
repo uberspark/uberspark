@@ -165,17 +165,12 @@ let create_from_existing_ns
 	hdr_namespace := output_config_ns;
 
 	(* make the output config directory *)
-	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o777 in
-	if(rval == true) then 
-		begin
-			retval := true;
-			reterrmsg := "";
-			(* dump the config namespace *)
-			dump output_config_json_pathname;
-		end
-	else
-		reterrmsg := remsg;
-	;
+	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
+
+	retval := true;
+	reterrmsg := "";
+	(* dump the config namespace *)
+	dump output_config_json_pathname;
 
 	(!retval, !reterrmsg)
 ;;
@@ -191,17 +186,12 @@ let create_from_file
 	let output_config_dir = (namespace_root ^ output_config_ns) in
 	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
 
-	let (rval, recode, remsg) = Uberspark_osservices.mkdir output_config_dir 0o777 in
-	if(rval == true) then 
-		begin
-			retval := true;
-			reterrmsg := "";
-			Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
-		end
-	else
-		reterrmsg := remsg;
-	;
+	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
 
+	retval := true;
+	reterrmsg := "";
+	Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
+	
 	(!retval, !reterrmsg)
 ;;
 

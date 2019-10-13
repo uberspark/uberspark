@@ -4,9 +4,7 @@ open FileUtilMode
 
 val abspath : string -> bool * string
 
-val mkdir : string -> Unix.file_perm ->  bool * Unix.error * string
-
-val mkdir_v2 :
+val mkdir :
            ?parent:bool ->
            FilePath.filename ->
            [< `Octal of Unix.file_perm | `Symbolic of FileUtilMode.t ] ->

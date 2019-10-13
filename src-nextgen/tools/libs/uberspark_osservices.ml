@@ -129,23 +129,8 @@ open FileUtil
 	;;
 
 
-	let mkdir path perm =
-		let retval = ref true in
-		let retecode = ref Unix.EFAULT in
-		let reterrmsg = ref "" in
-		try
-    	Unix.mkdir path perm;
-		with Unix.Unix_error (ecode, fname, fparam) -> 
-				reterrmsg := Unix.error_message ecode;
-				retecode := ecode;
-				retval := false;
-		;
 
-		(!retval, !retecode, !reterrmsg)
-	;;
-
-
-	let mkdir_v2 ?(parent = true) path perm =
+	let mkdir ?(parent = true) path perm =
 		FileUtil.mkdir ~parent:parent ~mode:perm path;
 	;;
 
