@@ -204,8 +204,8 @@ let store_settings_to_namespace
 				end
 			;
 
-		| _ ->
-			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unknown bridgetype '%s', ignoring" x;
+		| _ -> let dummy = ref 0 in dummy := 0;
+			(*Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unknown bridgetype '%s', ignoring" x;*)
 		;	
 		
 	) bridgetypes;
