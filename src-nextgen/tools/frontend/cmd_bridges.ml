@@ -11,7 +11,7 @@ type opts = {
   ld_bridge: bool;
   pp_bridge: bool;
   vf_bridge: bool;
-  output_filename: string option;
+  output_directory: string option;
 };;
 
 (* fold all bridges options into type opts *)
@@ -22,7 +22,7 @@ let cmd_bridges_opts_handler
   (ld_bridge: bool)
   (pp_bridge: bool)
   (vf_bridge: bool)
-  (output_filename: string option)
+  (output_directory: string option)
   : opts = 
   { ar_bridge=ar_bridge;
     as_bridge=as_bridge;
@@ -30,7 +30,7 @@ let cmd_bridges_opts_handler
     ld_bridge=ld_bridge;
     pp_bridge=pp_bridge;
     vf_bridge=vf_bridge;
-    output_filename=output_filename
+    output_directory=output_directory
   }
 ;;
 
@@ -68,12 +68,12 @@ let cmd_bridges_opts_t =
   Arg.(value & flag & info ["vf"; "vf-bridge"] ~doc ~docs)
   in
 
-  let output_filename =
-    let doc = "Select output filename, $(docv)."  in
-      Arg.(value & opt (some string) None & info ["o"; "output-filename"] ~docs ~docv:"NAME" ~doc)
+  let output_directory =
+    let doc = "Select output directory, $(docv)."  in
+      Arg.(value & opt (some string) None & info ["o"; "output-directory"] ~docs ~docv:"DIR" ~doc)
   in
 
-  Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_filename)
+  Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_directory)
 
 
 
@@ -145,11 +145,53 @@ let handler_bridges_action_dump
   (copts : Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
-  = 
+  : [> `Error of bool * string | `Ok of unit ] = 
+
+    let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
     (* perform common initialization *)
     Commoninit.initialize copts;
-    `Ok()
+
+    (* check to see if we have path_ns spcified *)
+    let l_path_ns = ref "" in
+    let bridge_ns_prefix = ref "" in
+    match path_ns with
+    | None -> 
+      retval := `Error (true, "need bridge $(i,NAMESPACE) argument");
+      (!retval)
+    | Some sname -> 
+      begin
+          l_path_ns := sname;
+          let action_options_unspecified = ref false in 
+(*
+          if cmd_bridges_opts.ar_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge;
+          else if cmd_bridges_opts.as_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge;
+          else if cmd_bridges_opts.cc_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge;
+          else if cmd_bridges_opts.ld_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge;
+          else if cmd_bridges_opts.pp_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge;
+          else if cmd_bridges_opts.vf_bridge then
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge;
+          else 
+            action_options_unspecified := true;
+ *)                   
+
+(*              `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)")
+
+
+          (* dump the bridge configuration and container files if any *)          
+          let bride_ns_path = (bridge_ns_prefix ^ "/" ^ l_path_ns) in 
+          Uberspark.Bridge.dump bridge_ns_path cmd_bridges_opts.output_directory;
+*)
+        (!retval)
+      end
+    
+
+    
 ;;
 
 

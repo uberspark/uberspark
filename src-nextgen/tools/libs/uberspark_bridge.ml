@@ -132,11 +132,11 @@ let load
 
 
 let dump
-	(bridge_ns : string)
-	(output_file_name : string)
+	(bridge_ns_path : string)
+	(output_directory : string)
 	=
-	let bridge_ns_json_path = Uberspark_config.namespace_root ^ bridge_ns ^ "/uberspark-bridge.json" in
-	Uberspark_osservices.file_copy bridge_ns_json_path output_file_name;
+	let bridge_ns_json_path = Uberspark_config.namespace_root ^ bridge_ns_path ^ "/uberspark-bridge.json" in
+	Uberspark_osservices.file_copy bridge_ns_json_path output_directory;
 	()
 ;;
 
