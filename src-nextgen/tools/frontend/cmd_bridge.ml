@@ -16,7 +16,7 @@ type opts = {
 };;
 
 (* fold all bridges options into type opts *)
-let cmd_bridges_opts_handler 
+let cmd_bridge_opts_handler 
   (ar_bridge: bool)
   (as_bridge: bool)
   (cc_bridge: bool)
@@ -38,7 +38,7 @@ let cmd_bridges_opts_handler
 ;;
 
 (* handle bridges command options *)
-let cmd_bridges_opts_t =
+let cmd_bridge_opts_t =
   let docs = "ACTION OPTIONS" in
   
   let ar_bridge =
@@ -82,7 +82,7 @@ let cmd_bridges_opts_t =
   in
 
 
-  Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_directory $ bridge_exectype)
+  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_directory $ bridge_exectype)
 
 
 
