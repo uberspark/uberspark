@@ -138,7 +138,7 @@ let cmd_bridges =
 			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
      	`I ("$(b,remove)",
         	"remove a bridge configuration namespace specified by the $(i,NAMESPACE) argument.
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bridge-exectype)");
 	 	`S "ACTION OPTIONS";
 	  	`P "These options qualify the aforementioned actions.";
 		`Blocks manpage_sec_common_options;

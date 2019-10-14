@@ -134,6 +134,10 @@ open FileUtil
 		FileUtil.mkdir ~parent:parent ~mode:perm path;
 	;;
 
+	let rmdir_recurse pathlist =
+    	FileUtil.rm ~recurse:true pathlist;
+		()
+	;;
 
 
 	let rmdir path =

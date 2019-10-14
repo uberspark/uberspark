@@ -155,6 +155,21 @@ let dump
 ;;
 
 
+
+let remove
+	(bridge_ns_path : string)
+	=
+	let full_bridge_ns_path = Uberspark_config.namespace_root ^ bridge_ns_path in
+	
+	(* remove the path and files within *)
+	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
+	()
+;;
+
+
+
+
+
 let store_settings_to_namespace
 	(bridgetypes: string list )
 	: unit =

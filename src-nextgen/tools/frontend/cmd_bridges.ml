@@ -253,6 +253,100 @@ let handler_bridges_action_dump
 ;;
 
 
+
+(* bridges remove action *)
+let handler_bridges_action_remove 
+  (copts : Commonopts.opts)
+  (cmd_bridges_opts: opts)
+  (path_ns : string option)
+  : [> `Error of bool * string | `Ok of unit ] = 
+
+    let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
+
+    (* perform common initialization *)
+    Commoninit.initialize copts;
+
+    let l_path_ns = ref "" in
+    let l_bridge_exectype = ref "" in
+
+    let bridge_ns_prefix = ref "" in
+
+    match path_ns with
+    | None -> 
+        begin
+          retval := `Error (true, "need bridge $(i,NAMESPACE) argument");
+          (!retval)
+        end
+
+    | Some path_ns_qname -> 
+        begin
+          l_path_ns := path_ns_qname;
+
+                match cmd_bridges_opts.bridge_exectype with
+                | None -> 
+                    begin
+                      retval := `Error (true, "need $(b,--bridge-exectype) action option");
+                      (!retval)
+                    end
+
+                | Some bridge_exectype_qname -> 
+                    begin
+                      l_bridge_exectype := bridge_exectype_qname;
+
+                      let action_options_unspecified = ref false in 
+
+                      if cmd_bridges_opts.ar_bridge then begin            
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge; end
+                      else if cmd_bridges_opts.as_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge; end
+                      else if cmd_bridges_opts.cc_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge; end
+                      else if cmd_bridges_opts.ld_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge; end
+                      else if cmd_bridges_opts.pp_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge; end
+                      else if cmd_bridges_opts.vf_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge; end
+                      else begin
+                        action_options_unspecified := true; end
+                      ;                   
+
+                      if(!l_bridge_exectype = "container" || !l_bridge_exectype = "native") then
+                        begin
+
+                          if (!action_options_unspecified) then
+                            begin
+                              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+                            end
+                          else
+                            begin
+                              (* remove the bridge configuration and container files if any *)          
+                              let bridge_ns_path = (!bridge_ns_prefix ^ "/" ^ !l_bridge_exectype ^ 
+                              "/" ^ !l_path_ns) in 
+                                Uberspark.Bridge.remove bridge_ns_path;
+                              Uberspark.Logger.log "Successfully removed bridge '%s'" bridge_ns_path;
+                            end
+                          ;              
+
+                        end
+                      else
+                        begin
+                          retval := `Error (true, "--bridge-type needs to be 'container' or 'native'");
+                        end
+                      ;
+
+
+                      (!retval)
+
+                    end
+        end
+
+;;
+
+
+
+
+
 (* main handler for bridges command *)
 let handler_bridges 
   (copts : Commonopts.opts)
@@ -278,8 +372,7 @@ let handler_bridges
 
     | `Remove -> 
 
-      (* perform common initialization *)
-      Commoninit.initialize copts;
+      retval := handler_bridges_action_remove copts cmd_bridges_opts path_ns;
   ;
 
 

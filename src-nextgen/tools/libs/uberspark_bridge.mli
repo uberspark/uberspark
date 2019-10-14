@@ -28,3 +28,5 @@ val load_from_file : string -> bool
 val store_settings_to_namespace: string list -> unit
 
 val dump : string -> ?bridge_exectype:string -> string -> unit
+
+val remove : string -> unit
