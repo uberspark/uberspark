@@ -201,36 +201,30 @@ let handler_bridges
   (cmd_bridges_opts: opts)
   (action : [> `Create | `Dump | `Rebuild | `Remove] as 'a)
   (path_ns : string option)
-  = 
+  : [> `Error of bool * string | `Ok of unit ] = 
 
-  let retval = 
+  let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
+
   match action with
     | `Create -> 
-
-      (handler_bridges_action_create copts cmd_bridges_opts path_ns)
-
+      retval := handler_bridges_action_create copts cmd_bridges_opts path_ns;
 
     | `Dump ->
 
-      (handler_bridges_action_dump copts cmd_bridges_opts path_ns)
-
+      retval := handler_bridges_action_dump copts cmd_bridges_opts path_ns;
 
     | `Rebuild -> 
  
       (* perform common initialization *)
       Commoninit.initialize copts;
-      `Ok()
- 
-
 
     | `Remove -> 
 
       (* perform common initialization *)
       Commoninit.initialize copts;
-      `Ok()
-        
-  in
+  ;
 
-  retval
+
+  (!retval)
 
 ;;
