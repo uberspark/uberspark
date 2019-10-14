@@ -15,10 +15,10 @@
     "cc-bridge" : {
         "hdr": {
             "btype" : "container",
-            "execname" : "gcc.dockerfile",
+            "execname" : "gcc",
             "path" : ".",
             "params" : [ "-v" ],
-            "extexecname" : "gcc",
+            "container_fname" : "gcc.dockerfile",
             "devenv" : "amd64",
             "arch" : "x86_32",
             "cpu" : "generic",

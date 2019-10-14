@@ -10,7 +10,7 @@ type bridge_hdr_t = {
 	mutable execname: string;
 	mutable path: string;
 	mutable params: string list;
-	mutable extexecname: string;
+	mutable container_fname: string;
 	mutable devenv: string;
 	mutable arch: string;
 	mutable cpu: string;
@@ -39,7 +39,7 @@ let cc_bridge_settings : cc_bridge_t = {
 			execname = "";
 			path = "";
 			params = [];
-			extexecname = "";
+			container_fname = "";
 			devenv = "";
 			arch = "";
 			cpu = "";
@@ -71,7 +71,7 @@ let load_from_file
 	(bridge_ns_json_file : string)
 	: bool =
 	let retval = ref false in
-	Uberspark_logger.log "bridge_ns_json_file=%s" bridge_ns_json_file;
+	Uberspark_logger.log "loading bridge settings from file: %s" bridge_ns_json_file;
 
 	try
 		let bridge_json = Yojson.Basic.from_file bridge_ns_json_file in
@@ -94,7 +94,7 @@ let load_from_file
 					cc_bridge_settings.hdr.execname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "execname" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.path <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "path" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.params <-	json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "params" cc_bridge_json_hdr));
-					cc_bridge_settings.hdr.extexecname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "extexecname" cc_bridge_json_hdr);
+					cc_bridge_settings.hdr.container_fname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "container_fname" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.devenv <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "devenv" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.arch <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.cpu <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" cc_bridge_json_hdr);
@@ -154,7 +154,6 @@ let store_settings_to_namespace
 			let output_bridge_json_file = output_bridge_ns_path ^ "/uberspark-bridge.json" in
 			
 			(* make the namespace directory *)
-			Uberspark_logger.log "Directory: %s" output_bridge_ns_path;
 			Uberspark_osservices.mkdir ~parent:true output_bridge_ns_path (`Octal 0o0777);
 
 			let oc = open_out output_bridge_json_file in
@@ -185,7 +184,7 @@ let store_settings_to_namespace
 				if (List.length cc_bridge_settings.hdr.params) > 0 then
 					Printf.fprintf oc "\"%s\" " (List.nth cc_bridge_settings.hdr.params ((List.length cc_bridge_settings.hdr.params)-1));
 				Printf.fprintf oc " ],";
-				Printf.fprintf oc "\n\t\t\t\"extexecname\" : \"%s\"," cc_bridge_settings.hdr.extexecname;
+				Printf.fprintf oc "\n\t\t\t\"container_fname\" : \"%s\"," cc_bridge_settings.hdr.container_fname;
 				Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," cc_bridge_settings.hdr.devenv;
 				Printf.fprintf oc "\n\t\t\t\"arch\" : \"%s\"," cc_bridge_settings.hdr.arch;
 				Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"," cc_bridge_settings.hdr.version;
@@ -199,10 +198,12 @@ let store_settings_to_namespace
 				Printf.fprintf oc "\n}";
 			close_out oc;	
 
+			Uberspark_logger.log "created cc-bridge namespace: %s" output_bridge_ns_path;
+
 			(* check if bridge type is container, if so store dockerfile *)
 			if cc_bridge_settings.hdr.btype = "container" then
 				begin
-					let input_bridge_dockerfile = cc_bridge_settings.hdr.execname in 
+					let input_bridge_dockerfile = cc_bridge_settings.hdr.container_fname in 
 					let output_bridge_dockerfile = output_bridge_ns_path ^ "/uberspark-bridge.Dockerfile" in 
 						Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 				end

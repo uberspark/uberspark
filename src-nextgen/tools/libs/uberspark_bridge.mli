@@ -8,7 +8,7 @@ type bridge_hdr_t = {
 	mutable execname: string;
 	mutable path: string;
 	mutable params: string list;
-	mutable extexecname: string;
+	mutable container_fname: string;
 	mutable devenv: string;
 	mutable arch: string;
 	mutable cpu: string;
