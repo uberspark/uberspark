@@ -26,3 +26,5 @@ type cc_bridge_t = {
 val load_from_file : string -> bool
 
 val store_settings_to_namespace: string list -> unit
+
+val dump : string -> string -> unit

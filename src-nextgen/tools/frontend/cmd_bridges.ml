@@ -154,44 +154,66 @@ let handler_bridges_action_dump
 
     (* check to see if we have path_ns spcified *)
     let l_path_ns = ref "" in
+    let l_output_directory = ref "" in
     let bridge_ns_prefix = ref "" in
+
     match path_ns with
     | None -> 
-      retval := `Error (true, "need bridge $(i,NAMESPACE) argument");
-      (!retval)
-    | Some sname -> 
-      begin
-          l_path_ns := sname;
-          let action_options_unspecified = ref false in 
-(*
-          if cmd_bridges_opts.ar_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge;
-          else if cmd_bridges_opts.as_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge;
-          else if cmd_bridges_opts.cc_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge;
-          else if cmd_bridges_opts.ld_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge;
-          else if cmd_bridges_opts.pp_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge;
-          else if cmd_bridges_opts.vf_bridge then
-            bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge;
-          else 
-            action_options_unspecified := true;
- *)                   
+        begin
+          retval := `Error (true, "need bridge $(i,NAMESPACE) argument");
+          (!retval)
+        end
 
-(*              `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)")
+    | Some path_ns_qname -> 
+        begin
+          l_path_ns := path_ns_qname;
 
+          match cmd_bridges_opts.output_directory with
+          | None -> 
+              begin
+                retval := `Error (true, "need $(b,--output-directory) action option");
+                (!retval)
+              end
 
-          (* dump the bridge configuration and container files if any *)          
-          let bride_ns_path = (bridge_ns_prefix ^ "/" ^ l_path_ns) in 
-          Uberspark.Bridge.dump bridge_ns_path cmd_bridges_opts.output_directory;
-*)
-        (!retval)
-      end
-    
+          | Some output_directory_qname -> 
+              begin
+                l_output_directory := output_directory_qname;
 
-    
+                let action_options_unspecified = ref false in 
+
+                if cmd_bridges_opts.ar_bridge then begin            
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge; end
+                else if cmd_bridges_opts.as_bridge then begin
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge; end
+                else if cmd_bridges_opts.cc_bridge then begin
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge; end
+                else if cmd_bridges_opts.ld_bridge then begin
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge; end
+                else if cmd_bridges_opts.pp_bridge then begin
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge; end
+                else if cmd_bridges_opts.vf_bridge then begin
+                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge; end
+                else begin
+                  action_options_unspecified := true; end
+                ;                   
+
+                if (!action_options_unspecified) then
+                  begin
+                    retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+                  end
+                else
+                  begin
+                    (* dump the bridge configuration and container files if any *)          
+                    let bridge_ns_path = (!bridge_ns_prefix ^ "/" ^ !l_path_ns) in 
+                      Uberspark.Bridge.dump bridge_ns_path !l_output_directory;
+                  end
+                ;              
+
+                (!retval)
+
+              end
+        end
+
 ;;
 
 
