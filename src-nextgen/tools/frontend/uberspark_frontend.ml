@@ -132,7 +132,7 @@ let cmd_bridges =
 			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
     	`I ("$(b,dump)",
         	"store a bridge configuration specified by the $(i,NAMESPACE) argument to the specified output directory. 
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--output-directory)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,--bridge-exectype), and $(b,--output-directory)");
     	`I ("$(b,rebuild)",
         	"rebuild a bridge specified by the $(i,NAMESPACE) argument; only valid for bridges backed by containers. 
 			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");

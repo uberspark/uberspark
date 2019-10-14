@@ -45,6 +45,10 @@ let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 let namespace_bridges = "uberspark/bridges";;
 
+let namespace_bridges_json_filename = "uberspark-bridge.json";;
+let namespace_bridges_container_filename = "uberspark-bridge.Dockerfile";;
+
+
 let namespace_bridges_ar_bridge_name = "ar-bridge";;
 let namespace_bridges_as_bridge_name = "as-bridge";;
 let namespace_bridges_cc_bridge_name = "cc-bridge";;

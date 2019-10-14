@@ -12,6 +12,7 @@ type opts = {
   pp_bridge: bool;
   vf_bridge: bool;
   output_directory: string option;
+  bridge_exectype : string option;
 };;
 
 (* fold all bridges options into type opts *)
@@ -23,6 +24,7 @@ let cmd_bridges_opts_handler
   (pp_bridge: bool)
   (vf_bridge: bool)
   (output_directory: string option)
+  (bridge_exectype : string option)
   : opts = 
   { ar_bridge=ar_bridge;
     as_bridge=as_bridge;
@@ -30,7 +32,8 @@ let cmd_bridges_opts_handler
     ld_bridge=ld_bridge;
     pp_bridge=pp_bridge;
     vf_bridge=vf_bridge;
-    output_directory=output_directory
+    output_directory=output_directory;
+    bridge_exectype=bridge_exectype;
   }
 ;;
 
@@ -73,7 +76,13 @@ let cmd_bridges_opts_t =
       Arg.(value & opt (some string) None & info ["o"; "output-directory"] ~docs ~docv:"DIR" ~doc)
   in
 
-  Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_directory)
+  let bridge_exectype =
+    let doc = "Select bridge execution $(docv)."  in
+      Arg.(value & opt (some string) None & info ["bet"; "bridge-exectype"] ~docs ~docv:"TYPE" ~doc)
+  in
+
+
+  Term.(const cmd_bridges_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ output_directory $ bridge_exectype)
 
 
 
@@ -155,6 +164,8 @@ let handler_bridges_action_dump
     (* check to see if we have path_ns spcified *)
     let l_path_ns = ref "" in
     let l_output_directory = ref "" in
+    let l_bridge_exectype = ref "" in
+
     let bridge_ns_prefix = ref "" in
 
     match path_ns with
@@ -179,38 +190,63 @@ let handler_bridges_action_dump
               begin
                 l_output_directory := output_directory_qname;
 
-                let action_options_unspecified = ref false in 
+                match cmd_bridges_opts.bridge_exectype with
+                | None -> 
+                    begin
+                      retval := `Error (true, "need $(b,--bridge-exectype) action option");
+                      (!retval)
+                    end
 
-                if cmd_bridges_opts.ar_bridge then begin            
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge; end
-                else if cmd_bridges_opts.as_bridge then begin
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge; end
-                else if cmd_bridges_opts.cc_bridge then begin
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge; end
-                else if cmd_bridges_opts.ld_bridge then begin
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge; end
-                else if cmd_bridges_opts.pp_bridge then begin
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge; end
-                else if cmd_bridges_opts.vf_bridge then begin
-                  bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge; end
-                else begin
-                  action_options_unspecified := true; end
-                ;                   
+                | Some bridge_exectype_qname -> 
+                    begin
+                      l_bridge_exectype := bridge_exectype_qname;
 
-                if (!action_options_unspecified) then
-                  begin
-                    retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
-                  end
-                else
-                  begin
-                    (* dump the bridge configuration and container files if any *)          
-                    let bridge_ns_path = (!bridge_ns_prefix ^ "/" ^ !l_path_ns) in 
-                      Uberspark.Bridge.dump bridge_ns_path !l_output_directory;
-                  end
-                ;              
+                      let action_options_unspecified = ref false in 
 
-                (!retval)
+                      if cmd_bridges_opts.ar_bridge then begin            
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge; end
+                      else if cmd_bridges_opts.as_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge; end
+                      else if cmd_bridges_opts.cc_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge; end
+                      else if cmd_bridges_opts.ld_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge; end
+                      else if cmd_bridges_opts.pp_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge; end
+                      else if cmd_bridges_opts.vf_bridge then begin
+                        bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge; end
+                      else begin
+                        action_options_unspecified := true; end
+                      ;                   
 
+                      if(!l_bridge_exectype = "container" || !l_bridge_exectype = "native") then
+                        begin
+
+                          if (!action_options_unspecified) then
+                            begin
+                              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+                            end
+                          else
+                            begin
+                              (* dump the bridge configuration and container files if any *)          
+                              let bridge_ns_path = (!bridge_ns_prefix ^ "/" ^ !l_bridge_exectype ^ 
+                              "/" ^ !l_path_ns) in 
+                                Uberspark.Bridge.dump bridge_ns_path ~bridge_exectype:!l_bridge_exectype !l_output_directory;
+                              Uberspark.Logger.log "Successfully dumped bridge definitions to directory: '%s'" !l_output_directory;
+                            end
+                          ;              
+
+                        end
+                      else
+                        begin
+                          retval := `Error (true, "--bridge-type needs to be 'container' or 'native'");
+                        end
+                      ;
+
+
+                      (!retval)
+
+                    end
               end
         end
 

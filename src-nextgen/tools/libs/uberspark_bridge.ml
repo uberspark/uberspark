@@ -133,11 +133,24 @@ let load
 
 let dump
 	(bridge_ns_path : string)
+	?(bridge_exectype = "container")
 	(output_directory : string)
 	=
-	let src_bridge_json_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ "/uberspark-bridge.json" in
-	let dst_json_filename = output_directory ^ "/uberspark-bridge.json" in
+	let src_bridge_json_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ "/" ^
+			Uberspark_config.namespace_bridges_json_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_json_filename in
+	let src_bridge_container_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ 
+			"/" ^ Uberspark_config.namespace_bridges_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_container_filename in
+	
+	(* copy json file *)
 	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
+
+	(* if container, then dump container file as well *)
+	if(bridge_exectype = "container") then
+		Uberspark_osservices.file_copy src_bridge_container_filename dst_container_filename;
+	;
+
 	()
 ;;
 

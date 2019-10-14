@@ -32,6 +32,9 @@ val namespace_uobjslt_output_symbols_filename : string
 
 val namespace_bridges : string
 
+val namespace_bridges_json_filename : string
+val namespace_bridges_container_filename : string
+
 val namespace_bridges_ar_bridge_name : string
 val namespace_bridges_as_bridge_name : string
 val namespace_bridges_cc_bridge_name : string
