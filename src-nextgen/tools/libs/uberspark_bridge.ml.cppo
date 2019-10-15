@@ -178,6 +178,35 @@ let remove
 
 
 
+let build
+	(bridgetypes: string list )
+	: unit =
+
+	List.iter (fun (x) ->
+		match x with 
+		|	"cc-bridge" ->
+	
+			if cc_bridge_settings.hdr.btype = "container" then
+				begin
+					Uberspark_logger.log "building cc-bridge: %s" cc_bridge_settings.hdr.namespace;
+					Uberspark_logger.log "cc-bridge build success!";
+				end
+			else
+				begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Warn "ignoring build command for 'native' bridge";
+				end
+			;
+
+		| _ -> let dummy = ref 0 in dummy := 0;
+			(*Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unknown bridgetype '%s', ignoring" x;*)
+		;	
+		
+	) bridgetypes;
+
+	()
+;;
+
+
 
 
 let store_settings_to_namespace
