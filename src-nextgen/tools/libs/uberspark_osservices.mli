@@ -26,4 +26,6 @@ val symlink : bool -> string -> string -> unit
     
 val exec_process_withlog :
            string ->
-           string list -> bool -> string -> int * bool * string ref list
+           string list -> 
+           ?log_lvl:Uberspark_logger.log_level -> 
+           ?stag:string -> int * bool * string ref list

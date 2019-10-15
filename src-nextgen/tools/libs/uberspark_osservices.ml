@@ -50,7 +50,13 @@ open FileUtil
 
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
-	let exec_process_withlog p_name cmdline verbose verbose_mod_tag =
+	let exec_process_withlog 
+		(p_name : string)
+		(cmdline : string list)
+		?(log_lvl = Uberspark_logger.Info)
+		?(stag = "")
+		: int * bool * string ref list =
+
 		let readme, writeme = Unix.pipe () in
 		let pid = Unix.create_process
 			p_name (Array.of_list ([p_name] @ cmdline))
@@ -65,10 +71,8 @@ open FileUtil
 	    try
 	      while true do
 					p_singleoutputline := input_line in_channel;
-					if verbose then
-						Uberspark_logger.logf verbose_mod_tag Uberspark_logger.Info "%s" !p_singleoutputline;
-											
-					p_output := p_singleoutputline :: !p_output 
+					Uberspark_logger.log ~lvl:log_lvl ~stag:stag "%s" !p_singleoutputline;
+					p_output :=  !p_output @ [ p_singleoutputline ]; 
 		    done
 	    with End_of_file -> 
 				match	(Unix.waitpid [] pid) with
@@ -84,7 +88,7 @@ open FileUtil
 	  end;
 	
 		Unix.close readme;
-		(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
+		(!p_exitstatus, !p_exitsignal, !p_output)
 	;;
 
 
