@@ -9,7 +9,8 @@
 
 let build_image 
     (bridge_container_path : string)
-    (bridge_ns: string)=
+    (bridge_ns: string)
+    : int =
     
     let bridge_container_filepath = bridge_container_path ^ "/" ^
         Uberspark_config.namespace_bridges_container_filename in
@@ -25,7 +26,7 @@ let build_image
 
         let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
                 ~stag:"docker" "docker" !cmdline in
-		()
+		(r_exitcode)
 ;;
 
 

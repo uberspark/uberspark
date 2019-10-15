@@ -1,4 +1,4 @@
-FROM amd64/alpine-3.10.2
+FROM ocaml/opam2:alpine-3.9-opam
 MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 
 # runtime arguments

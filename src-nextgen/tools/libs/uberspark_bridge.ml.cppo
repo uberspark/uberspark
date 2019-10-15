@@ -189,7 +189,19 @@ let build
 			if cc_bridge_settings.hdr.btype = "container" then
 				begin
 					Uberspark_logger.log "building cc-bridge: %s" cc_bridge_settings.hdr.namespace;
-					Uberspark_logger.log "cc-bridge build success!";
+					let bridge_ns = Uberspark_config.namespace_bridges_cc_bridge ^ "/" ^
+						cc_bridge_settings.hdr.namespace in
+
+					let bridge_container_path = Uberspark_config.namespace_root ^ bridge_ns in
+
+					if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
+						Uberspark_logger.log "cc-bridge build success!"; end
+					else begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build cc-bridge!"; 
+						ignore (exit 1);
+					end
+					;
+												
 				end
 			else
 				begin

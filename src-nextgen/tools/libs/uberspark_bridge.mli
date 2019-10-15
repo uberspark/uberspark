@@ -25,7 +25,7 @@ type cc_bridge_t = {
 
 module Container : sig
 
-val build_image : string -> string -> unit
+val build_image : string -> string -> int
 
 val list_images : string -> unit 
 
