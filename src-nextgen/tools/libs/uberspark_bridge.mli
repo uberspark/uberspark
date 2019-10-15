@@ -40,6 +40,8 @@ end
 
 val load_from_file : string -> bool
 
+val load : string -> bool
+
 val store_settings_to_namespace: string list -> unit
 
 val build: string list -> unit

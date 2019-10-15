@@ -264,8 +264,8 @@ let handler_bridges_action_dump
 
 ;;
 
-(* bridges rebuild action *)
-let handler_bridges_action_rebuild 
+(* bridges config action *)
+let handler_bridges_action_config 
   (copts : Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
@@ -276,10 +276,72 @@ let handler_bridges_action_rebuild
     (* perform common initialization *)
     Commoninit.initialize copts;
 
-    Uberspark.Bridge.Container.list_images "";
-    
-    (!retval)
+    let l_path_ns = ref "" in
+    let bridge_ns_prefix = ref "" in
+    let bridge_type = ref [] in 
+
+    match path_ns with
+    | None -> 
+        begin
+          retval := `Error (true, "need bridge $(i,NAMESPACE) argument");
+          (!retval)
+        end
+
+    | Some path_ns_qname -> 
+        begin
+          l_path_ns := path_ns_qname;
+
+          let action_options_unspecified = ref false in 
+
+          if cmd_bridges_opts.ar_bridge then begin            
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ar_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_ar_bridge_name ]; end
+          else if cmd_bridges_opts.as_bridge then begin
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_as_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_as_bridge_name ]; end
+          else if cmd_bridges_opts.cc_bridge then begin
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_cc_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_cc_bridge_name ]; end
+          else if cmd_bridges_opts.ld_bridge then begin
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_ld_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_ld_bridge_name ]; end
+          else if cmd_bridges_opts.pp_bridge then begin
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_pp_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_pp_bridge_name ]; end
+          else if cmd_bridges_opts.vf_bridge then begin
+            bridge_ns_prefix := Uberspark.Config.namespace_bridges_vf_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridges_vf_bridge_name ]; end
+          else begin
+            action_options_unspecified := true; end
+          ;                   
+
+          if (!action_options_unspecified) then
+            begin
+              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+            end
+          else
+            begin
+              (* load bridge from namespace *)
+              let bridge_ns = !bridge_ns_prefix ^ "/container/" ^ !l_path_ns in 
+              if ( Uberspark.Bridge.load bridge_ns ) then 
+                begin
+                  (* check if build and if so then build the bridge *)
+                  Uberspark.Logger.log "going to build...";
+                end
+              else
+                begin
+                  retval := `Error (false, "could not load bridge settings");
+                end
+              ;
+            
+            end
+          ;              
+
+          (!retval)
+
+        end
 ;;
+
 
 (* bridges remove action *)
 let handler_bridges_action_remove 
@@ -379,13 +441,17 @@ let handler_bridges_action_remove
 let handler_bridge 
   (copts : Commonopts.opts)
   (cmd_bridges_opts: opts)
-  (action : [> `Create | `Dump | `Rebuild | `Remove] as 'a)
+  (action : [> `Config | `Create | `Dump | `Remove] as 'a)
   (path_ns : string option)
   : [> `Error of bool * string | `Ok of unit ] = 
 
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   match action with
+    | `Config -> 
+ 
+      retval := handler_bridges_action_config copts cmd_bridges_opts path_ns;
+
     | `Create -> 
       retval := handler_bridges_action_create copts cmd_bridges_opts path_ns;
 
@@ -393,9 +459,6 @@ let handler_bridge
 
       retval := handler_bridges_action_dump copts cmd_bridges_opts path_ns;
 
-    | `Rebuild -> 
- 
-      retval := handler_bridges_action_rebuild copts cmd_bridges_opts path_ns;
 
     | `Remove -> 
 
