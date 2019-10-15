@@ -11,7 +11,7 @@ type opts = {
   ld_bridge: bool;
   pp_bridge: bool;
   vf_bridge: bool;
-  bare: bool;
+  build: bool;
   output_directory: string option;
   bridge_exectype : string option;
 };;
@@ -24,7 +24,7 @@ let cmd_bridge_opts_handler
   (ld_bridge: bool)
   (pp_bridge: bool)
   (vf_bridge: bool)
-  (bare : bool)
+  (build : bool)
   (output_directory: string option)
   (bridge_exectype : string option)
   : opts = 
@@ -34,7 +34,7 @@ let cmd_bridge_opts_handler
     ld_bridge=ld_bridge;
     pp_bridge=pp_bridge;
     vf_bridge=vf_bridge;
-    bare=bare;
+    build=build;
     output_directory=output_directory;
     bridge_exectype=bridge_exectype;
   }
@@ -74,9 +74,9 @@ let cmd_bridge_opts_t =
   Arg.(value & flag & info ["vf"; "vf-bridge"] ~doc ~docs)
   in
 
-  let bare =
-  let doc = "Do not perform bridge configuration upon create." in
-  Arg.(value & flag & info ["b"; "bare"] ~doc ~docs)
+  let build =
+  let doc = "Build the bridge if bridge execution type is 'container'" in
+  Arg.(value & flag & info ["b"; "build"] ~doc ~docs)
   in
 
   let output_directory =
@@ -90,7 +90,7 @@ let cmd_bridge_opts_t =
   in
 
 
-  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ bare $ output_directory $ bridge_exectype)
+  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ build $ output_directory $ bridge_exectype)
 
 
 
@@ -152,6 +152,10 @@ let handler_bridges_action_create
             ];
           
           Uberspark.Bridge.store_settings_to_namespace !bridgetypes;
+         
+          if (cmd_bridges_opts.build) then
+            Uberspark.Bridge.build !bridgetypes;
+
          `Ok()
       end
 ;;
