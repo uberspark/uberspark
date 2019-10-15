@@ -325,8 +325,16 @@ let handler_bridges_action_config
               let bridge_ns = !bridge_ns_prefix ^ "/container/" ^ !l_path_ns in 
               if ( Uberspark.Bridge.load bridge_ns ) then 
                 begin
-                  (* check if build and if so then build the bridge *)
-                  Uberspark.Logger.log "going to build...";
+                  (* check if build option is specified and if so then build the bridge *)
+                  if (cmd_bridges_opts.build) then
+                    begin
+                      Uberspark.Bridge.build !bridge_type;
+                    end
+                  else  
+                    begin
+                      retval := `Error (true, "you must specify --build");
+                    end
+                  ;
                 end
               else
                 begin
