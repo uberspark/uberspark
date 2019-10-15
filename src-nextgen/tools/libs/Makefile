@@ -70,6 +70,7 @@ prep_sources: prep_base prep_defs
 	$(CP) uberspark_bridge.mli $(BUILDDIR)/.
 	$(CP) uberspark.mli.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
+	$(CP) uberspark_bridge_container.ml $(BUILDDIR)/.
 	$(CP) uberspark_bridge.ml.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark_bridge.ml.cppo -o uberspark_bridge.ml
 

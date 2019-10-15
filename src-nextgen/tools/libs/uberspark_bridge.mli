@@ -23,6 +23,13 @@ type cc_bridge_t = {
 	mutable params_prefix_to_output: string;
 }
 
+module Container : sig
+
+val sample : string -> unit
+
+end
+
+
 val load_from_file : string -> bool
 
 val store_settings_to_namespace: string list -> unit

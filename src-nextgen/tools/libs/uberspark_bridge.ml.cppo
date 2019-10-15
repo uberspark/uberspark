@@ -65,6 +65,10 @@ let json_list_to_string_list
 	(!ret_str_list)
 ;;
 
+module Container =
+struct
+#include "uberspark_bridge_container.ml"
+end
 
 
 let load_from_file 
@@ -246,3 +250,5 @@ let store_settings_to_namespace
 
 	()
 ;;
+
+
