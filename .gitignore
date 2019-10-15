@@ -25,5 +25,5 @@ temp/
 !*.json
 !*.us
 !*.mk
-
+!*.Dockerfile
 
