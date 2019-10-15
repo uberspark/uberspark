@@ -24,8 +24,8 @@ val file_remove : string -> unit
 
 val symlink : bool -> string -> string -> unit
     
-val exec_process_withlog :
-           string ->
-           string list -> 
+val exec_process_withlog : 
            ?log_lvl:Uberspark_logger.log_level -> 
-           ?stag:string -> int * bool * string ref list
+           ?stag:string -> 
+           string ->
+           string list -> int * bool * string ref list

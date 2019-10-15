@@ -145,7 +145,7 @@ let cmd_bridges =
 		`Blocks manpage_sec_issues;
 		`S Manpage.s_exit_status;
 	] in
-  Term.(ret (const Cmd_bridge.handler_bridges $ Commonopts.opts_t $ Cmd_bridge.cmd_bridge_opts_t $ action $ path_ns )),
+  Term.(ret (const Cmd_bridge.handler_bridge $ Commonopts.opts_t $ Cmd_bridge.cmd_bridge_opts_t $ action $ path_ns )),
   Term.info "bridge" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 

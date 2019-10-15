@@ -51,10 +51,10 @@ open FileUtil
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
 	let exec_process_withlog 
-		(p_name : string)
-		(cmdline : string list)
 		?(log_lvl = Uberspark_logger.Info)
 		?(stag = "")
+		(p_name : string)
+		(cmdline : string list)
 		: int * bool * string ref list =
 
 		let readme, writeme = Unix.pipe () in

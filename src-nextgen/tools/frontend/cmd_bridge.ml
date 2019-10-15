@@ -252,7 +252,22 @@ let handler_bridges_action_dump
 
 ;;
 
+(* bridges rebuild action *)
+let handler_bridges_action_rebuild 
+  (copts : Commonopts.opts)
+  (cmd_bridges_opts: opts)
+  (path_ns : string option)
+  : [> `Error of bool * string | `Ok of unit ] = 
 
+    let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
+
+    (* perform common initialization *)
+    Commoninit.initialize copts;
+
+    Uberspark.Bridge.Container.list_images "";
+    
+    (!retval)
+;;
 
 (* bridges remove action *)
 let handler_bridges_action_remove 
@@ -345,10 +360,11 @@ let handler_bridges_action_remove
 
 
 
+ 
 
 
 (* main handler for bridges command *)
-let handler_bridges 
+let handler_bridge 
   (copts : Commonopts.opts)
   (cmd_bridges_opts: opts)
   (action : [> `Create | `Dump | `Rebuild | `Remove] as 'a)
@@ -367,17 +383,15 @@ let handler_bridges
 
     | `Rebuild -> 
  
-      (* perform common initialization *)
-      Commoninit.initialize copts;
-      Uberspark.Bridge.Container.sample "hello";
-      Uberspark.Bridge.Native.sample "hello";
+      retval := handler_bridges_action_rebuild copts cmd_bridges_opts path_ns;
 
     | `Remove -> 
 
       retval := handler_bridges_action_remove copts cmd_bridges_opts path_ns;
+
   ;
 
+    (!retval)
 
-  (!retval)
 
 ;;
