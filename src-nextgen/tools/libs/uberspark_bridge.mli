@@ -29,6 +29,12 @@ val sample : string -> unit
 
 end
 
+module Native : sig
+
+val sample : string -> unit
+
+end
+
 
 val load_from_file : string -> bool
 

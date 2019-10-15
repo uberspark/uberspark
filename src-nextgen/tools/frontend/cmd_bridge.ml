@@ -370,6 +370,7 @@ let handler_bridges
       (* perform common initialization *)
       Commoninit.initialize copts;
       Uberspark.Bridge.Container.sample "hello";
+      Uberspark.Bridge.Native.sample "hello";
 
     | `Remove -> 
 

@@ -70,6 +70,12 @@ struct
 #include "uberspark_bridge_container.ml"
 end
 
+module Native =
+struct
+#include "uberspark_bridge_native.ml"
+end
+
+
 
 let load_from_file 
 	(bridge_ns_json_file : string)
