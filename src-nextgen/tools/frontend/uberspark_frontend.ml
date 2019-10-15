@@ -129,7 +129,7 @@ let cmd_bridges =
  		`S "ACTIONS";
     	`I ("$(b,create)",
         	"create a new bridge namespaces from a file $(i,PATH) argument.
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bare)");
     	`I ("$(b,dump)",
         	"store a bridge configuration specified by the $(i,NAMESPACE) argument to the specified output directory. 
 			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,--bridge-exectype), and $(b,--output-directory)");
