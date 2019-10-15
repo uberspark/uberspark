@@ -24,3 +24,6 @@ val file_remove : string -> unit
 
 val symlink : bool -> string -> string -> unit
     
+val exec_process_withlog :
+           string ->
+           string list -> bool -> string -> int * bool * string ref list
