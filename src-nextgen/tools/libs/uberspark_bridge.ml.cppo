@@ -267,12 +267,13 @@ let store_settings_to_namespace
 				Printf.fprintf oc "\n\t\t\t\"container_fname\" : \"%s\"," cc_bridge_settings.hdr.container_fname;
 				Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," cc_bridge_settings.hdr.devenv;
 				Printf.fprintf oc "\n\t\t\t\"arch\" : \"%s\"," cc_bridge_settings.hdr.arch;
-				Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"," cc_bridge_settings.hdr.version;
-				Printf.fprintf oc "\n\t\t\t\"namespace\" : \"%s\"," cc_bridge_settings.hdr.namespace;
+				Printf.fprintf oc "\n\t\t\t\"cpu\" : \"%s\"," cc_bridge_settings.hdr.cpu;
+				Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"" cc_bridge_settings.hdr.version;
+				(*Printf.fprintf oc "\n\t\t\t\"namespace\" : \"%s\"," cc_bridge_settings.hdr.namespace;*)
 				Printf.fprintf oc "\n\t\t},";
 				Printf.fprintf oc "\n\t\t\"params_prefix_to_obj\" : \"%s\"," cc_bridge_settings.params_prefix_to_obj;
 				Printf.fprintf oc "\n\t\t\"params_prefix_to_asm\" : \"%s\"," cc_bridge_settings.params_prefix_to_asm;
-				Printf.fprintf oc "\n\t\t\"params_prefix_to_output\" : \"%s\"," cc_bridge_settings.params_prefix_to_output;
+				Printf.fprintf oc "\n\t\t\"params_prefix_to_output\" : \"%s\"" cc_bridge_settings.params_prefix_to_output;
 				Printf.fprintf oc "\n\t}";
 				Printf.fprintf oc "\n";
 				Printf.fprintf oc "\n}";
