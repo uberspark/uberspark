@@ -6,6 +6,6 @@ ENV D_CMD=make
 ENV D_CMDARGS=all
 
 RUN apt-get update &&\
-    apt-get -y install gcc binutils
+    apt-get -y install gcc binutils gcc-multilib
 
 CMD ${D_CMD} ${D_CMDARGS}

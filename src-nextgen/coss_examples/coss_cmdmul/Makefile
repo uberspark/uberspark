@@ -2,6 +2,6 @@
 
 .PHONY: all
 all:	
-	gcc -o coss_cmdmul coss_cmdmul.c 
+	gcc -m32 -o coss_cmdmul main.c 
 
 	
