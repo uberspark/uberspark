@@ -3,11 +3,15 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+val hdr_namespace : string ref
+
+
 (*------------------------------------------------------------------------*)
 (* environment related configuration settings *)	
 (*------------------------------------------------------------------------*)
 (*val env_path_seperator : string ref*)
 val env_home_dir : string ref
+
 
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	
@@ -28,6 +32,9 @@ val namespace_uobjslt_mf_filename : string
 val namespace_uobjslt_callees_output_filename : string
 val namespace_uobjslt_exitcallees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
+
+val namespace_config_json_filename : string
+val namespace_config_current : string
 
 
 val namespace_bridges : string

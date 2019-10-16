@@ -43,6 +43,10 @@ let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
+let namespace_config_json_filename = "uberspark-config.json";;
+let namespace_config_current = "uberspark/config/current";;
+
+
 let namespace_bridges = "uberspark/bridges";;
 
 let namespace_bridges_json_filename = "uberspark-bridge.json";;
@@ -151,7 +155,7 @@ let dump
 		Printf.fprintf oc "\n\t\t\"binary_uobj_section_alignment\" : \"0x%x\"," !binary_uobj_section_alignment;
 		Printf.fprintf oc "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," !binary_uobj_default_section_size;
 		Printf.fprintf oc "\n\t\t\"binary_uobj_default_load_addr\" : \"0x%x\"," !binary_uobj_default_load_addr;
-		Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"" !binary_uobj_default_size;
+		Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"," !binary_uobj_default_size;
 		Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"" !bridge_cc_bridge;
 		Printf.fprintf oc "\n\t}";
 		Printf.fprintf oc "\n";

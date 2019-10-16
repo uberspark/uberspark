@@ -17,7 +17,7 @@ let initialize
   Uberspark.Logger.log "";
 
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
-  Uberspark.Config.load "uberspark/config/current";
+  Uberspark.Config.load Uberspark.Config.namespace_config_current;
   Uberspark.Logger.log ~tag:"" "[OK]";
 
 ;;
