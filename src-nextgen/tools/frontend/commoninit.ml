@@ -23,7 +23,7 @@ let initialize
 ;;
 
 
-let initialize_bridges : bool =
+let initialize_bridges () : bool =
   let retval = ref false in
 
   Uberspark.Bridge.load !Uberspark.Config.bridge_cc_bridge;
