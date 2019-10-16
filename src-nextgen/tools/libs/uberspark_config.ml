@@ -132,6 +132,12 @@ let load
 	(!retval)
 ;;
 
+
+
+
+
+
+
 let dump 
 	(output_config_filename : string)
 	=
@@ -204,12 +210,56 @@ let create_from_file
 	let output_config_dir = (namespace_root ^ output_config_ns) in
 	let output_config_json_pathname = output_config_dir ^ "/uberspark-config.json" in
 
+
+	try
+		let config_json = Yojson.Basic.from_file input_config_json_pathname in
+		(*parse header*)
+		let config_json_hdr = Yojson.Basic.Util.member "hdr" config_json in
+			hdr_type := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr);
+			hdr_namespace := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr);
+			hdr_platform := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "platform" config_json_hdr);
+			hdr_arch := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" config_json_hdr);
+			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" config_json_hdr);
+			(* TBD: sanity check header *)
+		
+		(* parse settings *)
+		let config_json_settings = 	Yojson.Basic.Util.member "settings" config_json in
+
+			if (Yojson.Basic.Util.member "binary_page_size" config_json_settings) <> `Null then
+				binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
+			
+			if (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings) <> `Null then
+				binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
+			
+			if (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings) <> `Null then
+				binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
+	
+			if (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings) <> `Null then
+				binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
+
+			if (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings) <> `Null then
+				binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
+
+			if (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings) <> `Null then
+				bridge_cc_bridge := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings);
+
+
+		retval := true;							
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+					
+
 	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
 
-	retval := true;
+	dump output_config_json_pathname;
+
+	(*retval := true;
 	reterrmsg := "";
 	Uberspark_osservices.file_copy input_config_json_pathname output_config_json_pathname;
-	
+	*)
+
 	(!retval, !reterrmsg)
 ;;
 
