@@ -21,3 +21,24 @@ let initialize
   Uberspark.Logger.log ~tag:"" "[OK]";
 
 ;;
+
+
+let initialize_bridges : bool =
+  let retval = ref false in
+
+  Uberspark.Bridge.load !Uberspark.Config.bridge_cc_bridge;
+
+  if ( !Uberspark.Bridge.cc_bridge_settings_loaded) then
+    begin
+      Uberspark.Logger.log "loaded cc_bridge settings";
+      retval := true;
+    end
+  else
+    begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load cc_bridge settings!";
+      retval := false;
+    end
+  ;  
+
+  (!retval)
+;;

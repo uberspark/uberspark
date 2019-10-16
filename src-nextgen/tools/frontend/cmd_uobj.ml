@@ -122,6 +122,9 @@ let handler_uobj
   (* perform common initialization *)
   Commoninit.initialize copts;
 
+  (* initialize bridges *)
+  Commoninit.initialize_bridges
+
   let retval = 
   match action with
   | `Build -> 

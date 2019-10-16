@@ -23,6 +23,9 @@ type cc_bridge_t = {
 	mutable params_prefix_to_output: string;
 }
 
+val cc_bridge_settings_loaded : bool ref
+
+
 module Container : sig
 
 val build_image : string -> string -> int
