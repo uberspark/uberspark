@@ -17,7 +17,8 @@
 		"binary_uobj_section_alignment" : "0x200000",
 		"binary_uobj_default_section_size" : "0x200000",
 		"binary_uobj_default_load_addr" : "0x60000000",
-		"binary_uobj_default_size" : "0x1000000"
+		"binary_uobj_default_size" : "0x1000000",
+		"bridge_cc_bridge" : ""
 	}
 
 }

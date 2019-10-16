@@ -66,6 +66,13 @@ val binary_uobj_default_load_addr : int ref
 val binary_uobj_default_size : int ref
 
 
+(*------------------------------------------------------------------------*)
+(* bridge related configuration settings *)	
+(*------------------------------------------------------------------------*)
+val bridge_cc_bridge : string ref
+
+
+
 
 val load : string -> bool
 

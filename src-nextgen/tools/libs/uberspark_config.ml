@@ -79,6 +79,14 @@ let binary_uobj_default_load_addr = ref 0x60000000;;
 let binary_uobj_default_size = ref 0x01000000;;
 
 
+(*------------------------------------------------------------------------*)
+(* bridge related configuration settings *)	
+(*------------------------------------------------------------------------*)
+let bridge_cc_bridge = ref "";;
+
+
+
+
 
 
 let load 
@@ -106,6 +114,7 @@ let load
 			binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
 			binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
 			binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
+			bridge_cc_bridge := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings);
 
 
 		retval := true;							
@@ -143,6 +152,7 @@ let dump
 		Printf.fprintf oc "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," !binary_uobj_default_section_size;
 		Printf.fprintf oc "\n\t\t\"binary_uobj_default_load_addr\" : \"0x%x\"," !binary_uobj_default_load_addr;
 		Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"" !binary_uobj_default_size;
+		Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"" !bridge_cc_bridge;
 		Printf.fprintf oc "\n\t}";
 		Printf.fprintf oc "\n";
 		Printf.fprintf oc "\n}";
@@ -212,6 +222,7 @@ let settings_get
 		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_section_size);
 		| "binary_uobj_default_load_addr" -> settings_value := (Printf.sprintf "0x%x"  !binary_uobj_default_load_addr);
 		| "binary_uobj_default_size" -> settings_value := (Printf.sprintf "0x%x" !binary_uobj_default_size);
+		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" !bridge_cc_bridge);
 		| _ -> retstatus := false;
 	;
 	
@@ -231,6 +242,7 @@ let settings_set
 		| "binary_uobj_default_section_size" -> binary_uobj_default_section_size := int_of_string setting_value;
 		| "binary_uobj_default_load_addr" -> binary_uobj_default_load_addr := int_of_string setting_value;
 		| "binary_uobj_default_size" -> binary_uobj_default_size := int_of_string setting_value;
+		| "bridge_cc_bridge" -> bridge_cc_bridge := setting_value;
 		| _ -> retval := false;
 	;
 	
