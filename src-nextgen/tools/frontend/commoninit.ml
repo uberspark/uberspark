@@ -26,7 +26,7 @@ let initialize
 let initialize_bridges () : bool =
   let retval = ref false in
 
-  Uberspark.Bridge.load !Uberspark.Config.bridge_cc_bridge;
+  Uberspark.Bridge.load (Uberspark.Config.namespace_bridges_cc_bridge ^ "/" ^ !Uberspark.Config.bridge_cc_bridge);
 
   if ( !Uberspark.Bridge.cc_bridge_settings_loaded) then
     begin
