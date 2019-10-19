@@ -76,6 +76,25 @@ struct
 end
 
 
+let load_bridge_hdr
+	(bridge_hdr_json_node : Yojson.Basic.json)
+	(bridge_hdr : bridge_hdr_t) =
+
+	bridge_hdr.btype <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "btype" bridge_hdr_json_node);
+	bridge_hdr.execname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "execname" bridge_hdr_json_node);
+	bridge_hdr.path <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "path" bridge_hdr_json_node);
+	bridge_hdr.params <-	json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "params" bridge_hdr_json_node));
+	bridge_hdr.container_fname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "container_fname" bridge_hdr_json_node);
+	bridge_hdr.devenv <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "devenv" bridge_hdr_json_node);
+	bridge_hdr.arch <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" bridge_hdr_json_node);
+	bridge_hdr.cpu <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" bridge_hdr_json_node);
+	bridge_hdr.version <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "version" bridge_hdr_json_node);
+	bridge_hdr.namespace <-	bridge_hdr.btype ^ "/" ^ bridge_hdr.devenv ^ "/" ^
+							bridge_hdr.arch ^ "/" ^ bridge_hdr.cpu ^ "/" ^
+							bridge_hdr.execname ^ "/" ^ bridge_hdr.version;
+	()
+;;
+
 
 let load_from_file 
 	(bridge_ns_json_file : string)
@@ -100,7 +119,7 @@ let load_from_file
 		if (cc_bridge_json <> `Null) then
 			begin
 				let cc_bridge_json_hdr = Yojson.Basic.Util.member "hdr" cc_bridge_json in
-					cc_bridge_settings.hdr.btype <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "btype" cc_bridge_json_hdr);
+					(*cc_bridge_settings.hdr.btype <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "btype" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.execname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "execname" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.path <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "path" cc_bridge_json_hdr);
 					cc_bridge_settings.hdr.params <-	json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "params" cc_bridge_json_hdr));
@@ -113,7 +132,8 @@ let load_from_file
 					cc_bridge_settings.hdr.namespace <-	cc_bridge_settings.hdr.btype ^ "/" ^ cc_bridge_settings.hdr.devenv ^ "/" ^
 							cc_bridge_settings.hdr.arch ^ "/" ^ cc_bridge_settings.hdr.cpu ^ "/" ^
 							cc_bridge_settings.hdr.execname ^ "/" ^ cc_bridge_settings.hdr.version;
-
+					*)
+				load_bridge_hdr cc_bridge_json_hdr cc_bridge_settings.hdr;
 
 				cc_bridge_settings.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" cc_bridge_json);
 				cc_bridge_settings.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" cc_bridge_json);
