@@ -1,3 +1,14 @@
+
+(* uberspark generic manifest header *)
+type hdrnew_t =
+{
+	mutable f_prog_name    : string;			
+	mutable f_prog_version : string;			
+	mutable f_uberspark_mftype : string;
+	mutable f_uberspark_version   : string;
+}
+
+
 type hdr_t =
   {
     mutable f_type         : string;			

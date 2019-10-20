@@ -5,6 +5,15 @@
 
 open Yojson
 
+(* uberspark generic manifest header *)
+type hdrnew_t =
+{
+	mutable f_prog_name    : string;			
+	mutable f_prog_version : string;			
+	mutable f_uberspark_mftype : string;
+	mutable f_uberspark_version   : string;
+};;
+
 
 
 	type hdr_t =
@@ -81,6 +90,30 @@ open Yojson
 		(!retval, !retjson)
 	;;
 
+
+(*--------------------------------------------------------------------------*)
+(* read manifest file into json object; sanity checking uberspark version *)
+(*--------------------------------------------------------------------------*)
+
+let get_manifest_json 
+	(mf_filename : string)
+	: bool * Yojson.Basic.json = 
+	let retval = ref false in
+	let retjson = ref `Null in
+
+	try
+
+		let mf_json = Yojson.Basic.from_file mf_filename in
+			retval := true;
+			retjson := mf_json;
+				
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "usmf_read_manifest: ERROR:%s" s;
+		retval := false;
+	;
+
+	(!retval, !retjson)
+;;
 
 	(*--------------------------------------------------------------------------*)
 	(* parse common manifest header node; "hdr" *)
