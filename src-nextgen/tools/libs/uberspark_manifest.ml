@@ -90,29 +90,6 @@ type hdr_t =
 	;;
 
 
-(*--------------------------------------------------------------------------*)
-(* read manifest file into json object; sanity checking uberspark version *)
-(*--------------------------------------------------------------------------*)
-
-let get_manifest_json 
-	(mf_filename : string)
-	: bool * Yojson.Basic.json = 
-	let retval = ref false in
-	let retjson = ref `Null in
-
-	try
-
-		let mf_json = Yojson.Basic.from_file mf_filename in
-			retval := true;
-			retjson := mf_json;
-				
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "usmf_read_manifest: ERROR:%s" s;
-		retval := false;
-	;
-
-	(!retval, !retjson)
-;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -150,6 +127,45 @@ let parse_hdr mf_json =
 		f_uberspark_version = !mf_hdr_uberspark_version;
 	})
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* read manifest file into json object; sanity checking uberspark version *)
+(*--------------------------------------------------------------------------*)
+
+let get_manifest_json 
+	(mf_filename : string)
+	: bool * Yojson.Basic.json = 
+	let retval = ref false in
+	let retjson = ref `Null in
+
+	try
+
+		let mf_json = Yojson.Basic.from_file mf_filename in
+		let (mf_hdr_parsed, mf_hdr) = parse_hdr mf_json in
+			if (mf_hdr_parsed) then 
+				begin
+					(* TBD: sanity check header and version *)
+					retval := true;
+					retjson := mf_json;
+				end
+			else 
+				begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
+					retval := false;
+					retjson := `Null;
+				end
+			;
+
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+
+	(!retval, !retjson)
+;;
+
+
 
 
 	(*--------------------------------------------------------------------------*)
