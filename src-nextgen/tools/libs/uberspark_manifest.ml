@@ -8,8 +8,7 @@ open Yojson
 (* uberspark generic manifest header *)
 type hdr_t =
 {
-	mutable f_prog_name    : string;			
-	mutable f_prog_version : string;			
+	mutable f_coss_version : string;			
 	mutable f_uberspark_mftype : string;
 	mutable f_uberspark_version   : string;
 };;
@@ -114,6 +113,44 @@ let get_manifest_json
 
 	(!retval, !retjson)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse common manifest header node; "hdr" *)
+(* return: true if successfully parsed header node, false if not *)
+(* if true also return: manifest header node as hdr_t *)
+(*--------------------------------------------------------------------------*)
+
+let parse_hdr mf_json =
+	let retval = ref false in
+
+	let mf_hdr_coss_version = ref "" in
+	let mf_hdr_uberspark_mftype = ref "" in
+	let mf_hdr_uberspark_version = ref "" in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_mf_hdr = mf_json |> member "uberspark-hdr" in
+			if(json_mf_hdr <> `Null) then
+				begin
+					mf_hdr_coss_version := json_mf_hdr |> member "coss_version" |> to_string;
+					mf_hdr_uberspark_mftype := json_mf_hdr |> member "mftype" |> to_string;
+					mf_hdr_uberspark_version := json_mf_hdr |> member "uberspark_version" |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, {
+		f_coss_version = !mf_hdr_coss_version;
+		f_uberspark_mftype = !mf_hdr_uberspark_mftype;
+		f_uberspark_version = !mf_hdr_uberspark_version;
+	})
+;;
+
 
 	(*--------------------------------------------------------------------------*)
 	(* parse common manifest header node; "hdr" *)
