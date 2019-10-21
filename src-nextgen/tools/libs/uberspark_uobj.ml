@@ -43,7 +43,7 @@ class uobject
 		val d_path_ns = ref "";
 		method get_d_path_ns = !d_path_ns;
 
-		val d_hdr: Uberspark_manifest.hdr_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
+		val d_hdr: Uberspark_manifest.hdrold_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 		method get_d_hdr = d_hdr;
 
 

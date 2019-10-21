@@ -1,6 +1,6 @@
 
 (* uberspark generic manifest header *)
-type hdrnew_t =
+type hdr_t =
 {
 	mutable f_prog_name    : string;			
 	mutable f_prog_version : string;			
@@ -9,7 +9,7 @@ type hdrnew_t =
 }
 
 
-type hdr_t =
+type hdrold_t =
   {
     mutable f_type         : string;			
     mutable f_namespace    : string;			
@@ -19,4 +19,4 @@ type hdr_t =
   }
 
   val read_manifest : string -> bool -> bool * Yojson.Basic.t
-  val parse_node_hdr : Yojson.Basic.t -> bool * hdr_t
+  val parse_node_hdr : Yojson.Basic.t -> bool * hdrold_t

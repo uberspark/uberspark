@@ -6,7 +6,7 @@
 open Yojson
 
 (* uberspark generic manifest header *)
-type hdrnew_t =
+type hdr_t =
 {
 	mutable f_prog_name    : string;			
 	mutable f_prog_version : string;			
@@ -16,7 +16,7 @@ type hdrnew_t =
 
 
 
-	type hdr_t =
+	type hdrold_t =
 		{
 			mutable f_type         : string;			
 			mutable f_namespace    : string;			
