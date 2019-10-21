@@ -106,12 +106,27 @@ let load_from_json
 		
 		let config_json_settings = 	Yojson.Basic.Util.member "settings" json_node in
 
-			binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
-			binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
-			binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
-			binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
-			binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
-			bridge_cc_bridge := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings);
+
+		(* parse settings *)
+		let config_json_settings = 	Yojson.Basic.Util.member "settings" json_node in
+
+			if (Yojson.Basic.Util.member "binary_page_size" config_json_settings) <> `Null then
+				binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
+			
+			if (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings) <> `Null then
+				binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
+			
+			if (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings) <> `Null then
+				binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
+	
+			if (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings) <> `Null then
+				binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
+
+			if (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings) <> `Null then
+				binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
+
+			if (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings) <> `Null then
+				bridge_cc_bridge := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings);
 
 
 		retval := true;							
