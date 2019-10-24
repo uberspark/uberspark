@@ -17,7 +17,9 @@ val env_home_dir : string ref
 (* namespace related configuration settings *)	
 (*------------------------------------------------------------------------*)
 val namespace_root : string
-val namespace_default_uobj_mf_filename : string
+val namespace_root_mf_filename : string
+
+val namespace_uobj_mf_filename : string
 val namespace_uobj_mf_hdr_type : string
 
 val namespace_uobj_binhdr_src_filename : string
@@ -26,6 +28,11 @@ val namespace_uobj_intrauobjcoll_callees_info_src_filename : string
 val namespace_uobj_interuobjcoll_callees_info_src_filename : string
 val namespace_uobj_linkerscript_filename : string
 
+val namespace_uobjcoll_mf_filename : string
+
+val namespace_uobjrtl_mf_filename : string
+
+
 val namespace_uobjslt : string
 val namespace_uobjslt_mf_hdr_type : string
 val namespace_uobjslt_mf_filename : string
@@ -33,13 +40,13 @@ val namespace_uobjslt_callees_output_filename : string
 val namespace_uobjslt_exitcallees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
 
-val namespace_config_json_filename : string
+val namespace_config_mf_filename : string
 val namespace_config_current : string
 
 
 val namespace_bridges : string
 
-val namespace_bridges_json_filename : string
+val namespace_bridges_mf_filename : string
 val namespace_bridges_container_filename : string
 
 val namespace_bridges_ar_bridge_name : string

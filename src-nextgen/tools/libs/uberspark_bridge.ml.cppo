@@ -171,8 +171,8 @@ let dump
 	(output_directory : string)
 	=
 	let src_bridge_json_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ "/" ^
-			Uberspark_config.namespace_bridges_json_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_json_filename in
+			Uberspark_config.namespace_bridges_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_mf_filename in
 	let src_bridge_container_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ 
 			"/" ^ Uberspark_config.namespace_bridges_container_filename in
 	let dst_container_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_container_filename in

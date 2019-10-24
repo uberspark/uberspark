@@ -26,7 +26,10 @@ let env_home_dir = ref "HOME";;
 (* namespace related configuration settings *)	
 (*------------------------------------------------------------------------*)
 let namespace_root = ((Unix.getenv !env_home_dir) ^ "/");;
-let namespace_default_uobj_mf_filename = "uberspark-uobj-mf.json";;
+let namespace_root_mf_filename = "uberspark.json";;
+
+
+let namespace_uobj_mf_filename = "uberspark-uobj.json";;
 let namespace_uobj_mf_hdr_type = "uobj";;
 
 let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
@@ -34,6 +37,14 @@ let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
 let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
+
+
+let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
+
+
+let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
+
+
 
 let namespace_uobjslt = (namespace_root ^ "uberspark/uobjslt");;
 let namespace_uobjslt_mf_hdr_type = "uobjslt";;
@@ -43,13 +54,13 @@ let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
-let namespace_config_json_filename = "uberspark-config.json";;
+let namespace_config_mf_filename = "uberspark-config.json";;
 let namespace_config_current = "uberspark/config/current";;
 
 
 let namespace_bridges = "uberspark/bridges";;
 
-let namespace_bridges_json_filename = "uberspark-bridge.json";;
+let namespace_bridges_mf_filename = "uberspark-bridge.json";;
 let namespace_bridges_container_filename = "uberspark-bridge.Dockerfile";;
 
 
