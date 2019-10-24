@@ -26,6 +26,13 @@ let initialize
 let initialize_bridges () : bool =
   let retval = ref false in
 
+  if !Uberspark.Config.bridge_cc_bridge = "" then
+    begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
+      ignore (exit 1);
+    end
+  ;
+
   Uberspark.Bridge.load (Uberspark.Config.namespace_bridges_cc_bridge ^ "/" ^ !Uberspark.Config.bridge_cc_bridge);
 
   if ( !Uberspark.Bridge.cc_bridge_settings_loaded) then
