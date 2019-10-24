@@ -23,7 +23,7 @@ type uobj_publicmethods_t =
   class uobject :
   object
     val d_callees_hashtbl : (string, string list) Hashtbl.t
-    val d_hdr : Uberspark_manifest.hdr_t
+    val d_hdr : Uberspark_manifest.hdrold_t
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
     val d_load_addr : int ref
@@ -57,7 +57,7 @@ type uobj_publicmethods_t =
     method generate_src_intrauobjcoll_callees_info : unit
     method generate_src_publicmethods_info : unit
     method get_d_callees_hashtbl : (string, string list) Hashtbl.t
-    method get_d_hdr : Uberspark_manifest.hdr_t
+    method get_d_hdr : Uberspark_manifest.hdrold_t
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
     method get_d_load_addr : int

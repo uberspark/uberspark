@@ -98,6 +98,57 @@ let cmd_uobj =
 
 
 
+(* kicks in when uberspark config ... is issued *)
+let cmd_bridges =
+	let action = 
+	let action = [ 	"config", `Config;
+					"create", `Create; 
+					"dump", `Dump; 
+					"remove", `Remove;
+				] in
+  	let doc = strf "The action to perform. $(docv) must be one of %s."
+      (Arg.doc_alts_enum action) in
+  	let action = Arg.enum action in
+  		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
+	in
+
+	let path_ns =
+    let doc = "The bridge namespace uri." in
+    Arg.(value & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+	in
+  
+  let doc = "Manage uberspark code bridges" in
+  let man =
+    [
+		`S Manpage.s_synopsis;
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i, PATH) or $(i,NAMESPACE)]";
+		`S Manpage.s_description;
+     	`P "The $(tname) command provides several actions to manage the
+	 		uberspark code bridge settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
+    	`S Manpage.s_arguments;
+ 		`S "ACTIONS";
+    	`I ("$(b,config)",
+        	"configure a bridge specified by the $(i,NAMESPACE) argument; only valid for bridges backed by containers. 
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--build)");
+    	`I ("$(b,create)",
+        	"create a new bridge namespaces from a file $(i,PATH) argument.
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bare)");
+    	`I ("$(b,dump)",
+        	"store a bridge configuration specified by the $(i,NAMESPACE) argument to the specified output directory. 
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,--bridge-exectype), and $(b,--output-directory)");
+     	`I ("$(b,remove)",
+        	"remove a bridge configuration namespace specified by the $(i,NAMESPACE) argument.
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bridge-exectype)");
+	 	`S "ACTION OPTIONS";
+	  	`P "These options qualify the aforementioned actions.";
+		`Blocks manpage_sec_common_options;
+		`Blocks manpage_sec_issues;
+		`S Manpage.s_exit_status;
+	] in
+  Term.(ret (const Cmd_bridge.handler_bridge $ Commonopts.opts_t $ Cmd_bridge.cmd_bridge_opts_t $ action $ path_ns )),
+  Term.info "bridge" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
+
 
 
 (* kicks in when uberspark config ... is issued *)
@@ -175,7 +226,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_config]
+let cmd_additions = [cmd_uobj; cmd_config; cmd_bridges]
 
 
 (*----------------------------------------------------------------------------*)

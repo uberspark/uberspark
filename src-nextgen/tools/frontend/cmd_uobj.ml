@@ -86,6 +86,13 @@ let handler_uobj_build
       end
       ;
 
+      if not (Commoninit.initialize_bridges ()) then 
+        begin
+          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not initialize bridges!";
+          ignore (exit 1);
+        end
+      ;
+
       (* create uobj instance and parse manifest *)
       let uobj = new Uberspark.Uobj.uobject in
       let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_default_uobj_mf_filename) in
@@ -117,17 +124,28 @@ let handler_uobj
   (cmd_uobj_opts: opts)
   (action : [> `Build ] as 'a)
   (path_ns : string)
-  = 
+  : [> `Error of bool * string | `Ok of unit ] = 
+
+  let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   (* perform common initialization *)
   Commoninit.initialize copts;
 
-  let retval = 
   match action with
-  | `Build -> 
-    (handler_uobj_build cmd_uobj_opts path_ns)
-  in
+    | `Build -> 
+      retval := handler_uobj_build cmd_uobj_opts path_ns;
+  ;
 
-  retval
-
+(*  (* initialize bridges *)
+  if (Commoninit.initialize_bridges) then 
+    begin
+  
+    end
+  else
+    begin
+      retval := `Error (false, "error in initializing bridges. check your bridge definitions");
+    end
+  ;
+*)
+  (!retval)
 ;;

@@ -7,6 +7,7 @@
 ###### variables
 
 UBERSPARK_FRONTEND_EXT_PACKAGES := -package unix
+UBERSPARK_FRONTEND_EXT_PACKAGES := -package fileutils
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package str 
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package yojson 
 UBERSPARK_FRONTEND_EXT_PACKAGES += -package cmdliner
@@ -25,6 +26,7 @@ UBERSPARK_FRONTEND_SOURCES := commonopts.ml
 UBERSPARK_FRONTEND_SOURCES += commoninit.ml
 UBERSPARK_FRONTEND_SOURCES += cmd_uobj.ml
 UBERSPARK_FRONTEND_SOURCES += cmd_config.ml
+UBERSPARK_FRONTEND_SOURCES += cmd_bridge.ml
 UBERSPARK_FRONTEND_SOURCES += uberspark_frontend.ml
 
 

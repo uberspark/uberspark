@@ -167,7 +167,11 @@ let handler_config
             let rval = (Uberspark.Config.settings_set !setting_name !setting_value) in 
             if rval == true then 
               begin
-                Uberspark.Logger.log "configuration setting '%s' set to '%s'" !setting_name !setting_value;
+                let config_ns_json_filename = Uberspark.Config.namespace_root ^
+                  Uberspark.Config.namespace_config_current ^ "/" ^
+                  Uberspark.Config.namespace_config_json_filename in
+                Uberspark.Config.dump config_ns_json_filename;  
+                Uberspark.Logger.log "configuration setting '%s' set to '%s' within current configuration" !setting_name !setting_value;
                 `Ok()  
               end
             else

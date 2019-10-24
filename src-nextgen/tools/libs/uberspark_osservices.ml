@@ -3,7 +3,8 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 open Unix
-		
+open FileUtil
+
 	let file_copy input_name output_name =
 		let buffer_size = 8192 in
 		let buffer = Bytes.create buffer_size in
@@ -49,7 +50,13 @@ open Unix
 
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
-	let exec_process_withlog p_name cmdline verbose verbose_mod_tag =
+	let exec_process_withlog 
+		?(log_lvl = Uberspark_logger.Info)
+		?(stag = "")
+		(p_name : string)
+		(cmdline : string list)
+		: int * bool * string ref list =
+
 		let readme, writeme = Unix.pipe () in
 		let pid = Unix.create_process
 			p_name (Array.of_list ([p_name] @ cmdline))
@@ -64,10 +71,8 @@ open Unix
 	    try
 	      while true do
 					p_singleoutputline := input_line in_channel;
-					if verbose then
-						Uberspark_logger.logf verbose_mod_tag Uberspark_logger.Info "%s" !p_singleoutputline;
-											
-					p_output := p_singleoutputline :: !p_output 
+					Uberspark_logger.log ~lvl:log_lvl ~stag:stag "%s" !p_singleoutputline;
+					p_output :=  !p_output @ [ p_singleoutputline ]; 
 		    done
 	    with End_of_file -> 
 				match	(Unix.waitpid [] pid) with
@@ -83,7 +88,7 @@ open Unix
 	  end;
 	
 		Unix.close readme;
-		(!p_exitstatus, !p_exitsignal, (List.rev !p_output))
+		(!p_exitstatus, !p_exitsignal, !p_output)
 	;;
 
 
@@ -128,19 +133,14 @@ open Unix
 	;;
 
 
-	let mkdir path perm =
-		let retval = ref true in
-		let retecode = ref Unix.EFAULT in
-		let reterrmsg = ref "" in
-		try
-    	Unix.mkdir path perm;
-		with Unix.Unix_error (ecode, fname, fparam) -> 
-				reterrmsg := Unix.error_message ecode;
-				retecode := ecode;
-				retval := false;
-		;
 
-		(!retval, !retecode, !reterrmsg)
+	let mkdir ?(parent = true) path perm =
+		FileUtil.mkdir ~parent:parent ~mode:perm path;
+	;;
+
+	let rmdir_recurse pathlist =
+    	FileUtil.rm ~recurse:true pathlist;
+		()
 	;;
 
 

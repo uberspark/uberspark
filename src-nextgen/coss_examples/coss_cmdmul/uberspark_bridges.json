@@ -1,0 +1,36 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+
+	"hdr":{
+		"type" : "uberspark-bridges",
+		"namespace" : "uberspark/bridges",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+    "cc-bridge" : {
+        "hdr": {
+            "btype" : "container",
+            "execname" : "gcc",
+            "path" : ".",
+            "params" : [ "-v" ],
+            "container_fname" : "uberspark_bridges.Dockerfile",
+            "devenv" : "amd64",
+            "arch" : "x86_32",
+            "cpu" : "generic",
+            "version" : "v5.4.0"
+        },   
+
+        "params_prefix_to_obj" : "-c",
+        "params_prefix_to_asm" : "-S",
+        "params_prefix_to_output" : "-o"
+
+    }
+    
+
+
+}

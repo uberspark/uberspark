@@ -3,11 +3,15 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+val hdr_namespace : string ref
+
+
 (*------------------------------------------------------------------------*)
 (* environment related configuration settings *)	
 (*------------------------------------------------------------------------*)
 (*val env_path_seperator : string ref*)
 val env_home_dir : string ref
+
 
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	
@@ -29,6 +33,33 @@ val namespace_uobjslt_callees_output_filename : string
 val namespace_uobjslt_exitcallees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
 
+val namespace_config_json_filename : string
+val namespace_config_current : string
+
+
+val namespace_bridges : string
+
+val namespace_bridges_json_filename : string
+val namespace_bridges_container_filename : string
+
+val namespace_bridges_ar_bridge_name : string
+val namespace_bridges_as_bridge_name : string
+val namespace_bridges_cc_bridge_name : string
+val namespace_bridges_ld_bridge_name : string
+val namespace_bridges_pp_bridge_name : string
+val namespace_bridges_vf_bridge_name : string
+val namespace_bridges_bldsys_bridge_name : string
+
+
+val namespace_bridges_ar_bridge : string
+val namespace_bridges_as_bridge : string
+val namespace_bridges_cc_bridge : string
+val namespace_bridges_ld_bridge : string
+val namespace_bridges_pp_bridge : string
+val namespace_bridges_vf_bridge : string
+val namespace_bridges_bldsys_bridge : string
+
+
 
 (*------------------------------------------------------------------------*)
 (* uobj/uobjcoll binary related configuration settings *)	
@@ -40,6 +71,13 @@ val binary_uobj_default_section_size : int ref
 
 val binary_uobj_default_load_addr : int ref
 val binary_uobj_default_size : int ref
+
+
+(*------------------------------------------------------------------------*)
+(* bridge related configuration settings *)	
+(*------------------------------------------------------------------------*)
+val bridge_cc_bridge : string ref
+
 
 
 
