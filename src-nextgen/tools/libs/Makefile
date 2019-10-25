@@ -13,20 +13,15 @@ UBERSPARK_LIB_EXT_PACKAGES += -package yojson
 
 
 UBERSPARK_LIB_SOURCES := 
+UBERSPARK_LIB_SOURCES += defs.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
-UBERSPARK_LIB_SOURCES += uberspark_config.ml
-#UBERSPARK_LIB_SOURCES += uberspark_bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
-UBERSPARK_LIB_SOURCES += uberspark_binary.ml
+UBERSPARK_LIB_SOURCES += uberspark_config.ml
+UBERSPARK_LIB_SOURCES += uberspark_bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
-
-UBERSPARK_LIB_SOURCES_MAIN := uberspark.ml
-UBERSPARK_LIB_SOURCES_MAIN_MLI := uberspark.mli
-UBERSPARK_LIB_SOURCES_MAIN_CMX := uberspark.cmx
-UBERSPARK_LIB_SOURCES_MAIN_CMI := uberspark.cmi
-UBERSPARK_LIB_SOURCES_MAIN_CMT := uberspark.cmt
-UBERSPARK_LIB_SOURCES_MAIN_CMTI := uberspark.cmti
+UBERSPARK_LIB_SOURCES += uberspark_binary.ml
+UBERSPARK_LIB_SOURCES += uberspark.ml
 
 
 UBERSPARK_LIB_SOURCES_MLI := $(patsubst %.ml, %.mli, $(UBERSPARK_LIB_SOURCES))
@@ -63,25 +58,24 @@ prep_defs: prep_base
 
 .PHONY: prep_sources
 prep_sources: prep_base prep_defs
-	$(CP) -f $(UBERSPARK_LIB_SOURCES) $(BUILDDIR)/.
-	$(CP) -f $(UBERSPARK_LIB_SOURCES_MAIN) $(BUILDDIR)/.
-	$(CP) -f ./META $(BUILDDIR)/.
-	$(CP) -f $(UBERSPARK_LIB_SOURCES_MLI) $(BUILDDIR)/.
-	$(CP) uberspark_bridge.mli $(BUILDDIR)/.
-	$(CP) uberspark.mli.cppo $(BUILDDIR)/.
-	cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
-	$(CP) uberspark_bridge_container.ml $(BUILDDIR)/.
-	$(CP) uberspark_bridge_native.ml $(BUILDDIR)/.
+	$(CP) -f *.ml $(BUILDDIR)/.
+	$(CP) uberspark_manifest.ml.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n uberspark_manifest.ml.cppo -o uberspark_manifest.ml
 	$(CP) uberspark_bridge.ml.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark_bridge.ml.cppo -o uberspark_bridge.ml
+	$(CP) -f *.mli $(BUILDDIR)/.
+	$(CP) uberspark.mli.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
+	$(CP) -f ./META $(BUILDDIR)/.
+
 
 .PHONY: all
 all: prep_sources
-	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot defs.mli  $(UBERSPARK_LIB_SOURCES_MLI) uberspark_bridge.mli $(UBERSPARK_LIB_SOURCES_MAIN_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
-	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot defs.ml  $(UBERSPARK_LIB_SOURCES) uberspark_bridge.ml $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
-	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static defs.ml  $(UBERSPARK_LIB_SOURCES) uberspark_bridge.ml $(UBERSPARK_LIB_SOURCES_MAIN) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
+	cd $(BUILDDIR) && $(OCAMLC) -c -bin-annot $(UBERSPARK_LIB_SOURCES_MLI) $(UBERSPARK_LIB_EXT_PACKAGES)
+	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot -ccopt -static $(UBERSPARK_LIB_SOURCES) $(UBERSPARK_LIB_EXT_PACKAGES) -o $(UBERSPARK_LIB_NAME).cmxa
 	cd $(BUILDDIR) && $(OCAMLFIND) remove $(UBERSPARK_LIB_NAME) 
-	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_SOURCES_MAIN_CMX) defs.cmx uberspark_bridge.cmx $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_SOURCES_MAIN_CMI) defs.cmi uberspark_bridge.cmi $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_SOURCES_MAIN_CMT) defs.cmt uberspark_bridge.cmt $(UBERSPARK_LIB_INSTALL_CMTI) $(UBERSPARK_LIB_SOURCES_MAIN_CMTI) defs.cmti uberspark_bridge.cmti
+	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_INSTALL_CMTI)  
 
 
 .PHONY: clean

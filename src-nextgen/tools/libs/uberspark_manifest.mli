@@ -22,3 +22,9 @@ type hdrold_t =
   val parse_node_hdr : Yojson.Basic.t -> bool * hdrold_t
   
   val parse_uberspark_hdr : Yojson.Basic.t -> bool * hdr_t
+
+
+module Uobj : sig
+
+end
+

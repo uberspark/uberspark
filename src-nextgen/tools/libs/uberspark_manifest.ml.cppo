@@ -144,6 +144,13 @@ let get_manifest_json
 
 
 
+module Uobj =
+struct
+#include "uberspark_manifest_uobj.ml"
+end
+
+
+
 
 	(*--------------------------------------------------------------------------*)
 	(* parse common manifest header node; "hdr" *)

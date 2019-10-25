@@ -26,6 +26,14 @@ module Config : sig
 
 end
 
+
+module Manifest : sig
+  
+#include "uberspark_manifest.mli"
+
+end
+
+
 module Bridge : sig
 
 #include "uberspark_bridge.mli"  
@@ -34,11 +42,6 @@ end
 
 
 
-module Manifest : sig
-  
-#include "uberspark_manifest.mli"
-
-end
 
 module Binary : sig
   
