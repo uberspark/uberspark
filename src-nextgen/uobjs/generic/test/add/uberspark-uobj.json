@@ -5,13 +5,22 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 {
 	/* header */
-	"hdr":{
+	"uberspark-hdr":{
+		"coss_version" : "1.0",
+		"mftype" : "uobj",
+		"uberspark_min_version" : "4.0",
+		"uberspark_max_version" : "5.1"
+	},
+
+	/* uobj header */
+	"uobj-hdr":{
 		"type" : "uobj",
 		"namespace" : "/uberspark/uobjs/generic/test/add",
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic"
 	},
+
 
 	/* sources */
 	"uobj-sources" : {

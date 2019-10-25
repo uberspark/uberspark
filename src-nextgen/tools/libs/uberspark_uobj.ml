@@ -484,10 +484,8 @@ class uobject
 			d_mf_filename := Filename.basename uobj_mf_filename;
 			d_path_ns := Filename.dirname uobj_mf_filename;
 			
-
 			(* read manifest JSON *)
-			let (rval, mf_json) = Uberspark_manifest.read_manifest 
-																self#get_d_mf_filename keep_temp_files in
+			let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
 			
 			if (rval == false) then (false)
 			else
@@ -704,7 +702,7 @@ class uobject
 					Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
 	
 					(* read manifest JSON *)
-					let (rval, mf_json) = (Uberspark_manifest.read_manifest abs_uobjslt_filename true) in
+					let (rval, mf_json) = (Uberspark_manifest.get_manifest_json abs_uobjslt_filename) in
 					if(rval == true) then
 					begin
 
