@@ -140,6 +140,11 @@ struct
 #include "uberspark_manifest_uobj.ml"
 end
 
+module Uobjslt =
+struct
+#include "uberspark_manifest_uobjslt.ml"
+end
+
 
 
 

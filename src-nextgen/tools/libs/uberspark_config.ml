@@ -48,7 +48,7 @@ let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
 
 let namespace_uobjslt = (namespace_root ^ "uberspark/uobjslt");;
 let namespace_uobjslt_mf_hdr_type = "uobjslt";;
-let namespace_uobjslt_mf_filename = "uberspark-uobjslt-mf.json";;
+let namespace_uobjslt_mf_filename = "uberspark-uobjslt.json";;
 let namespace_uobjslt_callees_output_filename = "uobjslt-callees.S";;
 let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;

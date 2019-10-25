@@ -26,3 +26,19 @@ module Uobj : sig
   
 end
 
+
+module Uobjslt : sig
+  type uobjslt_hdr_t =
+    {
+      mutable f_namespace    : string;			
+      mutable f_platform	   : string;
+      mutable f_arch	       : string;
+      mutable f_cpu				   : string;
+    }
+
+
+  val parse_uobjslt_hdr : Yojson.Basic.t -> uobjslt_hdr_t -> bool
+  val parse_uobjslt_trampolinecode : Yojson.Basic.t -> bool * string
+  val parse_uobjslt_trampolinedata : Yojson.Basic.t -> bool * string
+end
+

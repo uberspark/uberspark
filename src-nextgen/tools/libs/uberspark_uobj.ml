@@ -693,34 +693,25 @@ class uobject
 					if(rval == true) then
 					begin
 
-						(* parse hdr node *)
-						let (rval, hdr) =	Uberspark_manifest.parse_node_hdr mf_json in
-						if(rval == true) then
+						(* parse uobjslt-hdr node *)
+						let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
+						let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json uobjslt_hdr) in
+						if rval then
 						begin
 
-							(* sanity check uobjslt header type*)
-							if (compare hdr.f_type Uberspark_config.namespace_uobjslt_mf_hdr_type) == 0 then 
-							begin
+							(* read trampoline code and data *)
+							let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
+							let (rval_tdata, tdata) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinedata mf_json) in
 
-								(* read node for trampoline code *)
-								try
-									let open Yojson.Basic.Util in
-									let uobjslt_trampolinecode_json = mf_json |> member "uobjslt-trampolinecode" in
-									let uobjslt_trampolinedata_json = mf_json |> member "uobjslt-trampolinedata" in
-									if uobjslt_trampolinecode_json != `Null && uobjslt_trampolinedata_json != `Null then
-									begin
-										self#set_d_slt_trampolinecode (uobjslt_trampolinecode_json |> to_string);
-										self#set_d_slt_trampolinedata (uobjslt_trampolinedata_json |> to_string);
-										retval := true;
-										(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
-										Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
-									end;
+							if  rval_tcode && rval_tdata then
+								begin
+									self#set_d_slt_trampolinecode tcode;
+									self#set_d_slt_trampolinedata tdata;
+									retval := true;
+									(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
+									Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
+								end;
 
-								with Yojson.Basic.Util.Type_error _ -> 
-										retval := false;
-								;
-
-							end;
 						end;
 					end;
 				end;
