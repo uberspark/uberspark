@@ -43,7 +43,7 @@ class uobject
 		val d_path_ns = ref "";
 		method get_d_path_ns = !d_path_ns;
 
-		val d_hdr: Uberspark_manifest.hdrold_t = {f_type = ""; f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
+		val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 		method get_d_hdr = d_hdr;
 
 
@@ -490,23 +490,10 @@ class uobject
 			if (rval == false) then (false)
 			else
 
-			(* parse hdr node *)
-			let (rval, hdr) =
-								Uberspark_manifest.parse_node_hdr mf_json in
+			(* parse uobj-hdr node *)
+			let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
 			if (rval == false) then (false)
 			else
-
-			(* sanity check type to be uobj and store hdr*)
-			if (compare hdr.f_type Uberspark_config.namespace_uobj_mf_hdr_type) <> 0 then (false)
-			else
-			let dummy = 0 in
-				begin
-					d_hdr.f_type <- hdr.f_type;								
-					d_hdr.f_namespace <- hdr.f_namespace;
-					d_hdr.f_platform <- hdr.f_platform;
-					d_hdr.f_arch <- hdr.f_arch;
-					d_hdr.f_cpu <- hdr.f_cpu;
-				end;
 
 			(* parse uobj-sources node *)
 			let rval = (self#parse_node_mf_uobj_sources mf_json) in
