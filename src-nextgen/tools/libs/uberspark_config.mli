@@ -3,6 +3,31 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+(*------------------------------------------------------------------------*)
+(* configuration settings data type *)	
+(*------------------------------------------------------------------------*)
+type config_settings_t = 
+{
+	(* namespace related settings *)
+	mutable namespace: string;
+
+	(* environment related settings *)
+	mutable env_home_dir : string;
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	mutable binary_page_size : int;
+	mutable binary_uobj_section_alignment : int;
+	mutable binary_uobj_default_section_size : int;
+	mutable binary_uobj_default_load_addr : int;
+	mutable binary_uobj_default_size : int;
+
+	(* bridge related configuration settings *)	
+	mutable bridge_cc_bridge : string;
+
+};;
+
+
+
 val hdr_namespace : string ref
 
 

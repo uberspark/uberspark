@@ -5,6 +5,55 @@
 open Unix
 open Yojson
 
+
+(*------------------------------------------------------------------------*)
+(* configuration settings data type *)	
+(*------------------------------------------------------------------------*)
+type config_settings_t = 
+{
+	(* namespace related settings *)
+	mutable namespace: string;
+
+	(* environment related settings *)
+	mutable env_home_dir : string;
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	mutable binary_page_size : int;
+	mutable binary_uobj_section_alignment : int;
+	mutable binary_uobj_default_section_size : int;
+	mutable binary_uobj_default_load_addr : int;
+	mutable binary_uobj_default_size : int;
+
+	(* bridge related configuration settings *)	
+	mutable bridge_cc_bridge : string;
+
+};;
+
+
+(*------------------------------------------------------------------------*)
+(* configuration settings record variable *)	
+(*------------------------------------------------------------------------*)
+let settings: config_settings_t = {
+	(* namespace related settings *)
+	namespace = "";
+
+	(* environment related settings *)
+	env_home_dir = "HOME";
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	binary_page_size = 0x0020000;
+	binary_uobj_section_alignment = 0x00200000;
+	binary_uobj_default_section_size =  0x00200000;
+	binary_uobj_default_load_addr = 0x60000000;
+	binary_uobj_default_size = 0x01000000;
+
+	(* bridge related configuration settings *)	
+	bridge_cc_bridge = "";
+
+};;
+
+
+
 (*------------------------------------------------------------------------*)
 (* header related configuration settings *)	
 (*------------------------------------------------------------------------*)
