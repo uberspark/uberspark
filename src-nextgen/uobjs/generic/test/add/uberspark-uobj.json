@@ -14,7 +14,6 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 	/* uobj header */
 	"uobj-hdr":{
-		"type" : "uobj",
 		"namespace" : "/uberspark/uobjs/generic/test/add",
 		"platform" : "generic",
 		"arch" : "generic",
