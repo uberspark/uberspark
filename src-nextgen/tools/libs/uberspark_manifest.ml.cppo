@@ -134,6 +134,12 @@ let get_manifest_json
 ;;
 
 
+module Config =
+struct
+#include "uberspark_manifest_config.ml"
+end
+
+
 
 module Uobj =
 struct

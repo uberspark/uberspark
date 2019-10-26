@@ -7,35 +7,18 @@ open Yojson
 
 
 (*------------------------------------------------------------------------*)
-(* configuration settings data type *)	
+(* configuration header variable *)	
 (*------------------------------------------------------------------------*)
-type config_settings_t = 
-{
-	(* namespace related settings *)
-	mutable namespace: string;
-
-	(* environment related settings *)
-	mutable env_home_dir : string;
-
-	(* uobj/uobjcoll binary related configuration settings *)	
-	mutable binary_page_size : int;
-	mutable binary_uobj_section_alignment : int;
-	mutable binary_uobj_default_section_size : int;
-	mutable binary_uobj_default_load_addr : int;
-	mutable binary_uobj_default_size : int;
-
-	(* bridge related configuration settings *)	
-	mutable bridge_cc_bridge : string;
-
+let hdr: Uberspark_manifest.Config.config_hdr_t = {
+	namespace = "";
 };;
+
 
 
 (*------------------------------------------------------------------------*)
 (* configuration settings record variable *)	
 (*------------------------------------------------------------------------*)
-let settings: config_settings_t = {
-	(* namespace related settings *)
-	namespace = "";
+let settings: Uberspark_manifest.Config.config_settings_t = {
 
 	(* environment related settings *)
 	env_home_dir = "HOME";
@@ -154,45 +137,14 @@ let load_from_json
 	: bool =
 	let retval = ref false in
 
+	let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node hdr in
+	let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node settings in
 
-	try
-		(*parse header*)
-		let config_json_hdr = Yojson.Basic.Util.member "hdr" json_node in
-			hdr_type := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" config_json_hdr);
-			hdr_namespace := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" config_json_hdr);
-			hdr_platform := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "platform" config_json_hdr);
-			hdr_arch := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" config_json_hdr);
-			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" config_json_hdr);
-			(* TBD: sanity check header *)
-
-
-		(* parse settings *)
-		let config_json_settings = 	Yojson.Basic.Util.member "settings" json_node in
-
-			if (Yojson.Basic.Util.member "binary_page_size" config_json_settings) <> `Null then
-				binary_page_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" config_json_settings));
-
-			if (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings) <> `Null then
-				binary_uobj_section_alignment := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" config_json_settings));
-			
-			if (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings) <> `Null then
-				binary_uobj_default_section_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" config_json_settings));
-	
-			if (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings) <> `Null then
-				binary_uobj_default_load_addr := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" config_json_settings));
-
-			if (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings) <> `Null then
-				binary_uobj_default_size := int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" config_json_settings));
-
-			if (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings) <> `Null then
-				bridge_cc_bridge := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" config_json_settings);
-
-		retval := true;							
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+	if rval_config_hdr && rval_config_settings then
+		retval := true;
+	else
 		retval := false;
 	;
-
 
 	(!retval)
 ;;
@@ -206,22 +158,15 @@ let load
 	let config_ns_json_path = namespace_root ^ config_ns ^ "/uberspark-config.json" in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
-	try
-		let config_json = Yojson.Basic.from_file config_ns_json_path in
-
+	let (rval, config_json) = Uberspark_manifest.get_manifest_json config_ns_json_path in
+	if rval then
 		retval := load_from_json config_json;
-	
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+	else
 		retval := false;
 	;
-					
-
-
+				
 	(!retval)
 ;;
-
-
 
 
 

@@ -12,6 +12,41 @@ val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
 val parse_uberspark_hdr : Yojson.Basic.t -> bool * hdr_t
 
 
+
+module Config : sig
+
+type config_hdr_t =
+{
+    mutable namespace    : string;			
+}
+
+(*------------------------------------------------------------------------*)
+(* configuration settings data type *)	
+(*------------------------------------------------------------------------*)
+type config_settings_t = 
+{
+	(* environment related settings *)
+	mutable env_home_dir : string;
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	mutable binary_page_size : int;
+	mutable binary_uobj_section_alignment : int;
+	mutable binary_uobj_default_section_size : int;
+	mutable binary_uobj_default_load_addr : int;
+	mutable binary_uobj_default_size : int;
+
+	(* bridge related configuration settings *)	
+	mutable bridge_cc_bridge : string;
+
+}
+
+
+val parse_config_hdr : Yojson.Basic.t -> config_hdr_t -> bool
+val parse_config_settings : Yojson.Basic.t -> config_settings_t -> bool
+
+end
+
+
 module Uobj : sig
   type uobj_hdr_t =
     {

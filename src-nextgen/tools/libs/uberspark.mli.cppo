@@ -19,6 +19,12 @@ module Osservices : sig
 
 end
 
+module Manifest : sig
+  
+#include "uberspark_manifest.mli"
+
+end
+
 
 module Config : sig
 
@@ -27,11 +33,6 @@ module Config : sig
 end
 
 
-module Manifest : sig
-  
-#include "uberspark_manifest.mli"
-
-end
 
 
 module Bridge : sig
