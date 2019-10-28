@@ -123,18 +123,24 @@ let handler_bridges_action_create
 
         if cmd_bridges_opts.cc_bridge then begin
           if (Uberspark.Bridge.load_bridge_cc_from_file !l_path_ns) then begin
+            let bridge_ns = Uberspark.Bridge.bridge_cc.bridge_hdr.btype ^ "/" ^
+              Uberspark.Bridge.bridge_cc.bridge_hdr.devenv ^ "/" ^
+              Uberspark.Bridge.bridge_cc.bridge_hdr.arch ^ "/" ^
+              Uberspark.Bridge.bridge_cc.bridge_hdr.cpu ^ "/" ^
+              Uberspark.Bridge.bridge_cc.bridge_hdr.execname ^ "/" ^
+              Uberspark.Bridge.bridge_cc.bridge_hdr.version in
+              
+            Uberspark.Bridge.store_bridge_cc bridge_ns;
+        
+            (*if (cmd_bridges_opts.build) then
+              Uberspark.Bridge.build !bridgetypes;*)
+
             retval := `Ok();
           end else begin
             retval := `Error (false, "could not load cc-bridge!");
           end;
         end;
         
-        (*Uberspark.Bridge.store_settings_to_namespace !bridgetypes;
-        
-        if (cmd_bridges_opts.build) then
-          Uberspark.Bridge.build !bridgetypes;
-
-        `Ok()*)
       (!retval)
     end
   

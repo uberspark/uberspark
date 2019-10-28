@@ -26,6 +26,8 @@ type cc_bridge_t = {
 val cc_bridge_settings_loaded : bool ref
 
 
+val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+
 module Container : sig
 
 val build_image : string -> string -> int
