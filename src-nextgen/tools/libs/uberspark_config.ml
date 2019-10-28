@@ -173,7 +173,6 @@ let load_from_json
 ;;
 
 
-
 let load 
 	(config_name : string)
 	: bool =
@@ -195,8 +194,6 @@ let load
 				
 	(!retval)
 ;;
-
-
 
 
 
