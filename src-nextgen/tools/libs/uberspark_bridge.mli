@@ -44,6 +44,11 @@ val load_bridge_cc_from_file : string -> bool
 
 val load_bridge_cc : string -> bool
 
+val store_bridge_cc_to_file : string -> bool
+
+val store_bridge_cc : string -> bool
+
+
 val store_settings_to_namespace: string list -> unit
 
 val build: string list -> unit

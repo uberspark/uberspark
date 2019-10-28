@@ -166,6 +166,38 @@ let load_bridge_cc
 ;;
 
 
+let store_bridge_cc_to_file 
+	(json_file : string)
+	: bool =
+	let retval = ref false in
+	Uberspark_logger.log "storing cc-bridge settings to file: %s" json_file;
+
+	let oc = open_out json_file in
+
+		Uberspark_manifest.write_prologue ~prologue_str:"uberSpark cc-bridge manifest" oc;
+		Uberspark_manifest.write_uberspark_hdr oc bridge_cc_uberspark_hdr;
+		Uberspark_manifest.Bridge.write_bridge_hdr oc bridge_cc.bridge_hdr;
+		Uberspark_manifest.Bridge.write_bridge_cc ~continuation:false oc bridge_cc;
+		Uberspark_manifest.write_epilogue oc;
+
+	close_out oc;	
+
+	retval := true;
+	(!retval)
+;;
+
+
+let store_bridge_cc 
+	(bridge_ns : string)
+	: bool =
+	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
+		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ 
+		Uberspark_config.namespace_bridge_mf_filename in
+		(store_bridge_cc_to_file bridge_ns_json_path)
+;;
+
+
+
 let dump
 	(bridge_ns_path : string)
 	?(bridge_exectype = "container")
