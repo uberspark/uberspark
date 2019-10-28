@@ -1,16 +1,22 @@
-(*----------------------------------------------------------------------------*)
+(****************************************************************************)
+(****************************************************************************)
 (* uberSpark manifest interface for config*)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(*----------------------------------------------------------------------------*)
+(****************************************************************************)
+(****************************************************************************)
 
+
+(****************************************************************************)
+(* manifest node types *)
+(****************************************************************************)
+
+(* config-hdr node type *)
 type config_hdr_t =
 {
     mutable namespace    : string;			
 };;
 
-(*------------------------------------------------------------------------*)
-(* configuration settings data type *)	
-(*------------------------------------------------------------------------*)
+(* config-settings node type *)
 type config_settings_t = 
 {
 	(* environment related settings *)
@@ -29,13 +35,17 @@ type config_settings_t =
 };;
 
 
+(****************************************************************************)
+(* manifest parse interfaces *)
+(****************************************************************************)
+
+
 (*--------------------------------------------------------------------------*)
 (* parse json node "config-hdr" *)
 (* return: *)
 (* on success: true; config_hdr fields are modified with parsed values *)
 (* on failure: false; config_hdr fields are untouched *)
 (*--------------------------------------------------------------------------*)
-
 let parse_config_hdr 
 	(mf_json : Yojson.Basic.t)
 	(config_hdr : config_hdr_t) 
@@ -66,7 +76,6 @@ let parse_config_hdr
 (* on success: true; config_settings fields are modified with parsed values *)
 (* on failure: false; config_settings fields are untouched *)
 (*--------------------------------------------------------------------------*)
-
 let parse_config_settings 
 	(mf_json : Yojson.Basic.t)
 	(config_settings : config_settings_t) 
@@ -106,3 +115,67 @@ let parse_config_settings
 
 	(!retval)
 ;;
+
+
+(****************************************************************************)
+(* manifest write interfaces *)
+(****************************************************************************)
+
+
+(*--------------------------------------------------------------------------*)
+(* write config-hdr manifest node *)
+(*--------------------------------------------------------------------------*)
+let write_config_hdr 
+	?(continuation = true)
+	(oc : out_channel)
+	(config_hdr : config_hdr_t) 
+	: bool =
+	let retval = ref false in
+
+	Printf.fprintf oc "\n\t\"config-hdr\":{";
+	Printf.fprintf oc "\n\t\t\"namespace\" : \"%s\"," config_hdr.namespace;
+
+	if continuation then
+		begin
+			Printf.fprintf oc "\n\t},";
+		end
+	else
+		begin
+			Printf.fprintf oc "\n\t}";
+		end
+	;
+
+	(!retval)
+;;
+
+(*--------------------------------------------------------------------------*)
+(* write config-settings manifest node *)
+(*--------------------------------------------------------------------------*)
+let write_config_settings 
+	?(continuation = true)
+	(oc : out_channel)
+	(config_settings : config_settings_t) 
+	: bool =
+	let retval = ref false in
+
+	Printf.fprintf oc "\n\t\"config-settings\":{";
+	Printf.fprintf oc "\n\t\t\"binary_page_size\" : \"0x%x\"," config_settings.binary_page_size;
+	Printf.fprintf oc "\n\t\t\"binary_uobj_section_alignment\" : \"0x%x\"," config_settings.binary_uobj_section_alignment;
+	Printf.fprintf oc "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," config_settings.binary_uobj_default_section_size;
+	Printf.fprintf oc "\n\t\t\"binary_uobj_default_load_addr\" : \"0x%x\"," config_settings.binary_uobj_default_load_addr;
+	Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"," config_settings.binary_uobj_default_size;
+	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"" config_settings.bridge_cc_bridge;
+
+	if continuation then
+		begin
+			Printf.fprintf oc "\n\t},";
+		end
+	else
+		begin
+			Printf.fprintf oc "\n\t}";
+		end
+	;
+
+	(!retval)
+;;
+
