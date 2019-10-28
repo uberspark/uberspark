@@ -53,23 +53,22 @@ let get_manifest_json
 (* on failure: false *)
 (*--------------------------------------------------------------------------*)
 
-let parse_uberspark_hdr mf_json =
-	let retval = ref false in
+let parse_uberspark_hdr 
+	(mf_json : Yojson.Basic.t)
+	(uberspark_hdr : hdr_t) 
+	: bool =
 
-	let coss_version = ref "" in
-	let mftype = ref "" in
-	let uberspark_min_version = ref "" in
-	let uberspark_max_version = ref "" in
+	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
 			let json_mf_hdr = mf_json |> member "uberspark-hdr" in
 			if(json_mf_hdr <> `Null) then
 				begin
-					coss_version := json_mf_hdr |> member "coss_version" |> to_string;
-					mftype := json_mf_hdr |> member "mftype" |> to_string;
-					uberspark_min_version := json_mf_hdr |> member "uberspark_min_version" |> to_string;
-					uberspark_max_version := json_mf_hdr |> member "uberspark_max_version" |> to_string;
+					uberspark_hdr.f_coss_version <- json_mf_hdr |> member "coss_version" |> to_string;
+					uberspark_hdr.f_mftype <- json_mf_hdr |> member "mftype" |> to_string;
+					uberspark_hdr.f_uberspark_min_version <- json_mf_hdr |> member "uberspark_min_version" |> to_string;
+					uberspark_hdr.f_uberspark_max_version <- json_mf_hdr |> member "uberspark_max_version" |> to_string;
 					retval := true;
 				end
 			;
@@ -78,12 +77,7 @@ let parse_uberspark_hdr mf_json =
 			retval := false;
 	;
 
-	(!retval, {
-		f_coss_version = !coss_version;
-		f_mftype = !mftype;
-		f_uberspark_min_version = !uberspark_min_version;
-		f_uberspark_max_version = !uberspark_max_version;
-	})
+	(!retval)
 ;;
 
 
@@ -108,7 +102,9 @@ let get_manifest_json
 
 		if (check_header) then
 		begin
-			let (mf_hdr_parsed, mf_hdr) = parse_uberspark_hdr mf_json in
+			let mf_hdr : hdr_t = { f_coss_version = ""; f_mftype = ""; f_uberspark_max_version = "";
+				f_uberspark_min_version = "";} in
+			let mf_hdr_parsed = parse_uberspark_hdr mf_json mf_hdr in
 			if (mf_hdr_parsed) then 
 				begin
 					(* TBD: sanity check header and version *)

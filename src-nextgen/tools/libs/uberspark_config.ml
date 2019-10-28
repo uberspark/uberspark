@@ -5,6 +5,17 @@
 open Unix
 open Yojson
 
+(*------------------------------------------------------------------------*)
+(* ubersprk general header variable *)	
+(*------------------------------------------------------------------------*)
+let uberspark_hdr: Uberspark_manifest.hdr_t = {
+	f_coss_version = "any";
+	f_mftype = "config";
+	f_uberspark_min_version = "any";
+	f_uberspark_max_version = "any";
+};;
+
+
 
 (*------------------------------------------------------------------------*)
 (* configuration header variable *)	
@@ -16,7 +27,7 @@ let hdr: Uberspark_manifest.Config.config_hdr_t = {
 
 
 (*------------------------------------------------------------------------*)
-(* configuration settings record variable *)	
+(* configuration settings variable *)	
 (*------------------------------------------------------------------------*)
 let settings: Uberspark_manifest.Config.config_settings_t = {
 
@@ -138,13 +149,18 @@ let load_from_json
 	: bool =
 	let retval = ref false in
 
+	let rval_uberspark_hdr = Uberspark_manifest.parse_uberspark_hdr json_node uberspark_hdr in
 	let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node hdr in
 	let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node settings in
 
-	if rval_config_hdr && rval_config_settings then
-		retval := true;
+	if rval_config_hdr && rval_config_settings && rval_uberspark_hdr then
+		begin
+			retval := true;
+		end
 	else
-		retval := false;
+		begin
+			retval := false;
+		end
 	;
 
 	(!retval)
@@ -161,9 +177,13 @@ let load
 
 	let (rval, config_json) = Uberspark_manifest.get_manifest_json config_ns_json_path in
 	if rval then
-		retval := load_from_json config_json;
+		begin
+			retval := load_from_json config_json;
+		end
 	else
-		retval := false;
+		begin
+			retval := false;
+		end
 	;
 				
 	(!retval)

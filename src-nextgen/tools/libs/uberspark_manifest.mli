@@ -9,7 +9,7 @@ type hdr_t =
 
 
 val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
-val parse_uberspark_hdr : Yojson.Basic.t -> bool * hdr_t
+val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 
 
 
