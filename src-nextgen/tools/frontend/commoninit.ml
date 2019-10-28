@@ -17,7 +17,13 @@ let initialize
   Uberspark.Logger.log "";
 
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
-  Uberspark.Config.load Uberspark.Config.namespace_config_current;
+  if not (Uberspark.Config.load Uberspark.Config.namespace_config_current) then 
+    begin
+      Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
+      ignore ( exit 1);
+    end
+  ;
+
   Uberspark.Logger.log ~tag:"" "[OK]";
 
 ;;
@@ -26,14 +32,14 @@ let initialize
 let initialize_bridges () : bool =
   let retval = ref false in
 
-  if !Uberspark.Config.bridge_cc_bridge = "" then
+  if Uberspark.Config.config_settings.bridge_cc_bridge = "" then
     begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
       ignore (exit 1);
     end
   ;
 
-  Uberspark.Bridge.load (Uberspark.Config.namespace_bridges_cc_bridge ^ "/" ^ !Uberspark.Config.bridge_cc_bridge);
+  Uberspark.Bridge.load (Uberspark.Config.namespace_bridges_cc_bridge ^ "/" ^ Uberspark.Config.config_settings.bridge_cc_bridge);
 
   if ( !Uberspark.Bridge.cc_bridge_settings_loaded) then
     begin

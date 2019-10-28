@@ -47,7 +47,7 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 };;
 
 
-
+(*
 (*------------------------------------------------------------------------*)
 (* header related configuration settings *)	
 (*------------------------------------------------------------------------*)
@@ -56,6 +56,7 @@ let hdr_namespace = ref "";;
 let hdr_platform = ref "";;
 let hdr_arch = ref "";;
 let hdr_cpu = ref "";;
+*)
 
 
 (*------------------------------------------------------------------------*)
@@ -126,7 +127,7 @@ let namespace_bridges_bldsys_bridge = namespace_bridges ^ "/" ^ namespace_bridge
 
 
 
-
+(*
 (*------------------------------------------------------------------------*)
 (* uobj/uobjcoll binary related configuration settings *)	
 (*------------------------------------------------------------------------*)
@@ -142,6 +143,7 @@ let binary_uobj_default_size = ref 0x01000000;;
 (* bridge related configuration settings *)	
 (*------------------------------------------------------------------------*)
 let bridge_cc_bridge = ref "";;
+*)
 
 
 let load_from_json 
@@ -155,6 +157,9 @@ let load_from_json
 
 	if rval_config_hdr && rval_config_settings && rval_uberspark_hdr then
 		begin
+			(* TBD: sanity check input mftype and override with config only if permissible *)
+			(* e.g., if existing mftype is top-level *)
+			uberspark_hdr.f_mftype <- "config";
 			retval := true;
 		end
 	else

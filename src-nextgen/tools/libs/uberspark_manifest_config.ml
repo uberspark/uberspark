@@ -132,8 +132,9 @@ let write_config_hdr
 	: bool =
 	let retval = ref false in
 
+	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n\t\"config-hdr\":{";
-	Printf.fprintf oc "\n\t\t\"namespace\" : \"%s\"," config_hdr.namespace;
+	Printf.fprintf oc "\n\t\t\"namespace\" : \"%s\"" config_hdr.namespace;
 
 	if continuation then
 		begin
@@ -144,6 +145,8 @@ let write_config_hdr
 			Printf.fprintf oc "\n\t}";
 		end
 	;
+
+	Printf.fprintf oc "\n";
 
 	(!retval)
 ;;
@@ -157,6 +160,8 @@ let write_config_settings
 	(config_settings : config_settings_t) 
 	: bool =
 	let retval = ref false in
+
+	Printf.fprintf oc "\n";
 
 	Printf.fprintf oc "\n\t\"config-settings\":{";
 	Printf.fprintf oc "\n\t\t\"binary_page_size\" : \"0x%x\"," config_settings.binary_page_size;
@@ -175,6 +180,8 @@ let write_config_settings
 			Printf.fprintf oc "\n\t}";
 		end
 	;
+
+	Printf.fprintf oc "\n";
 
 	(!retval)
 ;;

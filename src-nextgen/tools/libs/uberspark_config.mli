@@ -3,11 +3,13 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+val config_hdr: Uberspark_manifest.Config.config_hdr_t
+val config_settings: Uberspark_manifest.Config.config_settings_t
 
 
-
+(*
 val hdr_namespace : string ref
-
+*)
 
 (*------------------------------------------------------------------------*)
 (* environment related configuration settings *)	
@@ -70,7 +72,7 @@ val namespace_bridges_vf_bridge : string
 val namespace_bridges_bldsys_bridge : string
 
 
-
+(*
 (*------------------------------------------------------------------------*)
 (* uobj/uobjcoll binary related configuration settings *)	
 (*------------------------------------------------------------------------*)
@@ -87,7 +89,7 @@ val binary_uobj_default_size : int ref
 (* bridge related configuration settings *)	
 (*------------------------------------------------------------------------*)
 val bridge_cc_bridge : string ref
-
+*)
 
 
 

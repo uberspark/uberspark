@@ -14,7 +14,7 @@
 
 	/* config header */
 	"config-hdr":{
-		"namespace" : "uberspark/config/default",
+		"namespace" : "uberspark/config/default"
 	},
 
 	"config-settings":{

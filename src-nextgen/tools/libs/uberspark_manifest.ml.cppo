@@ -148,11 +148,12 @@ let write_uberspark_hdr
 	
 	let retval = ref false in
 
+	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n\t\"uberspark-hdr\":{";
 	Printf.fprintf oc "\n\t\t\"coss_version\" : \"%s\"," uberspark_hdr.f_coss_version;
 	Printf.fprintf oc "\n\t\t\"mftype\" : \"%s\"," uberspark_hdr.f_mftype;
 	Printf.fprintf oc "\n\t\t\"uberspark_min_version\" : \"%s\"," uberspark_hdr.f_uberspark_min_version;
-	Printf.fprintf oc "\n\t\t\"uberspark_max_version\" : \"%s\"," uberspark_hdr.f_uberspark_max_version;
+	Printf.fprintf oc "\n\t\t\"uberspark_max_version\" : \"%s\"" uberspark_hdr.f_uberspark_max_version;
 
 	if continuation then
 		begin
@@ -163,6 +164,8 @@ let write_uberspark_hdr
 			Printf.fprintf oc "\n\t}";
 		end
 	;
+
+	Printf.fprintf oc "\n";
 
 	retval := true;
 
@@ -185,7 +188,7 @@ let write_epilogue
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n/* %s */" epilogue_str;
 	Printf.fprintf oc "\n";
-	Printf.fprintf oc "\n{";
+	Printf.fprintf oc "\n}";
 
 	retval := true;
 

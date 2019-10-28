@@ -107,12 +107,12 @@ class uobject
 		;
 
 		(* uobj load address base *)
-		val d_load_addr = ref !Uberspark_config.binary_uobj_default_load_addr;
+		val d_load_addr = ref Uberspark_config.config_settings.binary_uobj_default_load_addr;
 		method get_d_load_addr = !d_load_addr;
 		method set_d_load_addr load_addr = (d_load_addr := load_addr);
 		
 		(* uobj size *)
-		val d_size = ref !Uberspark_config.binary_uobj_default_size; 
+		val d_size = ref Uberspark_config.config_settings.binary_uobj_default_size; 
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
@@ -807,11 +807,11 @@ class uobject
 				(*num_sections*)
 				Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length self#get_d_sections_hashtbl);
 				(*page_size*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
 				(*aligned_at*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
 				(*pad_to*)
-				Printf.fprintf oc "\n\t\t0x%08xUL," !Uberspark_config.binary_page_size; 
+				Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
 				(*size*)
 				Printf.fprintf oc "\n\t\t0x%08xULL," (self#get_d_size); 
 				Printf.fprintf oc "\n\t},"; 
@@ -1135,11 +1135,11 @@ class uobject
 			(* iterate over all the sections *)
 			Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.binary_uobj_section_alignment) in
+				let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.binary_uobj_section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Uberspark_config.binary_uobj_section_alignment - remainder_size;
+							padding_size := Uberspark_config.config_settings.binary_uobj_section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1155,8 +1155,8 @@ class uobject
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_size = section_size;
-														f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-														f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+														f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+														f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 														f_addr_start = !uobj_section_load_addr; 
 														f_addr_file = 0;
 														f_reserved = 0;
@@ -1168,8 +1168,8 @@ class uobject
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
 														f_size = section_size;
-														f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-														f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+														f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+														f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 														f_addr_start = !uobj_section_load_addr; 
 														f_addr_file = 0;
 														f_reserved = 0;
@@ -1198,8 +1198,8 @@ class uobject
 							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-															f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -1211,8 +1211,8 @@ class uobject
 							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-															f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -1289,9 +1289,9 @@ class uobject
 				 	f_subsection_list = [ ".hdr" ];	
 					usbinformat = { f_type= Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; 
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1303,9 +1303,9 @@ class uobject
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment;
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1317,9 +1317,9 @@ class uobject
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment;
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment;
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1331,9 +1331,9 @@ class uobject
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment; 
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1345,9 +1345,9 @@ class uobject
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1359,9 +1359,9 @@ class uobject
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 													f_prot=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
-													f_aligned_at = !Uberspark_config.binary_uobj_section_alignment; 
-													f_pad_to = !Uberspark_config.binary_uobj_section_alignment;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment;
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -1435,11 +1435,11 @@ end;;
 			(* iterate over sentinels *)
 			Hashtbl.iter (fun key (x:sentinel_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.s_length mod !Uberspark_config.section_alignment) in
+				let remainder_size = (x.s_length mod Uberspark_config.config_settings.section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Uberspark_config.section_alignment - remainder_size;
+							padding_size := Uberspark_config.config_settings.section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1457,7 +1457,7 @@ end;;
 														(*f_size = x.s_length;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+														f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -1469,7 +1469,7 @@ end;;
 														(* f_size = x.s_length; *)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+														f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 					};
 			
@@ -1481,11 +1481,11 @@ end;;
 			(* iterate over regular sections *)
 			Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
 				(* compute and round up section size to section alignment *)
-				let remainder_size = (x.usbinformat.f_size mod !Uberspark_config.section_alignment) in
+				let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.section_alignment) in
 				let padding_size = ref 0 in
 					if remainder_size > 0 then
 						begin
-							padding_size := !Uberspark_config.section_alignment - remainder_size;
+							padding_size := Uberspark_config.config_settings.section_alignment - remainder_size;
 						end
 					else
 						begin
@@ -1504,7 +1504,7 @@ end;;
 														(*f_size = x.usbinformat.f_size;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+														f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -1516,7 +1516,7 @@ end;;
 														(*f_size = x.usbinformat.f_size;*)
 														f_size = section_size;
 														f_addr_file = 0;
-														f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+														f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 					};
 
@@ -1545,7 +1545,7 @@ end;;
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_addr_file = 0;
-															f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+															f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 														};
 						};
 					Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
@@ -1556,7 +1556,7 @@ end;;
 															f_addr_start = !uobj_section_load_addr; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
 															f_addr_file = 0;
-															f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+															f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 														};
 						};
 				end
@@ -2070,7 +2070,7 @@ end ;;
 								s_fparamdwords = pm.f_paramdwords;
 								s_attribute = (Uberspark_config.get_sentinel_prot ());
 								s_origin = 0;
-								s_length = !Uberspark_config.section_size_sentinel;
+								s_length = Uberspark_config.config_settings.section_size_sentinel;
 							};
 			
 						) d_publicmethods_hashtbl;
@@ -2083,9 +2083,9 @@ end ;;
 				 	f_subsection_list = [ ".hdr" ];	
 					usbinformat = { f_type= Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+													f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
@@ -2093,9 +2093,9 @@ end ;;
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+													f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
@@ -2103,9 +2103,9 @@ end ;;
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+													f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
@@ -2113,9 +2113,9 @@ end ;;
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-								f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+								f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
@@ -2123,9 +2123,9 @@ end ;;
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+													f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 				
@@ -2134,9 +2134,9 @@ end ;;
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
 													f_addr_start=0; 
-													f_size = !Uberspark_config.binary_uobj_default_section_size;
+													f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
 													f_addr_file = 0;
-													f_aligned_at = !Uberspark_config.section_alignment; f_pad_to = !Uberspark_config.section_alignment; f_reserved = 0;
+													f_aligned_at = Uberspark_config.config_settings.section_alignment; f_pad_to = Uberspark_config.config_settings.section_alignment; f_reserved = 0;
 												};
 				};
 			
