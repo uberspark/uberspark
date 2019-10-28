@@ -77,6 +77,12 @@ module Bridge : sig
   val parse_bridge_cc : Yojson.Basic.t -> bridge_cc_t -> bool
 
 
+  (****************************************************************************)
+  (* manifest write interfaces *)
+  (****************************************************************************)
+  val write_bridge_hdr : ?continuation:bool -> out_channel -> bridge_hdr_t -> bool
+  val write_bridge_cc : ?continuation:bool -> out_channel -> bridge_cc_t -> bool
+
 end
 
 

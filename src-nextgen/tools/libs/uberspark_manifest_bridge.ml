@@ -122,4 +122,85 @@ let parse_bridge_cc
 (* manifest write interfaces *)
 (****************************************************************************)
 
+(*--------------------------------------------------------------------------*)
+(* write bridge-hdr manifest node *)
+(*--------------------------------------------------------------------------*)
+let write_bridge_hdr 
+	?(continuation = true)
+	(oc : out_channel)
+	(bridge_hdr : bridge_hdr_t) 
+	: bool =
+	let retval = ref false in
+
+	Printf.fprintf oc "\n";
+	Printf.fprintf oc "\n\t\"bridge-hdr\":{";
+
+	Printf.fprintf oc "\n\t\t\t\"btype\" : \"%s\"," bridge_hdr.btype;
+	Printf.fprintf oc "\n\t\t\t\"execname\" : \"%s\"," bridge_hdr.execname;
+	Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," bridge_hdr.devenv;
+	Printf.fprintf oc "\n\t\t\t\"arch\" : \"%s\"," bridge_hdr.arch;
+	Printf.fprintf oc "\n\t\t\t\"cpu\" : \"%s\"," bridge_hdr.cpu;
+	Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"" bridge_hdr.version;
+	Printf.fprintf oc "\n\t\t\t\"path\" : \"%s\"," bridge_hdr.path;
+	Printf.fprintf oc "\n\t\t\t\"params\" : [ ";
+	let index = ref 0 in
+	while !index < ((List.length bridge_hdr.params)-1) do
+		Printf.fprintf oc "\"%s\", " (List.nth bridge_hdr.params !index);
+		index := !index + 1;
+	done;
+	if (List.length bridge_hdr.params) > 0 then
+		Printf.fprintf oc "\"%s\" " (List.nth bridge_hdr.params ((List.length bridge_hdr.params)-1));
+	Printf.fprintf oc " ],";
+	Printf.fprintf oc "\n\t\t\t\"container_fname\" : \"%s\"" bridge_hdr.container_fname;
+
+	if continuation then
+		begin
+			Printf.fprintf oc "\n\t},";
+		end
+	else
+		begin
+			Printf.fprintf oc "\n\t}";
+		end
+	;
+
+	Printf.fprintf oc "\n";
+
+	(!retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* write bridge-cc manifest node *)
+(*--------------------------------------------------------------------------*)
+let write_bridge_cc 
+	?(continuation = true)
+	(oc : out_channel)
+	(bridge_cc : bridge_cc_t) 
+	: bool =
+	let retval = ref false in
+
+	Printf.fprintf oc "\n";
+	Printf.fprintf oc "\n\t\"bridge-cc\":{";
+
+	Printf.fprintf oc "\n\t\t\"params_prefix_to_obj\" : \"%s\"," bridge_cc.params_prefix_to_obj;
+	Printf.fprintf oc "\n\t\t\"params_prefix_to_asm\" : \"%s\"," bridge_cc.params_prefix_to_asm;
+	Printf.fprintf oc "\n\t\t\"params_prefix_to_output\" : \"%s\"" bridge_cc.params_prefix_to_output;
+
+	if continuation then
+		begin
+			Printf.fprintf oc "\n\t},";
+		end
+	else
+		begin
+			Printf.fprintf oc "\n\t}";
+		end
+	;
+
+	Printf.fprintf oc "\n";
+
+	(!retval)
+;;
+
+
+
 
