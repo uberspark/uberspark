@@ -82,6 +82,41 @@ let parse_bridge_hdr
 
 
 
+(*--------------------------------------------------------------------------*)
+(* parse json node "bridge-cc" *)
+(* return: *)
+(* on success: true; bridge_cc fields are modified with parsed values *)
+(* on failure: false; bridge_cc fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_bridge_cc 
+	(mf_json : Yojson.Basic.t)
+	(bridge_cc : bridge_cc_t) 
+	: bool =
+
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_bridge_cc = mf_json |> member "bridge-cc" in
+			if(json_bridge_cc <> `Null) then
+				begin
+
+					bridge_cc.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" json_bridge_cc);
+					bridge_cc.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" json_bridge_cc);
+					bridge_cc.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" json_bridge_cc);
+
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
 
 (****************************************************************************)
 (* manifest write interfaces *)

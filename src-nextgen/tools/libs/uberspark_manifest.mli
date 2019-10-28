@@ -74,6 +74,7 @@ module Bridge : sig
   (* manifest parse interfaces *)
   (****************************************************************************)
   val parse_bridge_hdr : Yojson.Basic.t -> bridge_hdr_t -> bool
+  val parse_bridge_cc : Yojson.Basic.t -> bridge_cc_t -> bool
 
 
 end
