@@ -65,6 +65,39 @@ let json_list_to_string_list
 	(!ret_str_list)
 ;;
 
+
+
+(* uberspark header node variable *)	
+let uberspark_hdr: Uberspark_manifest.hdr_t = {
+	f_coss_version = "any";
+	f_mftype = "bridge";
+	f_uberspark_min_version = "any";
+	f_uberspark_max_version = "any";
+};;
+
+(* bridge-cc node variable *)	
+let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
+	bridge_hdr = { btype = "";
+				execname = "";
+				path = "";
+				devenv = "";
+				arch = "";
+				cpu = "";
+				version = "";
+				params = [];
+				container_fname = "";
+				namespace = "";
+	};
+	params_prefix_to_obj = "";
+	params_prefix_to_asm = "";
+	params_prefix_to_output = "";
+};;
+
+
+
+
+
+
 module Container =
 struct
 #include "uberspark_bridge_container.ml"
