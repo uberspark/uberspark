@@ -45,6 +45,7 @@ val namespace_uobjslt_callees_output_filename : string
 val namespace_uobjslt_exitcallees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
 
+val namespace_config : string
 val namespace_config_mf_filename : string
 val namespace_config_current : string
 

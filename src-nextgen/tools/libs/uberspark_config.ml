@@ -21,7 +21,7 @@ let uberspark_hdr: Uberspark_manifest.hdr_t = {
 (* configuration header variable *)	
 (*------------------------------------------------------------------------*)
 let config_hdr: Uberspark_manifest.Config.config_hdr_t = {
-	namespace = "";
+	name = "";
 };;
 
 
@@ -98,9 +98,10 @@ let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
+let namespace_config = "uberspark/config";;
 let namespace_config_mf_filename = "uberspark-config.json";;
-let namespace_config_current = "uberspark/config/current";;
-let namespace_config_default = "uberspark/config/default";;
+let namespace_config_current = "current";;
+let namespace_config_default = "default";;
 
 
 let namespace_bridges = "uberspark/bridges";;
@@ -174,10 +175,11 @@ let load_from_json
 
 
 let load 
-	(config_ns : string)
+	(config_name : string)
 	: bool =
 	let retval = ref false in
-	let config_ns_json_path = namespace_root ^ config_ns ^ "/uberspark-config.json" in
+	let config_ns_json_path = namespace_root ^ namespace_config ^ "/" ^ config_name ^ "/" ^ 
+		namespace_config_mf_filename in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
 	let (rval, config_json) = Uberspark_manifest.get_manifest_json config_ns_json_path in
@@ -215,21 +217,21 @@ let dump
 
 
 let create_from_existing_ns
-	(input_config_ns : string)
-	(output_config_ns : string)
+	(input_config_name : string)
+	(output_config_name : string)
 	: (bool * string) =
 	
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (namespace_root ^ output_config_ns) in
+	let output_config_dir = (namespace_root ^ namespace_config ^ "/" ^ output_config_name) in
 	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
 
-	(* load the input config ns *)
-	load input_config_ns;
+	(* load the input config *)
+	load input_config_name;
 
-	(* change namespace field within header *)
-	config_hdr.namespace <- output_config_ns;
+	(* change name field within config header *)
+	config_hdr.name <- output_config_name;
 
 	(* make the output config directory *)
 	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
@@ -246,13 +248,13 @@ let create_from_existing_ns
 
 let create_from_file
 	(input_config_json_pathname : string)
-	(output_config_ns : string)
+	(output_config_name : string)
 	: (bool * string) =
 	
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (namespace_root ^ output_config_ns) in
+	let output_config_dir = (namespace_root ^ namespace_config ^ "/" ^ output_config_name) in
 	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
 
 
@@ -316,12 +318,12 @@ let settings_set
 
 
 let switch 
-	(config_ns : string)
+	(config_name : string)
 	: bool =
 	
 	let retval = ref true in
-	let config_ns_path = namespace_root ^ config_ns in 
-	let config_ns_current_path = namespace_root ^ namespace_config_current in
+	let config_ns_path = namespace_root ^ namespace_config ^ "/" ^ config_name in 
+	let config_ns_current_path = namespace_root ^ namespace_config ^ "/" ^ namespace_config_current in
 	let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
 
 	Uberspark_osservices.file_remove config_ns_current_path;
@@ -334,20 +336,20 @@ let switch
 
 
 let remove 
-	(config_ns : string)
+	(config_name : string)
 	: bool =
 	let retval = ref false in
 	
-	if (config_ns <> namespace_config_default) then 
+	if (config_name <> namespace_config_default) then 
 		begin
-			let config_ns_path = namespace_root ^ config_ns in 
+			let config_ns_path = namespace_root ^ namespace_config ^ "/" ^ config_name in 
 			let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
 			
 			Uberspark_osservices.file_remove config_ns_json_path;
 			Uberspark_osservices.rmdir config_ns_path;
 
 			(* check if we removed the current config, if so reload the default *)
-			if config_hdr.namespace = config_ns then
+			if config_hdr.name = config_name then
 				ignore(switch namespace_config_default);
 			;
 

@@ -12,7 +12,7 @@
 
 	/* config header */
 	"config-hdr":{
-		"namespace" : "uberspark/config/coss_cmdmul"
+		"name" : "coss_cmdmul"
 	},
 
 	

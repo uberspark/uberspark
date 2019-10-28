@@ -13,7 +13,7 @@
 (* config-hdr node type *)
 type config_hdr_t =
 {
-    mutable namespace    : string;			
+    mutable name    : string;			
 };;
 
 (* config-settings node type *)
@@ -57,7 +57,7 @@ let parse_config_hdr
 			let json_config_hdr = mf_json |> member "config-hdr" in
 			if(json_config_hdr <> `Null) then
 				begin
-					config_hdr.namespace <- json_config_hdr |> member "namespace" |> to_string;
+					config_hdr.name <- json_config_hdr |> member "name" |> to_string;
 					retval := true;
 				end
 			;
@@ -134,7 +134,7 @@ let write_config_hdr
 
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n\t\"config-hdr\":{";
-	Printf.fprintf oc "\n\t\t\"namespace\" : \"%s\"" config_hdr.namespace;
+	Printf.fprintf oc "\n\t\t\"name\" : \"%s\"" config_hdr.name;
 
 	if continuation then
 		begin

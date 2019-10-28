@@ -49,7 +49,7 @@ module Config : sig
   (* config-hdr node type *)
   type config_hdr_t =
   {
-      mutable namespace    : string;			
+      mutable name   : string;			
   }
 
   (* config-settings node type *)

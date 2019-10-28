@@ -168,6 +168,7 @@ let handler_config
             if rval == true then 
               begin
                 let config_ns_json_filename = Uberspark.Config.namespace_root ^
+                  Uberspark.Config.namespace_config ^ "/" ^
                   Uberspark.Config.namespace_config_current ^ "/" ^
                   Uberspark.Config.namespace_config_mf_filename in
                 Uberspark.Config.dump config_ns_json_filename;  
