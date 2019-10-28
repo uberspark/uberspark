@@ -22,6 +22,22 @@ type hdr_t =
 };;
 
 
+(****************************************************************************)
+(* manifest helper interfaces *)
+(****************************************************************************)
+
+
+let json_list_to_string_list
+	json_list = 
+	
+	let ret_str_list = ref [] in
+		List.iter (fun (x) ->
+			ret_str_list := !ret_str_list @ [ (Yojson.Basic.Util.to_string x) ];
+		) json_list;
+
+	(!ret_str_list)
+;;
+
 
 (****************************************************************************)
 (* manifest parse interfaces *)
