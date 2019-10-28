@@ -198,6 +198,43 @@ let store_bridge_cc
 
 
 
+let build_bridge_cc 
+	: unit =
+
+	if bridge_cc.bridge_hdr.btype = "container" then
+		begin
+			let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
+				bridge_cc.bridge_hdr.btype ^ "/" ^
+				bridge_cc.bridge_hdr.devenv ^ "/" ^
+				bridge_cc.bridge_hdr.arch ^ "/" ^
+				bridge_cc.bridge_hdr.cpu ^ "/" ^
+				bridge_cc.bridge_hdr.execname ^ "/" ^
+				bridge_cc.bridge_hdr.version in
+			let bridge_container_path = Uberspark_config.namespace_root ^ bridge_ns in
+
+			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
+
+			if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
+				Uberspark_logger.log "cc-bridge build success!"; end
+			else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build cc-bridge!"; 
+				ignore (exit 1);
+			end
+			;
+										
+		end
+	else
+		begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "ignoring build command for 'native' bridge";
+		end
+	;
+
+	()
+;;
+
+
+
+
 let dump
 	(bridge_ns_path : string)
 	?(bridge_exectype = "container")

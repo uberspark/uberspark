@@ -132,8 +132,8 @@ let handler_bridges_action_create
               
             Uberspark.Bridge.store_bridge_cc bridge_ns;
         
-            (*if (cmd_bridges_opts.build) then
-              Uberspark.Bridge.build !bridgetypes;*)
+            if (cmd_bridges_opts.build) then
+              Uberspark.Bridge.build_bridge_cc;
 
             retval := `Ok();
           end else begin
