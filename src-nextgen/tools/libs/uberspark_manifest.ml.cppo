@@ -203,6 +203,11 @@ let write_epilogue
 (* submodules *)
 (****************************************************************************)
 
+module Bridge =
+struct
+#include "uberspark_manifest_bridge.ml"
+end
+
 
 module Config =
 struct
