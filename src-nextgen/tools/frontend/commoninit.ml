@@ -39,9 +39,7 @@ let initialize_bridges () : bool =
     end
   ;
 
-  Uberspark.Bridge.load (Uberspark.Config.namespace_bridges_cc_bridge ^ "/" ^ Uberspark.Config.config_settings.bridge_cc_bridge);
-
-  if ( !Uberspark.Bridge.cc_bridge_settings_loaded) then
+  if (Uberspark.Bridge.load_bridge_cc Uberspark.Config.config_settings.bridge_cc_bridge) then
     begin
       Uberspark.Logger.log "loaded cc_bridge settings";
       retval := true;

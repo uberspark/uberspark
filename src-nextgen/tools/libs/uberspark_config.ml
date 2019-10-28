@@ -104,27 +104,25 @@ let namespace_config_current = "current";;
 let namespace_config_default = "default";;
 
 
-let namespace_bridges = "uberspark/bridges";;
+let namespace_bridge = "uberspark/bridges";;
+let namespace_bridge_mf_filename = "uberspark-bridge.json";;
+let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
 
-let namespace_bridges_mf_filename = "uberspark-bridge.json";;
-let namespace_bridges_container_filename = "uberspark-bridge.Dockerfile";;
+let namespace_bridge_ar_bridge_name = "ar-bridge";;
+let namespace_bridge_as_bridge_name = "as-bridge";;
+let namespace_bridge_cc_bridge_name = "cc-bridge";;
+let namespace_bridge_ld_bridge_name = "ld-bridge";;
+let namespace_bridge_pp_bridge_name = "pp-bridge";;
+let namespace_bridge_vf_bridge_name = "vf-bridge";;
+let namespace_bridge_bldsys_bridge_name = "bldsys-bridge";;
 
-
-let namespace_bridges_ar_bridge_name = "ar-bridge";;
-let namespace_bridges_as_bridge_name = "as-bridge";;
-let namespace_bridges_cc_bridge_name = "cc-bridge";;
-let namespace_bridges_ld_bridge_name = "ld-bridge";;
-let namespace_bridges_pp_bridge_name = "pp-bridge";;
-let namespace_bridges_vf_bridge_name = "vf-bridge";;
-let namespace_bridges_bldsys_bridge_name = "bldsys-bridge";;
-
-let namespace_bridges_ar_bridge = namespace_bridges ^ "/" ^ namespace_bridges_ar_bridge_name;;
-let namespace_bridges_as_bridge = namespace_bridges ^ "/" ^ namespace_bridges_as_bridge_name;;
-let namespace_bridges_cc_bridge = namespace_bridges ^ "/" ^ namespace_bridges_cc_bridge_name;;
-let namespace_bridges_ld_bridge = namespace_bridges ^ "/" ^ namespace_bridges_ld_bridge_name;;
-let namespace_bridges_pp_bridge = namespace_bridges ^ "/" ^ namespace_bridges_pp_bridge_name;;
-let namespace_bridges_vf_bridge = namespace_bridges ^ "/" ^ namespace_bridges_vf_bridge_name;;
-let namespace_bridges_bldsys_bridge = namespace_bridges ^ "/" ^ namespace_bridges_bldsys_bridge_name;;
+let namespace_bridge_ar_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ar_bridge_name;;
+let namespace_bridge_as_bridge = namespace_bridge ^ "/" ^ namespace_bridge_as_bridge_name;;
+let namespace_bridge_cc_bridge = namespace_bridge ^ "/" ^ namespace_bridge_cc_bridge_name;;
+let namespace_bridge_ld_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ld_bridge_name;;
+let namespace_bridge_pp_bridge = namespace_bridge ^ "/" ^ namespace_bridge_pp_bridge_name;;
+let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_bridge_name;;
+let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_bldsys_bridge_name;;
 
 
 

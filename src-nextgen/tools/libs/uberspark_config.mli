@@ -50,27 +50,26 @@ val namespace_config_mf_filename : string
 val namespace_config_current : string
 
 
-val namespace_bridges : string
+val namespace_bridge : string
+val namespace_bridge_mf_filename : string
+val namespace_bridge_container_filename : string
 
-val namespace_bridges_mf_filename : string
-val namespace_bridges_container_filename : string
-
-val namespace_bridges_ar_bridge_name : string
-val namespace_bridges_as_bridge_name : string
-val namespace_bridges_cc_bridge_name : string
-val namespace_bridges_ld_bridge_name : string
-val namespace_bridges_pp_bridge_name : string
-val namespace_bridges_vf_bridge_name : string
-val namespace_bridges_bldsys_bridge_name : string
+val namespace_bridge_ar_bridge_name : string
+val namespace_bridge_as_bridge_name : string
+val namespace_bridge_cc_bridge_name : string
+val namespace_bridge_ld_bridge_name : string
+val namespace_bridge_pp_bridge_name : string
+val namespace_bridge_vf_bridge_name : string
+val namespace_bridge_bldsys_bridge_name : string
 
 
-val namespace_bridges_ar_bridge : string
-val namespace_bridges_as_bridge : string
-val namespace_bridges_cc_bridge : string
-val namespace_bridges_ld_bridge : string
-val namespace_bridges_pp_bridge : string
-val namespace_bridges_vf_bridge : string
-val namespace_bridges_bldsys_bridge : string
+val namespace_bridge_ar_bridge : string
+val namespace_bridge_as_bridge : string
+val namespace_bridge_cc_bridge : string
+val namespace_bridge_ld_bridge : string
+val namespace_bridge_pp_bridge : string
+val namespace_bridge_vf_bridge : string
+val namespace_bridge_bldsys_bridge : string
 
 
 (*

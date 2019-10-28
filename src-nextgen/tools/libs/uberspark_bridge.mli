@@ -40,10 +40,9 @@ val sample : string -> unit
 
 end
 
+val load_bridge_cc_from_file : string -> bool
 
-val load_from_file : string -> bool
-
-val load : string -> bool
+val load_bridge_cc : string -> bool
 
 val store_settings_to_namespace: string list -> unit
 

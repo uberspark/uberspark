@@ -13,7 +13,7 @@ let build_image
     : int =
     
     let bridge_container_filepath = bridge_container_path ^ "/" ^
-        Uberspark_config.namespace_bridges_container_filename in
+        Uberspark_config.namespace_bridge_container_filename in
     let cmdline = ref [] in
     
         cmdline := !cmdline @ [ "build" ];
