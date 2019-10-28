@@ -1,9 +1,16 @@
-(*----------------------------------------------------------------------------*)
+(****************************************************************************)
+(****************************************************************************)
 (* uberSpark manifest interface *)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(*----------------------------------------------------------------------------*)
+(****************************************************************************)
+(****************************************************************************)
 
 open Yojson
+
+
+(****************************************************************************)
+(* manifest node types *)
+(****************************************************************************)
 
 (* uberspark generic manifest header *)
 type hdr_t =
@@ -16,33 +23,9 @@ type hdr_t =
 
 
 
-(*
 (****************************************************************************)
-(* return json object for a given manifest file *)
+(* manifest parse interfaces *)
 (****************************************************************************)
-let get_manifest_json
-	?(check_header = true) 
-	(mf_filename : string)
-	= 
-
-	let retval = ref false in
-	let retjson = ref `Null in
-
-	try
-				
-		let mf_json = Yojson.Basic.from_file mf_filename in
-			retval := true;
-			retjson := mf_json;
-								
-	with Yojson.Json_error s -> 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "usmf_read_manifest: ERROR:%s" s;
-			retval := false;
-			;
-	
-	(!retval, !retjson)
-;;
-*)
-
 
 
 (*--------------------------------------------------------------------------*)
@@ -52,7 +35,6 @@ let get_manifest_json
 (* on success: true, manifest header node as hdr_t*)
 (* on failure: false *)
 (*--------------------------------------------------------------------------*)
-
 let parse_uberspark_hdr 
 	(mf_json : Yojson.Basic.t)
 	(uberspark_hdr : hdr_t) 
@@ -81,12 +63,9 @@ let parse_uberspark_hdr
 ;;
 
 
-
-
 (*--------------------------------------------------------------------------*)
 (* read manifest file into json object; sanity checking uberspark version *)
 (*--------------------------------------------------------------------------*)
-
 let get_manifest_json 
 	?(check_header = true)
 	(mf_filename : string)
@@ -128,6 +107,7 @@ let get_manifest_json
 
 	(!retval, !retjson)
 ;;
+
 
 
 
