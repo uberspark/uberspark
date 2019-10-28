@@ -188,17 +188,25 @@ let store_bridge_cc_to_file
 
 
 let store_bridge_cc 
-	(bridge_ns : string)
+	()
 	: bool =
+    let bridge_ns = bridge_cc.bridge_hdr.btype ^ "/" ^
+		bridge_cc.bridge_hdr.devenv ^ "/" ^
+		bridge_cc.bridge_hdr.arch ^ "/" ^
+		bridge_cc.bridge_hdr.cpu ^ "/" ^
+		bridge_cc.bridge_hdr.execname ^ "/" ^
+		bridge_cc.bridge_hdr.version in
 	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
 		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ 
 		Uberspark_config.namespace_bridge_mf_filename in
-		(store_bridge_cc_to_file bridge_ns_json_path)
+
+	(store_bridge_cc_to_file bridge_ns_json_path)
 ;;
 
 
 
 let build_bridge_cc 
+	()
 	: unit =
 
 	if bridge_cc.bridge_hdr.btype = "container" then
