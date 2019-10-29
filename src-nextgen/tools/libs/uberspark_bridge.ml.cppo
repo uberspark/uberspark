@@ -207,7 +207,9 @@ let store_bridge_cc
 
 let build_bridge_cc 
 	()
-	: unit =
+	: bool =
+
+	let retval = ref false in
 
 	if bridge_cc.bridge_hdr.btype = "container" then
 		begin
@@ -223,10 +225,11 @@ let build_bridge_cc
 			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
 
 			if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
-				Uberspark_logger.log "cc-bridge build success!"; end
-			else begin
+				Uberspark_logger.log "cc-bridge build success!"; 
+				retval := true;
+			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build cc-bridge!"; 
-				ignore (exit 1);
+				retval := false;
 			end
 			;
 										
@@ -234,12 +237,12 @@ let build_bridge_cc
 	else
 		begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "ignoring build command for 'native' bridge";
+			retval := true;
 		end
 	;
 
-	()
+	(!retval)
 ;;
-
 
 
 

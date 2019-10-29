@@ -50,7 +50,7 @@ val store_bridge_cc_to_file : string -> bool
 
 val store_bridge_cc : unit -> bool
 
-val build_bridge_cc : unit -> unit
+val build_bridge_cc : unit -> bool
 
 
 val store_settings_to_namespace: string list -> unit

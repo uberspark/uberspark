@@ -126,9 +126,10 @@ let handler_bridges_action_create
               
             Uberspark.Bridge.store_bridge_cc ();
         
-            if (cmd_bridges_opts.build) then
-              Uberspark.Bridge.build_bridge_cc ();
-
+            if (cmd_bridges_opts.build) then begin
+              ignore (Uberspark.Bridge.build_bridge_cc ());
+            end;
+            
             retval := `Ok();
           end else begin
             retval := `Error (false, "could not load cc-bridge!");
@@ -247,6 +248,36 @@ let handler_bridges_action_dump
 ;;
 
 
+let helper_bridges_action_config_do
+  (bridge_type : string)
+  (bridge_ns : string)
+  (cmd_bridges_opts : opts )
+  : [> `Error of bool * string | `Ok of unit ] = 
+
+  let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
+
+  if (cmd_bridges_opts.build) then
+    begin
+      match bridge_type with 
+        | "cc-bridge" -> 
+          if ( Uberspark.Bridge.build_bridge_cc () ) then begin
+            retval := `Ok();
+          end else begin
+            retval := `Error (false, "could not build cc bridge!");
+          end;
+        | _ ->
+            retval := `Error (false, "unknown bridge type!");
+      ;
+    end
+  else  
+    begin
+      retval := `Error (true, "you must specify --build");
+    end
+  ;
+
+  (!retval)
+;;
+
 (* bridges config action *)
 let handler_bridges_action_config 
   (copts : Commonopts.opts)
@@ -274,6 +305,21 @@ let handler_bridges_action_config
         begin
           l_path_ns := path_ns_qname;
 
+          let bridge_ns = "container/" ^ !l_path_ns in 
+
+          if cmd_bridges_opts.cc_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_cc_bridge bridge_ns cmd_bridges_opts;
+          end else begin
+              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+          end;
+
+
+          (*
+            bridge_ns_prefix := Uberspark.Config.namespace_bridge_cc_bridge; 
+            bridge_type := [ Uberspark.Config.namespace_bridge_cc_bridge_name ]; end
+          
+          
+          
           let action_options_unspecified = ref false in 
 
           if cmd_bridges_opts.ar_bridge then begin            
@@ -328,7 +374,7 @@ let handler_bridges_action_config
               ;*)
             
             end
-          ;              
+          ; *)             
 
           (!retval)
 
