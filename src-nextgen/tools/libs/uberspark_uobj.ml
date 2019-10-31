@@ -52,8 +52,8 @@ class uobject
 		val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 		method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
-		val d_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
-		method get_d_callees_hashtbl = d_callees_hashtbl;
+		val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+		method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
 
 		val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 		method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
@@ -208,43 +208,6 @@ class uobject
 
 
 
-		(*--------------------------------------------------------------------------*)
-		(* parse manifest node "uobj-callees" *)
-		(* return true on successful parse, false if not *)
-		(* return: if true then populate hashtable of callees*)
-		(*--------------------------------------------------------------------------*)
-		method parse_node_mf_uobj_callees mf_json =
-			let retval = ref true in
-
-			try
-				let open Yojson.Basic.Util in
-					let uobj_callees_json = mf_json |> member "intrauobjcoll-callees" in
-						if uobj_callees_json != `Null then
-							begin
-
-								let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
-									retval := true;
-									List.iter (fun (x,y) ->
-											let uobj_callees_attribute_list = ref [] in
-												List.iter (fun z ->
-													uobj_callees_attribute_list := !uobj_callees_attribute_list @
-																			[ (z |> to_string) ];
-													()
-												)(Yojson.Basic.Util.to_list y);
-												
-												Hashtbl.add d_callees_hashtbl x !uobj_callees_attribute_list;
-											()
-										) uobj_callees_assoc_list;
-							end
-						;
-																
-			with Yojson.Basic.Util.Type_error _ -> 
-					retval := false;
-			;
-
-									
-			(!retval)
-		;
 
 
 
@@ -409,7 +372,7 @@ class uobject
 				end;
 
 			(* parse uobj-calles node *)
-			let rval = (self#parse_node_mf_uobj_callees mf_json) in
+			let rval = (Uberspark_manifest.Uobj.parse_uobj_intrauobjcoll_callees mf_json d_intrauobjcoll_callees_hashtbl) in
 
 			if (rval == false) then (false)
 			else
@@ -419,7 +382,7 @@ class uobject
 
 					Hashtbl.iter (fun key value  ->
 						Uberspark_logger.log "uobj=%s; callees=%u" key (List.length value);
-					) self#get_d_callees_hashtbl;
+					) self#get_d_intrauobjcoll_callees_hashtbl;
 				end;
 
 			(* parse uobj-exitcallees node *)
@@ -817,7 +780,7 @@ class uobject
 			let num_intrauobjcoll_callees = ref 0 in
 			Hashtbl.iter (fun key value  ->
 				num_intrauobjcoll_callees := !num_intrauobjcoll_callees + (List.length value);
-			) self#get_d_callees_hashtbl;
+			) self#get_d_intrauobjcoll_callees_hashtbl;
 			Printf.fprintf oc "\n\t\t0x%08xUL," !num_intrauobjcoll_callees;
 			
 			(* generate uobj public methods defs *)
@@ -838,7 +801,7 @@ class uobject
 					Printf.fprintf oc "\n\t\t},"; 
 					slt_ordinal := !slt_ordinal + 1;
 				) value;
-			) self#get_d_callees_hashtbl;
+			) self#get_d_intrauobjcoll_callees_hashtbl;
 			
 			Printf.fprintf oc "\n\t},"; 
 
@@ -1145,7 +1108,7 @@ class uobject
 			let callees_list = ref [] in 
 			Hashtbl.iter (fun key value  ->
 				callees_list := !callees_list @ value;
-			) self#get_d_callees_hashtbl;
+			) self#get_d_intrauobjcoll_callees_hashtbl;
 			Uberspark_logger.log "total callees=%u" (List.length !callees_list);
 
 			let rval = (self#generate_slt !callees_list ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" Uberspark_config.namespace_uobjslt_callees_output_filename) in	

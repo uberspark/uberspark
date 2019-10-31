@@ -38,7 +38,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	},
 
 	/* public methods of other uobjs that this uobj invokes */
-	"intrauobjcoll-callees" : {
+	"uobj-intrauobjcoll-callees" : {
 		"testuobj": ["one", "two", "three"]
 	},
 	

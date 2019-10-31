@@ -15,7 +15,7 @@ type sentinel_info_t =
 
   class uobject :
   object
-    val d_callees_hashtbl : (string, string list) Hashtbl.t
+    val d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     val d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
@@ -49,7 +49,7 @@ type sentinel_info_t =
     method generate_src_interuobjcoll_callees_info : unit
     method generate_src_intrauobjcoll_callees_info : unit
     method generate_src_publicmethods_info : unit
-    method get_d_callees_hashtbl : (string, string list) Hashtbl.t
+    method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
@@ -79,7 +79,6 @@ type sentinel_info_t =
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method parse_node_mf_uobj_binary : Yojson.Basic.t -> bool
-    method parse_node_mf_uobj_callees : Yojson.Basic.t -> bool
     method parse_node_mf_uobj_interuobjcoll_callees :
       Yojson.Basic.t -> bool
 
