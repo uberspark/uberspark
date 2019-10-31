@@ -79,8 +79,6 @@ type sentinel_info_t =
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method parse_node_mf_uobj_binary : Yojson.Basic.t -> bool
-    method parse_node_mf_uobj_interuobjcoll_callees :
-      Yojson.Basic.t -> bool
 
     method set_d_load_addr : int -> unit
     method set_d_size : int -> unit

@@ -221,3 +221,48 @@ let parse_uobj_intrauobjcoll_callees
 	(!retval)
 ;;
 
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-interuobjcoll-callees" *)
+(* return: *)
+(* on success: true; interuobjcoll-callees hash table modified with parsed values *)
+(* on failure: false; interuobjcoll-callees hash table is left untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_interuobjcoll_callees 
+	(mf_json : Yojson.Basic.t)
+	(interuobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t) )
+	: bool =
+
+	let retval = ref true in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_callees_json = mf_json |> member "uobj-interuobjcoll-callees" in
+				if uobj_callees_json != `Null then
+					begin
+
+						let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
+							retval := true;
+							List.iter (fun (x,y) ->
+									let uobj_callees_attribute_list = ref [] in
+										List.iter (fun z ->
+											uobj_callees_attribute_list := !uobj_callees_attribute_list @
+																	[ (z |> to_string) ];
+											()
+										)(Yojson.Basic.Util.to_list y);
+										
+										Hashtbl.add interuobjcoll_callees_hashtbl x !uobj_callees_attribute_list;
+									()
+								) uobj_callees_assoc_list;
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval)
+;;
