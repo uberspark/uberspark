@@ -15,8 +15,10 @@
 (****************************************************************************)
 (* interfaces *)
 (****************************************************************************)
-
-
+let hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t ) 
+	: int list = 
+	Hashtbl.fold (fun key _ l -> key :: l) h []
+;;
 
 
 

@@ -92,7 +92,6 @@ class uobject
 		method get_d_size = !d_size;
 		method set_d_size size = (d_size := size);
 
-		method hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t ) = Hashtbl.fold (fun key _ l -> key :: l) h [];
 
 
 
@@ -398,7 +397,8 @@ class uobject
 			) self#get_d_intrauobjcoll_callees_hashtbl;
 			Uberspark_logger.log "total callees=%u" (List.length !callees_list);
 
-			let rval = (self#generate_slt !callees_list ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" Uberspark_config.namespace_uobjslt_callees_output_filename) in	
+			let rval = (Uberspark_codegen.Uobj.generate_slt Uberspark_config.namespace_uobjslt_callees_output_filename 
+				!callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" ) in	
 			if (rval == false) then
 				begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for callees!";
@@ -414,7 +414,8 @@ class uobject
 			)self#get_d_interuobjcoll_callees_hashtbl;
 			Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
 
-			let rval = (self#generate_slt !interuobjcoll_callees_list ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" Uberspark_config.namespace_uobjslt_exitcallees_output_filename) in	
+			let rval = (Uberspark_codegen.Uobj.generate_slt Uberspark_config.namespace_uobjslt_exitcallees_output_filename 
+				!interuobjcoll_callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" ) in	
 			if (rval == false) then
 				begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for exitcallees!";
@@ -514,27 +515,34 @@ class uobject
 
 			(* generate uobj binary header source *)
 			Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
-			self#generate_src_binhdr;
+			Uberspark_codegen.Uobj.generate_src_binhdr Uberspark_config.namespace_uobj_binhdr_src_filename
+				self#get_d_load_addr self#get_d_size d_sections_hashtbl;
 			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary public methods info source *)
 			Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
-			self#generate_src_publicmethods_info;
+			Uberspark_codegen.Uobj.generate_src_publicmethods_info Uberspark_config.namespace_uobj_publicmethods_info_src_filename
+				d_publicmethods_hashtbl;
 			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary intrauobjcoll callees info source *)
 			Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
-			self#generate_src_intrauobjcoll_callees_info;
+			Uberspark_codegen.Uobj.generate_src_intrauobjcoll_callees_info 
+				Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename
+				d_intrauobjcoll_callees_hashtbl;
 			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary interuobjcoll callees info source *)
 			Uberspark_logger.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
-			self#generate_src_interuobjcoll_callees_info;
+			Uberspark_codegen.Uobj.generate_src_interuobjcoll_callees_info 
+				Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename
+				d_interuobjcoll_callees_hashtbl;
 			Uberspark_logger.log ~tag:"" "[OK]";
 
 			(* generate uobj binary linker script *)
 			Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
-			self#generate_linker_script self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
+			Uberspark_codegen.Uobj.generate_linker_script Uberspark_config.namespace_uobj_linkerscript_filename 
+				self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
 			Uberspark_logger.log ~tag:"" "[OK]";
 
 
