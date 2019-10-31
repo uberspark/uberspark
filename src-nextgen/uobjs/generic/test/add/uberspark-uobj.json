@@ -50,6 +50,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 
 	,
+	
 	"uobj-binary" : {
 		"uobj-sections": {
 			"uobj_testsect" 		: [ "0x0", "0x111", "0x1000", "0x100000", "0x100000", ".testsect", ".testsect1" ]
