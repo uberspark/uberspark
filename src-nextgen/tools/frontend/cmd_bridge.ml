@@ -120,7 +120,9 @@ let handler_bridges_action_create
   | Some sname -> 
     begin
         l_path_ns := sname;
+        let processed_bridge = ref false in
 
+        (* process cc-bridge *)
         if cmd_bridges_opts.cc_bridge then begin
           if (Uberspark.Bridge.load_bridge_cc_from_file !l_path_ns) then begin
               
@@ -134,6 +136,13 @@ let handler_bridges_action_create
           end else begin
             retval := `Error (false, "could not load cc-bridge!");
           end;
+        
+          processed_bridge := true;
+        end;
+
+
+        if not !processed_bridge then begin
+          retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
         end;
         
       (!retval)
@@ -260,11 +269,20 @@ let helper_bridges_action_config_do
     begin
       match bridge_type with 
         | "cc-bridge" -> 
-          if ( Uberspark.Bridge.build_bridge_cc () ) then begin
-            retval := `Ok();
+
+          if (Uberspark.Bridge.load_bridge_cc bridge_ns) then begin
+            Uberspark.Logger.log "loaded cc-bridge settings";
+            if ( Uberspark.Bridge.build_bridge_cc () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build cc-bridge!");
+            end;
           end else begin
-            retval := `Error (false, "could not build cc bridge!");
-          end;
+            retval := `Error (false, "unable to load cc-bridge settings!");
+          end
+          ;  
+
+
         | _ ->
             retval := `Error (false, "unknown bridge type!");
       ;
@@ -308,7 +326,7 @@ let handler_bridges_action_config
           let bridge_ns = "container/" ^ !l_path_ns in 
 
           if cmd_bridges_opts.cc_bridge then begin
-              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_cc_bridge bridge_ns cmd_bridges_opts;
+              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_cc_bridge_name bridge_ns cmd_bridges_opts;
           end else begin
               retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
           end;

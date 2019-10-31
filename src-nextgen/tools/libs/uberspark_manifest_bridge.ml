@@ -100,12 +100,16 @@ let parse_bridge_cc
 			let json_bridge_cc = mf_json |> member "bridge-cc" in
 			if(json_bridge_cc <> `Null) then
 				begin
+					
+					retval := parse_bridge_hdr json_bridge_cc bridge_cc.bridge_hdr;
 
-					bridge_cc.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" json_bridge_cc);
-					bridge_cc.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" json_bridge_cc);
-					bridge_cc.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" json_bridge_cc);
-
-					retval := true;
+					if !retval then begin
+						bridge_cc.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" json_bridge_cc);
+						bridge_cc.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" json_bridge_cc);
+						bridge_cc.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" json_bridge_cc);
+						retval := true;
+					end;
+					
 				end
 			;
 
@@ -181,6 +185,8 @@ let write_bridge_cc
 
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n\t\"bridge-cc\":{";
+
+	write_bridge_hdr oc bridge_cc.bridge_hdr;
 
 	Printf.fprintf oc "\n\t\t\"params_prefix_to_obj\" : \"%s\"," bridge_cc.params_prefix_to_obj;
 	Printf.fprintf oc "\n\t\t\"params_prefix_to_asm\" : \"%s\"," bridge_cc.params_prefix_to_asm;

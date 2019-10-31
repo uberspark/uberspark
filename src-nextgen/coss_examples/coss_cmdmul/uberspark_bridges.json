@@ -19,7 +19,7 @@
             "devenv" : "amd64",
             "arch" : "x86_32",
             "cpu" : "generic",
-            "version" : "v5.4.0",
+            "version" : "v5.5.0",
             "path" : ".",
             "params" : [ "-v" ],
             "container_fname" : "uberspark_bridges.Dockerfile"
