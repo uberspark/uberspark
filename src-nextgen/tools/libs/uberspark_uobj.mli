@@ -12,13 +12,6 @@ type sentinel_info_t =
   }
 
 
-type uobj_publicmethods_t = 
-  {
-    f_name: string;
-    f_retvaldecl : string;
-    f_paramdecl: string;
-    f_paramdwords : int;
-  }
 
   class uobject :
   object
@@ -31,7 +24,7 @@ type uobj_publicmethods_t =
     val d_mf_filename : string ref
     val d_path_ns : string ref
     val d_publicmethods_hashtbl :
-      (string, uobj_publicmethods_t) Hashtbl.t
+      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
     val d_sections_hashtbl :
       (string, Defs.Basedefs.section_info_t) Hashtbl.t
     val d_sections_memory_map_hashtbl :
@@ -64,7 +57,7 @@ type uobj_publicmethods_t =
     method get_d_mf_filename : string
     method get_d_path_ns : string
     method get_d_publicmethods_hashtbl :
-      (string, uobj_publicmethods_t) Hashtbl.t
+      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
     method get_d_sections_hashtbl :
       (string, Defs.Basedefs.section_info_t) Hashtbl.t
     method get_d_sections_memory_map_hashtbl :
@@ -89,7 +82,6 @@ type uobj_publicmethods_t =
     method parse_node_mf_uobj_callees : Yojson.Basic.t -> bool
     method parse_node_mf_uobj_interuobjcoll_callees :
       Yojson.Basic.t -> bool
-    method parse_node_mf_uobj_publicmethods : Yojson.Basic.t -> bool
 
     method set_d_load_addr : int -> unit
     method set_d_size : int -> unit

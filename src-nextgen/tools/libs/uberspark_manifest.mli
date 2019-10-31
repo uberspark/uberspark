@@ -144,9 +144,19 @@ module Uobj : sig
       mutable f_cpu				   : string;
     }
 
+  type uobj_publicmethods_t = 
+  {
+    f_name: string;
+    f_retvaldecl : string;
+    f_paramdecl: string;
+    f_paramdwords : int;
+  }
+
 
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> bool
+  val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
+
 
 end
 

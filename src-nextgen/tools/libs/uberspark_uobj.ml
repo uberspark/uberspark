@@ -20,13 +20,6 @@ open Str
 			};;
 
 
-		type uobj_publicmethods_t = 
-			{
-				f_name: string;
-				f_retvaldecl : string;
-				f_paramdecl: string;
-				f_paramdwords : int;
-			};;
 
 
 		
@@ -56,7 +49,7 @@ class uobject
 		val d_sources_casm_file_list: string list ref = ref [];
 		method get_d_sources_casm_file_list = !d_sources_casm_file_list;
 
-		val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobj_publicmethods_t)  Hashtbl.t)); 
+		val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 		method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
 		val d_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
@@ -213,56 +206,6 @@ class uobject
 		
 	
 
-	  (*--------------------------------------------------------------------------*)
-		(* parse manifest node "uobj-publicmethods" *)
-		(* return true on successful parse, false if not *)
-		(* return: if true then list public methods *)
-		(*--------------------------------------------------------------------------*)
-		method parse_node_mf_uobj_publicmethods mf_json =
-			let retval = ref false in
-
-			try
-				let open Yojson.Basic.Util in
-					let uobj_publicmethods_json = mf_json |> member "uobj-publicmethods" in
-						if uobj_publicmethods_json != `Null then
-							begin
-
-								let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
-									retval := true;
-									
-									List.iter (fun (x,y) ->
-										let uobj_publicmethods_inner_list = (Yojson.Basic.Util.to_list y) in 
-										if (List.length uobj_publicmethods_inner_list) <> 3 then
-											begin
-												retval := false;
-											end
-										else
-											begin
-												Hashtbl.add d_publicmethods_hashtbl (x) 
-												{
-													f_name = x;
-													f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
-													f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
-													f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
-												};
-														
-												retval := true; 
-											end
-										;
-							
-										()
-									) uobj_publicmethods_assoc_list;
-
-							end
-						;
-																
-			with Yojson.Basic.Util.Type_error _ -> 
-					retval := false;
-			;
-
-									
-			(!retval)
-		;
 
 
 		(*--------------------------------------------------------------------------*)
@@ -456,7 +399,7 @@ class uobject
 
 
 			(* parse uobj-publicmethods node *)
-			let rval = (self#parse_node_mf_uobj_publicmethods mf_json) in
+			let rval = (Uberspark_manifest.Uobj.parse_uobj_publicmethods mf_json d_publicmethods_hashtbl) in
 
 			if (rval == false) then (false)
 			else
@@ -828,7 +771,7 @@ class uobject
 				(* generate uobj public methods defs *)
 				Printf.fprintf oc "\n\t{"; 
 				
-				Hashtbl.iter (fun key (pm_info:uobj_publicmethods_t) ->  
+				Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
 					Printf.fprintf oc "\n\t\t{"; 
 					(* name *)
 					Printf.fprintf oc "\n\t\t\t\"%s\"," (pm_info.f_name); 
