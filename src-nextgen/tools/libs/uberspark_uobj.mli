@@ -82,6 +82,7 @@ type uobj_publicmethods_t =
       (int, Defs.Basedefs.section_info_t) Hashtbl.t ->
       int list
     method initialize : Defs.Basedefs.target_def_t -> unit
+
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method parse_node_mf_uobj_binary : Yojson.Basic.t -> bool
@@ -89,7 +90,7 @@ type uobj_publicmethods_t =
     method parse_node_mf_uobj_interuobjcoll_callees :
       Yojson.Basic.t -> bool
     method parse_node_mf_uobj_publicmethods : Yojson.Basic.t -> bool
-    method parse_node_mf_uobj_sources : Yojson.Basic.t -> bool
+
     method set_d_load_addr : int -> unit
     method set_d_size : int -> unit
     method set_d_slt_trampolinecode : string -> unit

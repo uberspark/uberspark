@@ -211,61 +211,6 @@ class uobject
 	
 
 		
-		(*--------------------------------------------------------------------------*)
-		(* parse manifest node "uobj-sources" *)
-		(* return true on successful parse, false if not *)
-		(* return: if true then store lists of h-files, c-files and casm files *)
-		(*--------------------------------------------------------------------------*)
-		method parse_node_mf_uobj_sources mf_json =
-			let retval = ref true in
-			try
-				let open Yojson.Basic.Util in
-					let mf_uobj_sources_json = mf_json |> member "uobj-sources" in
-					if mf_uobj_sources_json != `Null then
-							begin
-
-								let mf_hfiles_json = mf_uobj_sources_json |> member "h-files" in
-									if mf_hfiles_json != `Null then
-										begin
-											let hfiles_json_list = mf_hfiles_json |> 
-													to_list in 
-												List.iter (fun x -> d_sources_h_file_list := 
-														!d_sources_h_file_list @ [(x |> to_string)]
-													) hfiles_json_list;
-										end
-									;
-
-								let mf_cfiles_json = mf_uobj_sources_json |> member "c-files" in
-									if mf_cfiles_json != `Null then
-										begin
-											let cfiles_json_list = mf_cfiles_json |> 
-													to_list in 
-												List.iter (fun x -> d_sources_c_file_list := 
-														!d_sources_c_file_list @ [(x |> to_string)]
-													) cfiles_json_list;
-										end
-									;
-
-								let mf_casmfiles_json = mf_uobj_sources_json |> member "casm-files" in
-									if mf_casmfiles_json != `Null then
-										begin
-											let casmfiles_json_list = mf_casmfiles_json |> 
-													to_list in 
-												List.iter (fun x -> d_sources_casm_file_list := 
-														!d_sources_casm_file_list @ [(x |> to_string)]
-													) casmfiles_json_list;
-										end
-									;
-									
-							end
-						;
-						
-			with Yojson.Basic.Util.Type_error _ -> 
-					retval := false;
-			;
-		
-			(!retval)
-		;
 	
 
 	  (*--------------------------------------------------------------------------*)
@@ -496,7 +441,8 @@ class uobject
 			else
 
 			(* parse uobj-sources node *)
-			let rval = (self#parse_node_mf_uobj_sources mf_json) in
+			let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
+					d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list) in
 	
 			if (rval == false) then (false)
 			else

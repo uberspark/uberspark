@@ -146,7 +146,8 @@ module Uobj : sig
 
 
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
-  
+  val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> bool
+
 end
 
 
