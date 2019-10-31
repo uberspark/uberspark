@@ -201,7 +201,7 @@ class uobject
 				= 
 				let retval = ref false in 	
 				let target_def = 	self#get_d_target_def in	
-				let uobjslt_filename = (Uberspark_config.namespace_uobjslt ^ "/" ^
+				let uobjslt_filename = (Uberspark_config.namespace_root ^ Uberspark_config.namespace_uobjslt ^ "/" ^
 					target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
 					Uberspark_config.namespace_uobjslt_mf_filename) in 
 

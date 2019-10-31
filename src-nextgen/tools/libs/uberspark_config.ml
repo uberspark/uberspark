@@ -69,7 +69,7 @@ let env_home_dir = ref "HOME";;
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	
 (*------------------------------------------------------------------------*)
-let namespace_root = ((Unix.getenv !env_home_dir) ^ "/");;
+let namespace_root = ((Unix.getenv !env_home_dir) ^ "/.uberspark/");;
 let namespace_root_mf_filename = "uberspark.json";;
 
 
@@ -90,7 +90,7 @@ let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
 
 
 
-let namespace_uobjslt = (namespace_root ^ "uberspark/uobjslt");;
+let namespace_uobjslt = "uobjslt";;
 let namespace_uobjslt_mf_hdr_type = "uobjslt";;
 let namespace_uobjslt_mf_filename = "uberspark-uobjslt.json";;
 let namespace_uobjslt_callees_output_filename = "uobjslt-callees.S";;
@@ -98,13 +98,13 @@ let namespace_uobjslt_exitcallees_output_filename = "uobjslt-exitcallees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
-let namespace_config = "uberspark/config";;
+let namespace_config = "config";;
 let namespace_config_mf_filename = "uberspark-config.json";;
 let namespace_config_current = "current";;
 let namespace_config_default = "default";;
 
 
-let namespace_bridge = "uberspark/bridges";;
+let namespace_bridge = "bridges";;
 let namespace_bridge_mf_filename = "uberspark-bridge.json";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
 

@@ -11,7 +11,7 @@ export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-nextgen
 export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 
-export USPARK_NAMESPACEROOTDIR := ~/uberspark
+export USPARK_NAMESPACEROOTDIR := ~/.uberspark
 export USPARK_INSTALL_BINDIR := /usr/bin
 
 export SUDO := sudo
