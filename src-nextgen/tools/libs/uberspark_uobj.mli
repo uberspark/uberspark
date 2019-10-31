@@ -1,16 +1,3 @@
-type sentinel_info_t = 
-  {
-    s_type: string;
-    s_type_id : string;
-    s_retvaldecl : string;
-    s_fname: string;
-    s_fparamdecl: string;
-    s_fparamdwords : int;
-    s_attribute : string;
-    s_origin: int;
-    s_length: int;	
-  }
-
 
 
   class uobject :
