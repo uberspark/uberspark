@@ -5,13 +5,21 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 {
 	/* header */
-	"hdr":{
-		"type" : "uobj",
+	"uberspark-hdr":{
+		"coss_version" : "1.0",
+		"mftype" : "uobj",
+		"uberspark_min_version" : "4.0",
+		"uberspark_max_version" : "5.1"
+	},
+
+	/* uobj header */
+	"uobj-hdr":{
 		"namespace" : "/uberspark/uobjs/generic/test/add",
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic"
 	},
+
 
 	/* sources */
 	"uobj-sources" : {
@@ -30,18 +38,19 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	},
 
 	/* public methods of other uobjs that this uobj invokes */
-	"intrauobjcoll-callees" : {
+	"uobj-intrauobjcoll-callees" : {
 		"testuobj": ["one", "two", "three"]
 	},
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"interuobjcoll-callees": {
+	"uobj-interuobjcoll-callees": {
 		"/uberspark/uobjcoll/test/testuobj1" : ["one", "two" ],
 		"legacy" : ["untrusted_func_1",	"untrusted_func_2"]
 	} 
 
 
 	,
+	
 	"uobj-binary" : {
 		"uobj-sections": {
 			"uobj_testsect" 		: [ "0x0", "0x111", "0x1000", "0x100000", "0x100000", ".testsect", ".testsect1" ]

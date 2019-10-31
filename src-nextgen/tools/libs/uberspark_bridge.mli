@@ -26,6 +26,8 @@ type cc_bridge_t = {
 val cc_bridge_settings_loaded : bool ref
 
 
+val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+
 module Container : sig
 
 val build_image : string -> string -> int
@@ -40,10 +42,16 @@ val sample : string -> unit
 
 end
 
+val load_bridge_cc_from_file : string -> bool
 
-val load_from_file : string -> bool
+val load_bridge_cc : string -> bool
 
-val load : string -> bool
+val store_bridge_cc_to_file : string -> bool
+
+val store_bridge_cc : unit -> bool
+
+val build_bridge_cc : unit -> bool
+
 
 val store_settings_to_namespace: string list -> unit
 

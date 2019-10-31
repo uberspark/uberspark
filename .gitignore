@@ -19,6 +19,7 @@ temp/
 !META
 !*.rst
 !*.ml
+!*.ml.cppo
 !*.mli
 !*.c
 !*.cS

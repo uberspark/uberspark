@@ -4,15 +4,20 @@
 
 
 {
-	"hdr":{
-		"type" : "uberspark-config",
-		"namespace" : "uberspark/config/default",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic"
+	/* uberspark header */
+	"uberspark-hdr":{
+		"coss_version" : "any",
+		"mftype" : "config",
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
 	},
 
-	"settings":{
+	/* config header */
+	"config-hdr":{
+		"name" : "default"
+	},
+
+	"config-settings":{
 		"binary_page_size" : "0x200000",
 		"binary_uobj_section_alignment" : "0x200000",
 		"binary_uobj_default_section_size" : "0x200000",

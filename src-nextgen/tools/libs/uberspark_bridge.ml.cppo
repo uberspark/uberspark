@@ -65,6 +65,37 @@ let json_list_to_string_list
 	(!ret_str_list)
 ;;
 
+
+
+(* bridge-cc uberspark header node variable *)	
+let bridge_cc_uberspark_hdr: Uberspark_manifest.hdr_t = {
+	f_coss_version = "any";
+	f_mftype = "bridge";
+	f_uberspark_min_version = "any";
+	f_uberspark_max_version = "any";
+};;
+
+(* bridge-cc node variable *)	
+let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
+	bridge_hdr = { btype = "";
+				execname = "";
+				path = "";
+				devenv = "";
+				arch = "";
+				cpu = "";
+				version = "";
+				params = [];
+				container_fname = "";
+				namespace = "";
+	};
+	params_prefix_to_obj = "";
+	params_prefix_to_asm = "";
+	params_prefix_to_output = "";
+};;
+
+
+
+
 module Container =
 struct
 #include "uberspark_bridge_container.ml"
@@ -76,93 +107,159 @@ struct
 end
 
 
-let load_bridge_hdr
-	(bridge_json_node : Yojson.Basic.json)
-	(bridge_hdr : bridge_hdr_t) =
-
-	let bridge_hdr_json_node = Yojson.Basic.Util.member "hdr" bridge_json_node in
-		
-	bridge_hdr.btype <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "btype" bridge_hdr_json_node);
-	bridge_hdr.execname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "execname" bridge_hdr_json_node);
-	bridge_hdr.path <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "path" bridge_hdr_json_node);
-	bridge_hdr.params <-	json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "params" bridge_hdr_json_node));
-	bridge_hdr.container_fname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "container_fname" bridge_hdr_json_node);
-	bridge_hdr.devenv <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "devenv" bridge_hdr_json_node);
-	bridge_hdr.arch <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" bridge_hdr_json_node);
-	bridge_hdr.cpu <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" bridge_hdr_json_node);
-	bridge_hdr.version <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "version" bridge_hdr_json_node);
-	bridge_hdr.namespace <-	bridge_hdr.btype ^ "/" ^ bridge_hdr.devenv ^ "/" ^
-							bridge_hdr.arch ^ "/" ^ bridge_hdr.cpu ^ "/" ^
-							bridge_hdr.execname ^ "/" ^ bridge_hdr.version;
-	()
-;;
-
-
-let load_cc_bridge
-	(bridge_json : Yojson.Basic.json)
+let load_bridge_cc_from_json
+	(json_node : Yojson.Basic.json)
 	: bool =
+
 	let retval = ref false in
 
-	let cc_bridge_json = Yojson.Basic.Util.member "cc-bridge" bridge_json in
-	if (cc_bridge_json <> `Null) then
-		begin
-			load_bridge_hdr cc_bridge_json cc_bridge_settings.hdr;
+	let rval_uberspark_hdr = Uberspark_manifest.parse_uberspark_hdr json_node bridge_cc_uberspark_hdr in
+	(*let rval_bridge_hdr = Uberspark_manifest.Bridge.parse_bridge_hdr json_node bridge_cc.bridge_hdr in*)
+	let rval_bridge_cc = Uberspark_manifest.Bridge.parse_bridge_cc json_node bridge_cc in
 
-			cc_bridge_settings.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" cc_bridge_json);
-			cc_bridge_settings.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" cc_bridge_json);
-			cc_bridge_settings.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" cc_bridge_json);
-		
-			cc_bridge_settings_loaded := true;
+	if rval_bridge_cc && rval_uberspark_hdr then
+		begin
+			(* TBD: sanity check input mftype and override with bridge only if permissible *)
+			(* e.g., if existing mftype is top-level *)
+			bridge_cc_uberspark_hdr.f_mftype <- "bridge";
 			retval := true;
 		end
-	else	
+	else
 		begin
 			retval := false;
 		end
 	;
 
-
 	(!retval)
 ;;
 
 
-let load_from_file 
-	(bridge_ns_json_file : string)
+let load_bridge_cc_from_file 
+	(json_file : string)
 	: bool =
 	let retval = ref false in
-	Uberspark_logger.log "loading bridge settings from file: %s" bridge_ns_json_file;
+	Uberspark_logger.log "loading cc-bridge settings from file: %s" json_file;
 
-	try
-		let bridge_json = Yojson.Basic.from_file bridge_ns_json_file in
-		(*parse header*)
-		let bridge_json_hdr = Yojson.Basic.Util.member "hdr" bridge_json in
-			hdr_type := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "type" bridge_json_hdr);
-			hdr_namespace := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "namespace" bridge_json_hdr);
-			hdr_platform := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "platform" bridge_json_hdr);
-			hdr_arch := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" bridge_json_hdr);
-			hdr_cpu := Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cpu" bridge_json_hdr);
-			(* TBD: sanity check header *)
-		
 
-		(* parse cc-bridge if found *)
-		load_cc_bridge bridge_json;
-		
-		
-		retval := true;							
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retval := false;
+	let (rval, bridge_cc_json) = Uberspark_manifest.get_manifest_json json_file in
+	if rval then
+		begin
+			retval := load_bridge_cc_from_json bridge_cc_json;
+		end
+	else
+		begin
+			retval := false;
+		end
 	;
-					
+
 	(!retval)
 ;;
 
-let load 
+
+let load_bridge_cc 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = Uberspark_config.namespace_root ^ bridge_ns ^ "/uberspark-bridge.json" in
-		(load_from_file bridge_ns_json_path)
+	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
+		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ "/" ^
+		Uberspark_config.namespace_bridge_mf_filename in
+		(load_bridge_cc_from_file bridge_ns_json_path)
 ;;
+
+
+let store_bridge_cc_to_file 
+	(json_file : string)
+	: bool =
+	let retval = ref false in
+	Uberspark_logger.log "storing cc-bridge settings to file: %s" json_file;
+
+	let oc = open_out json_file in
+
+		Uberspark_manifest.write_prologue ~prologue_str:"uberSpark cc-bridge manifest" oc;
+		Uberspark_manifest.write_uberspark_hdr oc bridge_cc_uberspark_hdr;
+		(*Uberspark_manifest.Bridge.write_bridge_hdr oc bridge_cc.bridge_hdr;*)
+		Uberspark_manifest.Bridge.write_bridge_cc ~continuation:false oc bridge_cc;
+		Uberspark_manifest.write_epilogue oc;
+
+	close_out oc;	
+
+	retval := true;
+	(!retval)
+;;
+
+
+let store_bridge_cc 
+	()
+	: bool =
+	let retval = ref false in 
+    let bridge_ns = bridge_cc.bridge_hdr.btype ^ "/" ^
+		bridge_cc.bridge_hdr.devenv ^ "/" ^
+		bridge_cc.bridge_hdr.arch ^ "/" ^
+		bridge_cc.bridge_hdr.cpu ^ "/" ^
+		bridge_cc.bridge_hdr.execname ^ "/" ^
+		bridge_cc.bridge_hdr.version in
+	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
+		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
+	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
+		Uberspark_config.namespace_bridge_mf_filename in
+
+	(* make the namespace directory *)
+	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
+
+	retval := store_bridge_cc_to_file bridge_ns_json_filename;
+
+	(* check if bridge type is container, if so store dockerfile *)
+	if !retval && bridge_cc.bridge_hdr.btype = "container" then
+		begin
+			let input_bridge_dockerfile = bridge_cc.bridge_hdr.container_fname in 
+			let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
+				Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
+		end
+	;
+
+	(!retval)
+;;
+
+
+
+let build_bridge_cc 
+	()
+	: bool =
+
+	let retval = ref false in
+
+	if bridge_cc.bridge_hdr.btype = "container" then
+		begin
+			let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
+				bridge_cc.bridge_hdr.btype ^ "/" ^
+				bridge_cc.bridge_hdr.devenv ^ "/" ^
+				bridge_cc.bridge_hdr.arch ^ "/" ^
+				bridge_cc.bridge_hdr.cpu ^ "/" ^
+				bridge_cc.bridge_hdr.execname ^ "/" ^
+				bridge_cc.bridge_hdr.version in
+			let bridge_container_path = Uberspark_config.namespace_root ^ bridge_ns in
+
+			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
+
+			if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
+				Uberspark_logger.log "cc-bridge build success!"; 
+				retval := true;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build cc-bridge!"; 
+				retval := false;
+			end
+			;
+										
+		end
+	else
+		begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "ignoring build command for 'native' bridge";
+			retval := true;
+		end
+	;
+
+	(!retval)
+;;
+
 
 
 let dump
@@ -171,11 +268,11 @@ let dump
 	(output_directory : string)
 	=
 	let src_bridge_json_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ "/" ^
-			Uberspark_config.namespace_bridges_json_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_json_filename in
+			Uberspark_config.namespace_bridge_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridge_mf_filename in
 	let src_bridge_container_filename = Uberspark_config.namespace_root ^ bridge_ns_path ^ 
-			"/" ^ Uberspark_config.namespace_bridges_container_filename in
-	let dst_container_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridges_container_filename in
+			"/" ^ Uberspark_config.namespace_bridge_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridge_container_filename in
 	
 	(* copy json file *)
 	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
@@ -213,7 +310,7 @@ let build
 			if cc_bridge_settings.hdr.btype = "container" then
 				begin
 					Uberspark_logger.log "building cc-bridge: %s" cc_bridge_settings.hdr.namespace;
-					let bridge_ns = Uberspark_config.namespace_bridges_cc_bridge ^ "/" ^
+					let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
 						cc_bridge_settings.hdr.namespace in
 
 					let bridge_container_path = Uberspark_config.namespace_root ^ bridge_ns in
@@ -253,7 +350,7 @@ let store_settings_to_namespace
 		match x with 
 		| "cc-bridge" ->
 			let output_bridge_ns_path = Uberspark_config.namespace_root ^  
-								Uberspark_config.namespace_bridges_cc_bridge ^ "/" ^
+								Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
 								cc_bridge_settings.hdr.namespace in 
 			let output_bridge_json_file = output_bridge_ns_path ^ "/uberspark-bridge.json" in
 			

@@ -4,9 +4,18 @@
 */
 
 {
-    	/* header */
-	"hdr":{
-		"type" : "uobjslt",
+
+	/* uberspark header */
+	"uberspark-hdr":{
+		"coss_version" : "any",
+		"mftype" : "uobjslt",
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+
+    /* uobjslt header */
+	"uobjslt-hdr":{
 		"namespace" : "/uberspark/uobjslt/x86_32/generic",
 		"platform" : "generic",
 		"arch" : "x86_32",
