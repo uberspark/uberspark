@@ -29,7 +29,7 @@ end
 
 val dump : string -> ?bridge_exectype:string -> string -> unit
 val remove : string -> unit
-
+val initialize_from_config : unit -> bool
 
 (****************************************************************************)
 (* bridge submodules *)
@@ -53,6 +53,7 @@ val load : string -> bool
 val store_to_file : string -> bool
 val store : unit -> bool
 val build : unit -> bool
+val initialize : unit -> bool
 val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> string list -> bool
 
 

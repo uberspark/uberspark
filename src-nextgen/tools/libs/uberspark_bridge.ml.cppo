@@ -81,3 +81,33 @@ end
 
 
 
+(****************************************************************************)
+(* general interfaces *)
+(****************************************************************************)
+let initialize_from_config () 
+	: bool =
+	
+	let retval = ref false in
+
+	
+	if Uberspark_config.config_settings.bridge_cc_bridge = "" then
+		begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
+		ignore (exit 1);
+		end
+	;
+
+	if (Cc.load Uberspark_config.config_settings.bridge_cc_bridge) then
+		begin
+		Uberspark_logger.log "loaded cc_bridge settings";
+		retval := true;
+		end
+	else
+		begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
+		retval := false;
+		end
+	;  
+
+	(!retval)
+;;

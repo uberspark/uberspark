@@ -197,6 +197,19 @@ let build
 ;;
 
 
+let initialize 
+	()
+	: bool =
+
+	let retval = ref false in
+
+
+
+	(!retval)
+;;
+
+
+
 let invoke 
 	?(gen_obj = false)
 	?(gen_asm = false)

@@ -86,7 +86,7 @@ let handler_uobj_build
       end
       ;
 
-      if not (Commoninit.initialize_bridges ()) then 
+      if not (Uberspark.Bridge.initialize_from_config ()) then 
         begin
           Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not initialize bridges!";
           ignore (exit 1);

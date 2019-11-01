@@ -28,28 +28,3 @@ let initialize
 
 ;;
 
-
-let initialize_bridges () : bool =
-  let retval = ref false in
-
-  if Uberspark.Config.config_settings.bridge_cc_bridge = "" then
-    begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
-      ignore (exit 1);
-    end
-  ;
-
-  if (Uberspark.Bridge.Cc.load Uberspark.Config.config_settings.bridge_cc_bridge) then
-    begin
-      Uberspark.Logger.log "loaded cc_bridge settings";
-      retval := true;
-    end
-  else
-    begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load cc_bridge settings!";
-      retval := false;
-    end
-  ;  
-
-  (!retval)
-;;
