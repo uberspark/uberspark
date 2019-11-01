@@ -3,6 +3,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 *)
 
+(*
 type bridge_hdr_t = {
 	mutable btype : string;
 	mutable execname: string;
@@ -23,8 +24,9 @@ type cc_bridge_t = {
 	mutable params_prefix_to_output: string;
 }
 
-val cc_bridge_settings_loaded : bool ref
 
+val cc_bridge_settings_loaded : bool ref
+*)
 
 val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
 
@@ -38,7 +40,6 @@ end
 
 module Native : sig
 
-val sample : string -> unit
 
 end
 
@@ -51,9 +52,6 @@ val store_bridge_cc_to_file : string -> bool
 val store_bridge_cc : unit -> bool
 
 val build_bridge_cc : unit -> bool
-
-
-val store_settings_to_namespace: string list -> unit
 
 val build: string list -> unit
 
