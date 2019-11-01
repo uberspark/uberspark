@@ -5,6 +5,25 @@
 open Unix
 open Yojson
 
+(****************************************************************************)
+(* general submodules *)
+(****************************************************************************)
+
+module Container =
+struct
+#include "uberspark_bridge_container.ml"
+end
+
+module Native =
+struct
+#include "uberspark_bridge_native.ml"
+end
+
+
+(****************************************************************************)
+(* cc-bridge data variables *)
+(****************************************************************************)
+
 (* bridge-cc uberspark header node variable *)	
 let bridge_cc_uberspark_hdr: Uberspark_manifest.hdr_t = {
 	f_coss_version = "any";
@@ -32,15 +51,12 @@ let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
 };;
 
 
-module Container =
-struct
-#include "uberspark_bridge_container.ml"
-end
 
-module Native =
-struct
-#include "uberspark_bridge_native.ml"
-end
+
+
+(****************************************************************************)
+(* cc-bridge interfaces *)
+(****************************************************************************)
 
 
 let load_bridge_cc_from_json
@@ -198,6 +214,10 @@ let build_bridge_cc
 
 
 
+(****************************************************************************)
+(* general interfaces *)
+(****************************************************************************)
+
 let dump
 	(bridge_ns_path : string)
 	?(bridge_exectype = "container")
@@ -222,7 +242,6 @@ let dump
 ;;
 
 
-
 let remove
 	(bridge_ns_path : string)
 	=
@@ -232,6 +251,4 @@ let remove
 	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
 	()
 ;;
-
-
 
