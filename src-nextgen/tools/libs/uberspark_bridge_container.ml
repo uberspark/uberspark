@@ -39,3 +39,26 @@ let list_images
 ;;
 
 
+let run_image 
+    (context_path : string)
+    (cmdline : string)
+    (bridge_ns: string)
+    : int =
+    
+    let cmdline = ref [] in
+    
+        cmdline := !cmdline @ [ "run" ];
+        cmdline := !cmdline @ [ "--rm" ];
+        cmdline := !cmdline @ [ "-i" ];
+        cmdline := !cmdline @ [ "-e" ];
+        cmdline := !cmdline @ [ "D_CMD=\"" ^ cmdline ^ "\""];
+        cmdline := !cmdline @ [ "-v" ];
+        cmdline := !cmdline @ [ "src:" ^ context_path ];
+        cmdline := !cmdline @ [ "-t" ];
+        cmdline := !cmdline @ [ bridge_ns ];
+
+        let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
+                ~stag:"docker" "docker" !cmdline in
+		(r_exitcode)
+;;
+

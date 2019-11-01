@@ -12,7 +12,8 @@ module Container : sig
 
 val build_image : string -> string -> int
 val list_images : string -> unit 
-
+val run_image : string -> string -> string -> int
+    
 end
 
 module Native : sig
