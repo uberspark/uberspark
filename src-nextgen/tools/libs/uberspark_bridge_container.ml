@@ -41,7 +41,7 @@ let list_images
 
 let run_image 
     (context_path : string)
-    (cmdline : string)
+    (d_cmd : string)
     (bridge_ns: string)
     : int =
     
@@ -51,7 +51,7 @@ let run_image
         cmdline := !cmdline @ [ "--rm" ];
         cmdline := !cmdline @ [ "-i" ];
         cmdline := !cmdline @ [ "-e" ];
-        cmdline := !cmdline @ [ "D_CMD=\"" ^ cmdline ^ "\""];
+        cmdline := !cmdline @ [ "D_CMD=\"" ^ d_cmd ^ "\""];
         cmdline := !cmdline @ [ "-v" ];
         cmdline := !cmdline @ [ "src:" ^ context_path ];
         cmdline := !cmdline @ [ "-t" ];
