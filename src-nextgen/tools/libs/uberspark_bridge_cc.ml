@@ -197,28 +197,64 @@ let build
 
 
 let invoke 
-	?(gen_obj = false)
+	?(gen_obj = true)
 	?(gen_asm = false)
 	(c_file_list : string list)
+	(context_path : string)
 	: bool =
 
 	let retval = ref false in
+	let d_cmd = ref "" in
+	
+	(* iterate over the c source files and build command line *)
+	for li = 0 to (List.length c_file_list) - 1 do begin
+		let c_file_name = (List.nth c_file_list li) in
+		let add_d_cmd = ref "" in
+			add_d_cmd := !add_d_cmd ^ bridge_cc.bridge_hdr.execname ^ " ";
+			(*List.iter (fun param ->
+				add_d_cmd := add_d_cmd ^ param ^ " ";
+			) bridge_cc.bridge_hdr.params;
 
-	if gen_obj then begin
-		
-		if bridge_cc.bridge_hdr.btype = "container" then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge container invocation. TBD!";
-			retval := true;
+			if gen_obj then
+				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+			else if gen_asm then
+				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_asm ^ " ";
+			else
+				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+
+			add_d_cmd := add_d_cmd ^ c_file_name ^ " ";
+			add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_output ^ " ";
+
+			if gen_obj then
+				add_d_cmd := add_d_cmd ^ c_file_name ^ ".o" ^ " ";
+			else if gen_asm then
+				add_d_cmd := add_d_cmd ^ c_file_name ^ ".S" ^ " ";
+			else
+				add_d_cmd := add_d_cmd ^ c_file_name ^ ".o" ^ " ";*)
+	
+		if li == 0 then begin
+			d_cmd := !add_d_cmd;
 		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge native invocation. TBD!";
-			retval := true;
+			d_cmd := !d_cmd ^ " && " ^ !add_d_cmd;
 		end;
+		
+	end done;
 
+
+
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
+	retval := true;
+
+(*	(* invoke the compiler *)
+	if bridge_cc.bridge_hdr.btype = "container" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge container invocation. TBD!";
+		retval := true;
 	end else begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "no op specified for cc-bridge invoke!";
-		retval := false;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge native invocation. TBD!";
+		retval := true;
 	end;
-
+*)
 
 	(!retval)
 ;;

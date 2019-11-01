@@ -54,7 +54,7 @@ val load : string -> bool
 val store_to_file : string -> bool
 val store : unit -> bool
 val build : unit -> bool
-val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> string list -> bool
+val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> string list -> string -> bool
 
 
 

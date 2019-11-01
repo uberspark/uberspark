@@ -12,10 +12,14 @@ let handler_opts
   (verb : int)
   (loglvl : int)
   : opts = 
-  (*Uberspark.Logger.log "verb=%u, loglvl=%u" verb loglvl;*)
+  Uberspark.Logger.log "verb=%u, loglvl=%u" verb loglvl;
   if verb == 0 then 
     begin
       { log_level=0 }
+    end
+  else if verb == 5 then
+    begin
+      { log_level=5 }
     end
   else if verb < loglvl then
     begin

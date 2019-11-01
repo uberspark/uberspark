@@ -549,7 +549,7 @@ class uobject
 		
 		let retval = ref false in
 
-		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true self#get_d_sources_c_file_list;
+		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true (self#get_d_sources_c_file_list) ".";
 
 		(!retval)	
 	;
