@@ -93,6 +93,8 @@ let handler_uobj_build
         end
       ;
 
+      Uberspark.Logger.log "initialized bridges";
+
       (* create uobj instance and parse manifest *)
       let uobj = new Uberspark.Uobj.uobject in
       let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_uobj_mf_filename) in

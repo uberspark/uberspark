@@ -177,7 +177,6 @@ let build
 			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
 
 			if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
-				Uberspark_logger.log "cc-bridge build success!"; 
 				retval := true;
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build cc-bridge!"; 
@@ -195,19 +194,6 @@ let build
 
 	(!retval)
 ;;
-
-
-let initialize 
-	()
-	: bool =
-
-	let retval = ref false in
-
-
-
-	(!retval)
-;;
-
 
 
 let invoke 

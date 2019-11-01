@@ -84,6 +84,8 @@ end
 (****************************************************************************)
 (* general interfaces *)
 (****************************************************************************)
+
+
 let initialize_from_config () 
 	: bool =
 	
@@ -105,6 +107,15 @@ let initialize_from_config ()
 		retval := true;
 	end;
 
+	if not (Cc.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build cc_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "cc_bridge build success";
+		retval := true;
+	end;
 
 	(!retval)
 ;;
