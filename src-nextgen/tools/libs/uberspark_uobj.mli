@@ -25,7 +25,7 @@
     val d_sources_casm_file_list : string list ref
     val d_sources_h_file_list : string list ref
     val d_target_def : Defs.Basedefs.target_def_t
-    method consolidate_sections_with_memory_map : int -> int -> unit
+
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     method get_d_interuobjcoll_callees_hashtbl :
@@ -48,15 +48,16 @@
     method get_d_sources_casm_file_list : string list
     method get_d_sources_h_file_list : string list
     method get_d_target_def : Defs.Basedefs.target_def_t
-    method initialize : Defs.Basedefs.target_def_t -> unit
-
-    method parse_manifest : string -> bool -> bool
-    method parse_manifest_slt : bool
-
     method set_d_load_addr : int -> unit
     method set_d_size : int -> unit
     method set_d_slt_trampolinecode : string -> unit
     method set_d_slt_trampolinedata : string -> unit
-    method set_d_target_def :
-      Defs.Basedefs.target_def_t -> unit
+    method set_d_target_def : Defs.Basedefs.target_def_t -> unit
+
+
+    method consolidate_sections_with_memory_map : int -> int -> unit
+    method parse_manifest : string -> bool -> bool
+    method parse_manifest_slt : bool
+    method initialize : Defs.Basedefs.target_def_t -> unit
+    method compile_c_files : unit -> bool
   end

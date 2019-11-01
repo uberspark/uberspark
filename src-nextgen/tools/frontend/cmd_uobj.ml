@@ -111,6 +111,15 @@ let handler_uobj_build
       let target_def: Uberspark.Defs.Basedefs.target_def_t = {f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
         uobj#initialize target_def;
 
+      Uberspark.Logger.log "proceeding to compile c files...";
+      if not (uobj#compile_c_files ()) then
+        begin
+          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not compile one or more uobj c files!";
+          ignore (exit 1);
+        end
+      ;
+      Uberspark.Logger.log "compiled c files successfully!";
+
       `Ok ()
     end
   ;
