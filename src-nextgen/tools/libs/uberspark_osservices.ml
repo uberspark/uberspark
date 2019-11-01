@@ -149,6 +149,10 @@ open FileUtil
 		()
 	;;
 
+	let getcurdir () =
+    	(Unix.getcwd ())
+	;;
+
 
 	let symlink 
 		(isdir : bool)

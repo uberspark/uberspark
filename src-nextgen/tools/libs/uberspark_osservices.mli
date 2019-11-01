@@ -17,6 +17,8 @@ val rmdir_recurse :
 
 val rmdir : string -> unit
 
+val getcurdir : unit -> string
+
 val file_copy : string -> string -> unit
 
 val file_remove : string -> unit
