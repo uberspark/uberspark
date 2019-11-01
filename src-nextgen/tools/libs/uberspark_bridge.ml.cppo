@@ -4,68 +4,6 @@
 *)
 open Unix
 open Yojson
-(*
-type bridge_hdr_t = {
-	mutable btype : string;
-	mutable execname: string;
-	mutable path: string;
-	mutable params: string list;
-	mutable container_fname: string;
-	mutable devenv: string;
-	mutable arch: string;
-	mutable cpu: string;
-	mutable version: string;
-	mutable namespace: string;
-}
-;;
-
-type cc_bridge_t = { 
-	mutable hdr : bridge_hdr_t;
-	mutable params_prefix_to_obj: string;
-	mutable params_prefix_to_asm: string;
-	mutable params_prefix_to_output: string;
-};;
-
-
-let hdr_type = ref "";;
-let hdr_namespace = ref "";;
-let hdr_platform = ref "";;
-let hdr_arch = ref "";;
-let hdr_cpu = ref "";;
-
-
-let cc_bridge_settings : cc_bridge_t = {
-	hdr = { btype = "";
-			execname = "";
-			path = "";
-			params = [];
-			container_fname = "";
-			devenv = "";
-			arch = "";
-			cpu = "";
-			version = "";
-			namespace = "";
-	};
-	params_prefix_to_obj = "";
-	params_prefix_to_asm = "";
-	params_prefix_to_output = "";
-};;
-
-let cc_bridge_settings_loaded = ref false;;
-
-
-let json_list_to_string_list
-	json_list = 
-	
-	let ret_str_list = ref [] in
-		List.iter (fun (x) ->
-			ret_str_list := !ret_str_list @ [ (Yojson.Basic.Util.to_string x) ];
-		) json_list;
-
-	(!ret_str_list)
-;;
-*)
-
 
 (* bridge-cc uberspark header node variable *)	
 let bridge_cc_uberspark_hdr: Uberspark_manifest.hdr_t = {
@@ -92,8 +30,6 @@ let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
 	params_prefix_to_asm = "";
 	params_prefix_to_output = "";
 };;
-
-
 
 
 module Container =
