@@ -124,12 +124,12 @@ let handler_bridges_action_create
 
         (* process cc-bridge *)
         if cmd_bridges_opts.cc_bridge then begin
-          if (Uberspark.Bridge.load_bridge_cc_from_file !l_path_ns) then begin
+          if (Uberspark.Bridge.Cc.load_from_file !l_path_ns) then begin
               
-            Uberspark.Bridge.store_bridge_cc ();
+            Uberspark.Bridge.Cc.store ();
         
             if (cmd_bridges_opts.build) then begin
-              ignore (Uberspark.Bridge.build_bridge_cc ());
+              ignore (Uberspark.Bridge.Cc.build ());
             end;
             
             retval := `Ok();
@@ -270,9 +270,9 @@ let helper_bridges_action_config_do
       match bridge_type with 
         | "cc-bridge" -> 
 
-          if (Uberspark.Bridge.load_bridge_cc bridge_ns) then begin
+          if (Uberspark.Bridge.Cc.load bridge_ns) then begin
             Uberspark.Logger.log "loaded cc-bridge settings";
-            if ( Uberspark.Bridge.build_bridge_cc () ) then begin
+            if ( Uberspark.Bridge.Cc.build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build cc-bridge!");
