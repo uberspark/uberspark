@@ -197,4 +197,28 @@ let build
 ;;
 
 
+let invoke 
+	(c_file_list : string list)
+	(op : string)
+	: bool =
 
+	let retval = ref false in
+
+	if op = "gen-obj" then begin
+		
+		if bridge_cc.bridge_hdr.btype = "container" then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge container invocation. TBD!";
+			retval := true;
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge native invocation. TBD!";
+			retval := true;
+		end;
+
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid op='%s' for cc-bridge invoke!" op;
+		retval := false;
+	end;
+
+
+	(!retval)
+;;

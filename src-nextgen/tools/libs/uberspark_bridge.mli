@@ -53,6 +53,7 @@ val load : string -> bool
 val store_to_file : string -> bool
 val store : unit -> bool
 val build : unit -> bool
+val invoke : string list -> string -> bool
 
 
 
