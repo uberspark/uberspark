@@ -209,34 +209,41 @@ let invoke
 	(* iterate over the c source files and build command line *)
 	for li = 0 to (List.length c_file_list) - 1 do begin
 		let c_file_name = (List.nth c_file_list li) in
+		
+		if li == 0 then begin
+			d_cmd := !d_cmd ^ "echo Compiling " ^ c_file_name ^ "..." ^ " && ";
+		end else begin
+			d_cmd := !d_cmd ^ " && " ^ "@echo Compiling " ^ c_file_name ^ "..." ^ " && ";
+		end;
+
+		
 		let add_d_cmd = ref "" in
+			
 			add_d_cmd := !add_d_cmd ^ bridge_cc.bridge_hdr.execname ^ " ";
-			(*List.iter (fun param ->
-				add_d_cmd := add_d_cmd ^ param ^ " ";
+			List.iter (fun param ->
+				add_d_cmd := !add_d_cmd ^ param ^ " ";
 			) bridge_cc.bridge_hdr.params;
 
-			if gen_obj then
-				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
-			else if gen_asm then
-				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_asm ^ " ";
-			else
-				add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+			if gen_obj then begin
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+			end else if gen_asm then begin
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_asm ^ " ";
+			end else begin
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+			end;
+			
+			add_d_cmd := !add_d_cmd ^ c_file_name ^ " ";
+			add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_output ^ " ";
 
-			add_d_cmd := add_d_cmd ^ c_file_name ^ " ";
-			add_d_cmd := add_d_cmd ^ bridge_cc.params_prefix_to_output ^ " ";
+			if gen_obj then begin
+				add_d_cmd := !add_d_cmd ^ c_file_name ^ ".o" ^ " ";
+			end else if gen_asm then begin
+				add_d_cmd := !add_d_cmd ^ c_file_name ^ ".S" ^ " ";
+			end else begin
+				add_d_cmd := !add_d_cmd ^ c_file_name ^ ".o" ^ " ";
+			end;
 
-			if gen_obj then
-				add_d_cmd := add_d_cmd ^ c_file_name ^ ".o" ^ " ";
-			else if gen_asm then
-				add_d_cmd := add_d_cmd ^ c_file_name ^ ".S" ^ " ";
-			else
-				add_d_cmd := add_d_cmd ^ c_file_name ^ ".o" ^ " ";*)
-	
-		if li == 0 then begin
-			d_cmd := !add_d_cmd;
-		end else begin
-			d_cmd := !d_cmd ^ " && " ^ !add_d_cmd;
-		end;
+			d_cmd := !d_cmd ^ !add_d_cmd;
 		
 	end done;
 
