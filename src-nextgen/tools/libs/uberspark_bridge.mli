@@ -18,6 +18,7 @@ end
 
 module Native : sig
 
+val run_shell_command : string -> string -> string -> int
 
 end
 
