@@ -11,12 +11,6 @@ val config_settings: Uberspark_manifest.Config.config_settings_t
 val hdr_namespace : string ref
 *)
 
-(*------------------------------------------------------------------------*)
-(* environment related configuration settings *)	
-(*------------------------------------------------------------------------*)
-(*val env_path_seperator : string ref*)
-val env_home_dir : string ref
-
 
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	

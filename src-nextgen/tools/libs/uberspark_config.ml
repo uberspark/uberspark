@@ -31,9 +31,6 @@ let config_hdr: Uberspark_manifest.Config.config_hdr_t = {
 (*------------------------------------------------------------------------*)
 let config_settings: Uberspark_manifest.Config.config_settings_t = {
 
-	(* environment related settings *)
-	env_home_dir = "HOME";
-
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
 	binary_uobj_section_alignment = 0x00200000;
@@ -59,11 +56,6 @@ let hdr_cpu = ref "";;
 *)
 
 
-(*------------------------------------------------------------------------*)
-(* environment related configuration settings *)	
-(*------------------------------------------------------------------------*)
-(*let env_path_seperator = ref "/";;*)
-let env_home_dir = ref "HOME";;
 
 
 (*------------------------------------------------------------------------*)

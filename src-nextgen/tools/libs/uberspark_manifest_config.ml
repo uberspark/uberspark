@@ -19,8 +19,6 @@ type config_hdr_t =
 (* config-settings node type *)
 type config_settings_t = 
 {
-	(* environment related settings *)
-	mutable env_home_dir : string;
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	mutable binary_page_size : int;
