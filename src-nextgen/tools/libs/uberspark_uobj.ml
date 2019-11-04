@@ -566,12 +566,23 @@ let build
 	: bool =
 
 	let retval = ref false in
+	let in_namespace_build = ref false in
 
 	let (rval, abs_uobj_path_ns) = (Uberspark_osservices.abspath uobj_path_ns) in
 	if(rval == false) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
 		(!retval)
 	end else
+
+	let dummy = 0 in begin
+	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
+	if (Str.string_match (Str.regexp_string Uberspark_config.namespace_root_dir) abs_uobj_path_ns 0) then begin
+		in_namespace_build := true;
+	end else begin
+		in_namespace_build := false;
+	end;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
+	end;
 
 	if not (Uberspark_bridge.initialize_from_config ()) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
