@@ -69,7 +69,8 @@ let env_home_dir = ref "HOME";;
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	
 (*------------------------------------------------------------------------*)
-let namespace_root = ((Unix.getenv !env_home_dir) ^ "/.uberspark/");;
+let namespace_root = ".uberspark";;
+let namespace_root_dir = ((Unix.getenv !env_home_dir) ^ "/"  ^ namespace_root ^ "/");;
 let namespace_root_mf_filename = "uberspark.json";;
 
 
@@ -175,7 +176,7 @@ let load
 	(config_name : string)
 	: bool =
 	let retval = ref false in
-	let config_ns_json_path = namespace_root ^ namespace_config ^ "/" ^ config_name ^ "/" ^ 
+	let config_ns_json_path = namespace_root_dir ^ namespace_config ^ "/" ^ config_name ^ "/" ^ 
 		namespace_config_mf_filename in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
@@ -219,7 +220,7 @@ let create_from_existing_ns
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (namespace_root ^ namespace_config ^ "/" ^ output_config_name) in
+	let output_config_dir = (namespace_root_dir ^ namespace_config ^ "/" ^ output_config_name) in
 	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
 
 	(* load the input config *)
@@ -249,7 +250,7 @@ let create_from_file
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (namespace_root ^ namespace_config ^ "/" ^ output_config_name) in
+	let output_config_dir = (namespace_root_dir ^ namespace_config ^ "/" ^ output_config_name) in
 	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
 
 
@@ -317,8 +318,8 @@ let switch
 	: bool =
 	
 	let retval = ref true in
-	let config_ns_path = namespace_root ^ namespace_config ^ "/" ^ config_name in 
-	let config_ns_current_path = namespace_root ^ namespace_config ^ "/" ^ namespace_config_current in
+	let config_ns_path = namespace_root_dir ^ namespace_config ^ "/" ^ config_name in 
+	let config_ns_current_path = namespace_root_dir ^ namespace_config ^ "/" ^ namespace_config_current in
 	let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
 
 	Uberspark_osservices.file_remove config_ns_current_path;
@@ -337,7 +338,7 @@ let remove
 	
 	if (config_name <> namespace_config_default) then 
 		begin
-			let config_ns_path = namespace_root ^ namespace_config ^ "/" ^ config_name in 
+			let config_ns_path = namespace_root_dir ^ namespace_config ^ "/" ^ config_name in 
 			let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
 			
 			Uberspark_osservices.file_remove config_ns_json_path;

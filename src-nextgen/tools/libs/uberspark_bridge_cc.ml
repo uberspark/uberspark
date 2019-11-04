@@ -96,7 +96,7 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
+	let bridge_ns_json_path = Uberspark_config.namespace_root_dir ^ 
 		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ "/" ^
 		Uberspark_config.namespace_bridge_mf_filename in
 		(load_from_file bridge_ns_json_path)
@@ -134,7 +134,7 @@ let store
 		bridge_cc.bridge_hdr.cpu ^ "/" ^
 		bridge_cc.bridge_hdr.execname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
-	let bridge_ns_json_path = Uberspark_config.namespace_root ^ 
+	let bridge_ns_json_path = Uberspark_config.namespace_root_dir ^ 
 		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
 	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
 		Uberspark_config.namespace_bridge_mf_filename in
@@ -172,7 +172,7 @@ let build
 				bridge_cc.bridge_hdr.cpu ^ "/" ^
 				bridge_cc.bridge_hdr.execname ^ "/" ^
 				bridge_cc.bridge_hdr.version in
-			let bridge_container_path = Uberspark_config.namespace_root ^ bridge_ns in
+			let bridge_container_path = Uberspark_config.namespace_root_dir ^ bridge_ns in
 
 			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
 
@@ -270,11 +270,12 @@ let invoke
 		bridge_cc.bridge_hdr.execname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
 	
-	if ( (Native.run_shell_command "." !d_cmd bridge_ns) == 0 ) then begin
+(*	if ( (Native.run_shell_command "." !d_cmd bridge_ns) == 0 ) then begin
 		retval := true;
 	end else begin
 		retval := false;
 	end;
+*)
 
 	(!retval)
 ;;
