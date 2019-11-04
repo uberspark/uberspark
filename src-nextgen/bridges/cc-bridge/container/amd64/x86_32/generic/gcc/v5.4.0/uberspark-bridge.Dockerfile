@@ -7,4 +7,4 @@ ENV D_CMD=placeholder
 RUN apt-get update &&\
     apt-get -y install gcc binutils
 
-CMD ${D_CMD}
+#CMD ["/bin/sh", "-c", "${D_CMD}"]

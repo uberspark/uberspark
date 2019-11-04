@@ -277,5 +277,13 @@ let invoke
 	end;
 *)
 
+	if ( (Container.run_image "." !d_cmd bridge_ns) == 0 ) then begin
+		retval := true;
+	end else begin
+		retval := false;
+	end;
+
+
+
 	(!retval)
 ;;
