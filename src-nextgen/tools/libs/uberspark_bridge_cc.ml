@@ -262,6 +262,19 @@ let invoke
 		retval := true;
 	end;
 *)
+	let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
+		bridge_cc.bridge_hdr.btype ^ "/" ^
+		bridge_cc.bridge_hdr.devenv ^ "/" ^
+		bridge_cc.bridge_hdr.arch ^ "/" ^
+		bridge_cc.bridge_hdr.cpu ^ "/" ^
+		bridge_cc.bridge_hdr.execname ^ "/" ^
+		bridge_cc.bridge_hdr.version in
+	
+	if ( (Native.run_shell_command "." !d_cmd bridge_ns) == 0 ) then begin
+		retval := true;
+	end else begin
+		retval := false;
+	end;
 
 	(!retval)
 ;;
