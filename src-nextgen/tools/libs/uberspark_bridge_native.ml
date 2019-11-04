@@ -12,7 +12,8 @@ let run_shell_command
     let cmdline = ref [] in
     
         cmdline := !cmdline @ [ "-c" ];
-        cmdline := !cmdline @ [ "\"" ^ d_cmd ^ "\""];
+        cmdline := !cmdline @ [ d_cmd ];
+
  
         let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
                 ~stag:"sh" "sh" !cmdline in
