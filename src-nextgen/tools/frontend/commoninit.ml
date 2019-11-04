@@ -16,6 +16,9 @@ let initialize
   Uberspark.Logger.log "creator: amit vasudevan <amitvasudevan@acm.org>";
   Uberspark.Logger.log "";
 
+  (* setup namespace root directory *)
+  Uberspark.Config.namespace_root_dir := ((Unix.getenv "HOME") ^ "/"  ^ Uberspark.Config.namespace_root ^ "/");
+
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
   if not (Uberspark.Config.load Uberspark.Config.namespace_config_current) then 
     begin

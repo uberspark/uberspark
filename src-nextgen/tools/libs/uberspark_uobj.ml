@@ -201,7 +201,7 @@ class uobject
 			= 
 			let retval = ref false in 	
 			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = (Uberspark_config.namespace_root_dir ^ Uberspark_config.namespace_uobjslt ^ "/" ^
+			let uobjslt_filename = (!Uberspark_config.namespace_root_dir ^ Uberspark_config.namespace_uobjslt ^ "/" ^
 				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
 				Uberspark_config.namespace_uobjslt_mf_filename) in 
 
@@ -576,7 +576,7 @@ let build
 
 	let dummy = 0 in begin
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
-	if (Str.string_match (Str.regexp_string Uberspark_config.namespace_root_dir) abs_uobj_path_ns 0) then begin
+	if (Str.string_match (Str.regexp_string !Uberspark_config.namespace_root_dir) abs_uobj_path_ns 0) then begin
 		in_namespace_build := true;
 	end else begin
 		in_namespace_build := false;
