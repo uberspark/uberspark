@@ -11,8 +11,8 @@ export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-nextgen
 export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 
-USPARK_NAMESPACEROOTDIR ?= ~/.uberspark
-export USPARK_NAMESPACEROOTDIR
+ROOT_DIR ?= ~
+export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/.uberspark
 export USPARK_INSTALL_BINDIR := /usr/bin
 
 export SUDO := sudo
@@ -103,7 +103,6 @@ frontend: build_bootstrap
 install: build_bootstrap
 	$(call docker_run,make -f install.mk, -w all)
 	@echo Creating namespace within: $(USPARK_NAMESPACEROOTDIR)...
-	rm -rf $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
 	cp -Rf $(USPARK_INSTALLPREPDIR)/* $(USPARK_NAMESPACEROOTDIR)/ 
 	@echo Setting up default configuration...
