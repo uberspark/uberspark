@@ -49,24 +49,21 @@ let run_image
     let (rval, context_path_abs) = (Uberspark_osservices.abspath context_path) in
     if(rval == true) then begin
 
+        Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path=%s" context_path_abs;
+        let r_d_cmd = ("cd /root/src && " ^ d_cmd) in 
         let bridge_ns_docker = ((Str.string_after Uberspark_config.namespace_root 1) ^ "/" ^ bridge_ns) in 
         let cmdline = ref [] in
         
             cmdline := !cmdline @ [ "run" ];
             cmdline := !cmdline @ [ "--rm" ];
             cmdline := !cmdline @ [ "-i" ];
-            (*cmdline := !cmdline @ [ "-e" ];*)
-            (* cmdline := !cmdline @ [ "D_CMD=\"" ^ d_cmd ^ "\""]; *)
-            (*cmdline := !cmdline @ [ "D_CMD=" ^ d_cmd];*)
             cmdline := !cmdline @ [ "-v" ];
-            cmdline := !cmdline @ [ "src:" ^ context_path_abs ];
+            cmdline := !cmdline @ [ context_path_abs ^ ":/root/src" ];
             cmdline := !cmdline @ [ "-t" ];
             cmdline := !cmdline @ [ bridge_ns_docker ];
             cmdline := !cmdline @ [ "/bin/sh" ];
             cmdline := !cmdline @ [ "-c" ];
-            cmdline := !cmdline @ [ d_cmd ];
-
-
+            cmdline := !cmdline @ [ r_d_cmd ];
 
             let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
                     ~stag:"docker" "docker" !cmdline in
