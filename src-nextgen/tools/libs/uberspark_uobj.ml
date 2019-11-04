@@ -576,6 +576,8 @@ let build
 
 	let dummy = 0 in begin
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path_ns);
 	if (Str.string_match (Str.regexp_string !Uberspark_config.namespace_root_dir) abs_uobj_path_ns 0) then begin
 		in_namespace_build := true;
 	end else begin
