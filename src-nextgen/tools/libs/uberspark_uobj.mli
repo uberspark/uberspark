@@ -61,3 +61,6 @@
     method initialize : Defs.Basedefs.target_def_t -> unit
     method compile_c_files : unit -> bool
   end
+
+
+val build : string -> Defs.Basedefs.target_def_t -> bool

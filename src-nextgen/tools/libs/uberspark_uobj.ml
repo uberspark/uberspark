@@ -558,3 +558,59 @@ class uobject
 end;;
 
 
+
+
+let build
+	(uobj_path_ns : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	: bool =
+
+	let retval = ref false in
+
+	let (rval, abs_uobj_path_ns) = (Uberspark_osservices.abspath uobj_path_ns) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
+		(!retval)
+	end else
+
+	if not (Uberspark_bridge.initialize_from_config ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
+		(!retval)
+	end else
+	
+
+	let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark_config.namespace_uobj_mf_filename) in
+	let dummy = 0 in begin
+    Uberspark_logger.log "initialized bridges";
+	Uberspark_logger.log "parsing uobj manifest: %s" uobj_mf_filename;
+	end;
+
+    (* create uobj instance and parse manifest *)
+	let uobj = new uobject in
+	let rval = (uobj#parse_manifest uobj_mf_filename true) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
+		(!retval)
+	end else
+
+	let dummy = 0 in begin
+
+	Uberspark_logger.log "successfully parsed uobj manifest";
+	(*TBD: validate platform, arch, cpu target def with uobj target spec*)
+
+	uobj#initialize uobj_target_def;
+
+    Uberspark_logger.log "proceeding to compile c files...";
+	end;
+
+	if not (uobj#compile_c_files ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
+		(!retval)
+	end else
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "compiled c files successfully!";
+	end;
+
+	(!retval)
+;;

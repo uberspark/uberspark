@@ -78,51 +78,13 @@ let handler_uobj_build
       `Error (true, "uobj CPU must be specified.")
   else
     begin
-      let (rval, abs_uobj_path_ns) = (Uberspark.Osservices.abspath uobj_path_ns) in
-      if(rval == false) then
-      begin
-        Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
-        ignore (exit 1);
-      end
-      ;
+     	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
+    		{f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
 
-      if not (Uberspark.Bridge.initialize_from_config ()) then 
-        begin
-          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not initialize bridges!";
-          ignore (exit 1);
-        end
-      ;
-
-      Uberspark.Logger.log "initialized bridges";
-
-      (* create uobj instance and parse manifest *)
-      let uobj = new Uberspark.Uobj.uobject in
-      let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark.Config.namespace_uobj_mf_filename) in
-      Uberspark.Logger.log "parsing uobj manifest: %s" uobj_mf_filename;
-      let rval = (uobj#parse_manifest uobj_mf_filename true) in	
-      if (rval == false) then
-        begin
-          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
-          ignore (exit 1);
-        end
-      ;
-
-      Uberspark.Logger.log "successfully parsed uobj manifest";
-      (*TBD: validate platform, arch, cpu target def with uobj target spec*)
-
-      let target_def: Uberspark.Defs.Basedefs.target_def_t = {f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
-        uobj#initialize target_def;
-
-      Uberspark.Logger.log "proceeding to compile c files...";
-      if not (uobj#compile_c_files ()) then
-        begin
-          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not compile one or more uobj c files!";
-          ignore (exit 1);
-        end
-      ;
-      Uberspark.Logger.log "compiled c files successfully!";
-
-      `Ok ()
+      if (Uberspark.Uobj.build uobj_path_ns target_def) then
+        `Ok ()
+      else
+        `Error (false, "uobj build failed!")
     end
   ;
 
