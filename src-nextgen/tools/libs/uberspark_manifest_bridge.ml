@@ -144,7 +144,7 @@ let write_bridge_hdr
 	Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," bridge_hdr.devenv;
 	Printf.fprintf oc "\n\t\t\t\"arch\" : \"%s\"," bridge_hdr.arch;
 	Printf.fprintf oc "\n\t\t\t\"cpu\" : \"%s\"," bridge_hdr.cpu;
-	Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"" bridge_hdr.version;
+	Printf.fprintf oc "\n\t\t\t\"version\" : \"%s\"," bridge_hdr.version;
 	Printf.fprintf oc "\n\t\t\t\"path\" : \"%s\"," bridge_hdr.path;
 	Printf.fprintf oc "\n\t\t\t\"params\" : [ ";
 	let index = ref 0 in

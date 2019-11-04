@@ -247,21 +247,9 @@ let invoke
 		
 	end done;
 
-
-
-
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
-	retval := true;
 
-(*	(* invoke the compiler *)
-	if bridge_cc.bridge_hdr.btype = "container" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge container invocation. TBD!";
-		retval := true;
-	end else begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "cc-bridge native invocation. TBD!";
-		retval := true;
-	end;
-*)
+	(* construct bridge namespace *)
 	let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
 		bridge_cc.bridge_hdr.btype ^ "/" ^
 		bridge_cc.bridge_hdr.devenv ^ "/" ^
@@ -269,21 +257,21 @@ let invoke
 		bridge_cc.bridge_hdr.cpu ^ "/" ^
 		bridge_cc.bridge_hdr.execname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
-	
-(*	if ( (Native.run_shell_command "." !d_cmd bridge_ns) == 0 ) then begin
-		retval := true;
+
+	(* invoke the compiler *)
+	if bridge_cc.bridge_hdr.btype = "container" then begin
+		if ( (Container.run_image "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
 	end else begin
-		retval := false;
+		if ( (Native.run_shell_command "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
 	end;
-*)
-
-	if ( (Container.run_image "." !d_cmd bridge_ns) == 0 ) then begin
-		retval := true;
-	end else begin
-		retval := false;
-	end;
-
-
 
 	(!retval)
 ;;
