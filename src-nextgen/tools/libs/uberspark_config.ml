@@ -68,7 +68,7 @@ let namespace_root_mf_filename = "uberspark.json";;
 
 let namespace_uobj_mf_filename = "uberspark-uobj.json";;
 let namespace_uobj_mf_hdr_type = "uobj";;
-
+let namespace_uobj_build_dir = "_build";;
 let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
 let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;

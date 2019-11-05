@@ -716,7 +716,7 @@ let build
 	Uberspark_osservices.mkdir ~parent:true "./_build" (`Octal 0o0777);
 	
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
-		Uberspark_osservices.cp "*.c" "./_build/.";
+		Uberspark_osservices.cp "*.c" (Uberspark_config.namespace_uobj_build_dir ^ "/.");
 	end;
 
 	if (List.length uobj#get_d_sources_h_file_list) > 0 then begin

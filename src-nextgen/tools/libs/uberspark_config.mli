@@ -21,7 +21,7 @@ val namespace_root_mf_filename : string
 
 val namespace_uobj_mf_filename : string
 val namespace_uobj_mf_hdr_type : string
-
+val namespace_uobj_build_dir : string
 val namespace_uobj_binhdr_src_filename : string
 val namespace_uobj_publicmethods_info_src_filename : string
 val namespace_uobj_intrauobjcoll_callees_info_src_filename : string
