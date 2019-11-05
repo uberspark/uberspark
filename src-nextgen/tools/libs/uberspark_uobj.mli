@@ -62,8 +62,8 @@
     method parse_manifest_slt : bool
     method initialize : Defs.Basedefs.target_def_t -> unit
     method compile_c_files : unit -> bool
-  end
+    method install_h_files_to_ns : unit -> unit
+end
 
 
 val build : string -> Defs.Basedefs.target_def_t -> bool
-val install_uobj_h_files : uobject -> unit
