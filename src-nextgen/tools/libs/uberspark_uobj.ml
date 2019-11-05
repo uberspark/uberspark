@@ -16,8 +16,12 @@ class uobject
 	val d_mf_filename = ref "";
 	method get_d_mf_filename = !d_mf_filename;
 
+	val d_path = ref "";
+	method get_d_path = !d_path;
+
 	val d_path_ns = ref "";
 	method get_d_path_ns = !d_path_ns;
+
 
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
@@ -108,7 +112,7 @@ class uobject
 		
 		(* store filename and uobj path/namespace *)
 		d_mf_filename := Filename.basename uobj_mf_filename;
-		d_path_ns := Filename.dirname uobj_mf_filename;
+		d_path := Filename.dirname uobj_mf_filename;
 		
 		(* read manifest JSON *)
 		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
@@ -557,6 +561,39 @@ class uobject
 
 end;;
 
+
+let install_uobj_h_files ()
+	: unit =
+	(* construct destination namespace folder *)
+	(* copy h files *)
+;;
+
+let install_uobj_c_files ()
+	: unit =
+	(* construct destination namespace folder *)
+	(* copy c files *)
+;;
+
+let install_uobj_casm_files ()
+	: unit =
+	(* construct destination namespace folder *)
+	(* copy casm files *)
+;;
+
+
+let install ()
+	: unit =
+	(* construct destination namespace folder *)
+	(* copy c files *)
+	(* copy casm files *)
+	(* copy h files *)
+;;
+
+let remove ()
+	: unit =
+	(* construct destination namespace folder *)
+	(* remove namespace folder *)
+;;
 
 
 
