@@ -199,6 +199,7 @@ let build
 let invoke 
 	?(gen_obj = true)
 	?(gen_asm = false)
+	?(context_path_builddir = "")
 	(c_file_list : string list)
 	(context_path : string)
 	: bool =

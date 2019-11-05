@@ -4,15 +4,25 @@
 *)
 
 let run_shell_command 
+   	?(context_path_builddir = "")
     (context_path : string)
     (d_cmd : string)
     (bridge_ns: string)
     : int =
     
+    let revised_d_cmd = ref "" in
+    
+    if (context_path_builddir = "") then begin
+        revised_d_cmd := d_cmd;
+    end else begin
+        revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;
+    end;
+
+
     let cmdline = ref [] in
     
         cmdline := !cmdline @ [ "-c" ];
-        cmdline := !cmdline @ [ d_cmd ];
+        cmdline := !cmdline @ [ !revised_d_cmd ];
 
  
         let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 

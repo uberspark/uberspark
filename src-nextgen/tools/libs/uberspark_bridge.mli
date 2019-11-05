@@ -12,13 +12,13 @@ module Container : sig
 
 val build_image : string -> string -> int
 val list_images : string -> unit 
-val run_image : string -> string -> string -> int
+val run_image : ?context_path_builddir:string -> string -> string -> string -> int
     
 end
 
 module Native : sig
 
-val run_shell_command : string -> string -> string -> int
+val run_shell_command : ?context_path_builddir:string -> string -> string -> string -> int
 
 end
 
@@ -55,7 +55,7 @@ val load : string -> bool
 val store_to_file : string -> bool
 val store : unit -> bool
 val build : unit -> bool
-val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> string list -> string -> bool
+val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string -> bool
 
 
 

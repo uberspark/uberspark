@@ -42,16 +42,26 @@ let list_images
 
 
 let run_image 
+	?(context_path_builddir = "")
     (context_path : string)
     (d_cmd : string)
     (bridge_ns: string)
     : int =
 
+    let revised_d_cmd = ref "" in
+    
+    if (context_path_builddir = "") then begin
+        revised_d_cmd := d_cmd;
+    end else begin
+        revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;
+    end;
+
+
     let (rval, context_path_abs) = (Uberspark_osservices.abspath context_path) in
     if(rval == true) then begin
 
         Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path=%s" context_path_abs;
-        let r_d_cmd = ("cd /root/src && " ^ d_cmd) in 
+        let r_d_cmd = ("cd /root/src && " ^ !revised_d_cmd) in 
         (*let bridge_ns_docker = ((Str.string_after Uberspark_config.namespace_root 1) ^ "/" ^ bridge_ns) in *)
         let bridge_ns_docker = Uberspark_config.namespace_root ^ "/" ^ bridge_ns in
         let cmdline = ref [] in
