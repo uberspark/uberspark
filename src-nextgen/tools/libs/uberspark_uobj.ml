@@ -712,8 +712,8 @@ let build
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 
-	(* create _build folder and copy all c, casm and h files *)
-	Uberspark_osservices.mkdir ~parent:true "./_build" (`Octal 0o0777);
+	(* create _build folder *and copy all c, casm and h files *)
+	Uberspark_osservices.mkdir ~parent:true Uberspark_config.namespace_uobj_build_dir (`Octal 0o0777);
 	
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
 		Uberspark_osservices.cp "*.c" (Uberspark_config.namespace_uobj_build_dir ^ "/.");
@@ -726,6 +726,7 @@ let build
 	if (List.length uobj#get_d_sources_casm_file_list) > 0 then begin
 		Uberspark_osservices.cp "*.cS" "./_build/.";
 	end;
+
 
     Uberspark_logger.log "proceeding to compile c files...";
 	end;
