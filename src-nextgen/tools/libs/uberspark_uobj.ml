@@ -16,12 +16,11 @@ class uobject
 	val d_mf_filename = ref "";
 	method get_d_mf_filename = !d_mf_filename;
 
-	val d_path = ref "";
-	method get_d_path = !d_path;
+	val d_path_to_mf_filename = ref "";
+	method get_d_path_to_mf_filename = !d_path_to_mf_filename;
 
 	val d_path_ns = ref "";
 	method get_d_path_ns = !d_path_ns;
-
 
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
@@ -110,9 +109,9 @@ class uobject
 		(keep_temp_files : bool) 
 		: bool =
 		
-		(* store filename and uobj path/namespace *)
+		(* store filename and uobj path to filename *)
 		d_mf_filename := Filename.basename uobj_mf_filename;
-		d_path := Filename.dirname uobj_mf_filename;
+		d_path_to_mf_filename := Filename.dirname uobj_mf_filename;
 		
 		(* read manifest JSON *)
 		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
@@ -124,6 +123,10 @@ class uobject
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
 		if (rval == false) then (false)
 		else
+
+		let dummy=0 in begin
+			d_path_ns := !Uberspark_config.namespace_root_dir ^ d_hdr.f_namespace;
+		end;
 
 		(* parse uobj-sources node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
@@ -564,18 +567,24 @@ end;;
 
 let install_uobj_h_files ()
 	: unit =
+	let dummy = ref 0 in
+		dummy :=0 ;
 	(* construct destination namespace folder *)
 	(* copy h files *)
 ;;
 
 let install_uobj_c_files ()
 	: unit =
+	let dummy = ref 0 in
+		dummy :=0 ;
 	(* construct destination namespace folder *)
 	(* copy c files *)
 ;;
 
 let install_uobj_casm_files ()
 	: unit =
+	let dummy = ref 0 in
+		dummy :=0 ;
 	(* construct destination namespace folder *)
 	(* copy casm files *)
 ;;
@@ -583,6 +592,8 @@ let install_uobj_casm_files ()
 
 let install ()
 	: unit =
+	let dummy = ref 0 in
+		dummy :=0 ;
 	(* construct destination namespace folder *)
 	(* copy c files *)
 	(* copy casm files *)
@@ -591,6 +602,9 @@ let install ()
 
 let remove ()
 	: unit =
+	let dummy = ref 0 in
+		dummy :=0 ;
+
 	(* construct destination namespace folder *)
 	(* remove namespace folder *)
 ;;
@@ -598,24 +612,24 @@ let remove ()
 
 
 let build
-	(uobj_path_ns : string)
+	(uobj_path : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
 	: bool =
 
 	let retval = ref false in
 	let in_namespace_build = ref false in
 
-	let (rval, abs_uobj_path_ns) = (Uberspark_osservices.abspath uobj_path_ns) in
+	let (rval, abs_uobj_path) = (Uberspark_osservices.abspath uobj_path) in
 	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path_ns;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path;
 		(!retval)
 	end else
 
 	let dummy = 0 in begin
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir);
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path_ns);
-	if (Str.string_match (Str.regexp_string !Uberspark_config.namespace_root_dir) abs_uobj_path_ns 0) then begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
+	if (Str.string_match (Str.regexp_string !Uberspark_config.namespace_root_dir) abs_uobj_path 0) then begin
 		in_namespace_build := true;
 	end else begin
 		in_namespace_build := false;
@@ -629,7 +643,7 @@ let build
 	end else
 	
 
-	let uobj_mf_filename = (abs_uobj_path_ns ^ "/" ^ Uberspark_config.namespace_uobj_mf_filename) in
+	let uobj_mf_filename = (abs_uobj_path ^ "/" ^ Uberspark_config.namespace_uobj_mf_filename) in
 	let dummy = 0 in begin
     Uberspark_logger.log "initialized bridges";
 	Uberspark_logger.log "parsing uobj manifest: %s" uobj_mf_filename;

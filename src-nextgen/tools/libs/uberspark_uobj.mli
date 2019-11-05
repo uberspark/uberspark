@@ -9,6 +9,7 @@
     val d_load_addr : int ref
     val d_ltag : string
     val d_mf_filename : string ref
+    val d_path_to_mf_filename : string ref
     val d_path_ns : string ref
     val d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
@@ -32,6 +33,7 @@
       (string, string list) Hashtbl.t
     method get_d_load_addr : int
     method get_d_mf_filename : string
+    method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
     method get_d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
