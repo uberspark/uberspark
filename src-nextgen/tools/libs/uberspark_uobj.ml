@@ -639,14 +639,6 @@ let install ()
 	(* copy h files *)
 ;;
 
-let remove ()
-	: unit =
-	let dummy = ref 0 in
-		dummy :=0 ;
-
-	(* construct destination namespace folder *)
-	(* remove namespace folder *)
-;;
 
 
 
@@ -664,7 +656,15 @@ let build
 		(!retval)
 	end else
 
+	(* switch working directory to uobj_path *)
+	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobj_path) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" abs_uobj_path;
+		(!retval)
+	end else
+
 	let dummy = 0 in begin
+	
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
@@ -712,6 +712,7 @@ let build
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 
+
     Uberspark_logger.log "proceeding to compile c files...";
 	end;
 
@@ -722,6 +723,7 @@ let build
 
 	let dummy = 0 in begin
 		Uberspark_logger.log "compiled c files successfully!";
+		ignore(Uberspark_osservices.dir_change r_prevpath);
 	end;
 
 	(!retval)

@@ -10,6 +10,9 @@ val mkdir :
            [< `Octal of Unix.file_perm | `Symbolic of FileUtilMode.t ] ->
            unit
 
+val dir_change : string -> bool * string * string
+
+
 val rmdir_recurse :
            FilePath.filename list ->
            unit
