@@ -17,7 +17,7 @@ let initialize
   Uberspark.Logger.log "";
 
   (* setup namespace root directory *)
-  Uberspark.Config.namespace_root_dir := (copts.root_dir ^ "/"  ^ Uberspark.Config.namespace_root ^ "/");
+  Uberspark.Config.namespace_root_dir := copts.root_dir;
 
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
   if not (Uberspark.Config.load Uberspark.Config.namespace_config_current) then 

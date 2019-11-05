@@ -125,7 +125,7 @@ class uobject
 		else
 
 		let dummy=0 in begin
-			d_path_ns := !Uberspark_config.namespace_root_dir ^ d_hdr.f_namespace;
+			d_path_ns := !Uberspark_config.namespace_root_dir  ^ "/" ^ d_hdr.f_namespace;
 		end;
 
 		(* parse uobj-sources node *)
@@ -208,7 +208,7 @@ class uobject
 			= 
 			let retval = ref false in 	
 			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = (!Uberspark_config.namespace_root_dir ^ Uberspark_config.namespace_uobjslt ^ "/" ^
+			let uobjslt_filename = (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ Uberspark_config.namespace_uobjslt ^ "/" ^
 				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
 				Uberspark_config.namespace_uobjslt_mf_filename) in 
 
@@ -565,10 +565,11 @@ class uobject
 end;;
 
 
-let install_uobj_h_files ()
+let install_uobj_h_files 
+	(uobj : uobject)
 	: unit =
-	let dummy = ref 0 in
-		dummy :=0 ;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj#get_d_path_to_mf_filename;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj#get_d_path_ns;
 	(* construct destination namespace folder *)
 	(* copy h files *)
 ;;
@@ -627,9 +628,9 @@ let build
 
 	let dummy = 0 in begin
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
-	if (Str.string_match (Str.regexp_string !Uberspark_config.namespace_root_dir) abs_uobj_path 0) then begin
+	if (Str.string_match (Str.regexp_string (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/")) abs_uobj_path 0) then begin
 		in_namespace_build := true;
 	end else begin
 		in_namespace_build := false;
@@ -662,7 +663,15 @@ let build
 	Uberspark_logger.log "successfully parsed uobj manifest";
 	(*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
+	(* initialize uobj initial state *)
 	uobj#initialize uobj_target_def;
+
+	(* install headers if we are doing an out-of-namespace build *)
+	if not !in_namespace_build then begin
+	    Uberspark_logger.log "prepping for out-of-namespace build...";
+		install_uobj_h_files uobj;
+	    Uberspark_logger.log "ready for out-of-namespace build";
+	end;
 
     Uberspark_logger.log "proceeding to compile c files...";
 	end;

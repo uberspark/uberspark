@@ -66,3 +66,4 @@
 
 
 val build : string -> Defs.Basedefs.target_def_t -> bool
+val install_uobj_h_files : uobject -> unit
