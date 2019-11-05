@@ -568,10 +568,23 @@ end;;
 let install_uobj_h_files 
 	(uobj : uobject)
 	: unit =
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj#get_d_path_to_mf_filename;
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj#get_d_path_ns;
-	(* construct destination namespace folder *)
-	(* copy h files *)
+	
+	let uobj_path_to_mf_filename = uobj#get_d_path_to_mf_filename in
+	let uobj_path_ns = uobj#get_d_path_ns in
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj_path_to_mf_filename;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
+	
+	(* make namespace folder if not already existing *)
+	Uberspark_osservices.mkdir ~parent:true uobj_path_ns (`Octal 0o0777);
+
+	(* copy h files to namespace *)
+	
+	List.iter ( fun h_filename -> 
+		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
+		 (uobj_path_ns ^ "/" ^ h_filename);
+	) uobj#get_d_sources_h_file_list;
+
 ;;
 
 let install_uobj_c_files ()
