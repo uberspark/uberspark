@@ -47,6 +47,25 @@ open FileUtil
 		()
 	;;
 
+	let cp 
+		?(recurse = false) 
+		?(force = true)
+		(input_filespec : string)
+		(output_filespec : string)
+		: unit =
+
+		let cp_cmd = ref "cp " in
+		
+		if recurse then begin
+			cp_cmd := !cp_cmd ^ "-r ";
+		end;
+
+		if force then begin
+			cp_cmd := !cp_cmd ^ "-f ";
+		end;
+		
+		ignore(Unix.system (!cp_cmd ^ input_filespec ^ " " ^ output_filespec));
+	;;
 
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
