@@ -62,7 +62,9 @@
     method parse_manifest_slt : bool
     method initialize : Defs.Basedefs.target_def_t -> unit
     method compile_c_files : unit -> bool
-    method install_h_files_to_ns : unit -> unit
+
+    method install_create_ns : unit -> unit
+    method install_h_files_ns : unit -> unit
 end
 
 

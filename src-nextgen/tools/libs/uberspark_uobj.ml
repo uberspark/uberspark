@@ -563,7 +563,21 @@ class uobject
 
 
 
-	method install_h_files_to_ns 
+
+	method install_create_ns 
+		()
+		: unit =
+		
+		let uobj_path_ns = self#get_d_path_ns in
+		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
+		
+		(* make namespace folder if not already existing *)
+		Uberspark_osservices.mkdir ~parent:true uobj_path_ns (`Octal 0o0777);
+	;
+
+
+	method install_h_files_ns 
 		()
 		: unit =
 		
@@ -573,11 +587,7 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj_path_to_mf_filename;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
 		
-		(* make namespace folder if not already existing *)
-		Uberspark_osservices.mkdir ~parent:true uobj_path_ns (`Octal 0o0777);
-
 		(* copy h files to namespace *)
-		
 		List.iter ( fun h_filename -> 
 			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
 			(uobj_path_ns ^ "/" ^ h_filename);
@@ -586,6 +596,17 @@ class uobject
 	;
 
 
+	method remove_ns 
+		()
+		: unit =
+		
+		let uobj_path_ns = self#get_d_path_ns in
+		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
+		
+		(* remove the path and files within *)
+		Uberspark_osservices.rmdir_recurse [ uobj_path_ns ];
+	;
 
 end;;
 
@@ -686,7 +707,8 @@ let build
 	(* install headers if we are doing an out-of-namespace build *)
 	if not !in_namespace_build then begin
 	    Uberspark_logger.log "prepping for out-of-namespace build...";
-		uobj#install_h_files_to_ns ();
+		uobj#install_create_ns ();
+		uobj#install_h_files_ns ();
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 
