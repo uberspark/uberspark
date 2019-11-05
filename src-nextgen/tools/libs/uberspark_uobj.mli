@@ -65,6 +65,7 @@
 
     method install_create_ns : unit -> unit
     method install_h_files_ns : unit -> unit
+    method remove_ns : unit -> unit
 end
 
 
