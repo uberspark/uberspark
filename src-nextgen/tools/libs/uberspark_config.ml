@@ -61,7 +61,7 @@ let hdr_cpu = ref "";;
 (*------------------------------------------------------------------------*)
 (* namespace related configuration settings *)	
 (*------------------------------------------------------------------------*)
-let namespace_root = ".uberspark";;
+let namespace_root = "uberspark";;
 (*let namespace_root_dir = ((Unix.getenv !env_home_dir) ^ "/"  ^ namespace_root ^ "/");;*)
 let namespace_root_dir = ref "";;
 let namespace_root_mf_filename = "uberspark.json";;
