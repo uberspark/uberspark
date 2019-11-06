@@ -614,35 +614,6 @@ end;;
 
 
 
-let install_uobj_c_files ()
-	: unit =
-	let dummy = ref 0 in
-		dummy :=0 ;
-	(* construct destination namespace folder *)
-	(* copy c files *)
-;;
-
-let install_uobj_casm_files ()
-	: unit =
-	let dummy = ref 0 in
-		dummy :=0 ;
-	(* construct destination namespace folder *)
-	(* copy casm files *)
-;;
-
-
-let install ()
-	: unit =
-	let dummy = ref 0 in
-		dummy :=0 ;
-	(* construct destination namespace folder *)
-	(* copy c files *)
-	(* copy casm files *)
-	(* copy h files *)
-;;
-
-
-
 
 let build
 	(uobj_path : string)
