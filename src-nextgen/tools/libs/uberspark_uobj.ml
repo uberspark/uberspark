@@ -95,7 +95,10 @@ class uobject
 	method get_d_size = !d_size;
 	method set_d_size size = (d_size := size);
 
-
+	(* uobj context path build folder *)
+	val d_context_path_builddir = ref ".";
+	method get_d_context_path_builddir = !d_context_path_builddir;
+	method set_d_context_path_builddir context_path = (d_context_path_builddir := context_path);
 
 
 
@@ -366,10 +369,15 @@ class uobject
 	(* initialize *)
 	(*--------------------------------------------------------------------------*)
 	method initialize	
+		?(context_path_builddir = ".")
 		(target_def: Defs.Basedefs.target_def_t)
 		= 
+	
 		(* set target definition *)
 		self#set_d_target_def target_def;	
+
+		(* set build directory *)
+		self#set_d_context_path_builddir context_path_builddir;
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
@@ -394,7 +402,7 @@ class uobject
 		) self#get_d_intrauobjcoll_callees_hashtbl;
 		Uberspark_logger.log "total callees=%u" (List.length !callees_list);
 
-		let rval = (Uberspark_codegen.Uobj.generate_slt Uberspark_config.namespace_uobjslt_callees_output_filename 
+		let rval = (Uberspark_codegen.Uobj.generate_slt (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_callees_output_filename) 
 			!callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" ) in	
 		if (rval == false) then
 			begin
@@ -411,7 +419,7 @@ class uobject
 		)self#get_d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
 
-		let rval = (Uberspark_codegen.Uobj.generate_slt Uberspark_config.namespace_uobjslt_exitcallees_output_filename 
+		let rval = (Uberspark_codegen.Uobj.generate_slt (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_exitcallees_output_filename) 
 			!interuobjcoll_callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" ) in	
 		if (rval == false) then
 			begin
@@ -512,33 +520,34 @@ class uobject
 
 		(* generate uobj binary header source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
-		Uberspark_codegen.Uobj.generate_src_binhdr Uberspark_config.namespace_uobj_binhdr_src_filename
+		Uberspark_codegen.Uobj.generate_src_binhdr (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_binhdr_src_filename)
 			self#get_d_load_addr self#get_d_size d_sections_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
-		Uberspark_codegen.Uobj.generate_src_publicmethods_info Uberspark_config.namespace_uobj_publicmethods_info_src_filename
+		Uberspark_codegen.Uobj.generate_src_publicmethods_info (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_publicmethods_info_src_filename)
 			d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary intrauobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_intrauobjcoll_callees_info 
-			Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename)
 			d_intrauobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary interuobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_interuobjcoll_callees_info 
-			Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename)
 			d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary linker script *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
-		Uberspark_codegen.Uobj.generate_linker_script Uberspark_config.namespace_uobj_linkerscript_filename 
+		Uberspark_codegen.Uobj.generate_linker_script 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_linkerscript_filename)
 			self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -637,7 +646,10 @@ let build
 	end else
 
 	let dummy = 0 in begin
-	
+
+	(* create _build folder *)
+	Uberspark_osservices.mkdir ~parent:true Uberspark_config.namespace_uobj_build_dir (`Octal 0o0777);
+
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
@@ -675,7 +687,7 @@ let build
 	(*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
 	(* initialize uobj initial state *)
-	uobj#initialize uobj_target_def;
+	uobj#initialize ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir uobj_target_def;
 
 	(* install headers if we are doing an out-of-namespace build *)
 	if not !in_namespace_build then begin
@@ -685,9 +697,6 @@ let build
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 
-	(* create _build folder *and copy all c, casm and h files *)
-	Uberspark_osservices.mkdir ~parent:true Uberspark_config.namespace_uobj_build_dir (`Octal 0o0777);
-	
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
 		Uberspark_osservices.cp "*.c" (Uberspark_config.namespace_uobj_build_dir ^ "/.");
 	end;
