@@ -81,10 +81,13 @@ let handler_uobj_build
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
 
-      if (Uberspark.Uobj.build uobj_path_ns target_def) then
+      if (Uberspark.Uobj.build uobj_path_ns target_def) then begin
+        Uberspark.Logger.log "uobj build success!";
         `Ok ()
-      else
+      end else begin
         `Error (false, "uobj build failed!")
+      end;
+
     end
   ;
 

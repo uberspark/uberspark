@@ -741,6 +741,7 @@ let build
 	let dummy = 0 in begin
 		Uberspark_logger.log "compiled c files successfully!";
 		ignore(Uberspark_osservices.dir_change r_prevpath);
+		retval := true;
 	end;
 
 	(!retval)
