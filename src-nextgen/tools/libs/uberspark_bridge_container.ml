@@ -42,21 +42,14 @@ let list_images
 
 
 let run_image 
-	?(context_path_builddir = "")
+	?(context_path_builddir = ".")
     (context_path : string)
     (d_cmd : string)
     (bridge_ns: string)
     : int =
 
     let revised_d_cmd = ref "" in
-    
-    (* change into build directory if one is specified *)
-    if (context_path_builddir = "") then begin
-        revised_d_cmd := d_cmd;
-    end else begin
         revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;
-    end;
-
 
     let (rval, context_path_abs) = (Uberspark_osservices.abspath context_path) in
     if(rval == true) then begin
