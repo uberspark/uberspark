@@ -710,9 +710,18 @@ let build
 	end else
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "compiled c files successfully!";
-		ignore(Uberspark_osservices.dir_change r_prevpath);
-		retval := true;
+	Uberspark_logger.log "compiled c files successfully!";
+
+	(* cleanup namespace if we are doing an out-of-namespace build *)
+	if not !in_namespace_build then begin
+		uobj#remove_ns ();
+	end;
+
+	(* restore working directory *)
+	ignore(Uberspark_osservices.dir_change r_prevpath);
+
+	Uberspark_logger.log "cleaned up build";
+	retval := true;
 	end;
 
 	(!retval)
