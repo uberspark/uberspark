@@ -202,16 +202,25 @@ let invoke
 	?(gen_asm = false)
 	?(context_path_builddir = "")
 	(c_file_list : string list)
+	(include_dir_list : string list)
 	(context_path : string)
 	: bool =
 
 	let retval = ref false in
 	let d_cmd = ref "" in
+	let cc_includes = ref "" in
+
+	(* iterate over include dir list and build include command line options *)
+	List.iter (fun include_dir_name -> 
+		cc_includes := !cc_includes ^ " " ^ bridge_cc.params_prefix_include ^ include_dir_name;
+	) include_dir_list;
+
 	
 	(* iterate over the c source files and build command line *)
 	for li = 0 to (List.length c_file_list) - 1 do begin
 		let c_file_name = (List.nth c_file_list li) in
 		
+		(* generate compile message *)
 		if li == 0 then begin
 			d_cmd := !d_cmd ^ "echo Compiling " ^ c_file_name ^ "..." ^ " && ";
 		end else begin
@@ -221,11 +230,16 @@ let invoke
 		
 		let add_d_cmd = ref "" in
 			
+			(* include compiler name and default params from bridge hdr *)
 			add_d_cmd := !add_d_cmd ^ bridge_cc.bridge_hdr.execname ^ " ";
 			List.iter (fun param ->
 				add_d_cmd := !add_d_cmd ^ param ^ " ";
 			) bridge_cc.bridge_hdr.params;
 
+			(* add includes *)
+			add_d_cmd := !add_d_cmd ^ " " ^ !cc_includes ^ " ";
+
+			(* select output type based on input parameters *)
 			if gen_obj then begin
 				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_obj ^ " ";
 			end else if gen_asm then begin
@@ -234,6 +248,7 @@ let invoke
 				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_obj ^ " ";
 			end;
 			
+			(* specify output filename based on output type *)
 			add_d_cmd := !add_d_cmd ^ c_file_name ^ " ";
 			add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_output ^ " ";
 
@@ -245,6 +260,7 @@ let invoke
 				add_d_cmd := !add_d_cmd ^ c_file_name ^ ".o" ^ " ";
 			end;
 
+			(* construct final compile command for c file *)
 			d_cmd := !d_cmd ^ !add_d_cmd;
 		
 	end done;

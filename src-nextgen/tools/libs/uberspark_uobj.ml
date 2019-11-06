@@ -556,7 +556,9 @@ class uobject
 		
 		let retval = ref false in
 
-		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir (self#get_d_sources_c_file_list) ".";
+		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
+			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
+			 (self#get_d_sources_c_file_list) [ "."; !Uberspark_config.namespace_root_dir ] ".";
 
 		(!retval)	
 	;
