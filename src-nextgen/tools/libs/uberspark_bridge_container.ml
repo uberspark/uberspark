@@ -50,6 +50,7 @@ let run_image
 
     let revised_d_cmd = ref "" in
     
+    (* change into build directory if one is specified *)
     if (context_path_builddir = "") then begin
         revised_d_cmd := d_cmd;
     end else begin
@@ -69,6 +70,8 @@ let run_image
             cmdline := !cmdline @ [ "run" ];
             cmdline := !cmdline @ [ "--rm" ];
             cmdline := !cmdline @ [ "-i" ];
+            cmdline := !cmdline @ [ "-v" ];
+            cmdline := !cmdline @ [ !Uberspark_config.namespace_root_dir ^ ":" ^ !Uberspark_config.namespace_root_dir ];
             cmdline := !cmdline @ [ "-v" ];
             cmdline := !cmdline @ [ context_path_abs ^ ":/root/src" ];
             cmdline := !cmdline @ [ "-t" ];
