@@ -33,9 +33,10 @@ let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
 				container_fname = "";
 				namespace = "";
 	};
-	params_prefix_to_obj = "";
-	params_prefix_to_asm = "";
-	params_prefix_to_output = "";
+	params_prefix_obj = "";
+	params_prefix_asm = "";
+	params_prefix_output = "";
+	params_prefix_include = "";
 };;
 
 
@@ -226,15 +227,15 @@ let invoke
 			) bridge_cc.bridge_hdr.params;
 
 			if gen_obj then begin
-				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_obj ^ " ";
 			end else if gen_asm then begin
-				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_asm ^ " ";
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_asm ^ " ";
 			end else begin
-				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_obj ^ " ";
+				add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_obj ^ " ";
 			end;
 			
 			add_d_cmd := !add_d_cmd ^ c_file_name ^ " ";
-			add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_to_output ^ " ";
+			add_d_cmd := !add_d_cmd ^ bridge_cc.params_prefix_output ^ " ";
 
 			if gen_obj then begin
 				add_d_cmd := !add_d_cmd ^ c_file_name ^ ".o" ^ " ";

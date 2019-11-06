@@ -28,9 +28,10 @@ type bridge_hdr_t = {
 (* bridge-cc node type *)
 type bridge_cc_t = { 
 	mutable bridge_hdr : bridge_hdr_t;
-	mutable params_prefix_to_obj: string;
-	mutable params_prefix_to_asm: string;
-	mutable params_prefix_to_output: string;
+	mutable params_prefix_obj: string;
+	mutable params_prefix_asm: string;
+	mutable params_prefix_output: string;
+	mutable params_prefix_include: string;
 };;
 
 
@@ -104,9 +105,10 @@ let parse_bridge_cc
 					retval := parse_bridge_hdr json_bridge_cc bridge_cc.bridge_hdr;
 
 					if !retval then begin
-						bridge_cc.params_prefix_to_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_obj" json_bridge_cc);
-						bridge_cc.params_prefix_to_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_asm" json_bridge_cc);
-						bridge_cc.params_prefix_to_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_to_output" json_bridge_cc);
+						bridge_cc.params_prefix_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_obj" json_bridge_cc);
+						bridge_cc.params_prefix_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_asm" json_bridge_cc);
+						bridge_cc.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_bridge_cc);
+						bridge_cc.params_prefix_include <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_include" json_bridge_cc);
 						retval := true;
 					end;
 					
@@ -188,9 +190,10 @@ let write_bridge_cc
 
 	write_bridge_hdr oc bridge_cc.bridge_hdr;
 
-	Printf.fprintf oc "\n\t\t\"params_prefix_to_obj\" : \"%s\"," bridge_cc.params_prefix_to_obj;
-	Printf.fprintf oc "\n\t\t\"params_prefix_to_asm\" : \"%s\"," bridge_cc.params_prefix_to_asm;
-	Printf.fprintf oc "\n\t\t\"params_prefix_to_output\" : \"%s\"" bridge_cc.params_prefix_to_output;
+	Printf.fprintf oc "\n\t\t\"params_prefix_obj\" : \"%s\"," bridge_cc.params_prefix_obj;
+	Printf.fprintf oc "\n\t\t\"params_prefix_asm\" : \"%s\"," bridge_cc.params_prefix_asm;
+	Printf.fprintf oc "\n\t\t\"params_prefix_output\" : \"%s\"," bridge_cc.params_prefix_output;
+	Printf.fprintf oc "\n\t\t\"params_prefix_include\" : \"%s\"" bridge_cc.params_prefix_include;
 
 	if continuation then
 		begin

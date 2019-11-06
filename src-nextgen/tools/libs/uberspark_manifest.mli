@@ -64,9 +64,10 @@ module Bridge : sig
   (* bridge-cc node type *)
   type bridge_cc_t = { 
     mutable bridge_hdr : bridge_hdr_t;
-    mutable params_prefix_to_obj: string;
-    mutable params_prefix_to_asm: string;
-    mutable params_prefix_to_output: string;
+    mutable params_prefix_obj: string;
+    mutable params_prefix_asm: string;
+    mutable params_prefix_output: string;
+    mutable params_prefix_include: string;
   }
 
 
