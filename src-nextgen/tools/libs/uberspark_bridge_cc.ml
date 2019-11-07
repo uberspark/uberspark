@@ -224,7 +224,7 @@ let invoke
 		if li == 0 then begin
 			d_cmd := !d_cmd ^ "echo Compiling " ^ c_file_name ^ "..." ^ " && ";
 		end else begin
-			d_cmd := !d_cmd ^ " && " ^ "@echo Compiling " ^ c_file_name ^ "..." ^ " && ";
+			d_cmd := !d_cmd ^ " && " ^ "echo Compiling " ^ c_file_name ^ "..." ^ " && ";
 		end;
 
 		

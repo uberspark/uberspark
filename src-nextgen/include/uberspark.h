@@ -55,6 +55,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 
+#include <uberspark/include/basedefs.h>
 
 #ifndef __ASSEMBLY__
 
