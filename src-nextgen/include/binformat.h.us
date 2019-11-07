@@ -132,7 +132,8 @@ typedef struct {
 
 typedef struct {
 	uint8_t name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
-	uint64_t vaddr;											//virtual address of the public method
+	uint32_t vaddr;
+	uint32_t vaddr_hi;										//virtual address of the public method
 } __attribute__((packed)) __usbinformat_uobj_publicmethod_info_t;
 
 typedef struct {
