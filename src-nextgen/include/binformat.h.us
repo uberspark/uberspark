@@ -80,6 +80,7 @@ typedef struct {
 	uint32_t aligned_at;	//boundary that header is aligned at
 	uint32_t pad_to;		//boundary that header is padded to
 	uint64_t size;			//size of header
+	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];	//callee uobj namespace
 } __attribute__((packed)) usbinformat_hdr_t;
 
 
@@ -99,17 +100,32 @@ typedef struct {
 } __attribute__((packed)) usbinformat_section_info_t;
 
 
+
+
 //////
-// uobjcoll binary header type definition
+// uobj public method info definition
 //////
 
 typedef struct {
-	usbinformat_hdr_t hdr;	//generic header fields
-	uint64_t load_addr;		//load address of the collection
-	uint64_t load_size;		//size in bytes of the loaded collection image
-	//uobjcoll section descriptions
-	usbinformat_section_info_t sections[USBINFORMAT_UOBJCOLL_HDR_MAX_SECTIONS];
-} __attribute__((packed)) usbinformat_uobjcoll_hdr_t;
+	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];		//uobjcoll/uobj namespace
+	uint8_t cname[USCONFIG_CNAME_MAX_LENGTH];	//public method name
+	uint32_t vaddr;
+	uint32_t vaddr_hi;										//virtual address of the public method
+} __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
+
+
+
+//////
+// uobj callees info type definition
+// this applies to intra-uobj, inter-uobj and legacy callees
+//////
+
+typedef struct {
+	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];		//callee uobjcoll/uobj namespace
+	uint8_t cname[USCONFIG_CNAME_MAX_LENGTH];	//callee name
+	uint32_t slt_ordinal;									//index into sentinal linkage table
+} __attribute__((packed)) usbinformat_uobj_callee_info_t;
+
 
 
 //////
@@ -138,56 +154,17 @@ typedef struct {
 	uint32_t sizeof_interuobjcoll_callee_record; //size (in bytes) of a inter-uobjcoll callee record
 	uint32_t offsetof_interuobjcoll_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
 
+	uint32_t total_legacy_callees;	//number of inter-uobjcoll callees
+	uint32_t sizeof_legacy_callee_record; //size (in bytes) of a inter-uobjcoll callee record
+	uint32_t offsetof_legacy_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
+
 } __attribute__((packed)) usbinformat_uobj_hdr_t;
 
 
-//////
-// uobj public method info definition
-//////
-
-typedef struct {
-	uint8_t name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
-	uint32_t vaddr;
-	uint32_t vaddr_hi;										//virtual address of the public method
-} __attribute__((packed)) __usbinformat_uobj_publicmethod_info_t;
-
-typedef struct {
-	uint32_t num_publicmethods;	//total number of public method definitions
-	__usbinformat_uobj_publicmethod_info_t publicmethods[USCONFIG_UOBJ_MAX_PUBLICMETHODS];
-} __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
-
-
-//////
-// uobj intrauobjcoll callees info type definition
-//////
-
-typedef struct {
-	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//public method name
-	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
-	uint32_t slt_ordinal;									//index into sentinal linkage table
-} __attribute__((packed)) __usbinformat_uobj_intrauobjcoll_callees_info_t;
-
-typedef struct {
-	uint32_t num_intraobjcoll_callees;	//total number of intrauobjcoll callees
-	__usbinformat_uobj_intrauobjcoll_callees_info_t intrauobjcoll_callees[USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES];
-} __attribute__((packed)) usbinformat_uobj_intrauobjcoll_callees_info_t;
 
 
 
-//////
-// uobj interuobjcoll callees info type definition
-//////
 
-typedef struct {
-	uint8_t uobj_ns[USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH];	//uobj namespace/ legacy code identifier
-	uint8_t pm_name[USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH];	//public method name
-	uint32_t slt_ordinal;									//index into sentinal linkage table
-} __attribute__((packed)) __usbinformat_uobj_interuobjcoll_callees_info_t;
-
-typedef struct {
-	uint32_t num_interuobjcoll_callees;	//total number of interuobjcoll callees
-	__usbinformat_uobj_interuobjcoll_callees_info_t interuobjcoll_callees[USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES];
-} __attribute__((packed)) usbinformat_uobj_interuobjcoll_callees_info_t;
 
 
 
