@@ -549,7 +549,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_intrauobjcoll_callees_info 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename)
-			(self#get_d_hdr).f_namespace d_intrauobjcoll_callees_hashtbl;
+			d_intrauobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary interuobjcoll callees info source *)
