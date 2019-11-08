@@ -105,6 +105,7 @@ let generate_src_binhdr
 (*--------------------------------------------------------------------------*)
 let generate_src_publicmethods_info 
     (output_filename : string)
+    (namespace : string)
     (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t))
     : unit = 
 
@@ -130,25 +131,30 @@ let generate_src_publicmethods_info
 
     Printf.fprintf oc "\n__attribute__(( section(\".pminfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_publicmethod_info_t uobj_pminfo = {";
 
-    (*num_publicmethods*)
+(*    (*num_publicmethods*)
     Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length publicmethods_hashtbl);
-    
+*)
+
     (* generate uobj public methods defs *)
-    Printf.fprintf oc "\n\t{"; 
     
     Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
-        Printf.fprintf oc "\n\t\t{"; 
+        Printf.fprintf oc "\n\t{"; 
 
-        (* name *)
-        Printf.fprintf oc "\n\t\t\t\"%s\"," (pm_info.f_name); 
+        (* namespace *)
+        Printf.fprintf oc "\n\t\t\"%s\"," (namespace); 
+
+        (* callee name *)
+        Printf.fprintf oc "\n\t\t\"%s\"," (pm_info.f_name); 
+
         (* vaddr *)
-        Printf.fprintf oc "\n\t\t\t(uint32_t)&%s," (pm_info.f_name); 
-        Printf.fprintf oc "\n\t\t\t(uint32_t)0UL"; 
+        Printf.fprintf oc "\n\t\t(uint32_t)&%s," (pm_info.f_name); 
 
-        Printf.fprintf oc "\n\t\t},"; 
+        (* vaddr_hi *)
+        Printf.fprintf oc "\n\t\t(uint32_t)0UL"; 
+
+        Printf.fprintf oc "\n\t},"; 
     ) publicmethods_hashtbl;
     
-    Printf.fprintf oc "\n\t},"; 
 
     (* generate epilogue *)
     Printf.fprintf oc "\n};";

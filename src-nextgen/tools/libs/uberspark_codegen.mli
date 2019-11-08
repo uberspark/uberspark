@@ -34,7 +34,7 @@ module Uobj : sig
   (* interfaces *)
   (****************************************************************************)
   val generate_src_binhdr : string -> int -> int -> ((string, Defs.Basedefs.section_info_t)  Hashtbl.t) ->  unit 
-  val generate_src_publicmethods_info : string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 
+  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit
   val generate_src_interuobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit 
   val generate_slt : string -> string list -> string -> string -> string -> string -> bool

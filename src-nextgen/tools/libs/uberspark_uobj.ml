@@ -540,7 +540,7 @@ class uobject
 
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
-		Uberspark_codegen.Uobj.generate_src_publicmethods_info (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_publicmethods_info_src_filename)
+		Uberspark_codegen.Uobj.generate_src_publicmethods_info (self#get_d_hdr).f_namespace (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_publicmethods_info_src_filename)
 			d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
