@@ -73,6 +73,7 @@ let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
 let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
 let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
 let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
+let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.c";;
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 
 
@@ -81,6 +82,7 @@ let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 
 let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
 
+let namespace_legacy = "legacy";;
 
 
 let namespace_uobjslt = "uobjslt";;

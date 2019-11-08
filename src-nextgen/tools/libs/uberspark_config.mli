@@ -26,11 +26,14 @@ val namespace_uobj_binhdr_src_filename : string
 val namespace_uobj_publicmethods_info_src_filename : string
 val namespace_uobj_intrauobjcoll_callees_info_src_filename : string
 val namespace_uobj_interuobjcoll_callees_info_src_filename : string
+val namespace_uobj_legacy_callees_info_src_filename : string
 val namespace_uobj_linkerscript_filename : string
 
 val namespace_uobjcoll_mf_filename : string
 
 val namespace_uobjrtl_mf_filename : string
+
+val namespace_legacy : string
 
 
 val namespace_uobjslt : string

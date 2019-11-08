@@ -559,6 +559,14 @@ class uobject
 			d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
+		(* generate uobj binary legacy callees info source *)
+		Uberspark_logger.log ~crlf:false "Generating uobj binary legacy callees info source...";
+		Uberspark_codegen.Uobj.generate_src_legacy_callees_info 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_legacy_callees_info_src_filename)
+			self#get_d_legacy_callees_list;
+		Uberspark_logger.log ~tag:"" "[OK]";
+
+
 		(* generate uobj binary linker script *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
 		Uberspark_codegen.Uobj.generate_linker_script 
