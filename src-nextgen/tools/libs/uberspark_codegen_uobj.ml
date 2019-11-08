@@ -173,6 +173,7 @@ let generate_src_publicmethods_info
 (*--------------------------------------------------------------------------*)
 let generate_src_intrauobjcoll_callees_info  
     (output_filename : string)
+    (namespace : string)
     (intrauobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
     : unit = 
     (* open public methods info source file *)
@@ -187,37 +188,37 @@ let generate_src_intrauobjcoll_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_intrauobjcoll_callees_info_t uobj_intrauobjcoll_callees = {";
+    Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_intrauobjcoll_callees = {";
 
-    (*num_intrauobjcoll_callees*)
+(*    (*num_intrauobjcoll_callees*)
     let num_intrauobjcoll_callees = ref 0 in
     Hashtbl.iter (fun key value  ->
         num_intrauobjcoll_callees := !num_intrauobjcoll_callees + (List.length value);
     ) intrauobjcoll_callees_hashtbl;
     Printf.fprintf oc "\n\t\t0x%08xUL," !num_intrauobjcoll_callees;
-    
-    (* generate uobj public methods defs *)
-    Printf.fprintf oc "\n\t{"; 
+*)
+
+    (* generate callee defs *)
 
     let slt_ordinal = ref 0 in
     Hashtbl.iter (fun key value ->  
         List.iter (fun pm_name -> 
-            Printf.fprintf oc "\n\t\t{"; 
+            Printf.fprintf oc "\n\t{"; 
             
-            (* uobj_ns *)
-            Printf.fprintf oc "\n\t\t\t\"%s\"," key; 
-            (* pm_name *)
-            Printf.fprintf oc "\n\t\t\t\"%s\"," pm_name; 
+            (* namespace *)
+            Printf.fprintf oc "\n\t\t\"%s\"," key; 
+            
+            (* cname *)
+            Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+            
             (* slt_ordinal *)
-            Printf.fprintf oc "\n\t\t0x%08xUL," !slt_ordinal;
+            Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
             
-            Printf.fprintf oc "\n\t\t},"; 
+            Printf.fprintf oc "\n\t},"; 
             slt_ordinal := !slt_ordinal + 1;
         ) value;
     ) intrauobjcoll_callees_hashtbl;
     
-    Printf.fprintf oc "\n\t},"; 
-
     (* generate epilogue *)
     Printf.fprintf oc "\n};";
     Printf.fprintf oc "\n";
