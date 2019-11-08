@@ -22,9 +22,14 @@
 (*--------------------------------------------------------------------------*)
 let generate_src_binhdr
     (output_filename : string)
+    (uobj_ns : string)
     (load_addr : int)
     (size : int)
     (sections_hashtbl : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t))
+    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t))
+    (intrauobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
+    (interuobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
+    (legacy_callees_list : string list)
     : unit = 
 
     (* open binary header source file *)
@@ -42,26 +47,73 @@ let generate_src_binhdr
     Printf.fprintf oc "\n__attribute__(( section(\".binhdr\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
 
     (* generate common header *)
-    (* hdr *)
     Printf.fprintf oc "\n\t{"; 
-    (*magic*)
-    Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJ,"; 
-    (*num_sections*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length sections_hashtbl);
-    (*page_size*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-    (*aligned_at*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-    (*pad_to*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-    (*size*)
-    Printf.fprintf oc "\n\t\t0x%08xULL," size; 
+        (*magic*)
+        Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJ,"; 
+        (*page_size*)
+        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
+        (*aligned_at*)
+        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
+        (*pad_to*)
+        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
+        (*size*)
+        Printf.fprintf oc "\n\t\t0x%08xULL," size; 
+        (*namespace*)
+        Printf.fprintf oc "\n\t\t\"%s\"" uobj_ns; 
     Printf.fprintf oc "\n\t},"; 
+
     (* load_addr *)
     Printf.fprintf oc "\n\t0x%08xULL," load_addr; 
+
     (* load_size *)
     Printf.fprintf oc "\n\t0x%08xULL," size; 
-    
+
+    (*total_sections*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length sections_hashtbl);
+
+    (*sizeof_section_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*offsetof_sections*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*total_publicmethods*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length publicmethods_hashtbl);
+
+    (*sizeof_publicmethods_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*offsetof_publicmethods_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*total_intrauobjcoll_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length intrauobjcoll_callees_hashtbl);
+
+    (*sizeof_intrauobjcoll_callee_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*offsetof_intrauobjcoll_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*total_interuobjcoll_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length interuobjcoll_callees_hashtbl);
+
+    (*sizeof_interuobjcoll_callee_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*offsetof_interuobjcoll_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*total_legacy_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," (List.length legacy_callees_list);
+
+    (*sizeof_legacy_callee_record*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+    (*offsetof_legacy_callees*)
+    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
+
+(*
     (* generate uobj section defs *)
     Printf.fprintf oc "\n\t{"; 
     
@@ -87,6 +139,8 @@ let generate_src_binhdr
     ) sections_hashtbl;
     
     Printf.fprintf oc "\n\t},"; 
+*)
+
 
     (* generate epilogue *)
     Printf.fprintf oc "\n};";

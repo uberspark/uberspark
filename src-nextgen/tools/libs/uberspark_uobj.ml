@@ -534,8 +534,11 @@ class uobject
 
 		(* generate uobj binary header source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
-		Uberspark_codegen.Uobj.generate_src_binhdr (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_binhdr_src_filename)
-			self#get_d_load_addr self#get_d_size d_sections_hashtbl;
+		Uberspark_codegen.Uobj.generate_src_binhdr 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_binhdr_src_filename)
+			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
+			d_sections_hashtbl d_publicmethods_hashtbl d_intrauobjcoll_callees_hashtbl d_interuobjcoll_callees_hashtbl
+			self#get_d_legacy_callees_list;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate uobj binary public methods info source *)
@@ -565,7 +568,6 @@ class uobject
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_legacy_callees_info_src_filename)
 			self#get_d_legacy_callees_list;
 		Uberspark_logger.log ~tag:"" "[OK]";
-
 
 		(* generate uobj binary linker script *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
