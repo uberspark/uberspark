@@ -44,6 +44,10 @@ class uobject
 	val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
+	val d_legacy_callees_list : string list ref = ref [];
+	method get_d_legacy_callees_list = !d_legacy_callees_list;
+
+
 	(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
 	val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 	method get_d_sections_hashtbl = d_sections_hashtbl;
@@ -178,6 +182,16 @@ class uobject
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
+			end;
+
+		(* parse uobj-legacy-callees node *)
+		let rval = (Uberspark_manifest.Uobj.parse_uobj_legacy_callees mf_json d_legacy_callees_list) in
+
+		if (rval == false) then (false)
+		else
+		let dummy = 0 in
+			begin
+				Uberspark_logger.log "total legacy callees=%u" (List.length self#get_d_legacy_callees_list);
 			end;
 
 

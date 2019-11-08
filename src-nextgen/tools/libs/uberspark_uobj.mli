@@ -6,6 +6,7 @@
     val d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
+    val d_legacy_callees_list : string list ref
     val d_load_addr : int ref
     val d_ltag : string
     val d_mf_filename : string ref
@@ -33,6 +34,7 @@
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
+    method get_d_legacy_callees_list : string list
     method get_d_load_addr : int
     method get_d_mf_filename : string
     method get_d_path_to_mf_filename : string

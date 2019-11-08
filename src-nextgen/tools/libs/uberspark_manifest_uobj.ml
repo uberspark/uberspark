@@ -268,6 +268,45 @@ let parse_uobj_interuobjcoll_callees
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-legacy-callees" *)
+(* return: *)
+(* on success: true; legacy-callees string list modified with parsed values *)
+(* on failure: false; legacy-callees string list is left untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_legacy_callees 
+	(mf_json : Yojson.Basic.t)
+	(legacy_callees_list : string list ref )
+	: bool =
+
+	let retval = ref true in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_legacy_callees_json = mf_json |> member "uobj-legacy-callees" in
+				if uobj_legacy_callees_json != `Null then
+					begin
+
+						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
+							legacy_callees_list := json_list_to_string_list uobj_legacy_callees_list;
+							retval := true;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval)
+;;
+
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobj-binary/uobj-sections" *)
 (* return: *)
