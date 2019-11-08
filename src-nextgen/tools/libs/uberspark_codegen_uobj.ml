@@ -183,7 +183,7 @@ let generate_src_publicmethods_info
     ) publicmethods_hashtbl;
 
 
-    Printf.fprintf oc "\n__attribute__(( section(\".pminfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_publicmethod_info_t uobj_pminfo = {";
+    Printf.fprintf oc "\n__attribute__(( section(\".pminfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_publicmethod_info_t uobj_pminfo [] = {";
 
 (*    (*num_publicmethods*)
     Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length publicmethods_hashtbl);
@@ -241,7 +241,7 @@ let generate_src_intrauobjcoll_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_intrauobjcoll_callees = {";
+    Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_intrauobjcoll_callees [] = {";
 
 (*    (*num_intrauobjcoll_callees*)
     let num_intrauobjcoll_callees = ref 0 in
@@ -304,7 +304,7 @@ let generate_src_interuobjcoll_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".interuobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_interuobjcoll_callees = {";
+    Printf.fprintf oc "\n__attribute__(( section(\".interuobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_interuobjcoll_callees [] = {";
 
 (*    (*num_interuobjcoll_callees*)
     let num_interuobjcoll_callees = ref 0 in
@@ -365,7 +365,7 @@ let generate_src_legacy_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".legacycalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_legacy_callees = {";
+    Printf.fprintf oc "\n__attribute__(( section(\".legacycalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_legacy_callees [] = {";
 
 (*    (*num_interuobjcoll_callees*)
     let num_interuobjcoll_callees = ref 0 in
