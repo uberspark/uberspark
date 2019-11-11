@@ -89,15 +89,25 @@ class uobject
 		()
 	;
 
-	(* uobj load address base *)
+	(* uobj binary image load address *)
 	val d_load_addr = ref Uberspark_config.config_settings.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
 	method set_d_load_addr load_addr = (d_load_addr := load_addr);
 	
-	(* uobj size *)
+	(* uobj binary image size; will be overwritten with actual size using alignment if uniform_size=false  *)
 	val d_size = ref Uberspark_config.config_settings.uobj_binary_image_size; 
 	method get_d_size = !d_size;
 	method set_d_size size = (d_size := size);
+
+	(* uobj binary image uniform size flag *)
+	val d_uniform_size = ref Uberspark_config.config_settings.uobj_binary_image_uniform_size; 
+	method get_d_uniform_size = !d_uniform_size;
+	method set_d_uniform_size uniform_size = (d_uniform_size := uniform_size);
+
+	(* uobj binary image alignment *)
+	val d_alignment = ref Uberspark_config.config_settings.uobj_binary_image_alignment; 
+	method get_d_alignment = !d_alignment;
+	method set_d_alignment alignment = (d_alignment := alignment);
 
 	(* uobj context path build folder *)
 	val d_context_path_builddir = ref ".";
@@ -281,7 +291,7 @@ class uobject
 		=
 
 		let uobj_section_load_addr = ref 0 in
-		self#set_d_load_addr uobj_load_addr;
+		(*self#set_d_load_addr uobj_load_addr;*)
 		uobj_section_load_addr := uobj_load_addr;
 
 		(* iterate over all the sections *)

@@ -35,7 +35,12 @@
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
     method get_d_legacy_callees_list : string list
+
     method get_d_load_addr : int
+    method get_d_size : int
+    method get_d_uniform_size : bool
+    method get_d_alignment : int
+ 
     method get_d_mf_filename : string
     method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
@@ -47,15 +52,18 @@
       (string, Defs.Basedefs.section_info_t) Hashtbl.t
     method get_d_sections_memory_map_hashtbl_byorigin :
       (int, Defs.Basedefs.section_info_t) Hashtbl.t
-    method get_d_size : int
     method get_d_slt_trampolinecode : string
     method get_d_slt_trampolinedata : string
     method get_d_sources_c_file_list : string list
     method get_d_sources_casm_file_list : string list
     method get_d_sources_h_file_list : string list
     method get_d_target_def : Defs.Basedefs.target_def_t
-    method set_d_load_addr : int -> unit
+ 
     method set_d_size : int -> unit
+    method set_d_load_addr : int -> unit
+    method set_d_alignment : int -> unit
+    method set_d_uniform_size : bool -> unit
+ 
     method set_d_slt_trampolinecode : string -> unit
     method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
