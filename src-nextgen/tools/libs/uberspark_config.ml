@@ -282,6 +282,9 @@ let settings_get
 		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_section_alignment);
 		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_default_section_size);
 		| "uobj_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_load_address);
+		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  config_settings.uobj_binary_image_uniform_size);
+		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_size);
+		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_alignment);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
 		| _ -> retstatus := false;
 	;
@@ -301,6 +304,9 @@ let settings_set
 		| "binary_uobj_section_alignment" -> config_settings.binary_uobj_section_alignment <- int_of_string setting_value;
 		| "binary_uobj_default_section_size" -> config_settings.binary_uobj_default_section_size <- int_of_string setting_value;
 		| "uobj_binary_image_load_address" -> config_settings.uobj_binary_image_load_address <- int_of_string setting_value;
+		| "uobj_binary_image_uniform_size" -> config_settings.uobj_binary_image_uniform_size <- bool_of_string setting_value;
+		| "uobj_binary_image_size" -> config_settings.uobj_binary_image_size <- int_of_string setting_value;
+		| "uobj_binary_image_alignment" -> config_settings.uobj_binary_image_alignment <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
 		| _ -> retval := false;
 	;
