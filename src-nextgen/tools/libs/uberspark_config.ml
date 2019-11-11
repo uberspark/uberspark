@@ -38,6 +38,11 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 	binary_uobj_default_load_addr = 0x60000000;
 	binary_uobj_default_size = 0x01000000;
 
+	uobj_binary_image_uniform_size = true;
+	uobj_binary_image_size = 0x1000000;
+	uobj_binary_image_alignment = 0x200000;
+
+
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
 
