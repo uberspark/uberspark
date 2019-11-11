@@ -35,9 +35,8 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 	binary_page_size = 0x0020000;
 	binary_uobj_section_alignment = 0x00200000;
 	binary_uobj_default_section_size =  0x00200000;
-	binary_uobj_default_load_addr = 0x60000000;
-	binary_uobj_default_size = 0x01000000;
 
+	uobj_binary_image_load_address = 0x60000000;
 	uobj_binary_image_uniform_size = true;
 	uobj_binary_image_size = 0x1000000;
 	uobj_binary_image_alignment = 0x200000;
@@ -282,8 +281,7 @@ let settings_get
 		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_page_size);
 		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_section_alignment);
 		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_default_section_size);
-		| "binary_uobj_default_load_addr" -> settings_value := (Printf.sprintf "0x%x"  config_settings.binary_uobj_default_load_addr);
-		| "binary_uobj_default_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_default_size);
+		| "uobj_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_load_address);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
 		| _ -> retstatus := false;
 	;
@@ -302,8 +300,7 @@ let settings_set
 		| "binary_page_size" -> config_settings.binary_page_size <- int_of_string setting_value;
 		| "binary_uobj_section_alignment" -> config_settings.binary_uobj_section_alignment <- int_of_string setting_value;
 		| "binary_uobj_default_section_size" -> config_settings.binary_uobj_default_section_size <- int_of_string setting_value;
-		| "binary_uobj_default_load_addr" -> config_settings.binary_uobj_default_load_addr <- int_of_string setting_value;
-		| "binary_uobj_default_size" -> config_settings.binary_uobj_default_size <- int_of_string setting_value;
+		| "uobj_binary_image_load_address" -> config_settings.uobj_binary_image_load_address <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
 		| _ -> retval := false;
 	;

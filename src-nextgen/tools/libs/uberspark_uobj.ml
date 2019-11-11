@@ -90,12 +90,12 @@ class uobject
 	;
 
 	(* uobj load address base *)
-	val d_load_addr = ref Uberspark_config.config_settings.binary_uobj_default_load_addr;
+	val d_load_addr = ref Uberspark_config.config_settings.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
 	method set_d_load_addr load_addr = (d_load_addr := load_addr);
 	
 	(* uobj size *)
-	val d_size = ref Uberspark_config.config_settings.binary_uobj_default_size; 
+	val d_size = ref Uberspark_config.config_settings.uobj_binary_image_size; 
 	method get_d_size = !d_size;
 	method set_d_size size = (d_size := size);
 

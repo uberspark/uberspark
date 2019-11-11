@@ -108,9 +108,8 @@ module Config : sig
     mutable binary_page_size : int;
     mutable binary_uobj_section_alignment : int;
     mutable binary_uobj_default_section_size : int;
-    mutable binary_uobj_default_load_addr : int;
-    mutable binary_uobj_default_size : int;
-
+ 
+    mutable uobj_binary_image_load_address : int;
     mutable uobj_binary_image_uniform_size : bool;
     mutable uobj_binary_image_size : int;
     mutable uobj_binary_image_alignment : int;
