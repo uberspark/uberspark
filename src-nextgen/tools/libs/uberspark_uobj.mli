@@ -71,10 +71,10 @@
 	  method set_d_context_path_builddir : string -> unit
 
 
-    method consolidate_sections_with_memory_map : int -> int -> unit
+    method consolidate_sections_with_memory_map : unit -> unit
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
-    method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> unit
+    method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> int -> unit
     method compile_c_files : unit -> bool
 
     method install_create_ns : unit -> unit

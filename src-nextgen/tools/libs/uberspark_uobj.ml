@@ -286,13 +286,15 @@ class uobject
 	(* uobj_load_addr = load address of uobj *)
 	(*--------------------------------------------------------------------------*)
 	method consolidate_sections_with_memory_map
-		(uobj_load_addr : int)
-		(uobjsize : int)  
+		()
+		: unit  
 		=
 
 		let uobj_section_load_addr = ref 0 in
+		let uobjsize = self#get_d_size in
+		let uobj_load_addr = self#get_d_load_addr in
 		(*self#set_d_load_addr uobj_load_addr;*)
-		uobj_section_load_addr := uobj_load_addr;
+		uobj_section_load_addr := self#get_d_load_addr;
 
 		(* iterate over all the sections *)
 		Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
@@ -342,48 +344,95 @@ class uobject
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
 		)  self#get_d_sections_hashtbl;
 
-		(* check to see if the uobj sections fit neatly into uobj size *)
-		(* if not, add a filler section to pad it to uobj size *)
-		if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
-				ignore(exit 1);
-			end
-		;	
+		
+		if (self#get_d_uniform_size) then begin
+			(* uniform uobj binary image size *)
+			
+			(* check to see if the uobj sections fit neatly into uobj size *)
+			(* if not, add a filler section to pad it to uobj size *)
+			if (!uobj_section_load_addr - uobj_load_addr) > uobjsize then
+				begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "uobj total section sizes (0x%08x) span beyond uobj size (0x%08x)!" (!uobj_section_load_addr - uobj_load_addr) uobjsize;
+					ignore(exit 1);
+				end
+			;	
 
-		if (!uobj_section_load_addr - uobj_load_addr) < uobjsize then
-			begin
+			if (!uobj_section_load_addr - uobj_load_addr) < uobjsize then
+				begin
+					(* add padding section *)
+					Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
+						{ f_name = "usuobj_padding";	
+							f_subsection_list = [ ];	
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_addr_file = 0;
+															f_reserved = 0;
+														};
+						};
+					Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+						{ f_name = "usuobj_padding";	
+							f_subsection_list = [ ];	
+							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
+															f_prot=0; 
+															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
+															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_addr_start = !uobj_section_load_addr; 
+															f_addr_file = 0;
+															f_reserved = 0;
+														};
+						};
+				end
+			;	
+
+		end else begin
+			(* uobj binary image sizes within the collection are not uniform *)
+			
+			if (!uobj_section_load_addr mod self#get_d_alignment) > 0 then begin
+				(* uobj_section_load_addr is __not__ aligned at uobj_binary_image_alignment *)
 				(* add padding section *)
-				Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
-					{ f_name = "usuobj_padding";	
+				Hashtbl.add d_sections_memory_map_hashtbl "uobj_padding" 
+					{ f_name = "uobj_padding";	
 						f_subsection_list = [ ];	
-						usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
-														f_prot=0; 
-														f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-														f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-														f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-														f_addr_start = !uobj_section_load_addr; 
-														f_addr_file = 0;
-														f_reserved = 0;
-													};
+						usbinformat = { f_type = Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_PADDING;
+										f_prot=0; 
+										f_size = (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment));
+										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_addr_start = !uobj_section_load_addr; 
+										f_addr_file = 0;
+										f_reserved = 0;
+						};
 					};
 				Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{ f_name = "usuobj_padding";	
+					{ f_name = "uobj_padding";	
 						f_subsection_list = [ ];	
 						usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
-														f_prot=0; 
-														f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-														f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-														f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-														f_addr_start = !uobj_section_load_addr; 
-														f_addr_file = 0;
-														f_reserved = 0;
-													};
+										f_prot=0; 
+										f_size = (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment));
+										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_addr_start = !uobj_section_load_addr; 
+										f_addr_file = 0;
+										f_reserved = 0;
+						};
 					};
-			end
-		;	
+
+				(* update uobj size *)
+				self#set_d_size ((!uobj_section_load_addr + (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment))) - self#get_d_load_addr);
+
+			end else begin
+				(* uobj_section_load_addr is aligned at uobj_binary_image_alignment *)
+				(* we don't need to do anything *)
+			end;
+
+		end;
+
 					
-		self#set_d_size uobjsize;
 		()
 	;
 
@@ -395,6 +444,7 @@ class uobject
 	method initialize	
 		?(context_path_builddir = ".")
 		(target_def: Defs.Basedefs.target_def_t)
+		(uobj_load_address : int)
 		= 
 	
 		(* set target definition *)
@@ -402,6 +452,9 @@ class uobject
 
 		(* set build directory *)
 		self#set_d_context_path_builddir context_path_builddir;
+
+		(* set load address *)
+		self#set_d_load_addr uobj_load_address;
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
@@ -655,7 +708,7 @@ class uobject
 
 		(* consolidate uboj section memory map *)
 		Uberspark_logger.log "Consolidating uobj section memory map...";
-		self#consolidate_sections_with_memory_map self#get_d_load_addr self#get_d_size;
+		self#consolidate_sections_with_memory_map ();
 		Uberspark_logger.log "uobj section memory map initialized";
 
 
@@ -892,7 +945,9 @@ let build
 	(*TBD: validate platform, arch, cpu target def with uobj target spec*)
 
 	(* initialize uobj initial state *)
-	uobj#initialize ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir uobj_target_def;
+	(* TBD: we need to get the load address as argument to the build interface *)
+	uobj#initialize ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir uobj_target_def 
+		Uberspark_config.config_settings.uobj_binary_image_load_address;
 
 	(* install headers if we are doing an out-of-namespace build *)
 	if not !in_namespace_build then begin
