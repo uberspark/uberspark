@@ -493,7 +493,7 @@ class uobject
 
 		Hashtbl.add d_sections_hashtbl "uobj_intrauobjcoll_cinfo" {
 			f_name = "uobj_intrauobjcoll_cinfo";	
-			f_subsection_list = [ ".uobj_intrauobjcoll_cinfo" ];	
+			f_subsection_list = [ ".uobj_intrauobjcoll_cinfo_hdr"; ".uobj_intrauobjcoll_cinfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CINFO; 
 							f_prot=0; 
 							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;

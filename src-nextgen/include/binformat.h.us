@@ -118,6 +118,13 @@ typedef struct {
 } __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
 
 
+//////
+// uobj intra-uobjcoll callees info header type definition
+//////
+typedef struct {
+	uint32_t total_intrauobjcoll_callees;	// total number of intra-uobjcoll callees
+} __attribute__((packed)) usbinformat_uobj_intrauobjcoll_callee_info_hdr_t;
+
 
 //////
 // uobj callees info type definition

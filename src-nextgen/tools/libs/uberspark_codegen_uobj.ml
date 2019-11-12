@@ -240,39 +240,43 @@ let generate_src_intrauobjcoll_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".intrauobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_intrauobjcoll_callees [] = {";
+    (* generate intrauobjcoll callee info header *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_intrauobjcoll_cinfo_hdr\") )) usbinformat_uobj_intrauobjcoll_callee_info_hdr_t uobj_intrauobjcoll_callee_info_hdr = {";
 
-(*    (*num_intrauobjcoll_callees*)
-    let num_intrauobjcoll_callees = ref 0 in
-    Hashtbl.iter (fun key value  ->
-        num_intrauobjcoll_callees := !num_intrauobjcoll_callees + (List.length value);
-    ) intrauobjcoll_callees_hashtbl;
-    Printf.fprintf oc "\n\t\t0x%08xUL," !num_intrauobjcoll_callees;
-*)
+        (*total_intrauobjcoll_callees*)
+        let num_intrauobjcoll_callees = ref 0 in
+        Hashtbl.iter (fun key value  ->
+            num_intrauobjcoll_callees := !num_intrauobjcoll_callees + (List.length value);
+        ) intrauobjcoll_callees_hashtbl;
+        Printf.fprintf oc "\n\t0x%08xUL," !num_intrauobjcoll_callees;
 
-    (* generate callee defs *)
-
-    let slt_ordinal = ref 0 in
-    Hashtbl.iter (fun key value ->  
-        List.iter (fun pm_name -> 
-            Printf.fprintf oc "\n\t{"; 
-            
-            (* namespace *)
-            Printf.fprintf oc "\n\t\t\"%s\"," key; 
-            
-            (* cname *)
-            Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
-            
-            (* slt_ordinal *)
-            Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
-            
-            Printf.fprintf oc "\n\t},"; 
-            slt_ordinal := !slt_ordinal + 1;
-        ) value;
-    ) intrauobjcoll_callees_hashtbl;
-    
-    (* generate epilogue *)
     Printf.fprintf oc "\n};";
+
+    (* generate intrauobjcoll callee info *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_intrauobjcoll_cinfo\") )) usbinformat_uobj_callee_info_t uobj_intrauobjcoll_callee_info [] = {";
+
+        let slt_ordinal = ref 0 in
+        Hashtbl.iter (fun key value ->  
+            List.iter (fun pm_name -> 
+                Printf.fprintf oc "\n\t{"; 
+                
+                (* namespace *)
+                Printf.fprintf oc "\n\t\t\"%s\"," key; 
+                
+                (* cname *)
+                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                
+                (* slt_ordinal *)
+                Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
+                
+                Printf.fprintf oc "\n\t},"; 
+                slt_ordinal := !slt_ordinal + 1;
+            ) value;
+        ) intrauobjcoll_callees_hashtbl;
+    
+    Printf.fprintf oc "\n};";
+
+    (* generate epilogue *)
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
