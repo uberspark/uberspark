@@ -24,12 +24,8 @@ let generate_src_binhdr
     (output_filename : string)
     (uobj_ns : string)
     (load_addr : int)
-    (size : int)
+    (image_size : int)
     (sections_hashtbl : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t))
-    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t))
-    (intrauobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
-    (interuobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
-    (legacy_callees_list : string list)
     : unit = 
 
     (* open binary header source file *)
@@ -44,106 +40,64 @@ let generate_src_binhdr
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".binhdr\") )) __attribute__((aligned(4096))) usbinformat_uobj_hdr_t uobj_hdr = {";
+    (* generate uobj binary header info *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_binhdr\") )) usbinformat_hdr_t uobj_binhdr = {";
 
-    (* generate common header *)
-    Printf.fprintf oc "\n\t{"; 
-        (*magic*)
-        Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJ,"; 
-        (*page_size*)
-        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-        (*aligned_at*)
-        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-        (*pad_to*)
-        Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_page_size; 
-        (*size*)
-        Printf.fprintf oc "\n\t\t0x%08xULL," size; 
+        (* sinfo. *)
+        Printf.fprintf oc "\n\t{"; 
+            (*type*)
+            Printf.fprintf oc "\n\t\tUSBINFORMAT_HDR_MAGIC_UOBJ,"; 
+            (*prot*)
+            Printf.fprintf oc "\n\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
+            (*size*)
+            Printf.fprintf oc "\n\t\t0x%08xULL," Uberspark_config.config_settings.binary_uobj_default_section_size; 
+            (*aligned_at*)
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_uobj_section_alignment; 
+            (*pad_to*)
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.config_settings.binary_uobj_section_alignment; 
+            (*addr_start*)
+            Printf.fprintf oc "\n\t\t0x%08xUL," load_addr; 
+            (*addr_file*)
+            Printf.fprintf oc "\n\t\t0x%08xUL," 0; 
+            (*reserved*)
+            Printf.fprintf oc "\n\t\t0x%08xUL" 0; 
+        Printf.fprintf oc "\n\t},"; 
+
+        (*image_size*)
+        Printf.fprintf oc "\n\t\t0x%08xUL," image_size; 
+
         (*namespace*)
-        Printf.fprintf oc "\n\t\t\"%s\"" uobj_ns; 
-    Printf.fprintf oc "\n\t},"; 
+        Printf.fprintf oc "\n\t\"%s\"" uobj_ns; 
 
-    (* load_addr *)
-    Printf.fprintf oc "\n\t0x%08xULL," load_addr; 
+    Printf.fprintf oc "\n};"; 
 
-    (* load_size *)
-    Printf.fprintf oc "\n\t0x%08xULL," size; 
+    (* generate uobj section definitions *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_binhdr_section_info\") )) usbinformat_section_info_t uobj_binsections [] = {";
 
-    (*total_sections*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length sections_hashtbl);
-
-    (*sizeof_section_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*offsetof_sections*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*total_publicmethods*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length publicmethods_hashtbl);
-
-    (*sizeof_publicmethods_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*offsetof_publicmethods_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*total_intrauobjcoll_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length intrauobjcoll_callees_hashtbl);
-
-    (*sizeof_intrauobjcoll_callee_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*offsetof_intrauobjcoll_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*total_interuobjcoll_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length interuobjcoll_callees_hashtbl);
-
-    (*sizeof_interuobjcoll_callee_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*offsetof_interuobjcoll_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*total_legacy_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (List.length legacy_callees_list);
-
-    (*sizeof_legacy_callee_record*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-    (*offsetof_legacy_callees*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," 0;
-
-(*
-    (* generate uobj section defs *)
-    Printf.fprintf oc "\n\t{"; 
-    
     Hashtbl.iter (fun key (section_info:Defs.Basedefs.section_info_t) ->  
-        Printf.fprintf oc "\n\t\t{"; 
+        Printf.fprintf oc "\n\t{"; 
         (* type *)
-        Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_type); 
+        Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_type); 
         (* prot *)
-        Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_prot); 
+        Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_prot); 
         (* size *)
-        Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_size); 
+        Printf.fprintf oc "\n\t\t0x%016xULL," (section_info.usbinformat.f_size); 
         (* aligned_at *)
-        Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_aligned_at); 
+        Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_aligned_at); 
         (* pad_to *)
-        Printf.fprintf oc "\n\t\t\t0x%08xUL," (section_info.usbinformat.f_pad_to); 
+        Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_pad_to); 
         (* addr_start *)
-        Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_addr_start); 
+        Printf.fprintf oc "\n\t\t0x%016xULL," (section_info.usbinformat.f_addr_start); 
         (* addr_file *)
-        Printf.fprintf oc "\n\t\t\t0x%016xULL," (section_info.usbinformat.f_addr_file); 
+        Printf.fprintf oc "\n\t\t0x%016xULL," (section_info.usbinformat.f_addr_file); 
         (* reserved *)
-        Printf.fprintf oc "\n\t\t\t0ULL"; 
-        Printf.fprintf oc "\n\t\t},"; 
+        Printf.fprintf oc "\n\t\t0ULL"; 
+        Printf.fprintf oc "\n\t},"; 
     ) sections_hashtbl;
     
-    Printf.fprintf oc "\n\t},"; 
-*)
-
+    Printf.fprintf oc "\n};"; 
 
     (* generate epilogue *)
-    Printf.fprintf oc "\n};";
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 

@@ -39,12 +39,9 @@ module Uobj : sig
     int ->
     int ->
     ((string, Defs.Basedefs.section_info_t)  Hashtbl.t) ->
-    ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) ->
-    ((string, string list)  Hashtbl.t) ->
-    ((string, string list)  Hashtbl.t) ->
-    string list -> unit
+    unit
 
-val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 
+  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit
   val generate_src_interuobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit 
   val generate_src_legacy_callees_info : string -> string list -> unit 

@@ -72,19 +72,6 @@
 #ifndef __ASSEMBLY__
 
 //////
-// uobj/uobjcoll binary generic header type definition
-//////
-typedef struct {
-	uint32_t magic;			//header magic
-	uint32_t page_size;		//memory page size
-	uint32_t aligned_at;	//boundary that header is aligned at
-	uint32_t pad_to;		//boundary that header is padded to
-	uint64_t size;			//size of header
-	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];	//callee uobj namespace
-} __attribute__((packed)) usbinformat_hdr_t;
-
-
-//////
 // uobj/uobjcoll binary generic section type definition
 //////
 
@@ -98,6 +85,19 @@ typedef struct {
 	uint64_t addr_file;		//file pointer address of section within binary file
 	uint64_t reserved;		//reserved
 } __attribute__((packed)) usbinformat_section_info_t;
+
+
+
+//////
+// uobj/uobjcoll binary generic header type definition
+//////
+typedef struct {
+	usbinformat_section_info_t sinfo;
+	uint32_t image_size; 	//size (in bytes) of image
+	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];	//uobj/uobjcoll namespace
+} __attribute__((packed)) usbinformat_hdr_t;
+
+
 
 
 
