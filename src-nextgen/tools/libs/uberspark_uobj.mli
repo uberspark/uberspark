@@ -26,6 +26,8 @@
     val d_sources_c_file_list : string list ref
     val d_sources_casm_file_list : string list ref
     val d_sources_h_file_list : string list ref
+    val d_sources_asm_file_list : string list ref
+
     val d_target_def : Defs.Basedefs.target_def_t
   	val d_context_path_builddir : string ref
 
@@ -57,6 +59,8 @@
     method get_d_sources_c_file_list : string list
     method get_d_sources_casm_file_list : string list
     method get_d_sources_h_file_list : string list
+    method get_d_sources_asm_file_list : string list
+    
     method get_d_target_def : Defs.Basedefs.target_def_t
  
     method set_d_size : int -> unit

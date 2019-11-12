@@ -25,7 +25,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	"uobj-sources" : {
 		"h-files": [ ],
 		"c-files": [ "add.c" ],
-		"casm-files": [ ]
+		"casm-files": [ ],
+		"asm-files": [ ]
 	},
 	
 	/* public methods */

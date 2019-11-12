@@ -35,6 +35,9 @@ class uobject
 	val d_sources_casm_file_list: string list ref = ref [];
 	method get_d_sources_casm_file_list = !d_sources_casm_file_list;
 
+	val d_sources_asm_file_list: string list ref = ref [];
+	method get_d_sources_asm_file_list = !d_sources_asm_file_list;
+
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
@@ -147,16 +150,17 @@ class uobject
 
 		(* parse uobj-sources node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
-				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list) in
+				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
 
 		if (rval == false) then (false)
 		else
 		let dummy = 0 in
 			begin
-				Uberspark_logger.log "total sources: h files=%u, c files=%u, casm files=%u" 
+				Uberspark_logger.log "total sources: h files=%u, c files=%u, casm files=%u, asm files=%u" 
 					(List.length self#get_d_sources_h_file_list)
 					(List.length self#get_d_sources_c_file_list)
-					(List.length self#get_d_sources_casm_file_list);
+					(List.length self#get_d_sources_casm_file_list)
+					(List.length self#get_d_sources_asm_file_list);
 			end;
 
 
