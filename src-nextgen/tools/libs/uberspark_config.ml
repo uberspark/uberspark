@@ -44,7 +44,8 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
-
+	bridge_as_bridge = "";
+	
 };;
 
 
@@ -287,6 +288,7 @@ let settings_get
 		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_size);
 		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_alignment);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
+		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_as_bridge);
 		| _ -> retstatus := false;
 	;
 	
@@ -309,6 +311,7 @@ let settings_set
 		| "uobj_binary_image_size" -> config_settings.uobj_binary_image_size <- int_of_string setting_value;
 		| "uobj_binary_image_alignment" -> config_settings.uobj_binary_image_alignment <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
+		| "bridge_as_bridge" -> config_settings.bridge_as_bridge <- setting_value;
 		| _ -> retval := false;
 	;
 	

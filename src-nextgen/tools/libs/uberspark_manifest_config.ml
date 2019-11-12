@@ -32,6 +32,7 @@ type config_settings_t =
 
 	(* bridge related configuration settings *)	
 	mutable bridge_cc_bridge : string;
+	mutable bridge_as_bridge : string;
 
 };;
 
@@ -112,6 +113,9 @@ let parse_config_settings
 					if (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings) <> `Null then
 						config_settings.bridge_cc_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings);
 
+					if (Yojson.Basic.Util.member "bridge_as_bridge" json_config_settings) <> `Null then
+						config_settings.bridge_as_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_as_bridge" json_config_settings);
+
 					retval := true;
 				end
 			;
@@ -178,7 +182,8 @@ let write_config_settings
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_uniform_size\" : %B," config_settings.uobj_binary_image_uniform_size;
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_size\" : \"0x%x\"," config_settings.uobj_binary_image_size;
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_alignment\" : \"0x%x\"," config_settings.uobj_binary_image_alignment;
-	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"" config_settings.bridge_cc_bridge;
+	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"," config_settings.bridge_cc_bridge;
+	Printf.fprintf oc "\n\t\t\"bridge_as_bridge\" : \"%s\"" config_settings.bridge_as_bridge;
 
 	if continuation then
 		begin

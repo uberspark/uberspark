@@ -79,6 +79,11 @@ struct
 end
 
 
+module As =
+struct
+#include "uberspark_bridge_as.ml"
+end
+
 
 
 (****************************************************************************)
@@ -91,7 +96,7 @@ let initialize_from_config ()
 	
 	let retval = ref false in
 
-	
+	(* handle cc-bridge *)	
 	if Uberspark_config.config_settings.bridge_cc_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
 		(!retval)
@@ -116,6 +121,34 @@ let initialize_from_config ()
 		Uberspark_logger.log "cc_bridge build success";
 		retval := true;
 	end;
+
+	(* handle as-bridge *)	
+	if Uberspark_config.config_settings.bridge_as_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (As.load Uberspark_config.config_settings.bridge_as_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded as_bridge settings";
+		retval := true;
+	end;
+
+	if not (As.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build as_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "as_bridge build success";
+		retval := true;
+	end;
+
+
 
 	(!retval)
 ;;

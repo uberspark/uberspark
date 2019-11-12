@@ -282,6 +282,20 @@ let helper_bridges_action_config_do
           end
           ;  
 
+        | "as-bridge" -> 
+
+          if (Uberspark.Bridge.As.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded as-bridge settings";
+            if ( Uberspark.Bridge.As.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build as-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load as-bridge settings!");
+          end
+          ;  
+
 
         | _ ->
             retval := `Error (false, "unknown bridge type!");
@@ -327,6 +341,10 @@ let handler_bridges_action_config
 
           if cmd_bridges_opts.cc_bridge then begin
               retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_cc_bridge_name bridge_ns cmd_bridges_opts;
+
+          end else if cmd_bridges_opts.as_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_as_bridge_name bridge_ns cmd_bridges_opts;
+
           end else begin
               retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
           end;

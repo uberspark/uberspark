@@ -63,3 +63,29 @@ end
 
 
 
+
+module As : sig
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge data variables *)
+(*--------------------------------------------------------------------------*)
+val uberspark_hdr: Uberspark_manifest.hdr_t
+val bridge_as : Uberspark_manifest.Bridge.bridge_as_t 
+
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge interfaces *)
+(*--------------------------------------------------------------------------*)
+val load_from_json : Yojson.Basic.json ->  bool
+val load_from_file : string -> bool
+val load : string -> bool
+val store_to_file : string -> bool
+val store : unit -> bool
+val build : unit -> bool
+val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+
+
+
+end
+
+

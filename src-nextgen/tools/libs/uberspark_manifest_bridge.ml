@@ -35,6 +35,15 @@ type bridge_cc_t = {
 	mutable params_prefix_include: string;
 };;
 
+(* bridge-as node type *)
+type bridge_as_t = { 
+	mutable bridge_hdr : bridge_hdr_t;
+	mutable params_prefix_obj: string;
+	mutable params_prefix_output: string;
+	mutable params_prefix_include: string;
+};;
+
+
 
 (****************************************************************************)
 (* manifest parse interfaces *)
@@ -111,6 +120,45 @@ let parse_bridge_cc
 						bridge_cc.params_prefix_asm <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_asm" json_bridge_cc);
 						bridge_cc.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_bridge_cc);
 						bridge_cc.params_prefix_include <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_include" json_bridge_cc);
+						retval := true;
+					end;
+					
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse json node "bridge-as" *)
+(* return: *)
+(* on success: true; bridge_as fields are modified with parsed values *)
+(* on failure: false; bridge_as fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_bridge_as 
+	(mf_json : Yojson.Basic.t)
+	(bridge_as : bridge_as_t) 
+	: bool =
+
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_bridge_as = mf_json |> member "bridge-as" in
+			if(json_bridge_as <> `Null) then
+				begin
+					
+					retval := parse_bridge_hdr json_bridge_as bridge_as.bridge_hdr;
+
+					if !retval then begin
+						bridge_as.params_prefix_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_obj" json_bridge_as);
+						bridge_as.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_bridge_as);
+						bridge_as.params_prefix_include <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_include" json_bridge_as);
 						retval := true;
 					end;
 					
@@ -213,6 +261,40 @@ let write_bridge_cc
 	(!retval)
 ;;
 
+
+(*--------------------------------------------------------------------------*)
+(* write bridge-as manifest node *)
+(*--------------------------------------------------------------------------*)
+let write_bridge_as 
+	?(continuation = true)
+	(oc : out_channel)
+	(bridge_as : bridge_as_t) 
+	: bool =
+	let retval = ref false in
+
+	Printf.fprintf oc "\n";
+	Printf.fprintf oc "\n\t\"bridge-as\":{";
+
+	write_bridge_hdr oc bridge_as.bridge_hdr;
+
+	Printf.fprintf oc "\n\t\t\"params_prefix_obj\" : \"%s\"," bridge_as.params_prefix_obj;
+	Printf.fprintf oc "\n\t\t\"params_prefix_output\" : \"%s\"," bridge_as.params_prefix_output;
+	Printf.fprintf oc "\n\t\t\"params_prefix_include\" : \"%s\"" bridge_as.params_prefix_include;
+
+	if continuation then
+		begin
+			Printf.fprintf oc "\n\t},";
+		end
+	else
+		begin
+			Printf.fprintf oc "\n\t}";
+		end
+	;
+
+	Printf.fprintf oc "\n";
+
+	(!retval)
+;;
 
 
 

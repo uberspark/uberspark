@@ -11,7 +11,7 @@
 		"uberspark_max_version" : "any"
 	},
 
-    "bridge-cc" : {
+    "bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",
