@@ -829,7 +829,8 @@ class uobject
 			Uberspark_config.namespace_uobj_binhdr_src_filename;
 			Uberspark_config.namespace_uobj_publicmethods_info_src_filename;		
 			Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename;
-			Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename
+			Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename;
+			Uberspark_config.namespace_uobj_legacy_callees_info_src_filename;
 		] @ !d_sources_c_file_list;
 
 
