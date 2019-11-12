@@ -479,7 +479,7 @@ class uobject
 
 		Hashtbl.add d_sections_hashtbl "uobj_pminfo" {
 			f_name = "uobj_pminfo";	
-			f_subsection_list = [ ".uobj_pminfo" ];	
+			f_subsection_list = [ ".uobj_pminfo_hdr"; ".uobj_pminfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
 							f_prot=0; 
 							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;

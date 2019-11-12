@@ -107,10 +107,14 @@ typedef struct {
 //////
 
 typedef struct {
-	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];		//uobjcoll/uobj namespace
+	uint32_t total_publicmethods;	// total number of public methods
+} __attribute__((packed)) usbinformat_uobj_publicmethod_info_hdr_t;
+
+
+typedef struct {
 	uint8_t cname[USCONFIG_CNAME_MAX_LENGTH];	//public method name
 	uint32_t vaddr;
-	uint32_t vaddr_hi;										//virtual address of the public method
+	uint32_t vaddr_hi;							//virtual address of the public method
 } __attribute__((packed)) usbinformat_uobj_publicmethod_info_t;
 
 

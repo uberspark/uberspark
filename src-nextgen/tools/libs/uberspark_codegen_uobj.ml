@@ -182,36 +182,35 @@ let generate_src_publicmethods_info
         Printf.fprintf oc "\n"; 
     ) publicmethods_hashtbl;
 
+    (* generate public methods info header *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo_hdr\") )) usbinformat_uobj_publicmethod_info_hdr_t uobj_pminfo_hdr = {";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".pminfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_publicmethod_info_t uobj_pminfo [] = {";
+        (*total_publicmethods*)
+        Printf.fprintf oc "\n\t0x%08xUL" (Hashtbl.length publicmethods_hashtbl);
 
-(*    (*num_publicmethods*)
-    Printf.fprintf oc "\n\t\t0x%08xUL," (Hashtbl.length publicmethods_hashtbl);
-*)
-
-    (* generate uobj public methods defs *)
-    
-    Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
-        Printf.fprintf oc "\n\t{"; 
-
-        (* namespace *)
-        Printf.fprintf oc "\n\t\t\"%s\"," (namespace); 
-
-        (* callee name *)
-        Printf.fprintf oc "\n\t\t\"%s\"," (pm_info.f_name); 
-
-        (* vaddr *)
-        Printf.fprintf oc "\n\t\t(uint32_t)&%s," (pm_info.f_name); 
-
-        (* vaddr_hi *)
-        Printf.fprintf oc "\n\t\t(uint32_t)0UL"; 
-
-        Printf.fprintf oc "\n\t},"; 
-    ) publicmethods_hashtbl;
-    
-
-    (* generate epilogue *)
     Printf.fprintf oc "\n};";
+
+    (* generate public methods info *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo\") )) usbinformat_uobj_publicmethod_info_t uobj_pminfo [] = {";
+
+        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
+            Printf.fprintf oc "\n\t{"; 
+
+            (* callee name *)
+            Printf.fprintf oc "\n\t\t\"%s\"," (pm_info.f_name); 
+
+            (* vaddr *)
+            Printf.fprintf oc "\n\t\t(uint32_t)&%s," (pm_info.f_name); 
+
+            (* vaddr_hi *)
+            Printf.fprintf oc "\n\t\t(uint32_t)0UL"; 
+
+            Printf.fprintf oc "\n\t},"; 
+        ) publicmethods_hashtbl;
+    
+    Printf.fprintf oc "\n};";
+ 
+    (* generate epilogue *)
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
