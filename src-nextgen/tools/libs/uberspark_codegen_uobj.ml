@@ -248,7 +248,7 @@ let generate_src_intrauobjcoll_callees_info
         Hashtbl.iter (fun key value  ->
             num_intrauobjcoll_callees := !num_intrauobjcoll_callees + (List.length value);
         ) intrauobjcoll_callees_hashtbl;
-        Printf.fprintf oc "\n\t0x%08xUL," !num_intrauobjcoll_callees;
+        Printf.fprintf oc "\n\t0x%08xUL" !num_intrauobjcoll_callees;
 
     Printf.fprintf oc "\n};";
 
@@ -267,7 +267,7 @@ let generate_src_intrauobjcoll_callees_info
                 Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
                 
                 (* slt_ordinal *)
-                Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
+                Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
                 
                 Printf.fprintf oc "\n\t},"; 
                 slt_ordinal := !slt_ordinal + 1;
@@ -313,7 +313,7 @@ let generate_src_interuobjcoll_callees_info
         Hashtbl.iter (fun key value  ->
             num_interuobjcoll_callees := !num_interuobjcoll_callees + (List.length value);
         ) interuobjcoll_callees_hashtbl;
-        Printf.fprintf oc "\n\t0x%08xUL," !num_interuobjcoll_callees;
+        Printf.fprintf oc "\n\t0x%08xUL" !num_interuobjcoll_callees;
 
     Printf.fprintf oc "\n};";
 
@@ -332,7 +332,7 @@ let generate_src_interuobjcoll_callees_info
                 Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
                 
                 (* slt_ordinal *)
-                Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
+                Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
                 
                 Printf.fprintf oc "\n\t},"; 
                 slt_ordinal := !slt_ordinal + 1;
@@ -402,7 +402,7 @@ let generate_src_legacy_callees_info
         (* cname *)
         Printf.fprintf oc "\n\t\t\"%s\"," callee_name; 
         (* slt_ordinal *)
-        Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
+        Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
         
         Printf.fprintf oc "\n\t},"; 
         slt_ordinal := !slt_ordinal + 1;
