@@ -92,9 +92,9 @@ let namespace_legacy = "legacy";;
 let namespace_uobjslt = "uobjslt";;
 let namespace_uobjslt_mf_hdr_type = "uobjslt";;
 let namespace_uobjslt_mf_filename = "uberspark-uobjslt.json";;
-let namespace_uobjslt_intrauobjcoll_callees_output_filename = "uobjslt-intrauobjcoll-callees.S";;
-let namespace_uobjslt_interuobjcoll_callees_output_filename = "uobjslt-interuobjcoll-callees.S";;
-let namespace_uobjslt_legacy_callees_output_filename = "uobjslt-legacy-callees.S";;
+let namespace_uobjslt_intrauobjcoll_callees_src_filename = "uobjslt-intrauobjcoll-callees.S";;
+let namespace_uobjslt_interuobjcoll_callees_src_filename = "uobjslt-interuobjcoll-callees.S";;
+let namespace_uobjslt_legacy_callees_src_filename = "uobjslt-legacy-callees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
 
