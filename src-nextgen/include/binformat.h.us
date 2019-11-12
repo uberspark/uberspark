@@ -135,6 +135,14 @@ typedef struct {
 
 
 //////
+// uobj legacy callees info header type definition
+//////
+typedef struct {
+	uint32_t total_legacy_callees;	// total number of legacy callees
+} __attribute__((packed)) usbinformat_uobj_legacy_callee_info_hdr_t;
+
+
+//////
 // uobj callees info type definition
 // this applies to intra-uobj, inter-uobj and legacy callees
 //////

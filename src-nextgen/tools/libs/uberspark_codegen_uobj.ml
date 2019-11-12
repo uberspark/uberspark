@@ -376,17 +376,23 @@ let generate_src_legacy_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".legacycalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_legacy_callees [] = {";
 
-(*    (*num_interuobjcoll_callees*)
-    let num_interuobjcoll_callees = ref 0 in
-    Hashtbl.iter (fun key value  ->
-        num_interuobjcoll_callees := !num_interuobjcoll_callees + (List.length value);
-    ) interuobjcoll_callees_hashtbl;
-    Printf.fprintf oc "\n\t\t0x%08xUL," !num_interuobjcoll_callees;
-*)
+    (* generate legacy callee info header *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_legacy_cinfo_hdr\") )) usbinformat_uobj_legacy_callee_info_hdr_t uobj_legacy_callee_info_hdr = {";
 
-    (* generate legacy callee defs *)
+        (*total_legacy_callees*)
+        let num_legacy_callees = ref 0 in
+        List.iter (fun value  ->
+            num_legacy_callees := !num_legacy_callees + 1;
+        ) legacy_callees_list;
+        Printf.fprintf oc "\n\t0x%08xUL" !num_legacy_callees;
+
+    Printf.fprintf oc "\n};";
+
+
+    (* generate legacy callee info *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_legacy_cinfo\") )) usbinformat_uobj_callee_info_t uobj_legacy_callees [] = {";
+
     let slt_ordinal = ref 0 in
     List.iter (fun callee_name ->  
         Printf.fprintf oc "\n\t{"; 
@@ -401,10 +407,11 @@ let generate_src_legacy_callees_info
         Printf.fprintf oc "\n\t},"; 
         slt_ordinal := !slt_ordinal + 1;
     ) legacy_callees_list;
-    
+
+    Printf.fprintf oc "\n};";
+
 
     (* generate epilogue *)
-    Printf.fprintf oc "\n};";
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
