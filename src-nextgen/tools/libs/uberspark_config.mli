@@ -39,8 +39,9 @@ val namespace_legacy : string
 val namespace_uobjslt : string
 val namespace_uobjslt_mf_hdr_type : string
 val namespace_uobjslt_mf_filename : string
-val namespace_uobjslt_callees_output_filename : string
-val namespace_uobjslt_exitcallees_output_filename : string
+val namespace_uobjslt_intrauobjcoll_callees_output_filename : string
+val namespace_uobjslt_interuobjcoll_callees_output_filename : string
+val namespace_uobjslt_legacy_callees_output_filename : string
 val namespace_uobjslt_output_symbols_filename : string
 
 val namespace_config : string

@@ -721,19 +721,21 @@ class uobject
 			end
 		;
 
-
-		(* generate slt for callees *)
+		(* generate slt for intra-uobjcoll callees *)
 		let callees_list = ref [] in 
 		Hashtbl.iter (fun key value  ->
 			callees_list := !callees_list @ value;
 		) self#get_d_intrauobjcoll_callees_hashtbl;
-		Uberspark_logger.log "total callees=%u" (List.length !callees_list);
+		Uberspark_logger.log "total intra-uobjcoll callees=%u" (List.length !callees_list);
 
-		let rval = (Uberspark_codegen.Uobj.generate_slt (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_callees_output_filename) 
-			!callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_callees_tcode" ".uobjslt_callees_tdata" ) in	
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_intrauobjcoll_callees_output_filename)
+			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" !callees_list 
+			self#get_d_slt_trampolinedata ".uobj_intrauobjcoll_csltdata"
+			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
 		if (rval == false) then
 			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for callees!";
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for intra-uobjcoll callees!";
 				ignore (exit 1);
 			end
 		;
@@ -746,15 +748,36 @@ class uobject
 		)self#get_d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
 
-		let rval = (Uberspark_codegen.Uobj.generate_slt (self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_exitcallees_output_filename) 
-			!interuobjcoll_callees_list self#get_d_slt_trampolinedata self#get_d_slt_trampolinecode ".uobjslt_exitcallees_tcode" ".uobjslt_exitcallees_tdata" ) in	
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_interuobjcoll_callees_output_filename) 
+			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" !interuobjcoll_callees_list 
+			self#get_d_slt_trampolinedata ".uobj_interauobjcoll_csltdata"
+			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
 		if (rval == false) then
 			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for exitcallees!";
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for inter-uobjcoll callees!";
 				ignore (exit 1);
 			end
 		;
 		
+		(* generate slt for legacy callees *)
+		let legacy_callees_list = ref [] in
+		List.iter (fun value ->
+			legacy_callees_list := !legacy_callees_list @ [ value ];
+		) self#get_d_legacy_callees_list;
+		Uberspark_logger.log "total legacy callees=%u" (List.length !legacy_callees_list);
+
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_legacy_callees_output_filename) 
+			~output_banner:"uobj sentinel linkage table for legacy callees" !legacy_callees_list 
+			self#get_d_slt_trampolinedata ".uobj_legacy_csltdata"
+			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
+		if (rval == false) then
+			begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for legacy callees!";
+				ignore (exit 1);
+			end
+		;
 
 
 		(* generate uobj binary header source *)
