@@ -23,6 +23,7 @@ let uberspark_hdr: Uberspark_manifest.hdr_t = {
 (* bridge-cc node variable *)	
 let bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t = {
 	bridge_hdr = { btype = "";
+				bname = "";
 				execname = "";
 				path = "";
 				devenv = "";
@@ -133,7 +134,7 @@ let store
 		bridge_cc.bridge_hdr.devenv ^ "/" ^
 		bridge_cc.bridge_hdr.arch ^ "/" ^
 		bridge_cc.bridge_hdr.cpu ^ "/" ^
-		bridge_cc.bridge_hdr.execname ^ "/" ^
+		bridge_cc.bridge_hdr.bname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
 	let bridge_ns_json_path = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^
 		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
@@ -171,7 +172,7 @@ let build
 				bridge_cc.bridge_hdr.devenv ^ "/" ^
 				bridge_cc.bridge_hdr.arch ^ "/" ^
 				bridge_cc.bridge_hdr.cpu ^ "/" ^
-				bridge_cc.bridge_hdr.execname ^ "/" ^
+				bridge_cc.bridge_hdr.bname ^ "/" ^
 				bridge_cc.bridge_hdr.version in
 			let bridge_container_path = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ bridge_ns in
 
@@ -273,7 +274,7 @@ let invoke
 		bridge_cc.bridge_hdr.devenv ^ "/" ^
 		bridge_cc.bridge_hdr.arch ^ "/" ^
 		bridge_cc.bridge_hdr.cpu ^ "/" ^
-		bridge_cc.bridge_hdr.execname ^ "/" ^
+		bridge_cc.bridge_hdr.bname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
 
 	(* invoke the compiler *)

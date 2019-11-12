@@ -50,6 +50,7 @@ module Bridge : sig
   (* bridge-hdr node type *)
   type bridge_hdr_t = {
     mutable btype : string;
+    mutable bname : string;
     mutable execname: string;
     mutable devenv: string;
     mutable arch: string;

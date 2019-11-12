@@ -15,6 +15,7 @@
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",
+			"bname" : "gcc",
 			"execname" : "gcc",
 			"devenv" : "amd64",
 			"arch" : "x86_32",

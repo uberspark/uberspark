@@ -15,6 +15,7 @@
     "bridge-cc" : {
         "bridge-hdr": {
             "btype" : "native",
+            "bname" : "gcc",
             "execname" : "gcc",
             "devenv" : "amd64",
             "arch" : "x86_32",

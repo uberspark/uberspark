@@ -13,6 +13,7 @@
 (* bridge-hdr node type *)
 type bridge_hdr_t = {
 	mutable btype : string;
+	mutable bname : string;
 	mutable execname: string;
 	mutable devenv: string;
 	mutable arch: string;
@@ -58,6 +59,7 @@ let parse_bridge_hdr
 			if(json_bridge_hdr <> `Null) then
 				begin
 					bridge_hdr.btype <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "btype" json_bridge_hdr);
+					bridge_hdr.bname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bname" json_bridge_hdr);
 					bridge_hdr.execname <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "execname" json_bridge_hdr);
 					bridge_hdr.devenv <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "devenv" json_bridge_hdr);
 					bridge_hdr.arch <-	Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "arch" json_bridge_hdr);
@@ -142,6 +144,7 @@ let write_bridge_hdr
 	Printf.fprintf oc "\n\t\"bridge-hdr\":{";
 
 	Printf.fprintf oc "\n\t\t\t\"btype\" : \"%s\"," bridge_hdr.btype;
+	Printf.fprintf oc "\n\t\t\t\"bname\" : \"%s\"," bridge_hdr.bname;
 	Printf.fprintf oc "\n\t\t\t\"execname\" : \"%s\"," bridge_hdr.execname;
 	Printf.fprintf oc "\n\t\t\t\"devenv\" : \"%s\"," bridge_hdr.devenv;
 	Printf.fprintf oc "\n\t\t\t\"arch\" : \"%s\"," bridge_hdr.arch;
