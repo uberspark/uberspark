@@ -286,16 +286,14 @@ let generate_src_intrauobjcoll_callees_info
 ;;
 
 
-
 (*--------------------------------------------------------------------------*)
 (* generate uobj interuobjcoll-callees info  *)
 (*--------------------------------------------------------------------------*)
-let generate_src_interuobjcoll_callees_info 
+let generate_src_interuobjcoll_callees_info  
     (output_filename : string)
     (interuobjcoll_callees_hashtbl : ((string, string list)  Hashtbl.t))
     : unit = 
-
-    (* open interuobjcoll callees info source file *)
+    (* open public methods info source file *)
     let oc = open_out output_filename in
     
     (* generate prologue *)
@@ -307,44 +305,54 @@ let generate_src_interuobjcoll_callees_info
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
-    Printf.fprintf oc "\n__attribute__(( section(\".interuobjcollcalleesinfo\") )) __attribute__((aligned(4096))) usbinformat_uobj_callee_info_t uobj_interuobjcoll_callees [] = {";
+    (* generate interuobjcoll callee info header *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_interuobjcoll_cinfo_hdr\") )) usbinformat_uobj_interuobjcoll_callee_info_hdr_t uobj_interuobjcoll_callee_info_hdr = {";
 
-(*    (*num_interuobjcoll_callees*)
-    let num_interuobjcoll_callees = ref 0 in
-    Hashtbl.iter (fun key value  ->
-        num_interuobjcoll_callees := !num_interuobjcoll_callees + (List.length value);
-    ) interuobjcoll_callees_hashtbl;
-    Printf.fprintf oc "\n\t\t0x%08xUL," !num_interuobjcoll_callees;
-*)
+        (*total_interuobjcoll_callees*)
+        let num_interuobjcoll_callees = ref 0 in
+        Hashtbl.iter (fun key value  ->
+            num_interuobjcoll_callees := !num_interuobjcoll_callees + (List.length value);
+        ) interuobjcoll_callees_hashtbl;
+        Printf.fprintf oc "\n\t0x%08xUL," !num_interuobjcoll_callees;
 
-    (* generate interuobjcoll callee defs *)
+    Printf.fprintf oc "\n};";
 
-    let slt_ordinal = ref 0 in
-    Hashtbl.iter (fun key value ->  
-        List.iter (fun pm_name -> 
-            Printf.fprintf oc "\n\t{"; 
-            
-            (* namespace *)
-            Printf.fprintf oc "\n\t\t\"%s\"," key; 
-            (* cname *)
-            Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
-            (* slt_ordinal *)
-            Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
-            
-            Printf.fprintf oc "\n\t},"; 
-            slt_ordinal := !slt_ordinal + 1;
-        ) value;
-    ) interuobjcoll_callees_hashtbl;
+    (* generate interuobjcoll callee info *)
+    Printf.fprintf oc "\n__attribute__(( section(\".uobj_interuobjcoll_cinfo\") )) usbinformat_uobj_callee_info_t uobj_interuobjcoll_callee_info [] = {";
+
+        let slt_ordinal = ref 0 in
+        Hashtbl.iter (fun key value ->  
+            List.iter (fun pm_name -> 
+                Printf.fprintf oc "\n\t{"; 
+                
+                (* namespace *)
+                Printf.fprintf oc "\n\t\t\"%s\"," key; 
+                
+                (* cname *)
+                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                
+                (* slt_ordinal *)
+                Printf.fprintf oc "\n\t0x%08xUL," !slt_ordinal;
+                
+                Printf.fprintf oc "\n\t},"; 
+                slt_ordinal := !slt_ordinal + 1;
+            ) value;
+        ) interuobjcoll_callees_hashtbl;
     
+    Printf.fprintf oc "\n};";
 
     (* generate epilogue *)
-    Printf.fprintf oc "\n};";
     Printf.fprintf oc "\n";
     Printf.fprintf oc "\n";
 
     close_out oc;
+
     ()
 ;;
+
+
+
+
 
 
 
