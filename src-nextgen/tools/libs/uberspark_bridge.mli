@@ -89,3 +89,36 @@ val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> s
 end
 
 
+
+module Ld : sig
+
+(*--------------------------------------------------------------------------*)
+(* ld-bridge data variables *)
+(*--------------------------------------------------------------------------*)
+val uberspark_hdr: Uberspark_manifest.hdr_t
+val bridge_ld : Uberspark_manifest.Bridge.bridge_ld_t 
+
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge interfaces *)
+(*--------------------------------------------------------------------------*)
+val load_from_json : Yojson.Basic.json ->  bool
+val load_from_file : string -> bool
+val load : string -> bool
+val store_to_file : string -> bool
+val store : unit -> bool
+val build : unit -> bool
+val invoke : 
+	?context_path_builddir : string -> 
+	string ->
+	string ->
+	string list ->
+	string list ->
+	string list ->
+	string ->
+	bool
+
+
+
+end
+

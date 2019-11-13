@@ -26,7 +26,8 @@
 		"uobj_binary_image_size" : "0x2400000",
 		"uobj_binary_image_alignment" : "0x200000",
 		"bridge_cc_bridge" : "",
-		"bridge_as_bridge" : ""
+		"bridge_as_bridge" : "",
+		"bridge_ld_bridge" : ""
 	}
 
 }

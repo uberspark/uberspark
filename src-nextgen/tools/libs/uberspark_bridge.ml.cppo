@@ -84,6 +84,10 @@ struct
 #include "uberspark_bridge_as.ml"
 end
 
+module Ld =
+struct
+#include "uberspark_bridge_ld.ml"
+end
 
 
 (****************************************************************************)
@@ -148,6 +152,32 @@ let initialize_from_config ()
 		retval := true;
 	end;
 
+
+	(* handle ld-bridge *)	
+	if Uberspark_config.config_settings.bridge_ld_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (Ld.load Uberspark_config.config_settings.bridge_ld_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded ld_bridge settings";
+		retval := true;
+	end;
+
+	if not (Ld.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build ld_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "ld_bridge build success";
+		retval := true;
+	end;
 
 
 	(!retval)

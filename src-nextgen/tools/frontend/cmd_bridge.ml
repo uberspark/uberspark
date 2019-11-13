@@ -296,6 +296,20 @@ let helper_bridges_action_config_do
           end
           ;  
 
+        | "ld-bridge" -> 
+
+          if (Uberspark.Bridge.Ld.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded ld-bridge settings";
+            if ( Uberspark.Bridge.Ld.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build ld-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load ld-bridge settings!");
+          end
+          ;  
+
 
         | _ ->
             retval := `Error (false, "unknown bridge type!");
@@ -344,6 +358,9 @@ let handler_bridges_action_config
 
           end else if cmd_bridges_opts.as_bridge then begin
               retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_as_bridge_name bridge_ns cmd_bridges_opts;
+
+          end else if cmd_bridges_opts.ld_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_ld_bridge_name bridge_ns cmd_bridges_opts;
 
           end else begin
               retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
