@@ -1053,6 +1053,17 @@ let build
 
 	let dummy = 0 in begin
 	Uberspark_logger.log "compiled c files successfully!";
+    Uberspark_logger.log "proceeding to compile asm files...";
+	end;
+
+	if not (uobj#compile_asm_files ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
+		(!retval)
+	end else
+
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "compiled asm files successfully!";
 
 	(* cleanup namespace if we are doing an out-of-namespace build *)
 	if not !in_namespace_build then begin
