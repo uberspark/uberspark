@@ -888,6 +888,22 @@ class uobject
 	;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* compile asm files *)
+	(*--------------------------------------------------------------------------*)
+	method compile_asm_files	
+		()
+		: bool = 
+		
+		let retval = ref false in
+
+		retval := Uberspark_bridge.As.invoke ~gen_obj:true
+			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
+			 (self#get_d_sources_asm_file_list) [ "."; !Uberspark_config.namespace_root_dir ] ".";
+
+		(!retval)	
+	;
+
 
 
 	method install_create_ns 

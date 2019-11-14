@@ -79,7 +79,9 @@
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> int -> unit
+ 
     method compile_c_files : unit -> bool
+    method compile_asm_files : unit -> bool
 
     method install_create_ns : unit -> unit
     method install_h_files_ns : unit -> unit
