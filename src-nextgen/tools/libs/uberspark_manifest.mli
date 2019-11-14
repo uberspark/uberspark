@@ -185,7 +185,8 @@ module Uobj : sig
   val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
   val parse_uobj_interuobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
   val parse_uobj_legacy_callees : Yojson.Basic.t -> string list ref -> bool
-  val parse_uobj_sections : Yojson.Basic.t -> ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)  ->  bool
+  (*val parse_uobj_sections : Yojson.Basic.t -> ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)  ->  bool*)
+  val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
 
 
 

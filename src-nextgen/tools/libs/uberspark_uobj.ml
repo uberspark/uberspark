@@ -50,6 +50,10 @@ class uobject
 	val d_legacy_callees_list : string list ref = ref [];
 	method get_d_legacy_callees_list = !d_legacy_callees_list;
 
+	(* association list of uobj binary image sections as parsed from uobj manifest; indexed by section name *)		
+	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
+	method get_d_sections_list_ref = d_sections_list;
+	method get_d_sections_list_val = !d_sections_list;
 
 	(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
 	val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
@@ -210,7 +214,18 @@ class uobject
 
 
 		(* parse uobj-binary/uobj-sections node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json d_sections_hashtbl) in
+		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json self#get_d_sections_list_ref) in
+
+		if (rval == false) then (false)
+		else
+		let dummy = 0 in
+		if (rval == true) then
+			begin
+				Uberspark_logger.log "binary sections override:%u" (List.length self#get_d_sections_list_val);								
+			end;
+
+
+(*		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json d_sections_hashtbl) in
 
 		if (rval == false) then (false)
 		else
@@ -219,8 +234,8 @@ class uobject
 			begin
 				Uberspark_logger.log "binary sections override:%u" (Hashtbl.length self#get_d_sections_hashtbl);								
 			end;
+*)
 
-		
 		(true)
 	;
 
