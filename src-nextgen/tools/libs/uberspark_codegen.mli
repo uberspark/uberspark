@@ -38,7 +38,7 @@ module Uobj : sig
     string ->
     int ->
     int ->
-    ((string, Defs.Basedefs.section_info_t)  Hashtbl.t) ->
+    (string * Defs.Basedefs.section_info_t) list ->
     unit
 
   val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 

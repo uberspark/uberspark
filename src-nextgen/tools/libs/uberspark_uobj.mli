@@ -19,12 +19,6 @@
   	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
 
-    val d_sections_hashtbl :
-      (string, Defs.Basedefs.section_info_t) Hashtbl.t
-    val d_sections_memory_map_hashtbl :
-      (string, Defs.Basedefs.section_info_t) Hashtbl.t
-    val d_sections_memory_map_hashtbl_byorigin :
-      (int, Defs.Basedefs.section_info_t) Hashtbl.t
     val d_size : int ref
     val d_slt_trampolinecode : string ref
     val d_slt_trampolinedata : string ref
@@ -62,12 +56,6 @@
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
 
-    method get_d_sections_hashtbl :
-      (string, Defs.Basedefs.section_info_t) Hashtbl.t
-    method get_d_sections_memory_map_hashtbl :
-      (string, Defs.Basedefs.section_info_t) Hashtbl.t
-    method get_d_sections_memory_map_hashtbl_byorigin :
-      (int, Defs.Basedefs.section_info_t) Hashtbl.t
     method get_d_slt_trampolinecode : string
     method get_d_slt_trampolinedata : string
     method get_d_sources_c_file_list : string list

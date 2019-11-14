@@ -66,19 +66,6 @@ class uobject
 	method get_d_memorymapped_sections_list_val = !d_memorymapped_sections_list;
 
 
-	(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
-	val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
-	method get_d_sections_hashtbl = d_sections_hashtbl;
-
-	(* hashtbl of uobj sections with memory map info; indexed by section name *)
-	val d_sections_memory_map_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
-	method get_d_sections_memory_map_hashtbl = (d_sections_memory_map_hashtbl);
-
-	(* hashtbl of uobj sections with memory map info; indexed by section virtual address*)
-	val d_sections_memory_map_hashtbl_byorigin = ((Hashtbl.create 32) : ((int, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
-	method get_d_sections_memory_map_hashtbl_byorigin = (d_sections_memory_map_hashtbl_byorigin);
-
-
 	val d_target_def: Defs.Basedefs.target_def_t = {
 		f_platform = ""; 
 		f_arch = ""; 
@@ -850,7 +837,7 @@ class uobject
 		Uberspark_codegen.Uobj.generate_src_binhdr 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_binhdr_src_filename)
 			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
-			d_sections_hashtbl;
+			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 

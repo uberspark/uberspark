@@ -25,7 +25,7 @@ let generate_src_binhdr
     (uobj_ns : string)
     (load_addr : int)
     (image_size : int)
-    (sections_hashtbl : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t))
+    (sections_list : (string * Defs.Basedefs.section_info_t) list)
     : unit = 
 
     (* open binary header source file *)
@@ -74,7 +74,7 @@ let generate_src_binhdr
     (* generate uobj section definitions *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_binhdr_section_info\") )) usbinformat_section_info_t uobj_binsections [] = {";
 
-    Hashtbl.iter (fun key (section_info:Defs.Basedefs.section_info_t) ->  
+    List.iter (fun (key, (section_info:Defs.Basedefs.section_info_t)) ->  
         Printf.fprintf oc "\n\t{"; 
         (* type *)
         Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_type); 
@@ -93,7 +93,7 @@ let generate_src_binhdr
         (* reserved *)
         Printf.fprintf oc "\n\t\t0ULL"; 
         Printf.fprintf oc "\n\t},"; 
-    ) sections_hashtbl;
+    ) sections_list;
     
     Printf.fprintf oc "\n};"; 
 
@@ -453,17 +453,6 @@ let generate_linker_script
         Printf.fprintf oc "\nMEMORY";
         Printf.fprintf oc "\n{";
 
-(*        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
-        List.iter (fun key ->
-                let x = Hashtbl.find sections_hashtbl key in
-                (* new section memory *)
-                Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
-                    ("mem_" ^ x.f_name)
-                    ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
-                ()
-        ) keys ;
-*)
-
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
                 (* new section memory *)
                 Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
@@ -479,45 +468,6 @@ let generate_linker_script
         Printf.fprintf oc "\nSECTIONS";
         Printf.fprintf oc "\n{";
         Printf.fprintf oc "\n";
-
-(*        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
-
-        let i = ref 0 in 			
-        while (!i < List.length keys) do
-            let key = (List.nth keys !i) in
-            let x = Hashtbl.find sections_hashtbl key in
-                (* new section *)
-                if(!i == (List.length keys) - 1 ) then 
-                    begin
-                        Printf.fprintf oc "\n %s : {" x.f_name;
-                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
-                        List.iter (fun subsection ->
-                                    Printf.fprintf oc "\n *(%s)" subsection;
-                        ) x.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
-                        Printf.fprintf oc "\n BYTE(0xAA)";
-                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
-                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
-                        Printf.fprintf oc "\n";
-                    end
-                else
-                    begin
-                        Printf.fprintf oc "\n %s : {" x.f_name;
-                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
-                        List.iter (fun subsection ->
-                                    Printf.fprintf oc "\n *(%s)" subsection;
-                        ) x.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
-                        Printf.fprintf oc "\n BYTE(0xAA)";
-                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
-                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
-                        Printf.fprintf oc "\n";
-                    end
-                ;
-        
-            i := !i + 1;
-        done;
-*)
 
         let i = ref 0 in 			
         while (!i < List.length sections_list) do
