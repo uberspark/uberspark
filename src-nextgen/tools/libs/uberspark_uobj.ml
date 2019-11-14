@@ -60,6 +60,10 @@ class uobject
 	method get_d_default_sections_list_ref = d_default_sections_list;
 	method get_d_default_sections_list_val = !d_default_sections_list;
 
+	(* association list of uobj binary image sections with memory map info; indexed by section name *)		
+	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
+	method get_d_memorymapped_sections_list_ref = d_memorymapped_sections_list;
+	method get_d_memorymapped_sections_list_val = !d_memorymapped_sections_list;
 
 
 	(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
@@ -310,8 +314,8 @@ class uobject
 		(*self#set_d_load_addr uobj_load_addr;*)
 		uobj_section_load_addr := self#get_d_load_addr;
 
-		(* iterate over all the sections *)
-		Hashtbl.iter (fun key (x:Defs.Basedefs.section_info_t)  ->
+		(* iterate over default sections *)
+		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
 			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.binary_uobj_section_alignment) in
 			let padding_size = ref 0 in
@@ -327,7 +331,7 @@ class uobject
 			let section_size = (x.usbinformat.f_size + !padding_size) in 
 
 
-			Hashtbl.add d_sections_memory_map_hashtbl key 
+			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = x.f_name;	
 					f_subsection_list = x.f_subsection_list;	
 					usbinformat = { f_type=x.usbinformat.f_type; 
@@ -339,8 +343,29 @@ class uobject
 													f_addr_file = 0;
 													f_reserved = 0;
 												};
-				};
-			Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
+				}) ];
+				
+		)self#get_d_default_sections_list_val;
+
+
+		(* iterate over manifest sections *)
+		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
+			(* compute and round up section size to section alignment *)
+			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.binary_uobj_section_alignment) in
+			let padding_size = ref 0 in
+				if remainder_size > 0 then
+					begin
+						padding_size := Uberspark_config.config_settings.binary_uobj_section_alignment - remainder_size;
+					end
+				else
+					begin
+						padding_size := 0;
+					end
+				;
+			let section_size = (x.usbinformat.f_size + !padding_size) in 
+
+
+			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = x.f_name;	
 					f_subsection_list = x.f_subsection_list;	
 					usbinformat = { f_type=x.usbinformat.f_type; 
@@ -351,12 +376,9 @@ class uobject
 													f_addr_start = !uobj_section_load_addr; 
 													f_addr_file = 0;
 													f_reserved = 0;
-											};
-				};
-
-			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
-			uobj_section_load_addr := !uobj_section_load_addr + section_size;
-		)  self#get_d_sections_hashtbl;
+												};
+				}) ];
+		)self#get_d_sections_list_val;
 
 		
 		if (self#get_d_uniform_size) then begin
@@ -374,7 +396,7 @@ class uobject
 			if (!uobj_section_load_addr - uobj_load_addr) < uobjsize then
 				begin
 					(* add padding section *)
-					Hashtbl.add d_sections_memory_map_hashtbl "usuobj_padding" 
+					d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ("usuobj_padding", 
 						{ f_name = "usuobj_padding";	
 							f_subsection_list = [ ];	
 							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
@@ -386,20 +408,7 @@ class uobject
 															f_addr_file = 0;
 															f_reserved = 0;
 														};
-						};
-					Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-						{ f_name = "usuobj_padding";	
-							f_subsection_list = [ ];	
-							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
-															f_prot=0; 
-															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-															f_addr_start = !uobj_section_load_addr; 
-															f_addr_file = 0;
-															f_reserved = 0;
-														};
-						};
+						}) ];
 				end
 			;	
 
@@ -409,7 +418,7 @@ class uobject
 			if (!uobj_section_load_addr mod self#get_d_alignment) > 0 then begin
 				(* uobj_section_load_addr is __not__ aligned at uobj_binary_image_alignment *)
 				(* add padding section *)
-				Hashtbl.add d_sections_memory_map_hashtbl "uobj_padding" 
+				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ("usuobj_padding", 
 					{ f_name = "uobj_padding";	
 						f_subsection_list = [ ];	
 						usbinformat = { f_type = Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_PADDING;
@@ -421,20 +430,7 @@ class uobject
 										f_addr_file = 0;
 										f_reserved = 0;
 						};
-					};
-				Hashtbl.add d_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{ f_name = "uobj_padding";	
-						f_subsection_list = [ ];	
-						usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
-										f_prot=0; 
-										f_size = (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment));
-										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-										f_addr_start = !uobj_section_load_addr; 
-										f_addr_file = 0;
-										f_reserved = 0;
-						};
-					};
+					} )];
 
 				(* update uobj size *)
 				self#set_d_size ((!uobj_section_load_addr + (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment))) - self#get_d_load_addr);
