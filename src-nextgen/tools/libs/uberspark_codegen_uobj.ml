@@ -449,7 +449,6 @@ let generate_linker_script
         Printf.fprintf oc "\n/* author: amit vasudevan (amitvasudevan@acm.org) */";
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n";
-        Printf.fprintf oc "\nOUTPUT_ARCH(\"i386\")";
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n";
 

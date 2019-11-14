@@ -211,8 +211,15 @@ let invoke
 	let d_cmd = ref "" in
 	let cc_includes = ref "" in
 
-	(* add linker executable and script option *)
-	d_cmd := bridge_ld.bridge_hdr.execname ^ " " ^ bridge_ld.params_prefix_lscript ^ " " ^ lscript_filename;
+	(* add linker executable and base parameters *)
+	d_cmd := bridge_ld.bridge_hdr.execname;
+	List.iter (fun param ->
+		d_cmd := !d_cmd ^ " " ^ param ^ " ";
+	) bridge_ld.bridge_hdr.params;
+
+
+	(* add linker script option and filename*)
+ 	d_cmd := !d_cmd ^ " " ^ bridge_ld.params_prefix_lscript ^ " " ^ lscript_filename;
 
 	(* iterate over object file list and include them into linker command line *)
 	List.iter (fun o_filename -> 
