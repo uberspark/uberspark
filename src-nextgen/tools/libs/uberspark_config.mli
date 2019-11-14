@@ -28,6 +28,8 @@ val namespace_uobj_intrauobjcoll_callees_info_src_filename : string
 val namespace_uobj_interuobjcoll_callees_info_src_filename : string
 val namespace_uobj_legacy_callees_info_src_filename : string
 val namespace_uobj_linkerscript_filename : string
+val namespace_uobj_binary_image_filename : string
+
 
 val namespace_uobjcoll_mf_filename : string
 

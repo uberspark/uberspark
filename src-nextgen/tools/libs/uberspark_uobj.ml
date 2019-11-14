@@ -906,6 +906,39 @@ class uobject
 
 
 
+	(*--------------------------------------------------------------------------*)
+	(* link uobj object files into binary image *)
+	(*--------------------------------------------------------------------------*)
+	method link_object_files	
+		()
+		: bool = 
+		
+		let retval = ref false in
+		let o_file_list =ref [] in
+
+		(* add object files generated from c sources *)
+		List.iter (fun fname ->
+			o_file_list := !o_file_list @ [ fname ^ ".o"];
+		) self#get_d_sources_c_file_list;
+
+		(* add object files generated from asm sources *)
+		List.iter (fun fname ->
+			o_file_list := !o_file_list @ [ fname ^ ".o"];
+		) self#get_d_sources_asm_file_list;
+
+
+		retval := Uberspark_bridge.Ld.invoke 
+			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
+			Uberspark_config.namespace_uobj_linkerscript_filename
+			Uberspark_config.namespace_uobj_binary_image_filename
+			!o_file_list
+			[ ] [ ]	".";
+
+		(!retval)	
+	;
+
+
+
 	method install_create_ns 
 		()
 		: unit =
@@ -1061,9 +1094,19 @@ let build
 		(!retval)
 	end else
 
-
 	let dummy = 0 in begin
 	Uberspark_logger.log "compiled asm files successfully!";
+    Uberspark_logger.log "proceeding to link object files...";
+	end;
+
+	if not (uobj#link_object_files ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
+		(!retval)
+	end else
+
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "linked object files successfully!";
 
 	(* cleanup namespace if we are doing an out-of-namespace build *)
 	if not !in_namespace_build then begin

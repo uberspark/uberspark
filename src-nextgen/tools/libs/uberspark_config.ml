@@ -81,6 +81,7 @@ let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll
 let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
 let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.c";;
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
+let namespace_uobj_binary_image_filename = "uobj.bin";;
 
 
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
