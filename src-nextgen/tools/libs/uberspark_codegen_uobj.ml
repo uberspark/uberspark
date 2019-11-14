@@ -438,7 +438,7 @@ let generate_linker_script
     (output_filename : string)
     (binary_origin : int)
     (binary_size : int)
-    (sections_hashtbl : (int, Defs.Basedefs.section_info_t) Hashtbl.t) 
+    (sections_list : (string * Defs.Basedefs.section_info_t) list ) 
     : unit   =
 
     let oc = open_out output_filename in
@@ -453,7 +453,7 @@ let generate_linker_script
         Printf.fprintf oc "\nMEMORY";
         Printf.fprintf oc "\n{";
 
-        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
+(*        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
         List.iter (fun key ->
                 let x = Hashtbl.find sections_hashtbl key in
                 (* new section memory *)
@@ -462,6 +462,15 @@ let generate_linker_script
                     ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
                 ()
         ) keys ;
+*)
+
+		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
+                (* new section memory *)
+                Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
+                    ("mem_" ^ x.f_name)
+                    ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
+        ) sections_list;
+
 
         Printf.fprintf oc "\n}";
         Printf.fprintf oc "\n";
@@ -471,7 +480,7 @@ let generate_linker_script
         Printf.fprintf oc "\n{";
         Printf.fprintf oc "\n";
 
-        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
+(*        let keys = List.sort compare (hashtbl_keys sections_hashtbl) in				
 
         let i = ref 0 in 			
         while (!i < List.length keys) do
@@ -508,6 +517,7 @@ let generate_linker_script
         
             i := !i + 1;
         done;
+*)
                     
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";

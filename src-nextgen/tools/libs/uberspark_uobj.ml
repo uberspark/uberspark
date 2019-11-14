@@ -850,7 +850,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
 		Uberspark_codegen.Uobj.generate_linker_script 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_linkerscript_filename)
-			self#get_d_load_addr self#get_d_size self#get_d_sections_memory_map_hashtbl_byorigin;
+			self#get_d_load_addr self#get_d_size self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
