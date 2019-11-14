@@ -55,6 +55,13 @@ class uobject
 	method get_d_sections_list_ref = d_sections_list;
 	method get_d_sections_list_val = !d_sections_list;
 
+	(* association list of default uobj binary image sections; indexed by section name *)		
+	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
+	method get_d_default_sections_list_ref = d_default_sections_list;
+	method get_d_default_sections_list_val = !d_default_sections_list;
+
+
+
 	(* hashtbl of uobj sections as parsed from uobj manifest; indexed by section name *)		
 	val d_sections_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)); 
 	method get_d_sections_hashtbl = d_sections_hashtbl;
@@ -470,7 +477,7 @@ class uobject
 				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 
 		(* add default uobj sections *)
-		Hashtbl.add d_sections_hashtbl "uobj_binhdr" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
 			f_name = "uobj_binhdr";	
 			f_subsection_list = [ ".uobj_binhdr"; ".uobj_binhdr_section_info" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
@@ -482,10 +489,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-
-		Hashtbl.add d_sections_hashtbl "uobj_ssa" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
 			f_name = "uobj_ssa";	
 			f_subsection_list = [ ".uobj_ssa" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
@@ -497,9 +503,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_pminfo" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_pminfo", {
 			f_name = "uobj_pminfo";	
 			f_subsection_list = [ ".uobj_pminfo_hdr"; ".uobj_pminfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
@@ -511,9 +517,10 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_intrauobjcoll_cinfo" {
+
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_cinfo", {
 			f_name = "uobj_intrauobjcoll_cinfo";	
 			f_subsection_list = [ ".uobj_intrauobjcoll_cinfo_hdr"; ".uobj_intrauobjcoll_cinfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CINFO; 
@@ -525,9 +532,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_intrauobjcoll_csltcode" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltcode", {
 			f_name = "uobj_intrauobjcoll_csltcode";	
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTCODE; 
@@ -539,9 +546,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_intrauobjcoll_csltdata" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltdata", {
 			f_name = "uobj_intrauobjcoll_csltdata";	
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTDATA; 
@@ -553,9 +560,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_interuobjcoll_cinfo" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_cinfo", {
 			f_name = "uobj_interuobjcoll_cinfo";	
 			f_subsection_list = [ ".uobj_interuobjcoll_cinfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CINFO; 
@@ -567,9 +574,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_interuobjcoll_csltcode" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltcode", {
 			f_name = "uobj_interuobjcoll_csltcode";	
 			f_subsection_list = [ ".uobj_interuobjcoll_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTCODE; 
@@ -581,9 +588,10 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_interuobjcoll_csltdata" {
+
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltdata", {
 			f_name = "uobj_interuobjcoll_csltdata";	
 			f_subsection_list = [ ".uobj_interuobjcoll_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTDATA; 
@@ -595,9 +603,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_legacy_cinfo" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_cinfo", {
 			f_name = "uobj_legacy_cinfo";	
 			f_subsection_list = [ ".uobj_legacy_cinfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CINFO; 
@@ -609,10 +617,10 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
 
-		Hashtbl.add d_sections_hashtbl "uobj_legacy_csltcode" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltcode", {
 			f_name = "uobj_legacy_csltcode";	
 			f_subsection_list = [ ".uobj_legacy_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTCODE; 
@@ -624,9 +632,9 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_legacy_csltdata" {
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltdata", {
 			f_name = "uobj_legacy_csltdata";	
 			f_subsection_list = [ ".uobj_legacy_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTDATA; 
@@ -638,11 +646,11 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		};
+		}) ];
 
 
-		Hashtbl.add d_sections_hashtbl "uobj_code" 
-			{ f_name = "uobj_code";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_code", {
+				 f_name = "uobj_code";	
 				f_subsection_list = [ ".text" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 												f_prot=0; 
@@ -653,10 +661,10 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_rodata" 
-			{ f_name = "uobj_rodata";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_rodata", {
+			 f_name = "uobj_rodata";	
 				f_subsection_list = [".rodata"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA; 
 												f_prot=0; 
@@ -667,10 +675,10 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_rwdata" 
-			{ f_name = "uobj_rwdata";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_rwdata", {
+			 f_name = "uobj_rwdata";	
 				f_subsection_list = [".data"; ".bss"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 												f_prot=0; 
@@ -681,10 +689,10 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_dmadata" 
-			{ f_name = "uobj_dmadata";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_dmadata", {
+			 f_name = "uobj_dmadata";	
 				f_subsection_list = [".dmadata"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 												f_prot=0; 
@@ -695,11 +703,10 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
-
-		Hashtbl.add d_sections_hashtbl "uobj_ustack" 
-			{ f_name = "uobj_ustack";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ustack", {
+			 f_name = "uobj_ustack";	
 				f_subsection_list = [ ".ustack" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 												f_prot=0; 
@@ -710,10 +717,10 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
-		Hashtbl.add d_sections_hashtbl "uobj_tstack" 
-			{ f_name = "uobj_tstack";	
+		d_default_sections_list := !d_default_sections_list @ [ ("uobj_tstack", {
+			 f_name = "uobj_tstack";	
 				f_subsection_list = [ ".tstack"; ".stack" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 												f_prot=0; 
@@ -724,7 +731,7 @@ class uobject
 												f_addr_file = 0;
 												f_reserved = 0;
 											};
-			};
+		}) ];
 
 
 
