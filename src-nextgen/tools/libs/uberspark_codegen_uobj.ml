@@ -383,6 +383,7 @@ let generate_slt
     ?(output_banner = "uobj sentinel linkage table")
     (fn_list: string list)
     (slt_trampolinedata : string)
+    (slt_trampolinedata_varname : string)
     (output_section_name_data : string)
     (slt_trampolinecode : string)    
     (output_section_name_code : string)
@@ -398,10 +399,10 @@ let generate_slt
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n/* --- trampoline data follows --- */";
             Printf.fprintf oc "\n.section %s" output_section_name_data;
-            Printf.fprintf oc "\n.global uobjslt_trampolinedata";
-            Printf.fprintf oc "\nuobjslt_trampolinedata:";
-            let tdata_0 = Str.global_replace (Str.regexp "TOTAL_TRAMPOLINES") "2" slt_trampolinedata in
-            let tdata = Str.global_replace (Str.regexp "SIZEOF_TRAMPOLINE_ENTRY") "4" tdata_0 in
+            Printf.fprintf oc "\n.global %s" slt_trampolinedata_varname;
+            Printf.fprintf oc "\n%s:" slt_trampolinedata_varname;
+            let tdata_0 = Str.global_replace (Str.regexp "TOTAL_TRAMPOLINES") (string_of_int (List.length fn_list)) slt_trampolinedata in
+            let tdata = Str.global_replace (Str.regexp "TRAMPOLINE_DATA_VARNAME") slt_trampolinedata_varname tdata_0 in
             Printf.fprintf oc "\n%s" (tdata);
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n";
@@ -415,7 +416,8 @@ let generate_slt
                 Printf.fprintf oc "\n.section %s" output_section_name_code;
                 Printf.fprintf oc "\n.global %s" (List.nth fn_list index);
                 Printf.fprintf oc "\n%s:" (List.nth fn_list index);
-                let tcode = Str.global_replace (Str.regexp "TRAMPOLINE_FN_INDEX") (string_of_int index) slt_trampolinecode in
+                let tcode_0 = Str.global_replace (Str.regexp "TRAMPOLINE_FN_INDEX") (string_of_int index) slt_trampolinecode in
+                let tcode = Str.global_replace (Str.regexp "TRAMPOLINE_DATA_VARNAME") slt_trampolinedata_varname tcode_0 in
                 Printf.fprintf oc "\n%s" tcode;
 
                 Printf.fprintf oc "\n";

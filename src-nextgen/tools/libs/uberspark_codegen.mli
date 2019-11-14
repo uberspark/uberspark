@@ -45,7 +45,7 @@ module Uobj : sig
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit
   val generate_src_interuobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit 
   val generate_src_legacy_callees_info : string -> string list -> unit 
-  val generate_slt : string -> ?output_banner: string -> string list -> string -> string -> string -> string -> bool
+  val generate_slt : string -> ?output_banner: string -> string list -> string -> string -> string -> string -> string -> bool
   val generate_linker_script : string -> int -> int -> ((int, Defs.Basedefs.section_info_t) Hashtbl.t) -> unit
 
 

@@ -25,10 +25,11 @@
     /*  trampoline code template 
 
         parameters: 
+        TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
         TRAMPOLINE_FN_INDEX = 0 based index of the ubj callee/exitcallee function
     */ 
     "uobjslt-trampolinecode": "
-        movl $(TRAMPOLINE_FN_INDEX), %eax
+        movl (TRAMPOLINE_DATA_VARNAME + TRAMPOLINE_FN_INDEX), %eax
         jmpl *%eax
     ",
 
@@ -36,11 +37,12 @@
     /*  trampoline data template
 
         parameters:
+        TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
         TOTAL_TRAMPOLINES = total number of trampolines
-        SIZEOF_TRAMPOLINE_ENTRY = size in bytes of trampoline entry
     */
     "uobjslt-trampolinedata": "
-        .byte $(TOTAL_TRAMPOLINES) * $(SIZEOF_TRAMPOLINE_ENTRY) \r\n
+        .global TRAMPOLINE_DATA_VARNAME
+        TRAMPOLINE_DATA_VARNAME: .fill TOTAL_TRAMPOLINES, 4, 0
     "
 
 }

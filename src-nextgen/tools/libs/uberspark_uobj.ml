@@ -750,7 +750,7 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" !callees_list 
-			self#get_d_slt_trampolinedata ".uobj_intrauobjcoll_csltdata"
+			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
 		if (rval == false) then
 			begin
@@ -770,7 +770,7 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" !interuobjcoll_callees_list 
-			self#get_d_slt_trampolinedata ".uobj_interauobjcoll_csltdata"
+			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
 		if (rval == false) then
 			begin
@@ -789,7 +789,7 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" !legacy_callees_list 
-			self#get_d_slt_trampolinedata ".uobj_legacy_csltdata"
+			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
 		if (rval == false) then
 			begin
