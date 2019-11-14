@@ -66,6 +66,9 @@ let generate_src_binhdr
         (*image_size*)
         Printf.fprintf oc "\n\t\t0x%08xUL," image_size; 
 
+        (*total_sections*)
+        Printf.fprintf oc "\n\t\t0x%08xUL," (List.length sections_list); 
+
         (*namespace*)
         Printf.fprintf oc "\n\t\"%s\"" uobj_ns; 
 

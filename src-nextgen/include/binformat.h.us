@@ -94,6 +94,7 @@ typedef struct {
 typedef struct {
 	usbinformat_section_info_t sinfo;
 	uint32_t image_size; 	//size (in bytes) of image
+	uint32_t total_sections; //total sections within image
 	uint8_t namespace[USCONFIG_NAMESPACE_MAX_LENGTH];	//uobj/uobjcoll namespace
 } __attribute__((packed)) usbinformat_hdr_t;
 
