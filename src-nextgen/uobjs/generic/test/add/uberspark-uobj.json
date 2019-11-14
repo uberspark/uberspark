@@ -42,7 +42,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		within the same collection
 	*/
 	"uobj-intrauobjcoll-callees" : {
-		"testuobj": ["one", "two", "three"]
+		"uberspark/uobjs/generic/test/sample": ["a_one", "a_two", "a_three"]
 	},
 	
 
@@ -50,7 +50,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		across other collection(s)
 	*/
 	"uobj-interuobjcoll-callees": {
-		"uberspark/uobjcoll/test/testuobj1" : ["one", "two" ]
+		"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]
 	} 
 
 

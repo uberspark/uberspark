@@ -211,8 +211,8 @@ let invoke
 	let d_cmd = ref "" in
 	let cc_includes = ref "" in
 
-	(* add linker script option *)
-	d_cmd := !d_cmd ^ " " ^ bridge_ld.params_prefix_lscript ^ " " ^ lscript_filename;
+	(* add linker executable and script option *)
+	d_cmd := bridge_ld.bridge_hdr.execname ^ " " ^ bridge_ld.params_prefix_lscript ^ " " ^ lscript_filename;
 
 	(* iterate over object file list and include them into linker command line *)
 	List.iter (fun o_filename -> 
