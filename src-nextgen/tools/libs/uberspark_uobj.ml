@@ -224,18 +224,6 @@ class uobject
 				Uberspark_logger.log "binary sections override:%u" (List.length self#get_d_sections_list_val);								
 			end;
 
-
-(*		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json d_sections_hashtbl) in
-
-		if (rval == false) then (false)
-		else
-		let dummy = 0 in
-		if (rval == true) then
-			begin
-				Uberspark_logger.log "binary sections override:%u" (Hashtbl.length self#get_d_sections_hashtbl);								
-			end;
-*)
-
 		(true)
 	;
 
