@@ -518,7 +518,42 @@ let generate_linker_script
             i := !i + 1;
         done;
 *)
-                    
+
+        let i = ref 0 in 			
+        while (!i < List.length sections_list) do
+            let (key, x) = (List.nth sections_list !i) in
+                (* new section *)
+                if(!i == (List.length sections_list) - 1 ) then 
+                    begin
+                        Printf.fprintf oc "\n %s : {" x.f_name;
+                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
+                        List.iter (fun subsection ->
+                                    Printf.fprintf oc "\n *(%s)" subsection;
+                        ) x.f_subsection_list;
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n BYTE(0xAA)";
+                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
+                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n";
+                    end
+                else
+                    begin
+                        Printf.fprintf oc "\n %s : {" x.f_name;
+                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
+                        List.iter (fun subsection ->
+                                    Printf.fprintf oc "\n *(%s)" subsection;
+                        ) x.f_subsection_list;
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n BYTE(0xAA)";
+                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
+                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n";
+                    end
+                ;
+        
+            i := !i + 1;
+        done;
+
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";
         Printf.fprintf oc "\n	* anything we didn't explicitly place.";

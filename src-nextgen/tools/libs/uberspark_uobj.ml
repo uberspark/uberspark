@@ -344,6 +344,10 @@ class uobject
 													f_reserved = 0;
 												};
 				}) ];
+
+
+			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+			uobj_section_load_addr := !uobj_section_load_addr + section_size;
 				
 		)self#get_d_default_sections_list_val;
 
@@ -378,6 +382,10 @@ class uobject
 													f_reserved = 0;
 												};
 				}) ];
+
+			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+			uobj_section_load_addr := !uobj_section_load_addr + section_size;
+
 		)self#get_d_sections_list_val;
 
 		
