@@ -25,9 +25,9 @@
 		"uobj_binary_image_uniform_size" : false,
 		"uobj_binary_image_size" : "0x2400000",
 		"uobj_binary_image_alignment" : "0x200000",
-		"bridge_cc_bridge" : "",
-		"bridge_as_bridge" : "",
-		"bridge_ld_bridge" : ""
+		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
+		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
+		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
 	}
 
 }
