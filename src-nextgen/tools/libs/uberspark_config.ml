@@ -64,69 +64,6 @@ let hdr_cpu = ref "";;
 
 
 
-(*------------------------------------------------------------------------*)
-(* namespace related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let namespace_root = "uberspark";;
-let namespace_root_dir = ref "";;
-let namespace_root_mf_filename = "uberspark.json";;
-
-
-let namespace_uobj_mf_filename = "uberspark-uobj.json";;
-let namespace_uobj_mf_hdr_type = "uobj";;
-let namespace_uobj_build_dir = "_build";;
-let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
-let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
-let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll_callees_info.c";;
-let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
-let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.c";;
-let namespace_uobj_linkerscript_filename = "uobj.lscript";;
-let namespace_uobj_binary_image_filename = "uobj.bin";;
-
-
-let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
-
-
-let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
-
-let namespace_legacy = "legacy";;
-
-
-let namespace_uobjslt = "uobjslt";;
-let namespace_uobjslt_mf_hdr_type = "uobjslt";;
-let namespace_uobjslt_mf_filename = "uberspark-uobjslt.json";;
-let namespace_uobjslt_intrauobjcoll_callees_src_filename = "uobjslt-intrauobjcoll-callees.S";;
-let namespace_uobjslt_interuobjcoll_callees_src_filename = "uobjslt-interuobjcoll-callees.S";;
-let namespace_uobjslt_legacy_callees_src_filename = "uobjslt-legacy-callees.S";;
-let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
-
-
-let namespace_config = "config";;
-let namespace_config_mf_filename = "uberspark-config.json";;
-let namespace_config_current = "current";;
-let namespace_config_default = "default";;
-
-
-let namespace_bridge = "bridges";;
-let namespace_bridge_mf_filename = "uberspark-bridge.json";;
-let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
-
-let namespace_bridge_ar_bridge_name = "ar-bridge";;
-let namespace_bridge_as_bridge_name = "as-bridge";;
-let namespace_bridge_cc_bridge_name = "cc-bridge";;
-let namespace_bridge_ld_bridge_name = "ld-bridge";;
-let namespace_bridge_pp_bridge_name = "pp-bridge";;
-let namespace_bridge_vf_bridge_name = "vf-bridge";;
-let namespace_bridge_bldsys_bridge_name = "bldsys-bridge";;
-
-let namespace_bridge_ar_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ar_bridge_name;;
-let namespace_bridge_as_bridge = namespace_bridge ^ "/" ^ namespace_bridge_as_bridge_name;;
-let namespace_bridge_cc_bridge = namespace_bridge ^ "/" ^ namespace_bridge_cc_bridge_name;;
-let namespace_bridge_ld_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ld_bridge_name;;
-let namespace_bridge_pp_bridge = namespace_bridge ^ "/" ^ namespace_bridge_pp_bridge_name;;
-let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_bridge_name;;
-let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_bldsys_bridge_name;;
-
 
 
 (*
@@ -178,8 +115,8 @@ let load
 	(config_name : string)
 	: bool =
 	let retval = ref false in
-	let config_ns_json_path = !namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ config_name ^ "/" ^ 
-		namespace_config_mf_filename in
+	let config_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name ^ "/" ^ 
+		Uberspark_namespace.namespace_config_mf_filename in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
 	let (rval, config_json) = Uberspark_manifest.get_manifest_json config_ns_json_path in
@@ -222,8 +159,8 @@ let create_from_existing_ns
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (!namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ output_config_name) in
-	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
+	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
+	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
 
 	(* load the input config *)
 	load input_config_name;
@@ -252,8 +189,8 @@ let create_from_file
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (!namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ output_config_name) in
-	let output_config_json_pathname = output_config_dir ^ "/" ^ namespace_config_mf_filename in
+	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
+	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
 
 
 	try
@@ -328,14 +265,14 @@ let switch
 	: bool =
 	
 	let retval = ref true in
-	let config_ns_path = !namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ config_name in 
-	let config_ns_current_path = !namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ namespace_config_current in
-	let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
+	let config_ns_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name in 
+	let config_ns_current_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ Uberspark_namespace.namespace_config_current in
+	let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
 
 	Uberspark_osservices.file_remove config_ns_current_path;
 	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
 	
-	load namespace_config_current;
+	load Uberspark_namespace.namespace_config_current;
 
 	(!retval)
 ;;
@@ -346,17 +283,17 @@ let remove
 	: bool =
 	let retval = ref false in
 	
-	if (config_name <> namespace_config_default) then 
+	if (config_name <> Uberspark_namespace.namespace_config_default) then 
 		begin
-			let config_ns_path = !namespace_root_dir ^ "/" ^ namespace_root ^ "/" ^ namespace_config ^ "/" ^ config_name in 
-			let config_ns_json_path = config_ns_path ^ "/" ^ namespace_config_mf_filename in
+			let config_ns_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name in 
+			let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
 			
 			Uberspark_osservices.file_remove config_ns_json_path;
 			Uberspark_osservices.rmdir config_ns_path;
 
 			(* check if we removed the current config, if so reload the default *)
 			if config_hdr.name = config_name then
-				ignore(switch namespace_config_default);
+				ignore(switch Uberspark_namespace.namespace_config_default);
 			;
 
 			retval := true;

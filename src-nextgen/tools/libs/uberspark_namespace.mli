@@ -41,6 +41,7 @@ val namespace_uobjslt_output_symbols_filename : string
 val namespace_config : string
 val namespace_config_mf_filename : string
 val namespace_config_current : string
+val namespace_config_default : string
 
 
 val namespace_bridge : string
