@@ -52,15 +52,15 @@ install_populateamespace: install_populateamespace_include
 	@echo Populating namespace within: $(UBERSPARK_INSTALLDIR)...
 	cp -rf $(UBERSPARK_SRCDIR)/bridges/* $(UBERSPARK_INSTALLDIR)/bridges/
 	cp -rf $(UBERSPARK_SRCDIR)/config/* $(UBERSPARK_INSTALLDIR)/config/
-	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/.
-	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/hwm/.
-	cp -rf $(UBERSPARK_SRCDIR)/loaders/* $(UBERSPARK_INSTALLDIR)/loaders/.
-	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/platforms/.
-	cp -rf $(UBERSPARK_SRCDIR)/sentinels/* $(UBERSPARK_INSTALLDIR)/sentinels/.
-	cp -rf $(UBERSPARK_SRCDIR)/uobjcoll/* $(UBERSPARK_INSTALLDIR)/uobjcoll/.
-	cp -rf $(UBERSPARK_SRCDIR)/uobjrtl/* $(UBERSPARK_INSTALLDIR)/uobjrtl/.
-	cp -rf $(UBERSPARK_SRCDIR)/uobjslt/* $(UBERSPARK_INSTALLDIR)/uobjslt/.
-	cp -rf $(UBERSPARK_SRCDIR)/uobjs/* $(UBERSPARK_INSTALLDIR)/uobjs/.
+	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/
+	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/hwm/
+	cp -rf $(UBERSPARK_SRCDIR)/loaders/* $(UBERSPARK_INSTALLDIR)/loaders/
+	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/platforms/
+	cp -rf $(UBERSPARK_SRCDIR)/sentinels/* $(UBERSPARK_INSTALLDIR)/sentinels/
+	cp -rf $(UBERSPARK_SRCDIR)/uobjcoll/* $(UBERSPARK_INSTALLDIR)/uobjcoll/
+	cp -rf $(UBERSPARK_SRCDIR)/uobjrtl/* $(UBERSPARK_INSTALLDIR)/uobjrtl/
+	cp -rf $(UBERSPARK_SRCDIR)/uobjslt/* $(UBERSPARK_INSTALLDIR)/uobjslt/
+	cp -rf $(UBERSPARK_SRCDIR)/uobjs/* $(UBERSPARK_INSTALLDIR)/uobjs/
 	@echo Namespace populated.
 
 

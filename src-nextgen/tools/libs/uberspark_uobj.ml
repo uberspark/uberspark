@@ -1018,11 +1018,8 @@ let build
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
-	if (Str.string_match (Str.regexp_string (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/")) abs_uobj_path 0) then begin
-		in_namespace_build := true;
-	end else begin
-		in_namespace_build := false;
-	end;
+	
+	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobj_path);
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
 	end;
 
