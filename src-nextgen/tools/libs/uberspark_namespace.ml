@@ -11,7 +11,7 @@ let namespace_root = "uberspark";;
 let namespace_root_dir = ref "";;
 let namespace_root_mf_filename = "uberspark.json";;
 
-
+let namespace_uobj = "uobjs";;
 let namespace_uobj_mf_filename = "uberspark-uobj.json";;
 let namespace_uobj_mf_hdr_type = "uobj";;
 let namespace_uobj_build_dir = "_build";;
@@ -24,6 +24,7 @@ let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 let namespace_uobj_binary_image_filename = "uobj.bin";;
 
 
+let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 
 
@@ -69,6 +70,35 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 
 
 
+let get_uobj_uobjcoll_name_from_uobj_ns
+	(uobj_ns : string)
+	(buildctx_uobjcoll_name : string)
+	: (string * string) =
+	let uobj_name = ref "" in 
+	let uobjcoll_name = ref "" in 
+	
+	if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobj ^ "/")) uobj_ns 0) then begin
+		(* this is a uobj within the uberspark uobj namespace *)
+		uobj_name := Filename.basename ("/" ^ uobj_ns);
+		uobjcoll_name := "";
+	
+	end else if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobjcoll ^ "/")) uobj_ns 0) then begin
+		(* this is a uobj within a uobjcoll wihin the uberspark uobjcoll namespace *)
+		uobj_name := Filename.basename ("/" ^ uobj_ns);
+		let uobjcoll_ns = Filename.dirname ("/" ^ uobj_ns) in 
+		uobjcoll_name := Filename.basename ("/" ^ uobjcoll_ns);
+	
+	end else begin
+		(* this is a uobj within the ccurrent build context *)
+		uobj_name := Filename.basename ("/" ^ uobj_ns);
+		uobjcoll_name := buildctx_uobjcoll_name;
+
+	end;
+
+
+
+	(!uobj_name, !uobjcoll_name)
+;;
 
 
 

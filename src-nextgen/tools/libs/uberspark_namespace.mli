@@ -11,6 +11,7 @@ val namespace_root : string
 val namespace_root_dir : string ref
 val namespace_root_mf_filename : string
 
+val namespace_uobj : string
 val namespace_uobj_mf_filename : string
 val namespace_uobj_mf_hdr_type : string
 val namespace_uobj_build_dir : string
@@ -22,7 +23,7 @@ val namespace_uobj_legacy_callees_info_src_filename : string
 val namespace_uobj_linkerscript_filename : string
 val namespace_uobj_binary_image_filename : string
 
-
+val namespace_uobjcoll : string
 val namespace_uobjcoll_mf_filename : string
 
 val namespace_uobjrtl_mf_filename : string
@@ -69,3 +70,5 @@ val namespace_bridge_bldsys_bridge : string
 (*------------------------------------------------------------------------*)
 (* namespace methods *)	
 (*------------------------------------------------------------------------*)
+
+val get_uobj_uobjcoll_name_from_uobj_ns :  string -> string -> (string * string)
