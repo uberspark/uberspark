@@ -72,8 +72,9 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 
 let get_uobj_uobjcoll_name_from_uobj_ns
 	(uobj_ns : string)
-	(buildctx_uobjcoll_name : string)
-	: (string * string) =
+	: (bool * string * string) =
+	
+	let retval = ref false in
 	let uobj_name = ref "" in 
 	let uobjcoll_name = ref "" in 
 	
@@ -81,23 +82,23 @@ let get_uobj_uobjcoll_name_from_uobj_ns
 		(* this is a uobj within the uberspark uobj namespace *)
 		uobj_name := Filename.basename ("/" ^ uobj_ns);
 		uobjcoll_name := "";
+		retval := true;
 	
 	end else if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobjcoll ^ "/")) uobj_ns 0) then begin
 		(* this is a uobj within a uobjcoll wihin the uberspark uobjcoll namespace *)
 		uobj_name := Filename.basename ("/" ^ uobj_ns);
 		let uobjcoll_ns = Filename.dirname ("/" ^ uobj_ns) in 
 		uobjcoll_name := Filename.basename ("/" ^ uobjcoll_ns);
-	
-	end else begin
-		(* this is a uobj within the ccurrent build context *)
-		uobj_name := Filename.basename ("/" ^ uobj_ns);
-		uobjcoll_name := buildctx_uobjcoll_name;
+		retval := true;
 
+	end else begin
+		(* this is an unknown namespace *)
+		uobj_name := "";
+		uobjcoll_name := "";
+		retval := false;
 	end;
 
-
-
-	(!uobj_name, !uobjcoll_name)
+	(!retval, !uobj_name, !uobjcoll_name)
 ;;
 
 

@@ -71,4 +71,4 @@ val namespace_bridge_bldsys_bridge : string
 (* namespace methods *)	
 (*------------------------------------------------------------------------*)
 
-val get_uobj_uobjcoll_name_from_uobj_ns :  string -> string -> (string * string)
+val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
