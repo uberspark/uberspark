@@ -284,12 +284,12 @@ let parse_uobj_interuobjcoll_callees
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobj-legacy-callees" *)
 (* return: *)
-(* on success: true; legacy-callees string list modified with parsed values *)
-(* on failure: false; legacy-callees string list is left untouched *)
+(* on success: true; legacy-callees hashtbl modified with parsed values *)
+(* on failure: false; legacy-callees hashtbl is left untouched *)
 (*--------------------------------------------------------------------------*)
 let parse_uobj_legacy_callees 
 	(mf_json : Yojson.Basic.t)
-	(legacy_callees_list : string list ref )
+	(legacy_callees_hashtbl : (string, string list) Hashtbl.t )
 	: bool =
 
 	let retval = ref true in
@@ -301,7 +301,7 @@ let parse_uobj_legacy_callees
 					begin
 
 						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
-							legacy_callees_list := json_list_to_string_list uobj_legacy_callees_list;
+							Hashtbl.add legacy_callees_hashtbl "legacy" (json_list_to_string_list uobj_legacy_callees_list);
 							retval := true;
 
 					end

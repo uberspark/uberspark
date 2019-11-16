@@ -47,8 +47,8 @@ class uobject
 	val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
 
-	val d_legacy_callees_list : string list ref = ref [];
-	method get_d_legacy_callees_list = !d_legacy_callees_list;
+	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
 
 	(* association list of uobj binary image sections as parsed from uobj manifest; indexed by section name *)		
 	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -201,13 +201,13 @@ class uobject
 			end;
 
 		(* parse uobj-legacy-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_legacy_callees mf_json d_legacy_callees_list) in
+		let rval = (Uberspark_manifest.Uobj.parse_uobj_legacy_callees mf_json d_legacy_callees_hashtbl) in
 
 		if (rval == false) then (false)
 		else
 		let dummy = 0 in
 			begin
-				Uberspark_logger.log "total legacy callees=%u" (List.length self#get_d_legacy_callees_list);
+				Uberspark_logger.log "total legacy callees=%u" (Hashtbl.length self#get_d_legacy_callees_hashtbl);
 			end;
 
 
@@ -742,15 +742,9 @@ class uobject
 		;
 
 		(* generate slt for intra-uobjcoll callees *)
-		let callees_list = ref [] in 
-		Hashtbl.iter (fun key value  ->
-			callees_list := !callees_list @ value;
-		) self#get_d_intrauobjcoll_callees_hashtbl;
-		Uberspark_logger.log "total intra-uobjcoll callees=%u" (List.length !callees_list);
-
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
-			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" !callees_list 
+			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" self#get_d_intrauobjcoll_callees_hashtbl 
 			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
 		if (rval == false) then
@@ -762,15 +756,9 @@ class uobject
 
 
 		(* generate slt for interuobjcoll callees *)
-		let interuobjcoll_callees_list = ref [] in
-		Hashtbl.iter (fun key value ->
-			interuobjcoll_callees_list := !interuobjcoll_callees_list @ value;
-		)self#get_d_interuobjcoll_callees_hashtbl;
-		Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
-
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" !interuobjcoll_callees_list 
+			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" self#get_d_interuobjcoll_callees_hashtbl 
 			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
 		if (rval == false) then
@@ -781,15 +769,9 @@ class uobject
 		;
 		
 		(* generate slt for legacy callees *)
-		let legacy_callees_list = ref [] in
-		List.iter (fun value ->
-			legacy_callees_list := !legacy_callees_list @ [ value ];
-		) self#get_d_legacy_callees_list;
-		Uberspark_logger.log "total legacy callees=%u" (List.length !legacy_callees_list);
-
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for legacy callees" !legacy_callees_list 
+			~output_banner:"uobj sentinel linkage table for legacy callees" self#get_d_legacy_callees_hashtbl 
 			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
 		if (rval == false) then
@@ -828,7 +810,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary legacy callees info source...";
 		Uberspark_codegen.Uobj.generate_src_legacy_callees_info 
 			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename)
-			self#get_d_legacy_callees_list;
+			self#get_d_legacy_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
