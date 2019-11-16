@@ -147,7 +147,7 @@ class uobject
 		else
 
 		let dummy=0 in begin
-			d_path_ns := !Uberspark_config.namespace_root_dir  ^ "/" ^ d_hdr.f_namespace;
+			d_path_ns := !Uberspark_namespace.namespace_root_dir  ^ "/" ^ d_hdr.f_namespace;
 		end;
 
 		(* parse uobj-sources node *)
@@ -240,9 +240,9 @@ class uobject
 			= 
 			let retval = ref false in 	
 			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ Uberspark_config.namespace_uobjslt ^ "/" ^
+			let uobjslt_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
 				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
-				Uberspark_config.namespace_uobjslt_mf_filename) in 
+				Uberspark_namespace.namespace_uobjslt_mf_filename) in 
 
 			let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
 			if(rval == true) then
@@ -749,7 +749,7 @@ class uobject
 		Uberspark_logger.log "total intra-uobjcoll callees=%u" (List.length !callees_list);
 
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_intrauobjcoll_callees_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" !callees_list 
 			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
@@ -769,7 +769,7 @@ class uobject
 		Uberspark_logger.log "total interuobjcoll callees=%u" (List.length !interuobjcoll_callees_list);
 
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_interuobjcoll_callees_src_filename) 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" !interuobjcoll_callees_list 
 			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
@@ -788,7 +788,7 @@ class uobject
 		Uberspark_logger.log "total legacy callees=%u" (List.length !legacy_callees_list);
 
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobjslt_legacy_callees_src_filename) 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" !legacy_callees_list 
 			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
@@ -803,7 +803,7 @@ class uobject
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_publicmethods_info_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
 			(self#get_d_hdr).f_namespace d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -811,7 +811,7 @@ class uobject
 		(* generate uobj binary intrauobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_intrauobjcoll_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename)
 			d_intrauobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -819,7 +819,7 @@ class uobject
 		(* generate uobj binary interuobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_interuobjcoll_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename)
 			d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -827,7 +827,7 @@ class uobject
 		(* generate uobj binary legacy callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary legacy callees info source...";
 		Uberspark_codegen.Uobj.generate_src_legacy_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_legacy_callees_info_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename)
 			self#get_d_legacy_callees_list;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -835,7 +835,7 @@ class uobject
 		(* generate uobj binary header source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 		Uberspark_codegen.Uobj.generate_src_binhdr 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_binhdr_src_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
 			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
 			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
@@ -844,27 +844,27 @@ class uobject
 		(* generate uobj binary linker script *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
 		Uberspark_codegen.Uobj.generate_linker_script 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_config.namespace_uobj_linkerscript_filename)
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_linkerscript_filename)
 			self#get_d_load_addr self#get_d_size self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
 		(* add all the autogenerated C source files to the list of c sources *)
 		d_sources_c_file_list := [ 
-			Uberspark_config.namespace_uobj_publicmethods_info_src_filename;		
-			Uberspark_config.namespace_uobj_intrauobjcoll_callees_info_src_filename;
-			Uberspark_config.namespace_uobj_interuobjcoll_callees_info_src_filename;
-			Uberspark_config.namespace_uobj_legacy_callees_info_src_filename;
-			Uberspark_config.namespace_uobj_binhdr_src_filename;
+			Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename;		
+			Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename;
+			Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename;
+			Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename;
+			Uberspark_namespace.namespace_uobj_binhdr_src_filename;
 		] @ !d_sources_c_file_list;
 
 
 		(* add all the autogenerated asm source files to the list of asm sources *)
 		(* TBD: eventually this will just be casm sources *)
 		d_sources_asm_file_list := [ 
-			Uberspark_config.namespace_uobjslt_intrauobjcoll_callees_src_filename;
-			Uberspark_config.namespace_uobjslt_interuobjcoll_callees_src_filename;
-			Uberspark_config.namespace_uobjslt_legacy_callees_src_filename;
+			Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename;
+			Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename;
+			Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename;
 		] @ !d_sources_asm_file_list;
 
 
@@ -882,8 +882,8 @@ class uobject
 		let retval = ref false in
 
 		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
-			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
-			 (self#get_d_sources_c_file_list) [ "."; !Uberspark_config.namespace_root_dir ] ".";
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (self#get_d_sources_c_file_list) [ "."; !Uberspark_namespace.namespace_root_dir ] ".";
 
 		(!retval)	
 	;
@@ -899,8 +899,8 @@ class uobject
 		let retval = ref false in
 
 		retval := Uberspark_bridge.As.invoke ~gen_obj:true
-			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
-			 (self#get_d_sources_asm_file_list) [ "."; !Uberspark_config.namespace_root_dir ] ".";
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (self#get_d_sources_asm_file_list) [ "."; !Uberspark_namespace.namespace_root_dir ] ".";
 
 		(!retval)	
 	;
@@ -929,9 +929,9 @@ class uobject
 
 
 		retval := Uberspark_bridge.Ld.invoke 
-			 ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir 
-			Uberspark_config.namespace_uobj_linkerscript_filename
-			Uberspark_config.namespace_uobj_binary_image_filename
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			Uberspark_namespace.namespace_uobj_linkerscript_filename
+			Uberspark_namespace.namespace_uobj_binary_image_filename
 			!o_file_list
 			[ ] [ ]	".";
 
@@ -1013,12 +1013,12 @@ let build
 	let dummy = 0 in begin
 
 	(* create _build folder *)
-	Uberspark_osservices.mkdir ~parent:true Uberspark_config.namespace_uobj_build_dir (`Octal 0o0777);
+	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobj_build_dir (`Octal 0o0777);
 
 	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/");
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
-	if (Str.string_match (Str.regexp_string (!Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/")) abs_uobj_path 0) then begin
+	if (Str.string_match (Str.regexp_string (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/")) abs_uobj_path 0) then begin
 		in_namespace_build := true;
 	end else begin
 		in_namespace_build := false;
@@ -1032,7 +1032,7 @@ let build
 	end else
 	
 
-	let uobj_mf_filename = (abs_uobj_path ^ "/" ^ Uberspark_config.namespace_uobj_mf_filename) in
+	let uobj_mf_filename = (abs_uobj_path ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) in
 	let dummy = 0 in begin
     Uberspark_logger.log "initialized bridges";
 	Uberspark_logger.log "parsing uobj manifest: %s" uobj_mf_filename;
@@ -1053,7 +1053,7 @@ let build
 
 	(* initialize uobj initial state *)
 	(* TBD: we need to get the load address as argument to the build interface *)
-	uobj#initialize ~context_path_builddir:Uberspark_config.namespace_uobj_build_dir uobj_target_def 
+	uobj#initialize ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir uobj_target_def 
 		Uberspark_config.config_settings.uobj_binary_image_load_address;
 
 	(* install headers if we are doing an out-of-namespace build *)
@@ -1065,7 +1065,7 @@ let build
 	end;
 
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
-		Uberspark_osservices.cp "*.c" (Uberspark_config.namespace_uobj_build_dir ^ "/.");
+		Uberspark_osservices.cp "*.c" (Uberspark_namespace.namespace_uobj_build_dir ^ "/.");
 	end;
 
 	if (List.length uobj#get_d_sources_h_file_list) > 0 then begin

@@ -37,12 +37,12 @@ let dump
 	?(bridge_exectype = "container")
 	(output_directory : string)
 	=
-	let src_bridge_json_filename = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
-			Uberspark_config.namespace_bridge_mf_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridge_mf_filename in
-	let src_bridge_container_filename = !Uberspark_config.namespace_root_dir  ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ bridge_ns_path ^ 
-			"/" ^ Uberspark_config.namespace_bridge_container_filename in
-	let dst_container_filename = output_directory ^ "/" ^ Uberspark_config.namespace_bridge_container_filename in
+	let src_bridge_json_filename = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
+			Uberspark_namespace.namespace_bridge_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_mf_filename in
+	let src_bridge_container_filename = !Uberspark_namespace.namespace_root_dir  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
+			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
 	
 	(* copy json file *)
 	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
@@ -59,7 +59,7 @@ let dump
 let remove
 	(bridge_ns_path : string)
 	=
-	let full_bridge_ns_path = !Uberspark_config.namespace_root_dir  ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ bridge_ns_path in
+	let full_bridge_ns_path = !Uberspark_namespace.namespace_root_dir  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path in
 	
 	(* remove the path and files within *)
 	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];

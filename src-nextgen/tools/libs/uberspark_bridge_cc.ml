@@ -98,9 +98,9 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^
-		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ "/" ^
-		Uberspark_config.namespace_bridge_mf_filename in
+	let bridge_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
+		Uberspark_namespace.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns ^ "/" ^
+		Uberspark_namespace.namespace_bridge_mf_filename in
 		(load_from_file bridge_ns_json_path)
 ;;
 
@@ -136,10 +136,10 @@ let store
 		bridge_cc.bridge_hdr.cpu ^ "/" ^
 		bridge_cc.bridge_hdr.bname ^ "/" ^
 		bridge_cc.bridge_hdr.version in
-	let bridge_ns_json_path = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^
-		Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
+	let bridge_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
+		Uberspark_namespace.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
 	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
-		Uberspark_config.namespace_bridge_mf_filename in
+		Uberspark_namespace.namespace_bridge_mf_filename in
 
 	(* make the namespace directory *)
 	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
@@ -167,14 +167,14 @@ let build
 
 	if bridge_cc.bridge_hdr.btype = "container" then
 		begin
-			let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
+			let bridge_ns = Uberspark_namespace.namespace_bridge_cc_bridge ^ "/" ^
 				bridge_cc.bridge_hdr.btype ^ "/" ^
 				bridge_cc.bridge_hdr.devenv ^ "/" ^
 				bridge_cc.bridge_hdr.arch ^ "/" ^
 				bridge_cc.bridge_hdr.cpu ^ "/" ^
 				bridge_cc.bridge_hdr.bname ^ "/" ^
 				bridge_cc.bridge_hdr.version in
-			let bridge_container_path = !Uberspark_config.namespace_root_dir ^ "/" ^ Uberspark_config.namespace_root ^ "/" ^ bridge_ns in
+			let bridge_container_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
 
 			Uberspark_logger.log "building cc-bridge: %s" bridge_ns;
 
@@ -269,7 +269,7 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_config.namespace_bridge_cc_bridge ^ "/" ^
+	let bridge_ns = Uberspark_namespace.namespace_bridge_cc_bridge ^ "/" ^
 		bridge_cc.bridge_hdr.btype ^ "/" ^
 		bridge_cc.bridge_hdr.devenv ^ "/" ^
 		bridge_cc.bridge_hdr.arch ^ "/" ^

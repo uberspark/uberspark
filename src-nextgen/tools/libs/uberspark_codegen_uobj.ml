@@ -355,7 +355,7 @@ let generate_src_legacy_callees_info
         Printf.fprintf oc "\n\t{"; 
         
         (* namespace *)
-        Printf.fprintf oc "\n\t\t\"%s\"," (Uberspark_config.namespace_root ^ "/" ^ Uberspark_config.namespace_legacy); 
+        Printf.fprintf oc "\n\t\t\"%s\"," (Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_legacy); 
         (* cname *)
         Printf.fprintf oc "\n\t\t\"%s\"," callee_name; 
         (* slt_ordinal *)
