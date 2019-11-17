@@ -22,6 +22,7 @@ let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll
 let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.c";;
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 let namespace_uobj_binary_image_filename = "uobj.bin";;
+let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 
 
 let namespace_uobjcoll = "uobjcoll";;

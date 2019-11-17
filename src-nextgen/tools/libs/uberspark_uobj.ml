@@ -467,6 +467,14 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
 				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 
+
+		(* generate uobj top-level include header file source *)
+		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
+		Uberspark_codegen.Uobj.generate_top_level_include_header 
+			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
+			self#get_d_publicmethods_hashtbl;
+		Uberspark_logger.log ~tag:"" "[OK]";
+
 		(* add default uobj sections *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
 			f_name = "uobj_binhdr";	

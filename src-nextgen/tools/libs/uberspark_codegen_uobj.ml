@@ -583,8 +583,6 @@ let generate_top_level_include_header
 
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n";
-        Printf.fprintf oc "\n}";
-        Printf.fprintf oc "\n";
 
         close_out oc;
         ()
