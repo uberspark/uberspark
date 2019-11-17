@@ -944,7 +944,7 @@ class uobject
 
 
 	method install_h_files_ns 
-		()
+		?(context_path_builddir = ".")
 		: unit =
 		
 		let uobj_path_to_mf_filename = self#get_d_path_to_mf_filename in
@@ -958,6 +958,10 @@ class uobject
 			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
 			(uobj_path_ns ^ "/" ^ h_filename);
 		) self#get_d_sources_h_file_list;
+
+		(* copy top-level header to namespace *)
+		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
+			(uobj_path_ns ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename);
 
 	;
 
@@ -1047,7 +1051,7 @@ let build
 	if not !in_namespace_build then begin
 	    Uberspark_logger.log "prepping for out-of-namespace build...";
 		uobj#install_create_ns ();
-		uobj#install_h_files_ns ();
+		uobj#install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir;
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 

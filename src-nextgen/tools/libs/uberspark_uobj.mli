@@ -91,7 +91,7 @@
     method link_object_files : unit -> bool
 
     method install_create_ns : unit -> unit
-    method install_h_files_ns : unit -> unit
+    method install_h_files_ns : ?context_path_builddir:string -> unit
     method remove_ns : unit -> unit
 end
 
