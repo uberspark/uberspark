@@ -420,10 +420,29 @@ let generate_slt
             let index = ref 0 in
        		Hashtbl.iter (fun key value  ->
                 List.iter (fun fn_name -> 
+                    let (rval, uobj_name, uobjcoll_name) = Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns key in
+                    let q_fn_name = ref "" in
+
+                    if uobjcoll_name <> "legacy" then begin
+                        q_fn_name := "uberspark_";
+
+                        if uobjcoll_name = "" && uobj_name <> "" then begin
+                            q_fn_name := !q_fn_name ^ "uobj_" ^ uobj_name ^ "_";
+                        end else if uobjcoll_name <> "" && uobj_name <> "" then begin
+                            q_fn_name := !q_fn_name ^ "uobjcoll_" ^ uobjcoll_name ^ "_" ^ uobj_name ^ "_";
+                        end else begin
+                            (*TBD: handle this error more gracefully *)
+                            q_fn_name := !q_fn_name ^ "unknown";            
+                        end;
+                    
+                    end;
+
+                    q_fn_name := !q_fn_name ^ fn_name;
+
                     Printf.fprintf oc "\n";
                     Printf.fprintf oc "\n.section %s" output_section_name_code;
-                    Printf.fprintf oc "\n.global %s" fn_name;
-                    Printf.fprintf oc "\n%s:" fn_name;
+                    Printf.fprintf oc "\n.global %s" !q_fn_name;
+                    Printf.fprintf oc "\n%s:" !q_fn_name;
                     let tcode_0 = Str.global_replace (Str.regexp "TRAMPOLINE_FN_INDEX") (string_of_int !index) slt_trampolinecode in
                     let tcode = Str.global_replace (Str.regexp "TRAMPOLINE_DATA_VARNAME") slt_trampolinedata_varname tcode_0 in
                     Printf.fprintf oc "\n%s" tcode;

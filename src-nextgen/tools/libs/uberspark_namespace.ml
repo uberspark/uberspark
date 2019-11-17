@@ -91,6 +91,12 @@ let get_uobj_uobjcoll_name_from_uobj_ns
 		uobjcoll_name := Filename.basename ("/" ^ uobjcoll_ns);
 		retval := true;
 
+	end else if uobj_ns = "legacy" then begin 
+		(* this is legacy code namespace *)
+		uobj_name := "";
+		uobjcoll_name := "legacy";
+		retval := true;
+		
 	end else begin
 		(* this is an unknown namespace *)
 		uobj_name := "";
