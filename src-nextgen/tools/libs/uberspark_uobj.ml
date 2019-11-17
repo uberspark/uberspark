@@ -1101,9 +1101,9 @@ let build
 	Uberspark_logger.log "linked object files successfully!";
 
 	(* cleanup namespace if we are doing an out-of-namespace build *)
-	if not !in_namespace_build then begin
+	(*if not !in_namespace_build then begin
 		uobj#remove_ns ();
-	end;
+	end;*)
 
 	(* restore working directory *)
 	ignore(Uberspark_osservices.dir_change r_prevpath);
