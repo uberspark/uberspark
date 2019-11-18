@@ -41,8 +41,12 @@ let parse_manifest
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
-	(* parse config-settings node, if one is present *)
-	
+	(* parse, load and overlay config-settings node, if one is present *)
+	if (Uberspark_config.load_from_json mf_json) then begin
+		Uberspark_logger.log "loaded and overlaid config-settings from uobjcoll manifest for uobjcoll build";
+	end else begin
+		Uberspark_logger.log "using default config for uobjcoll build";
+    end;
 
 
 	(true)

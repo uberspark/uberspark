@@ -50,6 +50,7 @@ val switch : string -> bool
 
 val remove : string -> bool
 
+val load_from_json : Yojson.Basic.json -> bool
 
 
 
