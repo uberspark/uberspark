@@ -5,6 +5,14 @@
 
 open Str
 
+type uobjcoll_uobjinfo_t =
+{
+	mutable f_uobj_name    : string;			
+	mutable f_uobj_ns	   : string;
+	mutable f_is_intrauobj : bool;
+	mutable f_uobj_path	   : string;
+};;
+
 
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
