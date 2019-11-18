@@ -202,7 +202,15 @@ module Uobjcoll : sig
       mutable f_cpu				   : string;
     }
 
+  type uobjcoll_uobjs_t =
+  {
+    mutable f_prime_uobj_ns    : string;
+    mutable f_templar_uobjs    : string list;
+  }
+
+
   val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
+  val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
 
 end
 
