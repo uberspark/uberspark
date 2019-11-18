@@ -192,6 +192,23 @@ module Uobj : sig
 end
 
 
+
+module Uobjcoll : sig
+  type uobjcoll_hdr_t =
+    {
+      mutable f_namespace    : string;			
+      mutable f_platform	   : string;
+      mutable f_arch	       : string;
+      mutable f_cpu				   : string;
+    }
+
+  val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
+
+end
+
+
+
+
 module Uobjslt : sig
   type uobjslt_hdr_t =
     {
