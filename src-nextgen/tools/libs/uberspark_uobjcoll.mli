@@ -4,4 +4,4 @@
 ------------------------------------------------------------------------------*)
 
 val parse_manifest : string -> bool
-val build : Defs.Basedefs.target_def_t -> bool
+val build : string -> Defs.Basedefs.target_def_t -> bool

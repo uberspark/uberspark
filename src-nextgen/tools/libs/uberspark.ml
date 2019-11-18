@@ -10,4 +10,5 @@ module Bridge = Uberspark_bridge
 module Manifest = Uberspark_manifest
 module Binary = Uberspark_binary
 module Uobj = Uberspark_uobj
+module Uobjcoll = Uberspark_uobjcoll
 

@@ -54,10 +54,13 @@ let parse_manifest
 
 
 let build
+	(uobjcoll_path_ns : string)
 	(target_def : Defs.Basedefs.target_def_t)
 	: bool =
 
 	let retval = ref false in
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection build start...";
 
 	(!retval)
 ;;

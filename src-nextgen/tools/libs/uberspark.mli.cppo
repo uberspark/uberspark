@@ -63,3 +63,9 @@ module Uobj : sig
 
 end
 
+module Uobjcoll : sig
+  
+#include "uberspark_uobjcoll.mli"
+
+end
+

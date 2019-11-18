@@ -97,6 +97,44 @@ let cmd_uobj =
 
 
 
+(* kicks in when uberspark uobjcoll ... is issued *)
+let cmd_uobjcoll =
+ 	let action = 
+	let action = [ 	"build", `Build; 
+				] in
+  	let doc = strf "The action to perform. $(docv) must be one of %s."
+      (Arg.doc_alts_enum action) in
+  	let action = Arg.enum action in
+  		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
+	in
+
+	let path_ns =
+    let doc = "The path to the uobj collection sources or a uobj collection namespace." in
+    Arg.(required & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+	in
+
+  let doc = "verify, build and/or manage uobj collections" in
+  let man =
+    [
+		`S Manpage.s_synopsis;
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
+		`S Manpage.s_description;
+		`P "The $(tname) command provides several actions to verify, build 
+			and manage uobj collections specified by $(i,PATH) or $(i,NAMESPACE).";
+    	`S Manpage.s_arguments;
+ 		`S "ACTIONS";
+    	`I ("$(b,build)",
+        	"build the uobj collection binary.");
+	 	`S "ACTION OPTIONS";
+	  	`P "These options qualify the aforementioned actions.";
+		`Blocks manpage_sec_common_options;
+		`Blocks manpage_sec_issues;
+		`S Manpage.s_exit_status;
+ 	] in
+  Term.(ret (const Cmd_uobjcoll.handler_uobjcoll $ Commonopts.opts_t $ Cmd_uobjcoll.cmd_uobjcoll_opts_t $ action $ path_ns)),
+  Term.info "uobjcoll" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
+
 
 (* kicks in when uberspark config ... is issued *)
 let cmd_bridges =
@@ -226,7 +264,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_config; cmd_bridges]
+let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_config; cmd_bridges]
 
 
 (*----------------------------------------------------------------------------*)
