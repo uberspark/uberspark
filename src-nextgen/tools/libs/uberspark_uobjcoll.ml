@@ -53,6 +53,20 @@ let parse_manifest
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* crate uobjcoll installation namespace *)
+(*--------------------------------------------------------------------------*)
+let install_create_ns 
+	()
+	: unit =
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" !d_path_ns;
+	
+	(* make namespace folder if not already existing *)
+	Uberspark_osservices.mkdir ~parent:true !d_path_ns (`Octal 0o0777);
+;;
+
+
 
 
 let build

@@ -4,4 +4,5 @@
 ------------------------------------------------------------------------------*)
 
 val parse_manifest : string -> bool
+val install_create_ns : unit -> unit
 val build : string -> Defs.Basedefs.target_def_t -> bool
