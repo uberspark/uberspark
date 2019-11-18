@@ -41,6 +41,10 @@ let parse_manifest
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
+	(* parse config-settings node, if one is present *)
+	
+
+
 	(true)
 ;;
 

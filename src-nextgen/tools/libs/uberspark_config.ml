@@ -91,21 +91,31 @@ let load_from_json
 	let retval = ref false in
 
 	let rval_uberspark_hdr = Uberspark_manifest.parse_uberspark_hdr json_node uberspark_hdr in
-	let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node config_hdr in
-	let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node config_settings in
 
-	if rval_config_hdr && rval_config_settings && rval_uberspark_hdr then
-		begin
-			(* TBD: sanity check input mftype and override with config only if permissible *)
-			(* e.g., if existing mftype is top-level *)
+	if rval_uberspark_hdr then begin
+		(* this is a valid uberspark json tree; TBD: sanity check header fields *)
+
+		let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node config_hdr in
+
+		(* if we have a config header then this is a load from uberspark configuration file *)
+		(* TBD: sanity check input mftype, for now override with config *)
+		if rval_config_hdr then begin
 			uberspark_hdr.f_mftype <- "config";
+		end;
+
+		(* check for config-settings node *)
+		let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node config_settings in
+		if rval_config_settings then begin
 			retval := true;
-		end
-	else
-		begin
+		end else begin
 			retval := false;
-		end
-	;
+		end;
+
+	end else begin
+		(* error, we require a uberspark json header *)
+		retval := false;
+	end;
+
 
 	(!retval)
 ;;
