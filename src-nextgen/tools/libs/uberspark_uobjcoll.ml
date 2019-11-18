@@ -19,6 +19,8 @@ let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
 let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};;
 
+let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
+
 
 (*--------------------------------------------------------------------------*)
 (* parse uobjcoll manifest *)
@@ -55,6 +57,15 @@ let parse_manifest
 	end else begin
 		Uberspark_logger.log "using default config for uobjcoll build";
     end;
+
+	(* parse uobjcoll-uobjs node *)
+	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_uobjs mf_json d_uobjcoll_uobjs_mf_node ) in
+	if (rval == false) then (false)
+	else
+
+	let dummy=0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_uobjcoll_uobjs_mf_node.f_templar_uobjs);
+	end;
 
 
 	(true)
