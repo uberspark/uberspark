@@ -1,62 +1,124 @@
-(*
-	uberSpark bridge module interface
-	author: amit vasudevan (amitvasudevan@acm.org)
-*)
+(****************************************************************************)
+(* uberSpark bridge module interface *)
+(*	 author: amit vasudevan (amitvasudevan@acm.org) *)
+(****************************************************************************)
+(****************************************************************************)
 
-type bridge_hdr_t = {
-	mutable btype : string;
-	mutable execname: string;
-	mutable path: string;
-	mutable params: string list;
-	mutable container_fname: string;
-	mutable devenv: string;
-	mutable arch: string;
-	mutable cpu: string;
-	mutable version: string;
-	mutable namespace: string;
-}
-
-type cc_bridge_t = { 
-	mutable hdr : bridge_hdr_t;
-	mutable params_prefix_to_obj: string;
-	mutable params_prefix_to_asm: string;
-	mutable params_prefix_to_output: string;
-}
-
-val cc_bridge_settings_loaded : bool ref
-
-
-val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+(****************************************************************************)
+(* general submodules *)
+(****************************************************************************)
 
 module Container : sig
 
 val build_image : string -> string -> int
-
 val list_images : string -> unit 
-
+val run_image : ?context_path_builddir:string -> string -> string -> string -> int
+    
 end
 
 module Native : sig
 
-val sample : string -> unit
+val run_shell_command : ?context_path_builddir:string -> string -> string -> string -> int
 
 end
 
-val load_bridge_cc_from_file : string -> bool
-
-val load_bridge_cc : string -> bool
-
-val store_bridge_cc_to_file : string -> bool
-
-val store_bridge_cc : unit -> bool
-
-val build_bridge_cc : unit -> bool
 
 
-val store_settings_to_namespace: string list -> unit
 
-val build: string list -> unit
+(****************************************************************************)
+(* general interfaces *)
+(****************************************************************************)
 
 val dump : string -> ?bridge_exectype:string -> string -> unit
-
 val remove : string -> unit
+val initialize_from_config : unit -> bool
+
+(****************************************************************************)
+(* bridge submodules *)
+(****************************************************************************)
+
+module Cc : sig
+
+(*--------------------------------------------------------------------------*)
+(* cc-bridge data variables *)
+(*--------------------------------------------------------------------------*)
+val uberspark_hdr: Uberspark_manifest.hdr_t
+val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+
+
+(*--------------------------------------------------------------------------*)
+(* cc-bridge interfaces *)
+(*--------------------------------------------------------------------------*)
+val load_from_json : Yojson.Basic.json ->  bool
+val load_from_file : string -> bool
+val load : string -> bool
+val store_to_file : string -> bool
+val store : unit -> bool
+val build : unit -> bool
+val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+
+
+
+end
+
+
+
+
+module As : sig
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge data variables *)
+(*--------------------------------------------------------------------------*)
+val uberspark_hdr: Uberspark_manifest.hdr_t
+val bridge_as : Uberspark_manifest.Bridge.bridge_as_t 
+
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge interfaces *)
+(*--------------------------------------------------------------------------*)
+val load_from_json : Yojson.Basic.json ->  bool
+val load_from_file : string -> bool
+val load : string -> bool
+val store_to_file : string -> bool
+val store : unit -> bool
+val build : unit -> bool
+val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+
+
+
+end
+
+
+
+module Ld : sig
+
+(*--------------------------------------------------------------------------*)
+(* ld-bridge data variables *)
+(*--------------------------------------------------------------------------*)
+val uberspark_hdr: Uberspark_manifest.hdr_t
+val bridge_ld : Uberspark_manifest.Bridge.bridge_ld_t 
+
+
+(*--------------------------------------------------------------------------*)
+(* as-bridge interfaces *)
+(*--------------------------------------------------------------------------*)
+val load_from_json : Yojson.Basic.json ->  bool
+val load_from_file : string -> bool
+val load : string -> bool
+val store_to_file : string -> bool
+val store : unit -> bool
+val build : unit -> bool
+val invoke : 
+	?context_path_builddir : string -> 
+	string ->
+	string ->
+	string list ->
+	string list ->
+	string list ->
+	string ->
+	bool
+
+
+
+end
+

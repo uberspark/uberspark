@@ -50,6 +50,7 @@ module Bridge : sig
   (* bridge-hdr node type *)
   type bridge_hdr_t = {
     mutable btype : string;
+    mutable bname : string;
     mutable execname: string;
     mutable devenv: string;
     mutable arch: string;
@@ -64,9 +65,27 @@ module Bridge : sig
   (* bridge-cc node type *)
   type bridge_cc_t = { 
     mutable bridge_hdr : bridge_hdr_t;
-    mutable params_prefix_to_obj: string;
-    mutable params_prefix_to_asm: string;
-    mutable params_prefix_to_output: string;
+    mutable params_prefix_obj: string;
+    mutable params_prefix_asm: string;
+    mutable params_prefix_output: string;
+    mutable params_prefix_include: string;
+  }
+
+  (* bridge-as node type *)
+  type bridge_as_t = { 
+    mutable bridge_hdr : bridge_hdr_t;
+    mutable params_prefix_obj: string;
+    mutable params_prefix_output: string;
+    mutable params_prefix_include: string;
+  }
+
+  (* bridge-ld node type *)
+  type bridge_ld_t = { 
+    mutable bridge_hdr : bridge_hdr_t;
+    mutable params_prefix_lscript: string;
+    mutable params_prefix_libdir: string;
+    mutable params_prefix_lib: string;
+    mutable params_prefix_output: string;
   }
 
 
@@ -75,6 +94,8 @@ module Bridge : sig
   (****************************************************************************)
   val parse_bridge_hdr : Yojson.Basic.t -> bridge_hdr_t -> bool
   val parse_bridge_cc : Yojson.Basic.t -> bridge_cc_t -> bool
+  val parse_bridge_as : Yojson.Basic.t -> bridge_as_t -> bool
+  val parse_bridge_ld : Yojson.Basic.t -> bridge_ld_t -> bool
 
 
   (****************************************************************************)
@@ -82,6 +103,8 @@ module Bridge : sig
   (****************************************************************************)
   val write_bridge_hdr : ?continuation:bool -> out_channel -> bridge_hdr_t -> bool
   val write_bridge_cc : ?continuation:bool -> out_channel -> bridge_cc_t -> bool
+  val write_bridge_as : ?continuation:bool -> out_channel -> bridge_as_t -> bool
+  val write_bridge_ld : ?continuation:bool -> out_channel -> bridge_ld_t -> bool
 
 end
 
@@ -102,18 +125,21 @@ module Config : sig
   (* config-settings node type *)
   type config_settings_t = 
   {
-    (* environment related settings *)
-    mutable env_home_dir : string;
 
     (* uobj/uobjcoll binary related configuration settings *)	
     mutable binary_page_size : int;
     mutable binary_uobj_section_alignment : int;
     mutable binary_uobj_default_section_size : int;
-    mutable binary_uobj_default_load_addr : int;
-    mutable binary_uobj_default_size : int;
+ 
+    mutable uobj_binary_image_load_address : int;
+    mutable uobj_binary_image_uniform_size : bool;
+    mutable uobj_binary_image_size : int;
+    mutable uobj_binary_image_alignment : int;
 
     (* bridge related configuration settings *)	
     mutable bridge_cc_bridge : string;
+    mutable bridge_as_bridge : string;
+    mutable bridge_ld_bridge : string;
 
   }
 
@@ -154,11 +180,12 @@ module Uobj : sig
 
 
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
-  val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> bool
+  val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
   val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
   val parse_uobj_interuobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
-  val parse_uobj_sections : Yojson.Basic.t -> ((string, Defs.Basedefs.section_info_t)  Hashtbl.t)  ->  bool
+  val parse_uobj_legacy_callees : Yojson.Basic.t -> (string, string list) Hashtbl.t -> bool
+  val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
 
 
 

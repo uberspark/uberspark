@@ -15,19 +15,22 @@
         /* bridge header */
         "bridge-hdr":{
             "btype" : "container",
+            "bname" : "gcc",
             "execname" : "gcc",
             "devenv" : "amd64",
             "arch" : "x86_32",
             "cpu" : "generic",
             "version" : "v5.5.0",
             "path" : ".",
-            "params" : [ "-v" ],
+            "params" : [ "-m32" ],
             "container_fname" : "uberspark_bridges.Dockerfile"
         },
 
-        "params_prefix_to_obj" : "-c",
-        "params_prefix_to_asm" : "-S",
-        "params_prefix_to_output" : "-o"
+        "params_prefix_obj" : "-c",
+        "params_prefix_asm" : "-S",
+        "params_prefix_output" : "-o",
+        "params_prefix_include" : "-I"
+
     }
 
 }

@@ -6,6 +6,13 @@ module Defs : sig
 
 end
 
+module Namespace : sig
+
+#include "uberspark_namespace.mli"
+
+end
+
+
 
 module Logger : sig
   

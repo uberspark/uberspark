@@ -56,14 +56,15 @@ let parse_uobj_hdr
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobj-sources" *)
 (* return: *)
-(* on success: true; h,c,casm file lists are modified with parsed values *)
-(* on failure: false; h,c,casm file lists are untouched *)
+(* on success: true; h,c,casm,asm file lists are modified with parsed values *)
+(* on failure: false; h,c,casm,asm file lists are untouched *)
 (*--------------------------------------------------------------------------*)
 let parse_uobj_sources 
 	(mf_json : Yojson.Basic.t)
 	(h_file_list : string list ref)
 	(c_file_list : string list ref)
 	(casm_file_list : string list ref)
+	(asm_file_list : string list ref)
 	: bool =
 
 	let retval = ref true in
@@ -104,6 +105,17 @@ let parse_uobj_sources
 										List.iter (fun x -> casm_file_list := 
 												!casm_file_list @ [(x |> to_string)]
 											) casmfiles_json_list;
+								end
+							;
+
+						let mf_asmfiles_json = mf_uobj_sources_json |> member "asm-files" in
+							if mf_asmfiles_json != `Null then
+								begin
+									let asmfiles_json_list = mf_asmfiles_json |> 
+											to_list in 
+										List.iter (fun x -> asm_file_list := 
+												!asm_file_list @ [(x |> to_string)]
+											) asmfiles_json_list;
 								end
 							;
 							
@@ -268,15 +280,52 @@ let parse_uobj_interuobjcoll_callees
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-legacy-callees" *)
+(* return: *)
+(* on success: true; legacy-callees hashtbl modified with parsed values *)
+(* on failure: false; legacy-callees hashtbl is left untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_legacy_callees 
+	(mf_json : Yojson.Basic.t)
+	(legacy_callees_hashtbl : (string, string list) Hashtbl.t )
+	: bool =
+
+	let retval = ref true in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_legacy_callees_json = mf_json |> member "uobj-legacy-callees" in
+				if uobj_legacy_callees_json != `Null then
+					begin
+
+						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
+							Hashtbl.add legacy_callees_hashtbl "legacy" (json_list_to_string_list uobj_legacy_callees_list);
+							retval := true;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval)
+;;
+
+
+
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobj-binary/uobj-sections" *)
 (* return: *)
-(* on success: true; sections hash table modified with parsed values *)
-(* on failure: false; sections hash table is left untouched *)
+(* on success: true; sections association list modified with parsed values *)
+(* on failure: false; sections association list is left untouched *)
 (*--------------------------------------------------------------------------*)
 let parse_uobj_sections 
 	(mf_json : Yojson.Basic.t)
-	(sections_hashtbl : ((string, Defs.Basedefs.section_info_t)  Hashtbl.t) )
+	(sections_list : (string * Defs.Basedefs.section_info_t) list ref )
 	: bool =
 
 	let retval = ref false in
@@ -322,7 +371,7 @@ let parse_uobj_sections
 																						};
 														} in
 							
-															Hashtbl.add sections_hashtbl x section_entry; 
+														sections_list := !sections_list @ [ (x, section_entry) ]; 
 														
 														retval := true;
 													end

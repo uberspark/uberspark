@@ -16,8 +16,12 @@ let initialize
   Uberspark.Logger.log "creator: amit vasudevan <amitvasudevan@acm.org>";
   Uberspark.Logger.log "";
 
+  (* setup namespace root directory *)
+  Uberspark.Namespace.namespace_root_dir := copts.root_dir;
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir=%s" !Uberspark.Namespace.namespace_root_dir;
+ 
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
-  if not (Uberspark.Config.load Uberspark.Config.namespace_config_current) then 
+  if not (Uberspark.Config.load Uberspark.Namespace.namespace_config_current) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
       ignore ( exit 1);
@@ -28,28 +32,3 @@ let initialize
 
 ;;
 
-
-let initialize_bridges () : bool =
-  let retval = ref false in
-
-  if Uberspark.Config.config_settings.bridge_cc_bridge = "" then
-    begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
-      ignore (exit 1);
-    end
-  ;
-
-  if (Uberspark.Bridge.load_bridge_cc Uberspark.Config.config_settings.bridge_cc_bridge) then
-    begin
-      Uberspark.Logger.log "loaded cc_bridge settings";
-      retval := true;
-    end
-  else
-    begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load cc_bridge settings!";
-      retval := false;
-    end
-  ;  
-
-  (!retval)
-;;

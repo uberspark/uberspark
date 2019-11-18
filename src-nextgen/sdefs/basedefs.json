@@ -18,13 +18,13 @@
     {
         "constdef": 
         {
+            "USCONFIG_NAMESPACE_MAX_LENGTH": ["int", "256"],
+            "USCONFIG_CNAME_MAX_LENGTH": ["int", "128"],
             "USCONFIG_SIZEOF_UOBJ_TSTACK": ["int", "4096"],
             "USCONFIG_SIZEOF_UOBJ_USTACK": ["int", "4096"],
             "USCONFIG_UOBJ_MAX_SECTIONS": ["int", "32"],
-            "USCONFIG_UOBJ_PUBLICMETHOD_MAX_LENGTH": ["int", "128"],
             "USCONFIG_UOBJ_MAX_PUBLICMETHODS": ["int", "16"],
             "USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES": ["int", "16"],
-            "USCONFIG_UOBJ_NAMESPACE_MAX_LENGTH": ["int", "256"],
             "USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES": ["int", "16"]
         }
     }

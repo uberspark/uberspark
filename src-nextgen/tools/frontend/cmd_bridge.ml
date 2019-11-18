@@ -124,12 +124,12 @@ let handler_bridges_action_create
 
         (* process cc-bridge *)
         if cmd_bridges_opts.cc_bridge then begin
-          if (Uberspark.Bridge.load_bridge_cc_from_file !l_path_ns) then begin
+          if (Uberspark.Bridge.Cc.load_from_file !l_path_ns) then begin
               
-            Uberspark.Bridge.store_bridge_cc ();
+            Uberspark.Bridge.Cc.store ();
         
             if (cmd_bridges_opts.build) then begin
-              ignore (Uberspark.Bridge.build_bridge_cc ());
+              ignore (Uberspark.Bridge.Cc.build ());
             end;
             
             retval := `Ok();
@@ -208,17 +208,17 @@ let handler_bridges_action_dump
                       let action_options_unspecified = ref false in 
 
                       if cmd_bridges_opts.ar_bridge then begin            
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_ar_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; end
                       else if cmd_bridges_opts.as_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_as_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; end
                       else if cmd_bridges_opts.cc_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_cc_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; end
                       else if cmd_bridges_opts.ld_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_ld_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; end
                       else if cmd_bridges_opts.pp_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_pp_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; end
                       else if cmd_bridges_opts.vf_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_vf_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_vf_bridge; end
                       else begin
                         action_options_unspecified := true; end
                       ;                   
@@ -270,15 +270,43 @@ let helper_bridges_action_config_do
       match bridge_type with 
         | "cc-bridge" -> 
 
-          if (Uberspark.Bridge.load_bridge_cc bridge_ns) then begin
+          if (Uberspark.Bridge.Cc.load bridge_ns) then begin
             Uberspark.Logger.log "loaded cc-bridge settings";
-            if ( Uberspark.Bridge.build_bridge_cc () ) then begin
+            if ( Uberspark.Bridge.Cc.build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build cc-bridge!");
             end;
           end else begin
             retval := `Error (false, "unable to load cc-bridge settings!");
+          end
+          ;  
+
+        | "as-bridge" -> 
+
+          if (Uberspark.Bridge.As.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded as-bridge settings";
+            if ( Uberspark.Bridge.As.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build as-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load as-bridge settings!");
+          end
+          ;  
+
+        | "ld-bridge" -> 
+
+          if (Uberspark.Bridge.Ld.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded ld-bridge settings";
+            if ( Uberspark.Bridge.Ld.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build ld-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load ld-bridge settings!");
           end
           ;  
 
@@ -326,38 +354,45 @@ let handler_bridges_action_config
           let bridge_ns = "container/" ^ !l_path_ns in 
 
           if cmd_bridges_opts.cc_bridge then begin
-              retval := helper_bridges_action_config_do Uberspark.Config.namespace_bridge_cc_bridge_name bridge_ns cmd_bridges_opts;
+              retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_cc_bridge_name bridge_ns cmd_bridges_opts;
+
+          end else if cmd_bridges_opts.as_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_as_bridge_name bridge_ns cmd_bridges_opts;
+
+          end else if cmd_bridges_opts.ld_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_ld_bridge_name bridge_ns cmd_bridges_opts;
+
           end else begin
               retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
           end;
 
 
           (*
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_cc_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_cc_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_cc_bridge_name ]; end
           
           
           
           let action_options_unspecified = ref false in 
 
           if cmd_bridges_opts.ar_bridge then begin            
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_ar_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_ar_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_ar_bridge_name ]; end
           else if cmd_bridges_opts.as_bridge then begin
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_as_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_as_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_as_bridge_name ]; end
           else if cmd_bridges_opts.cc_bridge then begin
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_cc_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_cc_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_cc_bridge_name ]; end
           else if cmd_bridges_opts.ld_bridge then begin
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_ld_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_ld_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_ld_bridge_name ]; end
           else if cmd_bridges_opts.pp_bridge then begin
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_pp_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_pp_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_pp_bridge_name ]; end
           else if cmd_bridges_opts.vf_bridge then begin
-            bridge_ns_prefix := Uberspark.Config.namespace_bridge_vf_bridge; 
-            bridge_type := [ Uberspark.Config.namespace_bridge_vf_bridge_name ]; end
+            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_vf_bridge; 
+            bridge_type := [ Uberspark.Namespace.namespace_bridge_vf_bridge_name ]; end
           else begin
             action_options_unspecified := true; end
           ;                   
@@ -442,17 +477,17 @@ let handler_bridges_action_remove
                       let action_options_unspecified = ref false in 
 
                       if cmd_bridges_opts.ar_bridge then begin            
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_ar_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; end
                       else if cmd_bridges_opts.as_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_as_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; end
                       else if cmd_bridges_opts.cc_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_cc_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; end
                       else if cmd_bridges_opts.ld_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_ld_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; end
                       else if cmd_bridges_opts.pp_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_pp_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; end
                       else if cmd_bridges_opts.vf_bridge then begin
-                        bridge_ns_prefix := Uberspark.Config.namespace_bridge_vf_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_vf_bridge; end
                       else begin
                         action_options_unspecified := true; end
                       ;                   

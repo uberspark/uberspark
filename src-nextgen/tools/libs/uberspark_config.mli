@@ -11,65 +11,6 @@ val config_settings: Uberspark_manifest.Config.config_settings_t
 val hdr_namespace : string ref
 *)
 
-(*------------------------------------------------------------------------*)
-(* environment related configuration settings *)	
-(*------------------------------------------------------------------------*)
-(*val env_path_seperator : string ref*)
-val env_home_dir : string ref
-
-
-(*------------------------------------------------------------------------*)
-(* namespace related configuration settings *)	
-(*------------------------------------------------------------------------*)
-val namespace_root : string
-val namespace_root_mf_filename : string
-
-val namespace_uobj_mf_filename : string
-val namespace_uobj_mf_hdr_type : string
-
-val namespace_uobj_binhdr_src_filename : string
-val namespace_uobj_publicmethods_info_src_filename : string
-val namespace_uobj_intrauobjcoll_callees_info_src_filename : string
-val namespace_uobj_interuobjcoll_callees_info_src_filename : string
-val namespace_uobj_linkerscript_filename : string
-
-val namespace_uobjcoll_mf_filename : string
-
-val namespace_uobjrtl_mf_filename : string
-
-
-val namespace_uobjslt : string
-val namespace_uobjslt_mf_hdr_type : string
-val namespace_uobjslt_mf_filename : string
-val namespace_uobjslt_callees_output_filename : string
-val namespace_uobjslt_exitcallees_output_filename : string
-val namespace_uobjslt_output_symbols_filename : string
-
-val namespace_config : string
-val namespace_config_mf_filename : string
-val namespace_config_current : string
-
-
-val namespace_bridge : string
-val namespace_bridge_mf_filename : string
-val namespace_bridge_container_filename : string
-
-val namespace_bridge_ar_bridge_name : string
-val namespace_bridge_as_bridge_name : string
-val namespace_bridge_cc_bridge_name : string
-val namespace_bridge_ld_bridge_name : string
-val namespace_bridge_pp_bridge_name : string
-val namespace_bridge_vf_bridge_name : string
-val namespace_bridge_bldsys_bridge_name : string
-
-
-val namespace_bridge_ar_bridge : string
-val namespace_bridge_as_bridge : string
-val namespace_bridge_cc_bridge : string
-val namespace_bridge_ld_bridge : string
-val namespace_bridge_pp_bridge : string
-val namespace_bridge_vf_bridge : string
-val namespace_bridge_bldsys_bridge : string
 
 
 (*

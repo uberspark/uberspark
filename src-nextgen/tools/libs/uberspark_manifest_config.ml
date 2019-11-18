@@ -19,19 +19,21 @@ type config_hdr_t =
 (* config-settings node type *)
 type config_settings_t = 
 {
-	(* environment related settings *)
-	mutable env_home_dir : string;
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	mutable binary_page_size : int;
 	mutable binary_uobj_section_alignment : int;
 	mutable binary_uobj_default_section_size : int;
-	mutable binary_uobj_default_load_addr : int;
-	mutable binary_uobj_default_size : int;
+
+	mutable uobj_binary_image_load_address : int;
+	mutable uobj_binary_image_uniform_size : bool;
+	mutable uobj_binary_image_size : int;
+	mutable uobj_binary_image_alignment : int;
 
 	(* bridge related configuration settings *)	
 	mutable bridge_cc_bridge : string;
-
+	mutable bridge_as_bridge : string;
+	mutable bridge_ld_bridge : string;
 };;
 
 
@@ -96,14 +98,26 @@ let parse_config_settings
 					if (Yojson.Basic.Util.member "binary_uobj_default_section_size" json_config_settings) <> `Null then
 						config_settings.binary_uobj_default_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" json_config_settings));
 			
-					if (Yojson.Basic.Util.member "binary_uobj_default_load_addr" json_config_settings) <> `Null then
-						config_settings.binary_uobj_default_load_addr <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_load_addr" json_config_settings));
+					if (Yojson.Basic.Util.member "uobj_binary_image_load_address" json_config_settings) <> `Null then
+						config_settings.uobj_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_load_address" json_config_settings));
 
-					if (Yojson.Basic.Util.member "binary_uobj_default_size" json_config_settings) <> `Null then
-						config_settings.binary_uobj_default_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_size" json_config_settings));
+					if (Yojson.Basic.Util.member "uobj_binary_image_uniform_size" json_config_settings) <> `Null then
+						config_settings.uobj_binary_image_uniform_size <- Yojson.Basic.Util.to_bool (Yojson.Basic.Util.member "uobj_binary_image_uniform_size" json_config_settings);
+
+					if (Yojson.Basic.Util.member "uobj_binary_image_size" json_config_settings) <> `Null then
+						config_settings.uobj_binary_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_size" json_config_settings));
+
+					if (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_config_settings) <> `Null then
+						config_settings.uobj_binary_image_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_config_settings));
 
 					if (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings) <> `Null then
 						config_settings.bridge_cc_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings);
+
+					if (Yojson.Basic.Util.member "bridge_as_bridge" json_config_settings) <> `Null then
+						config_settings.bridge_as_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_as_bridge" json_config_settings);
+
+					if (Yojson.Basic.Util.member "bridge_ld_bridge" json_config_settings) <> `Null then
+						config_settings.bridge_ld_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_ld_bridge" json_config_settings);
 
 					retval := true;
 				end
@@ -167,9 +181,13 @@ let write_config_settings
 	Printf.fprintf oc "\n\t\t\"binary_page_size\" : \"0x%x\"," config_settings.binary_page_size;
 	Printf.fprintf oc "\n\t\t\"binary_uobj_section_alignment\" : \"0x%x\"," config_settings.binary_uobj_section_alignment;
 	Printf.fprintf oc "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," config_settings.binary_uobj_default_section_size;
-	Printf.fprintf oc "\n\t\t\"binary_uobj_default_load_addr\" : \"0x%x\"," config_settings.binary_uobj_default_load_addr;
-	Printf.fprintf oc "\n\t\t\"binary_uobj_default_size\" : \"0x%x\"," config_settings.binary_uobj_default_size;
-	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"" config_settings.bridge_cc_bridge;
+	Printf.fprintf oc "\n\t\t\"uobj_binary_image_load_address\" : \"0x%x\"," config_settings.uobj_binary_image_load_address;
+	Printf.fprintf oc "\n\t\t\"uobj_binary_image_uniform_size\" : %B," config_settings.uobj_binary_image_uniform_size;
+	Printf.fprintf oc "\n\t\t\"uobj_binary_image_size\" : \"0x%x\"," config_settings.uobj_binary_image_size;
+	Printf.fprintf oc "\n\t\t\"uobj_binary_image_alignment\" : \"0x%x\"," config_settings.uobj_binary_image_alignment;
+	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"," config_settings.bridge_cc_bridge;
+	Printf.fprintf oc "\n\t\t\"bridge_as_bridge\" : \"%s\"," config_settings.bridge_as_bridge;
+	Printf.fprintf oc "\n\t\t\"bridge_ld_bridge\" : \"%s\"" config_settings.bridge_ld_bridge;
 
 	if continuation then
 		begin
