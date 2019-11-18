@@ -1,0 +1,28 @@
+/*
+	uobj collection 'test'
+	json manifest
+	author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+	/* header */
+	"uberspark-hdr":{
+		"coss_version" : "1.0",
+		"mftype" : "uobjcoll",
+		"uberspark_min_version" : "5.1",
+		"uberspark_max_version" : "any"
+	},
+
+	/* uobjcoll header */
+	"uobjcoll-hdr":{
+		"namespace" : "uberspark/uobjcoll/generic/test",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	}
+
+	
+}
+
+
+
