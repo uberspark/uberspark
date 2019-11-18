@@ -27,6 +27,7 @@ let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 
 let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
+let namespace_uobjcoll_build_dir = "_build";;
 
 
 let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;

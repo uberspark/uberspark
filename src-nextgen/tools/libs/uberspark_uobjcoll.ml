@@ -58,9 +58,48 @@ let build
 	(target_def : Defs.Basedefs.target_def_t)
 	: bool =
 
+	(* local variables *)
 	let retval = ref false in
+	let in_namespace_build = ref false in
 
+	let dummy = 0 in begin
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection build start...";
+	end;
+
+	(* get uobj collection absolute path *)
+	let (rval, abs_uobjcoll_path) = (Uberspark_osservices.abspath uobjcoll_path_ns) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobjcoll: %s" abs_uobjcoll_path;
+		(!retval)
+	end else
+
+	(* switch working directory to uobjcoll_path *)
+	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobjcoll_path) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll path: %s" abs_uobjcoll_path;
+		(!retval)
+	end else
+
+	let dummy = 0 in begin
+
+	(* create _build folder *)
+	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
+
+	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobjcoll_path_ns=%s" (abs_uobjcoll_path);
+	
+	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobjcoll_path);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
+	end;
+
+	let dummy = 0 in begin
+
+	(* restore working directory *)
+	ignore(Uberspark_osservices.dir_change r_prevpath);
+	Uberspark_logger.log "cleaned up build workspace";
+	retval := true;
+	end;
 
 	(!retval)
 ;;
