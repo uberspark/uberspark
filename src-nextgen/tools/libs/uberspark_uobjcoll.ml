@@ -122,6 +122,14 @@ let build
 	Uberspark_logger.log "successfully parsed uobjcoll manifest";
 	end;
 
+	(* install headers if we are doing an out-of-namespace build *)
+	if not !in_namespace_build then begin
+	    Uberspark_logger.log "prepping for out-of-namespace build...";
+		install_create_ns ();
+		(*TBD: install h_files *)
+	    Uberspark_logger.log "ready for out-of-namespace build";
+	end;
+
 
 	let dummy = 0 in begin
 
