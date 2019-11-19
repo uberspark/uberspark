@@ -136,6 +136,43 @@ let collect_uobjinfo
 	if (!retval == false) then (false)
 	else
 
+	(* process templar uobjs within the collection *)
+	let dummy = 0 in begin
+	List.iter (fun templar_uobj_ns ->
+
+			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
+			if (rval) then begin
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = ""; 
+					f_uobj_path = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns 
+					templar_uobj_ns
+					d_hdr.f_namespace) then begin
+					uobjinfo_entry.f_uobj_is_incollection <- false;
+
+				end else begin
+					uobjinfo_entry.f_uobj_is_incollection <- true;
+
+				end;
+
+
+				uobjinfo_entry.f_uobj_name <- uobj_name;
+				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
+				uobjinfo_entry.f_uobj_path <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
+				uobjinfo_entry.f_uobj_is_prime <- false;
+				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
+
+				retval := true;
+			end else begin
+				retval := false;
+			end;
+
+	) d_uobjcoll_uobjs_mf_node.f_templar_uobjs;
+	end;
+
+	if (!retval == false) then (false)
+	else
+
 	let dummy=0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collect_uobjinfo: total collection uobjs=%u" (List.length !d_uobjcoll_uobjinfo);
 	end;
