@@ -9,8 +9,9 @@ type uobjcoll_uobjinfo_t =
 {
 	mutable f_uobj_name    : string;			
 	mutable f_uobj_ns	   : string;
-	mutable f_is_intrauobj : bool;
 	mutable f_uobj_path	   : string;
+	mutable f_uobj_is_incollection : bool;
+	mutable f_uobj_is_prime 	   : bool;
 };;
 
 
@@ -21,6 +22,7 @@ let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_pla
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 
+let d_uobjcoll_uobjinfo : uobjcoll_uobjinfo_t list ref = ref [];;
 
 (*--------------------------------------------------------------------------*)
 (* parse uobjcoll manifest *)
@@ -85,6 +87,57 @@ let install_create_ns
 	Uberspark_osservices.mkdir ~parent:true !d_path_ns (`Octal 0o0777);
 ;;
 
+
+
+(*--------------------------------------------------------------------------*)
+(* collect uobjcoll uobj info *)
+(*--------------------------------------------------------------------------*)
+let collect_uobjinfo 
+	()
+	: bool =
+
+	let retval = ref false in
+
+	(* if the uobjcoll has a prime uobj, add it to uobjcoll_uobjinfo first *)
+	if not (d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns = "") then begin
+		
+			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
+			if (rval) then begin
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = ""; 
+					f_uobj_path = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns 
+					d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
+					d_hdr.f_namespace) then begin
+					uobjinfo_entry.f_uobj_is_incollection <- false;
+
+				end else begin
+					uobjinfo_entry.f_uobj_is_incollection <- true;
+
+				end;
+
+
+				uobjinfo_entry.f_uobj_name <- uobj_name;
+				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
+				uobjinfo_entry.f_uobj_path <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
+				uobjinfo_entry.f_uobj_is_prime <- true;
+				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
+
+				retval := true;
+			end else begin
+				retval := false;
+			end;
+	end;
+
+	if (!retval == false) then (false)
+	else
+
+	let dummy=0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collect_uobjinfo: total collection uobjs=%u" (List.length !d_uobjcoll_uobjinfo);
+	end;
+
+	(true)
+;;
 
 
 
