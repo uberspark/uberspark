@@ -127,6 +127,10 @@ let collect_uobjinfo
 			end else begin
 				retval := false;
 			end;
+
+	end else begin
+		(* there is no prime uobj, we still might have templars *)
+		retval := true;
 	end;
 
 	if (!retval == false) then (false)
@@ -168,7 +172,16 @@ let build
 		(!retval)
 	end else
 
+    (* parse uobjcoll manifest *)
+	let uobjcoll_mf_filename = (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_mf_filename) in
+	let rval = (parse_manifest uobjcoll_mf_filename) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobjcoll: %s" uobjcoll_mf_filename;
+		(!retval)
+	end else
+
 	let dummy = 0 in begin
+	Uberspark_logger.log "successfully parsed uobjcoll manifest";
 
 	(* create _build folder *)
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
@@ -179,19 +192,18 @@ let build
 	
 	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobjcoll_path);
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
+
 	end;
 
-    (* parse uobjcoll manifest *)
-	let uobjcoll_mf_filename = (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_mf_filename) in
-	let rval = (parse_manifest uobjcoll_mf_filename) in	
+    (* collect uobj collection uobj info *)
+	let rval = (collect_uobjinfo ()) in	
     if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobjcoll: %s" uobjcoll_mf_filename;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to collect uobj information for uobj collection!";
 		(!retval)
 	end else
 
 	let dummy = 0 in begin
-
-	Uberspark_logger.log "successfully parsed uobjcoll manifest";
+	Uberspark_logger.log "successfully collect uobj information";
 	end;
 
 	(* install headers if we are doing an out-of-namespace build *)
