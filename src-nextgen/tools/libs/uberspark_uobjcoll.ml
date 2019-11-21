@@ -196,6 +196,41 @@ let collect_uobjinfo
 
 
 
+let setup_uobj_build_workspace
+	(in_namespace_build : bool)
+	: bool =
+
+	let retval = ref false in
+
+	(* install headers if we are doing an out-of-namespace build *)
+	if not in_namespace_build then begin
+	    Uberspark_logger.log "prepping for out-of-namespace build...";
+		install_create_ns ();
+		(*TBD: install h_files *)
+	    Uberspark_logger.log "ready for out-of-namespace build";
+	end;
+
+	let dummy = 0 in begin
+
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+	    if uobjinfo_entry.f_uobj_is_incollection then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying from '%s' to '%s' without manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying from '%s' to '%s' with manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+		end;
+
+	)!d_uobjcoll_uobjinfo;
+
+	retval := true;
+	end;
+
+	(!retval)
+;;
+
+
+
+
+
 let build
 	(uobjcoll_path_ns : string)
 	(target_def : Defs.Basedefs.target_def_t)
@@ -257,14 +292,12 @@ let build
 	Uberspark_logger.log "successfully collect uobj information";
 	end;
 
-	(* install headers if we are doing an out-of-namespace build *)
-	if not !in_namespace_build then begin
-	    Uberspark_logger.log "prepping for out-of-namespace build...";
-		install_create_ns ();
-		(*TBD: install h_files *)
-	    Uberspark_logger.log "ready for out-of-namespace build";
-	end;
-
+	(* setup collection uobj build workspace *)
+	let rval = (setup_uobj_build_workspace !in_namespace_build) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to setup uobj build workspace for uobj collection!";
+		(!retval)
+	end else
 
 	let dummy = 0 in begin
 
