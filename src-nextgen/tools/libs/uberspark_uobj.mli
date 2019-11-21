@@ -85,6 +85,7 @@
 
 
     method consolidate_sections_with_memory_map : unit -> unit
+  	method write_manifest : string -> bool
     method parse_manifest : string -> bool -> bool
     method parse_manifest_slt : bool
     method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> int -> unit

@@ -447,7 +447,7 @@ let parse_uobj_sections
 (*--------------------------------------------------------------------------*)
 (* write uobj manifest *)
 (*--------------------------------------------------------------------------*)
-let write_uobj_mf 
+let write_uobj_mf_json_nodes
 	?(prologue_str = "uberSpark uobj manifest")
 	(uobj_mf_json_nodes : uobj_mf_json_nodes_t)
 	(oc : out_channel)
@@ -464,5 +464,5 @@ let write_uobj_mf
 	Printf.fprintf oc "\n\t\"uobj-binary\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_binary);
 	write_epilogue oc;
 
-	close_out oc;	
+	()
 ;;

@@ -132,6 +132,21 @@ class uobject
 
 
 	(*--------------------------------------------------------------------------*)
+	(* write uobj manifest *)
+	(* uobj_mf_filename = uobj manifest filename *)
+	(*--------------------------------------------------------------------------*)
+	method write_manifest 
+		(uobj_mf_filename : string)
+		: bool =
+
+		let oc = open_out uobj_mf_filename in
+		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
+		close_out oc;	
+
+		(true)
+	;
+
+	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
 	(* usmf_filename = canonical uobj manifest filename *)
 	(* keep_temp_files = true if temporary files need to be preserved *)
