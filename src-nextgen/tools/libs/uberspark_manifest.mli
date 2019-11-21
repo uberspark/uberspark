@@ -19,6 +19,9 @@ type hdr_t =
   mutable f_uberspark_max_version : string;
 }
 
+val json_list_to_string_list : Yojson.Basic.t list -> string list
+val json_node_pretty_print_to_string : Yojson.Basic.t -> string
+val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojson.Basic.t
 
 (****************************************************************************)
 (* manifest parse interfaces *)

@@ -141,6 +141,13 @@ class uobject
 		if (rval == false) then (false)
 		else
 
+		(* debug *)
+		let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
+		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
+		end;
+
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
 		if (rval == false) then (false)
