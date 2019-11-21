@@ -111,7 +111,7 @@ let collect_uobjinfo
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- true;
-				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
 					d_hdr.f_namespace) then begin
@@ -153,7 +153,7 @@ let collect_uobjinfo
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- false;
-				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr.f_namespace) then begin
 					uobjinfo_entry.f_uobj_is_incollection <- true;
@@ -237,9 +237,11 @@ let prepare_namespace_for_build
 	let dummy = 0 in begin
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 	    if uobjinfo_entry.f_uobj_is_incollection then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying from '%s' to '%s' without manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+			if not !in_namespace_build then begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj in collection (out-of-namespace): copying from '%s' to '%s' without manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+			end;
 		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying from '%s' to '%s' with manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj out of collection; copying from '%s' to '%s' with manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
 		end;
 
 	)!d_uobjcoll_uobjinfo;
