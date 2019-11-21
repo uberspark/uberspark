@@ -22,9 +22,19 @@ class uobject
 	val d_path_ns = ref "";
 	method get_d_path_ns = !d_path_ns;
 
+	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
+		f_uberspark_hdr = `Null;
+		f_uobj_hdr = `Null;
+		f_uobj_sources = `Null;
+		f_uobj_publicmethods = `Null;
+		f_uobj_intrauobjcoll_callees = `Null;
+		f_uobj_interuobjcoll_callees = `Null;
+		f_uobj_legacy_callees = `Null;
+		f_uobj_binary = `Null;
+	};
+
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
-
 
 	val d_sources_h_file_list: string list ref = ref [];
 	method get_d_sources_h_file_list = !d_sources_h_file_list;
@@ -138,6 +148,12 @@ class uobject
 		(* read manifest JSON *)
 		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
 		
+		if (rval == false) then (false)
+		else
+
+		(* get uobj manifest json nodes *)
+		let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
+
 		if (rval == false) then (false)
 		else
 

@@ -196,6 +196,8 @@ module Uobj : sig
   }
 
 
+  val get_uobj_mf_json_nodes : Yojson.Basic.t -> uobj_mf_json_nodes_t ->  bool
+  
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool

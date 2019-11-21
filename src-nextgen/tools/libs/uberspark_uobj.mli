@@ -14,6 +14,9 @@
     val d_mf_filename : string ref
     val d_path_to_mf_filename : string ref
     val d_path_ns : string ref
+
+  	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
+
     val d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
 
