@@ -3,6 +3,19 @@
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
 (*----------------------------------------------------------------------------*)
 
+type uobj_mf_json_nodes_t =
+{
+	mutable f_uberspark_hdr					: Yojson.Basic.t;			
+	mutable f_uobj_hdr   					: Yojson.Basic.t;
+	mutable f_uobj_sources       			: Yojson.Basic.t;
+	mutable f_uobj_publicmethods		   	: Yojson.Basic.t;
+	mutable f_uobj_intrauobjcoll_callees    : Yojson.Basic.t;
+	mutable f_uobj_interuobjcoll_callees	: Yojson.Basic.t;
+	mutable f_uobj_legacy_callees		   	: Yojson.Basic.t;
+	mutable f_uobj_binary		   			: Yojson.Basic.t;
+};;
+
+
 type uobj_hdr_t =
 {
 	mutable f_namespace    : string;			
@@ -18,6 +31,40 @@ type uobj_publicmethods_t =
 	f_paramdecl: string;
 	f_paramdwords : int;
 };;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node into individual uobj manifest json nodes *)
+(* return: *)
+(* on success: true; uobj_mf_json_nodes fields are modified with parsed values *)
+(* on failure: false; uobj_mf_json_nodes fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let get_uobj_mf_json_nodes 
+	(mf_json : Yojson.Basic.t)
+	(uobj_mf_json_nodes : uobj_mf_json_nodes_t) 
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			uobj_mf_json_nodes.f_uberspark_hdr <- mf_json |> member "uberspark-hdr";
+			uobj_mf_json_nodes.f_uobj_hdr <- mf_json |> member "uobj-hdr";
+			uobj_mf_json_nodes.f_uobj_sources <- mf_json |> member "uobj-sources";
+			uobj_mf_json_nodes.f_uobj_publicmethods <- mf_json |> member "uobj-publicmethods";
+			uobj_mf_json_nodes.f_uobj_intrauobjcoll_callees <- mf_json |> member "uobj-intrauobjcoll-callees";
+			uobj_mf_json_nodes.f_uobj_interuobjcoll_callees <- mf_json |> member "uobj-interuobjcoll-callees";
+			uobj_mf_json_nodes.f_uobj_legacy_callees <- mf_json |> member "uobj-legacy-callees";
+			uobj_mf_json_nodes.f_uobj_binary <- mf_json |> member "uobj-binary";
+
+			retval := true;
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
 
 
 (*--------------------------------------------------------------------------*)

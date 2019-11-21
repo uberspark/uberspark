@@ -165,6 +165,20 @@ end
 
 
 module Uobj : sig
+ type uobj_mf_json_nodes_t =
+  {
+    mutable f_uberspark_hdr					: Yojson.Basic.t;			
+    mutable f_uobj_hdr   					: Yojson.Basic.t;
+    mutable f_uobj_sources       			: Yojson.Basic.t;
+    mutable f_uobj_publicmethods		   	: Yojson.Basic.t;
+    mutable f_uobj_intrauobjcoll_callees    : Yojson.Basic.t;
+    mutable f_uobj_interuobjcoll_callees	: Yojson.Basic.t;
+    mutable f_uobj_legacy_callees		   	: Yojson.Basic.t;
+    mutable f_uobj_binary		   			: Yojson.Basic.t;
+  }
+
+
+ 
   type uobj_hdr_t =
     {
       mutable f_namespace    : string;			
