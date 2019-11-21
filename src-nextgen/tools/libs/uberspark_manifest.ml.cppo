@@ -39,6 +39,12 @@ let json_list_to_string_list
 ;;
 
 
+let json_node_to_string json_node 
+	: string =
+    (Yojson.Basic.pretty_to_string json_node)
+;;
+
+
 (****************************************************************************)
 (* manifest parse interfaces *)
 (****************************************************************************)
