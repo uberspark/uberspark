@@ -8,8 +8,7 @@ open Str
 type uobjcoll_uobjinfo_t =
 {
 	mutable f_uobj_name    			: string;			
-	mutable f_uobj_srcns			: string;
-	mutable f_uobj_buildns			: string;
+	mutable f_uobj_ns				: string;
 	mutable f_uobj_srcpath	   		: string;
 	mutable f_uobj_buildpath 		: string;
 	mutable f_uobj_is_incollection 	: bool;
@@ -106,12 +105,13 @@ let collect_uobjinfo
 		
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_srcns = ""; f_uobj_buildns = ""; 
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobj_srcns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
+				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- true;
+				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobj_name);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
 					d_hdr.f_namespace) then begin
@@ -122,12 +122,8 @@ let collect_uobjinfo
 
 				if uobjinfo_entry.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
 				end else begin
 					uobjinfo_entry.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
-					uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildns <- (d_hdr.f_namespace ^ "/" ^ uobj_name);
 				end;
 
 				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
@@ -151,12 +147,13 @@ let collect_uobjinfo
 
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_srcns = ""; f_uobj_buildns = ""; 
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobj_srcns <- templar_uobj_ns;
+				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- false;
+				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobj_name);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr.f_namespace) then begin
 					uobjinfo_entry.f_uobj_is_incollection <- true;
@@ -166,12 +163,8 @@ let collect_uobjinfo
 
 				if uobjinfo_entry.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildns <- templar_uobj_ns;
 				end else begin
 					uobjinfo_entry.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
-					uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-					uobjinfo_entry.f_uobj_buildns <- (d_hdr.f_namespace ^ "/" ^ uobj_name);
 				end;
 
 				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
