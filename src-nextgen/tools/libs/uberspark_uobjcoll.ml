@@ -196,7 +196,10 @@ let collect_uobjinfo
 
 
 
-let setup_uobj_build_workspace
+(*--------------------------------------------------------------------------*)
+(* prepare uobjcoll namespace for build *)
+(*--------------------------------------------------------------------------*)
+let prepare_namespace_for_build
 	(in_namespace_build : bool)
 	: bool =
 
@@ -293,7 +296,7 @@ let build
 	end;
 
 	(* setup collection uobj build workspace *)
-	let rval = (setup_uobj_build_workspace !in_namespace_build) in	
+	let rval = (prepare_namespace_for_build !in_namespace_build) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to setup uobj build workspace for uobj collection!";
 		(!retval)
