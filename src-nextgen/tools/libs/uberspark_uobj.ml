@@ -177,6 +177,8 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
 		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
+		d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
+		self#write_manifest "auto_test.json";		
 		end;
 
 		(* parse uobj-hdr node *)

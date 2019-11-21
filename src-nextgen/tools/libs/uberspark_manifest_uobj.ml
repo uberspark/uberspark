@@ -454,13 +454,13 @@ let write_uobj_mf_json_nodes
 	: unit = 
 	
 	write_prologue ~prologue_str:prologue_str oc;
-	Printf.fprintf oc "\n\t\"uberspark-hdr\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uberspark_hdr);
-	Printf.fprintf oc "\n\t\"uobj-hdr\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_hdr);
-	Printf.fprintf oc "\n\t\"uobj-sources\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_sources);
-	Printf.fprintf oc "\n\t\"uobj-publicmethods\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_publicmethods);
-	Printf.fprintf oc "\n\t\"uobj-intrauobjcoll-callees\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_intrauobjcoll_callees);
-	Printf.fprintf oc "\n\t\"uobj-interuobjcoll-callees\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_interuobjcoll_callees);
-	Printf.fprintf oc "\n\t\"uobj-legacy-callees\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_legacy_callees);
+	Printf.fprintf oc "\n\t\"uberspark-hdr\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uberspark_hdr);
+	Printf.fprintf oc "\n\t\"uobj-hdr\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_hdr);
+	Printf.fprintf oc "\n\t\"uobj-sources\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_sources);
+	Printf.fprintf oc "\n\t\"uobj-publicmethods\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_publicmethods);
+	Printf.fprintf oc "\n\t\"uobj-intrauobjcoll-callees\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_intrauobjcoll_callees);
+	Printf.fprintf oc "\n\t\"uobj-interuobjcoll-callees\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_interuobjcoll_callees);
+	Printf.fprintf oc "\n\t\"uobj-legacy-callees\" : %s,\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_legacy_callees);
 	Printf.fprintf oc "\n\t\"uobj-binary\" : %s\n" (json_node_pretty_print_to_string uobj_mf_json_nodes.f_uobj_binary);
 	write_epilogue oc;
 
