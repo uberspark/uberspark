@@ -101,3 +101,4 @@ end
 
 
 val build : string -> Defs.Basedefs.target_def_t -> bool
+val create_parse_and_build : string -> Defs.Basedefs.target_def_t -> bool

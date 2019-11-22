@@ -1023,6 +1023,11 @@ end;;
 
 
 
+
+
+
+
+
 let build
 	(uobj_path : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
@@ -1153,4 +1158,13 @@ let build
 	end;
 
 	(!retval)
+;;
+
+let create_parse_and_build
+	(uobj_path : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	: bool =
+
+	(build uobj_path uobj_target_def)
+
 ;;
