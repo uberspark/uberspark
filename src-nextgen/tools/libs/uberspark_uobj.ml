@@ -1061,10 +1061,12 @@ class uobject
 	(* assumes initialize method has been called *)
 	(* prepares uobj sources within destination_path *)
 	method prepare_sources
-		(destination_path : string)
+		?(for_build = false)
+		?(for_verify = false)
 		: bool =
 
 		let retval = ref false in
+
 
 		(!retval)
 	;
