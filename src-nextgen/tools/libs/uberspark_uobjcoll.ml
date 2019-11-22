@@ -11,6 +11,7 @@ type uobjcoll_uobjinfo_t =
 	mutable f_uobj_ns				: string;
 	mutable f_uobj_srcpath	   		: string;
 	mutable f_uobj_buildpath 		: string;
+	mutable f_uobj_nspath 			: string; 
 	mutable f_uobj_is_incollection 	: bool;
 	mutable f_uobj_is_prime 	   	: bool;
 };;
@@ -106,12 +107,13 @@ let collect_uobjinfo
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
-					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- true;
-				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
 					d_hdr.f_namespace) then begin
@@ -148,12 +150,13 @@ let collect_uobjinfo
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
-					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+					f_uobj_srcpath = ""; f_uobj_buildpath = "";  f_uobj_nspath = "" ; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- false;
-				uobjinfo_entry.f_uobj_buildpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_hdr.f_namespace ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr.f_namespace) then begin
 					uobjinfo_entry.f_uobj_is_incollection <- true;
@@ -224,19 +227,6 @@ let prepare_namespace_for_build
 			end;
 		)!d_uobjcoll_uobjinfo;
 	end;
-
-(*	let dummy = 0 in begin
-	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-	    if uobjinfo_entry.f_uobj_is_incollection then begin
-			if not !in_namespace_build then begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj in collection (out-of-namespace): copying from '%s' to '%s' without manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
-			end;
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj out of collection; copying from '%s' to '%s' with manifest rewrite" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
-		end;
-
-	)!d_uobjcoll_uobjinfo;
-*)
 
 	retval := true;
 	(!retval)
@@ -311,6 +301,19 @@ let build
 	let dummy = 0 in begin
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
 	end;
+
+
+	(* prep uobj sources within _build folder *)
+	let dummy = 0 in begin
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+	    if uobjinfo_entry.f_uobj_is_incollection then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj in collection: copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj out of collection; copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
+		end;
+	)!d_uobjcoll_uobjinfo;
+	end;
+
 
 
 	(* restore working directory *)
