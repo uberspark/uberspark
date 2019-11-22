@@ -1,0 +1,81 @@
+/*
+add uobj json manifest
+author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+	/* header */
+	"uberspark-hdr":{
+		"coss_version" : "1.0",
+		"mftype" : "uobj",
+		"uberspark_min_version" : "5.1",
+		"uberspark_max_version" : "any"
+	},
+
+	/* uobj header */
+	"uobj-hdr":{
+		"namespace" : "uberspark/uobjcoll/generic/test/main",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+
+	/* sources */
+	"uobj-sources" : {
+		"h-files": [ ],
+		"c-files": [ "main.c" ],
+		"casm-files": [ ],
+		"asm-files": [ ]
+	},
+	
+	/* public methods */
+	"uobj-publicmethods" : {
+		"main" : [
+			"uint32_t",
+			"(uint32_t param1, uint32_t param2)", 
+			"2" 
+		]
+	},
+
+	/* public methods of other uobjs that this uobj invokes 
+		within the same collection
+	*/
+	"uobj-intrauobjcoll-callees" : {
+		"uberspark/uobjs/generic/test/sample": ["a_one", "a_two", "a_three"]
+	},
+	
+
+	/* public methods of other uobjs that this uobj invokes 
+		across other collection(s)
+	*/
+	"uobj-interuobjcoll-callees": {
+		"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]
+	} 
+
+
+	,
+	
+	/* legacy CoSS functions/code that this uobj invokes */
+	"uobj-legacy-callees": [
+		"untrusted_func_1",	
+		"untrusted_func_2"
+	] 
+
+
+	,
+
+
+
+	"uobj-binary" : {
+		"uobj-sections": {
+			"uobj_testsect" 		: [ "0x0", "0x111", "0x1000", "0x100000", "0x100000", ".testsect", ".testsect1" ]
+
+		}
+	}
+
+	
+}
+
+
+

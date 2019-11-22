@@ -209,11 +209,22 @@ let prepare_namespace_for_build
 	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobjcoll_path);
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
 
-	(* if we are doing an out-of-namespace build, then create canonical namespace *)
+	(* if we are doing an out-of-namespace build, then create canonical namespace and copy uobjcoll uobjs *)
 	if not !in_namespace_build then begin
 	    Uberspark_logger.log "prepping for out-of-namespace build...";
+		(* create uobjcoll canonical namespace *)
 		install_create_ns ();
-		(*TBD: install h_files *)
+
+		(* copy all intra uobjs include headers to uobjcoll canonical namespace *)
+		(* TBS: only copy headers listed in the uobj manifest *)
+		List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+			if uobjinfo_entry.f_uobj_is_incollection then begin
+				Uberspark_osservices.mkdir ~parent:true (uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include") (`Octal 0o0777);
+				Uberspark_osservices.cp ~recurse:true ~force:true (abs_uobjcoll_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*") 
+					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*")	
+			end;
+		)!d_uobjcoll_uobjinfo;
+
 	    Uberspark_logger.log "ready for out-of-namespace build";
 	end;
 	end;

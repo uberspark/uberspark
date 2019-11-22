@@ -41,7 +41,8 @@
 	"uobjcoll-uobjs" : {
 		"prime" : "",
 		"templars" : [
-			"uberspark/uobjs/generic/test/add"
+			"uberspark/uobjs/generic/test/add",
+			"uberspark/uobjcoll/generic/test/main"
 		]
 	}
 	
