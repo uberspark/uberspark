@@ -156,10 +156,18 @@ class uobject
 		(keep_temp_files : bool) 
 		: bool =
 		
-		(* store filename and uobj path to filename *)
+		(* store uobj manifest filename *)
 		d_mf_filename := Filename.basename uobj_mf_filename;
-		d_path_to_mf_filename := Filename.dirname uobj_mf_filename;
-		
+
+		(* store absolute uobj path *)		
+		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
+		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
+		else
+	
+		let dummy = 0 in begin
+			d_path_to_mf_filename := abs_uobj_path;
+		end;
+
 		(* read manifest JSON *)
 		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
 		
