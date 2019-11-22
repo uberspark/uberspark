@@ -14,9 +14,10 @@
     val d_mf_filename : string ref
     val d_path_to_mf_filename : string ref
     val d_path_ns : string ref
-
  
-
+    val d_builddir : string ref
+  	method set_d_builddir : string -> unit 
+    method get_d_builddir : string
 
   	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
 
@@ -36,7 +37,6 @@
     val d_sources_asm_file_list : string list ref
 
     val d_target_def : Defs.Basedefs.target_def_t
-  	val d_context_path_builddir : string ref
 
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
@@ -55,7 +55,7 @@
     method get_d_mf_filename : string
     method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
-
+ 
     method get_d_target_def : Defs.Basedefs.target_def_t
 
  
@@ -86,9 +86,8 @@
     method set_d_slt_trampolinecode : string -> unit
     method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
-  	method get_d_context_path_builddir : string
-	  method set_d_context_path_builddir : string -> unit
-
+  
+ 
 
     method consolidate_sections_with_memory_map : unit -> unit
   	method write_manifest : string -> bool
@@ -105,7 +104,7 @@
     method remove_ns : unit -> unit
 
   	method prepare_namespace_for_build : unit -> bool
-  	method prepare_sources : ?for_build:bool -> ?for_verify:bool -> bool
+  	method prepare_sources : unit -> bool
 
 end
 
