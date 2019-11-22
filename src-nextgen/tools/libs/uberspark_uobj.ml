@@ -1057,6 +1057,19 @@ class uobject
 	;
 
 
+
+	(* assumes initialize method has been called *)
+	method prepare_sources
+		()
+		: bool =
+
+		let retval = ref false in
+
+		(!retval)
+	;
+
+
+
 end;;
 
 
