@@ -15,6 +15,9 @@
     val d_path_to_mf_filename : string ref
     val d_path_ns : string ref
 
+ 
+
+
   	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
 
     val d_publicmethods_hashtbl :
@@ -52,6 +55,10 @@
     method get_d_mf_filename : string
     method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
+
+    method get_d_target_def : Defs.Basedefs.target_def_t
+
+ 
     method get_d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
 
@@ -70,7 +77,6 @@
     method get_d_sources_h_file_list : string list
     method get_d_sources_asm_file_list : string list
     
-    method get_d_target_def : Defs.Basedefs.target_def_t
  
     method set_d_size : int -> unit
     method set_d_load_addr : int -> unit
@@ -97,6 +103,9 @@
     method install_create_ns : unit -> unit
     method install_h_files_ns : ?context_path_builddir:string -> unit
     method remove_ns : unit -> unit
+
+  	method prepare_namespace_for_build : unit -> bool
+
 end
 
 

@@ -1018,9 +1018,38 @@ class uobject
 		Uberspark_osservices.rmdir_recurse [ uobj_path_ns ];
 	;
 
+
+	(* assumes initialize method has been called *)
+	method prepare_namespace_for_build
+		()
+		: bool =
+
+		let retval = ref false in
+		let in_namespace_build = ref false in
+
+		(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
+		let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (self#get_d_path_to_mf_filename);
+		
+		in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace self#get_d_path_to_mf_filename);
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
+
+		(* install headers if we are doing an out-of-namespace build *)
+		if not !in_namespace_build then begin
+			Uberspark_logger.log "prepping for out-of-namespace build...";
+			self#install_create_ns ();
+			self#install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir;
+			Uberspark_logger.log "ready for out-of-namespace build";
+		end;
+
+		end;
+
+		(!retval)
+	;
+
+
 end;;
-
-
 
 
 
@@ -1054,12 +1083,6 @@ let build
 	(* create _build folder *)
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobj_build_dir (`Octal 0o0777);
 
-	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
-	
-	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobj_path);
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
 	end;
 
 	if not (Uberspark_bridge.initialize_from_config ()) then begin
@@ -1091,14 +1114,6 @@ let build
 	(* TBD: we need to get the load address as argument to the build interface *)
 	uobj#initialize ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir uobj_target_def 
 		Uberspark_config.config_settings.uobj_binary_image_load_address;
-
-	(* install headers if we are doing an out-of-namespace build *)
-	if not !in_namespace_build then begin
-	    Uberspark_logger.log "prepping for out-of-namespace build...";
-		uobj#install_create_ns ();
-		uobj#install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir;
-	    Uberspark_logger.log "ready for out-of-namespace build";
-	end;
 
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
 		Uberspark_osservices.cp "*.c" (Uberspark_namespace.namespace_uobj_build_dir ^ "/.");
