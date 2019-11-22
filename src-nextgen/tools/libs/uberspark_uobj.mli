@@ -105,7 +105,7 @@
     method remove_ns : unit -> unit
 
   	method prepare_namespace_for_build : unit -> bool
-  	method prepare_sources : unit -> bool
+  	method prepare_sources : string -> bool
 
 end
 
