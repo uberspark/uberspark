@@ -202,14 +202,13 @@ let prepare_namespace_for_build
 	let uobjcoll_canonical_namespace = d_hdr.f_namespace in
 	let uobjcoll_canonical_namespace_path = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ uobjcoll_canonical_namespace) in
 
-	let dummy=0 in begin
 	(* determine if we are doing an in-namespace build or an out-of-namespace build *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobjcoll_path_ns=%s" (abs_uobjcoll_path);
 	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobjcoll_path);
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
 
-	(* if we are doing an out-of-namespace build, then create canonical namespace and copy uobjcoll uobjs *)
+	(* if we are doing an out-of-namespace build, then create canonical namespace and copy uobjcoll uobjs headers*)
 	if not !in_namespace_build then begin
 	    Uberspark_logger.log "prepping for out-of-namespace build...";
 		(* create uobjcoll canonical namespace *)
@@ -224,28 +223,9 @@ let prepare_namespace_for_build
 					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*")	
 			end;
 		)!d_uobjcoll_uobjinfo;
-
-	    Uberspark_logger.log "ready for out-of-namespace build";
-	end;
 	end;
 
-	(* switch working directory to canonical uobjcoll build namespace *)
-	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change uobjcoll_canonical_namespace_path) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to canonical uobjcoll build namespace: %s" abs_uobjcoll_path;
-		(!retval)
-	end else
-
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "successfully switched to uobjcoll canonical build namespace";
-	(* create _build folder *)
-	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
-	end;
-
-
-
-	let dummy = 0 in begin
+(*	let dummy = 0 in begin
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 	    if uobjinfo_entry.f_uobj_is_incollection then begin
 			if not !in_namespace_build then begin
@@ -256,16 +236,9 @@ let prepare_namespace_for_build
 		end;
 
 	)!d_uobjcoll_uobjinfo;
+*)
 
 	retval := true;
-	end;
-
-	let dummy = 0 in begin
-	(* restore working directory *)
-	ignore(Uberspark_osservices.dir_change r_prevpath);
-	retval := true;
-	end;
-
 	(!retval)
 ;;
 
@@ -323,11 +296,27 @@ let build
 	end else
 
 	let dummy = 0 in begin
+	Uberspark_logger.log "uobjcoll canonical build namespace ready";
+	end;
 
-(*	(* restore working directory *)
+	(* switch working directory to uobjcoll source path *)
+	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobjcoll_path) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll source directory: %s" abs_uobjcoll_path;
+		(!retval)
+	end else
+
+
+	(* create _build folder *)
+	let dummy = 0 in begin
+	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
+	end;
+
+
+	(* restore working directory *)
+	let dummy = 0 in begin
 	ignore(Uberspark_osservices.dir_change r_prevpath);
 	Uberspark_logger.log "cleaned up build workspace";
-*)
 	retval := true;
 	end;
 
