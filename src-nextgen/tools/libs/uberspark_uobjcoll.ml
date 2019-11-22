@@ -223,7 +223,7 @@ let prepare_namespace_for_build
 			if uobjinfo_entry.f_uobj_is_incollection then begin
 				Uberspark_osservices.mkdir ~parent:true (uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include") (`Octal 0o0777);
 				Uberspark_osservices.cp ~recurse:true ~force:true (abs_uobjcoll_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*") 
-					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*")	
+					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/.")	
 			end;
 		)!d_uobjcoll_uobjinfo;
 	end;
@@ -306,11 +306,15 @@ let build
 	(* prep uobj sources within _build folder *)
 	let dummy = 0 in begin
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-	    if uobjinfo_entry.f_uobj_is_incollection then begin
+	    (*if uobjinfo_entry.f_uobj_is_incollection then begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj in collection: copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
 		end else begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj out of collection; copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
-		end;
+		end;*)
+		Uberspark_osservices.mkdir ~parent:true uobjinfo_entry.f_uobj_buildpath (`Octal 0o0777);
+		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobj_srcpath ^ "/*") 
+			(uobjinfo_entry.f_uobj_buildpath ^ "/.")	
+
 	)!d_uobjcoll_uobjinfo;
 	end;
 
