@@ -91,10 +91,11 @@
 
     method consolidate_sections_with_memory_map : unit -> unit
   	method write_manifest : string -> bool
-    method parse_manifest : string -> bool -> bool
+    method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
-    method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> int -> unit
- 
+    method initialize : ?context_path_builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool
+ 	
+
     method compile_c_files : unit -> bool
     method compile_asm_files : unit -> bool
     method link_object_files : unit -> bool

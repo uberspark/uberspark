@@ -153,25 +153,11 @@ class uobject
 	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
 	(* usmf_filename = canonical uobj manifest filename *)
-	(* keep_temp_files = true if temporary files need to be preserved *)
 	(*--------------------------------------------------------------------------*)
 	method parse_manifest 
-		(uobj_mf_filename : string)
-		(keep_temp_files : bool) 
+		()
 		: bool =
 		
-		(* store uobj manifest filename *)
-		d_mf_filename := Filename.basename uobj_mf_filename;
-
-		(* store absolute uobj path *)		
-		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
-		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
-		else
-	
-		let dummy = 0 in begin
-			d_path_to_mf_filename := abs_uobj_path;
-		end;
-
 		(* read manifest JSON *)
 		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
 		
@@ -500,9 +486,10 @@ class uobject
 	(*--------------------------------------------------------------------------*)
 	method initialize	
 		?(context_path_builddir = ".")
+		(uobj_mf_filename : string)
 		(target_def: Defs.Basedefs.target_def_t)
 		(uobj_load_address : int)
-		= 
+		: bool = 
 	
 		(* set target definition *)
 		self#set_d_target_def target_def;	
@@ -512,6 +499,19 @@ class uobject
 
 		(* set load address *)
 		self#set_d_load_addr uobj_load_address;
+
+	(* store uobj manifest filename *)
+		d_mf_filename := Filename.basename uobj_mf_filename;
+
+		(* store absolute uobj path *)		
+		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
+		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
+		else
+	
+		let dummy = 0 in begin
+			d_path_to_mf_filename := abs_uobj_path;
+		end;
+
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
@@ -910,7 +910,7 @@ class uobject
 		] @ !d_sources_asm_file_list;
 
 
-		()	
+		(true)	
 	;
 
 
@@ -1126,7 +1126,7 @@ let build
 
     (* create uobj instance and parse manifest *)
 	let uobj = new uobject in
-	let rval = (uobj#parse_manifest uobj_mf_filename true) in	
+	let rval = (uobj#parse_manifest ()) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
 		(!retval)
