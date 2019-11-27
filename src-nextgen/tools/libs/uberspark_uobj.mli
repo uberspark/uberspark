@@ -111,9 +111,9 @@
     method remove_ns : unit -> unit
 
   	method prepare_namespace_for_build : unit -> bool
- 
+  	method build_image : unit -> bool
+
 end
 
 
-val build : string -> Defs.Basedefs.target_def_t -> bool
-val create_parse_and_build : string -> Defs.Basedefs.target_def_t -> bool
+val create_initialize_and_build : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option

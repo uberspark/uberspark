@@ -763,17 +763,17 @@ class uobject
 		: unit =
 
 		(* copy all the uobj c files to build area *)
-		if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
+		if (List.length self#get_d_sources_c_file_list) > 0 then begin
 			Uberspark_osservices.cp "*.c" (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj h files to build area *)
-		if (List.length uobj#get_d_sources_h_file_list) > 0 then begin
+		if (List.length self#get_d_sources_h_file_list) > 0 then begin
 			Uberspark_osservices.cp "*.h" (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj cS files to build area *)
-		if (List.length uobj#get_d_sources_casm_file_list) > 0 then begin
+		if (List.length self#get_d_sources_casm_file_list) > 0 then begin
 			Uberspark_osservices.cp "*.cS" (self#get_d_builddir ^ "/.");
 		end;
 
@@ -962,7 +962,7 @@ class uobject
 		Uberspark_logger.log "uobj section memory map initialized";
 
 		(* create _build folder *)
-		Uberspark_osservices.mkdir ~parent:true (self#set_d_path_to_mf_filename ^ "/" ^ Uberspark_namespace.namespace_uobj_build_dir) (`Octal 0o0777);
+		Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir) (`Octal 0o0777);
 		end;
 
 		(true)	
@@ -1115,6 +1115,8 @@ class uobject
 		(!retval)
 	;
 
+
+
 	(* build the uobj binary image *)
 	method build_image
 		()
@@ -1185,7 +1187,7 @@ end;;
 
 
 
-
+(*
 let build
 	(uobj_path : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
@@ -1303,12 +1305,52 @@ let build
 
 	(!retval)
 ;;
+*)
 
-let create_parse_and_build
-	(uobj_path : string)
+	
+let create_initialize_and_build
+	(uobj_mf_filename : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
-	: bool =
+	(uobj_load_address : int)
+	: bool * uobject option =
 
-	(build uobj_path uobj_target_def)
+	(* create uobj instance and initialize *)
+	let uobj = new uobject in
+	let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
+		uobj_mf_filename uobj_target_def uobj_load_address) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj!";
+		(false, None)
+	end else
 
+	(* prepare uobj sources *)
+	let dummy = 0 in begin
+	Uberspark_logger.log "initialized uobj";
+	uobj#prepare_sources ();
+	Uberspark_logger.log "prepped uobj sources";
+	end;
+
+	(* prepare uobj namespace *)
+	let rval = (uobj#prepare_namespace_for_build ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to prepare uobj namespace!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "prepped uobj namespace";
+	end;
+
+	(* build uobj binary image *)
+	let rval = (uobj#build_image ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uobj binary image!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "generated uobj binary image";
+	end;
+
+	(true, Some uobj)
 ;;
