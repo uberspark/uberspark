@@ -762,6 +762,21 @@ class uobject
 		()
 		: unit =
 
+		(* copy all the uobj c files to build area *)
+		if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
+			Uberspark_osservices.cp "*.c" (self#get_d_builddir ^ "/.");
+		end;
+
+		(* copy all the uobj h files to build area *)
+		if (List.length uobj#get_d_sources_h_file_list) > 0 then begin
+			Uberspark_osservices.cp "*.h" (self#get_d_builddir ^ "/.");
+		end;
+
+		(* copy all the uobj cS files to build area *)
+		if (List.length uobj#get_d_sources_casm_file_list) > 0 then begin
+			Uberspark_osservices.cp "*.cS" (self#get_d_builddir ^ "/.");
+		end;
+
 		(* generate uobj top-level include header file source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
 		Uberspark_codegen.Uobj.generate_top_level_include_header 
@@ -897,9 +912,6 @@ class uobject
 		(* set target definition *)
 		self#set_d_target_def target_def;	
 
-		(* set build directory *)
-		self#set_d_builddir builddir;
-
 		(* set load address *)
 		self#set_d_load_addr uobj_load_address;
 
@@ -910,6 +922,9 @@ class uobject
 	
 		let dummy = 0 in begin
 		self#set_d_path_to_mf_filename abs_uobj_path;
+
+		(* set build directory *)
+		self#set_d_builddir (abs_uobj_path ^ "/" ^ builddir);
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
@@ -945,6 +960,10 @@ class uobject
 		Uberspark_logger.log "Consolidating uobj section memory map...";
 		self#consolidate_sections_with_memory_map ();
 		Uberspark_logger.log "uobj section memory map initialized";
+
+		(* create _build folder *)
+		Uberspark_osservices.mkdir ~parent:true (self#set_d_path_to_mf_filename ^ "/" ^ Uberspark_namespace.namespace_uobj_build_dir) (`Octal 0o0777);
+		end;
 
 		(true)	
 	;
@@ -1096,13 +1115,72 @@ class uobject
 		(!retval)
 	;
 
+	(* build the uobj binary image *)
+	method build_image
+		()
+		: bool =
+
+		let retval = ref false in
+
+		(* switch working directory to uobj_path build folder *)
+		let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change (self#get_d_builddir)) in
+		if(rval == false) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" self#get_d_builddir;
+			(!retval)
+		end else
+
+		(* initialize bridges *)
+		if not (Uberspark_bridge.initialize_from_config ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
+			(!retval)
+		end else
+
+		let dummy =0 in begin
+	    Uberspark_logger.log "initialized bridges";
+	   	Uberspark_logger.log "proceeding to compile c files...";
+		end;
+
+		if not (self#compile_c_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled c files successfully!";
+		Uberspark_logger.log "proceeding to compile asm files...";
+		end;
+
+		if not (self#compile_asm_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled asm files successfully!";
+		Uberspark_logger.log "proceeding to link object files...";
+		end;
+
+		if not (self#link_object_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
+			(!retval)
+		end else
 
 
+		let dummy = 0 in begin
+		Uberspark_logger.log "linked object files successfully!";
+
+		(* restore working directory *)
+		ignore(Uberspark_osservices.dir_change r_prevpath);
+
+		Uberspark_logger.log "cleaned up build";
+		retval := true;
+		end;
+
+		(!retval)
+	;
 	
 
 end;;
-
-
 
 
 
