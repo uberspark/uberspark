@@ -11,8 +11,13 @@
 
     val d_load_addr : int ref
     val d_ltag : string
+
     val d_mf_filename : string ref
+	  method set_d_mf_filename : string -> unit
+
     val d_path_to_mf_filename : string ref
+  	method set_d_path_to_mf_filename : string -> unit
+
     val d_path_ns : string ref
  
     val d_builddir : string ref
@@ -87,13 +92,14 @@
     method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
- 
-
-    method consolidate_sections_with_memory_map : unit -> unit
   	method write_manifest : string -> bool
+
+  	method prepare_sources : unit -> unit 
+		method add_default_uobj_binary_sections	: unit -> unit
+    method consolidate_sections_with_memory_map : unit -> unit
     method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
-    method initialize : ?context_path_builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool
+    method initialize : ?builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool
  	
 
     method compile_c_files : unit -> bool
@@ -105,8 +111,7 @@
     method remove_ns : unit -> unit
 
   	method prepare_namespace_for_build : unit -> bool
-  	method prepare_sources : unit -> bool
-
+ 
 end
 
 

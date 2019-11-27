@@ -15,9 +15,17 @@ class uobject
 
 	val d_mf_filename = ref "";
 	method get_d_mf_filename = !d_mf_filename;
+	method set_d_mf_filename (mf_filename : string) = 
+		d_mf_filename := mf_filename;
+		()
+	;
 
 	val d_path_to_mf_filename = ref "";
 	method get_d_path_to_mf_filename = !d_path_to_mf_filename;
+	method set_d_path_to_mf_filename (path_to_mf_filename : string) = 
+		d_path_to_mf_filename := path_to_mf_filename;
+		()
+	;
 
 	val d_path_ns = ref "";
 	method get_d_path_ns = !d_path_ns;
@@ -480,53 +488,13 @@ class uobject
 	;
 
 
-
 	(*--------------------------------------------------------------------------*)
-	(* initialize *)
+	(* add default uobj binary sections *)
 	(*--------------------------------------------------------------------------*)
-	method initialize	
-		?(context_path_builddir = ".")
-		(uobj_mf_filename : string)
-		(target_def: Defs.Basedefs.target_def_t)
-		(uobj_load_address : int)
-		: bool = 
-	
-		(* set target definition *)
-		self#set_d_target_def target_def;	
-
-		(* set build directory *)
-		self#set_d_builddir context_path_builddir;
-
-		(* set load address *)
-		self#set_d_load_addr uobj_load_address;
-
-	(* store uobj manifest filename *)
-		d_mf_filename := Filename.basename uobj_mf_filename;
-
-		(* store absolute uobj path *)		
-		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
-		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
-		else
-	
-		let dummy = 0 in begin
-			d_path_to_mf_filename := abs_uobj_path;
-		end;
-
-
-		(* debug dump the target spec and definition *)		
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
-				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
-				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
-
-
-		(* generate uobj top-level include header file source *)
-		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
-		Uberspark_codegen.Uobj.generate_top_level_include_header 
-			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
-			self#get_d_publicmethods_hashtbl;
-		Uberspark_logger.log ~tag:"" "[OK]";
-
+	method add_default_uobj_binary_sections	
+		()
+		: unit =
+		
 		(* add default uobj sections *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
 			f_name = "uobj_binhdr";	
@@ -784,22 +752,22 @@ class uobject
 											};
 		}) ];
 
+		()
+	;
 
+	(*--------------------------------------------------------------------------*)
+	(* prepare uobj sources *)
+	(*--------------------------------------------------------------------------*)
+	method prepare_sources
+		()
+		: unit =
 
-		(* consolidate uboj section memory map *)
-		Uberspark_logger.log "Consolidating uobj section memory map...";
-		self#consolidate_sections_with_memory_map ();
-		Uberspark_logger.log "uobj section memory map initialized";
-
-
-		(* parse uobj slt manifest *)
-		let rval = (self#parse_manifest_slt) in	
-		if (rval == false) then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
-				ignore (exit 1);
-			end
-		;
+		(* generate uobj top-level include header file source *)
+		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
+		Uberspark_codegen.Uobj.generate_top_level_include_header 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
+			self#get_d_publicmethods_hashtbl;
+		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate slt for intra-uobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
@@ -909,6 +877,74 @@ class uobject
 			Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename;
 		] @ !d_sources_asm_file_list;
 
+		()
+	;
+
+
+	(*--------------------------------------------------------------------------*)
+	(* initialize *)
+	(*--------------------------------------------------------------------------*)
+	method initialize	
+		?(builddir = ".")
+		(uobj_mf_filename : string)
+		(target_def: Defs.Basedefs.target_def_t)
+		(uobj_load_address : int)
+		: bool = 
+	
+		(* store uobj manifest filename *)
+		self#set_d_mf_filename (Filename.basename uobj_mf_filename);
+
+		(* set target definition *)
+		self#set_d_target_def target_def;	
+
+		(* set build directory *)
+		self#set_d_builddir builddir;
+
+		(* set load address *)
+		self#set_d_load_addr uobj_load_address;
+
+		(* store absolute uobj path *)		
+		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
+		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
+		else
+	
+		let dummy = 0 in begin
+		self#set_d_path_to_mf_filename abs_uobj_path;
+
+		(* debug dump the target spec and definition *)		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
+				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
+				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
+		end;
+
+
+		(* parse manifest *)
+		let rval = (self#parse_manifest ()) in	
+		if (rval == false) then	begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj!";
+			(rval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "successfully parsed uobj manifest";
+		end;
+
+		(* parse uobj slt manifest *)
+		let rval = (self#parse_manifest_slt) in	
+		if (rval == false) then	begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
+				(rval)
+		end else
+
+		let dummy=0 in begin
+		(* add default uobj sections *)
+		self#add_default_uobj_binary_sections ();
+
+		(* consolidate uboj section memory map *)
+		Uberspark_logger.log "Consolidating uobj section memory map...";
+		self#consolidate_sections_with_memory_map ();
+		Uberspark_logger.log "uobj section memory map initialized";
 
 		(true)	
 	;
@@ -1062,19 +1098,7 @@ class uobject
 
 
 
-	(* assumes initialize method has been called *)
-	(* prepares uobj sources within destination_path *)
-	method prepare_sources
-		()
-		: bool =
-
-		let retval = ref false in
-			
-
-		(!retval)
-	;
-
-
+	
 
 end;;
 
