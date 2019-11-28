@@ -1109,7 +1109,9 @@ class uobject
 			Uberspark_logger.log "ready for out-of-namespace build";
 		end;
 
+		retval := true;
 		end;
+
 
 		(!retval)
 	;
