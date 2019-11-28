@@ -96,7 +96,7 @@
 
   	method prepare_sources : unit -> unit 
 		method add_default_uobj_binary_sections	: unit -> unit
-    method consolidate_sections_with_memory_map : unit -> unit
+    method consolidate_sections_with_memory_map : unit -> int
     method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
     method initialize : ?builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool

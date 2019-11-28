@@ -334,17 +334,17 @@ class uobject
 
 	(*--------------------------------------------------------------------------*)
 	(* consolidate sections with memory map *)
-	(* uobj_load_addr = load address of uobj *)
+	(* update uobj size (d_size) accordingly and return the size *)
 	(*--------------------------------------------------------------------------*)
 	method consolidate_sections_with_memory_map
 		()
-		: unit  
+		: int  
 		=
 
 		let uobj_section_load_addr = ref 0 in
 		let uobjsize = self#get_d_size in
 		let uobj_load_addr = self#get_d_load_addr in
-		(*self#set_d_load_addr uobj_load_addr;*)
+
 		uobj_section_load_addr := self#get_d_load_addr;
 
 		(* iterate over default sections *)
@@ -482,9 +482,8 @@ class uobject
 			end;
 
 		end;
-
 					
-		()
+		(self#get_d_size)
 	;
 
 
