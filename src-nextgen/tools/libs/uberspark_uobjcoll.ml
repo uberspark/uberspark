@@ -215,17 +215,23 @@ let initialize_uobjs_within_uobjinfo_list
 	()
 	: unit = 
 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x" __LOC__ !d_load_address;
+
+	let curr_load_address = ref 0 in
+	curr_load_address := !d_load_address;
+
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		match uobjinfo_entry.f_uobj with 
 			| None ->
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
 
 			| Some uobj ->
-				Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobj_name;
+				Uberspark_logger.log "initializing uobj '%s' at load-address=0x%08x..." uobjinfo_entry.f_uobj_name !curr_load_address;
 				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
 					(uobjinfo_entry.f_uobj_srcpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
-					d_target_def 0) in	
-				Uberspark_logger.log "uobj '%s' successfully initialized" uobjinfo_entry.f_uobj_name;
+					d_target_def !curr_load_address) in
+				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
+				curr_load_address := !curr_load_address + uobj#get_d_size; 
 		;
 
 	)!d_uobjcoll_uobjinfo;
@@ -233,23 +239,6 @@ let initialize_uobjs_within_uobjinfo_list
 ;;
 
 
-(*--------------------------------------------------------------------------*)
-(* compute load address and size for all uobjs within the collection *)
-(*--------------------------------------------------------------------------*)
-let compute_uobjs_load_address_and_size
-	()
-	: unit = 
-	
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x" __LOC__ !d_load_address;
-
-	let curr_load_address = ref 0 in
-	curr_load_address := !d_load_address;
-
-	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-		uobjinfo_entry.f_uobj_load_address <- !curr_load_address;
-	)!d_uobjcoll_uobjinfo;
-
-;;
 
 
 
@@ -348,10 +337,6 @@ let build
 	(* initialize uobjs within uobj collection *)
 	initialize_uobjs_within_uobjinfo_list ();
 	Uberspark_logger.log "initialized uobjs within collection";
-
-	(* compute uobj load addresses and sizes *)
-	compute_uobjs_load_address_and_size ();
-	Uberspark_logger.log "computed uobj load address and size for uobjs within collection";
 
 	end;
 
