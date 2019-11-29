@@ -81,7 +81,7 @@ let handler_uobjcoll_build
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{f_platform = cmd_uobjcoll_opts.platform; f_arch = cmd_uobjcoll_opts.arch; f_cpu = cmd_uobjcoll_opts.cpu} in
 
-      if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def) then begin
+      if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Config.config_settings.uobj_binary_image_load_address) then begin
         Uberspark.Logger.log "uobj collection build success!";
         `Ok ()
       end else begin

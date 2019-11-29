@@ -14,6 +14,8 @@ type uobjcoll_uobjinfo_t =
 	mutable f_uobj_nspath 			: string; 
 	mutable f_uobj_is_incollection 	: bool;
 	mutable f_uobj_is_prime 	   	: bool;
+	mutable f_uobj_load_address		: int;
+	mutable f_uobj_size				: int;
 };;
 
 
@@ -25,6 +27,11 @@ let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_pla
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 
 let d_uobjcoll_uobjinfo : uobjcoll_uobjinfo_t list ref = ref [];;
+
+let d_load_address : int ref = ref 0;;
+let d_size : int ref = ref 0;;
+
+
 
 (*--------------------------------------------------------------------------*)
 (* parse uobjcoll manifest *)
@@ -92,9 +99,9 @@ let install_create_ns
 
 
 (*--------------------------------------------------------------------------*)
-(* collect uobjcoll uobj info *)
+(* initialize basic info for all uobjs within the collection *)
 (*--------------------------------------------------------------------------*)
-let collect_uobjinfo 
+let initialize_uobjs_baseinfo 
 	(uobjcoll_abs_path : string)
 	(uobjcoll_builddir : string)
 	: bool =
@@ -107,7 +114,8 @@ let collect_uobjinfo
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
-					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
+					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
@@ -150,7 +158,8 @@ let collect_uobjinfo
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
-					f_uobj_srcpath = ""; f_uobj_buildpath = "";  f_uobj_nspath = "" ; f_uobj_is_incollection = false; f_uobj_is_prime  = false;} in
+					f_uobj_srcpath = ""; f_uobj_buildpath = "";  f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
+					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
 
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
@@ -188,6 +197,26 @@ let collect_uobjinfo
 	end;
 
 	(true)
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* compute load address and size for all uobjs within the collection *)
+(*--------------------------------------------------------------------------*)
+let compute_uobjs_load_address_and_size
+	()
+	: unit = 
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x" __LOC__ !d_load_address;
+
+	let curr_load_address = ref 0 in
+	curr_load_address := !d_load_address;
+
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		uobjinfo_entry.f_uobj_load_address <- !curr_load_address;
+	)!d_uobjcoll_uobjinfo;
+
 ;;
 
 
@@ -235,10 +264,10 @@ let prepare_namespace_for_build
 
 
 
-
 let build
 	(uobjcoll_path_ns : string)
 	(target_def : Defs.Basedefs.target_def_t)
+	(uobjcoll_load_address : int)
 	: bool =
 
 	(* local variables *)
@@ -247,6 +276,10 @@ let build
 
 	let dummy = 0 in begin
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection build start...";
+	
+	(* store global initialization variables *)
+	d_load_address := uobjcoll_load_address;
+	
 	end;
 
 
@@ -268,7 +301,7 @@ let build
 
 
     (* collect uobj collection uobj info *)
-	let rval = (collect_uobjinfo abs_uobjcoll_path Uberspark_namespace.namespace_uobjcoll_build_dir) in	
+	let rval = (initialize_uobjs_baseinfo abs_uobjcoll_path Uberspark_namespace.namespace_uobjcoll_build_dir) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to collect uobj information for uobj collection!";
 		(!retval)
@@ -276,6 +309,11 @@ let build
 
 	let dummy = 0 in begin
 	Uberspark_logger.log "successfully collect uobj information";
+
+	(* compute uobj load addresses and sizes *)
+	compute_uobjs_load_address_and_size ();
+	Uberspark_logger.log "computed uobj load address and size for uobjs within collection";
+
 	end;
 
 	(* setup collection uobj build workspace *)
