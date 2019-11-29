@@ -7,6 +7,7 @@ open Str
 
 type uobjcoll_uobjinfo_t =
 {
+	mutable f_uobj 					: Uberspark_uobj.uobject option;
 	mutable f_uobj_name    			: string;			
 	mutable f_uobj_ns				: string;
 	mutable f_uobj_srcpath	   		: string;
@@ -113,10 +114,11 @@ let initialize_uobjs_baseinfo
 		
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
 					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
 
+				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- true;
@@ -157,10 +159,11 @@ let initialize_uobjs_baseinfo
 
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj_name = ""; f_uobj_ns = "";  
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = "";  f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
 					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
 
+				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
 				uobjinfo_entry.f_uobj_name <- uobj_name;
 				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
 				uobjinfo_entry.f_uobj_is_prime <- false;
