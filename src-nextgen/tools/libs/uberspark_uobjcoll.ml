@@ -32,6 +32,11 @@ let d_uobjcoll_uobjinfo : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_load_address : int ref = ref 0;;
 let d_size : int ref = ref 0;;
 
+let d_target_def: Defs.Basedefs.target_def_t = {
+	f_platform = ""; 
+	f_arch = ""; 
+	f_cpu = "";
+};;
 
 
 (*--------------------------------------------------------------------------*)
@@ -216,7 +221,11 @@ let initialize_uobjs_within_uobjinfo_list
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
 
 			| Some uobj ->
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "valid uobj!";
+				Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobj_name;
+				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
+					(uobjinfo_entry.f_uobj_srcpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
+					d_target_def 0) in	
+				Uberspark_logger.log "uobj '%s' successfully initialized" uobjinfo_entry.f_uobj_name;
 		;
 
 	)!d_uobjcoll_uobjinfo;
@@ -302,6 +311,9 @@ let build
 	
 	(* store global initialization variables *)
 	d_load_address := uobjcoll_load_address;
+	d_target_def.f_platform <- target_def.f_platform;
+	d_target_def.f_cpu <- target_def.f_cpu;
+	d_target_def.f_arch <- target_def.f_arch;
 	
 	end;
 

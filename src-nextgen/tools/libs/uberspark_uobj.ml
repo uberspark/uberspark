@@ -167,7 +167,7 @@ class uobject
 		: bool =
 		
 		(* read manifest JSON *)
-		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
+		let (rval, mf_json) = Uberspark_manifest.get_manifest_json (self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
 		
 		if (rval == false) then (false)
 		else
@@ -179,13 +179,13 @@ class uobject
 		else
 
 		(* debug *)
-		let dummy = 0 in begin
+		(*let dummy = 0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
 		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
 		d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
 		self#write_manifest "auto_test.json";		
-		end;
+		end;*)
 
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
