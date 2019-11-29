@@ -203,6 +203,26 @@ let initialize_uobjs_baseinfo
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* initialize uobjs within uobjinfo list *)
+(*--------------------------------------------------------------------------*)
+let initialize_uobjs_within_uobjinfo_list
+	()
+	: unit = 
+
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+
+			| Some uobj ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "valid uobj!";
+		;
+
+	)!d_uobjcoll_uobjinfo;
+
+;;
+
 
 (*--------------------------------------------------------------------------*)
 (* compute load address and size for all uobjs within the collection *)
@@ -311,7 +331,11 @@ let build
 	end else
 
 	let dummy = 0 in begin
-	Uberspark_logger.log "successfully collect uobj information";
+	Uberspark_logger.log "successfully collected uobj information";
+
+	(* initialize uobjs within uobj collection *)
+	initialize_uobjs_within_uobjinfo_list ();
+	Uberspark_logger.log "initialized uobjs within collection";
 
 	(* compute uobj load addresses and sizes *)
 	compute_uobjs_load_address_and_size ();
