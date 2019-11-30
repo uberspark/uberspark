@@ -30,6 +30,12 @@ type config_settings_t =
 	mutable uobj_binary_image_size : int;
 	mutable uobj_binary_image_alignment : int;
 
+	(* uobjcoll related configuration settings *)
+	mutable uobjcoll_binary_image_load_address : int;
+	mutable uobjcoll_binary_image_hdr_section_alignment : int;
+	mutable uobjcoll_binary_image_hdr_section_size : int;
+
+
 	(* bridge related configuration settings *)	
 	mutable bridge_cc_bridge : string;
 	mutable bridge_as_bridge : string;
@@ -110,6 +116,15 @@ let parse_config_settings
 					if (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_config_settings) <> `Null then
 						config_settings.uobj_binary_image_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_config_settings));
 
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_load_address" json_config_settings) <> `Null then
+						config_settings.uobjcoll_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_load_address" json_config_settings));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_alignment" json_config_settings) <> `Null then
+						config_settings.uobjcoll_binary_image_hdr_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_alignment" json_config_settings));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_size" json_config_settings) <> `Null then
+						config_settings.uobjcoll_binary_image_hdr_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_size" json_config_settings));
+
 					if (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings) <> `Null then
 						config_settings.bridge_cc_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" json_config_settings);
 
@@ -185,6 +200,9 @@ let write_config_settings
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_uniform_size\" : %B," config_settings.uobj_binary_image_uniform_size;
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_size\" : \"0x%x\"," config_settings.uobj_binary_image_size;
 	Printf.fprintf oc "\n\t\t\"uobj_binary_image_alignment\" : \"0x%x\"," config_settings.uobj_binary_image_alignment;
+	Printf.fprintf oc "\n\t\t\"uobjcoll_binary_image_load_address\" : \"0x%x\"," config_settings.uobjcoll_binary_image_load_address;
+	Printf.fprintf oc "\n\t\t\"uobjcoll_binary_image_hdr_section_alignment\" : \"0x%x\"," config_settings.uobjcoll_binary_image_hdr_section_alignment;
+	Printf.fprintf oc "\n\t\t\"uobjcoll_binary_image_hdr_section_size\" : \"0x%x\"," config_settings.uobjcoll_binary_image_hdr_section_size;
 	Printf.fprintf oc "\n\t\t\"bridge_cc_bridge\" : \"%s\"," config_settings.bridge_cc_bridge;
 	Printf.fprintf oc "\n\t\t\"bridge_as_bridge\" : \"%s\"," config_settings.bridge_as_bridge;
 	Printf.fprintf oc "\n\t\t\"bridge_ld_bridge\" : \"%s\"" config_settings.bridge_ld_bridge;

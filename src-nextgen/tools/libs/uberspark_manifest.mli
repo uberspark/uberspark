@@ -139,6 +139,12 @@ module Config : sig
     mutable uobj_binary_image_size : int;
     mutable uobj_binary_image_alignment : int;
 
+    (* uobjcoll related configuration settings *)
+    mutable uobjcoll_binary_image_load_address : int;
+    mutable uobjcoll_binary_image_hdr_section_alignment : int;
+    mutable uobjcoll_binary_image_hdr_section_size : int;
+
+
     (* bridge related configuration settings *)	
     mutable bridge_cc_bridge : string;
     mutable bridge_as_bridge : string;

@@ -41,6 +41,11 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 	uobj_binary_image_size = 0x1000000;
 	uobj_binary_image_alignment = 0x200000;
 
+	(* uobjcoll related configuration settings *)
+	uobjcoll_binary_image_load_address = 0x60000000;
+	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
+	uobjcoll_binary_image_hdr_section_size = 0x200000;
+
 
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
@@ -236,6 +241,9 @@ let settings_get
 		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  config_settings.uobj_binary_image_uniform_size);
 		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_size);
 		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_alignment);
+		| "uobjcoll_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_load_address);
+		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_alignment);
+		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_size);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
 		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_as_bridge);
 		| "bridge_ld_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_ld_bridge);
@@ -260,6 +268,9 @@ let settings_set
 		| "uobj_binary_image_uniform_size" -> config_settings.uobj_binary_image_uniform_size <- bool_of_string setting_value;
 		| "uobj_binary_image_size" -> config_settings.uobj_binary_image_size <- int_of_string setting_value;
 		| "uobj_binary_image_alignment" -> config_settings.uobj_binary_image_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_load_address" -> config_settings.uobjcoll_binary_image_load_address <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_alignment" -> config_settings.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_size" -> config_settings.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
 		| "bridge_as_bridge" -> config_settings.bridge_as_bridge <- setting_value;
 		| "bridge_ld_bridge" -> config_settings.bridge_ld_bridge <- setting_value;
