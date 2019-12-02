@@ -1,6 +1,6 @@
 (****************************************************************************)
 (****************************************************************************)
-(* uberSpark codegen interface implementation *)
+(* uberSpark codegen interface for uobj collection *)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
 (****************************************************************************)
 (****************************************************************************)
@@ -15,24 +15,5 @@
 (****************************************************************************)
 (* interfaces *)
 (****************************************************************************)
-let hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t ) 
-	: int list = 
-	Hashtbl.fold (fun key _ l -> key :: l) h []
-;;
 
-
-
-(****************************************************************************)
-(* submodules *)
-(****************************************************************************)
-
-module Uobj =
-struct
-#include "uberspark_codegen_uobj.ml"
-end
-
-module Uobjcoll =
-struct
-#include "uberspark_codegen_uobjcoll.ml"
-end
 
