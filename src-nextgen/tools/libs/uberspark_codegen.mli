@@ -65,7 +65,10 @@ module Uobjcoll : sig
   (****************************************************************************)
   (* interfaces *)
   (****************************************************************************)
-  
+  val generate_uobj_binary_image_section_mapping : string ->
+    ?output_banner : string ->
+    Defs.Basedefs.uobjinfo_t list -> bool
+
 
 end
 

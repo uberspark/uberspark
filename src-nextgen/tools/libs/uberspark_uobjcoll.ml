@@ -8,15 +8,7 @@ open Str
 type uobjcoll_uobjinfo_t =
 {
 	mutable f_uobj 					: Uberspark_uobj.uobject option;
-	mutable f_uobj_name    			: string;			
-	mutable f_uobj_ns				: string;
-	mutable f_uobj_srcpath	   		: string;	(* path where uobj sources reside *)
-	mutable f_uobj_buildpath 		: string;	(* path where uobj sources are copied for build *)
-	mutable f_uobj_nspath 			: string; 	(* path for uobj namsepace *)
-	mutable f_uobj_is_incollection 	: bool;
-	mutable f_uobj_is_prime 	   	: bool;
-	mutable f_uobj_load_address		: int;
-	mutable f_uobj_size				: int;
+	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 };;
 
 
@@ -119,28 +111,29 @@ let initialize_uobjs_baseinfo
 		
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; f_uobj_name = ""; f_uobj_ns = "";  
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; 
+					f_uobjinfo = { f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
-					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
+					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;}; } in
 
 				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
-				uobjinfo_entry.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
-				uobjinfo_entry.f_uobj_is_prime <- true;
-				uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_name <- uobj_name;
+				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
+				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- true;
+				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
 					d_hdr.f_namespace) then begin
-					uobjinfo_entry.f_uobj_is_incollection <- true;
+					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
-					uobjinfo_entry.f_uobj_is_incollection <- false;
+					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
 				end;
 
-				if uobjinfo_entry.f_uobj_is_incollection then begin
-					uobjinfo_entry.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
+				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
 				end;
 
 				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
@@ -164,27 +157,28 @@ let initialize_uobjs_baseinfo
 
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
 			if (rval) then begin
-				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; f_uobj_name = ""; f_uobj_ns = "";  
-					f_uobj_srcpath = ""; f_uobj_buildpath = "";  f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
-					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;} in
+				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; 
+					f_uobjinfo = { f_uobj_name = ""; f_uobj_ns = "";  
+					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
+					f_uobj_is_prime  = false; f_uobj_load_address = 0; f_uobj_size = 0;}; } in
 
 				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
-				uobjinfo_entry.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobj_ns <- templar_uobj_ns;
-				uobjinfo_entry.f_uobj_is_prime <- false;
-				uobjinfo_entry.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_name <- uobj_name;
+				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- templar_uobj_ns;
+				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- false;
+				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr.f_namespace) then begin
-					uobjinfo_entry.f_uobj_is_incollection <- true;
+					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
-					uobjinfo_entry.f_uobj_is_incollection <- false;
+					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
 				end;
 
-				if uobjinfo_entry.f_uobj_is_incollection then begin
-					uobjinfo_entry.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
+				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
 				end;
 
 				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
@@ -226,11 +220,11 @@ let initialize_uobjs_within_uobjinfo_list
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
 
 			| Some uobj ->
-				Uberspark_logger.log "initializing uobj '%s' at load-address=0x%08x..." uobjinfo_entry.f_uobj_name !curr_load_address;
+				Uberspark_logger.log "initializing uobj '%s' at load-address=0x%08x..." uobjinfo_entry.f_uobjinfo.f_uobj_name !curr_load_address;
 				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
-					(uobjinfo_entry.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
+					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
 					d_target_def !curr_load_address) in
-				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
+				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
 				curr_load_address := !curr_load_address + uobj#get_d_size; 
 		;
 
@@ -270,10 +264,10 @@ let prepare_namespace_for_build
 		(* copy all intra uobjs include headers to uobjcoll canonical namespace *)
 		(* TBS: only copy headers listed in the uobj manifest *)
 		List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-			if uobjinfo_entry.f_uobj_is_incollection then begin
-				Uberspark_osservices.mkdir ~parent:true (uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include") (`Octal 0o0777);
-				Uberspark_osservices.cp ~recurse:true ~force:true (abs_uobjcoll_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/*") 
-					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobj_name ^ "/include/.")	
+			if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
+				Uberspark_osservices.mkdir ~parent:true (uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name ^ "/include") (`Octal 0o0777);
+				Uberspark_osservices.cp ~recurse:true ~force:true (abs_uobjcoll_path ^ "/" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name ^ "/include/*") 
+					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name ^ "/include/.")	
 			end;
 		)!d_uobjcoll_uobjinfo;
 	end;
@@ -361,9 +355,9 @@ let build
 	let dummy = 0 in begin
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 
-		Uberspark_osservices.mkdir ~parent:true uobjinfo_entry.f_uobj_buildpath (`Octal 0o0777);
-		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobj_srcpath ^ "/*") 
-			(uobjinfo_entry.f_uobj_buildpath ^ "/.")	
+		Uberspark_osservices.mkdir ~parent:true uobjinfo_entry.f_uobjinfo.f_uobj_buildpath (`Octal 0o0777);
+		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobjinfo.f_uobj_srcpath ^ "/*") 
+			(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/.")	
 
 	)!d_uobjcoll_uobjinfo;
 	end;
@@ -380,7 +374,7 @@ let build
 	let dummy = 0 in begin
 	retval := true;
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-		Uberspark_logger.log "Building uobj '%s'..." uobjinfo_entry.f_uobj_name;
+		Uberspark_logger.log "Building uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
 
 		match uobjinfo_entry.f_uobj with 
 			| None ->
@@ -399,7 +393,7 @@ let build
 						retval := false;
 					end;
 					
-					Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobj_name;
+					Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
 				end
 		;
 

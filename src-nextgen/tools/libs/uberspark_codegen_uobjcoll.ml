@@ -16,4 +16,18 @@
 (* interfaces *)
 (****************************************************************************)
 
+(*--------------------------------------------------------------------------*)
+(* generate uobj binary image section mapping *)
+(*--------------------------------------------------------------------------*)
+let generate_uobj_binary_image_section_mapping	
+    (output_filename : string)
+    ?(output_banner = "uobj collection uobj binary image section mapping source")
+	(uobjcoll_uobjinfo_list : Defs.Basedefs.uobjinfo_t list)
+    : bool	= 
+        let retval = ref false in
+        
+
+        retval := true;
+        (!retval)
+;;
 
