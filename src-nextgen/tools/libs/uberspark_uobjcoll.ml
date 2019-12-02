@@ -391,17 +391,14 @@ let build
 				begin
 					uobj#prepare_sources ();
 
-					(*if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
+					if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
 						retval := false;
 					end;
-					*)
 					
-					(*
+					if !retval &&  not (uobj#build_image ()) then begin
+						retval := false;
+					end;
 					
-					
-					build_image
-
-					*)
 					Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobj_name;
 				end
 		;
