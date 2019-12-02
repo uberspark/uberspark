@@ -10,9 +10,9 @@ type uobjcoll_uobjinfo_t =
 	mutable f_uobj 					: Uberspark_uobj.uobject option;
 	mutable f_uobj_name    			: string;			
 	mutable f_uobj_ns				: string;
-	mutable f_uobj_srcpath	   		: string;
-	mutable f_uobj_buildpath 		: string;
-	mutable f_uobj_nspath 			: string; 
+	mutable f_uobj_srcpath	   		: string;	(* path where uobj sources reside *)
+	mutable f_uobj_buildpath 		: string;	(* path where uobj sources are copied for build *)
+	mutable f_uobj_nspath 			: string; 	(* path for uobj namsepace *)
 	mutable f_uobj_is_incollection 	: bool;
 	mutable f_uobj_is_prime 	   	: bool;
 	mutable f_uobj_load_address		: int;
@@ -228,7 +228,7 @@ let initialize_uobjs_within_uobjinfo_list
 			| Some uobj ->
 				Uberspark_logger.log "initializing uobj '%s' at load-address=0x%08x..." uobjinfo_entry.f_uobj_name !curr_load_address;
 				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
-					(uobjinfo_entry.f_uobj_srcpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
+					(uobjinfo_entry.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
 					d_target_def !curr_load_address) in
 				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
 				curr_load_address := !curr_load_address + uobj#get_d_size; 
@@ -314,6 +314,17 @@ let build
 		(!retval)
 	end else
 
+	(* switch working directory to uobjcoll source path *)
+	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobjcoll_path) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll source directory: %s" abs_uobjcoll_path;
+		(!retval)
+	end else
+
+	(* create _build folder *)
+	let dummy = 0 in begin
+	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
+	end;
 
     (* parse uobjcoll manifest *)
 	let uobjcoll_mf_filename = (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_mf_filename) in
@@ -333,14 +344,9 @@ let build
 
 	let dummy = 0 in begin
 	Uberspark_logger.log "successfully collected uobj information";
-
-	(* initialize uobjs within uobj collection *)
-	initialize_uobjs_within_uobjinfo_list ();
-	Uberspark_logger.log "initialized uobjs within collection";
-
 	end;
 
-	(* setup collection uobj build workspace *)
+	(* setup uobj collection canonical namespace for build *)
 	let rval = (prepare_namespace_for_build abs_uobjcoll_path) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to prepare uobjcoll canonical build namespace!";
@@ -351,28 +357,10 @@ let build
 	Uberspark_logger.log "uobjcoll canonical build namespace ready";
 	end;
 
-	(* switch working directory to uobjcoll source path *)
-	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobjcoll_path) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll source directory: %s" abs_uobjcoll_path;
-		(!retval)
-	end else
-
-
-	(* create _build folder *)
-	let dummy = 0 in begin
-	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
-	end;
-
-
-	(* prep uobj sources within _build folder *)
+	(* provision all uobj sources within uobjcoll _build folder *)
 	let dummy = 0 in begin
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-	    (*if uobjinfo_entry.f_uobj_is_incollection then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj in collection: copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj out of collection; copying from '%s' to '%s'" uobjinfo_entry.f_uobj_srcpath uobjinfo_entry.f_uobj_buildpath;
-		end;*)
+
 		Uberspark_osservices.mkdir ~parent:true uobjinfo_entry.f_uobj_buildpath (`Octal 0o0777);
 		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobj_srcpath ^ "/*") 
 			(uobjinfo_entry.f_uobj_buildpath ^ "/.")	
@@ -380,6 +368,52 @@ let build
 	)!d_uobjcoll_uobjinfo;
 	end;
 
+
+	(* initialize uobjs within uobj collection *)
+	let dummy = 0 in begin
+	initialize_uobjs_within_uobjinfo_list ();
+	Uberspark_logger.log "initialized uobjs within collection";
+	end;
+
+
+	(* build all uobjs *)
+	let dummy = 0 in begin
+	retval := true;
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		Uberspark_logger.log "Building uobj '%s'..." uobjinfo_entry.f_uobj_name;
+
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+				retval := false;
+
+			| Some uobj ->
+				begin
+					uobj#prepare_sources ();
+
+					(*if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
+						retval := false;
+					end;
+					*)
+					
+					(*
+					
+					
+					build_image
+
+					*)
+					Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobj_name;
+				end
+		;
+
+
+	)!d_uobjcoll_uobjinfo;
+	end;
+
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build uobj(s)!";
+		(!retval)
+	end else
 
 
 	(* restore working directory *)

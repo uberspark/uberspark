@@ -763,17 +763,17 @@ class uobject
 
 		(* copy all the uobj c files to build area *)
 		if (List.length self#get_d_sources_c_file_list) > 0 then begin
-			Uberspark_osservices.cp "*.c" (self#get_d_builddir ^ "/.");
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.c") (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj h files to build area *)
 		if (List.length self#get_d_sources_h_file_list) > 0 then begin
-			Uberspark_osservices.cp "*.h" (self#get_d_builddir ^ "/.");
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.h") (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj cS files to build area *)
 		if (List.length self#get_d_sources_casm_file_list) > 0 then begin
-			Uberspark_osservices.cp "*.cS" (self#get_d_builddir ^ "/.");
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.cS") (self#get_d_builddir ^ "/.");
 		end;
 
 		(* generate uobj top-level include header file source *)
