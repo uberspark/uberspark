@@ -426,6 +426,24 @@ let build
 		(!retval)
 	end else
 
+
+	(* generate uobjcoll linker script *)
+	let dummy = 0 in begin
+	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
+	)!d_uobjcoll_uobjinfo;
+	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
+		("./" ^ Uberspark_namespace.namespace_uobjcoll_build_dir ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_linkerscript_filename)
+		 !uobjinfo_list !d_load_address !d_size;
+	end;
+
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate uobjcoll linker script!";
+		(!retval)
+	end else
+
+
 	(* restore working directory *)
 	let dummy = 0 in begin
 	ignore(Uberspark_osservices.dir_change r_prevpath);

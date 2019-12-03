@@ -70,5 +70,10 @@ module Uobjcoll : sig
     Defs.Basedefs.uobjinfo_t list -> bool
 
 
+  val generate_linker_script : string ->
+    ?output_banner : string ->
+    Defs.Basedefs.uobjinfo_t list -> 
+    int -> int -> bool
+
 end
 
