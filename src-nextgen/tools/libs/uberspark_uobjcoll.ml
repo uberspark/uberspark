@@ -455,6 +455,7 @@ let build
 
 			| Some uobj ->
 				begin
+					let uobj_bridges_override = ref false in
 					uobj#prepare_sources ();
 
 					if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
@@ -463,9 +464,15 @@ let build
 
 					if (uobj#overlay_config_settings ()) then begin
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with uobj manifest override...";
+						(* save current config settings *)
+						Uberspark_config.settings_save ();
+
 						if not (Uberspark_bridge.initialize_from_config ()) then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not build uobj specific bridges!";
 							retval := false;
 						end;
+						
+						uobj_bridges_override := true;
 					end else begin
 						(* uobj manifest did not have any config-settings specified, so use the collection default *)
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "using uobj collection default bridges...";
@@ -478,6 +485,17 @@ let build
 
 					if !retval then begin					
 						Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
+					end;
+
+					(* restore config settings if we saved them*)
+					if !uobj_bridges_override then begin
+						Uberspark_config.settings_restore ();
+						(* reload bridges *)
+						if not (Uberspark_bridge.initialize_from_config ()) then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not build uobjcoll bridges during config restoration!";
+							retval := false;
+						end;
+
 					end;
 				end
 		;

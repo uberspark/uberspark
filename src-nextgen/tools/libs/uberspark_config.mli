@@ -32,6 +32,9 @@ val binary_uobj_default_size : int ref
 val bridge_cc_bridge : string ref
 *)
 
+val settings_save : unit -> unit
+
+val settings_restore : unit -> unit
 
 
 val load : string -> bool

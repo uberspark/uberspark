@@ -55,39 +55,83 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 };;
 
 
-(*
-(*------------------------------------------------------------------------*)
-(* header related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let hdr_type = ref "";;
-let hdr_namespace = ref "";;
-let hdr_platform = ref "";;
-let hdr_arch = ref "";;
-let hdr_cpu = ref "";;
-*)
+let saved_config_settings: Uberspark_manifest.Config.config_settings_t = {
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	binary_page_size = 0x0020000;
+	binary_uobj_section_alignment = 0x00200000;
+	binary_uobj_default_section_size =  0x00200000;
+
+	uobj_binary_image_load_address = 0x60000000;
+	uobj_binary_image_uniform_size = true;
+	uobj_binary_image_size = 0x1000000;
+	uobj_binary_image_alignment = 0x200000;
+
+	(* uobjcoll related configuration settings *)
+	uobjcoll_binary_image_load_address = 0x60000000;
+	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
+	uobjcoll_binary_image_hdr_section_size = 0x200000;
+
+
+	(* bridge related configuration settings *)	
+	bridge_cc_bridge = "";
+	bridge_as_bridge = "";
+	bridge_ld_bridge = "";
+	
+};;
 
 
 
+let settings_save 
+	() 
+	: unit =
+	saved_config_settings.binary_page_size <- config_settings.binary_page_size;
+	saved_config_settings.binary_uobj_section_alignment <- config_settings.binary_uobj_section_alignment;
+	saved_config_settings.binary_uobj_default_section_size <- config_settings.binary_uobj_default_section_size;
+
+	saved_config_settings.uobj_binary_image_load_address <- config_settings.uobj_binary_image_load_address;
+	saved_config_settings.uobj_binary_image_uniform_size <- config_settings.uobj_binary_image_uniform_size;
+	saved_config_settings.uobj_binary_image_size <- config_settings.uobj_binary_image_size;
+	saved_config_settings.uobj_binary_image_alignment <- config_settings.uobj_binary_image_alignment;
+
+	saved_config_settings.uobjcoll_binary_image_load_address <- config_settings.uobjcoll_binary_image_load_address;
+	saved_config_settings.uobjcoll_binary_image_hdr_section_alignment <- config_settings.uobjcoll_binary_image_hdr_section_alignment;
+	saved_config_settings.uobjcoll_binary_image_hdr_section_size <- config_settings.uobjcoll_binary_image_hdr_section_size;
+
+	saved_config_settings.bridge_cc_bridge <- config_settings.bridge_cc_bridge;
+	saved_config_settings.bridge_as_bridge <- config_settings.bridge_as_bridge;
+	saved_config_settings.bridge_ld_bridge <- config_settings.bridge_ld_bridge;
 
 
-
-(*
-(*------------------------------------------------------------------------*)
-(* uobj/uobjcoll binary related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let binary_page_size = ref 0x00200000;;
-let binary_uobj_section_alignment = ref 0x00200000;;
-let binary_uobj_default_section_size = ref 0x00200000;;
-
-let binary_uobj_default_load_addr = ref 0x60000000;;
-let binary_uobj_default_size = ref 0x01000000;;
+	()
+;;
 
 
-(*------------------------------------------------------------------------*)
-(* bridge related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let bridge_cc_bridge = ref "";;
-*)
+let settings_restore 
+	() 
+	: unit =
+	config_settings.binary_page_size <- saved_config_settings.binary_page_size;
+	config_settings.binary_uobj_section_alignment <- saved_config_settings.binary_uobj_section_alignment;
+	config_settings.binary_uobj_default_section_size <- saved_config_settings.binary_uobj_default_section_size;
+
+	config_settings.uobj_binary_image_load_address <- saved_config_settings.uobj_binary_image_load_address;
+	config_settings.uobj_binary_image_uniform_size <- saved_config_settings.uobj_binary_image_uniform_size;
+	config_settings.uobj_binary_image_size <- saved_config_settings.uobj_binary_image_size;
+	config_settings.uobj_binary_image_alignment <- saved_config_settings.uobj_binary_image_alignment;
+
+	config_settings.uobjcoll_binary_image_load_address <- saved_config_settings.uobjcoll_binary_image_load_address;
+	config_settings.uobjcoll_binary_image_hdr_section_alignment <- saved_config_settings.uobjcoll_binary_image_hdr_section_alignment;
+	config_settings.uobjcoll_binary_image_hdr_section_size <- saved_config_settings.uobjcoll_binary_image_hdr_section_size;
+
+	config_settings.bridge_cc_bridge <- saved_config_settings.bridge_cc_bridge;
+	config_settings.bridge_as_bridge <- saved_config_settings.bridge_as_bridge;
+	config_settings.bridge_ld_bridge <- saved_config_settings.bridge_ld_bridge;
+
+
+	()
+;;
+
+
 
 
 let load_from_json 
