@@ -302,6 +302,39 @@ let compile_asm_files
 
 
 
+(*--------------------------------------------------------------------------*)
+(* link uobjcoll binary image *)
+(*--------------------------------------------------------------------------*)
+let link_binary_image	
+	()
+	: bool = 
+	
+	let retval = ref false in
+	let o_file_list =ref [] in
+
+	(* add object files generated from c sources *)
+	(*List.iter (fun fname ->
+		o_file_list := !o_file_list @ [ fname ^ ".o"];
+	) !d_sources_c_file_list;
+	*)
+
+	(* add object files generated from asm sources *)
+	List.iter (fun fname ->
+		o_file_list := !o_file_list @ [ fname ^ ".o"];
+	) !d_sources_asm_file_list;
+
+
+	retval := Uberspark_bridge.Ld.invoke 
+			~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
+		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
+		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
+		!o_file_list
+		[ ] [ ]	".";
+
+	(!retval)	
+;;
+
+
 
 let build
 	(uobjcoll_path_ns : string)
@@ -487,7 +520,16 @@ let build
 	end else
 
 	let dummy = 0 in begin
-	Uberspark_logger.log "cleaned up build workspace";
+	Uberspark_logger.log "built uobjcoll uobj binary image section map source";
+	end;
+
+	if not (link_binary_image ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobjcoll binary image!";
+		(!retval)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "built uobjcoll binary image successfully";
 	end;
 
 

@@ -30,6 +30,7 @@ let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 let namespace_uobjcoll_build_dir = "_build";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
+let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
 
 
 let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
