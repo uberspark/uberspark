@@ -28,6 +28,11 @@ val namespace_uobj_top_level_include_header_src_filename : string;;
 val namespace_uobjcoll : string
 val namespace_uobjcoll_mf_filename : string
 val namespace_uobjcoll_build_dir : string
+val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
+val namespace_uobjcoll_linkerscript_filename : string
+
+
+
 
 val namespace_uobjrtl_mf_filename : string
 

@@ -406,6 +406,21 @@ let build
 		(!retval)
 	end else
 
+	(* generate uobj binary image section mapping source *)
+	let dummy = 0 in begin
+	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
+	)!d_uobjcoll_uobjinfo;
+	retval := Uberspark_codegen.Uobjcoll.generate_uobj_binary_image_section_mapping	
+		("./" ^ Uberspark_namespace.namespace_uobjcoll_build_dir ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename)
+		 !uobjinfo_list;
+	end;
+
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate uobj binary image section mapping source!";
+		(!retval)
+	end else
 
 	(* restore working directory *)
 	let dummy = 0 in begin

@@ -28,6 +28,8 @@ let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 let namespace_uobjcoll_build_dir = "_build";;
+let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
+let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
 
 
 let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
