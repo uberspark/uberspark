@@ -393,6 +393,13 @@ let build
 		(!retval)
 	end else
 
+	(* initialize uobj collection bridges *)
+	let rval = (Uberspark_bridge.initialize_from_config ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
+		(!retval)
+	end else
+
 
     (* collect uobj collection uobj info *)
 	let rval = (initialize_uobjs_baseinfo abs_uobjcoll_path Uberspark_namespace.namespace_uobjcoll_build_dir) in	
@@ -453,12 +460,25 @@ let build
 					if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
 						retval := false;
 					end;
-					
+
+					if (uobj#overlay_config_settings ()) then begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with uobj manifest override...";
+						if not (Uberspark_bridge.initialize_from_config ()) then begin
+							retval := false;
+						end;
+					end else begin
+						(* uobj manifest did not have any config-settings specified, so use the collection default *)
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "using uobj collection default bridges...";
+						retval := true
+					end;
+
 					if !retval &&  not (uobj#build_image ()) then begin
 						retval := false;
 					end;
-					
-					Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
+
+					if !retval then begin					
+						Uberspark_logger.log "Successfully built uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
+					end;
 				end
 		;
 

@@ -20,7 +20,6 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		"cpu" : "generic"
 	},
 
-
 	/* sources */
 	"uobj-sources" : {
 		"h-files": [ ],

@@ -50,6 +50,8 @@ class uobject
 		f_uobj_binary = `Null;
 	};
 
+	val d_mf_json : Yojson.Basic.t ref = ref `Null;
+
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
 
@@ -171,6 +173,11 @@ class uobject
 		
 		if (rval == false) then (false)
 		else
+
+		(* store manifest JSON *)
+		let dummy = 0 in begin
+		d_mf_json := mf_json;
+		end;
 
 		(* get uobj manifest json nodes *)
 		let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
@@ -330,6 +337,20 @@ class uobject
 	;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* overlay uobj config settings if any *)
+	(*--------------------------------------------------------------------------*)
+	method overlay_config_settings 
+		()
+		: bool =
+
+		(* parse, load and overlay config-settings node, if one is present *)
+		if (Uberspark_config.load_from_json !d_mf_json) then begin
+			(true) (* loaded and overlaid config-settings from uobj manifest *)
+		end else begin
+			(false) (* uobj manifest did not have config-settings specified *)
+		end
+	;
 
 
 	(*--------------------------------------------------------------------------*)
@@ -1133,13 +1154,14 @@ class uobject
 		end else
 
 		(* initialize bridges *)
-		if not (Uberspark_bridge.initialize_from_config ()) then begin
+		(*if not (Uberspark_bridge.initialize_from_config ()) then begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
 			(!retval)
 		end else
+		*)
 
 		let dummy =0 in begin
-	    Uberspark_logger.log "initialized bridges";
+	    (*Uberspark_logger.log "initialized bridges";*)
 	   	Uberspark_logger.log "proceeding to compile c files...";
 		end;
 
@@ -1341,6 +1363,31 @@ let create_initialize_and_build
 	let dummy = 0 in begin
 	Uberspark_logger.log "prepped uobj namespace";
 	end;
+
+	(* initialize bridges *)
+	let l_rval = ref true in 
+	let dummy = 0 in begin
+
+	(* if uobj manifest specified config-settings node, re-initialize bridges to be sure 
+	 we get uobj specific bridges if specified *)
+	if (uobj#overlay_config_settings ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with uobj manifest override...";
+		if not (Uberspark_bridge.initialize_from_config ()) then begin
+			l_rval := false;
+		end;
+	end else begin
+		(* uobj manifest did not have any config-settings specified *)
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with default config settings...";
+		if not (Uberspark_bridge.initialize_from_config ()) then begin
+			l_rval := false;
+		end;
+	end;
+	end;
+
+    if (!l_rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
+		(false, None)
+	end else
 
 	(* build uobj binary image *)
 	let rval = (uobj#build_image ()) in	
