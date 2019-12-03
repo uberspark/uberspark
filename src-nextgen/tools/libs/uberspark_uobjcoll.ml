@@ -225,10 +225,14 @@ let initialize_uobjs_within_uobjinfo_list
 					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
 					d_target_def !curr_load_address) in
 				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
+				(* update uobjcoll size *)
+				d_size := !d_size + uobj#get_d_size;
 				curr_load_address := !curr_load_address + uobj#get_d_size; 
 		;
 
 	)!d_uobjcoll_uobjinfo;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x, d_size=0x%08x" __LOC__ !d_load_address !d_size;
 
 ;;
 
