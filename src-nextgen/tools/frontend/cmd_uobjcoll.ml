@@ -1,4 +1,4 @@
-(* uberspark front-end command processing logic for command: uobj *)
+(* uberspark front-end command processing logic for command: uobjcoll *)
 (* author: amit vasudevan (amitvasudevan@acm.org) *)
 
 open Uberspark
@@ -10,8 +10,8 @@ type opts = {
   cpu: string;
 };;
 
-(* fold all uobj options into type opts *)
-let cmd_uobj_opts_handler 
+(* fold all uobjcoll options into type opts *)
+let cmd_uobjcoll_opts_handler 
   (platform : string option)
   (arch : string option)
   (cpu : string option)
@@ -45,49 +45,47 @@ let cmd_uobj_opts_handler
 ;;
 
 (* handle uobj command options *)
-let cmd_uobj_opts_t =
+let cmd_uobjcoll_opts_t =
   let docs = "ACTION OPTIONS" in
 	let platform =
-    let doc = "Specify uobj target $(docv)." in
+    let doc = "Specify uobj collection target $(docv)." in
     Arg.(value & opt (some string) None & info ["p"; "platform"] ~docv:"PLATFORM" ~doc ~docs)
   in
 	let arch =
-    let doc = "Specify uobj target $(docv)." in
+    let doc = "Specify uobj collection target $(docv)." in
     Arg.(value & opt (some string) None & info ["a"; "arch"] ~docv:"ARCH" ~doc ~docs)
   in
 	let cpu =
-    let doc = "Specify uobj target $(docv)." in
+    let doc = "Specify uobj collection target $(docv)." in
     Arg.(value & opt (some string) None & info ["c"; "cpu"] ~docv:"CPU" ~doc ~docs)
   in
-  Term.(const cmd_uobj_opts_handler $ platform $ arch $ cpu)
+  Term.(const cmd_uobjcoll_opts_handler $ platform $ arch $ cpu)
 
 
 
 
 (* build action handler *)
-let handler_uobj_build
-  (cmd_uobj_opts: opts)
-  (uobj_path_ns : string)
+let handler_uobjcoll_build
+  (cmd_uobjcoll_opts: opts)
+  (uobjcoll_path_ns : string)
   =
 
-  if cmd_uobj_opts.platform = "" then
-      `Error (true, "uobj PLATFORM must be specified.")
-  else if cmd_uobj_opts.arch = "" then
-      `Error (true, "uobj ARCH must be specified.")
-  else if cmd_uobj_opts.cpu = "" then
-      `Error (true, "uobj CPU must be specified.")
+  if cmd_uobjcoll_opts.platform = "" then
+      `Error (true, "uobj collection PLATFORM must be specified.")
+  else if cmd_uobjcoll_opts.arch = "" then
+      `Error (true, "uobj collection ARCH must be specified.")
+  else if cmd_uobjcoll_opts.cpu = "" then
+      `Error (true, "uobj collection CPU must be specified.")
   else
     begin
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
-    		{f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
+    		{f_platform = cmd_uobjcoll_opts.platform; f_arch = cmd_uobjcoll_opts.arch; f_cpu = cmd_uobjcoll_opts.cpu} in
 
-      let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_build (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_uobj_mf_filename) target_def 
-        Uberspark.Config.config_settings.uobj_binary_image_load_address) in
-      if (rval) then begin
-        Uberspark.Logger.log "uobj build success!";
+      if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Config.config_settings.uobjcoll_binary_image_load_address) then begin
+        Uberspark.Logger.log "uobj collection build success!";
         `Ok ()
       end else begin
-        `Error (false, "uobj build failed!")
+        `Error (false, "uobj collection build failed!")
       end;
 
     end
@@ -96,10 +94,10 @@ let handler_uobj_build
 ;;
 
 
-(* main handler for uobj command *)
-let handler_uobj 
+(* main handler for uobjcoll command *)
+let handler_uobjcoll 
   (copts : Commonopts.opts)
-  (cmd_uobj_opts: opts)
+  (cmd_uobjcoll_opts: opts)
   (action : [> `Build ] as 'a)
   (path_ns : string)
   : [> `Error of bool * string | `Ok of unit ] = 
@@ -111,19 +109,8 @@ let handler_uobj
 
   match action with
     | `Build -> 
-      retval := handler_uobj_build cmd_uobj_opts path_ns;
+      retval := handler_uobjcoll_build cmd_uobjcoll_opts path_ns;
   ;
 
-(*  (* initialize bridges *)
-  if (Commoninit.initialize_bridges) then 
-    begin
-  
-    end
-  else
-    begin
-      retval := `Error (false, "error in initializing bridges. check your bridge definitions");
-    end
-  ;
-*)
   (!retval)
 ;;

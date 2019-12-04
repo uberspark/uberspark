@@ -27,6 +27,10 @@ let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 
 let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
+let namespace_uobjcoll_build_dir = "_build";;
+let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
+let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
+let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
 
 
 let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
@@ -107,6 +111,51 @@ let get_uobj_uobjcoll_name_from_uobj_ns
 
 	(!retval, !uobj_name, !uobjcoll_name)
 ;;
+
+
+let is_uobj_uobjcoll_canonical_namespace
+	(uobj_uobjcoll_ns : string)
+	: bool =
+
+	let retval = ref false in
+
+	if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobj ^ "/")) uobj_uobjcoll_ns 0) then begin
+		(* this is a uobj within the uberspark uobj namespace *)
+		retval := true;
+	
+	end else if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobjcoll ^ "/")) uobj_uobjcoll_ns 0) then begin
+		(* this is a uobj within a uobjcoll wihin the uberspark uobjcoll namespace *)
+		retval := true;
+
+	end else begin
+		(* this is an unknown namespace *)
+		retval := false;
+	end;
+
+	(!retval)
+;;
+
+
+let is_uobj_ns_in_uobjcoll_ns
+	(uobj_ns : string)
+	(uobjcoll_ns : string)
+	: bool =
+
+	let retval = ref false in
+
+	if (Str.string_match (Str.regexp_string (uobjcoll_ns)) uobj_ns 0) then begin
+		(* this is a uobj within the given uobjcoll namespace *)
+		retval := true;
+	
+	end else begin
+		(* this uobj does not belong to the given uobjcoll namespace *)
+		retval := false;
+	end;
+
+	(!retval)
+;;
+
+
 
 
 let is_uobj_uobjcoll_abspath_in_namespace

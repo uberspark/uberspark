@@ -279,13 +279,13 @@ let invoke
 
 	(* invoke the compiler *)
 	if bridge_cc.bridge_hdr.btype = "container" then begin
-		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
+		if ( (Container.run_image "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin
 			retval := false;
 		end;
 	end else begin
-		if ( (Native.run_shell_command  ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
+		if ( (Native.run_shell_command  "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin
 			retval := false;

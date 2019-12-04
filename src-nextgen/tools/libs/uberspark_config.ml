@@ -41,6 +41,11 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 	uobj_binary_image_size = 0x1000000;
 	uobj_binary_image_alignment = 0x200000;
 
+	(* uobjcoll related configuration settings *)
+	uobjcoll_binary_image_load_address = 0x60000000;
+	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
+	uobjcoll_binary_image_hdr_section_size = 0x200000;
+
 
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
@@ -50,39 +55,83 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 };;
 
 
-(*
-(*------------------------------------------------------------------------*)
-(* header related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let hdr_type = ref "";;
-let hdr_namespace = ref "";;
-let hdr_platform = ref "";;
-let hdr_arch = ref "";;
-let hdr_cpu = ref "";;
-*)
+let saved_config_settings: Uberspark_manifest.Config.config_settings_t = {
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	binary_page_size = 0x0020000;
+	binary_uobj_section_alignment = 0x00200000;
+	binary_uobj_default_section_size =  0x00200000;
+
+	uobj_binary_image_load_address = 0x60000000;
+	uobj_binary_image_uniform_size = true;
+	uobj_binary_image_size = 0x1000000;
+	uobj_binary_image_alignment = 0x200000;
+
+	(* uobjcoll related configuration settings *)
+	uobjcoll_binary_image_load_address = 0x60000000;
+	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
+	uobjcoll_binary_image_hdr_section_size = 0x200000;
+
+
+	(* bridge related configuration settings *)	
+	bridge_cc_bridge = "";
+	bridge_as_bridge = "";
+	bridge_ld_bridge = "";
+	
+};;
 
 
 
+let settings_save 
+	() 
+	: unit =
+	saved_config_settings.binary_page_size <- config_settings.binary_page_size;
+	saved_config_settings.binary_uobj_section_alignment <- config_settings.binary_uobj_section_alignment;
+	saved_config_settings.binary_uobj_default_section_size <- config_settings.binary_uobj_default_section_size;
+
+	saved_config_settings.uobj_binary_image_load_address <- config_settings.uobj_binary_image_load_address;
+	saved_config_settings.uobj_binary_image_uniform_size <- config_settings.uobj_binary_image_uniform_size;
+	saved_config_settings.uobj_binary_image_size <- config_settings.uobj_binary_image_size;
+	saved_config_settings.uobj_binary_image_alignment <- config_settings.uobj_binary_image_alignment;
+
+	saved_config_settings.uobjcoll_binary_image_load_address <- config_settings.uobjcoll_binary_image_load_address;
+	saved_config_settings.uobjcoll_binary_image_hdr_section_alignment <- config_settings.uobjcoll_binary_image_hdr_section_alignment;
+	saved_config_settings.uobjcoll_binary_image_hdr_section_size <- config_settings.uobjcoll_binary_image_hdr_section_size;
+
+	saved_config_settings.bridge_cc_bridge <- config_settings.bridge_cc_bridge;
+	saved_config_settings.bridge_as_bridge <- config_settings.bridge_as_bridge;
+	saved_config_settings.bridge_ld_bridge <- config_settings.bridge_ld_bridge;
 
 
-
-(*
-(*------------------------------------------------------------------------*)
-(* uobj/uobjcoll binary related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let binary_page_size = ref 0x00200000;;
-let binary_uobj_section_alignment = ref 0x00200000;;
-let binary_uobj_default_section_size = ref 0x00200000;;
-
-let binary_uobj_default_load_addr = ref 0x60000000;;
-let binary_uobj_default_size = ref 0x01000000;;
+	()
+;;
 
 
-(*------------------------------------------------------------------------*)
-(* bridge related configuration settings *)	
-(*------------------------------------------------------------------------*)
-let bridge_cc_bridge = ref "";;
-*)
+let settings_restore 
+	() 
+	: unit =
+	config_settings.binary_page_size <- saved_config_settings.binary_page_size;
+	config_settings.binary_uobj_section_alignment <- saved_config_settings.binary_uobj_section_alignment;
+	config_settings.binary_uobj_default_section_size <- saved_config_settings.binary_uobj_default_section_size;
+
+	config_settings.uobj_binary_image_load_address <- saved_config_settings.uobj_binary_image_load_address;
+	config_settings.uobj_binary_image_uniform_size <- saved_config_settings.uobj_binary_image_uniform_size;
+	config_settings.uobj_binary_image_size <- saved_config_settings.uobj_binary_image_size;
+	config_settings.uobj_binary_image_alignment <- saved_config_settings.uobj_binary_image_alignment;
+
+	config_settings.uobjcoll_binary_image_load_address <- saved_config_settings.uobjcoll_binary_image_load_address;
+	config_settings.uobjcoll_binary_image_hdr_section_alignment <- saved_config_settings.uobjcoll_binary_image_hdr_section_alignment;
+	config_settings.uobjcoll_binary_image_hdr_section_size <- saved_config_settings.uobjcoll_binary_image_hdr_section_size;
+
+	config_settings.bridge_cc_bridge <- saved_config_settings.bridge_cc_bridge;
+	config_settings.bridge_as_bridge <- saved_config_settings.bridge_as_bridge;
+	config_settings.bridge_ld_bridge <- saved_config_settings.bridge_ld_bridge;
+
+
+	()
+;;
+
+
 
 
 let load_from_json 
@@ -91,21 +140,31 @@ let load_from_json
 	let retval = ref false in
 
 	let rval_uberspark_hdr = Uberspark_manifest.parse_uberspark_hdr json_node uberspark_hdr in
-	let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node config_hdr in
-	let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node config_settings in
 
-	if rval_config_hdr && rval_config_settings && rval_uberspark_hdr then
-		begin
-			(* TBD: sanity check input mftype and override with config only if permissible *)
-			(* e.g., if existing mftype is top-level *)
+	if rval_uberspark_hdr then begin
+		(* this is a valid uberspark json tree; TBD: sanity check header fields *)
+
+		let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node config_hdr in
+
+		(* if we have a config header then this is a load from uberspark configuration file *)
+		(* TBD: sanity check input mftype, for now override with config *)
+		if rval_config_hdr then begin
 			uberspark_hdr.f_mftype <- "config";
+		end;
+
+		(* check for config-settings node *)
+		let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node config_settings in
+		if rval_config_settings then begin
 			retval := true;
-		end
-	else
-		begin
+		end else begin
 			retval := false;
-		end
-	;
+		end;
+
+	end else begin
+		(* error, we require a uberspark json header *)
+		retval := false;
+	end;
+
 
 	(!retval)
 ;;
@@ -226,6 +285,9 @@ let settings_get
 		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  config_settings.uobj_binary_image_uniform_size);
 		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_size);
 		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_alignment);
+		| "uobjcoll_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_load_address);
+		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_alignment);
+		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_size);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
 		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_as_bridge);
 		| "bridge_ld_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_ld_bridge);
@@ -250,6 +312,9 @@ let settings_set
 		| "uobj_binary_image_uniform_size" -> config_settings.uobj_binary_image_uniform_size <- bool_of_string setting_value;
 		| "uobj_binary_image_size" -> config_settings.uobj_binary_image_size <- int_of_string setting_value;
 		| "uobj_binary_image_alignment" -> config_settings.uobj_binary_image_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_load_address" -> config_settings.uobjcoll_binary_image_load_address <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_alignment" -> config_settings.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_size" -> config_settings.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
 		| "bridge_as_bridge" -> config_settings.bridge_as_bridge <- setting_value;
 		| "bridge_ld_bridge" -> config_settings.bridge_ld_bridge <- setting_value;

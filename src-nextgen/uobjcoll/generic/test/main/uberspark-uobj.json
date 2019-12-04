@@ -14,23 +14,31 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 	/* uobj header */
 	"uobj-hdr":{
-		"namespace" : "uberspark/uobjs/generic/test/add",
+		"namespace" : "uberspark/uobjcoll/generic/test/main",
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic"
 	},
 
+	/* config settings */	
+	"config-settings":{
+		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
+		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
+		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
+	},
+
+
 	/* sources */
 	"uobj-sources" : {
 		"h-files": [ ],
-		"c-files": [ "add.c" ],
+		"c-files": [ "main.c" ],
 		"casm-files": [ ],
 		"asm-files": [ ]
 	},
 	
 	/* public methods */
 	"uobj-publicmethods" : {
-		"add" : [
+		"main" : [
 			"uint32_t",
 			"(uint32_t param1, uint32_t param2)", 
 			"2" 

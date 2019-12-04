@@ -11,7 +11,8 @@ let run_shell_command
     : int =
     
     let revised_d_cmd = ref "" in
-        revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;
+        (*revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;*)
+        revised_d_cmd := d_cmd;
 
     let cmdline = ref [] in
     

@@ -27,6 +27,13 @@ val namespace_uobj_top_level_include_header_src_filename : string;;
 
 val namespace_uobjcoll : string
 val namespace_uobjcoll_mf_filename : string
+val namespace_uobjcoll_build_dir : string
+val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
+val namespace_uobjcoll_linkerscript_filename : string
+val namespace_uobjcoll_binary_image_filename : string
+
+
+
 
 val namespace_uobjrtl_mf_filename : string
 
@@ -75,4 +82,6 @@ val namespace_bridge_bldsys_bridge : string
 
 val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
+val is_uobj_uobjcoll_canonical_namespace : string -> bool
+val is_uobj_ns_in_uobjcoll_ns : string -> string -> bool
 

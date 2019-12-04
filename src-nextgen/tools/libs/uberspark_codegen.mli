@@ -53,3 +53,27 @@ module Uobj : sig
 end
 
 
+
+
+module Uobjcoll : sig
+
+  (****************************************************************************)
+  (* types *)
+  (****************************************************************************)
+
+
+  (****************************************************************************)
+  (* interfaces *)
+  (****************************************************************************)
+  val generate_uobj_binary_image_section_mapping : string ->
+    ?output_banner : string ->
+    Defs.Basedefs.uobjinfo_t list -> bool
+
+
+  val generate_linker_script : string ->
+    ?output_banner : string ->
+    Defs.Basedefs.uobjinfo_t list -> 
+    int -> int -> bool
+
+end
+

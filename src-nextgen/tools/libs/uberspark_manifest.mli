@@ -19,6 +19,9 @@ type hdr_t =
   mutable f_uberspark_max_version : string;
 }
 
+val json_list_to_string_list : Yojson.Basic.t list -> string list
+val json_node_pretty_print_to_string : Yojson.Basic.t -> string
+val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojson.Basic.t
 
 (****************************************************************************)
 (* manifest parse interfaces *)
@@ -136,6 +139,12 @@ module Config : sig
     mutable uobj_binary_image_size : int;
     mutable uobj_binary_image_alignment : int;
 
+    (* uobjcoll related configuration settings *)
+    mutable uobjcoll_binary_image_load_address : int;
+    mutable uobjcoll_binary_image_hdr_section_alignment : int;
+    mutable uobjcoll_binary_image_hdr_section_size : int;
+
+
     (* bridge related configuration settings *)	
     mutable bridge_cc_bridge : string;
     mutable bridge_as_bridge : string;
@@ -162,6 +171,20 @@ end
 
 
 module Uobj : sig
+ type uobj_mf_json_nodes_t =
+  {
+    mutable f_uberspark_hdr					: Yojson.Basic.t;			
+    mutable f_uobj_hdr   					: Yojson.Basic.t;
+    mutable f_uobj_sources       			: Yojson.Basic.t;
+    mutable f_uobj_publicmethods		   	: Yojson.Basic.t;
+    mutable f_uobj_intrauobjcoll_callees    : Yojson.Basic.t;
+    mutable f_uobj_interuobjcoll_callees	: Yojson.Basic.t;
+    mutable f_uobj_legacy_callees		   	: Yojson.Basic.t;
+    mutable f_uobj_binary		   			: Yojson.Basic.t;
+  }
+
+
+ 
   type uobj_hdr_t =
     {
       mutable f_namespace    : string;			
@@ -179,6 +202,8 @@ module Uobj : sig
   }
 
 
+  val get_uobj_mf_json_nodes : Yojson.Basic.t -> uobj_mf_json_nodes_t ->  bool
+  
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
@@ -188,8 +213,34 @@ module Uobj : sig
   val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
 
 
+  val write_uobj_mf_json_nodes :	?prologue_str : string -> uobj_mf_json_nodes_t -> out_channel -> unit
 
 end
+
+
+
+module Uobjcoll : sig
+  type uobjcoll_hdr_t =
+    {
+      mutable f_namespace    : string;			
+      mutable f_platform	   : string;
+      mutable f_arch	       : string;
+      mutable f_cpu				   : string;
+    }
+
+  type uobjcoll_uobjs_t =
+  {
+    mutable f_prime_uobj_ns    : string;
+    mutable f_templar_uobjs    : string list;
+  }
+
+
+  val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
+  val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
+
+end
+
+
 
 
 module Uobjslt : sig

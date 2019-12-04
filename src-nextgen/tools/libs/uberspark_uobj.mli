@@ -11,9 +11,21 @@
 
     val d_load_addr : int ref
     val d_ltag : string
+
     val d_mf_filename : string ref
+	  method set_d_mf_filename : string -> unit
+
     val d_path_to_mf_filename : string ref
+  	method set_d_path_to_mf_filename : string -> unit
+
     val d_path_ns : string ref
+ 
+    val d_builddir : string ref
+  	method set_d_builddir : string -> unit 
+    method get_d_builddir : string
+
+  	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
+
     val d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
 
@@ -30,7 +42,6 @@
     val d_sources_asm_file_list : string list ref
 
     val d_target_def : Defs.Basedefs.target_def_t
-  	val d_context_path_builddir : string ref
 
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
@@ -49,6 +60,10 @@
     method get_d_mf_filename : string
     method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
+ 
+    method get_d_target_def : Defs.Basedefs.target_def_t
+
+ 
     method get_d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
 
@@ -67,7 +82,6 @@
     method get_d_sources_h_file_list : string list
     method get_d_sources_asm_file_list : string list
     
-    method get_d_target_def : Defs.Basedefs.target_def_t
  
     method set_d_size : int -> unit
     method set_d_load_addr : int -> unit
@@ -77,15 +91,20 @@
     method set_d_slt_trampolinecode : string -> unit
     method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
-  	method get_d_context_path_builddir : string
-	  method set_d_context_path_builddir : string -> unit
+  
+  	method write_manifest : string -> bool
 
-
-    method consolidate_sections_with_memory_map : unit -> unit
-    method parse_manifest : string -> bool -> bool
+  	method prepare_sources : unit -> unit 
+		method add_default_uobj_binary_sections	: unit -> unit
+    method consolidate_sections_with_memory_map : unit -> int
+    method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
-    method initialize : ?context_path_builddir:string -> Defs.Basedefs.target_def_t -> int -> unit
- 
+
+  	method overlay_config_settings : unit -> bool
+
+    method initialize : ?builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool
+ 	
+
     method compile_c_files : unit -> bool
     method compile_asm_files : unit -> bool
     method link_object_files : unit -> bool
@@ -93,7 +112,11 @@
     method install_create_ns : unit -> unit
     method install_h_files_ns : ?context_path_builddir:string -> unit
     method remove_ns : unit -> unit
+
+  	method prepare_namespace_for_build : unit -> bool
+  	method build_image : unit -> bool
+
 end
 
 
-val build : string -> Defs.Basedefs.target_def_t -> bool
+val create_initialize_and_build : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option

@@ -15,16 +15,45 @@ class uobject
 
 	val d_mf_filename = ref "";
 	method get_d_mf_filename = !d_mf_filename;
+	method set_d_mf_filename (mf_filename : string) = 
+		d_mf_filename := mf_filename;
+		()
+	;
 
 	val d_path_to_mf_filename = ref "";
 	method get_d_path_to_mf_filename = !d_path_to_mf_filename;
+	method set_d_path_to_mf_filename (path_to_mf_filename : string) = 
+		d_path_to_mf_filename := path_to_mf_filename;
+		()
+	;
 
 	val d_path_ns = ref "";
 	method get_d_path_ns = !d_path_ns;
 
+	val d_builddir = ref "";
+	method get_d_builddir = !d_builddir;
+	method set_d_builddir (builddir : string) = 
+		d_builddir := builddir;
+		()
+	;
+
+
+
+	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
+		f_uberspark_hdr = `Null;
+		f_uobj_hdr = `Null;
+		f_uobj_sources = `Null;
+		f_uobj_publicmethods = `Null;
+		f_uobj_intrauobjcoll_callees = `Null;
+		f_uobj_interuobjcoll_callees = `Null;
+		f_uobj_legacy_callees = `Null;
+		f_uobj_binary = `Null;
+	};
+
+	val d_mf_json : Yojson.Basic.t ref = ref `Null;
+
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
-
 
 	val d_sources_h_file_list: string list ref = ref [];
 	method get_d_sources_h_file_list = !d_sources_h_file_list;
@@ -114,32 +143,56 @@ class uobject
 	method get_d_alignment = !d_alignment;
 	method set_d_alignment alignment = (d_alignment := alignment);
 
-	(* uobj context path build folder *)
-	val d_context_path_builddir = ref ".";
-	method get_d_context_path_builddir = !d_context_path_builddir;
-	method set_d_context_path_builddir context_path = (d_context_path_builddir := context_path);
 
 
+	(*--------------------------------------------------------------------------*)
+	(* write uobj manifest *)
+	(* uobj_mf_filename = uobj manifest filename *)
+	(*--------------------------------------------------------------------------*)
+	method write_manifest 
+		(uobj_mf_filename : string)
+		: bool =
+
+		let oc = open_out uobj_mf_filename in
+		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
+		close_out oc;	
+
+		(true)
+	;
 
 	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
 	(* usmf_filename = canonical uobj manifest filename *)
-	(* keep_temp_files = true if temporary files need to be preserved *)
 	(*--------------------------------------------------------------------------*)
 	method parse_manifest 
-		(uobj_mf_filename : string)
-		(keep_temp_files : bool) 
+		()
 		: bool =
 		
-		(* store filename and uobj path to filename *)
-		d_mf_filename := Filename.basename uobj_mf_filename;
-		d_path_to_mf_filename := Filename.dirname uobj_mf_filename;
-		
 		(* read manifest JSON *)
-		let (rval, mf_json) = Uberspark_manifest.get_manifest_json self#get_d_mf_filename in
+		let (rval, mf_json) = Uberspark_manifest.get_manifest_json (self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
 		
 		if (rval == false) then (false)
 		else
+
+		(* store manifest JSON *)
+		let dummy = 0 in begin
+		d_mf_json := mf_json;
+		end;
+
+		(* get uobj manifest json nodes *)
+		let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
+
+		if (rval == false) then (false)
+		else
+
+		(* debug *)
+		(*let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
+		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
+		d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
+		self#write_manifest "auto_test.json";		
+		end;*)
 
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
@@ -284,21 +337,35 @@ class uobject
 	;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* overlay uobj config settings if any *)
+	(*--------------------------------------------------------------------------*)
+	method overlay_config_settings 
+		()
+		: bool =
+
+		(* parse, load and overlay config-settings node, if one is present *)
+		if (Uberspark_config.load_from_json !d_mf_json) then begin
+			(true) (* loaded and overlaid config-settings from uobj manifest *)
+		end else begin
+			(false) (* uobj manifest did not have config-settings specified *)
+		end
+	;
 
 
 	(*--------------------------------------------------------------------------*)
 	(* consolidate sections with memory map *)
-	(* uobj_load_addr = load address of uobj *)
+	(* update uobj size (d_size) accordingly and return the size *)
 	(*--------------------------------------------------------------------------*)
 	method consolidate_sections_with_memory_map
 		()
-		: unit  
+		: int  
 		=
 
 		let uobj_section_load_addr = ref 0 in
 		let uobjsize = self#get_d_size in
 		let uobj_load_addr = self#get_d_load_addr in
-		(*self#set_d_load_addr uobj_load_addr;*)
+
 		uobj_section_load_addr := self#get_d_load_addr;
 
 		(* iterate over default sections *)
@@ -436,45 +503,18 @@ class uobject
 			end;
 
 		end;
-
 					
-		()
+		(self#get_d_size)
 	;
 
 
-
 	(*--------------------------------------------------------------------------*)
-	(* initialize *)
+	(* add default uobj binary sections *)
 	(*--------------------------------------------------------------------------*)
-	method initialize	
-		?(context_path_builddir = ".")
-		(target_def: Defs.Basedefs.target_def_t)
-		(uobj_load_address : int)
-		= 
-	
-		(* set target definition *)
-		self#set_d_target_def target_def;	
-
-		(* set build directory *)
-		self#set_d_context_path_builddir context_path_builddir;
-
-		(* set load address *)
-		self#set_d_load_addr uobj_load_address;
-
-		(* debug dump the target spec and definition *)		
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
-				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
-				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
-
-
-		(* generate uobj top-level include header file source *)
-		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
-		Uberspark_codegen.Uobj.generate_top_level_include_header 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
-			self#get_d_publicmethods_hashtbl;
-		Uberspark_logger.log ~tag:"" "[OK]";
-
+	method add_default_uobj_binary_sections	
+		()
+		: unit =
+		
 		(* add default uobj sections *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
 			f_name = "uobj_binhdr";	
@@ -732,26 +772,41 @@ class uobject
 											};
 		}) ];
 
+		()
+	;
 
+	(*--------------------------------------------------------------------------*)
+	(* prepare uobj sources *)
+	(*--------------------------------------------------------------------------*)
+	method prepare_sources
+		()
+		: unit =
 
-		(* consolidate uboj section memory map *)
-		Uberspark_logger.log "Consolidating uobj section memory map...";
-		self#consolidate_sections_with_memory_map ();
-		Uberspark_logger.log "uobj section memory map initialized";
+		(* copy all the uobj c files to build area *)
+		if (List.length self#get_d_sources_c_file_list) > 0 then begin
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.c") (self#get_d_builddir ^ "/.");
+		end;
 
+		(* copy all the uobj h files to build area *)
+		if (List.length self#get_d_sources_h_file_list) > 0 then begin
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.h") (self#get_d_builddir ^ "/.");
+		end;
 
-		(* parse uobj slt manifest *)
-		let rval = (self#parse_manifest_slt) in	
-		if (rval == false) then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
-				ignore (exit 1);
-			end
-		;
+		(* copy all the uobj cS files to build area *)
+		if (List.length self#get_d_sources_casm_file_list) > 0 then begin
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.cS") (self#get_d_builddir ^ "/.");
+		end;
+
+		(* generate uobj top-level include header file source *)
+		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
+		Uberspark_codegen.Uobj.generate_top_level_include_header 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
+			self#get_d_publicmethods_hashtbl;
+		Uberspark_logger.log ~tag:"" "[OK]";
 
 		(* generate slt for intra-uobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" self#get_d_intrauobjcoll_callees_hashtbl 
 			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
@@ -765,7 +820,7 @@ class uobject
 
 		(* generate slt for interuobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" self#get_d_interuobjcoll_callees_hashtbl 
 			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
@@ -778,7 +833,7 @@ class uobject
 		
 		(* generate slt for legacy callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" self#get_d_legacy_callees_hashtbl 
 			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
 			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
@@ -793,7 +848,7 @@ class uobject
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
 			(self#get_d_hdr).f_namespace d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -801,7 +856,7 @@ class uobject
 		(* generate uobj binary intrauobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary intrauobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_intrauobjcoll_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename)
 			d_intrauobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -809,7 +864,7 @@ class uobject
 		(* generate uobj binary interuobjcoll callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary interuobjcoll callees info source...";
 		Uberspark_codegen.Uobj.generate_src_interuobjcoll_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename)
 			d_interuobjcoll_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -817,7 +872,7 @@ class uobject
 		(* generate uobj binary legacy callees info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary legacy callees info source...";
 		Uberspark_codegen.Uobj.generate_src_legacy_callees_info 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename)
 			self#get_d_legacy_callees_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -825,7 +880,7 @@ class uobject
 		(* generate uobj binary header source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 		Uberspark_codegen.Uobj.generate_src_binhdr 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
 			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
 			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
@@ -834,7 +889,7 @@ class uobject
 		(* generate uobj binary linker script *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary linker script...";
 		Uberspark_codegen.Uobj.generate_linker_script 
-			(self#get_d_context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_linkerscript_filename)
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_linkerscript_filename)
 			self#get_d_load_addr self#get_d_size self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -857,8 +912,80 @@ class uobject
 			Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename;
 		] @ !d_sources_asm_file_list;
 
+		()
+	;
 
-		()	
+
+	(*--------------------------------------------------------------------------*)
+	(* initialize *)
+	(*--------------------------------------------------------------------------*)
+	method initialize	
+		?(builddir = ".")
+		(uobj_mf_filename : string)
+		(target_def: Defs.Basedefs.target_def_t)
+		(uobj_load_address : int)
+		: bool = 
+	
+		(* store uobj manifest filename *)
+		self#set_d_mf_filename (Filename.basename uobj_mf_filename);
+
+		(* set target definition *)
+		self#set_d_target_def target_def;	
+
+		(* set load address *)
+		self#set_d_load_addr uobj_load_address;
+
+		(* store absolute uobj path *)		
+		let (rval, abs_uobj_path) = (Uberspark_osservices.abspath (Filename.dirname uobj_mf_filename)) in
+		if(rval == false) then (false) (* could not obtain absolute path for uobj *)
+		else
+	
+		let dummy = 0 in begin
+		self#set_d_path_to_mf_filename abs_uobj_path;
+
+		(* set build directory *)
+		self#set_d_builddir (abs_uobj_path ^ "/" ^ builddir);
+
+		(* debug dump the target spec and definition *)		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
+				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
+				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
+		end;
+
+
+		(* parse manifest *)
+		let rval = (self#parse_manifest ()) in	
+		if (rval == false) then	begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj!";
+			(rval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "successfully parsed uobj manifest";
+		end;
+
+		(* parse uobj slt manifest *)
+		let rval = (self#parse_manifest_slt) in	
+		if (rval == false) then	begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
+				(rval)
+		end else
+
+		let dummy=0 in begin
+		(* add default uobj sections *)
+		self#add_default_uobj_binary_sections ();
+
+		(* consolidate uboj section memory map *)
+		Uberspark_logger.log "Consolidating uobj section memory map...";
+		self#consolidate_sections_with_memory_map ();
+		Uberspark_logger.log "uobj section memory map initialized";
+
+		(* create _build folder *)
+		Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir) (`Octal 0o0777);
+		end;
+
+		(true)	
 	;
 
 
@@ -978,11 +1105,112 @@ class uobject
 		Uberspark_osservices.rmdir_recurse [ uobj_path_ns ];
 	;
 
+
+	(* assumes initialize method has been called *)
+	method prepare_namespace_for_build
+		()
+		: bool =
+
+		let retval = ref false in
+		let in_namespace_build = ref false in
+
+		(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
+		let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (self#get_d_path_to_mf_filename);
+		
+		in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace self#get_d_path_to_mf_filename);
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
+
+		(* install headers if we are doing an out-of-namespace build *)
+		if not !in_namespace_build then begin
+			Uberspark_logger.log "prepping for out-of-namespace build...";
+			self#install_create_ns ();
+			self#install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir;
+			Uberspark_logger.log "ready for out-of-namespace build";
+		end;
+
+		retval := true;
+		end;
+
+
+		(!retval)
+	;
+
+
+
+	(* build the uobj binary image *)
+	method build_image
+		()
+		: bool =
+
+		let retval = ref false in
+
+		(* switch working directory to uobj_path build folder *)
+		let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change (self#get_d_builddir)) in
+		if(rval == false) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" self#get_d_builddir;
+			(!retval)
+		end else
+
+		(* initialize bridges *)
+		(*if not (Uberspark_bridge.initialize_from_config ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
+			(!retval)
+		end else
+		*)
+
+		let dummy =0 in begin
+	    (*Uberspark_logger.log "initialized bridges";*)
+	   	Uberspark_logger.log "proceeding to compile c files...";
+		end;
+
+		if not (self#compile_c_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled c files successfully!";
+		Uberspark_logger.log "proceeding to compile asm files...";
+		end;
+
+		if not (self#compile_asm_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled asm files successfully!";
+		Uberspark_logger.log "proceeding to link object files...";
+		end;
+
+		if not (self#link_object_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
+			(!retval)
+		end else
+
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "linked object files successfully!";
+
+		(* restore working directory *)
+		ignore(Uberspark_osservices.dir_change r_prevpath);
+
+		Uberspark_logger.log "cleaned up build";
+		retval := true;
+		end;
+
+		(!retval)
+	;
+	
+
 end;;
 
 
 
 
+(*
 let build
 	(uobj_path : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
@@ -1009,12 +1237,6 @@ let build
 	(* create _build folder *)
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobj_build_dir (`Octal 0o0777);
 
-	(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (abs_uobj_path);
-	
-	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobj_path);
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
 	end;
 
 	if not (Uberspark_bridge.initialize_from_config ()) then begin
@@ -1031,7 +1253,7 @@ let build
 
     (* create uobj instance and parse manifest *)
 	let uobj = new uobject in
-	let rval = (uobj#parse_manifest uobj_mf_filename true) in	
+	let rval = (uobj#parse_manifest ()) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
 		(!retval)
@@ -1046,14 +1268,6 @@ let build
 	(* TBD: we need to get the load address as argument to the build interface *)
 	uobj#initialize ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir uobj_target_def 
 		Uberspark_config.config_settings.uobj_binary_image_load_address;
-
-	(* install headers if we are doing an out-of-namespace build *)
-	if not !in_namespace_build then begin
-	    Uberspark_logger.log "prepping for out-of-namespace build...";
-		uobj#install_create_ns ();
-		uobj#install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir;
-	    Uberspark_logger.log "ready for out-of-namespace build";
-	end;
 
 	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
 		Uberspark_osservices.cp "*.c" (Uberspark_namespace.namespace_uobj_build_dir ^ "/.");
@@ -1113,4 +1327,78 @@ let build
 	end;
 
 	(!retval)
+;;
+*)
+
+	
+let create_initialize_and_build
+	(uobj_mf_filename : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	(uobj_load_address : int)
+	: bool * uobject option =
+
+	(* create uobj instance and initialize *)
+	let uobj = new uobject in
+	let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
+		uobj_mf_filename uobj_target_def uobj_load_address) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj!";
+		(false, None)
+	end else
+
+	(* prepare uobj sources *)
+	let dummy = 0 in begin
+	Uberspark_logger.log "initialized uobj";
+	uobj#prepare_sources ();
+	Uberspark_logger.log "prepped uobj sources";
+	end;
+
+	(* prepare uobj namespace *)
+	let rval = (uobj#prepare_namespace_for_build ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to prepare uobj namespace!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "prepped uobj namespace";
+	end;
+
+	(* initialize bridges *)
+	let l_rval = ref true in 
+	let dummy = 0 in begin
+
+	(* if uobj manifest specified config-settings node, re-initialize bridges to be sure 
+	 we get uobj specific bridges if specified *)
+	if (uobj#overlay_config_settings ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with uobj manifest override...";
+		if not (Uberspark_bridge.initialize_from_config ()) then begin
+			l_rval := false;
+		end;
+	end else begin
+		(* uobj manifest did not have any config-settings specified *)
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with default config settings...";
+		if not (Uberspark_bridge.initialize_from_config ()) then begin
+			l_rval := false;
+		end;
+	end;
+	end;
+
+    if (!l_rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
+		(false, None)
+	end else
+
+	(* build uobj binary image *)
+	let rval = (uobj#build_image ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uobj binary image!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "generated uobj binary image";
+	end;
+
+	(true, Some uobj)
 ;;

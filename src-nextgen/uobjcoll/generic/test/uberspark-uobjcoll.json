@@ -1,0 +1,47 @@
+/*
+	uobj collection 'test'
+	json manifest
+	author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+	/* header */
+	"uberspark-hdr":{
+		"coss_version" : "1.0",
+		"mftype" : "uobjcoll",
+		"uberspark_min_version" : "5.1",
+		"uberspark_max_version" : "any"
+	},
+
+	/* uobjcoll header */
+	"uobjcoll-hdr":{
+		"namespace" : "uberspark/uobjcoll/generic/test",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+	/* config settings */	
+	"config-settings":{
+		"binary_uobj_default_size" : "0x1000000",
+		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
+		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
+		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
+	},
+
+
+	/* uobjs */
+	"uobjcoll-uobjs" : {
+		"prime" : "",
+		"templars" : [
+			"uberspark/uobjcoll/generic/test/main",
+			"uberspark/uobjs/generic/test/add"
+		]
+	}
+	
+
+
+}
+
+
+

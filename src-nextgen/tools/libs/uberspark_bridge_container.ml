@@ -49,7 +49,8 @@ let run_image
     : int =
 
     let revised_d_cmd = ref "" in
-        revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;
+        (*revised_d_cmd := "cd " ^ context_path_builddir ^ " && " ^ d_cmd;*)
+        revised_d_cmd := d_cmd;
 
     let (rval, context_path_abs) = (Uberspark_osservices.abspath context_path) in
     if(rval == true) then begin

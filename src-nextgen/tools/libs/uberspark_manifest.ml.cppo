@@ -39,6 +39,26 @@ let json_list_to_string_list
 ;;
 
 
+let json_node_pretty_print_to_string json_node 
+	: string =
+    (Yojson.Basic.pretty_to_string json_node)
+;;
+
+
+let json_node_update key new_value json_node 
+	: (bool * Yojson.Basic.t) =
+    let updated = ref false in
+    let as_obj = Yojson.Basic.Util.to_assoc json_node in
+    let g = List.map begin function
+        | (this_key, _inner) when this_key = key -> updated := true; (this_key, new_value)
+        | otherwise -> otherwise
+      end
+        as_obj
+    in
+    if !updated then (true, `Assoc g) else (false, `Assoc g)
+;;
+
+
 (****************************************************************************)
 (* manifest parse interfaces *)
 (****************************************************************************)
@@ -233,6 +253,11 @@ end
 module Uobj =
 struct
 #include "uberspark_manifest_uobj.ml"
+end
+
+module Uobjcoll =
+struct
+#include "uberspark_manifest_uobjcoll.ml"
 end
 
 module Uobjslt =

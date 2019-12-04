@@ -26,6 +26,20 @@ type uobjcoll_exitcallee_t = {
   s_fparamdwords : int;
 }
 
+type uobjinfo_t =
+{
+	mutable f_uobj_name    			: string;			
+	mutable f_uobj_ns				: string;
+	mutable f_uobj_srcpath	   		: string;	(* path where uobj sources reside *)
+	mutable f_uobj_buildpath 		: string;	(* path where uobj sources are copied for build *)
+	mutable f_uobj_nspath 			: string; 	(* path for uobj namsepace *)
+	mutable f_uobj_is_incollection 	: bool;
+	mutable f_uobj_is_prime 	   	: bool;
+	mutable f_uobj_load_address		: int;
+	mutable f_uobj_size				: int;
+}
+
+
 @@basedefs_uobj@@
 
 (* TBA: basedefs *)
