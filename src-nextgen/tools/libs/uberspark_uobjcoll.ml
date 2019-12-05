@@ -32,6 +32,7 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 
 let d_sources_asm_file_list: string list ref = ref [];;
 
+let d_slt_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t));; 
 
 
 (*--------------------------------------------------------------------------*)
@@ -240,7 +241,43 @@ let initialize_uobjs_within_uobjinfo_list
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* create uobj collection slt public method info hashtable *)
+(* TBD: inter-uobjcoll slt handling *)
+(*--------------------------------------------------------------------------*)
+let create_uobjs_slt_publicmethod_info_hashtbl
+	()
+	: unit =
 
+	(* iterate over all uobjs within uobjinfo list *)
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+
+			| Some uobj ->
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding slt public method info for uobj '%s', total public methods=%u" 
+					uobjinfo_entry.f_uobjinfo.f_uobj_name (Hashtbl.length uobj#get_d_publicmethods_hashtbl);
+				
+				Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+					let htbl_key = uobjinfo_entry.f_uobjinfo.f_uobj_name in 
+					Hashtbl.add d_slt_publicmethods_hashtbl htbl_key pm_info; 
+				) uobj#get_d_publicmethods_hashtbl;
+
+		;
+
+	)!d_uobjcoll_uobjinfo;
+
+	(* dump slt publc method info hashtable *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "slt publicmethods hashtbl dump follows:"; 
+	Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s; addr=0x%08x" pm_name pm_info.f_addr; 
+	) d_slt_publicmethods_hashtbl;
+
+
+	()
+;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -439,6 +476,12 @@ let build
 	let dummy = 0 in begin
 	initialize_uobjs_within_uobjinfo_list ();
 	Uberspark_logger.log "initialized uobjs within collection";
+	end;
+
+	(* create uobj collection slt public method info hashtable *)
+	let dummy = 0 in begin
+	create_uobjs_slt_publicmethod_info_hashtbl ();
+	Uberspark_logger.log "created uobj collection slt public method info hashtable";
 	end;
 
 
