@@ -1096,6 +1096,10 @@ class uobject
 		
 		(* make namespace folder if not already existing *)
 		Uberspark_osservices.mkdir ~parent:true uobj_path_ns (`Octal 0o0777);
+
+		(* make namespace include folder if not already existing *)
+		Uberspark_osservices.mkdir ~parent:true (uobj_path_ns ^ "/include") (`Octal 0o0777);
+
 	;
 
 
@@ -1109,15 +1113,17 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj_path_to_mf_filename;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
 		
+
+
 		(* copy h files to namespace *)
 		List.iter ( fun h_filename -> 
 			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
-			(uobj_path_ns ^ "/" ^ h_filename);
+			(uobj_path_ns ^ "/include/" ^ h_filename);
 		) self#get_d_sources_h_file_list;
 
 		(* copy top-level header to namespace *)
 		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
-			(uobj_path_ns ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename);
+			(uobj_path_ns ^ "/include/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename);
 
 	;
 
