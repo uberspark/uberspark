@@ -195,10 +195,11 @@ module Uobj : sig
 
   type uobj_publicmethods_t = 
   {
-    f_name: string;
-    f_retvaldecl : string;
-    f_paramdecl: string;
-    f_paramdwords : int;
+    mutable f_name: string;
+    mutable f_retvaldecl : string;
+    mutable f_paramdecl: string;
+    mutable f_paramdwords : int;
+    mutable f_addr : int;
   }
 
 

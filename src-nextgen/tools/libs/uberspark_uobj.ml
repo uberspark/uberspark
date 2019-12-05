@@ -408,8 +408,25 @@ class uobject
 
 
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+
+			(* if this section is for a public method, then update publicmethods hashtable with address *)
+			if x.usbinformat.f_type == Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO then begin
+				let pm_name = (Str.string_after x.f_name 8) in  (* grab public method name after uobj_pm_ *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" pm_name;
+			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl pm_name) then begin
+					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl pm_name) in
+						pm_info.f_addr <- !uobj_section_load_addr;
+					Hashtbl.replace self#get_d_publicmethods_hashtbl pm_name pm_info;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updated publicmethod address as 0x%08x" pm_info.f_addr;
+		    	end else begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unable to match public method name to section definition!";
+		    	end
+			    ;
+			end;
+
+			(* compute next section load address *)
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
-				
+
 		)self#get_d_default_sections_list_val;
 
 
@@ -573,7 +590,7 @@ class uobject
 		) self#get_d_publicmethods_hashtbl;
 		
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_pminfo", {
+		(*d_default_sections_list := !d_default_sections_list @ [ ("uobj_pminfo", {
 			f_name = "uobj_pminfo";	
 			f_subsection_list = [ ".uobj_pminfo_hdr"; ".uobj_pminfo" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
@@ -585,7 +602,7 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		}) ];
+		}) ];*)
 
 
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_cinfo", {

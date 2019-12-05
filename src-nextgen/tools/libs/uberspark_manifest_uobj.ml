@@ -26,10 +26,11 @@ type uobj_hdr_t =
 
 type uobj_publicmethods_t = 
 {
-	f_name: string;
-	f_retvaldecl : string;
-	f_paramdecl: string;
-	f_paramdwords : int;
+	mutable f_name: string;
+	mutable f_retvaldecl : string;
+	mutable f_paramdecl: string;
+	mutable f_paramdwords : int;
+	mutable f_addr : int;
 };;
 
 
@@ -214,6 +215,7 @@ let parse_uobj_publicmethods
 												f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
 												f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
 												f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
+												f_addr = 0; 
 											} in
 
 										Hashtbl.add publicmethods_hashtbl x tbl_entry; 
