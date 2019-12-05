@@ -523,7 +523,7 @@ class uobject
 		: unit =
 		
 		(* add default uobj sections *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
+		(*d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
 			f_name = "uobj_binhdr";	
 			f_subsection_list = [ ".uobj_binhdr"; ".uobj_binhdr_section_info" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
@@ -535,8 +535,10 @@ class uobject
 							f_addr_file = 0;
 							f_reserved = 0;
 						};
-		}) ];
+		}) ];*)
 
+
+		(* start with uobj state save area section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
 			f_name = "uobj_ssa";	
 			f_subsection_list = [ ".uobj_ssa" ];	
@@ -550,6 +552,26 @@ class uobject
 							f_reserved = 0;
 						};
 		}) ];
+
+		(* create sections for each public method *)
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ pm_name) in 
+			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
+				f_name = section_name;	
+				f_subsection_list = [ "." ^ section_name ];	
+				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
+								f_prot=0; 
+								f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+								f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+								f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+								f_addr_start=0; 
+								f_addr_file = 0;
+								f_reserved = 0;
+							};
+			}) ];
+
+		) self#get_d_publicmethods_hashtbl;
+		
 
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_pminfo", {
 			f_name = "uobj_pminfo";	
