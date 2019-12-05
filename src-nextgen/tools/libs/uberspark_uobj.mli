@@ -31,6 +31,7 @@
 
   	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
+  	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
 
     val d_size : int ref
@@ -71,6 +72,8 @@
 	  method get_d_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_default_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_default_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
+  	method get_d_publicmethods_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
+	  method get_d_publicmethods_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_memorymapped_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 

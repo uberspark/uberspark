@@ -89,6 +89,13 @@ class uobject
 	method get_d_default_sections_list_ref = d_default_sections_list;
 	method get_d_default_sections_list_val = !d_default_sections_list;
 
+
+	(* association list of uobj public methods sections; indexed by section name *)		
+	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
+	method get_d_publicmethods_sections_list_ref = d_publicmethods_sections_list;
+	method get_d_publicmethods_sections_list_val = !d_publicmethods_sections_list;
+
+
 	(* association list of uobj binary image sections with memory map info; indexed by section name *)		
 	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
 	method get_d_memorymapped_sections_list_ref = d_memorymapped_sections_list;
