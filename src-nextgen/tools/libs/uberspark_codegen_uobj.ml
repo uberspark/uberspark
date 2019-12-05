@@ -130,14 +130,9 @@ let generate_src_publicmethods_info
     Printf.fprintf oc "\n#include <uberspark/include/uberspark.h>";
     Printf.fprintf oc "\n#include <uberspark/include/binformat.h>";
     Printf.fprintf oc "\n";
+    Printf.fprintf oc "\n#include <%s/include/uobj.h>" namespace;
     Printf.fprintf oc "\n";
-
-    (* define externs *)
-    Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
-        Printf.fprintf oc "\n"; 
-        Printf.fprintf oc "\nextern %s %s %s;" (pm_info.f_retvaldecl) (pm_info.f_name) (pm_info.f_paramdecl); 
-        Printf.fprintf oc "\n"; 
-    ) publicmethods_hashtbl;
+    Printf.fprintf oc "\n";
 
     (* generate public methods info header *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo_hdr\") )) usbinformat_uobj_publicmethod_info_hdr_t uobj_pminfo_hdr = {";
@@ -574,7 +569,7 @@ let generate_top_level_include_header
         (* define externs *)
         Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n"; 
-            Printf.fprintf oc "\nextern %s %s %s;" (pm_info.f_retvaldecl) (pm_info.f_name) (pm_info.f_paramdecl); 
+            Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.f_retvaldecl) (pm_info.f_name) (pm_info.f_paramdecl); 
             Printf.fprintf oc "\n"; 
         ) publicmethods_hashtbl;
 
