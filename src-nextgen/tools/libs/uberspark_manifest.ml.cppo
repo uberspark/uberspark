@@ -265,3 +265,7 @@ struct
 #include "uberspark_manifest_uobjslt.ml"
 end
 
+module Sentinel =
+struct
+#include "uberspark_manifest_sentinel.ml"
+end

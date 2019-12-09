@@ -259,3 +259,17 @@ module Uobjslt : sig
   val parse_uobjslt_trampolinedata : Yojson.Basic.t -> bool * string
 end
 
+module Sentinel : sig
+  type sentinel_hdr_t =
+    {
+      mutable f_namespace    : string;			
+      mutable f_platform	   : string;
+      mutable f_arch	       : string;
+      mutable f_cpu				   : string;
+    }
+
+
+  val parse_sentinel_hdr : Yojson.Basic.t -> sentinel_hdr_t -> bool
+  val parse_sentinel_code : Yojson.Basic.t -> bool * string
+  val parse_sentinel_libcode : Yojson.Basic.t -> bool * string
+end
