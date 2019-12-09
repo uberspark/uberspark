@@ -85,6 +85,60 @@ let parse_manifest
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* parse sentinel manifest *)
+(*--------------------------------------------------------------------------*)
+let parse_manifest_sentinel	
+	(sentinel_type : string)
+	: bool * string * string = 
+	
+	let retval = ref false in 	
+	let scode = ref "" in
+	let slcode = ref "" in
+	let target_def = d_target_def in	
+	let sentinel_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
+		target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
+		Uberspark_namespace.namespace_sentinel_mf_filename) in 
+
+	let (rval, abs_sentinel_filename) = (Uberspark_osservices.abspath sentinel_filename) in
+	if(rval == true) then
+	begin
+		Uberspark_logger.log "reading sentinel manifest from:%s" abs_sentinel_filename;
+
+		(* read manifest JSON *)
+		let (rval, mf_json) = (Uberspark_manifest.get_manifest_json abs_sentinel_filename) in
+		if(rval == true) then
+		begin
+
+			(* parse sentinel-hdr node *)
+			let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
+			let rval =	(Uberspark_manifest.Sentinel.parse_sentinel_hdr mf_json sentinel_hdr) in
+			if rval then
+			begin
+
+				(* read sentinel code and libcode nodes *)
+				let (rval_code, sentinel_code) =	(Uberspark_manifest.Sentinel.parse_sentinel_code mf_json) in
+				let (rval_libcode, sentinel_libcode) =	(Uberspark_manifest.Sentinel.parse_sentinel_libcode mf_json) in
+
+				if  rval_code && rval_libcode then
+					begin
+						scode := sentinel_code;
+						slcode := sentinel_libcode;
+						retval := true;
+					end;
+			end;
+		end;
+	end;
+
+(!retval, !scode, !slcode)
+;;
+
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* crate uobjcoll installation namespace *)
 (*--------------------------------------------------------------------------*)

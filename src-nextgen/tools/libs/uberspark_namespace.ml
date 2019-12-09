@@ -46,6 +46,10 @@ let namespace_uobjslt_interuobjcoll_callees_src_filename = "uobjslt-interuobjcol
 let namespace_uobjslt_legacy_callees_src_filename = "uobjslt-legacy-callees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 
+let namespace_sentinel = "sentinels";;
+let namespace_sentinel_mf_filename = "uberspark-sentinel.json";;
+
+
 
 let namespace_config = "config";;
 let namespace_config_mf_filename = "uberspark-config.json";;

@@ -48,6 +48,10 @@ val namespace_uobjslt_interuobjcoll_callees_src_filename : string
 val namespace_uobjslt_legacy_callees_src_filename : string
 val namespace_uobjslt_output_symbols_filename : string
 
+val namespace_sentinel : string
+val namespace_sentinel_mf_filename : string
+
+
 val namespace_config : string
 val namespace_config_mf_filename : string
 val namespace_config_current : string
