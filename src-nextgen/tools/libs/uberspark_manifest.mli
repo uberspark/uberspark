@@ -269,6 +269,15 @@ module Uobjslt : sig
 end
 
 module Sentinel : sig
+
+  type sentinel_mf_json_nodes_t =
+  {
+    mutable f_uberspark_hdr					: Yojson.Basic.t;			
+    mutable f_sentinel_hdr   				: Yojson.Basic.t;
+    mutable f_sentinel_code       			: Yojson.Basic.t;
+    mutable f_sentinel_libcode			   	: Yojson.Basic.t;
+  }
+
   type sentinel_hdr_t =
     {
       mutable f_namespace    : string;			
@@ -278,6 +287,7 @@ module Sentinel : sig
     }
 
 
+  val get_sentinel_mf_json_nodes : Yojson.Basic.t ->  sentinel_mf_json_nodes_t -> bool
   val parse_sentinel_hdr : Yojson.Basic.t -> sentinel_hdr_t -> bool
   val parse_sentinel_code : Yojson.Basic.t -> bool * string
   val parse_sentinel_libcode : Yojson.Basic.t -> bool * string

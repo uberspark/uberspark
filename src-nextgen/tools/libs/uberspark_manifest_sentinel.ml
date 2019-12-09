@@ -3,6 +3,15 @@
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
 (*----------------------------------------------------------------------------*)
 
+type sentinel_mf_json_nodes_t =
+{
+	mutable f_uberspark_hdr					: Yojson.Basic.t;			
+	mutable f_sentinel_hdr   				: Yojson.Basic.t;
+	mutable f_sentinel_code       			: Yojson.Basic.t;
+	mutable f_sentinel_libcode			   	: Yojson.Basic.t;
+};;
+
+
 type sentinel_hdr_t =
 {
 	mutable f_namespace    : string;			
@@ -10,6 +19,35 @@ type sentinel_hdr_t =
 	mutable f_arch	       : string;
 	mutable f_cpu		   : string;
 };;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node into individual sentinel manifest json nodes *)
+(* return: *)
+(* on success: true; sentinel_mf_json_nodes fields are modified with parsed values *)
+(* on failure: false; sentinel_mf_json_nodes fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let get_sentinel_mf_json_nodes 
+	(mf_json : Yojson.Basic.t)
+	(sentinel_mf_json_nodes : sentinel_mf_json_nodes_t) 
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			sentinel_mf_json_nodes.f_uberspark_hdr <- mf_json |> member "uberspark-hdr";
+			sentinel_mf_json_nodes.f_sentinel_hdr <- mf_json |> member "sentinel-hdr";
+			sentinel_mf_json_nodes.f_sentinel_code <- mf_json |> member "sentinel-code";
+			sentinel_mf_json_nodes.f_sentinel_libcode <- mf_json |> member "sentinel-libcode";
+
+			retval := true;
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
 
 
 (*--------------------------------------------------------------------------*)
