@@ -84,6 +84,7 @@ val namespace_bridge_bldsys_bridge : string
 (* namespace methods *)	
 (*------------------------------------------------------------------------*)
 
+val get_variable_name_prefix_from_ns : string -> string
 val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
 val is_uobj_uobjcoll_canonical_namespace : string -> bool

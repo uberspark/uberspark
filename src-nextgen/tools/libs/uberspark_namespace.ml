@@ -79,6 +79,16 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 
 
 
+let get_variable_name_prefix_from_ns
+	(ns : string)
+	: string = 
+
+	let retval = (Str.global_replace (Str.regexp "/") "_" ns) in
+	(retval)
+;;
+
+
+
 let get_uobj_uobjcoll_name_from_uobj_ns
 	(uobj_ns : string)
 	: (bool * string * string) =
