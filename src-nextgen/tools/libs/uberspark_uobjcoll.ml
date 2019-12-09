@@ -18,6 +18,11 @@ type uobjcoll_uobjs_publicmethod_info_t =
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 };;
 
+type uobjcoll_sentinel_info_t =
+{
+	mutable f_sentinel_code			: string;
+	mutable f_sentinel_libcode  	: string;			
+};;
 
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
@@ -25,12 +30,17 @@ let d_path_ns = ref "";;
 let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";};;
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
-
 let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;
 
 
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
+
+(* association list of interuobjcoll (entry) sentinels; indexed by sentinel type *)		
+let d_interuobjcoll_sentinels_list : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
+
+(* association list of intrauobjcoll sentinels; indexed by sentinel type *)		
+let d_intraobjcoll_sentinels_list : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
 
 
 let d_load_address : int ref = ref 0;;
@@ -109,6 +119,36 @@ let parse_manifest
 	(true)
 ;;
 
+
+(*--------------------------------------------------------------------------*)
+(* create uobj collection sentinels list *)
+(*--------------------------------------------------------------------------*)
+let create_sentinels_list	
+	()
+	: bool = 
+
+	let retval = ref false in
+
+	(* create intrauobjcoll sentinel list *)
+	List.iter ( fun (sentinel_type: string) ->
+		let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
+			Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
+			d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/intrauobjcoll/" ^ 
+			sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
+
+	) d_uobjcoll_sentinels_mf_node.f_intrauobjcoll;
+
+(*
+	(* create interuobjcoll sentinel list *)
+	List.iter ( fun (sentinel_type: string) ->
+
+	) d_uobjcoll_sentinels_mf_node.f_interuobjcoll;
+*)
+
+	retval := true;
+	(!retval)
+;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -527,6 +567,22 @@ let build
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobjcoll: %s" uobjcoll_mf_filename;
 		(!retval)
 	end else
+
+	(* sanity check platform, cpu, arch override *)
+	(* TBD: if manifest says generic, we need a command line override *)
+	let dummy = 0 in begin
+	d_hdr.f_arch <- d_target_def.f_arch;
+	d_hdr.f_cpu <- d_target_def.f_cpu;
+	d_hdr.f_platform <- d_target_def.f_platform;
+	end;
+
+    (* create uobjcoll sentinels list *)
+	let rval = (create_sentinels_list ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for uobjcoll!";
+		(!retval)
+	end else
+
 
 	(* initialize uobj collection bridges *)
 	let rval = (Uberspark_bridge.initialize_from_config ()) in	
