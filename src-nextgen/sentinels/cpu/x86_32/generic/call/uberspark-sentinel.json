@@ -1,0 +1,39 @@
+/*
+    uberspark sentinel manifest (x86_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+	/* uberspark header */
+	"uberspark-hdr":{
+		"coss_version" : "any",
+		"mftype" : "sentinel",
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+
+    /* sentinel header */
+	"sentinel-hdr":{
+		"namespace" : "uberspark/sentinels/cpu/x86_32/generic",
+		"platform" : "generic",
+		"arch" : "x86_32",
+		"cpu" : "generic"
+	},
+
+    /*  sentinel code template 
+
+        parameters: 
+        PUBLICMETHOD_NAME = canonical name of public method
+        PUBLICMETHOD_ADDR = address of public method
+    */ 
+    "sentinel-code": "
+        .global PUBLICMETHOD_NAME
+        PUBLICMETHOD_NAME : 
+        movl (PUBLICMETHOD_ADDR), %eax
+        jmpl *%eax
+    "
+
+
+}
