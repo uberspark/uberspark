@@ -12,6 +12,13 @@ type uobjcoll_uobjinfo_t =
 };;
 
 
+type uobjcoll_uobjs_publicmethod_info_t =
+{
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
+};;
+
+
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
@@ -36,6 +43,7 @@ let d_sources_asm_file_list: string list ref = ref [];;
 
 let d_slt_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t));; 
 
+let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
 (*--------------------------------------------------------------------------*)
 (* parse uobjcoll manifest *)
@@ -313,10 +321,10 @@ let initialize_uobjs_within_uobjinfo_list
 
 
 (*--------------------------------------------------------------------------*)
-(* create uobj collection slt public method info hashtable *)
-(* TBD: inter-uobjcoll slt handling *)
+(* create uobj collection public method info hashtable *)
+(* note: these are for uobjs that are part of this collection *)
 (*--------------------------------------------------------------------------*)
-let create_uobjs_slt_publicmethod_info_hashtbl
+let create_uobjs_publicmethods_hashtbl
 	()
 	: unit =
 
@@ -328,23 +336,26 @@ let create_uobjs_slt_publicmethod_info_hashtbl
 
 			| Some uobj ->
 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding slt public method info for uobj '%s', total public methods=%u" 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding public method info for uobj '%s', total public methods=%u" 
 					uobjinfo_entry.f_uobjinfo.f_uobj_name (Hashtbl.length uobj#get_d_publicmethods_hashtbl);
 				
 				Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
-					let htbl_key = uobjinfo_entry.f_uobjinfo.f_uobj_name in 
-					Hashtbl.add d_slt_publicmethods_hashtbl htbl_key pm_info; 
+					let htbl_key = uobjinfo_entry.f_uobjinfo.f_uobj_ns in 
+					Hashtbl.add d_uobjs_publicmethods_hashtbl htbl_key { f_uobjpminfo = pm_info;
+						f_uobjinfo = uobjinfo_entry.f_uobjinfo;}
 				) uobj#get_d_publicmethods_hashtbl;
 
 		;
 
 	)!d_uobjcoll_uobjinfo_list;
 
-	(* dump slt publc method info hashtable *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "slt publicmethods hashtbl dump follows:"; 
-	Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s; addr=0x%08x" pm_name pm_info.f_addr; 
-	) d_slt_publicmethods_hashtbl;
+	(* dump uobjs publc methods hashtable *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll uobjs publicmethods hashtbl dump follows:"; 
+	Hashtbl.iter (fun (uobj_ns:string) (entry:uobjcoll_uobjs_publicmethod_info_t)  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj_ns=%s; pm_name=%s, pm_addr=0x%08x" 
+			uobj_ns entry.f_uobjpminfo.f_name entry.f_uobjpminfo.f_addr; 
+	) d_uobjs_publicmethods_hashtbl;
+
 
 
 	()
@@ -549,10 +560,10 @@ let build
 	Uberspark_logger.log "initialized uobjs within collection";
 	end;
 
-	(* create uobj collection slt public method info hashtable *)
+	(* create uobj collection uobjs public methods hashtable *)
 	let dummy = 0 in begin
-	create_uobjs_slt_publicmethod_info_hashtbl ();
-	Uberspark_logger.log "created uobj collection slt public method info hashtable";
+	create_uobjs_publicmethods_hashtbl ();
+	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
 	end;
 
 
