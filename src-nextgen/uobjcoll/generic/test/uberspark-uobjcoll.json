@@ -18,7 +18,8 @@
 		"namespace" : "uberspark/uobjcoll/generic/test",
 		"platform" : "generic",
 		"arch" : "generic",
-		"cpu" : "generic"
+		"cpu" : "generic",
+		"hpl" : "any"
 	},
 
 	/* config settings */	

@@ -22,7 +22,7 @@ type uobjcoll_uobjs_publicmethod_info_t =
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
-let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};;
+let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";};;
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 
