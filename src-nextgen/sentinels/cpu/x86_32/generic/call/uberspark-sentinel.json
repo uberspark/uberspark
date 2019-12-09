@@ -36,12 +36,9 @@
     /*  sentinel library code template 
 
         parameters: 
-        PUBLICMETHOD_NAME = canonical name of public method
         PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
     */ 
     "sentinel-libcode": "
-        .global PUBLICMETHOD_NAME
-        PUBLICMETHOD_NAME : 
         movl (PUBLICMETHOD_SENTINEL_ADDR), %eax
         jmpl *%eax
     "
