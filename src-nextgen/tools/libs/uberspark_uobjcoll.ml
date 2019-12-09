@@ -19,7 +19,9 @@ let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_pla
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 
-let d_uobjcoll_uobjinfo : uobjcoll_uobjinfo_t list ref = ref [];;
+let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
+let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
+
 
 let d_load_address : int ref = ref 0;;
 let d_size : int ref = ref 0;;
@@ -194,9 +196,17 @@ let initialize_uobjs_baseinfo
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
 				end;
 
-				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
+				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
 
-				retval := true;
+			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) then begin
+					(* there is already another uobj with the same ns within the collection, so bail out *)
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "multiple uobjs with same namespace!";
+					retval := false;
+		    	end else begin
+					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns uobjinfo_entry;
+					retval := true;
+		    	end;
+
 			end else begin
 				retval := false;
 			end;
@@ -214,7 +224,7 @@ let initialize_uobjs_baseinfo
 	List.iter (fun templar_uobj_ns ->
 
 			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns templar_uobj_ns) in
-			if (rval) then begin
+			if (rval) && !retval then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; 
 					f_uobjinfo = { f_uobj_name = ""; f_uobj_ns = "";  
 					f_uobj_srcpath = ""; f_uobj_buildpath = ""; f_uobj_nspath = "" ; f_uobj_is_incollection = false; 
@@ -239,9 +249,16 @@ let initialize_uobjs_baseinfo
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
 				end;
 
-				d_uobjcoll_uobjinfo := !d_uobjcoll_uobjinfo @ [ uobjinfo_entry ];
+				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
 
-				retval := true;
+			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl templar_uobj_ns) then begin
+					(* there is already another uobj with the same ns within the collection, so bail out *)
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "multiple uobjs with same namespace!";
+					retval := false;
+		    	end else begin
+					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl templar_uobj_ns uobjinfo_entry;
+		    	end;
+
 			end else begin
 				retval := false;
 			end;
@@ -253,7 +270,7 @@ let initialize_uobjs_baseinfo
 	else
 
 	let dummy=0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collect_uobjinfo: total collection uobjs=%u" (List.length !d_uobjcoll_uobjinfo);
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collect_uobjinfo: total collection uobjs=%u" (List.length !d_uobjcoll_uobjinfo_list);
 	end;
 
 	(true)
@@ -288,7 +305,7 @@ let initialize_uobjs_within_uobjinfo_list
 				curr_load_address := !curr_load_address + uobj#get_d_size; 
 		;
 
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x, d_size=0x%08x" __LOC__ !d_load_address !d_size;
 
@@ -321,7 +338,7 @@ let create_uobjs_slt_publicmethod_info_hashtbl
 
 		;
 
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 
 	(* dump slt publc method info hashtable *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "slt publicmethods hashtbl dump follows:"; 
@@ -367,7 +384,7 @@ let prepare_namespace_for_build
 				Uberspark_osservices.cp ~recurse:true ~force:true (abs_uobjcoll_path ^ "/" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name ^ "/include/*") 
 					(uobjcoll_canonical_namespace_path ^ "/" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name ^ "/include/.")	
 			end;
-		)!d_uobjcoll_uobjinfo;
+		)!d_uobjcoll_uobjinfo_list;
 	end;
 
 	retval := true;
@@ -522,7 +539,7 @@ let build
 		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobjinfo.f_uobj_srcpath ^ "/*") 
 			(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/.")	
 
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 	end;
 
 
@@ -598,7 +615,7 @@ let build
 		;
 
 
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 	end;
 
 	if(!retval == false) then begin
@@ -611,7 +628,7 @@ let build
 	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 	retval := Uberspark_codegen.Uobjcoll.generate_uobj_binary_image_section_mapping	
 		(Uberspark_namespace.namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename)
 		 !uobjinfo_list;
@@ -628,7 +645,7 @@ let build
 	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
-	)!d_uobjcoll_uobjinfo;
+	)!d_uobjcoll_uobjinfo_list;
 	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
 		(Uberspark_namespace.namespace_uobjcoll_linkerscript_filename)
 		 !uobjinfo_list !d_load_address !d_size;
