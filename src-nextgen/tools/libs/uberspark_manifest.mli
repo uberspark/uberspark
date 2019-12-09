@@ -237,8 +237,16 @@ module Uobjcoll : sig
   }
 
 
+  type uobjcoll_sentinels_t =
+  {
+    mutable f_interuobjcoll    : string list;
+    mutable f_intrauobjcoll    : string list;
+  }
+
+
   val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
   val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
+  val parse_uobjcoll_sentinels : Yojson.Basic.t -> uobjcoll_sentinels_t -> bool
 
 end
 

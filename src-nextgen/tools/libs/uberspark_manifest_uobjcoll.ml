@@ -18,6 +18,11 @@ type uobjcoll_uobjs_t =
 	mutable f_templar_uobjs    : string list;
 };;
 
+type uobjcoll_sentinels_t =
+{
+	mutable f_interuobjcoll    : string list;
+	mutable f_intrauobjcoll    : string list;
+};;
 
 
 (*--------------------------------------------------------------------------*)
@@ -84,4 +89,36 @@ let parse_uobjcoll_uobjs
 
 	(!retval)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobjcoll-sentinels" *)
+(* return: *)
+(* on success: true; uobjcoll_sentinels fields are modified with parsed values *)
+(* on failure: false; uobjcoll_sentinels fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobjcoll_sentinels 
+	(mf_json : Yojson.Basic.t)
+	(uobjcoll_sentinels : uobjcoll_sentinels_t) 
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobjcoll_sentinels = mf_json |> member "uobjcoll-sentinels" in
+			if(json_uobjcoll_sentinels <> `Null) then
+				begin
+					uobjcoll_sentinels.f_interuobjcoll <- (json_list_to_string_list  (json_uobjcoll_sentinels |> member "interuobjcoll" |> to_list));
+					uobjcoll_sentinels.f_intrauobjcoll <- (json_list_to_string_list  (json_uobjcoll_sentinels |> member "intrauobjcoll" |> to_list));
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
 

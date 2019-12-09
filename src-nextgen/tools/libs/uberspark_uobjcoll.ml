@@ -26,6 +26,9 @@ let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_pla
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 
+let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;
+
+
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
 
@@ -88,6 +91,18 @@ let parse_manifest
 
 	let dummy=0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_uobjcoll_uobjs_mf_node.f_templar_uobjs);
+	end;
+
+	(* parse uobjcoll-sentinels node *)
+	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels mf_json d_uobjcoll_sentinels_mf_node ) in
+	if (rval == false) then (false)
+	else
+
+
+	let dummy=0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection sentinels=(%u, %u)" 
+			(List.length d_uobjcoll_sentinels_mf_node.f_interuobjcoll)
+			(List.length d_uobjcoll_sentinels_mf_node.f_intrauobjcoll);
 	end;
 
 

@@ -38,8 +38,14 @@
 			"uberspark/uobjcoll/generic/test/main",
 			"uberspark/uobjs/generic/test/add"
 		]
+	},
+
+	/* uobj collection sentinel type definitions  */
+	"uobjcoll-sentinels" : {
+		"interuobjcoll" : [ "call" ],
+		"intrauobjcoll" : [ "call" ]
 	}
-	
+
 
 
 }
