@@ -127,17 +127,54 @@ let create_sentinels_list
 	()
 	: bool = 
 
-	let retval = ref false in
+	let retval = ref true in
 
 	(* create intrauobjcoll sentinel list *)
 	List.iter ( fun (sentinel_type: string) ->
-		let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
-			Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-			d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/intrauobjcoll/" ^ 
-			sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
+		if !retval then begin
+			let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
+				Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
+				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/intrauobjcoll/" ^ 
+				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
+			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= "";} in
+			
+			(* read sentinel manifest JSON *)
+			let (rval, mf_json) = (Uberspark_manifest.get_manifest_json sentinel_mf_filename) in
+			
+			if (rval == false) then begin
+			retval := false;
+			end;
 
+			(* read sentinel manifest header *)
+			if !retval then begin 			
+				let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
+				let rval =	(Uberspark_manifest.Sentinel.parse_sentinel_hdr mf_json sentinel_hdr) in
+
+				if (rval == false) then begin
+				retval := false;
+				end;
+			end;
+
+			(* read sentinel code and libcode nodes *)
+			if !retval then begin 			
+				let (rval_code, sentinel_code) =	(Uberspark_manifest.Sentinel.parse_sentinel_code mf_json) in
+				let (rval_libcode, sentinel_libcode) =	(Uberspark_manifest.Sentinel.parse_sentinel_libcode mf_json) in
+
+				if not (rval_code && rval_libcode) then begin
+					retval := false;
+				end else begin
+					sentinel_info.f_sentinel_code <- sentinel_code;
+					sentinel_info.f_sentinel_libcode <- sentinel_libcode;
+					d_intraobjcoll_sentinels_list := !d_intraobjcoll_sentinels_list @ [ (sentinel_type, sentinel_info)];
+				end;
+			end;
+
+		end;
 	) d_uobjcoll_sentinels_mf_node.f_intrauobjcoll;
+
+	if (!retval == false) then (false)
+	else
 
 (*
 	(* create interuobjcoll sentinel list *)
@@ -145,8 +182,10 @@ let create_sentinels_list
 
 	) d_uobjcoll_sentinels_mf_node.f_interuobjcoll;
 *)
-
+	let dummy=0 in begin
 	retval := true;
+	end;
+	
 	(!retval)
 ;;
 
