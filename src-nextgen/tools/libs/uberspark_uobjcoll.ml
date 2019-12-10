@@ -124,7 +124,9 @@ let parse_manifest
 (* create uobj collection sentinels list *)
 (*--------------------------------------------------------------------------*)
 let create_sentinels_list	
-	()
+	(sentinel_facet : string)
+	(sentinel_type_list_input : string list)
+	(sentinels_list_output : (string * uobjcoll_sentinel_info_t) list ref)
 	: bool = 
 
 	let retval = ref true in
@@ -134,7 +136,7 @@ let create_sentinels_list
 		if !retval then begin
 			let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
 				Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/intrauobjcoll/" ^ 
+				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= "";} in
@@ -166,12 +168,13 @@ let create_sentinels_list
 				end else begin
 					sentinel_info.f_sentinel_code <- sentinel_code;
 					sentinel_info.f_sentinel_libcode <- sentinel_libcode;
-					d_intraobjcoll_sentinels_list := !d_intraobjcoll_sentinels_list @ [ (sentinel_type, sentinel_info)];
+					sentinels_list_output := !sentinels_list_output @ [ (sentinel_type, sentinel_info)];
 				end;
 			end;
 
 		end;
-	) d_uobjcoll_sentinels_mf_node.f_intrauobjcoll;
+	) sentinel_type_list_input;
+
 
 	if (!retval == false) then (false)
 	else
@@ -615,12 +618,27 @@ let build
 	d_hdr.f_platform <- d_target_def.f_platform;
 	end;
 
-    (* create uobjcoll sentinels list *)
-	let rval = (create_sentinels_list ()) in	
+    (* create intra uobjcoll sentinels list *)
+	let rval = (create_sentinels_list "intrauobjcoll" d_uobjcoll_sentinels_mf_node.f_intrauobjcoll d_intraobjcoll_sentinels_list) in	
     if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for uobjcoll!";
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for intra-uobjcoll sentinels!";
 		(!retval)
 	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "created intra-uobjcoll sentinel list, total sentinels=%u" (List.length !d_intraobjcoll_sentinels_list);
+	end;
+
+    (* create inter uobjcoll sentinels list *)
+	let rval = (create_sentinels_list "interuobjcoll" d_uobjcoll_sentinels_mf_node.f_interuobjcoll d_interuobjcoll_sentinels_list) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for inter-uobjcoll sentinels!";
+		(!retval)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "created inter-uobjcoll sentinel list, total sentinels=%u" (List.length !d_interuobjcoll_sentinels_list);
+	end;
 
 
 	(* initialize uobj collection bridges *)
