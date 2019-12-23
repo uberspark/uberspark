@@ -54,8 +54,6 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 
 let d_sources_asm_file_list: string list ref = ref [];;
 
-let d_slt_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t));; 
-
 let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
 (*--------------------------------------------------------------------------*)
