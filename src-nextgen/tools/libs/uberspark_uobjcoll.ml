@@ -56,6 +56,14 @@ let d_sources_asm_file_list: string list ref = ref [];;
 
 let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
+
+(* association list of uobj binary image sections with memory map info; indexed by section name *)		
+let d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref [];;
+
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* parse uobjcoll manifest *)
 (* uobjcoll_mf_filename = uobj collection manifest filename *)
@@ -415,6 +423,77 @@ let initialize_uobjs_within_uobjinfo_list
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* consolidate uobjcoll sections with memory map *)
+(* update uobj size (d_size) accordingly and return the size *)
+(*--------------------------------------------------------------------------*)
+let consolidate_sections_with_memory_map
+	()
+	: (bool * int)  
+	=
+
+	let uobjinfo_status = ref true in 
+	let uobjcoll_section_load_addr = ref 0 in
+
+	(* clear out memory mapped sections list and set initial section load address *)
+	uobjcoll_section_load_addr := !d_load_address;
+	d_memorymapped_sections_list := []; 
+	
+
+	(* TBD: add inter-uobjcoll entry point sentinels *)
+	(* TBD: add intra-uobjcoll sentinels *)
+
+	(* iterate over all the uobjs and add a section for each *)
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				uobjinfo_status := false;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+
+			| Some uobj ->
+				Uberspark_logger.log "adding section for uobj '%s' at 0x%08x, size=%08x..." uobjinfo_entry.f_uobjinfo.f_uobj_name 
+					!uobjcoll_section_load_addr uobj#get_d_size;
+
+				let key = (".section_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name)	in 
+				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
+					{ f_name = key;	
+						f_subsection_list = [];	
+						usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
+										f_prot=0; 
+										f_size = uobj#get_d_size;
+										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_addr_start = !uobjcoll_section_load_addr; 
+										f_addr_file = 0;
+										f_reserved = 0;
+									};
+					}) ];
+
+
+
+				uobjcoll_section_load_addr := !uobjcoll_section_load_addr + uobj#get_d_size; 
+		;
+
+	)!d_uobjcoll_uobjinfo_list;
+
+
+	(* update uobjcoll size *)
+	d_size := !uobjcoll_section_load_addr -  !d_load_address;
+
+
+	(!uobjinfo_status, !d_size)
+;;
+
+
+
+
+
+
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* create uobj collection public method info hashtable *)
 (* note: these are for uobjs that are part of this collection *)
@@ -682,10 +761,18 @@ let build
 
 
 	(* initialize uobjs within uobj collection *)
+	(* after this, we all the uobj manifests parsed, build folders created, 
+		public methods populated based on load address of 0 for every uobj
+		uobj size is available for every uobj
+	*)
 	let dummy = 0 in begin
 	initialize_uobjs_within_uobjinfo_list ();
 	Uberspark_logger.log "initialized uobjs within collection";
 	end;
+
+
+	(* TBD: create uobjcoll memory map *)
+	(* TBD: initialize uobj section memory map for all uobjs based on uobjcoll memory map *)
 
 	(* create uobj collection uobjs public methods hashtable *)
 	let dummy = 0 in begin

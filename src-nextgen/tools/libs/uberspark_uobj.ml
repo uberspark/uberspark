@@ -370,6 +370,9 @@ class uobject
 		=
 
 		let uobj_section_load_addr = ref 0 in
+		(* TBD: we need to handle non-uniform uobj size, in which case we will only be an alignment value 
+			and we need to revise uobjsize comparision to alignment comparisons
+		*)
 		let uobjsize = self#get_d_size in
 		let uobj_load_addr = self#get_d_load_addr in
 
