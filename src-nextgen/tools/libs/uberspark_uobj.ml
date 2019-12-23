@@ -373,8 +373,10 @@ class uobject
 		let uobjsize = self#get_d_size in
 		let uobj_load_addr = self#get_d_load_addr in
 
+		(* clear out memory mapped sections list and set initial load address *)
 		uobj_section_load_addr := self#get_d_load_addr;
-
+		d_memorymapped_sections_list := []; 
+		
 		(* iterate over default sections *)
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
