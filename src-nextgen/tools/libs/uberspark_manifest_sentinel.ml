@@ -18,6 +18,7 @@ type sentinel_hdr_t =
 	mutable f_platform	   : string;
 	mutable f_arch	       : string;
 	mutable f_cpu		   : string;
+	mutable f_sizeof_code  : int;
 };;
 
 
@@ -75,6 +76,7 @@ let parse_sentinel_hdr
 					sentinel_hdr.f_platform <- json_sentinel_hdr |> member "platform" |> to_string;
 					sentinel_hdr.f_arch <- json_sentinel_hdr |> member "arch" |> to_string;
 					sentinel_hdr.f_cpu <- json_sentinel_hdr |> member "cpu" |> to_string;
+					sentinel_hdr.f_sizeof_code <- int_of_string (json_sentinel_hdr |> member "sizeof-code" |> to_string);
 					retval := true;
 				end
 			;

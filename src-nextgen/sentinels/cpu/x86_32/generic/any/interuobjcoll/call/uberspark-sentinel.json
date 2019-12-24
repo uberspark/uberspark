@@ -19,12 +19,13 @@
 		"namespace" : "uberspark/sentinels/cpu/x86_32/generic",
 		"platform" : "generic",
 		"arch" : "x86_32",
-		"cpu" : "generic"
+        "cpu" : "generic",
+        "sizeof-code" : "0x1000" 
 	},
 
     /*  sentinel code template 
 
-        parameters: 
+        parameters: -
         PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
     */ 
     "sentinel-code": "

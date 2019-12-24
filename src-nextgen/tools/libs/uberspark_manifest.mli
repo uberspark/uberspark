@@ -284,6 +284,7 @@ module Sentinel : sig
       mutable f_platform	   : string;
       mutable f_arch	       : string;
       mutable f_cpu				   : string;
+      mutable f_sizeof_code  : int;
     }
 
 

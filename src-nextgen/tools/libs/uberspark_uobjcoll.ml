@@ -158,7 +158,7 @@ let create_sentinels_list
 
 			(* read sentinel manifest header *)
 			if !retval then begin 			
-				let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
+				let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0;} in
 				let rval =	(Uberspark_manifest.Sentinel.parse_sentinel_hdr mf_json sentinel_hdr) in
 
 				if (rval == false) then begin
@@ -222,7 +222,7 @@ let parse_manifest_sentinel
 		begin
 
 			(* parse sentinel-hdr node *)
-			let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
+			let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code=0;} in
 			let rval =	(Uberspark_manifest.Sentinel.parse_sentinel_hdr mf_json sentinel_hdr) in
 			if rval then
 			begin
