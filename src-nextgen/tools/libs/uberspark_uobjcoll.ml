@@ -524,7 +524,7 @@ let consolidate_sections_with_memory_map
 (* note: these are for uobjs that are part of this collection *)
 (*--------------------------------------------------------------------------*)
 let create_uobjs_publicmethods_hashtbl
-	()
+	(publicmethods_hashtbl : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t))
 	: unit =
 
 	(* iterate over all uobjs within uobjinfo list *)
@@ -541,7 +541,7 @@ let create_uobjs_publicmethods_hashtbl
 				Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
 					let htbl_key = uobjinfo_entry.f_uobjinfo.f_uobj_ns in 
 					let htbl_key_pm_name = ((Uberspark_namespace.get_variable_name_prefix_from_ns htbl_key) ^ "__" ^ pm_name) in
-					Hashtbl.add d_uobjs_publicmethods_hashtbl htbl_key_pm_name { f_uobjpminfo = pm_info;
+					Hashtbl.add publicmethods_hashtbl htbl_key_pm_name { f_uobjpminfo = pm_info;
 						f_uobjinfo = uobjinfo_entry.f_uobjinfo;}
 				) uobj#get_d_publicmethods_hashtbl;
 
@@ -554,7 +554,7 @@ let create_uobjs_publicmethods_hashtbl
 	Hashtbl.iter (fun (canonical_pm_name:string) (entry:uobjcoll_uobjs_publicmethod_info_t)  ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical pm_name=%s; pm_name=%s, pm_addr=0x%08x" 
 			canonical_pm_name entry.f_uobjpminfo.f_name entry.f_uobjpminfo.f_addr; 
-	) d_uobjs_publicmethods_hashtbl;
+	) publicmethods_hashtbl;
 
 
 
@@ -795,6 +795,7 @@ let build
 	Uberspark_logger.log "initialized uobjs within collection";
 	end;
 
+	(* TBD: create public methods hashtable by passing in publicmethod hashtable variable *)
 
 	(* create uobjcoll memory map *)
 	let (rval, uobjcoll_size) = (consolidate_sections_with_memory_map ()) in 
@@ -816,9 +817,10 @@ let build
 	Uberspark_logger.log "computed uobj section memory map for all uobjs within collection";
 	end;
 
+	(* TBD: create public methods hashtable by passing in publicmethod hashtable with addr variable *)
 	(* create uobj collection uobjs public methods hashtable *)
 	let dummy = 0 in begin
-	create_uobjs_publicmethods_hashtbl ();
+	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
 	end;
 
