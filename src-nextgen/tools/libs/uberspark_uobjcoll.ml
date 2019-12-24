@@ -434,10 +434,21 @@ let compute_uobjs_section_memory_map_within_uobjinfo_list
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: total d_memorymapped_sections_list elements=%u" __LOC__ 
 		(List.length !d_memorymapped_sections_list);
 
-	List.iter ( fun ((section_name:string), (section_info:Defs.Basedefs.section_info_t)) -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section_name:%s" section_name;
 
-	)!d_memorymapped_sections_list;
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+
+			| Some uobj ->
+				let key = (".section_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name) in
+				let section_info : Defs.Basedefs.section_info_t = (List.assoc key !d_memorymapped_sections_list) in
+				let uobj_load_address = section_info.usbinformat.f_addr_start in 
+				Uberspark_logger.log "computing memory-map for uobj '%s' at load-address=0x%08x..." 
+					uobjinfo_entry.f_uobjinfo.f_uobj_name uobj_load_address;
+				uobj#set_d_load_addr uobj_load_address;
+				ignore(uobj#consolidate_sections_with_memory_map ());
+	)!d_uobjcoll_uobjinfo_list;
 
 	()
 ;;
