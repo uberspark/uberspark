@@ -425,6 +425,28 @@ let initialize_uobjs_within_uobjinfo_list
 
 
 (*--------------------------------------------------------------------------*)
+(* compute uobjs section memory map within uobjinfo list *)
+(*--------------------------------------------------------------------------*)
+let compute_uobjs_section_memory_map_within_uobjinfo_list
+	()
+	: unit = 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: total d_memorymapped_sections_list elements=%u" __LOC__ 
+		(List.length !d_memorymapped_sections_list);
+
+	List.iter ( fun ((section_name:string), (section_info:Defs.Basedefs.section_info_t)) -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section_name:%s" section_name;
+
+	)!d_memorymapped_sections_list;
+
+	()
+;;
+
+
+
+
+
+(*--------------------------------------------------------------------------*)
 (* consolidate uobjcoll sections with memory map *)
 (* update uobj size (d_size) accordingly and return the size *)
 (*--------------------------------------------------------------------------*)
