@@ -54,6 +54,8 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 
 let d_sources_asm_file_list: string list ref = ref [];;
 
+let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
+
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
 
@@ -795,7 +797,11 @@ let build
 	Uberspark_logger.log "initialized uobjs within collection";
 	end;
 
-	(* TBD: create public methods hashtable by passing in publicmethod hashtable variable *)
+	(* create uobj collection uobjs public methods hashtable *)
+	let dummy = 0 in begin
+	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
+	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
+	end;
 
 	(* create uobjcoll memory map *)
 	let (rval, uobjcoll_size) = (consolidate_sections_with_memory_map ()) in 
@@ -817,11 +823,10 @@ let build
 	Uberspark_logger.log "computed uobj section memory map for all uobjs within collection";
 	end;
 
-	(* TBD: create public methods hashtable by passing in publicmethod hashtable with addr variable *)
-	(* create uobj collection uobjs public methods hashtable *)
+	(* create uobj collection uobjs public methods hashtable with address *)
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
-	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
+	Uberspark_logger.log "created uobj collection uobjs public methods hashtable with address";
 	end;
 
 
