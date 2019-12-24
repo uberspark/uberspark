@@ -54,7 +54,7 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 
 let d_sources_asm_file_list: string list ref = ref [];;
 
-let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
+let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
 
 (* association list of uobj binary image sections with memory map info; indexed by section name *)		
@@ -820,7 +820,7 @@ let build
 	(* TBD: create public methods hashtable by passing in publicmethod hashtable with addr variable *)
 	(* create uobj collection uobjs public methods hashtable *)
 	let dummy = 0 in begin
-	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
+	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
 	end;
 
