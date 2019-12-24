@@ -139,7 +139,7 @@ let create_sentinels_list
 
 	let retval = ref true in
 
-	(* create intrauobjcoll sentinel list *)
+	(* create sentinel list *)
 	List.iter ( fun (sentinel_type: string) ->
 		if !retval then begin
 			let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
@@ -187,12 +187,6 @@ let create_sentinels_list
 	if (!retval == false) then (false)
 	else
 
-(*
-	(* create interuobjcoll sentinel list *)
-	List.iter ( fun (sentinel_type: string) ->
-
-	) d_uobjcoll_sentinels_mf_node.f_interuobjcoll;
-*)
 	let dummy=0 in begin
 	retval := true;
 	end;
