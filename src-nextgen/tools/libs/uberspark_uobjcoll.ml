@@ -395,30 +395,21 @@ let initialize_uobjs_within_uobjinfo_list
 	()
 	: unit = 
 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x" __LOC__ !d_load_address;
-
-	let curr_load_address = ref 0 in
-	curr_load_address := !d_load_address;
-
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		match uobjinfo_entry.f_uobj with 
 			| None ->
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
 
 			| Some uobj ->
-				Uberspark_logger.log "initializing uobj '%s' at load-address=0x%08x..." uobjinfo_entry.f_uobjinfo.f_uobj_name !curr_load_address;
+				Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
 				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
 					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
-					d_target_def !curr_load_address) in
-				Uberspark_logger.log "uobj '%s' successfully initialized; load-address=0x%08x, size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name uobj#get_d_load_addr uobj#get_d_size;
-				(* update uobjcoll size *)
-				d_size := !d_size + uobj#get_d_size;
-				curr_load_address := !curr_load_address + uobj#get_d_size; 
+					d_target_def 0) in
+				Uberspark_logger.log "uobj '%s' successfully initialized; size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name 
+					uobj#get_d_size;
 		;
 
 	)!d_uobjcoll_uobjinfo_list;
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x, d_size=0x%08x" __LOC__ !d_load_address !d_size;
 
 ;;
 
@@ -514,6 +505,7 @@ let consolidate_sections_with_memory_map
 	(* update uobjcoll size *)
 	d_size := !uobjcoll_section_load_addr -  !d_load_address;
 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x, d_size=0x%08x" __LOC__ !d_load_address !d_size;
 
 	(!uobjinfo_status, !d_size)
 ;;
