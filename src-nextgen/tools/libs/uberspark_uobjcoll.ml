@@ -771,7 +771,20 @@ let build
 	end;
 
 
-	(* TBD: create uobjcoll memory map *)
+	(* create uobjcoll memory map *)
+	let (rval, uobjcoll_size) = (consolidate_sections_with_memory_map ()) in 
+
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not create uobj collection memory map!";
+		(false)
+	end else
+
+	(* store uobj collection computed size *)
+	let dummy = 0 in begin
+	d_size := uobjcoll_size;
+	Uberspark_logger.log "consolidated uobj collection sections, total size=0x%08x" !d_size;
+	end;
+
 	(* TBD: initialize uobj section memory map for all uobjs based on uobjcoll memory map *)
 
 	(* create uobj collection uobjs public methods hashtable *)
