@@ -807,7 +807,11 @@ let build
 	Uberspark_logger.log "consolidated uobj collection sections, total size=0x%08x" !d_size;
 	end;
 
-	(* TBD: initialize uobj section memory map for all uobjs based on uobjcoll memory map *)
+	(* compute uobj section memory map for all uobjs based on uobjcoll memory map *)
+	let dummy = 0 in begin
+	compute_uobjs_section_memory_map_within_uobjinfo_list ();
+	Uberspark_logger.log "computed uobj section memory map for all uobjs within collection";
+	end;
 
 	(* create uobj collection uobjs public methods hashtable *)
 	let dummy = 0 in begin
