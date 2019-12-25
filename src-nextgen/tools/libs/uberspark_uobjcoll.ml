@@ -21,7 +21,8 @@ type uobjcoll_uobjs_publicmethod_info_t =
 type uobjcoll_sentinel_info_t =
 {
 	mutable f_sentinel_code			: string;
-	mutable f_sentinel_libcode  	: string;			
+	mutable f_sentinel_libcode  	: string;	
+	mutable f_sizeof_code : int;		
 };;
 
 let d_mf_filename = ref "";;
@@ -138,6 +139,7 @@ let create_sentinels_list
 	: bool = 
 
 	let retval = ref true in
+	let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0;} in
 
 	(* create sentinel list *)
 	List.iter ( fun (sentinel_type: string) ->
@@ -147,7 +149,7 @@ let create_sentinels_list
 				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
-			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= "";} in
+			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= ""; f_sizeof_code=0;} in
 			
 			(* read sentinel manifest JSON *)
 			let (rval, mf_json) = (Uberspark_manifest.get_manifest_json sentinel_mf_filename) in
@@ -158,7 +160,6 @@ let create_sentinels_list
 
 			(* read sentinel manifest header *)
 			if !retval then begin 			
-				let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0;} in
 				let rval =	(Uberspark_manifest.Sentinel.parse_sentinel_hdr mf_json sentinel_hdr) in
 
 				if (rval == false) then begin
@@ -176,6 +177,7 @@ let create_sentinels_list
 				end else begin
 					sentinel_info.f_sentinel_code <- sentinel_code;
 					sentinel_info.f_sentinel_libcode <- sentinel_libcode;
+					sentinel_info.f_sizeof_code <- sentinel_hdr.f_sizeof_code;
 					sentinels_list_output := !sentinels_list_output @ [ (sentinel_type, sentinel_info)];
 				end;
 			end;
