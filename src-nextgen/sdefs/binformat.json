@@ -36,8 +36,9 @@
             "USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA": ["int", "0xf"],
             "USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA": ["int", "0x10"],
             "USBINFORMAT_SECTION_TYPE_UOBJ_USTACK": ["int", "0x11"],
-            "USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK": ["int", "0x12"]
-         }
+            "USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK": ["int", "0x12"],
+            "USBINFORMAT_SECTION_TYPE_INTERUOBJCOLL_SENTINEL": ["int", "0x13"]
+        }
     }
 
 }

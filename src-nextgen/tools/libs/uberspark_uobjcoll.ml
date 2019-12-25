@@ -461,9 +461,41 @@ let consolidate_sections_with_memory_map
 	(* clear out memory mapped sections list and set initial section load address *)
 	uobjcoll_section_load_addr := !d_load_address;
 	d_memorymapped_sections_list := []; 
-	
 
-	(* TBD: add inter-uobjcoll entry point sentinels *)
+	(* add inter-uobjcoll entry point sentinels *)
+	List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_type sentinel_info.f_sizeof_code;
+	
+		Hashtbl.iter (fun (pm_name:string) (pm_info:uobjcoll_uobjs_publicmethod_info_t)  ->
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
+			let key = (".section_interuobjcoll_sentinel_" ^ pm_name) in 
+			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.f_sizeof_code mod Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment)) in
+
+			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
+				{ f_name = key;	
+					f_subsection_list = [];	
+					usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_INTERUOBJCOLL_SENTINEL; 
+									f_prot=0; 
+									f_size = section_size;
+									f_aligned_at = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
+									f_pad_to = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
+									f_addr_start = !uobjcoll_section_load_addr; 
+									f_addr_file = 0;
+									f_reserved = 0;
+								};
+				}) ];
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for interuobjcoll sentinel '%s' at 0x%08x, size=%08x..." 
+				key !uobjcoll_section_load_addr section_size;
+
+			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+
+		) d_uobjs_publicmethods_hashtbl;
+
+	) !d_interuobjcoll_sentinels_list;
+
+
 	(* TBD: add intra-uobjcoll sentinels *)
 
 	(* iterate over all the uobjs and add a section for each *)
