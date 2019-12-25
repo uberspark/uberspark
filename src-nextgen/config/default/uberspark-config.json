@@ -29,6 +29,7 @@
 		"uobjcoll_binary_image_load_address" : "0x60000000",
 		"uobjcoll_binary_image_hdr_section_alignment" : "0x200000",
 		"uobjcoll_binary_image_hdr_section_size" : "0x200000",
+		"uobjcoll_binary_image_section_alignment" : "0x200000",
 	
 		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
 		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
