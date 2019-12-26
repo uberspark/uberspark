@@ -63,6 +63,7 @@ let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string
 
 let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t list)  Hashtbl.t));; 
 
+let d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t list)  Hashtbl.t));; 
 
 (* association list of uobj binary image sections with memory map info; indexed by section name *)		
 let d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref [];;
@@ -527,6 +528,8 @@ let consolidate_sections_with_memory_map
 	
 		Hashtbl.iter (fun (pm_name:string) (pm_info:uobjcoll_uobjs_publicmethod_info_t)  ->
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
+
+			(* add section *)
 			let key = (".section_intrauobjcoll_sentinel_" ^ pm_name) in 
 			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment - 
 				(sentinel_info.f_sizeof_code mod Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment)) in
@@ -548,6 +551,22 @@ let consolidate_sections_with_memory_map
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for intrauobjcoll sentinel '%s' at 0x%08x, size=%08x..." 
 				key !uobjcoll_section_load_addr section_size;
 
+			(* add entry into d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl *)
+			let sinfo : uobjcoll_sentinel_info_t = { f_sentinel_code = sentinel_info.f_sentinel_code; 
+				f_sentinel_libcode= sentinel_info.f_sentinel_libcode; 
+				f_sizeof_code= sentinel_info.f_sizeof_code; 
+				f_addr= !uobjcoll_section_load_addr; 
+				f_type= sentinel_info.f_type;} in
+			if (Hashtbl.mem d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name) then begin
+				let list_of_sentinels = (Hashtbl.find d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name) in
+				let new_list_of_sentinels = list_of_sentinels @ [ sinfo ] in
+				Hashtbl.replace d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
+			end else begin
+				let new_list_of_sentinels =  [ sinfo ] in
+				Hashtbl.add d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
+			end;
+
+			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
 
 		) d_uobjs_publicmethods_hashtbl;
