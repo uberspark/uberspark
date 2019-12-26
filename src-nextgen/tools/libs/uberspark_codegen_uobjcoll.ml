@@ -9,6 +9,17 @@
 (****************************************************************************)
 (* types *)
 (****************************************************************************)
+type sentinel_info_t =
+{
+	mutable f_sentinel_code			: string;
+	mutable f_sentinel_libcode  	: string;	
+	mutable f_sizeof_code : int;	
+	mutable f_addr : int;
+    mutable f_pm_addr : int;
+    mutable f_sentinel_name : string;
+    mutable f_sentinel_secname : string;
+	mutable f_type : string; 	
+};;
 
 
 
