@@ -61,6 +61,8 @@ let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uo
 
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, uobjcoll_uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
+let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t)  Hashtbl.t));; 
+
 
 (* association list of uobj binary image sections with memory map info; indexed by section name *)		
 let d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref [];;
