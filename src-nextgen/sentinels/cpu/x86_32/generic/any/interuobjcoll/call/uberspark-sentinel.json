@@ -16,7 +16,7 @@
 
     /* sentinel header */
 	"sentinel-hdr":{
-		"namespace" : "uberspark/sentinels/cpu/x86_32/generic",
+		"namespace" : "uberspark/sentinels/cpu/x86_32/generic/any/interuobjcoll/call",
 		"platform" : "generic",
 		"arch" : "x86_32",
         "cpu" : "generic",

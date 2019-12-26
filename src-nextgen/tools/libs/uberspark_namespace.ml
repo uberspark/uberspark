@@ -194,3 +194,9 @@ let is_uobj_uobjcoll_abspath_in_namespace
 	(!retval)
 ;;
 
+let get_namespace_basename
+	(ns : string)
+	: string =
+
+	(Filename.basename ns)
+;;

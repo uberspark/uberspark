@@ -89,4 +89,5 @@ val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
 val is_uobj_uobjcoll_canonical_namespace : string -> bool
 val is_uobj_ns_in_uobjcoll_ns : string -> string -> bool
+val get_namespace_basename : string -> string
 

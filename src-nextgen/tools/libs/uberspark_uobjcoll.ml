@@ -22,7 +22,9 @@ type uobjcoll_sentinel_info_t =
 {
 	mutable f_sentinel_code			: string;
 	mutable f_sentinel_libcode  	: string;	
-	mutable f_sizeof_code : int;		
+	mutable f_sizeof_code : int;	
+	mutable f_addr : int;
+	mutable f_type : string; 	
 };;
 
 let d_mf_filename = ref "";;
@@ -149,7 +151,7 @@ let create_sentinels_list
 				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
-			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= ""; f_sizeof_code=0;} in
+			let sentinel_info : uobjcoll_sentinel_info_t = { f_sentinel_code = ""; f_sentinel_libcode= ""; f_sizeof_code=0; f_addr=0; f_type="";} in
 			
 			(* read sentinel manifest JSON *)
 			let (rval, mf_json) = (Uberspark_manifest.get_manifest_json sentinel_mf_filename) in
@@ -178,6 +180,8 @@ let create_sentinels_list
 					sentinel_info.f_sentinel_code <- sentinel_code;
 					sentinel_info.f_sentinel_libcode <- sentinel_libcode;
 					sentinel_info.f_sizeof_code <- sentinel_hdr.f_sizeof_code;
+					sentinel_info.f_addr <- 0;
+					sentinel_info.f_type <- sentinel_type;
 					sentinels_list_output := !sentinels_list_output @ [ (sentinel_type, sentinel_info)];
 				end;
 			end;
@@ -464,7 +468,7 @@ let consolidate_sections_with_memory_map
 
 	(* add inter-uobjcoll entry point sentinels *)
 	List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_type sentinel_info.f_sizeof_code;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 	
 		Hashtbl.iter (fun (pm_name:string) (pm_info:uobjcoll_uobjs_publicmethod_info_t)  ->
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
@@ -499,7 +503,7 @@ let consolidate_sections_with_memory_map
 	(* add intra-uobjcoll sentinel sections *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add intra-uobjcoll sentinel sections...";
 	List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_type sentinel_info.f_sizeof_code;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 	
 		Hashtbl.iter (fun (pm_name:string) (pm_info:uobjcoll_uobjs_publicmethod_info_t)  ->
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
