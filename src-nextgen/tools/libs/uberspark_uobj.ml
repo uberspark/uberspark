@@ -70,6 +70,10 @@ class uobject
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
+	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref = ref []; 
+	method get_d_publicmethods_assoc_list = !d_publicmethods_assoc_list;
+
+
 	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
 
