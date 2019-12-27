@@ -232,12 +232,14 @@ class uobject
 
 		(* parse uobj-publicmethods node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_publicmethods mf_json d_publicmethods_hashtbl) in
+		let rval_assoc = (Uberspark_manifest.Uobj.parse_uobj_publicmethods_into_assoc_list mf_json d_publicmethods_assoc_list) in
 
-		if (rval == false) then (false)
+		if (rval == false) || (rval_assoc == false) then (false)
 		else
 		let dummy = 0 in
 			begin
-				Uberspark_logger.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
+				Uberspark_logger.log "total public methods:%u,%u" (Hashtbl.length self#get_d_publicmethods_hashtbl)
+					(List.length self#get_d_publicmethods_assoc_list); 
 			end;
 
 		(* parse uobj-intrauobjcoll-callees node *)
