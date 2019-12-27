@@ -62,13 +62,13 @@ module Uobjcoll : sig
   (****************************************************************************)
 type sentinel_info_t =
 {
-	mutable f_sentinel_code			: string;
-	mutable f_sentinel_libcode  	: string;	
+	mutable f_code			: string;
+	mutable f_libcode  	: string;	
 	mutable f_sizeof_code : int;	
 	mutable f_addr : int;
     mutable f_pm_addr : int;
-    mutable f_sentinel_name : string;
-    mutable f_sentinel_secname : string;
+    mutable f_name : string;
+    mutable f_secname : string;
 	mutable f_type : string; 	
 }
 
@@ -76,6 +76,10 @@ type sentinel_info_t =
   (****************************************************************************)
   (* interfaces *)
   (****************************************************************************)
+  val generate_sentinel_code : string ->
+      ?output_banner : string ->
+      sentinel_info_t list -> bool
+  
   val generate_uobj_binary_image_section_mapping : string ->
     ?output_banner : string ->
     Defs.Basedefs.uobjinfo_t list -> bool
