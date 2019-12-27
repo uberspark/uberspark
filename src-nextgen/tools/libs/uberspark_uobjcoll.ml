@@ -19,15 +19,14 @@ type uobjcoll_uobjinfo_t =
 };;
 *)
 
-(*type uobjcoll_sentinel_info_t =
+type uobjcoll_sentinel_info_t =
 {
-	mutable f_sentinel_code			: string;
-	mutable f_sentinel_libcode  	: string;	
+	mutable f_code			: string;
+	mutable f_libcode  	: string;	
 	mutable f_sizeof_code : int;	
-	mutable f_addr : int;
 	mutable f_type : string; 	
 };;
-*)
+
 
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
@@ -41,11 +40,13 @@ let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinel
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
 
-(* association list of interuobjcoll (entry) sentinels; indexed by sentinel type *)		
-let d_interuobjcoll_sentinels_list : (string * Uberspark_codegen.Uobjcoll.sentinel_info_t) list ref = ref [];; 
+(* association list of interuobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
+the collection manifest *)		
+let d_interuobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
 
-(* association list of intrauobjcoll sentinels; indexed by sentinel type *)		
-let d_intrauobjcoll_sentinels_list : (string * Uberspark_codegen.Uobjcoll.sentinel_info_t) list ref = ref [];; 
+(* association list of intrauobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
+the collection manifest *)		
+let d_intrauobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
 
 
 let d_load_address : int ref = ref 0;;
@@ -142,7 +143,7 @@ let parse_manifest
 let create_sentinels_list	
 	(sentinel_facet : string)
 	(sentinel_type_list_input : string list)
-	(sentinels_list_output : (string * Uberspark_codegen.Uobjcoll.sentinel_info_t) list ref)
+	(sentinels_list_output : (string * uobjcoll_sentinel_info_t) list ref)
 	: bool = 
 
 	let retval = ref true in
@@ -156,7 +157,7 @@ let create_sentinels_list
 				d_hdr.f_arch ^ "/" ^ d_hdr.f_cpu ^ "/" ^ d_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
-			let sentinel_info : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = ""; f_libcode= ""; f_sizeof_code=0; f_pm_addr=0; f_addr=0; f_name=""; f_secname=""; f_type="";} in
+			let sentinel_info : uobjcoll_sentinel_info_t = { f_code = ""; f_libcode= ""; f_sizeof_code=0; f_type="";} in
 			
 			(* read sentinel manifest JSON *)
 			let (rval, mf_json) = (Uberspark_manifest.get_manifest_json sentinel_mf_filename) in
@@ -185,11 +186,7 @@ let create_sentinels_list
 					sentinel_info.f_code <- sentinel_code;
 					sentinel_info.f_libcode <- sentinel_libcode;
 					sentinel_info.f_sizeof_code <- sentinel_hdr.f_sizeof_code;
-					sentinel_info.f_addr <- 0;
-					sentinel_info.f_pm_addr <- 0;
 					sentinel_info.f_type <- sentinel_type;
-					sentinel_info.f_name <- "";
-					sentinel_info.f_secname <- "";
 					sentinels_list_output := !sentinels_list_output @ [ (sentinel_type, sentinel_info)];
 				end;
 			end;
@@ -475,7 +472,7 @@ let consolidate_sections_with_memory_map
 	d_memorymapped_sections_list := []; 
 
 	(* add inter-uobjcoll entry point sentinels *)
-	List.iter ( fun ( (sentinel_type:string), (sentinel_info: Uberspark_codegen.Uobjcoll.sentinel_info_t)) ->
+	List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 	
 		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t)  ->
@@ -526,12 +523,12 @@ let consolidate_sections_with_memory_map
 
 		) d_uobjs_publicmethods_hashtbl;
 
-	) !d_interuobjcoll_sentinels_list;
+	) !d_interuobjcoll_sentinels_list_mforder;
 
 
 	(* add intra-uobjcoll sentinel sections *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add intra-uobjcoll sentinel sections...";
-	List.iter ( fun ( (sentinel_type:string), (sentinel_info: Uberspark_codegen.Uobjcoll.sentinel_info_t)) ->
+	List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 	
 		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t)  ->
@@ -583,7 +580,7 @@ let consolidate_sections_with_memory_map
 
 		) d_uobjs_publicmethods_hashtbl;
 
-	) !d_intrauobjcoll_sentinels_list;
+	) !d_intrauobjcoll_sentinels_list_mforder;
 
 
 	(* iterate over all the uobjs and add a section for each *)
@@ -839,25 +836,25 @@ let build
 	end;
 
     (* create intra uobjcoll sentinels list *)
-	let rval = (create_sentinels_list "intrauobjcoll" d_uobjcoll_sentinels_mf_node.f_intrauobjcoll d_intrauobjcoll_sentinels_list) in	
+	let rval = (create_sentinels_list "intrauobjcoll" d_uobjcoll_sentinels_mf_node.f_intrauobjcoll d_intrauobjcoll_sentinels_list_mforder) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for intra-uobjcoll sentinels!";
 		(!retval)
 	end else
 
 	let dummy = 0 in begin
-	Uberspark_logger.log "created intra-uobjcoll sentinel list, total sentinels=%u" (List.length !d_intrauobjcoll_sentinels_list);
+	Uberspark_logger.log "created intra-uobjcoll sentinel list, total sentinels=%u" (List.length !d_intrauobjcoll_sentinels_list_mforder);
 	end;
 
     (* create inter uobjcoll sentinels list *)
-	let rval = (create_sentinels_list "interuobjcoll" d_uobjcoll_sentinels_mf_node.f_interuobjcoll d_interuobjcoll_sentinels_list) in	
+	let rval = (create_sentinels_list "interuobjcoll" d_uobjcoll_sentinels_mf_node.f_interuobjcoll d_interuobjcoll_sentinels_list_mforder) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for inter-uobjcoll sentinels!";
 		(!retval)
 	end else
 
 	let dummy = 0 in begin
-	Uberspark_logger.log "created inter-uobjcoll sentinel list, total sentinels=%u" (List.length !d_interuobjcoll_sentinels_list);
+	Uberspark_logger.log "created inter-uobjcoll sentinel list, total sentinels=%u" (List.length !d_interuobjcoll_sentinels_list_mforder);
 	end;
 
 
