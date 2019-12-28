@@ -64,6 +64,10 @@ let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_c
 
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
+let d_uobjs_publicmethods_list_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; 
+
+let d_uobjs_publicmethods_list_with_address_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; 
+
 let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; 
 
 let d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; 
@@ -631,6 +635,52 @@ let consolidate_sections_with_memory_map
 
 
 
+(*--------------------------------------------------------------------------*)
+(* create uobj collection public methods association list in mf order *)
+(* note: these are for uobjs that are part of this collection *)
+(*--------------------------------------------------------------------------*)
+let create_uobjs_publicmethods_list_mforder
+	(publicmethods_list : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref)
+	: unit =
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "create_uobjs_publicmethods_list_mforder [START]"; 
+
+	(* iterate over all uobjs within uobjinfo list *)
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+
+			| Some uobj ->
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding public method info for uobj '%s', total public methods=%u" 
+					uobjinfo_entry.f_uobjinfo.f_uobj_name (List.length uobj#get_d_publicmethods_assoc_list);
+				
+				let publicmethods_hashtbl = uobj#get_d_publicmethods_hashtbl in
+
+				List.iter (fun ((pm_name:string), (throw_away:Uberspark_manifest.Uobj.uobj_publicmethods_t))  ->
+					let assoc_key = uobjinfo_entry.f_uobjinfo.f_uobj_ns in 
+					let assoc_key_pm_name = ((Uberspark_namespace.get_variable_name_prefix_from_ns assoc_key) ^ "__" ^ pm_name) in
+					let pm_info : Uberspark_manifest.Uobj.uobj_publicmethods_t = (Hashtbl.find publicmethods_hashtbl pm_name) in
+					publicmethods_list := !publicmethods_list @ [ (assoc_key_pm_name, { f_uobjpminfo = pm_info;
+						f_uobjinfo = uobjinfo_entry.f_uobjinfo;}) ];
+				) uobj#get_d_publicmethods_assoc_list;
+
+		;
+
+	)!d_uobjcoll_uobjinfo_list;
+
+	(* dump uobjs publc methods association list *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll uobjs publicmethods assoc list dump follows:"; 
+	List.iter (fun ((canonical_pm_name:string), (entry:Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t))  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical pm_name=%s; pm_name=%s, pm_addr=0x%08x" 
+			canonical_pm_name entry.f_uobjpminfo.f_name entry.f_uobjpminfo.f_addr; 
+	) !publicmethods_list;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "create_uobjs_publicmethods_list_mforder [END]"; 
+
+	()
+;;
 
 
 
@@ -910,10 +960,11 @@ let build
 	Uberspark_logger.log "initialized uobjs within collection";
 	end;
 
-	(* create uobj collection uobjs public methods hashtable *)
+	(* create uobj collection uobjs public methods hashtable and association list *)
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
-	Uberspark_logger.log "created uobj collection uobjs public methods hashtable";
+	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_list_mforder;
+	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list";
 	end;
 
 	(* create uobjcoll memory map *)
@@ -936,10 +987,11 @@ let build
 	Uberspark_logger.log "computed uobj section memory map for all uobjs within collection";
 	end;
 
-	(* create uobj collection uobjs public methods hashtable with address *)
+	(* create uobj collection uobjs public methods hashtable and association list with address *)
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
-	Uberspark_logger.log "created uobj collection uobjs public methods hashtable with address";
+	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_list_with_address_mforder;
+	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list with address";
 	end;
 
 
