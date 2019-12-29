@@ -19,7 +19,8 @@
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic",
-		"hpl" : "any"
+		"hpl" : "any",
+		"intrauobjcoll-sentinels" : [ "call" ]
 	},
 
 	/* config settings */	

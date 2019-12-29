@@ -10,6 +10,7 @@ type uobjcoll_hdr_t =
 	mutable f_arch	       : string;
 	mutable f_cpu		   : string;
 	mutable f_hpl		   : string;
+	mutable f_intrauobjcoll_sentinels : string list;
 };;
 
 type uobjcoll_uobjs_t =
@@ -56,6 +57,8 @@ let parse_uobjcoll_hdr
 					uobjcoll_hdr.f_arch <- json_uobjcoll_hdr |> member "arch" |> to_string;
 					uobjcoll_hdr.f_cpu <- json_uobjcoll_hdr |> member "cpu" |> to_string;
 					uobjcoll_hdr.f_hpl <- json_uobjcoll_hdr |> member "hpl" |> to_string;
+					uobjcoll_hdr.f_intrauobjcoll_sentinels <- (json_list_to_string_list  (json_uobjcoll_hdr |> member "intrauobjcoll-sentinels" |> to_list));
+
 					retval := true;
 				end
 			;

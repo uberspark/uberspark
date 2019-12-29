@@ -31,7 +31,7 @@ type uobjcoll_sentinel_info_t =
 let d_mf_filename = ref "";;
 let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
-let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";};;
+let d_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; f_intrauobjcoll_sentinels = [];};;
 
 let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;

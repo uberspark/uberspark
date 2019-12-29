@@ -229,6 +229,7 @@ module Uobjcoll : sig
       mutable f_arch	       : string;
       mutable f_cpu				   : string;
       mutable f_hpl          : string;
+    	mutable f_intrauobjcoll_sentinels : string list;
     }
 
   type uobjcoll_uobjs_t =
