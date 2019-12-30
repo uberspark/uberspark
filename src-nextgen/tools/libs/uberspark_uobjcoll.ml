@@ -77,12 +77,12 @@ as it appears in manifest order; with computed publicmethod address *)
 (* TO REMOVE *)
 (* association list of interuobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
 the collection manifest *)		
-let d_interuobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
+(*let d_interuobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; *)
 
 (* TO REMOVE *)
 (* association list of intrauobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
 the collection manifest *)		
-let d_intrauobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
+(*let d_intrauobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; *)
 
 
 (*let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; *)
@@ -331,7 +331,7 @@ let create_interuobjcoll_intrauobjcoll_sentinels_hashtbl
 
 
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* create uobj collection sentinels list *)
 (*--------------------------------------------------------------------------*)
@@ -399,7 +399,7 @@ let create_sentinels_list
 	
 	(!retval)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* parse sentinel manifest *)
