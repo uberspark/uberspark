@@ -304,3 +304,33 @@ let parse_uobjcoll_sentinels_interuobjcoll
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobjcoll-sentinels/intrauobjcoll" *)
+(* return: *)
+(* on success: true; uobjcoll_sentinels fields are modified with parsed values *)
+(* on failure: false; uobjcoll_sentinels fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobjcoll_sentinels_intrauobjcoll 
+	(mf_json : Yojson.Basic.t)
+	(uobjcoll_sentinels_intrauobjcoll_list : string list ref)
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobjcoll_sentinels = mf_json |> member "uobjcoll-sentinels" in
+			if(json_uobjcoll_sentinels <> `Null) then
+				begin
+					uobjcoll_sentinels_intrauobjcoll_list := (json_list_to_string_list  (json_uobjcoll_sentinels |> member "intrauobjcoll" |> to_list));
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
