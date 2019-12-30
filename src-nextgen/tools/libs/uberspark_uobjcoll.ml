@@ -33,9 +33,9 @@ let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
 
 
-let d_hdr_mf_node: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; f_intrauobjcoll_sentinels = [];};;
-let d_uobjcoll_uobjs_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
-let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;
+let d_mf_node_hdr: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; f_intrauobjcoll_sentinels = [];};;
+let d_mf_node_uobjcoll_uobjs : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
+(*let d_mf_node_uobjcoll_sentinels : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;*)
 
 
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
@@ -139,12 +139,12 @@ let parse_manifest
 	else
 
 	(* parse uobjcoll-hdr node *)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_hdr mf_json d_hdr_mf_node ) in
+	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_hdr mf_json d_mf_node_hdr ) in
 	if (rval == false) then (false)
 	else
 
 	let dummy=0 in begin
-		d_path_ns := !Uberspark_namespace.namespace_root_dir  ^ "/" ^ d_hdr_mf_node.f_namespace;
+		d_path_ns := !Uberspark_namespace.namespace_root_dir  ^ "/" ^ d_mf_node_hdr.f_namespace;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
@@ -156,12 +156,12 @@ let parse_manifest
     end;
 
 	(* parse uobjcoll-uobjs node *)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_uobjs mf_json d_uobjcoll_uobjs_mf_node ) in
+	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_uobjs mf_json d_mf_node_uobjcoll_uobjs ) in
 	if (rval == false) then (false)
 	else
 
 	let dummy=0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_uobjcoll_uobjs_mf_node.f_templar_uobjs);
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_mf_node_uobjcoll_uobjs.f_templar_uobjs);
 	end;
 
 	(* parse uobjcoll-interuobjcoll-publicmethods node *)
@@ -179,17 +179,17 @@ let parse_manifest
 
 
 	(* parse uobjcoll-sentinels node *)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels mf_json d_uobjcoll_sentinels_mf_node ) in
+(*	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels mf_json d_mf_node_uobjcoll_sentinels ) in
 	if (rval == false) then (false)
 	else
 
 
 	let dummy=0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection sentinels=(%u, %u)" 
-			(List.length d_uobjcoll_sentinels_mf_node.f_interuobjcoll)
-			(List.length d_uobjcoll_sentinels_mf_node.f_intrauobjcoll);
+			(List.length d_mf_node_uobjcoll_sentinels.f_interuobjcoll)
+			(List.length d_mf_node_uobjcoll_sentinels.f_intrauobjcoll);
 	end;
-
+*)
 
 	(true)
 ;;
@@ -210,7 +210,7 @@ let get_sentinel_info_for_sentinel_facet_and_type
 	
 	let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-		d_hdr_mf_node.f_arch ^ "/" ^ d_hdr_mf_node.f_cpu ^ "/" ^ d_hdr_mf_node.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
+		d_mf_node_hdr.f_arch ^ "/" ^ d_mf_node_hdr.f_cpu ^ "/" ^ d_mf_node_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
@@ -301,7 +301,7 @@ let create_interuobjcoll_intrauobjcoll_sentinels_hashtbl
 		if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
 			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intrauobjcoll";
 		end;
-	) d_hdr_mf_node.f_intrauobjcoll_sentinels;
+	) d_mf_node_hdr.f_intrauobjcoll_sentinels;
 
 	(* now iterate over the intrauobjcoll sentinel type to sentinel facet hashtbl, get the corresponding 
 	sentinel info and add it to d_uobjcoll_sentinels_hashtbl *)
@@ -349,7 +349,7 @@ let create_sentinels_list
 		if !retval then begin
 			let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
 				Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-				d_hdr_mf_node.f_arch ^ "/" ^ d_hdr_mf_node.f_cpu ^ "/" ^ d_hdr_mf_node.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
+				d_mf_node_hdr.f_arch ^ "/" ^ d_mf_node_hdr.f_cpu ^ "/" ^ d_mf_node_hdr.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 				sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 			let sentinel_info : uobjcoll_sentinel_info_t = { f_code = ""; f_libcode= ""; f_sizeof_code=0; f_type="";} in
@@ -480,9 +480,9 @@ let initialize_uobjs_baseinfo
 	let retval = ref false in
 
 	(* if the uobjcoll has a prime uobj, add it to uobjcoll_uobjinfo first *)
-	if not (d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns = "") then begin
+	if not (d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns = "") then begin
 		
-			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) in
+			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; 
 					f_uobjinfo = { f_uobj_name = ""; f_uobj_ns = "";  
@@ -491,13 +491,13 @@ let initialize_uobjs_baseinfo
 
 				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
 				uobjinfo_entry.f_uobjinfo.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns;
+				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- true;
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns);
 
-				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns
-					d_hdr_mf_node.f_namespace) then begin
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns
+					d_mf_node_hdr.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -506,17 +506,17 @@ let initialize_uobjs_baseinfo
 				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns);
 				end;
 
 				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
 
-			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns) then begin
+			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns) then begin
 					(* there is already another uobj with the same ns within the collection, so bail out *)
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "multiple uobjs with same namespace!";
 					retval := false;
 		    	end else begin
-					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf_node.f_prime_uobj_ns uobjinfo_entry;
+					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl d_mf_node_uobjcoll_uobjs.f_prime_uobj_ns uobjinfo_entry;
 					retval := true;
 		    	end;
 
@@ -550,7 +550,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
 				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
 
-				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr_mf_node.f_namespace) then begin
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_mf_node_hdr.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -576,7 +576,7 @@ let initialize_uobjs_baseinfo
 				retval := false;
 			end;
 
-	) d_uobjcoll_uobjs_mf_node.f_templar_uobjs;
+	) d_mf_node_uobjcoll_uobjs.f_templar_uobjs;
 	end;
 
 	if (!retval == false) then (false)
@@ -800,7 +800,7 @@ let consolidate_sections_with_memory_map
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
 
-		) d_hdr_mf_node.f_intrauobjcoll_sentinels;
+		) d_mf_node_hdr.f_intrauobjcoll_sentinels;
 
 	) !d_uobjs_publicmethods_assoc_list_mforder;
 
@@ -958,7 +958,7 @@ let prepare_namespace_for_build
 	(* local variables *)
 	let retval = ref false in
 	let in_namespace_build = ref false in
-	let uobjcoll_canonical_namespace = d_hdr_mf_node.f_namespace in
+	let uobjcoll_canonical_namespace = d_mf_node_hdr.f_namespace in
 	let uobjcoll_canonical_namespace_path = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ uobjcoll_canonical_namespace) in
 
 	(* determine if we are doing an in-namespace build or an out-of-namespace build *)
@@ -1101,14 +1101,14 @@ let build
 	(* sanity check platform, cpu, arch override *)
 	(* TBD: if manifest says generic, we need a command line override *)
 	let dummy = 0 in begin
-	d_hdr_mf_node.f_arch <- d_target_def.f_arch;
-	d_hdr_mf_node.f_cpu <- d_target_def.f_cpu;
-	d_hdr_mf_node.f_platform <- d_target_def.f_platform;
+	d_mf_node_hdr.f_arch <- d_target_def.f_arch;
+	d_mf_node_hdr.f_cpu <- d_target_def.f_cpu;
+	d_mf_node_hdr.f_platform <- d_target_def.f_platform;
 	end;
 
     (* create intra uobjcoll sentinels list *)
 	(* TO REMOVE *)
-	let rval = (create_sentinels_list "intrauobjcoll" d_uobjcoll_sentinels_mf_node.f_intrauobjcoll d_intrauobjcoll_sentinels_list_mforder) in	
+	(*let rval = (create_sentinels_list "intrauobjcoll" d_mf_node_uobjcoll_sentinels.f_intrauobjcoll d_intrauobjcoll_sentinels_list_mforder) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for intra-uobjcoll sentinels!";
 		(!retval)
@@ -1117,10 +1117,11 @@ let build
 	let dummy = 0 in begin
 	Uberspark_logger.log "created intra-uobjcoll sentinel list, total sentinels=%u" (List.length !d_intrauobjcoll_sentinels_list_mforder);
 	end;
+	*)
 
     (* create inter uobjcoll sentinels list *)
 	(* TO REMOVE *)
-	let rval = (create_sentinels_list "interuobjcoll" d_uobjcoll_sentinels_mf_node.f_interuobjcoll d_interuobjcoll_sentinels_list_mforder) in	
+	(*let rval = (create_sentinels_list "interuobjcoll" d_mf_node_uobjcoll_sentinels.f_interuobjcoll d_interuobjcoll_sentinels_list_mforder) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to create sentinels list for inter-uobjcoll sentinels!";
 		(!retval)
@@ -1129,7 +1130,7 @@ let build
 	let dummy = 0 in begin
 	Uberspark_logger.log "created inter-uobjcoll sentinel list, total sentinels=%u" (List.length !d_interuobjcoll_sentinels_list_mforder);
 	end;
-
+	*)
 
 	(*create interuobjcoll and intrauobjcoll sentinels hashtbl *)
 	let rval = (create_interuobjcoll_intrauobjcoll_sentinels_hashtbl ()) in 
