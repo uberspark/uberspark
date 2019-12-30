@@ -188,7 +188,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list
 									f_pm_name = pm_name;
 									f_sentinel_type_list = sentinel_type_list;
 								} in
-								let canonical_pm_name_key = uobj_ns ^ "__" ^ pm_name in
+								let canonical_pm_name_key = (Uberspark_namespace.get_variable_name_prefix_from_ns uobj_ns) ^ "__" ^ pm_name in
 								publicmethods_assoc_list := !publicmethods_assoc_list @ [ (canonical_pm_name_key, entry) ];
 
 							) pm_name_assoc_list;
