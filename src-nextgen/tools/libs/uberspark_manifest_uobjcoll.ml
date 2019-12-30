@@ -19,7 +19,7 @@ type uobjcoll_uobjs_t =
 	mutable f_templar_uobjs    : string list;
 };;
 
-
+(* TO REMOVE *)
 type uobjcoll_interuobjcoll_publicmethods_t =
 {
 	mutable f_uobj_ns    : string;
@@ -27,12 +27,13 @@ type uobjcoll_interuobjcoll_publicmethods_t =
 	mutable f_sentinel_type_list : string list;
 };;
 
-
+(*
 type uobjcoll_sentinels_t =
 {
 	mutable f_interuobjcoll    : string list;
 	mutable f_intrauobjcoll    : string list;
 };;
+*)
 
 
 (*--------------------------------------------------------------------------*)
@@ -207,7 +208,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list
 	(!retval)
 ;;
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobjcoll-sentinels" *)
 (* return: *)
@@ -237,5 +238,5 @@ let parse_uobjcoll_sentinels
 
 	(!retval)
 ;;
-
+*)
 

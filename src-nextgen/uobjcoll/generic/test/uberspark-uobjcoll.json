@@ -51,11 +51,11 @@
 		"uberspark/uobjs/generic/test/add" : {
 			"add" : [ "call" ]
 		}
-	}
+	},
 
 
 	/* uobj collection sentinel definitions  */
-/*	"uobjcoll-sentinels" : {
+	"uobjcoll-sentinels" : {
 		"intrauobjcoll" : [ "call" ],
 
 		"interuobjcoll" : {
@@ -68,7 +68,7 @@
 			}
 		}	
 	}
-*/
+
 
 
 }
