@@ -81,6 +81,16 @@ the collection manifest *)
 let d_intrauobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
 
 
+(*let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; *)
+
+(* hashtbl of canonical publicmethod name to sentinel address mapping for interuobjcoll publicmethods *)
+let d_interuobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));; 
+
+
+(*let d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; *)
+
+(* hashtbl of canonical publicmethod name to sentinel address mapping for intrauobjcoll publicmethods *)
+let d_intrauobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));; 
 
 
 
@@ -97,9 +107,6 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 let d_sources_asm_file_list: string list ref = ref [];;
 
 
-let d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; 
-
-let d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.sentinel_info_t list)  Hashtbl.t));; 
 
 (* association list of uobj binary image sections with memory map info; indexed by section name *)		
 let d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref [];;
@@ -681,7 +688,7 @@ let consolidate_sections_with_memory_map
 				key !uobjcoll_section_load_addr section_size;
 
 			(* add entry into d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl *)
-			let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
+			(*let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
 				f_libcode= sentinel_info.f_libcode; 
 				f_sizeof_code= sentinel_info.f_sizeof_code; 
 				f_addr= !uobjcoll_section_load_addr; 
@@ -696,7 +703,13 @@ let consolidate_sections_with_memory_map
 			end else begin
 				let new_list_of_sentinels =  [ sinfo ] in
 				Hashtbl.add d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
+			end;*)
+			if (Hashtbl.mem d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name) then begin
+				Hashtbl.replace d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+			end else begin
+				Hashtbl.add d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
 			end;
+
 
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
@@ -737,7 +750,7 @@ let consolidate_sections_with_memory_map
 				key !uobjcoll_section_load_addr section_size;
 
 			(* add entry into d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl *)
-			let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
+			(*let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
 				f_libcode= sentinel_info.f_libcode; 
 				f_sizeof_code= sentinel_info.f_sizeof_code; 
 				f_addr= !uobjcoll_section_load_addr; 
@@ -753,7 +766,13 @@ let consolidate_sections_with_memory_map
 			end else begin
 				let new_list_of_sentinels =  [ sinfo ] in
 				Hashtbl.add d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
+			end;*)
+			if (Hashtbl.mem d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name) then begin
+				Hashtbl.replace d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+			end else begin
+				Hashtbl.add d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
 			end;
+
 
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
