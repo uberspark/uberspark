@@ -33,13 +33,12 @@ let d_path_to_mf_filename = ref "";;
 let d_path_ns = ref "";;
 
 
-let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; f_intrauobjcoll_sentinels = [];};;
+let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; };;
 let d_uobjcoll_uobjs_mf : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
 (*let d_mf_node_uobjcoll_sentinels : Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_t = {f_interuobjcoll = []; f_intrauobjcoll = []};;*)
 
 (* list of intrauobjcoll sentinel types as specified in the manifest *)
 let d_uobjcoll_intrauobjcoll_sentinels_list_mf : string list ref = ref [];;
-
 
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
@@ -300,7 +299,7 @@ let create_interuobjcoll_intrauobjcoll_sentinels_hashtbl
 		if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
 			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intrauobjcoll";
 		end;
-	) d_hdr_mf.f_intrauobjcoll_sentinels;
+	) !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
 
 	(* now iterate over the intrauobjcoll sentinel type to sentinel facet hashtbl, get the corresponding 
 	sentinel info and add it to d_uobjcoll_sentinels_hashtbl *)
@@ -799,7 +798,7 @@ let consolidate_sections_with_memory_map
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
 
-		) d_hdr_mf.f_intrauobjcoll_sentinels;
+		) !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
 
 	) !d_uobjs_publicmethods_assoc_list_mforder;
 
