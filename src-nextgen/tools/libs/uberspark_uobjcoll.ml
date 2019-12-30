@@ -47,6 +47,10 @@ let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobj
 (* assoc list of uobjcoll-interuobjcoll-publicmethods indexed by canonical publicmethod name *)
 let d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder : (string * Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t) list ref = ref [];;
 
+(* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t 
+as it appears in manifest order*)
+let d_uobjs_publicmethods_assoc_list_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; 
+
 (* hashtbl of uobjcoll sentinels mapping sentinel type to sentinel info for interuobjcoll sentinels *)
 let d_uobjcoll_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t)  Hashtbl.t));; 
 
@@ -60,13 +64,10 @@ let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_c
 computed publicmethod address *)
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
-(* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t 
-as it appears in manifest order*)
-let d_uobjs_publicmethods_list_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; 
 
 (* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t 
 as it appears in manifest order; with computed publicmethod address *)
-let d_uobjs_publicmethods_list_with_address_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; 
+(*let d_uobjs_publicmethods_list_with_address_mforder : (string * Uberspark_codegen.Uobjcoll.uobjs_publicmethod_info_t) list ref = ref [];; *)
 
 
 (* TO REMOVE *)
@@ -1153,7 +1154,7 @@ let build
 	(* create uobj collection uobjs public methods hashtable and association list *)
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
-	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_list_mforder;
+	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_assoc_list_mforder;
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list";
 	end;
 
@@ -1180,7 +1181,7 @@ let build
 	(* create uobj collection uobjs public methods hashtable and association list with address *)
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
-	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_list_with_address_mforder;
+	(*create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_list_with_address_mforder;*)
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list with address";
 	end;
 
