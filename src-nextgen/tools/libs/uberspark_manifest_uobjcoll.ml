@@ -162,7 +162,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl
 (* on success: true; assoc list is modified with parsed values *)
 (* on failure: false; assoc list is left untouched *)
 (*--------------------------------------------------------------------------*)
-let parse_uobjcoll_interuobjcoll_publicmethods
+let parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list
 	(mf_json : Yojson.Basic.t)
 	(publicmethods_assoc_list : (string * uobjcoll_interuobjcoll_publicmethods_t) list ref)
 	: bool =

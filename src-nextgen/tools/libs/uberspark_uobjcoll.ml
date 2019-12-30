@@ -40,6 +40,14 @@ let d_uobjcoll_sentinels_mf_node : Uberspark_manifest.Uobjcoll.uobjcoll_sentinel
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
 
+
+(* hashtbl of uobjcoll-interuobjcoll-publicmethods *)
+let d_uobjcoll_interuobjcoll_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t)  Hashtbl.t));; 
+
+(* assoc list of uobjcoll-interuobjcoll-publicmethods *)
+let d_uobjcoll_interuobjcoll_publicmethods_assoc_list : (string * Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t) list ref = ref [];;
+
+
 (* association list of interuobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
 the collection manifest *)		
 let d_interuobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
@@ -47,6 +55,7 @@ let d_interuobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t)
 (* association list of intrauobjcoll (entry) sentinels; indexed by sentinel type in the order listed within
 the collection manifest *)		
 let d_intrauobjcoll_sentinels_list_mforder : (string * uobjcoll_sentinel_info_t) list ref = ref [];; 
+
 
 
 let d_load_address : int ref = ref 0;;
@@ -123,6 +132,18 @@ let parse_manifest
 	let dummy=0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_uobjcoll_uobjs_mf_node.f_templar_uobjs);
 	end;
+
+	(* parse uobjcoll-interuobjcoll-publicmethods node *)
+	let rval_hashtbl = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl mf_json d_uobjcoll_interuobjcoll_publicmethods_hashtbl) in
+	let rval_assoc = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list) in
+	if (rval_hashtbl == false) || (rval_assoc == false) then (false)
+	else
+
+	let dummy=0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "parsed uobjcoll-interuobjcoll-publicmethods: total=%u" 
+			(List.length !d_uobjcoll_interuobjcoll_publicmethods_assoc_list);
+	end;
+
 
 	(* parse uobjcoll-sentinels node *)
 	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels mf_json d_uobjcoll_sentinels_mf_node ) in
