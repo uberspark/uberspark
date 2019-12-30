@@ -103,7 +103,7 @@ let parse_uobjcoll_uobjs
 ;;
 
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobjcoll-interuobjcoll-publicmethods" into hashtbl *)
 (* return: *)
@@ -154,7 +154,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl
 							
 	(!retval)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobjcoll-interuobjcoll-publicmethods" into assoc list *)
