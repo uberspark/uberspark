@@ -21,11 +21,6 @@ type sentinel_info_t =
 	mutable f_type : string; 	
 };;
 
-type uobjs_publicmethod_info_t =
-{
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
-	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
-};;
 
 
 
