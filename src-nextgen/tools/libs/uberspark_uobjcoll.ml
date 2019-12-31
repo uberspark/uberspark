@@ -45,11 +45,11 @@ let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobj
 
 
 (* hashtbl of uobjcoll-interuobjcoll-publicmethods *)
-(*let d_uobjcoll_interuobjcoll_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t)  Hashtbl.t));; *)
+(*let d_uobjcoll_interuobjcoll_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_interuobjcoll_t)  Hashtbl.t));; *)
 
 
 (* assoc list of uobjcoll-interuobjcoll-publicmethods indexed by canonical publicmethod name *)
-let d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder : (string * Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t) list ref = ref [];;
+let d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf : (string * Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_interuobjcoll_t) list ref = ref [];;
 
 (* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t 
 as it appears in manifest order*)
@@ -166,17 +166,17 @@ let parse_manifest
 
 	(* parse uobjcoll-interuobjcoll-publicmethods node *)
 (*	let rval_hashtbl = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl mf_json d_uobjcoll_interuobjcoll_publicmethods_hashtbl) in*)
-(*	let rval_assoc = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder) in*)
+(*	let rval_assoc = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf) in*)
 (*	if (rval_hashtbl == false) || (rval_assoc == false) then (false)*)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder) in
+(*	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf) in
 	if (rval == false) then (false)
 	else
 
 	let dummy=0 in begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "parsed uobjcoll-interuobjcoll-publicmethods: total=%u" 
-			(List.length !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder);
+			(List.length !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf);
 	end;
-
+*)
 
 	(* parse uobjcoll-sentinels/intrauobjcoll node *)
 	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels_intrauobjcoll mf_json d_uobjcoll_intrauobjcoll_sentinels_list_mf) in
@@ -188,6 +188,16 @@ let parse_manifest
 			(List.length !d_uobjcoll_intrauobjcoll_sentinels_list_mf);
 	end;
 
+
+	(* parse uobjcoll-sentinels/interuobjcoll node *)
+	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_sentinels_interuobjcoll mf_json d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf) in
+	if (rval == false) then (false)
+	else
+
+	let dummy=0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "interuobjcoll sentinels=%u" 
+			(List.length !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf);
+	end;
 
 	(true)
 ;;
@@ -260,13 +270,13 @@ let create_interuobjcoll_intrauobjcoll_sentinels_hashtbl
 
 	(* iterate over interuobjcoll sentinel list and build sentinel type to sentinel facet hashtbl *)
 	let sentinel_type_to_sentinel_facet = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t)) in 
-	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info: Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t)) -> 
+	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info: Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_interuobjcoll_t)) -> 
 		List.iter ( fun (sentinel_type: string) -> 
 			if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
 				Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "interuobjcoll";
 			end;
 		) pm_sentinel_info.f_sentinel_type_list;
-	) !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder;
+	) !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf;
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "create_sentinels_hashtbl: total unique interuobjcoll sentinels=%u" 
 		(Hashtbl.length sentinel_type_to_sentinel_facet);
 
@@ -670,7 +680,7 @@ let consolidate_sections_with_memory_map
 	(*List.iter ( fun ( (sentinel_type:string), (sentinel_info: uobjcoll_sentinel_info_t)) ->*)
 		(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;*)
 	
-	List.iter ( fun ( (pm_name:string), (pm_sentinel_info:Uberspark_manifest.Uobjcoll.uobjcoll_interuobjcoll_publicmethods_t))  ->
+	List.iter ( fun ( (pm_name:string), (pm_sentinel_info:Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_interuobjcoll_t))  ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
 		
 		List.iter ( fun (sentinel_type:string) ->
@@ -729,7 +739,7 @@ let consolidate_sections_with_memory_map
 		
 		) pm_sentinel_info.f_sentinel_type_list;
 
-	) !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mforder;
+	) !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf;
 
 	(* 
 	) !d_interuobjcoll_sentinels_list_mforder; *)

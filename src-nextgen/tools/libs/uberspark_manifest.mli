@@ -237,7 +237,15 @@ module Uobjcoll : sig
     mutable f_templar_uobjs    : string list;
   }
 
-  type uobjcoll_interuobjcoll_publicmethods_t =
+(*  type uobjcoll_interuobjcoll_publicmethods_t =
+  {
+    mutable f_uobj_ns    : string;
+    mutable f_pm_name	 : string;
+    mutable f_sentinel_type_list : string list;
+  }
+*)
+
+  type uobjcoll_sentinels_interuobjcoll_t =
   {
     mutable f_uobj_ns    : string;
     mutable f_pm_name	 : string;
@@ -255,8 +263,9 @@ module Uobjcoll : sig
   val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
   val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
   (*val parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl : Yojson.Basic.t ->  ((string, uobjcoll_interuobjcoll_publicmethods_t)  Hashtbl.t) -> bool*)
-  val parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobjcoll_interuobjcoll_publicmethods_t) list ref -> bool
-  (*val parse_uobjcoll_sentinels : Yojson.Basic.t -> uobjcoll_sentinels_t -> bool*)
+  (*val parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobjcoll_interuobjcoll_publicmethods_t) list ref -> bool*)
+  (*v)al parse_uobjcoll_sentinels : Yojson.Basic.t -> uobjcoll_sentinels_t -> bool*)
+  val parse_uobjcoll_sentinels_interuobjcoll : Yojson.Basic.t -> (string * uobjcoll_sentinels_interuobjcoll_t) list ref -> bool
   val parse_uobjcoll_sentinels_intrauobjcoll : Yojson.Basic.t -> string list ref -> bool
 
 

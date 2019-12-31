@@ -28,12 +28,13 @@ type uobjcoll_sentinels_interuobjcoll_t =
 
 
 (* TO REMOVE *)
-type uobjcoll_interuobjcoll_publicmethods_t =
+(*type uobjcoll_interuobjcoll_publicmethods_t =
 {
 	mutable f_uobj_ns    : string;
 	mutable f_pm_name	 : string;
 	mutable f_sentinel_type_list : string list;
 };;
+*)
 
 (*
 type uobjcoll_sentinels_t =
@@ -164,6 +165,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl
 ;;
 *)
 
+(*
 (*--------------------------------------------------------------------------*)
 (* parse manifest json node "uobjcoll-interuobjcoll-publicmethods" into assoc list *)
 (* return: *)
@@ -214,6 +216,7 @@ let parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list
 							
 	(!retval)
 ;;
+*)
 
 (*
 (*--------------------------------------------------------------------------*)
