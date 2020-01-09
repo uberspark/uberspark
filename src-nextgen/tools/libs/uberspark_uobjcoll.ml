@@ -635,22 +635,6 @@ let consolidate_sections_with_memory_map
 				key !uobjcoll_section_load_addr section_size;
 
 			(* add entry into d_interuobjcoll_publicmethods_sentinel_address_hashtbl *)
-			(*let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
-				f_libcode= sentinel_info.f_libcode; 
-				f_sizeof_code= sentinel_info.f_sizeof_code; 
-				f_addr= !uobjcoll_section_load_addr; 
-				f_type= sentinel_info.f_type;
-				f_pm_addr = 0;
-				f_name = pm_name;
-				f_secname = key;} in
-			if (Hashtbl.mem d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name) then begin
-				let list_of_sentinels = (Hashtbl.find d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name) in
-				let new_list_of_sentinels = list_of_sentinels @ [ sinfo ] in
-				Hashtbl.replace d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
-			end else begin
-				let new_list_of_sentinels =  [ sinfo ] in
-				Hashtbl.add d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
-			end;*)
 			let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
 			if (Hashtbl.mem d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
 				Hashtbl.replace d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
@@ -701,23 +685,6 @@ let consolidate_sections_with_memory_map
 				key !uobjcoll_section_load_addr section_size;
 
 			(* add entry into d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl *)
-			(*let sinfo : Uberspark_codegen.Uobjcoll.sentinel_info_t = { f_code = sentinel_info.f_code; 
-				f_libcode= sentinel_info.f_libcode; 
-				f_sizeof_code= sentinel_info.f_sizeof_code; 
-				f_addr= !uobjcoll_section_load_addr; 
-				f_type= sentinel_info.f_type;
-				f_pm_addr = 0;
-				f_name = pm_name;
-				f_secname = key;} in
-				
-			if (Hashtbl.mem d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name) then begin
-				let list_of_sentinels = (Hashtbl.find d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name) in
-				let new_list_of_sentinels = list_of_sentinels @ [ sinfo ] in
-				Hashtbl.replace d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
-			end else begin
-				let new_list_of_sentinels =  [ sinfo ] in
-				Hashtbl.add d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
-			end;*)
 			let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
 			if (Hashtbl.mem d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
 				Hashtbl.replace d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
@@ -734,7 +701,9 @@ let consolidate_sections_with_memory_map
 	) !d_uobjs_publicmethods_assoc_list_mf;
 
 
+
 	(* iterate over all the uobjs and add a section for each *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add uobj sections...";
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		match uobjinfo_entry.f_uobj with 
 			| None ->
