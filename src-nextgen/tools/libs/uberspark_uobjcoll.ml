@@ -42,6 +42,9 @@ type uobjs_publicmethod_info_t =
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+(* note: canonical public-method name = <uobj/uobjcoll namespace>__<public-method name> *)
+(* note: canonical public-medhod sentinel name = <uobj/uobjcoll_namespace>__<public-method name>__<sentinel-type> *)
+
 (* uobjcoll manifest filename *)
 let d_mf_filename = ref "";;
 
@@ -100,10 +103,10 @@ let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjs_publi
 computed publicmethod address *)
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, uobjs_publicmethod_info_t)  Hashtbl.t));; 
 
-(* hashtbl of canonical publicmethod name to sentinel address mapping for interuobjcoll publicmethods *)
+(* hashtbl of canonical public-medhod sentinel name to sentinel address mapping for interuobjcoll publicmethods *)
 let d_interuobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));; 
 
-(* hashtbl of canonical publicmethod name to sentinel address mapping for intrauobjcoll publicmethods *)
+(* hashtbl of canonical public-medhod sentinel name to sentinel address mapping for intrauobjcoll publicmethods *)
 let d_intrauobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));; 
 
 (* association list of uobj binary image sections with memory map info; indexed by section name *)		
@@ -648,10 +651,11 @@ let consolidate_sections_with_memory_map
 				let new_list_of_sentinels =  [ sinfo ] in
 				Hashtbl.add d_uobjs_publicmethods_interuobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
 			end;*)
-			if (Hashtbl.mem d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name) then begin
-				Hashtbl.replace d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+			let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
+			if (Hashtbl.mem d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
+				Hashtbl.replace d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
 			end else begin
-				Hashtbl.add d_interuobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+				Hashtbl.add d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
 			end;
 
 
@@ -714,10 +718,11 @@ let consolidate_sections_with_memory_map
 				let new_list_of_sentinels =  [ sinfo ] in
 				Hashtbl.add d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl pm_name new_list_of_sentinels;
 			end;*)
-			if (Hashtbl.mem d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name) then begin
-				Hashtbl.replace d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+			let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
+			if (Hashtbl.mem d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
+				Hashtbl.replace d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
 			end else begin
-				Hashtbl.add d_intrauobjcoll_publicmethods_sentinel_address_hashtbl pm_name !uobjcoll_section_load_addr;
+				Hashtbl.add d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name !uobjcoll_section_load_addr;
 			end;
 
 
@@ -893,7 +898,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 				f_code = sentinel_info.f_code ; 
 				f_libcode= sentinel_info.f_libcode ; 
 				f_sizeof_code= sentinel_info.f_sizeof_code ; 
-				f_addr= Hashtbl.find d_interuobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_name; 
+				f_addr= Hashtbl.find d_interuobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type); 
 				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 			} in 
 
