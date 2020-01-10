@@ -897,8 +897,8 @@ class uobject
 	(* prepare for slt code generation *)
 	(*--------------------------------------------------------------------------*)
 	method prepare_slt_codegen 
-		(callees_sentinel_type_list : string list)
 		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
+		(callees_sentinel_type_list : string list)
 		(callees_hashtbl : (string, string list)  Hashtbl.t)
 		: unit =
 
@@ -908,16 +908,30 @@ class uobject
 	        List.iter (fun (pm_name:string) -> 
 				List.iter ( fun (sentinel_type: string) ->
 					let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
+					let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
+					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
-						f_canonical_pm_name = "";
+						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
 						f_pm_sentinel_addr = 0;
 					} in
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
-					(* if type is call then add regular ns variable as well as __call addition to 
-					codegen info list *)
-						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_type=%s ns_var = %s" sentinel_type ns_var;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
+						slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+
+					(* if sentinel type is call, then add entry with just canonical_pm_name in addition *)
+					if sentinel_type = "call" then begin
+						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
+							f_canonical_pm_name = canonical_pm_name;
+							f_pm_sentinel_addr = 0;
+						} in
+	
+						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
+							slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+					end;
+
 				) callees_sentinel_type_list;
 				
 			) pm_name_list;
@@ -962,7 +976,7 @@ class uobject
 
 
 		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
-		self#prepare_slt_codegen d_slt_info.f_intrauobjcoll_sentinels_list_mf d_intrauobjcoll_callees_slt_codegen_info_list self#get_d_intrauobjcoll_callees_hashtbl;
+		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list d_slt_info.f_intrauobjcoll_sentinels_list_mf  self#get_d_intrauobjcoll_callees_hashtbl;
 		
 
 		(* generate slt for intra-uobjcoll callees *)

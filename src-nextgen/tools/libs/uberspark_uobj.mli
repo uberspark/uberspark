@@ -130,7 +130,7 @@ type slt_info_t =
   	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
-  	method prepare_slt_codegen : string list -> Uberspark_codegen.Uobj.slt_codegen_info_t list ref ->
+  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> string list ->
 		  (string, string list)  Hashtbl.t -> unit
 
 
