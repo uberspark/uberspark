@@ -85,11 +85,7 @@ type sentinel_info_t =
     ?output_banner : string ->
     Defs.Basedefs.uobjinfo_t list -> bool
 
-
-  val generate_linker_script : string ->
-    ?output_banner : string ->
-    Defs.Basedefs.uobjinfo_t list -> 
-    int -> int -> bool
+val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> bool
 
 end
 

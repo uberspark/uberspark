@@ -710,7 +710,7 @@ let consolidate_sections_with_memory_map
 				let key = (".section_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name)	in 
 				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 					{ f_name = key;	
-						f_subsection_list = [];	
+						f_subsection_list = [ key;];	
 						usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 										f_prot=0; 
 										f_size = uobj#get_d_size;
@@ -1275,13 +1275,18 @@ let build
 
 	(* generate uobjcoll linker script *)
 	let dummy = 0 in begin
-	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
+(*	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
 		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
 	)!d_uobjcoll_uobjinfo_list;
-	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
+*)
+(*	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
 		(Uberspark_namespace.namespace_uobjcoll_linkerscript_filename)
 		 !uobjinfo_list !d_load_address !d_size;
+*)
+	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
+		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename 
+		!d_load_address !d_size !d_memorymapped_sections_list;
 	end;
 
 	if(!retval == false) then begin
