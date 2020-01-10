@@ -22,6 +22,13 @@ type publicmethod_info_t =
 };;
 
 
+type slt_info_t =
+{
+	mutable f_intrauobjcoll_sentinels_list_mf : string list;
+	mutable f_uobjcoll_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
+	mutable f_intrauobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_interuobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+};;
 
 
 
@@ -178,6 +185,24 @@ class uobject
 	val d_alignment = ref Uberspark_config.config_settings.uobj_binary_image_alignment; 
 	method get_d_alignment = !d_alignment;
 	method set_d_alignment alignment = (d_alignment := alignment);
+
+
+	(* uobj sentinel linkage table info  -- updated by uobjcoll build *)
+	val d_slt_info : slt_info_t = {
+		f_intrauobjcoll_sentinels_list_mf = [];
+		f_uobjcoll_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, publicmethod_info_t)  Hashtbl.t));
+		f_intrauobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_interuobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+	};
+	method get_d_slt_info = d_slt_info;
+	method set_d_slt_info 
+		(slt_info: slt_info_t) = 
+		d_slt_info.f_intrauobjcoll_sentinels_list_mf <- slt_info.f_intrauobjcoll_sentinels_list_mf;
+		d_slt_info.f_uobjcoll_publicmethods_hashtbl_with_address <- slt_info.f_uobjcoll_publicmethods_hashtbl_with_address;
+		d_slt_info.f_intrauobjcoll_publicmethods_sentinel_address_hashtbl <- slt_info.f_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
+		d_slt_info.f_interuobjcoll_publicmethods_sentinel_address_hashtbl <- slt_info.f_interuobjcoll_publicmethods_sentinel_address_hashtbl;
+		()
+	;
 
 
 

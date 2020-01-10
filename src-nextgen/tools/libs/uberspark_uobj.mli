@@ -4,6 +4,13 @@ type publicmethod_info_t =
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 }
 
+type slt_info_t =
+{
+	mutable f_intrauobjcoll_sentinels_list_mf : string list;
+	mutable f_uobjcoll_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
+	mutable f_intrauobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_interuobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+}
 
 
 
@@ -53,6 +60,9 @@ type publicmethod_info_t =
 
     val d_target_def : Defs.Basedefs.target_def_t
 
+  	val d_slt_info : slt_info_t
+    method get_d_slt_info : slt_info_t
+    method set_d_slt_info : slt_info_t -> unit
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
