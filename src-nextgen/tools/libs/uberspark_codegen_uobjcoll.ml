@@ -63,9 +63,11 @@ let generate_sentinel_code
 
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n";
+            Printf.fprintf oc "\n/* sentinel canonical name: %s */" sinfo_entry.f_name;
             Printf.fprintf oc "\n.section %s" sinfo_entry.f_secname;
-            Printf.fprintf oc "\n.global %s" sinfo_entry.f_name;
+            (*Printf.fprintf oc "\n.global %s" sinfo_entry.f_name;
             Printf.fprintf oc "\n%s:" sinfo_entry.f_name;
+            *)
             let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_ADDR") (Printf.sprintf "0x%08x" sinfo_entry.f_pm_addr) sinfo_entry.f_code in
             Printf.fprintf oc "\n%s" tcode;
             Printf.fprintf oc "\n";
