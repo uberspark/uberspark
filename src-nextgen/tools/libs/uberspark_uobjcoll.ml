@@ -872,10 +872,35 @@ let prepare_for_uobjcoll_sentinel_codegen
 			} in 
 
 			d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added sentinel type %s for public-method %s" sentinel_type canonical_pm_name;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "interuobjcoll; added sentinel type %s for public-method %s" sentinel_type canonical_pm_name;
 
 		) pm_sentinel_info.f_sentinel_type_list; 
 	) !d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf;
+
+
+	(* add intrauobjcoll publicmethods sentinels *)
+	List.iter ( fun ((canonical_pm_name:string), (throwaway:uobjs_publicmethod_info_t)) ->
+		List.iter ( fun (sentinel_type:string) ->
+
+			let sentinel_info : uobjcoll_sentinel_info_t = Hashtbl.find d_uobjcoll_interuobjcoll_sentinels_hashtbl sentinel_type in
+			let pm_info : uobjs_publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+			let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
+				f_type= sentinel_type;
+				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
+				f_secname = ".section_intrauobjcoll_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
+				f_code = sentinel_info.f_code ; 
+				f_libcode= sentinel_info.f_libcode ; 
+				f_sizeof_code= sentinel_info.f_sizeof_code ; 
+				f_addr= Hashtbl.find d_intrauobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type); 
+				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
+			} in 
+
+			d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "intrauobjcoll; added sentinel type %s for public-method %s" sentinel_type canonical_pm_name;
+
+		) !d_uobjcoll_intrauobjcoll_sentinels_list_mf; 
+	) !d_uobjs_publicmethods_assoc_list_mf;
+
 
 
 	(* debug: dump all the sentinels in codegen list *)
