@@ -57,7 +57,7 @@
 	"uobjcoll-sentinels" : {
 		"intrauobjcoll" : [ "call" ],
 
-		"interuobjcoll" : {
+		"uobjcoll-publicmethods" : {
 			"uberspark/uobjcoll/generic/test/main" : {
 				"main" : [ "call" ]
 			},

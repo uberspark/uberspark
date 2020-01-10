@@ -28,7 +28,7 @@ type uobjcoll_uobjs_t =
 	mutable f_templar_uobjs    : string list;
 };;
 
-type uobjcoll_sentinels_interuobjcoll_t =
+type uobjcoll_sentinels_uobjcoll_publicmethods_t =
 {
 	mutable f_uobj_ns    : string;
 	mutable f_pm_name	 : string;
@@ -118,14 +118,14 @@ let parse_uobjcoll_uobjs
 
 
 (*--------------------------------------------------------------------------*)
-(* parse manifest json node "uobjcoll-sentinels/interuobjcoll" *)
+(* parse manifest json node "uobjcoll-sentinels/uobjcoll-publicmethods" *)
 (* return: *)
 (* on success: true; assoc list is modified with parsed values *)
 (* on failure: false; assoc list is left untouched *)
 (*--------------------------------------------------------------------------*)
-let parse_uobjcoll_sentinels_interuobjcoll 
+let parse_uobjcoll_sentinels_uobjcoll_publicmethods 
 	(mf_json : Yojson.Basic.t)
-	(uobjcoll_sentinels_interuobjcoll_assoc_list : (string * uobjcoll_sentinels_interuobjcoll_t) list ref)
+	(uobjcoll_sentinels_uobjcoll_publicmethods_assoc_list : (string * uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref)
 	: bool =
 	let retval = ref false in
 
@@ -134,11 +134,11 @@ let parse_uobjcoll_sentinels_interuobjcoll
 			let uobjcoll_sentinels_json = mf_json |> member "uobjcoll-sentinels" in
 			if(uobjcoll_sentinels_json <> `Null) then
 			begin
-				let uobjcoll_sentinels_interuobjcoll_json = uobjcoll_sentinels_json |> member "interuobjcoll" in
-				if uobjcoll_sentinels_interuobjcoll_json != `Null then
+				let uobjcoll_sentinels_uobjcoll_publicmethods_json = uobjcoll_sentinels_json |> member "uobjcoll_publicmethods" in
+				if uobjcoll_sentinels_uobjcoll_publicmethods_json != `Null then
 				begin
 
-					let uobj_ns_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_sentinels_interuobjcoll_json in
+					let uobj_ns_assoc_list = Yojson.Basic.Util.to_assoc uobjcoll_sentinels_uobjcoll_publicmethods_json in
 						
 					List.iter (fun ( (uobj_ns:string),(uobj_ns_json:Yojson.Basic.t)) ->
 
@@ -146,13 +146,13 @@ let parse_uobjcoll_sentinels_interuobjcoll
 
 						List.iter (fun ( (pm_name:string),(sentinel_type_list_json:Yojson.Basic.t)) ->
 							let sentinel_type_list = (json_list_to_string_list  (sentinel_type_list_json |> to_list)) in
-							let entry : uobjcoll_sentinels_interuobjcoll_t = {
+							let entry : uobjcoll_sentinels_uobjcoll_publicmethods_t = {
 								f_uobj_ns = uobj_ns;
 								f_pm_name = pm_name;
 								f_sentinel_type_list = sentinel_type_list;
 							} in
 							let canonical_pm_name_key = (Uberspark_namespace.get_variable_name_prefix_from_ns uobj_ns) ^ "__" ^ pm_name in
-							uobjcoll_sentinels_interuobjcoll_assoc_list := !uobjcoll_sentinels_interuobjcoll_assoc_list @ [ (canonical_pm_name_key, entry) ];
+							uobjcoll_sentinels_uobjcoll_publicmethods_assoc_list := !uobjcoll_sentinels_uobjcoll_publicmethods_assoc_list @ [ (canonical_pm_name_key, entry) ];
 
 						) pm_name_assoc_list;
 
