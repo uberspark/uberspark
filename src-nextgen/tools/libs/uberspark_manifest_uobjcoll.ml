@@ -134,7 +134,7 @@ let parse_uobjcoll_sentinels_uobjcoll_publicmethods
 			let uobjcoll_sentinels_json = mf_json |> member "uobjcoll-sentinels" in
 			if(uobjcoll_sentinels_json <> `Null) then
 			begin
-				let uobjcoll_sentinels_uobjcoll_publicmethods_json = uobjcoll_sentinels_json |> member "uobjcoll_publicmethods" in
+				let uobjcoll_sentinels_uobjcoll_publicmethods_json = uobjcoll_sentinels_json |> member "uobjcoll-publicmethods" in
 				if uobjcoll_sentinels_uobjcoll_publicmethods_json != `Null then
 				begin
 
