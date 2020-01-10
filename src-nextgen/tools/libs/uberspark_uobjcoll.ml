@@ -1173,6 +1173,21 @@ let build
 	Uberspark_logger.log "prepared inputs for sentinel code generation";
 	end;
 
+	(* generate uobj collection sentinel code *)
+	let rval = (Uberspark_codegen.Uobjcoll.generate_sentinel_code 
+		Uberspark_namespace.namespace_uobjcoll_sentinel_definitions_src_filename
+		!d_sentinel_info_for_codegen_list
+		) in 
+	
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate source for uobj collection sentinel definitions!";
+		(false)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "generated source for  uobj collection sentinel definitions";
+	end;
+
 
 	(* build all uobjs *)
 	let dummy = 0 in begin

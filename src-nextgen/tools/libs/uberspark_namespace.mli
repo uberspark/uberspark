@@ -29,6 +29,7 @@ val namespace_uobjcoll : string
 val namespace_uobjcoll_mf_filename : string
 val namespace_uobjcoll_build_dir : string
 val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
+val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
 val namespace_uobjcoll_binary_image_filename : string
 

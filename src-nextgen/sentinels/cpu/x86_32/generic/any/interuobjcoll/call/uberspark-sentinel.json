@@ -29,7 +29,7 @@
         PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
     */ 
     "sentinel-code": "
-        movl (PUBLICMETHOD_ADDR), %eax
+        movl $(PUBLICMETHOD_ADDR), %eax
         jmpl *%eax
     ",
 
