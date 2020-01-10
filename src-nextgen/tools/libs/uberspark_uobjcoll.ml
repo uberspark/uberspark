@@ -1203,7 +1203,18 @@ let build
 			| Some uobj ->
 				begin
 					let uobj_bridges_override = ref false in
+
+					let uobj_slt_info : Uberspark_uobj.slt_info_t = {
+						f_intrauobjcoll_sentinels_list_mf = !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
+						f_uobjcoll_publicmethods_hashtbl_with_address = d_uobjs_publicmethods_hashtbl_with_address;
+						f_intrauobjcoll_publicmethods_sentinel_address_hashtbl = d_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
+						f_interuobjcoll_publicmethods_sentinel_address_hashtbl = d_interuobjcoll_publicmethods_sentinel_address_hashtbl;
+					} in
+					uobj#set_d_slt_info uobj_slt_info;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "setup uobj sentinel linkage table information";
+					
 					uobj#prepare_sources ();
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepared uobj sources";
 
 					if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
 						retval := false;
