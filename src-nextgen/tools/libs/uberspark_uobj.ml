@@ -891,6 +891,46 @@ class uobject
 		()
 	;
 
+
+
+	(*--------------------------------------------------------------------------*)
+	(* prepare for slt code generation *)
+	(*--------------------------------------------------------------------------*)
+	method prepare_slt_codegen 
+		(callees_sentinel_type_list : string list)
+		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
+		(callees_hashtbl : (string, string list)  Hashtbl.t)
+		: unit =
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: start";
+
+  		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
+	        List.iter (fun (pm_name:string) -> 
+				List.iter ( fun (sentinel_type: string) ->
+					let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
+					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
+						f_canonical_pm_name = "";
+						f_pm_sentinel_addr = 0;
+					} in
+
+					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
+
+					(* if type is call then add regular ns variable as well as __call addition to 
+					codegen info list *)
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_type=%s ns_var = %s" sentinel_type ns_var;
+				) callees_sentinel_type_list;
+				
+			) pm_name_list;
+		) callees_hashtbl;
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: end";
+
+		()
+	;
+
+
+
+
 	(*--------------------------------------------------------------------------*)
 	(* prepare uobj sources *)
 	(*--------------------------------------------------------------------------*)
@@ -919,6 +959,11 @@ class uobject
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
 			self#get_d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
+
+
+		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
+		self#prepare_slt_codegen d_slt_info.f_intrauobjcoll_sentinels_list_mf d_intrauobjcoll_callees_slt_codegen_info_list self#get_d_intrauobjcoll_callees_hashtbl;
+		
 
 		(* generate slt for intra-uobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
@@ -1033,31 +1078,6 @@ class uobject
 
 
 
-	(*--------------------------------------------------------------------------*)
-	(* prepare for slt code generation *)
-	(*--------------------------------------------------------------------------*)
-	method prepare_slt_codegen 
-		(callees_sentinel_type_list : string list)
-		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
-		(callees_hashtbl : (string, string list)  Hashtbl.t)
-		: unit =
-
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "start";
-
-  		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
-	        List.iter (fun (pm_name:string) -> 
-				List.iter ( fun (sentinel_type: string) ->
-					(* if type is call then add regular ns variable as well as __call addition to 
-					codegen info list *)
-					(* (Uberspark_namespace.get_variable_name_prefix_from_ns ns) *)
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "place holder";
-				) callees_sentinel_type_list;
-				
-			) pm_name_list;
-		) callees_hashtbl;
-
-		()
-	;
 
 	(*--------------------------------------------------------------------------*)
 	(* initialize *)
