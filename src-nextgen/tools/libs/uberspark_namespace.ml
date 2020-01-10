@@ -84,8 +84,14 @@ let get_variable_name_prefix_from_ns
 	(ns : string)
 	: string = 
 
-	let retval = (Str.global_replace (Str.regexp "/") "_" ns) in
-	(retval)
+	let retval = ref "" in
+	if ns = "legacy" then begin
+		retval := "uberspark_legacy";
+	end else begin
+		retval := (Str.global_replace (Str.regexp "/") "_" ns);
+	end;
+
+	(!retval)
 ;;
 
 

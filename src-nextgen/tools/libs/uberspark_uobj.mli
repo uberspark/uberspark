@@ -64,6 +64,17 @@ type slt_info_t =
     method get_d_slt_info : slt_info_t
     method set_d_slt_info : slt_info_t -> unit
 
+
+    (* uobj slt codegen info list for interuobjcoll callees *)
+    val d_interuobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+
+    (* uobj slt codegen info list for intrauobjcoll callees *)
+    val d_intrauobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+
+    (* uobj slt codegen info list for legacy callees *)
+    val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+    
+
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
     method get_d_interuobjcoll_callees_hashtbl :
@@ -119,6 +130,10 @@ type slt_info_t =
   	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
+  	method prepare_slt_codegen : string list -> Uberspark_codegen.Uobj.slt_codegen_info_t list ref ->
+		  (string, string list)  Hashtbl.t -> unit
+
+
 		method add_default_uobj_binary_sections	: unit -> unit
     method consolidate_sections_with_memory_map : unit -> int
     method parse_manifest : unit ->  bool

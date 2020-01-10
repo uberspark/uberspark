@@ -413,7 +413,7 @@ let parse_uobj_legacy_callees
 					begin
 
 						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
-							Hashtbl.add legacy_callees_hashtbl "legacy" (json_list_to_string_list uobj_legacy_callees_list);
+							Hashtbl.add legacy_callees_hashtbl "uberspark_legacy" (json_list_to_string_list uobj_legacy_callees_list);
 							retval := true;
 
 					end
