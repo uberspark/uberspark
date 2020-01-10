@@ -28,13 +28,6 @@ type uobjcoll_sentinel_info_t =
 	mutable f_type : string; 	
 };;
 
-type uobjs_publicmethod_info_t =
-{
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
-	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
-};;
-
-
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -82,9 +75,9 @@ let d_uobjcoll_intrauobjcoll_sentinels_list_mf : string list ref = ref [];;
 (* assoc list of interuobjcoll publicmethods indexed by canonical publicmethod name *)
 let d_uobjcoll_interuobjcoll_publicmethods_assoc_list_mf : (string * Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_interuobjcoll_t) list ref = ref [];;
 
-(* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t 
+(* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to Uberspark_uobj.publicmethod_info_t 
 as it appears in manifest order*)
-let d_uobjs_publicmethods_assoc_list_mf : (string * uobjs_publicmethod_info_t) list ref = ref [];; 
+let d_uobjs_publicmethods_assoc_list_mf : (string * Uberspark_uobj.publicmethod_info_t) list ref = ref [];; 
 
 (* list and hashtbl of uobjs info within uobjcoll *)
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
@@ -96,12 +89,12 @@ let d_uobjcoll_interuobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string
 (* hashtbl of uobjcoll sentinels mapping sentinel type to sentinel info for intrauobjcoll sentinels *)
 let d_uobjcoll_intrauobjcoll_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t)  Hashtbl.t));; 
 
-(* hashtbl of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t *)
-let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, uobjs_publicmethod_info_t)  Hashtbl.t));; 
+(* hashtbl of intrauobjcoll publicmethods mapping canonical publicmethod names to Uberspark_uobj.publicmethod_info_t *)
+let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_uobj.publicmethod_info_t)  Hashtbl.t));; 
 
-(* hashtbl of intrauobjcoll publicmethods mapping canonical publicmethod names to uobjs_publicmethod_info_t; with 
+(* hashtbl of intrauobjcoll publicmethods mapping canonical publicmethod names to Uberspark_uobj.publicmethod_info_t; with 
 computed publicmethod address *)
-let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, uobjs_publicmethod_info_t)  Hashtbl.t));; 
+let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, Uberspark_uobj.publicmethod_info_t)  Hashtbl.t));; 
 
 (* hashtbl of canonical public-medhod sentinel name to sentinel address mapping for interuobjcoll publicmethods *)
 let d_interuobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));; 
@@ -654,7 +647,7 @@ let consolidate_sections_with_memory_map
 	(* add intra-uobjcoll sentinel sections *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add intra-uobjcoll sentinel sections...";
 	
-	List.iter (fun ((pm_name:string) ,(pm_info:uobjs_publicmethod_info_t))  ->
+	List.iter (fun ((pm_name:string) ,(pm_info:Uberspark_uobj.publicmethod_info_t))  ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "pm_name=%s" pm_name;
 
 		List.iter ( fun (sentinel_type:string) ->
@@ -756,7 +749,7 @@ let consolidate_sections_with_memory_map
 (* note: these are for uobjs that are part of this collection *)
 (*--------------------------------------------------------------------------*)
 let create_uobjs_publicmethods_list_mforder
-	(publicmethods_list : (string * uobjs_publicmethod_info_t) list ref)
+	(publicmethods_list : (string * Uberspark_uobj.publicmethod_info_t) list ref)
 	: unit =
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "create_uobjs_publicmethods_list_mforder [START]"; 
@@ -788,7 +781,7 @@ let create_uobjs_publicmethods_list_mforder
 
 	(* dump uobjs publc methods association list *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll uobjs publicmethods assoc list dump follows:"; 
-	List.iter (fun ((canonical_pm_name:string), (entry:uobjs_publicmethod_info_t))  ->
+	List.iter (fun ((canonical_pm_name:string), (entry:Uberspark_uobj.publicmethod_info_t))  ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical pm_name=%s; pm_name=%s, pm_addr=0x%08x" 
 			canonical_pm_name entry.f_uobjpminfo.f_name entry.f_uobjpminfo.f_addr; 
 	) !publicmethods_list;
@@ -805,7 +798,7 @@ let create_uobjs_publicmethods_list_mforder
 (* note: these are for uobjs that are part of this collection *)
 (*--------------------------------------------------------------------------*)
 let create_uobjs_publicmethods_hashtbl
-	(publicmethods_hashtbl : ((string, uobjs_publicmethod_info_t)  Hashtbl.t))
+	(publicmethods_hashtbl : ((string, Uberspark_uobj.publicmethod_info_t)  Hashtbl.t))
 	: unit =
 
 	(* iterate over all uobjs within uobjinfo list *)
@@ -832,7 +825,7 @@ let create_uobjs_publicmethods_hashtbl
 
 	(* dump uobjs publc methods hashtable *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll uobjs publicmethods hashtbl dump follows:"; 
-	Hashtbl.iter (fun (canonical_pm_name:string) (entry:uobjs_publicmethod_info_t)  ->
+	Hashtbl.iter (fun (canonical_pm_name:string) (entry:Uberspark_uobj.publicmethod_info_t)  ->
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical pm_name=%s; pm_name=%s, pm_addr=0x%08x" 
 			canonical_pm_name entry.f_uobjpminfo.f_name entry.f_uobjpminfo.f_addr; 
 	) publicmethods_hashtbl;
@@ -859,7 +852,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 		List.iter ( fun (sentinel_type:string) ->
 
 			let sentinel_info : uobjcoll_sentinel_info_t = Hashtbl.find d_uobjcoll_interuobjcoll_sentinels_hashtbl sentinel_type in
-			let pm_info : uobjs_publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+			let pm_info : Uberspark_uobj.publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
 			let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
@@ -879,11 +872,11 @@ let prepare_for_uobjcoll_sentinel_codegen
 
 
 	(* add intrauobjcoll publicmethods sentinels *)
-	List.iter ( fun ((canonical_pm_name:string), (throwaway:uobjs_publicmethod_info_t)) ->
+	List.iter ( fun ((canonical_pm_name:string), (throwaway:Uberspark_uobj.publicmethod_info_t)) ->
 		List.iter ( fun (sentinel_type:string) ->
 
 			let sentinel_info : uobjcoll_sentinel_info_t = Hashtbl.find d_uobjcoll_interuobjcoll_sentinels_hashtbl sentinel_type in
-			let pm_info : uobjs_publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+			let pm_info : Uberspark_uobj.publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
 			let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
