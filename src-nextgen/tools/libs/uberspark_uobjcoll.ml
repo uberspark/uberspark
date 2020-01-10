@@ -561,7 +561,7 @@ let compute_uobjs_section_memory_map_within_uobjinfo_list
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
 
 			| Some uobj ->
-				let key = (".section_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name) in
+				let key = (".section_uobj_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name) in
 				let section_info : Defs.Basedefs.section_info_t = (List.assoc key !d_memorymapped_sections_list) in
 				let uobj_load_address = section_info.usbinformat.f_addr_start in 
 				Uberspark_logger.log "computing memory-map for uobj '%s' at load-address=0x%08x..." 
@@ -707,7 +707,7 @@ let consolidate_sections_with_memory_map
 				Uberspark_logger.log "adding section for uobj '%s' at 0x%08x, size=%08x..." uobjinfo_entry.f_uobjinfo.f_uobj_name 
 					!uobjcoll_section_load_addr uobj#get_d_size;
 
-				let key = (".section_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name)	in 
+				let key = (".section_uobj_" ^ uobjinfo_entry.f_uobjinfo.f_uobj_name)	in 
 				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 					{ f_name = key;	
 						f_subsection_list = [ key;];	

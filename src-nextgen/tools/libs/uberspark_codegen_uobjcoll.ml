@@ -218,7 +218,8 @@ let generate_linker_script
                         List.iter (fun subsection ->
                                     Printf.fprintf oc "\n *(%s)" subsection;
                         ) section_info.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s);" ("mem_" ^ section_info.f_name) ("mem_" ^ section_info.f_name);
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ section_info.f_name) ("mem_" ^ section_info.f_name);
+                        Printf.fprintf oc "\n BYTE(0xAA)";
                         Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ section_info.f_name);
                         Printf.fprintf oc "\n";
 
