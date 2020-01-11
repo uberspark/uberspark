@@ -9,7 +9,7 @@ type slt_info_t =
 	mutable f_intrauobjcoll_sentinels_list_mf : string list;
 	mutable f_uobjcoll_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
 	mutable f_intrauobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-	mutable f_interuobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_uobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
 }
 
 
