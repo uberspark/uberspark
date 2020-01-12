@@ -108,6 +108,8 @@ let d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list 
 (* list of sentinel_info_t elements for sentinel code generation *)		
 let d_sentinel_info_for_codegen_list : Uberspark_codegen.Uobjcoll.sentinel_info_t list ref = ref [];;
 
+(* hashtbl of intruobjcoll callees sentinel types indexed by canonical publicmethod name *)
+let d_intrauobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));;
 
 
 (*---------------------------------------------------------------------------*)
@@ -907,6 +909,21 @@ let prepare_for_uobjcoll_sentinel_codegen
 
 
 
+(*--------------------------------------------------------------------------*)
+(* setup contents of intrauobjcoll callees sentinel type hashtbl *)
+(*--------------------------------------------------------------------------*)
+let setup_intrauobjcoll_callees_sentinel_type_hashtbl
+	()
+	: unit = 
+
+	List.iter ( fun ( (canonical_pm_name:string), (pm_info: Uberspark_uobj.publicmethod_info_t)) ->
+		Hashtbl.add d_intrauobjcoll_callees_sentinel_type_hashtbl canonical_pm_name !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
+	) !d_uobjs_publicmethods_assoc_list_mf;
+
+	()
+;;
+
+
 
 
 (*--------------------------------------------------------------------------*)
@@ -1184,6 +1201,12 @@ let build
 
 	let dummy = 0 in begin
 	Uberspark_logger.log "generated source for  uobj collection sentinel definitions";
+	end;
+
+	(* setup intrauobjcoll callees sentinel type hashtbl *)
+	let dummy = 0 in begin
+	setup_intrauobjcoll_callees_sentinel_type_hashtbl ();
+	Uberspark_logger.log "setup intrauobjcoll callees sentinel type hashtbl";
 	end;
 
 
