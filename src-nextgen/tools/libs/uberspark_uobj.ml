@@ -930,17 +930,30 @@ class uobject
 				List.iter ( fun (sentinel_type: string) ->
 					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
 					let pm_sentinel_addr = ref 0 in 
+					let codegen_type = ref "" in 
 
 					if sentinel_type = "call" then begin
-						pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_pm_addr;
+						if (Hashtbl.mem callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix) then begin
+							pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_pm_addr;
+							codegen_type := "direct";
+						end else begin
+							pm_sentinel_addr := 0;
+							codegen_type := "indirect";
+						end;
 					end else begin
-						pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_sentinel_addr;
+						if (Hashtbl.mem callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix) then begin
+							pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_sentinel_addr;
+							codegen_type := "direct";
+						end else begin
+							pm_sentinel_addr := 0;
+							codegen_type := "indirect";
+						end;
 					end;
-
 
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
 						f_pm_sentinel_addr = !pm_sentinel_addr;
+						f_codegen_type = !codegen_type;
 					} in
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -953,6 +966,7 @@ class uobject
 						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 							f_canonical_pm_name = canonical_pm_name;
 							f_pm_sentinel_addr = !pm_sentinel_addr;
+							f_codegen_type = !codegen_type;
 						} in
 	
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
