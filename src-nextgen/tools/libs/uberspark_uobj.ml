@@ -933,6 +933,8 @@ class uobject
 				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
 				List.iter ( fun (sentinel_type: string) ->
 					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
+					let sentinel_addr = ref 0 in 
+
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
 						f_pm_sentinel_addr = 0;

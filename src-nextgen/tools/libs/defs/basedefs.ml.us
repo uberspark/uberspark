@@ -65,7 +65,12 @@ type uobjinfo_t =
 	mutable f_uobj_size				: int;
 };;
 
-
+type uobjcoll_sentinel_address_t = 
+{
+	mutable f_pm_addr : int;	(* address of public method *)
+	mutable f_sentinel_addr : int;	(* address of sentinel *)
+};;
+	
 	@@basedefs_uobj@@
 
 	(*TBA: basedefs *)
