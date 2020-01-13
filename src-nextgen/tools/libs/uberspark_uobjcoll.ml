@@ -917,6 +917,7 @@ let setup_intrauobjcoll_callees_sentinel_type_hashtbl
 	: unit = 
 
 	List.iter ( fun ( (canonical_pm_name:string), (pm_info: Uberspark_uobj.publicmethod_info_t)) ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding key = %s" canonical_pm_name;
 		Hashtbl.add d_intrauobjcoll_callees_sentinel_type_hashtbl canonical_pm_name !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
 	) !d_uobjs_publicmethods_assoc_list_mf;
 
@@ -1226,10 +1227,13 @@ let build
 					let uobj_bridges_override = ref false in
 
 					let uobj_slt_info : Uberspark_uobj.slt_info_t = {
-						f_intrauobjcoll_sentinels_list_mf = !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
-						f_uobjcoll_publicmethods_hashtbl_with_address = d_uobjs_publicmethods_hashtbl_with_address;
-						f_intrauobjcoll_publicmethods_sentinel_address_hashtbl = d_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
-						f_uobjcoll_publicmethods_sentinel_address_hashtbl = d_uobjcoll_publicmethods_sentinel_address_hashtbl;
+						f_intrauobjcoll_callees_sentinel_type_hashtbl = d_intrauobjcoll_callees_sentinel_type_hashtbl;
+						f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address = d_uobjs_publicmethods_hashtbl_with_address;
+						f_intrauobjcoll_callees_sentinel_address_hashtbl = d_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
+						f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+						f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+						f_legacy_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+						f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));  
 					} in
 					uobj#set_d_slt_info uobj_slt_info;
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "setup uobj sentinel linkage table information";

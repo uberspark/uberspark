@@ -22,38 +22,29 @@ type publicmethod_info_t =
 };;
 
 
-type slt_info_new_t = 
+type slt_info_t = 
 {
-	(* indexed by canonical publicmethod name *)
+	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* intrauobjcoll canonical publicmethod name to public method info mapping *)
+	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
+
+	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
 
 	(* indexed by canonical publicmethod name *)
 	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
-	(* indexed by canonical legacy callee name *)
-	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
-
-	(* indexed by canonical publicmethod name *)
-	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-
-	(* indexed by canonical publicmethod sentinel name *)
-	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-
 	(* indexed by canonical publicmethod sentinel name *)
 	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+
+	(* indexed by canonical legacy callee name *)
+	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical legacy callee sentinel name *)
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
 };;
-
-type slt_info_t =
-{
-	mutable f_intrauobjcoll_sentinels_list_mf : string list;
-	mutable f_uobjcoll_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-	mutable f_intrauobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-	mutable f_uobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-};;
-
 
 
 (*---------------------------------------------------------------------------*)
@@ -213,18 +204,24 @@ class uobject
 
 	(* uobj sentinel linkage table info  -- updated by uobjcoll build *)
 	val d_slt_info : slt_info_t = {
-		f_intrauobjcoll_sentinels_list_mf = [];
-		f_uobjcoll_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, publicmethod_info_t)  Hashtbl.t));
-		f_intrauobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
-		f_uobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_intrauobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, publicmethod_info_t)  Hashtbl.t));
+		f_intrauobjcoll_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_legacy_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));  
 	};
 	method get_d_slt_info = d_slt_info;
 	method set_d_slt_info 
 		(slt_info: slt_info_t) = 
-		d_slt_info.f_intrauobjcoll_sentinels_list_mf <- slt_info.f_intrauobjcoll_sentinels_list_mf;
-		d_slt_info.f_uobjcoll_publicmethods_hashtbl_with_address <- slt_info.f_uobjcoll_publicmethods_hashtbl_with_address;
-		d_slt_info.f_intrauobjcoll_publicmethods_sentinel_address_hashtbl <- slt_info.f_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
-		d_slt_info.f_uobjcoll_publicmethods_sentinel_address_hashtbl <- slt_info.f_uobjcoll_publicmethods_sentinel_address_hashtbl;
+		d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl;
+		d_slt_info.f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address <- slt_info.f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address;
+		d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl; 
+		d_slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl; 
+		d_slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl;
+		d_slt_info.f_legacy_callees_sentinel_type_hashtbl <- slt_info.f_legacy_callees_sentinel_type_hashtbl; 
+		d_slt_info.f_legacy_callees_sentinel_address_hashtbl <- slt_info.f_legacy_callees_sentinel_address_hashtbl; 
 		()
 	;
 
@@ -922,17 +919,23 @@ class uobject
 	(*--------------------------------------------------------------------------*)
 	method prepare_slt_codegen 
 		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
-		(callees_sentinel_type_list : string list)
+		(callees_sentinel_type_hashtbl : (string, string list)  Hashtbl.t)
 		(callees_hashtbl : (string, string list)  Hashtbl.t)
 		: unit =
 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: start";
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "length of callees_sentinel_type_hashtbl=%u" (Hashtbl.length callees_sentinel_type_hashtbl);
 
   		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
 	        List.iter (fun (pm_name:string) -> 
+				let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
+				let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical_pm_name=%s" canonical_pm_name;
+				Hashtbl.iter ( fun key value ->
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "key=%s" key;
+				) callees_sentinel_type_hashtbl;
+				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
 				List.iter ( fun (sentinel_type: string) ->
-					let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
-					let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
 					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
@@ -1000,7 +1003,8 @@ class uobject
 
 
 		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
-		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list d_slt_info.f_intrauobjcoll_sentinels_list_mf  self#get_d_intrauobjcoll_callees_hashtbl;
+		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list 
+			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  self#get_d_intrauobjcoll_callees_hashtbl;
 		
 
 		(* generate slt for intra-uobjcoll callees *)

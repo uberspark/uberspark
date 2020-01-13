@@ -5,38 +5,29 @@ type publicmethod_info_t =
 }
 
 
-type slt_info_new_t = 
+type slt_info_t = 
 {
-	(* indexed by canonical publicmethod name *)
+	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* intrauobjcoll canonical publicmethod name to public method info mapping *)
+	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
+
+	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
 
 	(* indexed by canonical publicmethod name *)
 	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
-	(* indexed by canonical legacy callee name *)
-	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
-
-	(* indexed by canonical publicmethod name *)
-	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-
-	(* indexed by canonical publicmethod sentinel name *)
-	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-
 	(* indexed by canonical publicmethod sentinel name *)
 	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+
+	(* indexed by canonical legacy callee name *)
+	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical legacy callee sentinel name *)
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
 }
-
-type slt_info_t =
-{
-	mutable f_intrauobjcoll_sentinels_list_mf : string list;
-	mutable f_uobjcoll_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-	mutable f_intrauobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-	mutable f_uobjcoll_publicmethods_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
-}
-
 
 
   class uobject :
@@ -155,7 +146,7 @@ type slt_info_t =
   	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
-  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> string list ->
+  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> (string, string list)  Hashtbl.t ->
 		  (string, string list)  Hashtbl.t -> unit
 
 
