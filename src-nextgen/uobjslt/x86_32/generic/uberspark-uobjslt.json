@@ -22,6 +22,31 @@
 		"cpu" : "generic"
 	},
 
+    /* uobjslt direct execution transfer code template 
+       inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
+    */
+    "uobjslt-directxfer": "
+        movl $(UOBJSLT_SENTINEL_PM_ADDRESS), %eax
+        jmpl *%eax
+    ",
+
+    /* uobjslt indirect execution transfer code template 
+       inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
+    */
+    "uobjslt-indirectxfer": "
+        movl $(UOBJSLT_SENTINEL_PM_ADDRESS_LOC), %eax
+        movl (%eax), %eax
+        jmpl *%eax
+    ",
+
+    /* uobjslt address definition template 
+       inputs: constant address, UOBJSLT_CONST_ADDRESS
+    */
+    "uobjslt-addrdef": "
+        .long UOBJSLT_CONST_ADDRESS
+    ",
+
+
     /*  trampoline code template 
 
         parameters: 

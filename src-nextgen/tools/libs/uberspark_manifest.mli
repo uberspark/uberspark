@@ -285,6 +285,11 @@ module Uobjslt : sig
 
 
   val parse_uobjslt_hdr : Yojson.Basic.t -> uobjslt_hdr_t -> bool
+
+  val parse_uobjslt_directxfer : Yojson.Basic.t -> bool * string
+  val parse_uobjslt_indirectxfer : Yojson.Basic.t -> bool * string
+  val parse_uobjslt_addrdef : Yojson.Basic.t -> bool * string
+
   val parse_uobjslt_trampolinecode : Yojson.Basic.t -> bool * string
   val parse_uobjslt_trampolinedata : Yojson.Basic.t -> bool * string
 end
