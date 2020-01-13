@@ -178,6 +178,30 @@ class uobject
 		()
 	;
 
+
+	val d_slt_directxfer_template : string ref = ref "";
+	method get_d_slt_directxfer_template = !d_slt_directxfer_template;
+	method set_d_slt_directxfer_template (template : string)= 
+		d_slt_directxfer_template := template;
+		()
+	;
+
+
+	val d_slt_indirectxfer_template : string ref = ref "";
+	method get_d_slt_indirectxfer_template = !d_slt_indirectxfer_template;
+	method set_d_slt_indirectxfer_template (template : string)= 
+		d_slt_indirectxfer_template := template;
+		()
+	;
+
+	val d_slt_addrdef_template : string ref = ref "";
+	method get_d_slt_addrdef_template = !d_slt_addrdef_template;
+	method set_d_slt_addrdef_template (template : string)= 
+		d_slt_addrdef_template := template;
+		()
+	;
+
+
 	(* uobj binary image load address *)
 	val d_load_addr = ref Uberspark_config.config_settings.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
@@ -403,13 +427,21 @@ class uobject
 					begin
 
 						(* read trampoline code and data *)
-						let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
+						(*let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
 						let (rval_tdata, tdata) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinedata mf_json) in
+						*)
+						let (rval_tdirectxfer, tdirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_directxfer mf_json) in
+						let (rval_tindirectxfer, tindirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_indirectxfer mf_json) in
+						let (rval_addrdef, taddrdef) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_addrdef mf_json) in
 
-						if  rval_tcode && rval_tdata then
+						(*if  rval_tcode && rval_tdata then*)
+						if  rval_tdirectxfer && rval_tindirectxfer && rval_addrdef then
 							begin
-								self#set_d_slt_trampolinecode tcode;
-								self#set_d_slt_trampolinedata tdata;
+								(*self#set_d_slt_trampolinecode tcode;
+								self#set_d_slt_trampolinedata tdata;*)
+								self#set_d_slt_directxfer_template tdirectxfer;
+								self#set_d_slt_indirectxfer_template tindirectxfer;
+								self#set_d_slt_addrdef_template taddrdef;
 								retval := true;
 								(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
 								Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								

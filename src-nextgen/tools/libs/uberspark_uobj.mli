@@ -66,6 +66,22 @@ type slt_info_t =
     val d_size : int ref
     val d_slt_trampolinecode : string ref
     val d_slt_trampolinedata : string ref
+    
+   	val d_slt_directxfer_template : string ref 
+  	method get_d_slt_directxfer_template : string
+  	method set_d_slt_directxfer_template : string -> unit
+
+   	val d_slt_indirectxfer_template : string ref 
+  	method get_d_slt_indirectxfer_template : string
+  	method set_d_slt_indirectxfer_template : string -> unit
+
+   	val d_slt_addrdef_template : string ref 
+  	method get_d_slt_addrdef_template : string
+  	method set_d_slt_addrdef_template : string -> unit
+
+
+    
+    
     val d_sources_c_file_list : string list ref
     val d_sources_casm_file_list : string list ref
     val d_sources_h_file_list : string list ref
