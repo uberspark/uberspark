@@ -10,9 +10,6 @@ type slt_info_t =
 	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
-	(* intrauobjcoll canonical publicmethod name to public method info mapping *)
-	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-
 	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 

@@ -27,9 +27,6 @@ type slt_info_t =
 	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
-	(* intrauobjcoll canonical publicmethod name to public method info mapping *)
-	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
-
 	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
 	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 
@@ -205,7 +202,6 @@ class uobject
 	(* uobj sentinel linkage table info  -- updated by uobjcoll build *)
 	val d_slt_info : slt_info_t = {
 		f_intrauobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
-		f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, publicmethod_info_t)  Hashtbl.t));
 		f_intrauobjcoll_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
 		f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
 		f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
@@ -216,7 +212,6 @@ class uobject
 	method set_d_slt_info 
 		(slt_info: slt_info_t) = 
 		d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl;
-		d_slt_info.f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address <- slt_info.f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address;
 		d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl; 
 		d_slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl; 
 		d_slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl;

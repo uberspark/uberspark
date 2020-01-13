@@ -1297,7 +1297,6 @@ let build
 
 					let uobj_slt_info : Uberspark_uobj.slt_info_t = {
 						f_intrauobjcoll_callees_sentinel_type_hashtbl = d_intrauobjcoll_callees_sentinel_type_hashtbl;
-						f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address = d_uobjs_publicmethods_hashtbl_with_address;
 						f_intrauobjcoll_callees_sentinel_address_hashtbl = d_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
 						f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
 						f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
