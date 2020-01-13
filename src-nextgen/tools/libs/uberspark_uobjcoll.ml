@@ -627,18 +627,6 @@ let consolidate_sections_with_memory_map
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobjcoll_publicmethods sentinel '%s' at 0x%08x, size=%08x..." 
 				key !uobjcoll_section_load_addr section_size;
 
-			(* add entry into d_uobjcoll_publicmethods_sentinel_address_hashtbl *)
-			(*let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
-			let sentinel_addr_info : Defs.Basedefs.uobjcoll_sentinel_address_t = {
-				f_pm_addr = 0;
-				f_sentinel_addr = !uobjcoll_section_load_addr;
-			} in 
-			if (Hashtbl.mem d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
-				Hashtbl.replace d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
-			end else begin
-				Hashtbl.add d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
-			end;*)
-
 
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
@@ -681,19 +669,6 @@ let consolidate_sections_with_memory_map
 
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for intrauobjcoll sentinel '%s' at 0x%08x, size=%08x..." 
 				key !uobjcoll_section_load_addr section_size;
-
-			(* add entry into d_uobjs_publicmethods_intrauobjcoll_sentinels_hashtbl *)
-			(*let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
-			let sentinel_addr_info : Defs.Basedefs.uobjcoll_sentinel_address_t = {
-				f_pm_addr = 0;
-				f_sentinel_addr = !uobjcoll_section_load_addr;
-			} in 
-			if (Hashtbl.mem d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
-				Hashtbl.replace d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
-			end else begin
-				Hashtbl.add d_intrauobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
-			end;
-			*)
 
 			(* update next section address *)
 			uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
