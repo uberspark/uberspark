@@ -917,7 +917,6 @@ let setup_intrauobjcoll_callees_sentinel_type_hashtbl
 	: unit = 
 
 	List.iter ( fun ( (canonical_pm_name:string), (pm_info: Uberspark_uobj.publicmethod_info_t)) ->
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding key = %s" canonical_pm_name;
 		Hashtbl.add d_intrauobjcoll_callees_sentinel_type_hashtbl canonical_pm_name !d_uobjcoll_intrauobjcoll_sentinels_list_mf;
 	) !d_uobjs_publicmethods_assoc_list_mf;
 

@@ -930,10 +930,6 @@ class uobject
 	        List.iter (fun (pm_name:string) -> 
 				let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
 				let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "canonical_pm_name=%s" canonical_pm_name;
-				Hashtbl.iter ( fun key value ->
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "key=%s" key;
-				) callees_sentinel_type_hashtbl;
 				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
 				List.iter ( fun (sentinel_type: string) ->
 					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
