@@ -628,7 +628,7 @@ let consolidate_sections_with_memory_map
 				key !uobjcoll_section_load_addr section_size;
 
 			(* add entry into d_uobjcoll_publicmethods_sentinel_address_hashtbl *)
-			let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
+			(*let canonical_pm_sentinel_name = (pm_name ^ "__" ^ sentinel_type) in 
 			let sentinel_addr_info : Defs.Basedefs.uobjcoll_sentinel_address_t = {
 				f_pm_addr = 0;
 				f_sentinel_addr = !uobjcoll_section_load_addr;
@@ -637,7 +637,7 @@ let consolidate_sections_with_memory_map
 				Hashtbl.replace d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
 			end else begin
 				Hashtbl.add d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
-			end;
+			end;*)
 
 
 			(* update next section address *)
@@ -932,6 +932,44 @@ let setup_intrauobjcoll_callees_sentinel_type_hashtbl
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* setup contents of uobjcoll publicmethods seninel address hashtbl *)
+(*--------------------------------------------------------------------------*)
+let setup_uobjcoll_publicmethods_sentinel_address_hashtbl
+	()
+	: unit = 
+
+	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info:Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_uobjcoll_publicmethods_t))  ->
+		List.iter ( fun (sentinel_type:string) ->
+			let canonical_pm_sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
+			let key = (".section_uobjcoll_publicmethods_sentinel_" ^ canonical_pm_sentinel_name) in 
+
+			(* grab section information for this sentinel *)
+			let section_info = (List.assoc key !d_memorymapped_sections_list) in
+			(* grab sentinel address *)
+			let sentinel_addr = section_info.usbinformat.f_addr_start in
+			let pm_info : Uberspark_uobj.publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+			(*grab public method address *)
+			let pm_addr = pm_info.f_uobjpminfo.f_addr in
+
+
+			(* add entry into d_uobjcoll_publicmethods_sentinel_address_hashtbl *)
+			let sentinel_addr_info : Defs.Basedefs.uobjcoll_sentinel_address_t = {
+				f_pm_addr = pm_addr;
+				f_sentinel_addr = sentinel_addr;
+			} in 
+			if (Hashtbl.mem d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
+				Hashtbl.replace d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
+			end else begin
+				Hashtbl.add d_uobjcoll_publicmethods_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
+			end;
+
+		) pm_sentinel_info.f_sentinel_type_list;
+	) !d_uobjcoll_publicmethods_assoc_list_mf;
+
+	()
+;;
+
 
 
 (*--------------------------------------------------------------------------*)
@@ -1188,6 +1226,13 @@ let build
 	let dummy = 0 in begin
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list with address";
+	end;
+
+	(* create sentinel address hashtbls for uobjcoll, intrauobjcoll, interuobjcoll and legacy publicmethods *)
+	(* TBD: intrauobjcoll, interuobjcoll and legacy *)
+	let dummy = 0 in begin
+	setup_uobjcoll_publicmethods_sentinel_address_hashtbl ();
+	Uberspark_logger.log "created sentinel address hashtbls";
 	end;
 
 	(* prepare inputs for sentinel code generation *)
