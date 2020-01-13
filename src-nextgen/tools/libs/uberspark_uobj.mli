@@ -144,7 +144,8 @@ type slt_info_t =
 
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> (string, string list)  Hashtbl.t ->
-		  (string, string list)  Hashtbl.t -> unit
+		  (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
+      (string, string list)  Hashtbl.t -> unit
 
 
 		method add_default_uobj_binary_sections	: unit -> unit

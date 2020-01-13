@@ -915,6 +915,7 @@ class uobject
 	method prepare_slt_codegen 
 		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
 		(callees_sentinel_type_hashtbl : (string, string list)  Hashtbl.t)
+		(callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t)
 		(callees_hashtbl : (string, string list)  Hashtbl.t)
 		: unit =
 
@@ -928,11 +929,18 @@ class uobject
 				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
 				List.iter ( fun (sentinel_type: string) ->
 					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
-					let sentinel_addr = ref 0 in 
+					let pm_sentinel_addr = ref 0 in 
+
+					if sentinel_type = "call" then begin
+						pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_pm_addr;
+					end else begin
+						pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_sentinel_addr;
+					end;
+
 
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
-						f_pm_sentinel_addr = 0;
+						f_pm_sentinel_addr = !pm_sentinel_addr;
 					} in
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -944,7 +952,7 @@ class uobject
 					if sentinel_type = "call" then begin
 						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
 							f_canonical_pm_name = canonical_pm_name;
-							f_pm_sentinel_addr = 0;
+							f_pm_sentinel_addr = !pm_sentinel_addr;
 						} in
 	
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -997,7 +1005,9 @@ class uobject
 
 		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
 		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list 
-			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  self#get_d_intrauobjcoll_callees_hashtbl;
+			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  
+			d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl
+			self#get_d_intrauobjcoll_callees_hashtbl;
 		
 
 		(* generate slt for intra-uobjcoll callees *)
