@@ -31,19 +31,19 @@ type slt_info_t =
 	mutable f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address : (string, publicmethod_info_t)  Hashtbl.t; 
 
 	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
-	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 
 	(* indexed by canonical publicmethod name *)
 	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical publicmethod sentinel name *)
-	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 
 	(* indexed by canonical legacy callee name *)
 	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical legacy callee sentinel name *)
-	mutable f_legacy_callees_sentinel_address_hashtbl : (string, int)  Hashtbl.t; 
+	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 };;
 
 
@@ -206,11 +206,11 @@ class uobject
 	val d_slt_info : slt_info_t = {
 		f_intrauobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
 		f_intrauobjcoll_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, publicmethod_info_t)  Hashtbl.t));
-		f_intrauobjcoll_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_intrauobjcoll_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
 		f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
-		f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, int)  Hashtbl.t));
+		f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
 		f_legacy_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
-		f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, int)  Hashtbl.t));  
+		f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));  
 	};
 	method get_d_slt_info = d_slt_info;
 	method set_d_slt_info 
