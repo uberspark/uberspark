@@ -167,7 +167,9 @@ type slt_indirect_xfer_table_info_t =
   	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
-  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> (string, string list)  Hashtbl.t ->
+  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
+    (string * slt_indirect_xfer_table_info_t) list ref ->
+    (string, string list)  Hashtbl.t ->
 		  (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
       (string, string list)  Hashtbl.t -> unit
 

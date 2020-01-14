@@ -962,11 +962,14 @@ class uobject
 	(*--------------------------------------------------------------------------*)
 	method prepare_slt_codegen 
 		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
+		(callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref) 
 		(callees_sentinel_type_hashtbl : (string, string list)  Hashtbl.t)
 		(callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t)
 		(callees_hashtbl : (string, string list)  Hashtbl.t)
 		: unit =
 
+		let slt_indirect_xfer_table_offset = ref 0 in
+		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: start";
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "length of callees_sentinel_type_hashtbl=%u" (Hashtbl.length callees_sentinel_type_hashtbl);
 
@@ -1006,6 +1009,21 @@ class uobject
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
+					if !codegen_type = "indirect" then begin
+						let slt_indirect_xfer_table_entry : slt_indirect_xfer_table_info_t = {
+							f_canonical_pm_name = canonical_pm_name;
+							f_sentinel_type = sentinel_type;
+							f_table_offset = !slt_indirect_xfer_table_offset;
+							f_addr = !pm_sentinel_addr;
+						} in
+
+						callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
+							[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
+
+						(* TBD we need to get addr_size from slt manifest *)
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + 4;
+					end;
+
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
 						slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
 
@@ -1018,6 +1036,22 @@ class uobject
 						} in
 	
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
+
+						if !codegen_type = "indirect" then begin
+							let slt_indirect_xfer_table_entry : slt_indirect_xfer_table_info_t = {
+								f_canonical_pm_name = canonical_pm_name;
+								f_sentinel_type = sentinel_type;
+								f_table_offset = !slt_indirect_xfer_table_offset;
+								f_addr = !pm_sentinel_addr;
+							} in
+
+							callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
+								[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
+
+							(* TBD we need to get addr_size from slt manifest *)
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + 4;
+						end;
+
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
 							slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
 					end;
@@ -1067,6 +1101,7 @@ class uobject
 
 		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
 		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list 
+			d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
 			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  
 			d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl
 			self#get_d_intrauobjcoll_callees_hashtbl;
