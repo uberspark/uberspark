@@ -107,6 +107,10 @@ class uobject
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
 
+	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;};
+	method get_d_uobjslt_hdr = d_uobjslt_hdr;
+
+
 	val d_sources_h_file_list: string list ref = ref [];
 	method get_d_sources_h_file_list = !d_sources_h_file_list;
 
@@ -437,8 +441,8 @@ class uobject
 				begin
 
 					(* parse uobjslt-hdr node *)
-					let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
-					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json uobjslt_hdr) in
+					(*let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;} in*)
+					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json d_uobjslt_hdr) in
 					if rval then
 					begin
 
@@ -1021,7 +1025,7 @@ class uobject
 							[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
 
 						(* TBD we need to get addr_size from slt manifest *)
-						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + 4;
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
 					end;
 
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
@@ -1049,7 +1053,7 @@ class uobject
 								[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
 
 							(* TBD we need to get addr_size from slt manifest *)
-							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + 4;
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
 						end;
 
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 

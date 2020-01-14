@@ -19,7 +19,8 @@
 		"namespace" : "/uberspark/uobjslt/x86_32/generic",
 		"platform" : "generic",
 		"arch" : "x86_32",
-		"cpu" : "generic"
+        "cpu" : "generic",
+        "addr-size" : "4"
 	},
 
     /* uobjslt direct execution transfer code template 

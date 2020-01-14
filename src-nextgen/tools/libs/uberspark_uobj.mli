@@ -114,6 +114,10 @@ type slt_indirect_xfer_table_info_t =
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
+
+   	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t
+  	method get_d_uobjslt_hdr : Uberspark_manifest.Uobjslt.uobjslt_hdr_t
+
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
 

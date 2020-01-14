@@ -9,6 +9,7 @@ type uobjslt_hdr_t =
 	mutable f_platform	   : string;
 	mutable f_arch	       : string;
 	mutable f_cpu		   : string;
+	mutable f_addr_size	   : int;
 };;
 
 
@@ -34,6 +35,7 @@ let parse_uobjslt_hdr
 					uobjslt_hdr.f_platform <- json_uobjslt_hdr |> member "platform" |> to_string;
 					uobjslt_hdr.f_arch <- json_uobjslt_hdr |> member "arch" |> to_string;
 					uobjslt_hdr.f_cpu <- json_uobjslt_hdr |> member "cpu" |> to_string;
+					uobjslt_hdr.f_addr_size <- int_of_string (json_uobjslt_hdr |> member "addr-size" |> to_string);
 					retval := true;
 				end
 			;
