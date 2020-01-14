@@ -44,6 +44,14 @@ type slt_info_t =
 };;
 
 
+type slt_indirect_xfer_table_info_t =
+{
+	mutable f_canonical_pm_name : string;
+	mutable f_sentinel_type : string;
+	mutable f_table_offset : int;
+	mutable f_addr : int;
+};;
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* class definitions *)
@@ -253,6 +261,14 @@ class uobject
 	(* uobj slt codegen info list for legacy callees *)
 	val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref = ref [];
 
+	(* uobj slt indirect xfer table assoc list for interuobjcoll callees indexed by canonical pm sentinel name *)
+	val d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
+	
+	(* uobj slt indirect xfer table assoc list for intrauobjcoll callees indexed by canonical pm sentinel name *)
+	val d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
+
+	(* uobj slt indirect xfer table assoc list for legacy callees indexed by canonical pm sentinel name *)
+	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 
 	(*--------------------------------------------------------------------------*)

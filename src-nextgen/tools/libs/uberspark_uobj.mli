@@ -26,6 +26,14 @@ type slt_info_t =
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 }
 
+type slt_indirect_xfer_table_info_t =
+{
+	mutable f_canonical_pm_name : string;
+	mutable f_sentinel_type : string;
+	mutable f_table_offset : int;
+	mutable f_addr : int;
+}
+
 
   class uobject :
   object
