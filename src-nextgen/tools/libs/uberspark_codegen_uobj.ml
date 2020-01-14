@@ -382,6 +382,26 @@ let generate_src_legacy_callees_info
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* generate sentinel linkage table *)
+(*--------------------------------------------------------------------------*)
+let generate_slt_v2	
+    (output_filename : string)
+    ?(output_banner = "uobj sentinel linkage table")
+	(slt_directxfer_template : string)
+	(slt_indirectxfer_template : string)
+	(slt_addr_def_template : string)
+    (callees_slt_codegen_info_list : slt_codegen_info_t list)
+    (code_section_name : string)
+    (callees_slt_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list)
+    (data_section_name : string)
+   : bool	= 
+        let retval = ref false in
+        
+        (!retval)
+;;
+
+
 
 (*--------------------------------------------------------------------------*)
 (* generate sentinel linkage table *)
