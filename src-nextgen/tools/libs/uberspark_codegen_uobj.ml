@@ -14,6 +14,7 @@ type slt_codegen_info_t =
 	mutable f_canonical_pm_name     : string;
 	mutable f_pm_sentinel_addr : int;			
     mutable f_codegen_type : string; (* direct or indirect *)	
+    mutable f_pm_sentinel_addr_loc : int;
 };;
 
 
