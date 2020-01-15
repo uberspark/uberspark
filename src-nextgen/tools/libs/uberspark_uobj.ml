@@ -44,13 +44,6 @@ type slt_info_t =
 };;
 
 
-type slt_indirect_xfer_table_info_t =
-{
-	mutable f_canonical_pm_name : string;
-	mutable f_sentinel_type : string;
-	mutable f_table_offset : int;
-	mutable f_addr : int;
-};;
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -266,13 +259,13 @@ class uobject
 	val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref = ref [];
 
 	(* uobj slt indirect xfer table assoc list for interuobjcoll callees indexed by canonical pm sentinel name *)
-	val d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
+	val d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 	
 	(* uobj slt indirect xfer table assoc list for intrauobjcoll callees indexed by canonical pm sentinel name *)
-	val d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
+	val d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 	(* uobj slt indirect xfer table assoc list for legacy callees indexed by canonical pm sentinel name *)
-	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref = ref []; 
+	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 
 	(*--------------------------------------------------------------------------*)
@@ -966,7 +959,7 @@ class uobject
 	(*--------------------------------------------------------------------------*)
 	method prepare_slt_codegen 
 		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
-		(callees_slt_indirect_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list ref) 
+		(callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref) 
 		(callees_sentinel_type_hashtbl : (string, string list)  Hashtbl.t)
 		(callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t)
 		(callees_hashtbl : (string, string list)  Hashtbl.t)
@@ -1014,7 +1007,7 @@ class uobject
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 					if !codegen_type = "indirect" then begin
-						let slt_indirect_xfer_table_entry : slt_indirect_xfer_table_info_t = {
+						let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
 							f_canonical_pm_name = canonical_pm_name;
 							f_sentinel_type = sentinel_type;
 							f_table_offset = !slt_indirect_xfer_table_offset;
@@ -1042,7 +1035,7 @@ class uobject
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 						if !codegen_type = "indirect" then begin
-							let slt_indirect_xfer_table_entry : slt_indirect_xfer_table_info_t = {
+							let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
 								f_canonical_pm_name = canonical_pm_name;
 								f_sentinel_type = sentinel_type;
 								f_table_offset = !slt_indirect_xfer_table_offset;

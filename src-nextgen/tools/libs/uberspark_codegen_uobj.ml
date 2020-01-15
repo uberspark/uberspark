@@ -393,7 +393,7 @@ let generate_slt_v2
 	(slt_addr_def_template : string)
     (callees_slt_codegen_info_list : slt_codegen_info_t list)
     (code_section_name : string)
-    (callees_slt_xfer_table_assoc_list : (string * slt_indirect_xfer_table_info_t) list)
+    (callees_slt_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list)
     (data_section_name : string)
    : bool	= 
         let retval = ref false in

@@ -26,13 +26,6 @@ type slt_info_t =
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 }
 
-type slt_indirect_xfer_table_info_t =
-{
-	mutable f_canonical_pm_name : string;
-	mutable f_sentinel_type : string;
-	mutable f_table_offset : int;
-	mutable f_addr : int;
-}
 
 
   class uobject :
@@ -172,7 +165,7 @@ type slt_indirect_xfer_table_info_t =
 
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
-    (string * slt_indirect_xfer_table_info_t) list ref ->
+    (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->
     (string, string list)  Hashtbl.t ->
 		  (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
       (string, string list)  Hashtbl.t -> unit
