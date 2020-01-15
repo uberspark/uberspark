@@ -1164,48 +1164,6 @@ class uobject
 			end
 		;
 
-
-(*		(* generate slt for intra-uobjcoll callees *)
-		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
-			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" self#get_d_intrauobjcoll_callees_hashtbl 
-			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
-		if (rval == false) then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for intra-uobjcoll callees!";
-				ignore (exit 1);
-			end
-		;
-
-
-		(* generate slt for interuobjcoll callees *)
-		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" self#get_d_interuobjcoll_callees_hashtbl 
-			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
-		if (rval == false) then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for inter-uobjcoll callees!";
-				ignore (exit 1);
-			end
-		;
-		
-		(* generate slt for legacy callees *)
-		let rval = (Uberspark_codegen.Uobj.generate_slt 
-			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for legacy callees" self#get_d_legacy_callees_hashtbl 
-			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
-		if (rval == false) then
-			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for legacy callees!";
-				ignore (exit 1);
-			end
-		;
-*)
-
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
