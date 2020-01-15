@@ -386,7 +386,7 @@ let generate_src_legacy_callees_info
 (*--------------------------------------------------------------------------*)
 (* generate sentinel linkage table *)
 (*--------------------------------------------------------------------------*)
-let generate_slt_v2	
+let generate_slt	
     (output_filename : string)
     ?(output_banner = "uobj sentinel linkage table")
 	(slt_directxfer_template : string)
@@ -459,7 +459,7 @@ let generate_slt_v2
 ;;
 
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* generate sentinel linkage table *)
 (*--------------------------------------------------------------------------*)
@@ -537,7 +537,7 @@ let generate_slt
         retval := true;
         (!retval)
 ;;
-
+*)
 
 
 (*--------------------------------------------------------------------------*)

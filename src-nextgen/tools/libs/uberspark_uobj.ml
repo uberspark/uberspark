@@ -1108,9 +1108,64 @@ class uobject
 			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  
 			d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl
 			self#get_d_intrauobjcoll_callees_hashtbl;
-		
 
 		(* generate slt for intra-uobjcoll callees *)
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
+			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_intrauobjcoll_callees_slt_codegen_info_list
+			".uobj_intrauobjcoll_csltcode"
+			!d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_intrauobjcoll_csltdata") in	
+		if (rval == false) then
+			begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for intrauobjcoll callees!";
+				ignore (exit 1);
+			end
+		;
+
+		(* generate slt for interuobjcoll callees *)
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
+			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_interuobjcoll_callees_slt_codegen_info_list
+			".uobj_interuobjcoll_csltcode"
+			!d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_interuobjcoll_csltdata") in	
+		if (rval == false) then
+			begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for inter-uobjcoll callees!";
+				ignore (exit 1);
+			end
+		;
+
+
+		(* generate slt for legacy callees *)
+		let rval = (Uberspark_codegen.Uobj.generate_slt 
+			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
+			~output_banner:"uobj sentinel linkage table for legacy callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_legacy_callees_slt_codegen_info_list
+			".uobj_legacy_csltcode"
+			!d_legacy_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_legacy_csltdata") in	
+		if (rval == false) then
+			begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for legacy callees!";
+				ignore (exit 1);
+			end
+		;
+
+
+(*		(* generate slt for intra-uobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" self#get_d_intrauobjcoll_callees_hashtbl 
@@ -1149,7 +1204,7 @@ class uobject
 				ignore (exit 1);
 			end
 		;
-
+*)
 
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
