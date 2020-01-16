@@ -49,7 +49,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		within the same collection
 	*/
 	"uobj-intrauobjcoll-callees" : {
-		"uberspark/uobjs/generic/test/sample": ["a_one", "a_two", "a_three"]
+		"uberspark/uobjs/generic/test/add": ["add"]
 	},
 	
 
@@ -57,7 +57,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		across other collection(s)
 	*/
 	"uobj-interuobjcoll-callees": {
-		"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]
+		/*"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]*/
 	} 
 
 
@@ -65,8 +65,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	
 	/* legacy CoSS functions/code that this uobj invokes */
 	"uobj-legacy-callees": [
-		"untrusted_func_1",	
-		"untrusted_func_2"
+		/*"untrusted_func_1",	
+		"untrusted_func_2"*/
 	] 
 
 

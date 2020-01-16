@@ -1,11 +1,56 @@
-(*------------------------------------------------------------------------------
-	uberSpark uberobject verification and build interface
-	author: amit vasudevan (amitvasudevan@acm.org)
-------------------------------------------------------------------------------*)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark uberobject verification and build interface 	             	 *)
+(*	implementation															 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
 
 open Str
 
 		
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+type publicmethod_info_t =
+{
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
+};;
+
+
+type slt_info_t = 
+{
+	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+
+	(* indexed by canonical publicmethod name *)
+	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* indexed by canonical publicmethod sentinel name *)
+	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+
+	(* indexed by canonical legacy callee name *)
+	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* indexed by canonical legacy callee sentinel name *)
+	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+};;
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* class definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 
 class uobject 
 	= object(self)
@@ -55,6 +100,10 @@ class uobject
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
 
+	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;};
+	method get_d_uobjslt_hdr = d_uobjslt_hdr;
+
+
 	val d_sources_h_file_list: string list ref = ref [];
 	method get_d_sources_h_file_list = !d_sources_h_file_list;
 
@@ -69,6 +118,10 @@ class uobject
 
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
+
+	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref = ref []; 
+	method get_d_publicmethods_assoc_list = !d_publicmethods_assoc_list;
+
 
 	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
@@ -88,6 +141,13 @@ class uobject
 	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
 	method get_d_default_sections_list_ref = d_default_sections_list;
 	method get_d_default_sections_list_val = !d_default_sections_list;
+
+
+	(* association list of uobj public methods sections; indexed by section name *)		
+	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
+	method get_d_publicmethods_sections_list_ref = d_publicmethods_sections_list;
+	method get_d_publicmethods_sections_list_val = !d_publicmethods_sections_list;
+
 
 	(* association list of uobj binary image sections with memory map info; indexed by section name *)		
 	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -123,6 +183,30 @@ class uobject
 		()
 	;
 
+
+	val d_slt_directxfer_template : string ref = ref "";
+	method get_d_slt_directxfer_template = !d_slt_directxfer_template;
+	method set_d_slt_directxfer_template (template : string)= 
+		d_slt_directxfer_template := template;
+		()
+	;
+
+
+	val d_slt_indirectxfer_template : string ref = ref "";
+	method get_d_slt_indirectxfer_template = !d_slt_indirectxfer_template;
+	method set_d_slt_indirectxfer_template (template : string)= 
+		d_slt_indirectxfer_template := template;
+		()
+	;
+
+	val d_slt_addrdef_template : string ref = ref "";
+	method get_d_slt_addrdef_template = !d_slt_addrdef_template;
+	method set_d_slt_addrdef_template (template : string)= 
+		d_slt_addrdef_template := template;
+		()
+	;
+
+
 	(* uobj binary image load address *)
 	val d_load_addr = ref Uberspark_config.config_settings.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
@@ -143,6 +227,45 @@ class uobject
 	method get_d_alignment = !d_alignment;
 	method set_d_alignment alignment = (d_alignment := alignment);
 
+
+	(* uobj sentinel linkage table info  -- updated by uobjcoll build *)
+	val d_slt_info : slt_info_t = {
+		f_intrauobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_intrauobjcoll_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
+		f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
+		f_legacy_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+		f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));  
+	};
+	method get_d_slt_info = d_slt_info;
+	method set_d_slt_info 
+		(slt_info: slt_info_t) = 
+		d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl;
+		d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl; 
+		d_slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_type_hashtbl; 
+		d_slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl <- slt_info.f_interuobjcoll_callees_sentinel_address_hashtbl;
+		d_slt_info.f_legacy_callees_sentinel_type_hashtbl <- slt_info.f_legacy_callees_sentinel_type_hashtbl; 
+		d_slt_info.f_legacy_callees_sentinel_address_hashtbl <- slt_info.f_legacy_callees_sentinel_address_hashtbl; 
+		()
+	;
+
+	(* uobj slt codegen info list for interuobjcoll callees *)
+	val d_interuobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref = ref [];
+
+	(* uobj slt codegen info list for intrauobjcoll callees *)
+	val d_intrauobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref = ref [];
+
+	(* uobj slt codegen info list for legacy callees *)
+	val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref = ref [];
+
+	(* uobj slt indirect xfer table assoc list for interuobjcoll callees indexed by canonical pm sentinel name *)
+	val d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
+	
+	(* uobj slt indirect xfer table assoc list for intrauobjcoll callees indexed by canonical pm sentinel name *)
+	val d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
+
+	(* uobj slt indirect xfer table assoc list for legacy callees indexed by canonical pm sentinel name *)
+	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 
 	(*--------------------------------------------------------------------------*)
@@ -221,12 +344,14 @@ class uobject
 
 		(* parse uobj-publicmethods node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_publicmethods mf_json d_publicmethods_hashtbl) in
+		let rval_assoc = (Uberspark_manifest.Uobj.parse_uobj_publicmethods_into_assoc_list mf_json d_publicmethods_assoc_list) in
 
-		if (rval == false) then (false)
+		if (rval == false) || (rval_assoc == false) then (false)
 		else
 		let dummy = 0 in
 			begin
-				Uberspark_logger.log "total public methods:%u" (Hashtbl.length self#get_d_publicmethods_hashtbl); 
+				Uberspark_logger.log "total public methods:%u,%u" (Hashtbl.length self#get_d_publicmethods_hashtbl)
+					(List.length self#get_d_publicmethods_assoc_list); 
 			end;
 
 		(* parse uobj-intrauobjcoll-callees node *)
@@ -309,19 +434,27 @@ class uobject
 				begin
 
 					(* parse uobjslt-hdr node *)
-					let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""} in
-					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json uobjslt_hdr) in
+					(*let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;} in*)
+					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json d_uobjslt_hdr) in
 					if rval then
 					begin
 
 						(* read trampoline code and data *)
-						let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
+						(*let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
 						let (rval_tdata, tdata) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinedata mf_json) in
+						*)
+						let (rval_tdirectxfer, tdirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_directxfer mf_json) in
+						let (rval_tindirectxfer, tindirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_indirectxfer mf_json) in
+						let (rval_addrdef, taddrdef) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_addrdef mf_json) in
 
-						if  rval_tcode && rval_tdata then
+						(*if  rval_tcode && rval_tdata then*)
+						if  rval_tdirectxfer && rval_tindirectxfer && rval_addrdef then
 							begin
-								self#set_d_slt_trampolinecode tcode;
-								self#set_d_slt_trampolinedata tdata;
+								(*self#set_d_slt_trampolinecode tcode;
+								self#set_d_slt_trampolinedata tdata;*)
+								self#set_d_slt_directxfer_template tdirectxfer;
+								self#set_d_slt_indirectxfer_template tindirectxfer;
+								self#set_d_slt_addrdef_template taddrdef;
 								retval := true;
 								(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
 								Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
@@ -363,11 +496,16 @@ class uobject
 		=
 
 		let uobj_section_load_addr = ref 0 in
+		(* TBD: we need to handle non-uniform uobj size, in which case we will only be an alignment value 
+			and we need to revise uobjsize comparision to alignment comparisons
+		*)
 		let uobjsize = self#get_d_size in
 		let uobj_load_addr = self#get_d_load_addr in
 
+		(* clear out memory mapped sections list and set initial load address *)
 		uobj_section_load_addr := self#get_d_load_addr;
-
+		d_memorymapped_sections_list := []; 
+		
 		(* iterate over default sections *)
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
@@ -401,8 +539,25 @@ class uobject
 
 
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
+
+			(* if this section is for a public method, then update publicmethods hashtable with address *)
+			if x.usbinformat.f_type == Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO then begin
+				let pm_name = (Str.string_after x.f_name 8) in  (* grab public method name after uobj_pm_ *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" pm_name;
+			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl pm_name) then begin
+					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl pm_name) in
+						pm_info.f_addr <- !uobj_section_load_addr;
+					Hashtbl.replace self#get_d_publicmethods_hashtbl pm_name pm_info;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updated publicmethod address as 0x%08x" pm_info.f_addr;
+		    	end else begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unable to match public method name to section definition!";
+		    	end
+			    ;
+			end;
+
+			(* compute next section load address *)
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
-				
+
 		)self#get_d_default_sections_list_val;
 
 
@@ -515,21 +670,7 @@ class uobject
 		()
 		: unit =
 		
-		(* add default uobj sections *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_binhdr", {
-			f_name = "uobj_binhdr";	
-			f_subsection_list = [ ".uobj_binhdr"; ".uobj_binhdr_section_info" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
-							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		(* start with uobj state save area section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
 			f_name = "uobj_ssa";	
 			f_subsection_list = [ ".uobj_ssa" ];	
@@ -544,35 +685,27 @@ class uobject
 						};
 		}) ];
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_pminfo", {
-			f_name = "uobj_pminfo";	
-			f_subsection_list = [ ".uobj_pminfo_hdr"; ".uobj_pminfo" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
-							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
+		(* create sections for each public method *)
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ pm_name) in 
+			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
+				f_name = section_name;	
+				f_subsection_list = [ "." ^ section_name ];	
+				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
+								f_prot=0; 
+								f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
+								f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+								f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+								f_addr_start=0; 
+								f_addr_file = 0;
+								f_reserved = 0;
+							};
+			}) ];
 
+		) self#get_d_publicmethods_hashtbl;
+		
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_cinfo", {
-			f_name = "uobj_intrauobjcoll_cinfo";	
-			f_subsection_list = [ ".uobj_intrauobjcoll_cinfo_hdr"; ".uobj_intrauobjcoll_cinfo" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CINFO; 
-							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		(* intrauobjcoll callees slt code section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltcode", {
 			f_name = "uobj_intrauobjcoll_csltcode";	
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltcode" ];	
@@ -587,6 +720,7 @@ class uobject
 						};
 		}) ];
 
+		(* intrauobjcoll callees slt data section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltdata", {
 			f_name = "uobj_intrauobjcoll_csltdata";	
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltdata" ];	
@@ -601,20 +735,8 @@ class uobject
 						};
 		}) ];
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_cinfo", {
-			f_name = "uobj_interuobjcoll_cinfo";	
-			f_subsection_list = [ ".uobj_interuobjcoll_cinfo" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CINFO; 
-							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
 
+		(* interuobjcoll callees slt code section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltcode", {
 			f_name = "uobj_interuobjcoll_csltcode";	
 			f_subsection_list = [ ".uobj_interuobjcoll_csltcode" ];	
@@ -630,6 +752,7 @@ class uobject
 		}) ];
 
 
+		(* interuobjcoll callees slt data section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltdata", {
 			f_name = "uobj_interuobjcoll_csltdata";	
 			f_subsection_list = [ ".uobj_interuobjcoll_csltdata" ];	
@@ -644,21 +767,8 @@ class uobject
 						};
 		}) ];
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_cinfo", {
-			f_name = "uobj_legacy_cinfo";	
-			f_subsection_list = [ ".uobj_legacy_cinfo" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CINFO; 
-							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
 
-
+		(* legacy callees slt code section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltcode", {
 			f_name = "uobj_legacy_csltcode";	
 			f_subsection_list = [ ".uobj_legacy_csltcode" ];	
@@ -673,6 +783,7 @@ class uobject
 						};
 		}) ];
 
+		(* legacy callees slt data section *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltdata", {
 			f_name = "uobj_legacy_csltdata";	
 			f_subsection_list = [ ".uobj_legacy_csltdata" ];	
@@ -688,6 +799,7 @@ class uobject
 		}) ];
 
 
+		(* uobj code, data, dmadata and stack sections follow *)
 		d_default_sections_list := !d_default_sections_list @ [ ("uobj_code", {
 				 f_name = "uobj_code";	
 				f_subsection_list = [ ".text" ];	
@@ -775,6 +887,126 @@ class uobject
 		()
 	;
 
+
+
+	(*--------------------------------------------------------------------------*)
+	(* prepare for slt code generation *)
+	(*--------------------------------------------------------------------------*)
+	method prepare_slt_codegen 
+		(callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref)
+		(callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref) 
+		(callees_sentinel_type_hashtbl : (string, string list)  Hashtbl.t)
+		(callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t)
+		(callees_hashtbl : (string, string list)  Hashtbl.t)
+		: unit =
+
+		let slt_indirect_xfer_table_offset = ref 0 in
+		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: start";
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "length of callees_sentinel_type_hashtbl=%u" (Hashtbl.length callees_sentinel_type_hashtbl);
+
+  		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
+	        List.iter (fun (pm_name:string) -> 
+				let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
+				let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
+				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
+				List.iter ( fun (sentinel_type: string) ->
+					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
+					let pm_sentinel_addr = ref 0 in 
+					let codegen_type = ref "" in 
+
+					if sentinel_type = "call" then begin
+						if (Hashtbl.mem callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix) then begin
+							pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_pm_addr;
+							codegen_type := "direct";
+						end else begin
+							pm_sentinel_addr := 0;
+							codegen_type := "indirect";
+						end;
+					end else begin
+						if (Hashtbl.mem callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix) then begin
+							pm_sentinel_addr := (Hashtbl.find callees_sentinel_address_hashtbl canonical_pm_name_with_sentinel_suffix).f_sentinel_addr;
+							codegen_type := "direct";
+						end else begin
+							pm_sentinel_addr := 0;
+							codegen_type := "indirect";
+						end;
+					end;
+
+					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
+						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
+						f_pm_sentinel_addr = !pm_sentinel_addr;
+						f_codegen_type = !codegen_type;
+						f_pm_sentinel_addr_loc = 0;
+					} in
+
+
+					if !codegen_type = "indirect" then begin
+						let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
+							f_canonical_pm_name = canonical_pm_name;
+							f_sentinel_type = sentinel_type;
+							f_table_offset = !slt_indirect_xfer_table_offset;
+							f_addr = !pm_sentinel_addr;
+						} in
+
+						callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
+							[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
+
+						slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
+
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
+					end;
+
+					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
+
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
+						slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+
+					(* if sentinel type is call, then add entry with just canonical_pm_name in addition *)
+					if sentinel_type = "call" then begin
+						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
+							f_canonical_pm_name = canonical_pm_name;
+							f_pm_sentinel_addr = !pm_sentinel_addr;
+							f_codegen_type = !codegen_type;
+							f_pm_sentinel_addr_loc = 0;
+						} in
+	
+
+						if !codegen_type = "indirect" then begin
+							let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
+								f_canonical_pm_name = canonical_pm_name;
+								f_sentinel_type = sentinel_type;
+								f_table_offset = !slt_indirect_xfer_table_offset;
+								f_addr = !pm_sentinel_addr;
+							} in
+
+							callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
+								[ (canonical_pm_name_with_sentinel_suffix, slt_indirect_xfer_table_entry) ];
+
+							slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
+
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
+						end;
+
+						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
+							slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+					end;
+
+				) callees_sentinel_type_list;
+				
+			) pm_name_list;
+		) callees_hashtbl;
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_slt_codegen: end";
+
+		()
+	;
+
+
+
+
 	(*--------------------------------------------------------------------------*)
 	(* prepare uobj sources *)
 	(*--------------------------------------------------------------------------*)
@@ -804,46 +1036,68 @@ class uobject
 			self#get_d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
+
+		(* prepare slt codegen for intrauobjcoll, interuobjcoll and legacy callees *)
+		self#prepare_slt_codegen d_intrauobjcoll_callees_slt_codegen_info_list 
+			d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
+			d_slt_info.f_intrauobjcoll_callees_sentinel_type_hashtbl  
+			d_slt_info.f_intrauobjcoll_callees_sentinel_address_hashtbl
+			self#get_d_intrauobjcoll_callees_hashtbl;
+
 		(* generate slt for intra-uobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
-			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" self#get_d_intrauobjcoll_callees_hashtbl 
-			self#get_d_slt_trampolinedata "intrauobjcoll_csltdata" ".uobj_intrauobjcoll_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_intrauobjcoll_csltcode" ) in	
+			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_intrauobjcoll_callees_slt_codegen_info_list
+			".uobj_intrauobjcoll_csltcode"
+			!d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_intrauobjcoll_csltdata") in	
 		if (rval == false) then
 			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for intra-uobjcoll callees!";
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for intrauobjcoll callees!";
 				ignore (exit 1);
 			end
 		;
 
-
 		(* generate slt for interuobjcoll callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" self#get_d_interuobjcoll_callees_hashtbl 
-			self#get_d_slt_trampolinedata "interuobjcoll_csltdata" ".uobj_interauobjcoll_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_interauobjcoll_csltcode" ) in	
+			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_interuobjcoll_callees_slt_codegen_info_list
+			".uobj_interuobjcoll_csltcode"
+			!d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_interuobjcoll_csltdata") in	
 		if (rval == false) then
 			begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for inter-uobjcoll callees!";
 				ignore (exit 1);
 			end
 		;
-		
+
+
 		(* generate slt for legacy callees *)
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
-			~output_banner:"uobj sentinel linkage table for legacy callees" self#get_d_legacy_callees_hashtbl 
-			self#get_d_slt_trampolinedata "legacy_csltdata" ".uobj_legacy_csltdata"
-			self#get_d_slt_trampolinecode ".uobj_legacy_csltcode" ) in	
+			~output_banner:"uobj sentinel linkage table for legacy callees" 
+			!d_slt_directxfer_template
+			!d_slt_indirectxfer_template
+			!d_slt_addrdef_template
+			!d_legacy_callees_slt_codegen_info_list
+			".uobj_legacy_csltcode"
+			!d_legacy_callees_slt_indirect_xfer_table_assoc_list
+			".uobj_legacy_csltdata") in	
 		if (rval == false) then
 			begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to generate slt for legacy callees!";
 				ignore (exit 1);
 			end
 		;
-
 
 		(* generate uobj binary public methods info source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
@@ -914,6 +1168,8 @@ class uobject
 
 		()
 	;
+
+
 
 
 	(*--------------------------------------------------------------------------*)
@@ -1067,6 +1323,10 @@ class uobject
 		
 		(* make namespace folder if not already existing *)
 		Uberspark_osservices.mkdir ~parent:true uobj_path_ns (`Octal 0o0777);
+
+		(* make namespace include folder if not already existing *)
+		Uberspark_osservices.mkdir ~parent:true (uobj_path_ns ^ "/include") (`Octal 0o0777);
+
 	;
 
 
@@ -1080,15 +1340,17 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobj_path_to_mf_filename;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobj_path_ns;
 		
+
+
 		(* copy h files to namespace *)
 		List.iter ( fun h_filename -> 
 			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
-			(uobj_path_ns ^ "/" ^ h_filename);
+			(uobj_path_ns ^ "/include/" ^ h_filename);
 		) self#get_d_sources_h_file_list;
 
 		(* copy top-level header to namespace *)
 		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
-			(uobj_path_ns ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename);
+			(uobj_path_ns ^ "/include/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename);
 
 	;
 

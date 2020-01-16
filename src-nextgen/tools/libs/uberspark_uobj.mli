@@ -1,3 +1,31 @@
+type publicmethod_info_t =
+{
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
+}
+
+
+type slt_info_t = 
+{
+	(* intrauobjcoll canonical publicmethod name to sentinel type list mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+
+	(* indexed by canonical publicmethod name *)
+	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* indexed by canonical publicmethod sentinel name *)
+	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+
+	(* indexed by canonical legacy callee name *)
+	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
+
+	(* indexed by canonical legacy callee sentinel name *)
+	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+}
+
 
 
   class uobject :
@@ -28,14 +56,33 @@
 
     val d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
+  	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref 
+
 
   	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
+  	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
 
     val d_size : int ref
     val d_slt_trampolinecode : string ref
     val d_slt_trampolinedata : string ref
+    
+   	val d_slt_directxfer_template : string ref 
+  	method get_d_slt_directxfer_template : string
+  	method set_d_slt_directxfer_template : string -> unit
+
+   	val d_slt_indirectxfer_template : string ref 
+  	method get_d_slt_indirectxfer_template : string
+  	method set_d_slt_indirectxfer_template : string -> unit
+
+   	val d_slt_addrdef_template : string ref 
+  	method get_d_slt_addrdef_template : string
+  	method set_d_slt_addrdef_template : string -> unit
+
+
+    
+    
     val d_sources_c_file_list : string list ref
     val d_sources_casm_file_list : string list ref
     val d_sources_h_file_list : string list ref
@@ -43,9 +90,27 @@
 
     val d_target_def : Defs.Basedefs.target_def_t
 
+  	val d_slt_info : slt_info_t
+    method get_d_slt_info : slt_info_t
+    method set_d_slt_info : slt_info_t -> unit
+
+
+    (* uobj slt codegen info list for interuobjcoll callees *)
+    val d_interuobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+
+    (* uobj slt codegen info list for intrauobjcoll callees *)
+    val d_intrauobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+
+    (* uobj slt codegen info list for legacy callees *)
+    val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+    
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
+
+   	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t
+  	method get_d_uobjslt_hdr : Uberspark_manifest.Uobjslt.uobjslt_hdr_t
+
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
 
@@ -66,11 +131,15 @@
  
     method get_d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
-
+  	method get_d_publicmethods_assoc_list :
+      (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list
+ 
   	method get_d_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_default_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_default_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
+  	method get_d_publicmethods_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
+	  method get_d_publicmethods_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_memorymapped_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
@@ -95,6 +164,13 @@
   	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
+  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
+    (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->
+    (string, string list)  Hashtbl.t ->
+		  (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
+      (string, string list)  Hashtbl.t -> unit
+
+
 		method add_default_uobj_binary_sections	: unit -> unit
     method consolidate_sections_with_memory_map : unit -> int
     method parse_manifest : unit ->  bool

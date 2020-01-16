@@ -9,6 +9,7 @@ type uobjslt_hdr_t =
 	mutable f_platform	   : string;
 	mutable f_arch	       : string;
 	mutable f_cpu		   : string;
+	mutable f_addr_size	   : int;
 };;
 
 
@@ -34,6 +35,7 @@ let parse_uobjslt_hdr
 					uobjslt_hdr.f_platform <- json_uobjslt_hdr |> member "platform" |> to_string;
 					uobjslt_hdr.f_arch <- json_uobjslt_hdr |> member "arch" |> to_string;
 					uobjslt_hdr.f_cpu <- json_uobjslt_hdr |> member "cpu" |> to_string;
+					uobjslt_hdr.f_addr_size <- int_of_string (json_uobjslt_hdr |> member "addr-size" |> to_string);
 					retval := true;
 				end
 			;
@@ -44,6 +46,102 @@ let parse_uobjslt_hdr
 
 	(!retval)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse json node "uobjslt-directxfer" *)
+(* return: *)
+(* on success: true; string representation of directxfer template code *)
+(* on failure: false; null string *)
+(*--------------------------------------------------------------------------*)
+let parse_uobjslt_directxfer 
+	(mf_json : Yojson.Basic.t)
+	: bool * string =
+	let retval = ref false in
+	let retstr = ref "" in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobjslt_directxfer = mf_json |> member "uobjslt-directxfer" in
+			if(json_uobjslt_directxfer <> `Null) then
+				begin
+					retstr := json_uobjslt_directxfer |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, !retstr)
+;;
+
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse json node "uobjslt-indirectxfer" *)
+(* return: *)
+(* on success: true; string representation of indirectxfer template code *)
+(* on failure: false; null string *)
+(*--------------------------------------------------------------------------*)
+let parse_uobjslt_indirectxfer 
+	(mf_json : Yojson.Basic.t)
+	: bool * string =
+	let retval = ref false in
+	let retstr = ref "" in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobjslt_indirectxfer = mf_json |> member "uobjslt-indirectxfer" in
+			if(json_uobjslt_indirectxfer <> `Null) then
+				begin
+					retstr := json_uobjslt_indirectxfer |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, !retstr)
+;;
+
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse json node "uobjslt-addrdef" *)
+(* return: *)
+(* on success: true; string representation of addrdef template directive *)
+(* on failure: false; null string *)
+(*--------------------------------------------------------------------------*)
+let parse_uobjslt_addrdef 
+	(mf_json : Yojson.Basic.t)
+	: bool * string =
+	let retval = ref false in
+	let retstr = ref "" in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobjslt_addrdef = mf_json |> member "uobjslt-addrdef" in
+			if(json_uobjslt_addrdef <> `Null) then
+				begin
+					retstr := json_uobjslt_addrdef |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, !retstr)
+;;
+
+
 
 
 (*--------------------------------------------------------------------------*)

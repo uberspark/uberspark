@@ -57,8 +57,12 @@
 
 #include <uberspark/include/basedefs.h>
 
-#ifndef __ASSEMBLY__
+#ifdef __ASSEMBLY__
 
+
+#else // not __ASSEMBLY__
+
+#define UBERSPARK_UOBJ_PUBLICMETHOD(x) __attribute__ ((section (".uobj_pm_"#x))) x
 
 #endif //__ASSEMBLY__
 

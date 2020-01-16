@@ -1,0 +1,49 @@
+/*
+    uberspark sentinel manifest (x86_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+	/* uberspark header */
+	"uberspark-hdr":{
+		"coss_version" : "any",
+		"mftype" : "sentinel",
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+
+    /* sentinel header */
+	"sentinel-hdr":{
+		"namespace" : "uberspark/sentinels/cpu/x86_32/generic/any/intrauobjcoll/call",
+		"platform" : "generic",
+		"arch" : "x86_32",
+        "cpu" : "generic",
+        "sizeof-code" : "0x1000" 
+	},
+
+    /*  sentinel code template 
+
+        parameters: 
+        PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
+    */ 
+    "sentinel-code": "
+        movl $(PUBLICMETHOD_ADDR), %eax
+        jmpl *%eax
+    ",
+
+
+    /*  sentinel library code template 
+
+        parameters: 
+        PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
+    */ 
+    "sentinel-libcode": "
+        movl (PUBLICMETHOD_SENTINEL_ADDR), %eax
+        jmpl *%eax
+    "
+
+
+
+}

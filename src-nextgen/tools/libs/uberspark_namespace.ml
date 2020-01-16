@@ -29,6 +29,7 @@ let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 let namespace_uobjcoll_build_dir = "_build";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
+let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.S";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
 let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
 
@@ -45,6 +46,10 @@ let namespace_uobjslt_intrauobjcoll_callees_src_filename = "uobjslt-intrauobjcol
 let namespace_uobjslt_interuobjcoll_callees_src_filename = "uobjslt-interuobjcoll-callees.S";;
 let namespace_uobjslt_legacy_callees_src_filename = "uobjslt-legacy-callees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
+
+let namespace_sentinel = "sentinels";;
+let namespace_sentinel_mf_filename = "uberspark-sentinel.json";;
+
 
 
 let namespace_config = "config";;
@@ -72,6 +77,22 @@ let namespace_bridge_ld_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ld_br
 let namespace_bridge_pp_bridge = namespace_bridge ^ "/" ^ namespace_bridge_pp_bridge_name;;
 let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_bridge_name;;
 let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_bldsys_bridge_name;;
+
+
+
+let get_variable_name_prefix_from_ns
+	(ns : string)
+	: string = 
+
+	let retval = ref "" in
+	if ns = "legacy" then begin
+		retval := "uberspark_legacy";
+	end else begin
+		retval := (Str.global_replace (Str.regexp "/") "_" ns);
+	end;
+
+	(!retval)
+;;
 
 
 
@@ -180,3 +201,9 @@ let is_uobj_uobjcoll_abspath_in_namespace
 	(!retval)
 ;;
 
+let get_namespace_basename
+	(ns : string)
+	: string =
+
+	(Filename.basename ns)
+;;

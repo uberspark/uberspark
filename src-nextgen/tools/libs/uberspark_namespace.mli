@@ -29,6 +29,7 @@ val namespace_uobjcoll : string
 val namespace_uobjcoll_mf_filename : string
 val namespace_uobjcoll_build_dir : string
 val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
+val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
 val namespace_uobjcoll_binary_image_filename : string
 
@@ -47,6 +48,10 @@ val namespace_uobjslt_intrauobjcoll_callees_src_filename : string
 val namespace_uobjslt_interuobjcoll_callees_src_filename : string
 val namespace_uobjslt_legacy_callees_src_filename : string
 val namespace_uobjslt_output_symbols_filename : string
+
+val namespace_sentinel : string
+val namespace_sentinel_mf_filename : string
+
 
 val namespace_config : string
 val namespace_config_mf_filename : string
@@ -80,8 +85,10 @@ val namespace_bridge_bldsys_bridge : string
 (* namespace methods *)	
 (*------------------------------------------------------------------------*)
 
+val get_variable_name_prefix_from_ns : string -> string
 val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
 val is_uobj_uobjcoll_canonical_namespace : string -> bool
 val is_uobj_ns_in_uobjcoll_ns : string -> string -> bool
+val get_namespace_basename : string -> string
 

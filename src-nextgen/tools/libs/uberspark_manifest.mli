@@ -143,7 +143,7 @@ module Config : sig
     mutable uobjcoll_binary_image_load_address : int;
     mutable uobjcoll_binary_image_hdr_section_alignment : int;
     mutable uobjcoll_binary_image_hdr_section_size : int;
-
+    mutable uobjcoll_binary_image_section_alignment : int;
 
     (* bridge related configuration settings *)	
     mutable bridge_cc_bridge : string;
@@ -195,10 +195,11 @@ module Uobj : sig
 
   type uobj_publicmethods_t = 
   {
-    f_name: string;
-    f_retvaldecl : string;
-    f_paramdecl: string;
-    f_paramdwords : int;
+    mutable f_name: string;
+    mutable f_retvaldecl : string;
+    mutable f_paramdecl: string;
+    mutable f_paramdwords : int;
+    mutable f_addr : int;
   }
 
 
@@ -207,6 +208,7 @@ module Uobj : sig
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
+  val parse_uobj_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobj_publicmethods_t) list ref -> bool
   val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
   val parse_uobj_interuobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
   val parse_uobj_legacy_callees : Yojson.Basic.t -> (string, string list) Hashtbl.t -> bool
@@ -226,6 +228,7 @@ module Uobjcoll : sig
       mutable f_platform	   : string;
       mutable f_arch	       : string;
       mutable f_cpu				   : string;
+      mutable f_hpl          : string;
     }
 
   type uobjcoll_uobjs_t =
@@ -234,9 +237,37 @@ module Uobjcoll : sig
     mutable f_templar_uobjs    : string list;
   }
 
+(*  type uobjcoll_interuobjcoll_publicmethods_t =
+  {
+    mutable f_uobj_ns    : string;
+    mutable f_pm_name	 : string;
+    mutable f_sentinel_type_list : string list;
+  }
+*)
+
+  type uobjcoll_sentinels_uobjcoll_publicmethods_t =
+  {
+    mutable f_uobj_ns    : string;
+    mutable f_pm_name	 : string;
+    mutable f_sentinel_type_list : string list;
+  }
+
+
+  (*type uobjcoll_sentinels_t =
+  {
+    mutable f_interuobjcoll    : string list;
+    mutable f_intrauobjcoll    : string list;
+  }
+*)
 
   val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
   val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
+  (*val parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl : Yojson.Basic.t ->  ((string, uobjcoll_interuobjcoll_publicmethods_t)  Hashtbl.t) -> bool*)
+  (*val parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobjcoll_interuobjcoll_publicmethods_t) list ref -> bool*)
+  (*v)al parse_uobjcoll_sentinels : Yojson.Basic.t -> uobjcoll_sentinels_t -> bool*)
+  val parse_uobjcoll_sentinels_uobjcoll_publicmethods : Yojson.Basic.t -> (string * uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref -> bool
+  val parse_uobjcoll_sentinels_intrauobjcoll : Yojson.Basic.t -> string list ref -> bool
+
 
 end
 
@@ -250,11 +281,42 @@ module Uobjslt : sig
       mutable f_platform	   : string;
       mutable f_arch	       : string;
       mutable f_cpu				   : string;
+      mutable f_addr_size    : int;
     }
 
 
   val parse_uobjslt_hdr : Yojson.Basic.t -> uobjslt_hdr_t -> bool
+
+  val parse_uobjslt_directxfer : Yojson.Basic.t -> bool * string
+  val parse_uobjslt_indirectxfer : Yojson.Basic.t -> bool * string
+  val parse_uobjslt_addrdef : Yojson.Basic.t -> bool * string
+
   val parse_uobjslt_trampolinecode : Yojson.Basic.t -> bool * string
   val parse_uobjslt_trampolinedata : Yojson.Basic.t -> bool * string
 end
 
+module Sentinel : sig
+
+  type sentinel_mf_json_nodes_t =
+  {
+    mutable f_uberspark_hdr					: Yojson.Basic.t;			
+    mutable f_sentinel_hdr   				: Yojson.Basic.t;
+    mutable f_sentinel_code       			: Yojson.Basic.t;
+    mutable f_sentinel_libcode			   	: Yojson.Basic.t;
+  }
+
+  type sentinel_hdr_t =
+    {
+      mutable f_namespace    : string;			
+      mutable f_platform	   : string;
+      mutable f_arch	       : string;
+      mutable f_cpu				   : string;
+      mutable f_sizeof_code  : int;
+    }
+
+
+  val get_sentinel_mf_json_nodes : Yojson.Basic.t ->  sentinel_mf_json_nodes_t -> bool
+  val parse_sentinel_hdr : Yojson.Basic.t -> sentinel_hdr_t -> bool
+  val parse_sentinel_code : Yojson.Basic.t -> bool * string
+  val parse_sentinel_libcode : Yojson.Basic.t -> bool * string
+end

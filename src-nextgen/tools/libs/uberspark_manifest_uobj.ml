@@ -26,10 +26,11 @@ type uobj_hdr_t =
 
 type uobj_publicmethods_t = 
 {
-	f_name: string;
-	f_retvaldecl : string;
-	f_paramdecl: string;
-	f_paramdwords : int;
+	mutable f_name: string;
+	mutable f_retvaldecl : string;
+	mutable f_paramdecl: string;
+	mutable f_paramdwords : int;
+	mutable f_addr : int;
 };;
 
 
@@ -214,6 +215,7 @@ let parse_uobj_publicmethods
 												f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
 												f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
 												f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
+												f_addr = 0; 
 											} in
 
 										Hashtbl.add publicmethods_hashtbl x tbl_entry; 
@@ -235,6 +237,69 @@ let parse_uobj_publicmethods
 							
 	(!retval)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-publicmethods" into an association list *)
+(* return: *)
+(* on success: true; public methods association list is modified with parsed values *)
+(* on failure: false; public methods association list is left untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_publicmethods_into_assoc_list
+	(mf_json : Yojson.Basic.t)
+	(publicmethods_assoc_list : (string * uobj_publicmethods_t) list ref)
+	: bool =
+		
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_publicmethods_json = mf_json |> member "uobj-publicmethods" in
+				if uobj_publicmethods_json != `Null then
+					begin
+
+						let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
+							retval := true;
+							
+							List.iter (fun (x,y) ->
+								let uobj_publicmethods_inner_list = (Yojson.Basic.Util.to_list y) in 
+								if (List.length uobj_publicmethods_inner_list) <> 3 then
+									begin
+										retval := false;
+									end
+								else
+									begin
+										let tbl_entry : uobj_publicmethods_t = 
+											{
+												f_name = x;
+												f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
+												f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
+												f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
+												f_addr = 0; 
+											} in
+
+
+										publicmethods_assoc_list := !publicmethods_assoc_list @ [ (x, tbl_entry)];
+		
+										retval := true; 
+									end
+								;
+					
+								()
+							) uobj_publicmethods_assoc_list;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval)
+;;
+
+
 
 
 (*--------------------------------------------------------------------------*)
@@ -348,7 +413,7 @@ let parse_uobj_legacy_callees
 					begin
 
 						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
-							Hashtbl.add legacy_callees_hashtbl "legacy" (json_list_to_string_list uobj_legacy_callees_list);
+							Hashtbl.add legacy_callees_hashtbl "uberspark_legacy" (json_list_to_string_list uobj_legacy_callees_list);
 							retval := true;
 
 					end
