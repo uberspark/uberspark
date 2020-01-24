@@ -7,9 +7,12 @@
 (*------------------------------------------------------------------------*)
 (* namespace variables *)	
 (*------------------------------------------------------------------------*)
+
+(* root *)
 let namespace_root = "uberspark";;
-let namespace_root_dir = ref "";;
+let namespace_root_dir = ref "";; (* will be populated on tool loading *)
 let namespace_root_mf_filename = "uberspark.json";;
+let namespace_root_base = "base";;
 
 let namespace_uobj = "uobjs";;
 let namespace_uobj_mf_filename = "uberspark-uobj.json";;
@@ -50,6 +53,10 @@ let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 let namespace_sentinel = "sentinels";;
 let namespace_sentinel_mf_filename = "uberspark-sentinel.json";;
 
+
+(* staging *)
+let namespace_staging = "staging";;
+let namespace_staging_current = "current";;
 
 
 let namespace_config = "config";;

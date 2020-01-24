@@ -10,6 +10,7 @@
 val namespace_root : string
 val namespace_root_dir : string ref
 val namespace_root_mf_filename : string
+val namespace_root_base : string
 
 val namespace_uobj : string
 val namespace_uobj_mf_filename : string
@@ -51,6 +52,10 @@ val namespace_uobjslt_output_symbols_filename : string
 
 val namespace_sentinel : string
 val namespace_sentinel_mf_filename : string
+
+
+val namespace_staging : string
+val namespace_staging_current : string
 
 
 val namespace_config : string
