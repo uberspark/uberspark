@@ -5,7 +5,6 @@ open Uberspark
 open Cmdliner
 
 type opts = { 
-  as_new : bool;
   from_existing : string option;
   setting_name: string option;
   setting_value: string option;
@@ -15,7 +14,6 @@ type opts = {
 
 (* fold all staging options into type opts *)
 let cmd_staging_opts_handler 
-  (as_new: bool)
   (from_existing: string option)
   (setting_name: string option)
   (setting_value: string option)
@@ -23,7 +21,6 @@ let cmd_staging_opts_handler
   (to_file : string option)
   : opts = 
   { 
-      as_new = as_new;
       from_existing = from_existing;
       setting_name=setting_name; 
       setting_value=setting_value;
@@ -36,11 +33,6 @@ let cmd_staging_opts_handler
 let cmd_staging_opts_t =
   let docs = "ACTION OPTIONS" in
 
-  let as_new =
-    let doc = "Create a new staging. This is the default." in
-    Arg.(value & flag & info ["as-new"] ~doc ~docs )
-
-  in
   let from_existing =
     let doc = "Create a new staging from an existing staging specified by $(docv)."  in
       Arg.(value & opt (some string) None & info ["from-existing"] ~docs ~docv:"NAME" ~doc)
@@ -67,7 +59,7 @@ let cmd_staging_opts_t =
 
   in
  
-  Term.(const cmd_staging_opts_handler $ as_new $ from_existing $ setting_name $ setting_value $ from_file $ to_file)
+  Term.(const cmd_staging_opts_handler $ from_existing $ setting_name $ setting_value $ from_file $ to_file)
 
 
 
@@ -82,12 +74,47 @@ let cmd_staging_opts_t =
 let handler_staging_create
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
 
+  let l_from_existing = ref "" in
+  let l_name = ref "" in
 
+  match cmd_staging_opts.from_existing with
+    | None -> l_from_existing := "";
+    | Some s_name -> l_from_existing := s_name;
+  ;
 
-  `Ok ()
+  match name with
+    | None -> l_name := "";
+    | Some s_name -> l_name := s_name;
+  ;
+
+  Uberspark.Logger.log "l_name=%s, l_from_existing=%s"  
+    !l_name !l_from_existing;
+
+  if (!l_name <> "") then begin
+    if (!l_from_existing <> "") then begin
+      (* create from existing staging *)
+      if (Uberspark.Staging.create_from_existing !l_name !l_from_existing) then begin
+        `Ok ()
+      end else begin
+        `Error (false, "could not create staging!")
+      end;
+
+    end else begin
+      (* create new staging *)
+      if (Uberspark.Staging.create_as_new !l_name) then begin
+        `Ok ()
+      end else begin
+        `Error (false, "could not create staging!")
+      end;
+    end;
+
+  end else begin
+    `Error (true, "need to specify staging name.")
+  end;
+
 ;;
 
 (* uberspark staging switch sub-handler *)

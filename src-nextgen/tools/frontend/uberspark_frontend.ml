@@ -281,7 +281,7 @@ let cmd_staging =
  		`S "ACTIONS";
     	`I ("$(b,create)",
         	"create a new staging with a name specified via the $(i,NAMESPACE) argument.
-			Uses the following action options: $(b,--as-new), and $(b,--from-existing)");
+			Uses the following action options: $(b,--from-existing)");
      	`I ("$(b,switch)",
         	"switch to a staging specified by the $(i,NAMESPACE) argument.");
      	`I ("$(b,list)",
