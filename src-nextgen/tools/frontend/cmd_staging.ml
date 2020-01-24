@@ -58,12 +58,12 @@ let cmd_staging_opts_t =
   in
   let from_file =
     let doc = "Set staging configuration settings from file specified by $(docv)."  in
-      Arg.(value & opt (some string) None & info ["from-existing"] ~docs ~docv:"NAME" ~doc)
+      Arg.(value & opt (some string) None & info ["from-file"] ~docs ~docv:"NAME" ~doc)
 
   in
   let to_file =
     let doc = "Store staging configuration settings to file specified by $(docv)."  in
-      Arg.(value & opt (some string) None & info ["from-existing"] ~docs ~docv:"NAME" ~doc)
+      Arg.(value & opt (some string) None & info ["to-file"] ~docs ~docv:"NAME" ~doc)
 
   in
  

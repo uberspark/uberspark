@@ -256,7 +256,6 @@ let cmd_staging =
 					"remove", `Remove;
 					"config-set", `Config_set;
 					"config-get", `Config_get;
-					"config-dump", `Config_dump;
 				] in
   	let doc = strf "The action to perform. $(docv) must be one of %s."
       (Arg.doc_alts_enum action) in
@@ -327,7 +326,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"5.1" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_config; cmd_bridges]
+let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_config; cmd_staging; cmd_bridges]
 
 
 (*----------------------------------------------------------------------------*)
