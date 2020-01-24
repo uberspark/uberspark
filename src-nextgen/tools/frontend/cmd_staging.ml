@@ -71,6 +71,72 @@ let cmd_staging_opts_t =
 
 
 
+(*
+  `Error (true, "message is printed along with usage.")
+  `Ok ()
+  `Error (false, "message is printed without usage")
+*)
+
+
+(* uberspark staging create sub-handler *)
+let handler_staging_create
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+(* uberspark staging switch sub-handler *)
+let handler_staging_switch
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+
+(* uberspark staging list sub-handler *)
+let handler_staging_list
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+
+(* uberspark staging remove sub-handler *)
+let handler_staging_remove
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+
+(* uberspark staging config-set sub-handler *)
+let handler_staging_config_set
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+
+(* uberspark staging config-get sub-handler *)
+let handler_staging_config_get
+  (copts : Commonopts.opts)
+  (cmd_staging_opts: opts)
+  (path_ns : string option)
+  =
+  `Ok ()
+;;
+
+
 (* main handler for staging command *)
 let handler_staging 
   (copts : Commonopts.opts)
@@ -79,25 +145,28 @@ let handler_staging
   (path_ns : string option)
   = 
 
+  (* perform common initialization *)
+  Commoninit.initialize copts;
+
   let retval = 
   match action with
     | `Create -> 
-        `Ok()
+        (handler_staging_create copts cmd_staging_opts path_ns)
     
     | `Switch ->
-        `Ok()
+        (handler_staging_switch copts cmd_staging_opts path_ns)
 
     | `List ->
-        `Ok()
+        (handler_staging_list copts cmd_staging_opts path_ns)
 
     | `Remove ->
-        `Ok()
+        (handler_staging_remove copts cmd_staging_opts path_ns)
 
     | `Config_set ->
-        `Ok()
+        (handler_staging_config_set copts cmd_staging_opts path_ns)
 
     | `Config_get ->
-        `Ok()
+        (handler_staging_config_get copts cmd_staging_opts path_ns)
 
   in
     retval
