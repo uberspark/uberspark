@@ -49,7 +49,7 @@ let create_as_new
 	Uberspark_osservices.mkdir ~parent:true staging_path_to_create (`Octal 0o0777);
 
 	(* copy everything from root base to new staging path *)
-	(* TBD *)
+	Uberspark_osservices.cp ~recurse:true (staging_path_root_base ^ "/*") (staging_path_to_create ^ "/.");  
 
 	(* remove the staging current symbolic link; its a regular file *)
 	Uberspark_osservices.file_remove staging_path_current;
