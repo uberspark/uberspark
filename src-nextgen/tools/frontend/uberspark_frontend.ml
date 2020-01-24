@@ -247,6 +247,67 @@ let cmd_config =
   
 
 
+(* kicks in when uberspark staging ... is issued *)
+let cmd_staging =
+	let action = 
+	let action = [ 	"create", `Create; 
+					"switch", `Dump; 
+					"get", `Get;
+					"switch", `Switch;
+					"set", `Set;
+					"remove", `Remove
+				] in
+  	let doc = strf "The action to perform. $(docv) must be one of %s."
+      (Arg.doc_alts_enum action) in
+  	let action = Arg.enum action in
+  		Arg.(required & pos 0 (some action) None & info [] ~doc ~docv:"ACTION")
+	in
+
+	let path_ns =
+    let doc = "The config namespace uri." in
+    Arg.(value & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+	in
+  
+  let doc = "Manage uberspark configuration" in
+  let man =
+    [
+		`S Manpage.s_synopsis;
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i, PATH) or $(i,NAMESPACE)]";
+		`S Manpage.s_description;
+     	`P "The $(tname) command provides several actions to manage the
+	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
+    	`S Manpage.s_arguments;
+ 		`S "ACTIONS";
+    	`I ("$(b,create)",
+        	"create a new configuration namespace from a file $(i,PATH) or $(i,NAMESPACE) arguments.
+			Uses the following action options: $(b,--from-ns), $(b,--from-file), and $(b,--new-namespace)");
+    	`I ("$(b,dump)",
+        	"store current configuration to a (json) file. 
+			Uses the $(i,PATH) argument");
+    	`I ("$(b,get)",
+        	"display a configuration setting within the current configuration namespace. 
+			Uses the following action options: $(b,--setting-name)");
+    	`I ("$(b,set)",
+        	"change a configuration setting within the current configuration namespace. 
+			Uses the following action options: $(b,--setting-name), and $(b,--setting-value)");
+     	`I ("$(b,switch)",
+        	"switch to a configuration specified by the $(i,NAMESPACE) argument.");
+     	`I ("$(b,remove)",
+        	"Remove a configuration namespace specified by the $(i,NAMESPACE) argument.");
+	 	`S "ACTION OPTIONS";
+	  	`P "These options qualify the aforementioned actions.";
+		`Blocks manpage_sec_common_options;
+		`Blocks manpage_sec_issues;
+		`S Manpage.s_exit_status;
+	] in
+  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ path_ns )),
+  Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
+
+
+
+
+
 (* kicks in when user just issues uberspark without any parameters *)
 let cmd_default =
   let doc = "enforcing verifiable object abstractions for commodity system software stacks" in
