@@ -25,8 +25,28 @@ open Yojson
 
 
 
+(*Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;*)
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+let create_as_new
+	(staging_name : string)
+	: bool =
+	
+	(true)
+;;
+
+
+let create_from_existing
+	(dst_staging_name : string)
+	(src_staging_name : string)
+	: bool =
+	
+	(true)
+;;
+
+
