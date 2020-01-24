@@ -251,11 +251,12 @@ let cmd_config =
 let cmd_staging =
 	let action = 
 	let action = [ 	"create", `Create; 
-					"switch", `Dump; 
-					"get", `Get;
-					"switch", `Switch;
-					"set", `Set;
-					"remove", `Remove
+					"switch", `Switch; 
+					"list", `List;
+					"remove", `Remove;
+					"config-set", `Config_set;
+					"config-get", `Config_get;
+					"config-dump", `Config_dump;
 				] in
   	let doc = strf "The action to perform. $(docv) must be one of %s."
       (Arg.doc_alts_enum action) in
@@ -264,44 +265,45 @@ let cmd_staging =
 	in
 
 	let path_ns =
-    let doc = "The config namespace uri." in
-    Arg.(value & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
+    let doc = "The staging namespace." in
+    Arg.(value & pos 1 (some string) None & info [] ~docv:"NAMESPACE" ~doc)
 	in
   
-  let doc = "Manage uberspark configuration" in
+  let doc = "Manage uberspark staging" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i, PATH) or $(i,NAMESPACE)]";
+    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,NAMESPACE)]";
 		`S Manpage.s_description;
      	`P "The $(tname) command provides several actions to manage the
-	 		uberspark configuration settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
+	 		uberspark staging settings, optionally qualified by $(i,NAMESPACE).";
     	`S Manpage.s_arguments;
+
  		`S "ACTIONS";
     	`I ("$(b,create)",
-        	"create a new configuration namespace from a file $(i,PATH) or $(i,NAMESPACE) arguments.
-			Uses the following action options: $(b,--from-ns), $(b,--from-file), and $(b,--new-namespace)");
-    	`I ("$(b,dump)",
-        	"store current configuration to a (json) file. 
-			Uses the $(i,PATH) argument");
-    	`I ("$(b,get)",
-        	"display a configuration setting within the current configuration namespace. 
-			Uses the following action options: $(b,--setting-name)");
-    	`I ("$(b,set)",
-        	"change a configuration setting within the current configuration namespace. 
-			Uses the following action options: $(b,--setting-name), and $(b,--setting-value)");
+        	"create a new staging with a name specified via the $(i,NAMESPACE) argument.
+			Uses the following action options: $(b,--as-new), and $(b,--from-existing)");
      	`I ("$(b,switch)",
-        	"switch to a configuration specified by the $(i,NAMESPACE) argument.");
+        	"switch to a staging specified by the $(i,NAMESPACE) argument.");
+     	`I ("$(b,list)",
+        	"print a list of all available stagings.");
      	`I ("$(b,remove)",
-        	"Remove a configuration namespace specified by the $(i,NAMESPACE) argument.");
+        	"Remove a staging specified by the $(i,NAMESPACE) argument.");
+    	`I ("$(b,config-set)",
+        	"change configuration settings within the current staging. 
+			Uses the following action options: $(b,--setting-name), $(b,--setting-value), and $(b,--from-file)");
+    	`I ("$(b,config-get)",
+        	"dump configuration settings within the current staging. 
+			Uses the following action options: $(b,--setting-name), $(b,--setting-value), and $(b,--to-file)");
+
 	 	`S "ACTION OPTIONS";
 	  	`P "These options qualify the aforementioned actions.";
 		`Blocks manpage_sec_common_options;
 		`Blocks manpage_sec_issues;
 		`S Manpage.s_exit_status;
 	] in
-  Term.(ret (const Cmd_config.handler_config $ Commonopts.opts_t $ Cmd_config.cmd_config_opts_t $ action $ path_ns )),
-  Term.info "config" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+  Term.(ret (const Cmd_staging.handler_staging $ Commonopts.opts_t $ Cmd_staging.cmd_staging_opts_t $ action $ path_ns )),
+  Term.info "staging" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
 
