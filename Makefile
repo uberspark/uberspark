@@ -102,12 +102,22 @@ frontend: build_bootstrap
 .PHONY: install
 install: build_bootstrap
 	$(call docker_run,make -f install.mk, -w all)
-	@echo Creating namespace within: $(USPARK_NAMESPACEROOTDIR)...
+	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
-	cp -Rf $(USPARK_INSTALLPREPDIR)/* $(USPARK_NAMESPACEROOTDIR)/ 
-	@echo Setting up default configuration...
-	ln -sf $(USPARK_NAMESPACEROOTDIR)/config/default $(USPARK_NAMESPACEROOTDIR)/config/current
-	@echo Default configuration setup.
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/docs
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/bridges
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark
+	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging/golden/uberspark
+	cp -Rf $(USPARK_INSTALLPREPDIR)/docs/* $(USPARK_NAMESPACEROOTDIR)/docs/ 
+	cp -Rf $(USPARK_INSTALLPREPDIR)/bridges/* $(USPARK_NAMESPACEROOTDIR)/bridges/ 
+	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark 
+	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging/golden/uberspark 
+	ln -sf $(USPARK_NAMESPACEROOTDIR)/staging/default $(USPARK_NAMESPACEROOTDIR)/staging/current
+	@echo Populated install namespace successfully
+	@echo Setting up default staging configuration...
+	ln -sf $(USPARK_NAMESPACEROOTDIR)/staging/current/uberspark/config/default $(USPARK_NAMESPACEROOTDIR)/staging/current/uberspark/config/current
+	@echo Default staging configuration setup.
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
 	$(SUDO) cp -f $(USPARK_INSTALLPREPDIR)/bin/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
