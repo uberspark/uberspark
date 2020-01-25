@@ -107,6 +107,21 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 (*---------------------------------------------------------------------------*)
 
 
+let set_root_dir
+	(root_dir : string)
+	: unit = 
+	namespace_root_dir := root_dir;
+	()
+;;
+
+
+let get_root_dir
+	()
+	: string = 
+
+	(!namespace_root_dir)
+;;
+
 let get_variable_name_prefix_from_ns
 	(ns : string)
 	: string = 
