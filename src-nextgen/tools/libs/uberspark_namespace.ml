@@ -118,8 +118,12 @@ let set_namespace_root_dir_prefix
 let get_namespace_root_dir_prefix
 	()
 	: string = 
-
-	(!namespace_root_dir)
+	let (rval, rabspath) = Uberspark_osservices.abspath !namespace_root_dir in
+	if (rval) then begin
+		(rabspath)
+	end else begin
+		(!namespace_root_dir)
+	end;
 ;;
 
 let get_namespace_staging_dir_prefix

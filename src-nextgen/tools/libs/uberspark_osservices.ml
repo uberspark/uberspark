@@ -120,7 +120,9 @@ open FileUtil
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
-				retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				if path_filename <> "" then begin
+					retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				end;
 				(*Unix.chdir !retval_abspath;
 				retval_abspath := Unix.getcwd ();
 				*)
