@@ -181,7 +181,10 @@ open FileUtil
 		()
 	;;
 
-
+	let readlink
+		(symlink_path : string) = 
+		(FileUtil.readlink symlink_path)
+	;;
 	
 (*	
 				let info =
