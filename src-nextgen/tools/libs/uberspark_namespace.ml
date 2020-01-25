@@ -107,7 +107,7 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 (*---------------------------------------------------------------------------*)
 
 
-let set_root_dir
+let set_root_dir_prefix
 	(root_dir : string)
 	: unit = 
 	namespace_root_dir := root_dir;
@@ -115,7 +115,7 @@ let set_root_dir
 ;;
 
 
-let get_root_dir
+let get_root_dir_prefix
 	()
 	: string = 
 
