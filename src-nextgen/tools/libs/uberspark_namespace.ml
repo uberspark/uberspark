@@ -107,7 +107,7 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 (*---------------------------------------------------------------------------*)
 
 
-let set_root_dir_prefix
+let set_namespace_root_dir_prefix
 	(root_dir : string)
 	: unit = 
 	namespace_root_dir := root_dir;
@@ -115,12 +115,21 @@ let set_root_dir_prefix
 ;;
 
 
-let get_root_dir_prefix
+let get_namespace_root_dir_prefix
 	()
 	: string = 
 
 	(!namespace_root_dir)
 ;;
+
+let get_namespace_staging_dir_prefix
+	()
+	: string = 
+
+	((get_namespace_root_dir_prefix ()) ^ "/" ^ namespace_root ^ "/" ^ namespace_staging ^ "/" ^ namespace_staging_current)
+;;
+
+
 
 let get_variable_name_prefix_from_ns
 	(ns : string)

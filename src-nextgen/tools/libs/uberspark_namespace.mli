@@ -103,8 +103,10 @@ val namespace_bridge_bldsys_bridge : string
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val set_root_dir_prefix : string -> unit
-val get_root_dir_prefix : unit -> string
+val set_namespace_root_dir_prefix : string -> unit
+val get_namespace_root_dir_prefix : unit -> string
+val get_namespace_staging_dir_prefix : unit -> string
+
 val get_variable_name_prefix_from_ns : string -> string
 val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
