@@ -20,6 +20,7 @@ let initialize
   (*Uberspark.Namespace.namespace_root_dir := copts.root_dir;*)
   Uberspark.Namespace.set_namespace_root_dir_prefix copts.root_dir;
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_staging_dir_prefix ());
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
   if not (Uberspark.Config.load Uberspark.Namespace.namespace_config_current) then 
