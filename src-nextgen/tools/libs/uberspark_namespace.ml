@@ -126,7 +126,9 @@ let get_namespace_staging_dir_prefix
 	()
 	: string = 
 
-	((get_namespace_root_dir_prefix ()) ^ "/" ^ namespace_root ^ "/" ^ namespace_staging ^ "/" ^ namespace_staging_current)
+	let symlink_path = 	((get_namespace_root_dir_prefix ()) ^ "/" ^ namespace_root ^ "/" ^ namespace_staging ^ 
+		"/" ^ namespace_staging_current) in
+	(Uberspark_osservices.readlink symlink_path)
 ;;
 
 
