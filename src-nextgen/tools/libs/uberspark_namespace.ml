@@ -23,7 +23,7 @@
 
 (* root *)
 let namespace_root = "uberspark";;
-let namespace_root_dir = ref "";; (* will be populated on tool loading *)
+let namespace_root_dir = ref "";; 
 let namespace_root_mf_filename = "uberspark.json";;
 
 let namespace_uobj = "uobjs";;
@@ -118,6 +118,13 @@ let set_namespace_root_dir_prefix
 let get_namespace_root_dir_prefix
 	()
 	: string = 
+	
+	(* check to see if namespace_root_dir has been populated, if not default to home directory *)
+	if !namespace_root_dir = "" then begin
+		namespace_root_dir := Unix.getenv "HOME";
+	end;
+
+	(* always try and return the absolute path, fall back to namespace_root_dir in case of error *)
 	let (rval, rabspath) = Uberspark_osservices.abspath !namespace_root_dir in
 	if (rval) then begin
 		(rabspath)
