@@ -40,8 +40,8 @@ let create_as_new
 	(* compute paths *)
 	let staging_parent_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
 		Uberspark_namespace.namespace_staging in 
-	let staging_path_root_base = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ 
-		"/" ^ Uberspark_namespace.namespace_root_base in 
+	let staging_path_golden = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ 
+		"/" ^ Uberspark_namespace.namespace_staging_golden in 
 	let staging_path_current = staging_parent_path ^ "/" ^ Uberspark_namespace.namespace_staging_current in 
 	let staging_path_to_create = staging_parent_path ^ "/" ^ staging_name in
 
@@ -49,7 +49,7 @@ let create_as_new
 	Uberspark_osservices.mkdir ~parent:true staging_path_to_create (`Octal 0o0777);
 
 	(* copy everything from root base to new staging path *)
-	Uberspark_osservices.cp ~recurse:true (staging_path_root_base ^ "/*") (staging_path_to_create ^ "/.");  
+	Uberspark_osservices.cp ~recurse:true (staging_path_golden ^ "/*") (staging_path_to_create ^ "/.");  
 
 	(* remove the staging current symbolic link; its a regular file *)
 	Uberspark_osservices.file_remove staging_path_current;

@@ -1,18 +1,30 @@
-(*
-	uberSpark namespace module
-	author: amit vasudevan (amitvasudevan@acm.org)
-*)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark namespace interface implementation		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
 
 
-(*------------------------------------------------------------------------*)
-(* namespace variables *)	
-(*------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* variable definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 
 (* root *)
 let namespace_root = "uberspark";;
 let namespace_root_dir = ref "";; (* will be populated on tool loading *)
 let namespace_root_mf_filename = "uberspark.json";;
-let namespace_root_base = "base";;
 
 let namespace_uobj = "uobjs";;
 let namespace_uobj_mf_filename = "uberspark-uobj.json";;
@@ -57,6 +69,7 @@ let namespace_sentinel_mf_filename = "uberspark-sentinel.json";;
 (* staging *)
 let namespace_staging = "staging";;
 let namespace_staging_current = "current";;
+let namespace_staging_golden = "golden";;
 
 
 let namespace_config = "config";;
@@ -85,6 +98,13 @@ let namespace_bridge_pp_bridge = namespace_bridge ^ "/" ^ namespace_bridge_pp_br
 let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_bridge_name;;
 let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_bldsys_bridge_name;;
 
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 let get_variable_name_prefix_from_ns
