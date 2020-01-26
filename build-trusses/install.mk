@@ -23,12 +23,12 @@ install_createnamespace:
 	mkdir -p $(UBERSPARK_INSTALLDIR)/bin
 	mkdir -p $(UBERSPARK_INSTALLDIR)/bridges
 	mkdir -p $(UBERSPARK_INSTALLDIR)/docs
+	mkdir -p $(UBERSPARK_INSTALLDIR)/platforms
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/config
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/hwm
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/include
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/loaders
-	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/platforms
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/sentinels
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/uobjs
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/uobjcoll
@@ -53,10 +53,10 @@ install_populateamespace: install_populateamespace_include
 	@echo Populating namespace within: $(UBERSPARK_INSTALLDIR)...
 	cp -rf $(UBERSPARK_SRCDIR)/bridges/* $(UBERSPARK_INSTALLDIR)/bridges/
 	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/
+	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/platforms/
 	cp -rf $(UBERSPARK_SRCDIR)/config/* $(UBERSPARK_INSTALLDIR)/staging/config/
 	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/staging/hwm/
 	cp -rf $(UBERSPARK_SRCDIR)/loaders/* $(UBERSPARK_INSTALLDIR)/staging/loaders/
-	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/staging/platforms/
 	cp -rf $(UBERSPARK_SRCDIR)/sentinels/* $(UBERSPARK_INSTALLDIR)/staging/sentinels/
 	cp -rf $(UBERSPARK_SRCDIR)/uobjcoll/* $(UBERSPARK_INSTALLDIR)/staging/uobjcoll/
 	cp -rf $(UBERSPARK_SRCDIR)/uobjrtl/* $(UBERSPARK_INSTALLDIR)/staging/uobjrtl/
