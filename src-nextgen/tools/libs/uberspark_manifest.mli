@@ -1,14 +1,16 @@
-(****************************************************************************)
-(****************************************************************************)
-(* uberSpark manifest interface *)
-(* author: amit vasudevan (amitvasudevan@acm.org) *)
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
+(* uberSpark manifest interface specification *)
+(*	 author: amit vasudevan (amitvasudevan@acm.org) *)
+(*===========================================================================*)
+(*===========================================================================*)
 
 
-(****************************************************************************)
-(* manifest node types *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 (* uberspark generic manifest header *)
 type hdr_t =
@@ -19,29 +21,31 @@ type hdr_t =
   mutable f_uberspark_max_version : string;
 }
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 val json_list_to_string_list : Yojson.Basic.t list -> string list
 val json_node_pretty_print_to_string : Yojson.Basic.t -> string
 val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojson.Basic.t
 
-(****************************************************************************)
-(* manifest parse interfaces *)
-(****************************************************************************)
 val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
 
-
-(****************************************************************************)
-(* manifest write interfaces *)
-(****************************************************************************)
 val write_prologue : ?prologue_str:string -> out_channel -> bool
 val write_uberspark_hdr : ?continuation:bool -> out_channel -> hdr_t -> bool
 val write_epilogue : ?epilogue_str:string -> out_channel -> bool
 
 
 
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 module Bridge : sig
@@ -110,7 +114,6 @@ module Bridge : sig
   val write_bridge_ld : ?continuation:bool -> out_channel -> bridge_ld_t -> bool
 
 end
-
 
 
 module Config : sig
@@ -220,7 +223,6 @@ module Uobj : sig
 end
 
 
-
 module Uobjcoll : sig
   type uobjcoll_hdr_t =
     {
@@ -237,13 +239,6 @@ module Uobjcoll : sig
     mutable f_templar_uobjs    : string list;
   }
 
-(*  type uobjcoll_interuobjcoll_publicmethods_t =
-  {
-    mutable f_uobj_ns    : string;
-    mutable f_pm_name	 : string;
-    mutable f_sentinel_type_list : string list;
-  }
-*)
 
   type uobjcoll_sentinels_uobjcoll_publicmethods_t =
   {
@@ -253,25 +248,14 @@ module Uobjcoll : sig
   }
 
 
-  (*type uobjcoll_sentinels_t =
-  {
-    mutable f_interuobjcoll    : string list;
-    mutable f_intrauobjcoll    : string list;
-  }
-*)
-
+ 
   val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
   val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
-  (*val parse_uobjcoll_interuobjcoll_publicmethods_into_hashtbl : Yojson.Basic.t ->  ((string, uobjcoll_interuobjcoll_publicmethods_t)  Hashtbl.t) -> bool*)
-  (*val parse_uobjcoll_interuobjcoll_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobjcoll_interuobjcoll_publicmethods_t) list ref -> bool*)
-  (*v)al parse_uobjcoll_sentinels : Yojson.Basic.t -> uobjcoll_sentinels_t -> bool*)
   val parse_uobjcoll_sentinels_uobjcoll_publicmethods : Yojson.Basic.t -> (string * uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref -> bool
   val parse_uobjcoll_sentinels_intrauobjcoll : Yojson.Basic.t -> string list ref -> bool
 
 
 end
-
-
 
 
 module Uobjslt : sig
@@ -294,6 +278,7 @@ module Uobjslt : sig
   val parse_uobjslt_trampolinecode : Yojson.Basic.t -> bool * string
   val parse_uobjslt_trampolinedata : Yojson.Basic.t -> bool * string
 end
+
 
 module Sentinel : sig
 
