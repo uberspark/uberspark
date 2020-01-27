@@ -151,7 +151,6 @@ let handler_staging_switch
   end;
 
 
-  `Ok ()
 ;;
 
 
@@ -169,9 +168,32 @@ let handler_staging_list
 let handler_staging_remove
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
-  `Ok ()
+
+
+  let l_name = ref "" in
+
+  match name with
+    | None -> l_name := "";
+    | Some s_name -> l_name := s_name;
+  ;
+
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_name=%s" !l_name;
+
+  if (!l_name <> "") then begin
+
+    if not (Uberspark.Staging.remove !l_name) then begin
+      `Error (false, "could not rempve specified staging: does not exist or is currently active!.")
+    end else begin
+      Uberspark.Logger.log "successfully removed staging: '%s'" !l_name;
+      `Ok ()
+    end;
+
+  end else begin
+    `Error (true, "need to specify staging name.")
+  end;
+
 ;;
 
 
