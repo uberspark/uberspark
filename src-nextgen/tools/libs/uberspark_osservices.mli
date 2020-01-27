@@ -42,3 +42,7 @@ val exec_process_withlog :
            ?stag:string -> 
            string ->
            string list -> int * bool * string ref list
+
+val readdir : string -> string list
+
+val is_dir : string -> bool

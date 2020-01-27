@@ -4,6 +4,7 @@
 *)
 open Unix
 open FileUtil
+open Sys
 
 	let file_copy input_name output_name =
 		let buffer_size = 8192 in
@@ -207,6 +208,27 @@ open FileUtil
 		(FileUtil.readlink symlink_path)
 	;;
 	
+
+	let readdir
+		(pathname : string)
+		: string list = 
+		let retlist = ref [] in 
+
+		try
+			let array_of_files = (Sys.readdir pathname) in
+			Array.iter (fun fname ->
+       			retlist := !retlist @ [ fname ];
+       			()
+			) array_of_files;
+
+		with Sys_error err -> 
+			retlist := !retlist;
+		;
+	
+		(!retlist)
+	;;
+
+
 (*	
 				let info =
     			try Unix.stat uobj_binary_filename

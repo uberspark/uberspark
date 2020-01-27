@@ -158,8 +158,10 @@ let handler_staging_switch
 let handler_staging_list
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
+  let staging_list = Uberspark.Staging.list () in 
+
   `Ok ()
 ;;
 

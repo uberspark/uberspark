@@ -8,7 +8,6 @@
 open Unix
 open Yojson
 
-
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* type definitions *)
@@ -40,7 +39,8 @@ let create_as_new
 	(* compute paths *)
 	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
 		Uberspark_namespace.namespace_staging in 
-	let staging_path_golden = staging_parent_path ^  "/" ^ Uberspark_namespace.namespace_staging_golden in 
+	let staging_path_golden = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
+		Uberspark_namespace.namespace_staging_golden in 
 	let staging_path_current = staging_parent_path ^ "/" ^ Uberspark_namespace.namespace_staging_current in 
 	let staging_path_to_create = staging_parent_path ^ "/" ^ staging_name in
 
@@ -168,5 +168,31 @@ let remove
 
 ;;
 
+
+
+
+let list
+	()
+	: string list =
+	
+	let retlist = ref [] in
+
+	(* compute paths *)
+	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
+		Uberspark_namespace.namespace_staging in 
+	let staging_path_current =  (Uberspark_namespace.get_namespace_staging_dir_prefix ()) in
+
+	(* obtain list of files within the staging area, these correspond to the various stagings *)
+	let staging_dirlist = Uberspark_osservices.readdir staging_parent_path in
+
+	(* iterate through the list now *)
+	List.iter (fun fname ->
+		Uberspark_logger.log "staging_dir_entry=%s" fname;
+	) staging_dirlist;
+
+	retlist := staging_dirlist;
+
+	(!retlist)
+;;
 
 

@@ -36,3 +36,5 @@ val create_from_existing : string -> string -> bool
 val switch : string -> bool
 
 val remove : string -> bool
+
+val list : unit -> string list
