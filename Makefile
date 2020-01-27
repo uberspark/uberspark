@@ -103,6 +103,7 @@ frontend: build_bootstrap
 install: build_bootstrap
 	$(call docker_run,make -f install.mk, -w all)
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
+	rm -rf $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/docs
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/bridges
