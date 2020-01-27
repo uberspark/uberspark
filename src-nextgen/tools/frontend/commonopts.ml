@@ -16,7 +16,7 @@ let handler_opts
   (loglvl : int)
   (rootdir : string option)
   : opts = 
-  Uberspark.Logger.log "verb=%u, loglvl=%u" verb loglvl;
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "verb=%u, loglvl=%u" verb loglvl;
 
   let l_rootdir = ref "" in
 

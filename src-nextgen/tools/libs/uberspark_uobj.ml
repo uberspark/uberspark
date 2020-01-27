@@ -323,7 +323,7 @@ class uobject
 		else
 
 		let dummy=0 in begin
-			d_path_ns := !Uberspark_namespace.namespace_root_dir  ^ "/" ^ d_hdr.f_namespace;
+			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ d_hdr.f_namespace;
 		end;
 
 		(* parse uobj-sources node *)
@@ -418,7 +418,7 @@ class uobject
 			= 
 			let retval = ref false in 	
 			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
+			let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
 				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
 				Uberspark_namespace.namespace_uobjslt_mf_filename) in 
 
@@ -1256,7 +1256,7 @@ class uobject
 
 		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (self#get_d_sources_c_file_list) [ "."; !Uberspark_namespace.namespace_root_dir ] ".";
+			 (self#get_d_sources_c_file_list) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1273,7 +1273,7 @@ class uobject
 
 		retval := Uberspark_bridge.As.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (self#get_d_sources_asm_file_list) [ "."; !Uberspark_namespace.namespace_root_dir ] ".";
+			 (self#get_d_sources_asm_file_list) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1378,7 +1378,7 @@ class uobject
 
 		(* check to see if we are doing an in-namespace build or an out-of-namespace build *)
 		let dummy = 0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobj_path_ns=%s" (self#get_d_path_to_mf_filename);
 		
 		in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace self#get_d_path_to_mf_filename);

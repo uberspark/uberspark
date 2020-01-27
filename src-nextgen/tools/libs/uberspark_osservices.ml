@@ -4,6 +4,7 @@
 *)
 open Unix
 open FileUtil
+open Sys
 
 	let file_copy input_name output_name =
 		let buffer_size = 8192 in
@@ -19,6 +20,25 @@ open FileUtil
 	  close fd_out;
 		()
 	;;
+
+
+	let file_exists 
+		(filename : string)
+		: bool = 
+
+		let retval = ref true in 
+
+		try
+			let filestat = Unix.stat filename in
+				retval := true;
+		with
+			| Unix_error (er,_,_) ->
+				retval := false;
+		;
+
+		(!retval)
+	;;
+
 
 
 	let file_concat output_name input_name_list =
@@ -120,7 +140,9 @@ open FileUtil
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();
-				retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				if path_filename <> "" then begin
+					retval_abspath := !retval_abspath ^ "/" ^ path_filename;
+				end;
 				(*Unix.chdir !retval_abspath;
 				retval_abspath := Unix.getcwd ();
 				*)
@@ -181,8 +203,38 @@ open FileUtil
 		()
 	;;
 
-
+	let readlink
+		(symlink_path : string) = 
+		(FileUtil.readlink symlink_path)
+	;;
 	
+
+	let readdir
+		(pathname : string)
+		: string list = 
+		let retlist = ref [] in 
+
+		try
+			let array_of_files = (Sys.readdir pathname) in
+			Array.iter (fun fname ->
+       			retlist := !retlist @ [ fname ];
+       			()
+			) array_of_files;
+
+		with Sys_error err -> 
+			retlist := !retlist;
+		;
+	
+		(!retlist)
+	;;
+
+	let is_dir 
+		(dir : string) 
+		: bool =
+
+		(Sys.is_directory dir)
+	;;
+
 (*	
 				let info =
     			try Unix.stat uobj_binary_filename

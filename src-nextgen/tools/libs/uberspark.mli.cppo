@@ -39,6 +39,11 @@ module Config : sig
 
 end
 
+module Staging : sig
+
+#include "uberspark_staging.mli"  
+
+end
 
 
 

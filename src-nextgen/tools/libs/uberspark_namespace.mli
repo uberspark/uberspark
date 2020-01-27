@@ -1,14 +1,26 @@
-(*
-	uberSpark namespace module interface
-	author: amit vasudevan (amitvasudevan@acm.org)
-*)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark namespace interface implementation		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
 
 
-(*------------------------------------------------------------------------*)
-(* namespace variables *)	
-(*------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* variable definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 val namespace_root : string
-val namespace_root_dir : string ref
+val namespace_root_dir_prefix : string ref
 val namespace_root_mf_filename : string
 
 val namespace_uobj : string
@@ -53,6 +65,11 @@ val namespace_sentinel : string
 val namespace_sentinel_mf_filename : string
 
 
+val namespace_staging : string
+val namespace_staging_current : string
+val namespace_staging_golden : string
+val namespace_staging_default : string
+
 val namespace_config : string
 val namespace_config_mf_filename : string
 val namespace_config_current : string
@@ -81,9 +98,15 @@ val namespace_bridge_vf_bridge : string
 val namespace_bridge_bldsys_bridge : string
 
 
-(*------------------------------------------------------------------------*)
-(* namespace methods *)	
-(*------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+val set_namespace_root_dir_prefix : string -> unit
+val get_namespace_root_dir_prefix : unit -> string
+val get_namespace_staging_dir_prefix : unit -> string
 
 val get_variable_name_prefix_from_ns : string -> string
 val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)

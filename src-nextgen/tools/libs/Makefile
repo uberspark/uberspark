@@ -14,11 +14,12 @@ UBERSPARK_LIB_EXT_PACKAGES += -package yojson
 
 UBERSPARK_LIB_SOURCES := 
 UBERSPARK_LIB_SOURCES += defs.ml
-UBERSPARK_LIB_SOURCES += uberspark_namespace.ml
 UBERSPARK_LIB_SOURCES += uberspark_logger.ml
 UBERSPARK_LIB_SOURCES += uberspark_osservices.ml
+UBERSPARK_LIB_SOURCES += uberspark_namespace.ml
 UBERSPARK_LIB_SOURCES += uberspark_manifest.ml
 UBERSPARK_LIB_SOURCES += uberspark_config.ml
+UBERSPARK_LIB_SOURCES += uberspark_staging.ml
 UBERSPARK_LIB_SOURCES += uberspark_bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark_codegen.ml
 UBERSPARK_LIB_SOURCES += uberspark_uobj.ml

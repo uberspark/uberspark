@@ -2,6 +2,9 @@ open Unix
 open FilePath
 open FileUtilMode
 
+
+val file_exists :  string ->  bool
+
 val abspath : string -> bool * string
 
 val mkdir :
@@ -32,8 +35,14 @@ val file_remove : string -> unit
 
 val symlink : bool -> string -> string -> unit
     
+val readlink : string -> string
+    
 val exec_process_withlog : 
            ?log_lvl:Uberspark_logger.log_level -> 
            ?stag:string -> 
            string ->
            string list -> int * bool * string ref list
+
+val readdir : string -> string list
+
+val is_dir : string -> bool

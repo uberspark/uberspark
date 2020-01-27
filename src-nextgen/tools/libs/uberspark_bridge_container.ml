@@ -65,7 +65,7 @@ let run_image
             cmdline := !cmdline @ [ "--rm" ];
             cmdline := !cmdline @ [ "-i" ];
             cmdline := !cmdline @ [ "-v" ];
-            cmdline := !cmdline @ [ !Uberspark_namespace.namespace_root_dir ^ ":" ^ !Uberspark_namespace.namespace_root_dir ];
+            cmdline := !cmdline @ [ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ ":" ^ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ];
             cmdline := !cmdline @ [ "-v" ];
             cmdline := !cmdline @ [ context_path_abs ^ ":/root/src" ];
             cmdline := !cmdline @ [ "-t" ];
