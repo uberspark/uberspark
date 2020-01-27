@@ -90,7 +90,7 @@ let handler_staging_create
     | Some s_name -> l_name := s_name;
   ;
 
-  Uberspark.Logger.log "l_name=%s, l_from_existing=%s"  
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_name=%s, l_from_existing=%s"  
     !l_name !l_from_existing;
 
   if (!l_name <> "") then begin
@@ -117,12 +117,37 @@ let handler_staging_create
 
 ;;
 
+
+
 (* uberspark staging switch sub-handler *)
 let handler_staging_switch
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
+
+  let l_name = ref "" in
+
+  match name with
+    | None -> l_name := "";
+    | Some s_name -> l_name := s_name;
+  ;
+
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_name=%s" !l_name;
+
+  if (!l_name <> "") then begin
+
+    if not (Uberspark.Staging.switch !l_name) then begin
+      `Error (false, "could not switch to specified staging: does not exist!.")
+    end else begin
+      `Ok ()
+    end;
+
+  end else begin
+    `Error (true, "need to specify staging name.")
+  end;
+
+
   `Ok ()
 ;;
 
