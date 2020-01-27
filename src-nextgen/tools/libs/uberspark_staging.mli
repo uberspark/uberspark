@@ -34,3 +34,5 @@ val create_as_new : string -> bool
 val create_from_existing : string -> string -> bool
 
 val switch : string -> bool
+
+val remove : string -> bool

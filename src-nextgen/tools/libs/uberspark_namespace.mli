@@ -68,6 +68,7 @@ val namespace_sentinel_mf_filename : string
 val namespace_staging : string
 val namespace_staging_current : string
 val namespace_staging_golden : string
+val namespace_staging_default : string
 
 val namespace_config : string
 val namespace_config_mf_filename : string

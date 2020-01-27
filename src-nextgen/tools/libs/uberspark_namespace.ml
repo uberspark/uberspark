@@ -70,6 +70,7 @@ let namespace_sentinel_mf_filename = "uberspark-sentinel.json";;
 let namespace_staging = "staging";;
 let namespace_staging_current = "current";;
 let namespace_staging_golden = "golden";;
+let namespace_staging_default = "default";;
 
 
 let namespace_config = "config";;

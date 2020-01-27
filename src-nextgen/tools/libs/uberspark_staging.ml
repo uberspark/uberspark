@@ -130,4 +130,43 @@ let switch
 
 
 
+let remove
+	(staging_name : string)
+	: bool =
+	
+	(* compute paths *)
+	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
+		Uberspark_namespace.namespace_staging in 
+	let staging_path_to_remove = staging_parent_path ^ "/" ^ staging_name in
+	let staging_path_current =  (Uberspark_namespace.get_namespace_staging_dir_prefix ()) in
+
+
+	(* check if target staging path exists *)
+	if (Uberspark_osservices.file_exists staging_path_current) then begin
+
+		(* sanity check to make sure target staging path is not the the current staging *)
+		if staging_path_to_remove <> staging_path_current then begin 
+
+			(* remove the target staging path *)
+			Uberspark_osservices.rmdir_recurse [ staging_path_to_remove ];
+
+			(true)
+
+		end else begin
+
+			(* cant remove current staging path *)
+			(false)
+
+		end;
+
+	end else begin
+
+		(* target staging does not exist *)
+		(false)
+
+	end;
+
+;;
+
+
 
