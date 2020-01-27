@@ -162,6 +162,12 @@ let handler_staging_list
   =
   let staging_list = Uberspark.Staging.list () in 
 
+  Uberspark.Logger.log "list of available stagings:";
+
+  List.iter (fun staging_name -> 
+    Uberspark.Logger.log "%s" staging_name;
+  )staging_list;
+  
   `Ok ()
 ;;
 

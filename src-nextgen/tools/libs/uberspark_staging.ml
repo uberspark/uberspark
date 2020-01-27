@@ -185,12 +185,18 @@ let list
 	(* obtain list of files within the staging area, these correspond to the various stagings *)
 	let staging_dirlist = Uberspark_osservices.readdir staging_parent_path in
 
-	(* iterate through the list now *)
+	(* iterate through the list now and filter out 'current' entry*)
 	List.iter (fun fname ->
-		Uberspark_logger.log "staging_dir_entry=%s" fname;
-	) staging_dirlist;
+		if fname <> Uberspark_namespace.namespace_staging_current then begin
+			let staging_path_name = staging_parent_path ^ "/" ^ fname in 
 
-	retlist := staging_dirlist;
+			if staging_path_name = staging_path_current then begin
+				retlist := !retlist @ [ (" * " ^ fname) ];
+			end else begin
+				retlist := !retlist @ [ ("   " ^ fname) ];
+			end;
+		end;
+	) staging_dirlist;
 
 	(!retlist)
 ;;

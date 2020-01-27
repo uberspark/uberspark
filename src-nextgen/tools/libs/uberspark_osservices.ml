@@ -228,6 +228,12 @@ open Sys
 		(!retlist)
 	;;
 
+	let is_dir 
+		(dir : string) 
+		: bool =
+
+		(Sys.is_directory dir)
+	;;
 
 (*	
 				let info =
