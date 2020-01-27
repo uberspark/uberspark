@@ -97,14 +97,16 @@ let handler_staging_create
     if (!l_from_existing <> "") then begin
       (* create from existing staging *)
       if (Uberspark.Staging.create_from_existing !l_name !l_from_existing) then begin
+        Uberspark.Logger.log "successfully created and switched to staging: '%s'" !l_name;
         `Ok ()
       end else begin
-        `Error (false, "could not create staging!")
+        `Error (false, "could not create staging; existing staging does not exist!")
       end;
 
     end else begin
       (* create new staging *)
       if (Uberspark.Staging.create_as_new !l_name) then begin
+        Uberspark.Logger.log "successfully created and switched to staging: '%s'" !l_name;
         `Ok ()
       end else begin
         `Error (false, "could not create staging!")
@@ -140,6 +142,7 @@ let handler_staging_switch
     if not (Uberspark.Staging.switch !l_name) then begin
       `Error (false, "could not switch to specified staging: does not exist!.")
     end else begin
+      Uberspark.Logger.log "successfully switched to staging: '%s'" !l_name;
       `Ok ()
     end;
 

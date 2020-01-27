@@ -40,8 +40,7 @@ let create_as_new
 	(* compute paths *)
 	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
 		Uberspark_namespace.namespace_staging in 
-	let staging_path_golden = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ 
-		"/" ^ Uberspark_namespace.namespace_staging_golden in 
+	let staging_path_golden = staging_parent_path ^  "/" ^ Uberspark_namespace.namespace_staging_golden in 
 	let staging_path_current = staging_parent_path ^ "/" ^ Uberspark_namespace.namespace_staging_current in 
 	let staging_path_to_create = staging_parent_path ^ "/" ^ staging_name in
 
@@ -73,19 +72,28 @@ let create_from_existing
 	let staging_path_src = staging_parent_path ^ "/" ^ src_staging_name in 
 	let staging_path_dst = staging_parent_path ^ "/" ^ dst_staging_name in 
 
-	(* create dst staging path *)
-	Uberspark_osservices.mkdir ~parent:true staging_path_dst (`Octal 0o0777);
-
-	(* copy everything from src staging to dst staging *)
-	Uberspark_osservices.cp ~recurse:true (staging_path_src ^ "/*") (staging_path_dst ^ "/.");  
-
-	(* remove the staging current symbolic link; its a regular file *)
-	Uberspark_osservices.file_remove staging_path_current;
-
-	(* create new staging current symbolic link and point to dst staging path *)
-	Uberspark_osservices.symlink true staging_path_dst staging_path_current;
+	(* check if src staging exists *)
+	if (Uberspark_osservices.file_exists staging_path_src) then begin
 	
-	(true)
+		(* create dst staging path *)
+		Uberspark_osservices.mkdir ~parent:true staging_path_dst (`Octal 0o0777);
+
+		(* copy everything from src staging to dst staging *)
+		Uberspark_osservices.cp ~recurse:true (staging_path_src ^ "/*") (staging_path_dst ^ "/.");  
+
+		(* remove the staging current symbolic link; its a regular file *)
+		Uberspark_osservices.file_remove staging_path_current;
+
+		(* create new staging current symbolic link and point to dst staging path *)
+		Uberspark_osservices.symlink true staging_path_dst staging_path_current;
+		
+		(true)
+
+	end else begin
+		(* src staging does not exist *)
+		(false)
+	end;
+
 ;;
 
 
