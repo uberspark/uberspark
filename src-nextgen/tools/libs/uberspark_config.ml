@@ -1,9 +1,28 @@
-(*
-	uberSpark configuration module
-	author: amit vasudevan (amitvasudevan@acm.org)
-*)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark staging configuration interface implementation		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
+
 open Unix
 open Yojson
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* variable definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 
 (*------------------------------------------------------------------------*)
 (* ubersprk general header variable *)	
@@ -82,6 +101,13 @@ let saved_config_settings: Uberspark_manifest.Config.config_settings_t = {
 	
 };;
 
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 let settings_save 
@@ -175,10 +201,12 @@ let load_from_json
 
 
 let load 
-	(config_name : string)
+	()
 	: bool =
+
 	let retval = ref false in
-	let config_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name ^ "/" ^ 
+	let config_ns_json_path = (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ 
 		Uberspark_namespace.namespace_config_mf_filename in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
@@ -213,35 +241,6 @@ let dump
 	close_out oc;	
 ;;
 
-
-let create_from_existing_ns
-	(input_config_name : string)
-	(output_config_name : string)
-	: (bool * string) =
-	
-	let retval = ref false in
-	let reterrmsg = ref "" in
-
-	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
-	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
-
-	(* load the input config *)
-	load input_config_name;
-
-	(* change name field within config header *)
-	config_hdr.name <- output_config_name;
-
-	(* make the output config directory *)
-	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
-
-	retval := true;
-	reterrmsg := "";
-	
-	(* dump the config namespace *)
-	dump output_config_json_pathname;
-
-	(!retval, !reterrmsg)
-;;
 
 
 let create_from_file
@@ -331,6 +330,42 @@ let settings_set
 ;;
 
 
+(*---------------------------------------------------------------------------*)
+(* FOR FUTURE EXPANSION *)
+(*---------------------------------------------------------------------------*)
+
+(*
+let create_from_existing_ns
+	(input_config_name : string)
+	(output_config_name : string)
+	: (bool * string) =
+	
+	let retval = ref false in
+	let reterrmsg = ref "" in
+
+	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
+	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
+
+	(* load the input config *)
+	load input_config_name;
+
+	(* change name field within config header *)
+	config_hdr.name <- output_config_name;
+
+	(* make the output config directory *)
+	Uberspark_osservices.mkdir ~parent:true output_config_dir (`Octal 0o0777);
+
+	retval := true;
+	reterrmsg := "";
+	
+	(* dump the config namespace *)
+	dump output_config_json_pathname;
+
+	(!retval, !reterrmsg)
+;;
+*)
+
+(*
 let switch 
 	(config_name : string)
 	: bool =
@@ -347,8 +382,9 @@ let switch
 
 	(!retval)
 ;;
+*)
 
-
+(*
 let remove 
 	(config_name : string)
 	: bool =
@@ -373,7 +409,7 @@ let remove
 
 	(!retval)
 ;;
-
+*)
 
 
 
