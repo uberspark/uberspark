@@ -255,7 +255,31 @@ let handler_staging_config_get
   (name : string option)
   =
 
-  `Ok ()
+  let l_setting_name = ref "" in
+  let l_setting_value = ref "" in
+
+  (* grab setting name *)
+  match cmd_staging_opts.setting_name with
+    | None -> l_setting_name := "";
+    | Some sname -> l_setting_name := sname;
+  ;
+
+  if !l_setting_name = "" then begin
+
+    `Error (true, "need staging configuration setting name")
+
+  end else begin
+
+    let(rval, setting_value) = Uberspark.Config.settings_get !l_setting_name in
+    if rval == true then begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Stdoutput "%s" setting_value;
+      `Ok()
+    end else begin
+      `Error (false, "invalid configuration setting")
+    end;
+
+  end;
+
 ;;
 
 
@@ -267,27 +291,44 @@ let handler_staging
   (path_ns : string option)
   = 
 
-  (* perform common initialization *)
-  Commoninit.initialize copts;
 
   let retval = 
   match action with
     | `Create -> 
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
         (handler_staging_create copts cmd_staging_opts path_ns)
     
     | `Switch ->
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
         (handler_staging_switch copts cmd_staging_opts path_ns)
 
     | `List ->
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
         (handler_staging_list copts cmd_staging_opts path_ns)
 
     | `Remove ->
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
         (handler_staging_remove copts cmd_staging_opts path_ns)
 
     | `Config_set ->
+        (* perform common initialization *)
+        Commoninit.initialize copts;
+
         (handler_staging_config_set copts cmd_staging_opts path_ns)
 
     | `Config_get ->
+        (* perform common initialization, but dont emit any messages *)
+        copts.log_level <- (Uberspark.Logger.ord Uberspark.Logger.Stdoutput);
+        Commoninit.initialize copts;
+
         (handler_staging_config_get copts cmd_staging_opts path_ns)
 
   in
