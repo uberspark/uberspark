@@ -2,6 +2,9 @@ open Unix
 open FilePath
 open FileUtilMode
 
+
+val file_exists :  string ->  bool
+
 val abspath : string -> bool * string
 
 val mkdir :

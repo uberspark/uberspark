@@ -21,6 +21,25 @@ open FileUtil
 	;;
 
 
+	let file_exists 
+		(filename : string)
+		: bool = 
+
+		let retval = ref true in 
+
+		try
+			let filestat = Unix.stat filename in
+				retval := true;
+		with
+			| Unix_error (er,_,_) ->
+				retval := false;
+		;
+
+		(!retval)
+	;;
+
+
+
 	let file_concat output_name input_name_list =
 	  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_TRUNC] 0o666 in
 
