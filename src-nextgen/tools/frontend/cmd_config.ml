@@ -85,9 +85,9 @@ let handler_config
               end  
             else if cmd_config_opts.from_ns then
               begin
-                Uberspark.Config.create_from_existing_ns !src_path_ns !new_ns;
-                Uberspark.Logger.log "created configuration namespace '%s'" !new_ns;
-                `Ok()
+                (*Uberspark.Config.create_from_existing_ns !src_path_ns !new_ns;
+                Uberspark.Logger.log "created configuration namespace '%s'" !new_ns;*)
+                `Error (false, "defunct functionality!")
               end
             else
               `Error (true, "need either --from-ns or --from-file options")
@@ -143,9 +143,10 @@ let handler_config
       | None -> `Error (true, "need NAMESPACE argument")
       | Some sname -> 
         src_path_ns := sname;
-        Uberspark.Config.switch !src_path_ns;
+        (*Uberspark.Config.switch !src_path_ns;
         Uberspark.Logger.log "switched to configuration namespace '%s'" !src_path_ns;
-        `Ok()
+        `Ok()*)
+        `Error (false, "defunct functionality!")
       )
       
 
@@ -191,9 +192,10 @@ let handler_config
       | None -> `Error (true, "need NAMESPACE argument")
       | Some sname -> 
         src_path_ns := sname;
-        Uberspark.Config.remove !src_path_ns;
+        (*Uberspark.Config.remove !src_path_ns;
         Uberspark.Logger.log "removed configuration namespace: %s" !src_path_ns;
-        `Ok()
+        `Ok()*)
+        `Error (false, "defunct functionality!")
       )
 
         
