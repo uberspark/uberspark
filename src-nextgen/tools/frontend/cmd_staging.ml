@@ -206,6 +206,7 @@ let handler_staging_remove
 
 
 (* uberspark staging config-set sub-handler *)
+(* TBD process option --from-file and integrate Uberspark.Config.load_from_file *)
 let handler_staging_config_set
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
@@ -249,6 +250,7 @@ let handler_staging_config_set
 
 
 (* uberspark staging config-get sub-handler *)
+(* TBD process option --to-file and integrate Uberspark.Config.load_from_file *)
 let handler_staging_config_get
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
