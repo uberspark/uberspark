@@ -145,7 +145,7 @@ let parse_manifest
 	else
 
 	let dummy=0 in begin
-		d_path_ns := !Uberspark_namespace.namespace_root_dir  ^ "/" ^ d_hdr_mf.f_namespace;
+		d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ d_hdr_mf.f_namespace;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
@@ -204,7 +204,7 @@ let get_sentinel_info_for_sentinel_facet_and_type
 	let sentinel_info : uobjcoll_sentinel_info_t = { f_code = ""; f_libcode= ""; f_sizeof_code=0; f_type="";} in
 	let sentinel_hdr: Uberspark_manifest.Sentinel.sentinel_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0;} in
 	
-	let sentinel_mf_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
+	let sentinel_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
 		d_hdr_mf.f_arch ^ "/" ^ d_hdr_mf.f_cpu ^ "/" ^ d_hdr_mf.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_sentinel_mf_filename) in 
@@ -339,7 +339,7 @@ let parse_manifest_sentinel
 	let scode = ref "" in
 	let slcode = ref "" in
 	let target_def = d_target_def in	
-	let sentinel_filename = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ 
+	let sentinel_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
 		target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
 		Uberspark_namespace.namespace_sentinel_mf_filename) in 
@@ -421,7 +421,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- d_uobjcoll_uobjs_mf.f_prime_uobj_ns;
 				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- true;
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf.f_prime_uobj_ns
 					d_hdr_mf.f_namespace) then begin
@@ -433,7 +433,7 @@ let initialize_uobjs_baseinfo
 				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
 				end;
 
 				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
@@ -475,7 +475,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- templar_uobj_ns;
 				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- false;
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ templar_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr_mf.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
@@ -486,7 +486,7 @@ let initialize_uobjs_baseinfo
 				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (!Uberspark_namespace.namespace_root_dir ^ "/" ^ templar_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ templar_uobj_ns);
 				end;
 
 				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
@@ -999,10 +999,10 @@ let prepare_namespace_for_build
 	let retval = ref false in
 	let in_namespace_build = ref false in
 	let uobjcoll_canonical_namespace = d_hdr_mf.f_namespace in
-	let uobjcoll_canonical_namespace_path = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ uobjcoll_canonical_namespace) in
+	let uobjcoll_canonical_namespace_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjcoll_canonical_namespace) in
 
 	(* determine if we are doing an in-namespace build or an out-of-namespace build *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "namespace root=%s" ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/");
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "abs_uobjcoll_path_ns=%s" (abs_uobjcoll_path);
 	in_namespace_build := (Uberspark_namespace.is_uobj_uobjcoll_abspath_in_namespace abs_uobjcoll_path);
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "in_namespace_build=%B" !in_namespace_build;
@@ -1040,7 +1040,7 @@ let compile_asm_files
 
 	retval := Uberspark_bridge.As.invoke ~gen_obj:true
 			~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
-			(!d_sources_asm_file_list) [ "."; !Uberspark_namespace.namespace_root_dir ] ".";
+			(!d_sources_asm_file_list) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 	(!retval)	
 ;;

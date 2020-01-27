@@ -20,7 +20,7 @@
 (*---------------------------------------------------------------------------*)
 
 val namespace_root : string
-val namespace_root_dir : string ref
+val namespace_root_dir_prefix : string ref
 val namespace_root_mf_filename : string
 
 val namespace_uobj : string

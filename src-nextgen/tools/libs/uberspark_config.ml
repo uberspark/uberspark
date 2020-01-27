@@ -251,7 +251,7 @@ let create_from_file
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
+	let output_config_dir = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config) in
 	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
 
 

@@ -38,9 +38,9 @@ let create_as_new
 	: bool =
 	
 	(* compute paths *)
-	let staging_parent_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
+	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
 		Uberspark_namespace.namespace_staging in 
-	let staging_path_golden = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ 
+	let staging_path_golden = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ 
 		"/" ^ Uberspark_namespace.namespace_staging_golden in 
 	let staging_path_current = staging_parent_path ^ "/" ^ Uberspark_namespace.namespace_staging_current in 
 	let staging_path_to_create = staging_parent_path ^ "/" ^ staging_name in
@@ -67,7 +67,7 @@ let create_from_existing
 	: bool =
 	
 	(* compute paths *)
-	let staging_parent_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
+	let staging_parent_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ 
 		Uberspark_namespace.namespace_staging in 
 	let staging_path_current = staging_parent_path ^ "/" ^ Uberspark_namespace.namespace_staging_current in 
 	let staging_path_src = staging_parent_path ^ "/" ^ src_staging_name in 

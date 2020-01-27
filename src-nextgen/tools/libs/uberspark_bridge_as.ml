@@ -96,7 +96,7 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
 		Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^ bridge_ns ^ "/" ^
 		Uberspark_namespace.namespace_bridge_mf_filename in
 		(load_from_file bridge_ns_json_path)
@@ -133,7 +133,7 @@ let store
 		bridge_as.bridge_hdr.cpu ^ "/" ^
 		bridge_as.bridge_hdr.bname ^ "/" ^
 		bridge_as.bridge_hdr.version in
-	let bridge_ns_json_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
 		Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^ bridge_ns in
 	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
 		Uberspark_namespace.namespace_bridge_mf_filename in
@@ -171,7 +171,7 @@ let build
 				bridge_as.bridge_hdr.cpu ^ "/" ^
 				bridge_as.bridge_hdr.bname ^ "/" ^
 				bridge_as.bridge_hdr.version in
-			let bridge_container_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
 
 			Uberspark_logger.log "building as-bridge: %s" bridge_ns;
 
