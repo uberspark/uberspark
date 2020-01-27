@@ -209,9 +209,42 @@ let handler_staging_remove
 let handler_staging_config_set
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
-  `Ok ()
+  let l_setting_name = ref "" in
+  let l_setting_value = ref "" in
+
+  (* grab setting name and setting value *)
+  match cmd_staging_opts.setting_name with
+    | None -> l_setting_name := "";
+    | Some sname -> l_setting_name := sname;
+  ;
+
+  match cmd_staging_opts.setting_value with
+    | None -> l_setting_value := "";
+    | Some sname -> l_setting_value := sname;
+  ;
+
+  if !l_setting_name = "" || !l_setting_value = "" then begin
+
+    `Error (true, "need staging configuration setting name and setting value")
+
+  end else begin
+
+    let rval = (Uberspark.Config.settings_set !l_setting_name !l_setting_value) in 
+    if rval == true then begin
+      let config_ns_json_filename = (Uberspark.Namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^
+        Uberspark.Namespace.namespace_config ^ "/" ^
+        Uberspark.Namespace.namespace_config_mf_filename in
+      Uberspark.Config.dump config_ns_json_filename;  
+      Uberspark.Logger.log "configuration setting '%s' set to '%s' within current configuration" !l_setting_name !l_setting_value;
+      `Ok()  
+    end else begin
+      `Error (false, "invalid configuration setting")
+    end;
+
+  end;
+
 ;;
 
 
@@ -219,8 +252,9 @@ let handler_staging_config_set
 let handler_staging_config_get
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
-  (path_ns : string option)
+  (name : string option)
   =
+
   `Ok ()
 ;;
 
