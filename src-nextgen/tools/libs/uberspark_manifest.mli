@@ -45,6 +45,7 @@ val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
 
 val parse_json_node_uberspark_manifest : Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
+val get_json_for_manifest_type :  string -> string -> bool * Yojson.Basic.json
 
 
 val write_prologue : ?prologue_str:string -> out_channel -> bool
