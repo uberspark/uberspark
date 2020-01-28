@@ -49,23 +49,22 @@ type json_node_uberspark_sentinel_t =
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_sentinel_to_var 
-	(mf_json : Yojson.Basic.t)
-	(json_node_uberspark_sentinel : json_node_uberspark_sentinel_t) 
+	(json_node_uberspark_sentinel : Yojson.Basic.t)
+	(json_node_uberspark_sentinel_var : json_node_uberspark_sentinel_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
-			let l_json_node_uberspark_sentinel = mf_json |> member "uberspark-sentinel" in
-			if(l_json_node_uberspark_sentinel <> `Null) then
+			if(json_node_uberspark_sentinel <> `Null) then
 				begin
-					json_node_uberspark_sentinel.f_namespace <- l_json_node_uberspark_sentinel |> member "namespace" |> to_string;
-					json_node_uberspark_sentinel.f_platform <- l_json_node_uberspark_sentinel |> member "platform" |> to_string;
-					json_node_uberspark_sentinel.f_arch <- l_json_node_uberspark_sentinel |> member "arch" |> to_string;
-					json_node_uberspark_sentinel.f_cpu <- l_json_node_uberspark_sentinel |> member "cpu" |> to_string;
-					json_node_uberspark_sentinel.f_sizeof_code <- int_of_string (l_json_node_uberspark_sentinel |> member "sizeof-code" |> to_string);
-					json_node_uberspark_sentinel.f_code <- l_json_node_uberspark_sentinel |> member "code" |> to_string;
-					json_node_uberspark_sentinel.f_libcode <- l_json_node_uberspark_sentinel |> member "libcode" |> to_string;
+					json_node_uberspark_sentinel_var.f_namespace <- json_node_uberspark_sentinel |> member "namespace" |> to_string;
+					json_node_uberspark_sentinel_var.f_platform <- json_node_uberspark_sentinel |> member "platform" |> to_string;
+					json_node_uberspark_sentinel_var.f_arch <- json_node_uberspark_sentinel |> member "arch" |> to_string;
+					json_node_uberspark_sentinel_var.f_cpu <- json_node_uberspark_sentinel |> member "cpu" |> to_string;
+					json_node_uberspark_sentinel_var.f_sizeof_code <- int_of_string (json_node_uberspark_sentinel |> member "sizeof-code" |> to_string);
+					json_node_uberspark_sentinel_var.f_code <- json_node_uberspark_sentinel |> member "code" |> to_string;
+					json_node_uberspark_sentinel_var.f_libcode <- json_node_uberspark_sentinel |> member "libcode" |> to_string;
 					retval := true;
 				end
 			;

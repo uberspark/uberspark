@@ -7,7 +7,7 @@
 
 	/* manifest header */
 	"uberspark-manifest":{
-		"manifest_node_types" : [ "sentinel" ],
+		"manifest_node_types" : [ "uberspark-sentinel" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
