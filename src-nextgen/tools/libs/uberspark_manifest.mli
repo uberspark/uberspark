@@ -317,6 +317,8 @@ module Sentinel : sig
   };;
 
 
+  val json_node_uberspark_sentinel_to_var : Yojson.Basic.t -> json_node_uberspark_sentinel_t -> bool
+
 
   val parse_sentinel_hdr : Yojson.Basic.t -> sentinel_hdr_t -> bool
   val parse_sentinel_code : Yojson.Basic.t -> bool * string
