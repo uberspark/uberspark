@@ -296,15 +296,6 @@ end
 module Sentinel : sig
 
 
-  type sentinel_hdr_t =
-    {
-      mutable f_namespace    : string;			
-      mutable f_platform	   : string;
-      mutable f_arch	       : string;
-      mutable f_cpu				   : string;
-      mutable f_sizeof_code  : int;
-    }
-
   type json_node_uberspark_sentinel_t =
   {
     mutable f_namespace    : string;			
@@ -319,8 +310,4 @@ module Sentinel : sig
 
   val json_node_uberspark_sentinel_to_var : Yojson.Basic.t -> json_node_uberspark_sentinel_t -> bool
 
-
-  val parse_sentinel_hdr : Yojson.Basic.t -> sentinel_hdr_t -> bool
-  val parse_sentinel_code : Yojson.Basic.t -> bool * string
-  val parse_sentinel_libcode : Yojson.Basic.t -> bool * string
 end
