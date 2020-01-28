@@ -24,6 +24,16 @@ type hdr_t =
 };;
 
 
+(* uberspark manifest json node type *)
+type json_node_uberspark_manifest_t =
+{
+	mutable f_manifest_node_types : string list;
+	mutable f_uberspark_min_version   : string;
+	mutable f_uberspark_max_version   : string;
+};;
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* interface definitions *)
@@ -142,6 +152,96 @@ let get_manifest_json
 
 	(!retval, !retjson)
 ;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse node: "uberspark-manifest" *)
+(* input: manifest json *)
+(* return: *)
+(* on success: true, json node as uberspark_manifest_t*)
+(* on failure: false *)
+(*--------------------------------------------------------------------------*)
+let parse_json_node_uberspark_manifest 
+	(manifest_json : Yojson.Basic.t)
+	(json_node_uberspark_manifest : json_node_uberspark_manifest_t) 
+	: bool =
+
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let l_json_node_uberspark_manifest = manifest_json |> member "uberspark-manifest" in
+			if(l_json_node_uberspark_manifest <> `Null) then
+				begin
+					json_node_uberspark_manifest.f_manifest_node_types <- (json_list_to_string_list (l_json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
+					json_node_uberspark_manifest.f_uberspark_min_version <- l_json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
+					json_node_uberspark_manifest.f_uberspark_max_version <- l_json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
+
+(*
+(*--------------------------------------------------------------------------*)
+(* read manifest file and return json object of specified manifest node type *)
+(* return null if the node type is not found in the manifest *)
+(*--------------------------------------------------------------------------*)
+let get_json_for_manifest_type 
+	(manifest_filename : string)
+	: bool * Yojson.Basic.json = 
+
+	let retval = ref false in
+	let retjson = ref `Null in
+
+	try
+
+		let manifest_json = Yojson.Basic.from_file manifest_filename in
+		retjson := manifest_json;
+		retval := true;
+
+		if (check_header) then
+		begin
+			let mf_hdr : hdr_t = { f_coss_version = ""; f_mftype = ""; f_uberspark_max_version = "";
+				f_uberspark_min_version = "";} in
+			let mf_hdr_parsed = parse_uberspark_hdr mf_json mf_hdr in
+			if (mf_hdr_parsed) then 
+				begin
+					(* TBD: sanity check header and version *)
+					retval := true;
+					retjson := mf_json;
+				end
+			else 
+				begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
+					retval := false;
+					retjson := `Null;
+				end
+			;
+		end
+		;
+
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+
+	(!retval, !retjson)
+;;
+
+*)
+
+
+
+
 
 
 

@@ -21,6 +21,15 @@ type hdr_t =
   mutable f_uberspark_max_version : string;
 }
 
+(* uberspark manifest json node type *)
+type json_node_uberspark_manifest_t =
+{
+	mutable f_manifest_node_types : string list;
+	mutable f_uberspark_min_version   : string;
+	mutable f_uberspark_max_version   : string;
+}
+
+
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -34,6 +43,9 @@ val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojs
 
 val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
+
+val parse_json_node_uberspark_manifest : Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
+
 
 val write_prologue : ?prologue_str:string -> out_channel -> bool
 val write_uberspark_hdr : ?continuation:bool -> out_channel -> hdr_t -> bool
