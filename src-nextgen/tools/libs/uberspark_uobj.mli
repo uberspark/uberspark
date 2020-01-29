@@ -142,8 +142,6 @@ type slt_info_t =
     method set_d_alignment : int -> unit
     method set_d_uniform_size : bool -> unit
  
-    method set_d_slt_trampolinecode : string -> unit
-    method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
   	method write_manifest : string -> bool
