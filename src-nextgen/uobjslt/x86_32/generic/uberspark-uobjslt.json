@@ -5,70 +5,68 @@
 
 {
 
-	/* uberspark header */
-	"uberspark-hdr":{
-		"coss_version" : "any",
-		"mftype" : "uobjslt",
+   	/* manifest header */
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobjslt" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
 
+    "uberspark-uobjslt" : {
 
-    /* uobjslt header */
-	"uobjslt-hdr":{
 		"namespace" : "/uberspark/uobjslt/x86_32/generic",
 		"platform" : "generic",
 		"arch" : "x86_32",
         "cpu" : "generic",
-        "addr-size" : "4"
-	},
+        "addr-size" : "4",
 
-    /* uobjslt direct execution transfer code template 
-       inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
-    */
-    "uobjslt-directxfer": "
-        movl $(UOBJSLT_SENTINEL_PM_ADDRESS), %eax
-        jmpl *%eax
-    ",
+        /* uobjslt direct execution transfer code template 
+        inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
+        */
+        "code-directxfer": "
+            movl $(UOBJSLT_SENTINEL_PM_ADDRESS), %eax
+            jmpl *%eax
+        ",
 
-    /* uobjslt indirect execution transfer code template 
-       inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
-    */
-    "uobjslt-indirectxfer": "
-        movl $(UOBJSLT_SENTINEL_PM_ADDRESS_LOC), %eax
-        movl (%eax), %eax
-        jmpl *%eax
-    ",
+        /* uobjslt indirect execution transfer code template 
+        inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
+        */
+        "code-indirectxfer": "
+            movl $(UOBJSLT_SENTINEL_PM_ADDRESS_LOC), %eax
+            movl (%eax), %eax
+            jmpl *%eax
+        ",
 
-    /* uobjslt address definition template 
-       inputs: constant address, UOBJSLT_CONST_ADDRESS
-    */
-    "uobjslt-addrdef": "
-        .long UOBJSLT_CONST_ADDRESS
-    ",
-
-
-    /*  trampoline code template 
-
-        parameters: 
-        TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
-        TRAMPOLINE_FN_INDEX = 0 based index of the ubj callee/exitcallee function
-    */ 
-    "uobjslt-trampolinecode": "
-        movl (TRAMPOLINE_DATA_VARNAME + TRAMPOLINE_FN_INDEX), %eax
-        jmpl *%eax
-    ",
+        /* uobjslt address definition template 
+        inputs: constant address, UOBJSLT_CONST_ADDRESS
+        */
+        "code-addrdef": "
+            .long UOBJSLT_CONST_ADDRESS
+        ",
 
 
-    /*  trampoline data template
+        /*  trampoline code template 
 
-        parameters:
-        TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
-        TOTAL_TRAMPOLINES = total number of trampolines
-    */
-    "uobjslt-trampolinedata": "
-        .global TRAMPOLINE_DATA_VARNAME
-        TRAMPOLINE_DATA_VARNAME: .fill TOTAL_TRAMPOLINES, 4, 0
-    "
+            parameters: 
+            TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
+            TRAMPOLINE_FN_INDEX = 0 based index of the ubj callee/exitcallee function
+        */ 
+        "code-trampoline": "
+            movl (TRAMPOLINE_DATA_VARNAME + TRAMPOLINE_FN_INDEX), %eax
+            jmpl *%eax
+        ",
 
+
+        /*  trampoline data template
+
+            parameters:
+            TRAMPOLINE_DATA_VARNAME = variable name of trampoline data
+            TOTAL_TRAMPOLINES = total number of trampolines
+        */
+        "data-trampoline": "
+            .global TRAMPOLINE_DATA_VARNAME
+            TRAMPOLINE_DATA_VARNAME: .fill TOTAL_TRAMPOLINES, 4, 0
+        "
+    }
+    
 }

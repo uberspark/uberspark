@@ -281,6 +281,22 @@ module Uobjslt : sig
       mutable f_addr_size    : int;
     }
 
+  type json_node_uberspark_uobjslt_t =
+  {
+    mutable f_namespace : string;
+    mutable f_platform : string;
+    mutable f_arch : string;
+    mutable f_cpu : string;
+    mutable f_addr_size : int;
+    mutable f_code_directxfer : string;
+    mutable f_code_indirectxfer : string;
+    mutable f_code_addrdef : string;
+    mutable f_code_trampoline : string;
+    mutable f_data_trampoline : string;
+  }
+
+  val json_node_uberspark_uobjslt_to_var : Yojson.Basic.t -> json_node_uberspark_uobjslt_t -> bool
+
 
   val parse_uobjslt_hdr : Yojson.Basic.t -> uobjslt_hdr_t -> bool
 
