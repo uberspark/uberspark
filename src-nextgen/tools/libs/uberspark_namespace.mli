@@ -56,8 +56,6 @@ val namespace_legacy : string
 
 
 val namespace_uobjslt : string
-val namespace_uobjslt_mf_hdr_type : string
-val namespace_uobjslt_mf_filename : string
 val namespace_uobjslt_intrauobjcoll_callees_src_filename : string
 val namespace_uobjslt_interuobjcoll_callees_src_filename : string
 val namespace_uobjslt_legacy_callees_src_filename : string

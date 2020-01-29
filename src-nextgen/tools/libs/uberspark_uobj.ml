@@ -102,8 +102,7 @@ class uobject
 
 	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
-		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; f_code_trampoline = "";
-    	f_data_trampoline = ""; };
+		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
 
 
 	val d_sources_h_file_list: string list ref = ref [];
@@ -385,7 +384,7 @@ class uobject
 		let target_def = self#get_d_target_def in	
 		let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
 			target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
-			Uberspark_namespace.namespace_uobjslt_mf_filename) in 
+			Uberspark_namespace.namespace_root_mf_filename) in 
 
 		let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
 		if(rval == true) then

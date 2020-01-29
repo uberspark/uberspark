@@ -291,8 +291,6 @@ module Uobjslt : sig
     mutable f_code_directxfer : string;
     mutable f_code_indirectxfer : string;
     mutable f_code_addrdef : string;
-    mutable f_code_trampoline : string;
-    mutable f_data_trampoline : string;
   }
 
   val json_node_uberspark_uobjslt_to_var : Yojson.Basic.t -> json_node_uberspark_uobjslt_t -> bool

@@ -32,8 +32,6 @@ type json_node_uberspark_uobjslt_t =
 	mutable f_code_directxfer : string;
     mutable f_code_indirectxfer : string;
     mutable f_code_addrdef : string;
-    mutable f_code_trampoline : string;
-    mutable f_data_trampoline : string;
 };;
 
 
@@ -70,8 +68,6 @@ let json_node_uberspark_uobjslt_to_var
 					json_node_uberspark_uobjslt_var.f_code_directxfer <- json_node_uberspark_uobjslt |> member "code-directxfer" |> to_string;
 					json_node_uberspark_uobjslt_var.f_code_indirectxfer <- json_node_uberspark_uobjslt |> member "code-indirectxfer" |> to_string;
 					json_node_uberspark_uobjslt_var.f_code_addrdef <- json_node_uberspark_uobjslt |> member "code-addrdef" |> to_string;
-					json_node_uberspark_uobjslt_var.f_code_trampoline <- json_node_uberspark_uobjslt |> member "code-trampoline" |> to_string;
-					json_node_uberspark_uobjslt_var.f_data_trampoline <- json_node_uberspark_uobjslt |> member "data-trampoline" |> to_string;
 
 					retval := true;
 				end
