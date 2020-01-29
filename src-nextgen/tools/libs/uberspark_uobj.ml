@@ -100,8 +100,10 @@ class uobject
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
 
-	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;};
-	method get_d_uobjslt_hdr = d_uobjslt_hdr;
+	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
+		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; f_code_trampoline = "";
+    	f_data_trampoline = ""; };
 
 
 	val d_sources_h_file_list: string list ref = ref [];
@@ -169,42 +171,6 @@ class uobject
 		()
 	;
 		
-	val d_slt_trampolinecode : string ref = ref "";
-	method get_d_slt_trampolinecode = !d_slt_trampolinecode;
-	method set_d_slt_trampolinecode (trampolinecode : string)= 
-		d_slt_trampolinecode := trampolinecode;
-		()
-	;
-
-	val d_slt_trampolinedata : string ref = ref "";
-	method get_d_slt_trampolinedata = !d_slt_trampolinedata;
-	method set_d_slt_trampolinedata (trampolinedata : string)= 
-		d_slt_trampolinedata := trampolinedata;
-		()
-	;
-
-
-	val d_slt_directxfer_template : string ref = ref "";
-	method get_d_slt_directxfer_template = !d_slt_directxfer_template;
-	method set_d_slt_directxfer_template (template : string)= 
-		d_slt_directxfer_template := template;
-		()
-	;
-
-
-	val d_slt_indirectxfer_template : string ref = ref "";
-	method get_d_slt_indirectxfer_template = !d_slt_indirectxfer_template;
-	method set_d_slt_indirectxfer_template (template : string)= 
-		d_slt_indirectxfer_template := template;
-		()
-	;
-
-	val d_slt_addrdef_template : string ref = ref "";
-	method get_d_slt_addrdef_template = !d_slt_addrdef_template;
-	method set_d_slt_addrdef_template (template : string)= 
-		d_slt_addrdef_template := template;
-		()
-	;
 
 
 	(* uobj binary image load address *)

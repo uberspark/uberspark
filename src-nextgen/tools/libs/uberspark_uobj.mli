@@ -65,21 +65,10 @@ type slt_info_t =
   	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
 
     val d_size : int ref
-    val d_slt_trampolinecode : string ref
-    val d_slt_trampolinedata : string ref
-    
-   	val d_slt_directxfer_template : string ref 
-  	method get_d_slt_directxfer_template : string
-  	method set_d_slt_directxfer_template : string -> unit
 
-   	val d_slt_indirectxfer_template : string ref 
-  	method get_d_slt_indirectxfer_template : string
-  	method set_d_slt_indirectxfer_template : string -> unit
 
-   	val d_slt_addrdef_template : string ref 
-  	method get_d_slt_addrdef_template : string
-  	method set_d_slt_addrdef_template : string -> unit
-
+ 	
+  	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t 
 
     
     
@@ -108,9 +97,7 @@ type slt_info_t =
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
     method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
 
-   	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t
-  	method get_d_uobjslt_hdr : Uberspark_manifest.Uobjslt.uobjslt_hdr_t
-
+  
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
 
@@ -144,8 +131,6 @@ type slt_info_t =
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
 
-    method get_d_slt_trampolinecode : string
-    method get_d_slt_trampolinedata : string
     method get_d_sources_c_file_list : string list
     method get_d_sources_casm_file_list : string list
     method get_d_sources_h_file_list : string list
