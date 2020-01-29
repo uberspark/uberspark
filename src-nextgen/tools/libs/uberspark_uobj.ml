@@ -380,59 +380,34 @@ class uobject
 	(* parse sentinel linkage manifest *)
 	(*--------------------------------------------------------------------------*)
 	method parse_manifest_slt	
-		(*(fn_list: string list)*)
-			= 
-			let retval = ref false in 	
-			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
-				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
-				Uberspark_namespace.namespace_uobjslt_mf_filename) in 
+		= 
+		let retval = ref false in 	
+		let target_def = self#get_d_target_def in	
+		let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
+			target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
+			Uberspark_namespace.namespace_uobjslt_mf_filename) in 
 
-			let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
+		let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
+		if(rval == true) then
+		begin
+			Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
+
+			(* read manifest JSON *)
+			let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type abs_uobjslt_filename Uberspark_namespace.namespace_uobjslt_mf_node_type_tag) in
 			if(rval == true) then
 			begin
-				(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "fn_list length=%u" (List.length fn_list);*)
-				Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
 
-				(* read manifest JSON *)
-				let (rval, mf_json) = (Uberspark_manifest.get_manifest_json abs_uobjslt_filename) in
-				if(rval == true) then
+				(* convert to var *)
+				let rval =	(Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_to_var mf_json d_mf_json_node_uberspark_uobjslt_var) in
+				if rval then
 				begin
+					retval := true;
 
-					(* parse uobjslt-hdr node *)
-					(*let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;} in*)
-					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json d_uobjslt_hdr) in
-					if rval then
-					begin
-
-						(* read trampoline code and data *)
-						(*let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
-						let (rval_tdata, tdata) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinedata mf_json) in
-						*)
-						let (rval_tdirectxfer, tdirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_directxfer mf_json) in
-						let (rval_tindirectxfer, tindirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_indirectxfer mf_json) in
-						let (rval_addrdef, taddrdef) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_addrdef mf_json) in
-
-						(*if  rval_tcode && rval_tdata then*)
-						if  rval_tdirectxfer && rval_tindirectxfer && rval_addrdef then
-							begin
-								(*self#set_d_slt_trampolinecode tcode;
-								self#set_d_slt_trampolinedata tdata;*)
-								self#set_d_slt_directxfer_template tdirectxfer;
-								self#set_d_slt_indirectxfer_template tindirectxfer;
-								self#set_d_slt_addrdef_template taddrdef;
-								retval := true;
-								(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
-								Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
-							end;
-
-					end;
 				end;
 			end;
+		end;
 
-
-
-	(!retval)
+		(!retval)
 	;
 
 

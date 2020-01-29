@@ -62,6 +62,7 @@ val namespace_uobjslt_intrauobjcoll_callees_src_filename : string
 val namespace_uobjslt_interuobjcoll_callees_src_filename : string
 val namespace_uobjslt_legacy_callees_src_filename : string
 val namespace_uobjslt_output_symbols_filename : string
+val namespace_uobjslt_mf_node_type_tag : string
 
 val namespace_sentinel : string
 val namespace_sentinel_mf_node_type_tag : string
