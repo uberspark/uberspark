@@ -81,6 +81,80 @@ type config_settings_t =
 
 
 (*--------------------------------------------------------------------------*)
+(* convert json node "uberspark-config" into json_node_uberspark_config_t variable *)
+(* return: *)
+(* on success: true; json_node_uberspark_config_var fields are modified with parsed values *)
+(* on failure: false; json_node_uberspark_config_Var fields are untouched *)
+(*--------------------------------------------------------------------------*)
+
+let json_node_uberspark_config_to_var 
+	(json_node_uberspark_config : Yojson.Basic.t)
+	(json_node_uberspark_config_var : json_node_uberspark_config_t) 
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			if(json_node_uberspark_config <> `Null) then
+				begin
+
+					if (Yojson.Basic.Util.member "binary_page_size" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.binary_page_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_page_size" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "binary_uobj_section_alignment" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.binary_uobj_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_section_alignment" json_node_uberspark_config));
+					
+					if (Yojson.Basic.Util.member "binary_uobj_default_section_size" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.binary_uobj_default_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "binary_uobj_default_section_size" json_node_uberspark_config));
+			
+					if (Yojson.Basic.Util.member "uobj_binary_image_load_address" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobj_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_load_address" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobj_binary_image_uniform_size" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobj_binary_image_uniform_size <- Yojson.Basic.Util.to_bool (Yojson.Basic.Util.member "uobj_binary_image_uniform_size" json_node_uberspark_config);
+
+					if (Yojson.Basic.Util.member "uobj_binary_image_size" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobj_binary_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_size" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobj_binary_image_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobj_binary_image_alignment" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_load_address" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobjcoll_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_load_address" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_alignment" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_alignment" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_size" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_hdr_section_size" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "uobjcoll_binary_image_section_alignment" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uobjcoll_binary_image_section_alignment" json_node_uberspark_config));
+
+					if (Yojson.Basic.Util.member "bridge_cc_bridge" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.bridge_cc_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_cc_bridge" json_node_uberspark_config);
+
+					if (Yojson.Basic.Util.member "bridge_as_bridge" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.bridge_as_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_as_bridge" json_node_uberspark_config);
+
+					if (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.bridge_ld_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config);
+
+
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
 (* parse json node "config-hdr" *)
 (* return: *)
 (* on success: true; config_hdr fields are modified with parsed values *)

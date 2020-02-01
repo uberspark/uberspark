@@ -194,6 +194,9 @@ module Config : sig
   }
 
 
+  val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool
+
+
   (****************************************************************************)
   (* manifest parse interfaces *)
   (****************************************************************************)
