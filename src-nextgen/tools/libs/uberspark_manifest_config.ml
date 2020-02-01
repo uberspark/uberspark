@@ -155,6 +155,45 @@ let json_node_uberspark_config_to_var
 
 
 (*--------------------------------------------------------------------------*)
+(* convert json_node_uberspark_config_var to json string *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_config_var_to_jsonstr  
+	(json_node_uberspark_config_var : json_node_uberspark_config_t) 
+	: string =
+	let retstr = ref "" in
+
+
+	retstr := !retstr ^ Printf.sprintf  "\n";
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-config\":{";
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"binary_page_size\" : \"0x%x\"," json_node_uberspark_config_var.binary_page_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"binary_uobj_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.binary_uobj_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"binary_uobj_default_section_size\" : \"0x%x\"," json_node_uberspark_config_var.binary_uobj_default_section_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobj_binary_image_load_address\" : \"0x%x\"," json_node_uberspark_config_var.uobj_binary_image_load_address;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobj_binary_image_uniform_size\" : %B," json_node_uberspark_config_var.uobj_binary_image_uniform_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobj_binary_image_size\" : \"0x%x\"," json_node_uberspark_config_var.uobj_binary_image_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobj_binary_image_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobj_binary_image_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobjcoll_binary_image_load_address\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_load_address;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobjcoll_binary_image_hdr_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobjcoll_binary_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobjcoll_binary_image_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_cc_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_cc_bridge;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_as_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_as_bridge;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_ld_bridge\" : \"%s\"" json_node_uberspark_config_var.bridge_ld_bridge;
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t}";
+
+	retstr := !retstr ^ Printf.sprintf  "\n";
+
+	(!retstr)
+;;
+
+
+
+
+
+
+(*--------------------------------------------------------------------------*)
 (* parse json node "config-hdr" *)
 (* return: *)
 (* on success: true; config_hdr fields are modified with parsed values *)
