@@ -1,14 +1,44 @@
-(****************************************************************************)
-(****************************************************************************)
-(* uberSpark manifest interface for config*)
+(*===========================================================================*)
+(*===========================================================================*)
+(* uberSpark config manifest interface implementation *)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
 
 
-(****************************************************************************)
-(* manifest node types *)
-(****************************************************************************)
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+type json_node_uberspark_config_t = 
+{
+
+	(* uobj/uobjcoll binary related configuration settings *)	
+	mutable binary_page_size : int;
+	mutable binary_uobj_section_alignment : int;
+	mutable binary_uobj_default_section_size : int;
+
+	mutable uobj_binary_image_load_address : int;
+	mutable uobj_binary_image_uniform_size : bool;
+	mutable uobj_binary_image_size : int;
+	mutable uobj_binary_image_alignment : int;
+
+	(* uobjcoll related configuration settings *)
+	mutable uobjcoll_binary_image_load_address : int;
+	mutable uobjcoll_binary_image_hdr_section_alignment : int;
+	mutable uobjcoll_binary_image_hdr_section_size : int;
+	mutable uobjcoll_binary_image_section_alignment : int;
+
+	(* bridge related configuration settings *)	
+	mutable bridge_cc_bridge : string;
+	mutable bridge_as_bridge : string;
+	mutable bridge_ld_bridge : string;
+};;
+
+
 
 (* config-hdr node type *)
 type config_hdr_t =
@@ -43,9 +73,11 @@ type config_settings_t =
 };;
 
 
-(****************************************************************************)
-(* manifest parse interfaces *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 (*--------------------------------------------------------------------------*)
@@ -147,11 +179,6 @@ let parse_config_settings
 
 	(!retval)
 ;;
-
-
-(****************************************************************************)
-(* manifest write interfaces *)
-(****************************************************************************)
 
 
 (*--------------------------------------------------------------------------*)

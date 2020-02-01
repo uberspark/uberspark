@@ -4,20 +4,14 @@
 
 
 {
-	/* uberspark header */
-	"uberspark-hdr":{
-		"coss_version" : "any",
-		"mftype" : "config",
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-config" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
 
-	/* config header */
-	"config-hdr":{
-		"name" : "default"
-	},
-
-	"config-settings":{
+	"uberspark-config":{
 		"binary_page_size" : "0x200000",
 		"binary_uobj_section_alignment" : "0x200000",
 		"binary_uobj_default_section_size" : "0x200000",
