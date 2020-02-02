@@ -75,6 +75,7 @@ val namespace_config : string
 val namespace_config_mf_filename : string
 val namespace_config_current : string
 val namespace_config_default : string
+val namespace_config_mf_node_type_tag : string
 
 
 val namespace_bridge : string

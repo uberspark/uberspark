@@ -19,8 +19,8 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val config_hdr: Uberspark_manifest.Config.config_hdr_t
-val config_settings: Uberspark_manifest.Config.config_settings_t
+(*val config_hdr: Uberspark_manifest.Config.config_hdr_t*)
+val json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t
 
 
 
@@ -36,10 +36,6 @@ val settings_restore : unit -> unit
 
 val load : unit -> bool
 
-val create_from_file : string -> string -> (bool * string)
-
-val dump : string -> unit
-
 val settings_get : string ->  (bool * string)
 
 val settings_set : string -> string -> bool
@@ -52,6 +48,8 @@ val load_from_json : Yojson.Basic.json -> bool
 (*---------------------------------------------------------------------------*)
 
 (*
+val create_from_file : string -> string -> (bool * string)
+val dump : string -> unit
 val create_from_existing_ns : string -> string -> (bool * string)
 val switch : string -> bool
 val remove : string -> bool

@@ -549,8 +549,8 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_uobjcoll_publicmethod_sentinel_" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_publicmethods_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.f_sizeof_code mod Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 
@@ -560,8 +560,8 @@ let consolidate_sections_with_memory_map
 					usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_PUBLICMETHODS_SENTINEL; 
 									f_prot=0; 
 									f_size = section_size;
-									f_aligned_at = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
-									f_pad_to = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
+									f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+									f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
 									f_addr_start = !uobjcoll_section_load_addr; 
 									f_addr_file = 0;
 									f_reserved = 0;
@@ -592,8 +592,8 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_intrauobjcoll_publicmethod_sentinel_" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_intrauobjcoll_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.f_sizeof_code mod Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
 
@@ -603,8 +603,8 @@ let consolidate_sections_with_memory_map
 					usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_INTRAUOBJCOLL_SENTINEL; 
 									f_prot=0; 
 									f_size = section_size;
-									f_aligned_at = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
-									f_pad_to = Uberspark_config.config_settings.uobjcoll_binary_image_section_alignment; 
+									f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+									f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
 									f_addr_start = !uobjcoll_section_load_addr; 
 									f_addr_file = 0;
 									f_reserved = 0;
@@ -642,8 +642,8 @@ let consolidate_sections_with_memory_map
 						usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 										f_prot=0; 
 										f_size = uobj#get_d_size;
-										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 										f_addr_start = !uobjcoll_section_load_addr; 
 										f_addr_file = 0;
 										f_reserved = 0;

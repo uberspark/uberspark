@@ -101,12 +101,12 @@ let initialize_from_config ()
 	let retval = ref false in
 
 	(* handle cc-bridge *)	
-	if Uberspark_config.config_settings.bridge_cc_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (Cc.load Uberspark_config.config_settings.bridge_cc_bridge) then begin
+	if not (Cc.load Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
 		(!retval)
 	end else 
@@ -127,12 +127,12 @@ let initialize_from_config ()
 	end;
 
 	(* handle as-bridge *)	
-	if Uberspark_config.config_settings.bridge_as_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (As.load Uberspark_config.config_settings.bridge_as_bridge) then begin
+	if not (As.load Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
 		(!retval)
 	end else 
@@ -154,12 +154,12 @@ let initialize_from_config ()
 
 
 	(* handle ld-bridge *)	
-	if Uberspark_config.config_settings.bridge_ld_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (Ld.load Uberspark_config.config_settings.bridge_ld_bridge) then begin
+	if not (Ld.load Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
 		(!retval)
 	end else 

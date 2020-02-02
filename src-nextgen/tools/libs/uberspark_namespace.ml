@@ -80,6 +80,7 @@ let namespace_config = "config";;
 let namespace_config_mf_filename = "uberspark-config.json";;
 let namespace_config_current = "current";;
 let namespace_config_default = "default";;
+let namespace_config_mf_node_type_tag = "uberspark-config";;
 
 
 let namespace_bridge = "bridges";;
