@@ -1,90 +1,91 @@
-(****************************************************************************)
-(* uberSpark bridge module interface *)
-(*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark bridge module interface specification		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
 
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* general submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 module Container : sig
 
-val build_image : string -> string -> int
-val list_images : string -> unit 
-val run_image : ?context_path_builddir:string -> string -> string -> string -> int
+	val build_image : string -> string -> int
+	val list_images : string -> unit 
+	val run_image : ?context_path_builddir:string -> string -> string -> string -> int
     
 end
 
 module Native : sig
 
-val run_shell_command : ?context_path_builddir:string -> string -> string -> string -> int
+	val run_shell_command : ?context_path_builddir:string -> string -> string -> string -> int
 
 end
 
 
 
 
-(****************************************************************************)
-(* general interfaces *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 val dump : string -> ?bridge_exectype:string -> string -> unit
 val remove : string -> unit
-val initialize_from_config : unit -> bool
 
-(****************************************************************************)
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* bridge submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 module Cc : sig
 
-(*--------------------------------------------------------------------------*)
-(* cc-bridge data variables *)
-(*--------------------------------------------------------------------------*)
-val uberspark_hdr: Uberspark_manifest.hdr_t
-val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+	(*--------------------------------------------------------------------------*)
+	(* cc-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val uberspark_hdr: Uberspark_manifest.hdr_t
+	val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
 
 
-(*--------------------------------------------------------------------------*)
-(* cc-bridge interfaces *)
-(*--------------------------------------------------------------------------*)
-val load_from_json : Yojson.Basic.json ->  bool
-val load_from_file : string -> bool
-val load : string -> bool
-val store_to_file : string -> bool
-val store : unit -> bool
-val build : unit -> bool
-val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
-
-
+	(*--------------------------------------------------------------------------*)
+	(* cc-bridge interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
 
 end
-
-
 
 
 module As : sig
 
-(*--------------------------------------------------------------------------*)
-(* as-bridge data variables *)
-(*--------------------------------------------------------------------------*)
-val uberspark_hdr: Uberspark_manifest.hdr_t
-val bridge_as : Uberspark_manifest.Bridge.bridge_as_t 
+	(*--------------------------------------------------------------------------*)
+	(* as-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val uberspark_hdr: Uberspark_manifest.hdr_t
+	val bridge_as : Uberspark_manifest.Bridge.bridge_as_t 
 
 
-(*--------------------------------------------------------------------------*)
-(* as-bridge interfaces *)
-(*--------------------------------------------------------------------------*)
-val load_from_json : Yojson.Basic.json ->  bool
-val load_from_file : string -> bool
-val load : string -> bool
-val store_to_file : string -> bool
-val store : unit -> bool
-val build : unit -> bool
-val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
-
-
+	(*--------------------------------------------------------------------------*)
+	(* as-bridge interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
 
 end
 
@@ -92,33 +93,39 @@ end
 
 module Ld : sig
 
-(*--------------------------------------------------------------------------*)
-(* ld-bridge data variables *)
-(*--------------------------------------------------------------------------*)
-val uberspark_hdr: Uberspark_manifest.hdr_t
-val bridge_ld : Uberspark_manifest.Bridge.bridge_ld_t 
+	(*--------------------------------------------------------------------------*)
+	(* ld-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val uberspark_hdr: Uberspark_manifest.hdr_t
+	val bridge_ld : Uberspark_manifest.Bridge.bridge_ld_t 
 
 
-(*--------------------------------------------------------------------------*)
-(* as-bridge interfaces *)
-(*--------------------------------------------------------------------------*)
-val load_from_json : Yojson.Basic.json ->  bool
-val load_from_file : string -> bool
-val load : string -> bool
-val store_to_file : string -> bool
-val store : unit -> bool
-val build : unit -> bool
-val invoke : 
-	?context_path_builddir : string -> 
-	string ->
-	string ->
-	string list ->
-	string list ->
-	string list ->
-	string ->
-	bool
-
-
+	(*--------------------------------------------------------------------------*)
+	(* as-bridge interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke : 
+		?context_path_builddir : string -> 
+		string ->
+		string ->
+		string list ->
+		string list ->
+		string list ->
+		string ->
+		bool
 
 end
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+val initialize_from_config : unit -> bool
