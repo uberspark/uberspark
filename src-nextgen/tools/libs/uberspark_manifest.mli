@@ -128,6 +128,10 @@ module Bridge : sig
   }
 
 
+  val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_bridge_hdr_t -> bool
+  val json_node_bridge_hdr_var_to_jsonstr  : json_node_bridge_hdr_t -> string
+
+
   (****************************************************************************)
   (* manifest parse interfaces *)
   (****************************************************************************)
