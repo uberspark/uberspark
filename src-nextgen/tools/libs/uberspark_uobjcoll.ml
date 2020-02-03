@@ -213,7 +213,7 @@ let get_sentinel_info_for_sentinel_facet_and_type
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
 	(* read sentinel manifest JSON *)
-	let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type sentinel_mf_filename Uberspark_namespace.namespace_sentinel_mf_node_type_tag) in
+	let (rval, _, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type sentinel_mf_filename Uberspark_namespace.namespace_sentinel_mf_node_type_tag) in
 	
 	if (rval == false) then begin
 	retval := false;

@@ -25,6 +25,7 @@
 let namespace_root = "uberspark";;
 let namespace_root_dir_prefix = ref "";; 
 let namespace_root_mf_filename = "uberspark.json";;
+let namespace_root_mf_node_type_tag = "uberspark-manifest";;
 
 
 

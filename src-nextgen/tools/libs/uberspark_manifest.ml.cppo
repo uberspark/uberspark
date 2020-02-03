@@ -198,9 +198,10 @@ let parse_json_node_uberspark_manifest
 let get_json_for_manifest_node_type 
 	(manifest_filename : string)
 	(manifest_node_type : string)
-	: bool * Yojson.Basic.json = 
+	: bool * Yojson.Basic.json * Yojson.Basic.json = 
 
 	let retval = ref false in
+	let retjson_uberspark_manifest = ref `Null in
 	let retjson = ref `Null in
 
 	try
@@ -216,26 +217,31 @@ let get_json_for_manifest_node_type
 
 			if (List.mem manifest_node_type json_node_uberspark_manifest.f_manifest_node_types) then begin
 				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
+				retjson_uberspark_manifest := (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag manifest_json);
 				retval := true;
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "manifest node type '%s' is not listed within uberspark-manifest node within manifest!";
-				retval := false;
 				retjson := `Null;
+				retjson_uberspark_manifest := `Null;
+				retval := false;
 			end;
 
 		end else begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
-			retval := false;
 			retjson := `Null;
+			retjson_uberspark_manifest := `Null;
+			retval := false;
+
 		end;	
 		
 	with Yojson.Json_error s -> 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retval := false;
+		retjson_uberspark_manifest := `Null;
 		retjson := `Null;
+		retval := false;
 	;
 
-	(!retval, !retjson)
+	(!retval, !retjson_uberspark_manifest, !retjson)
 ;;
 
 
