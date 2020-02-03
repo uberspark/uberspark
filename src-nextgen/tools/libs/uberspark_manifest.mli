@@ -70,6 +70,22 @@ module Bridge : sig
   (* manifest node types *)
   (****************************************************************************)
 
+  (* bridge-hdr json node type *)
+  type json_node_bridge_hdr_t = {
+    mutable btype : string;
+    mutable bname : string;
+    mutable execname: string;
+    mutable devenv: string;
+    mutable arch: string;
+    mutable cpu: string;
+    mutable version: string;
+    mutable path: string;
+    mutable params: string list;
+    mutable container_fname: string;
+    mutable namespace: string;
+  }
+
+
   (* bridge-hdr node type *)
   type bridge_hdr_t = {
     mutable btype : string;
@@ -133,6 +149,15 @@ module Bridge : sig
   (* submodules *)
   (****************************************************************************)
   module Cc : sig
+    type json_node_uberspark_bridge_cc_t = 
+    {
+      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable params_prefix_obj: string;
+      mutable params_prefix_asm: string;
+      mutable params_prefix_output: string;
+      mutable params_prefix_include: string;
+    }
+
   end
 
 end

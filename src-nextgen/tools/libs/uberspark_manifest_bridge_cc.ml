@@ -12,6 +12,15 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_bridge_cc_t = 
+{
+	mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+	mutable params_prefix_obj: string;
+	mutable params_prefix_asm: string;
+	mutable params_prefix_output: string;
+	mutable params_prefix_include: string;
+}
+;;
 
 
 (*---------------------------------------------------------------------------*)
