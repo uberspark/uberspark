@@ -100,7 +100,7 @@ module Bridge : sig
     mutable container_fname: string;
     mutable namespace: string;
   }
-
+(*
   (* bridge-cc node type *)
   type bridge_cc_t = { 
     mutable bridge_hdr : bridge_hdr_t;
@@ -109,7 +109,7 @@ module Bridge : sig
     mutable params_prefix_output: string;
     mutable params_prefix_include: string;
   }
-
+*)
   (* bridge-as node type *)
   type bridge_as_t = { 
     mutable bridge_hdr : bridge_hdr_t;
@@ -136,7 +136,7 @@ module Bridge : sig
   (* manifest parse interfaces *)
   (****************************************************************************)
   val parse_bridge_hdr : Yojson.Basic.t -> bridge_hdr_t -> bool
-  val parse_bridge_cc : Yojson.Basic.t -> bridge_cc_t -> bool
+  (*val parse_bridge_cc : Yojson.Basic.t -> bridge_cc_t -> bool*)
   val parse_bridge_as : Yojson.Basic.t -> bridge_as_t -> bool
   val parse_bridge_ld : Yojson.Basic.t -> bridge_ld_t -> bool
 
@@ -145,7 +145,7 @@ module Bridge : sig
   (* manifest write interfaces *)
   (****************************************************************************)
   val write_bridge_hdr : ?continuation:bool -> out_channel -> bridge_hdr_t -> bool
-  val write_bridge_cc : ?continuation:bool -> out_channel -> bridge_cc_t -> bool
+  (*val write_bridge_cc : ?continuation:bool -> out_channel -> bridge_cc_t -> bool*)
   val write_bridge_as : ?continuation:bool -> out_channel -> bridge_as_t -> bool
   val write_bridge_ld : ?continuation:bool -> out_channel -> bridge_ld_t -> bool
 

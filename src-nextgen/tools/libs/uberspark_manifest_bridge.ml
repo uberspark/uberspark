@@ -46,7 +46,7 @@ type bridge_hdr_t = {
 }
 ;;
 
-(* bridge-cc node type *)
+(*(* bridge-cc node type *)
 type bridge_cc_t = { 
 	mutable bridge_hdr : bridge_hdr_t;
 	mutable params_prefix_obj: string;
@@ -54,6 +54,7 @@ type bridge_cc_t = {
 	mutable params_prefix_output: string;
 	mutable params_prefix_include: string;
 };;
+*)
 
 (* bridge-as node type *)
 type bridge_as_t = { 
@@ -213,7 +214,7 @@ let parse_bridge_hdr
 ;;
 
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* parse json node "bridge-cc" *)
 (* return: *)
@@ -252,7 +253,7 @@ let parse_bridge_cc
 
 	(!retval)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* parse json node "bridge-as" *)
@@ -385,7 +386,7 @@ let write_bridge_hdr
 	(!retval)
 ;;
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* write bridge-cc manifest node *)
 (*--------------------------------------------------------------------------*)
@@ -420,7 +421,7 @@ let write_bridge_cc
 
 	(!retval)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* write bridge-as manifest node *)
