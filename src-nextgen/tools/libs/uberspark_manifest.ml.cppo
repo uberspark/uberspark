@@ -108,6 +108,33 @@ let parse_uberspark_hdr
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* read manifest file into json *)
+(* note: this does not check if this is a valid uberspark manifest; only checked *)
+(* if it is a valid json file *)
+(*--------------------------------------------------------------------------*)
+let get_json_for_manifest 
+	(mf_filename : string)
+	: bool * Yojson.Basic.json = 
+
+	let retval = ref false in
+	let retjson = ref `Null in
+
+	try
+		let mf_json = Yojson.Basic.from_file mf_filename in
+		retjson := mf_json;
+		retval := true;
+
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+
+	(!retval, !retjson)
+;;
+
+
 (*--------------------------------------------------------------------------*)
 (* read manifest file into json object; sanity checking uberspark version *)
 (*--------------------------------------------------------------------------*)
