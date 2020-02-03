@@ -179,7 +179,7 @@ end
 
 
 module Uobj : sig
- type uobj_mf_json_nodes_t =
+ (*type uobj_mf_json_nodes_t =
   {
     mutable f_uberspark_hdr					: Yojson.Basic.t;			
     mutable f_uobj_hdr   					: Yojson.Basic.t;
@@ -190,7 +190,7 @@ module Uobj : sig
     mutable f_uobj_legacy_callees		   	: Yojson.Basic.t;
     mutable f_uobj_binary		   			: Yojson.Basic.t;
   }
-
+  *)
 
  
   type uobj_hdr_t =
@@ -211,7 +211,6 @@ module Uobj : sig
   }
 
 
-  val get_uobj_mf_json_nodes : Yojson.Basic.t -> uobj_mf_json_nodes_t ->  bool
   
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
@@ -222,7 +221,7 @@ module Uobj : sig
   val parse_uobj_legacy_callees : Yojson.Basic.t -> (string, string list) Hashtbl.t -> bool
   val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
 
-
+  (*val get_uobj_mf_json_nodes : Yojson.Basic.t -> uobj_mf_json_nodes_t ->  bool*)
   (*val write_uobj_mf_json_nodes :	?prologue_str : string -> uobj_mf_json_nodes_t -> out_channel -> unit*)
 
 end
