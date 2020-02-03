@@ -183,6 +183,21 @@ module Bridge : sig
 
   end
 
+  module As : sig
+    type json_node_uberspark_bridge_as_t = 
+    {
+      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable params_prefix_obj : string;
+      mutable params_prefix_output : string;
+      mutable params_prefix_include : string;
+    }
+
+    val json_node_uberspark_bridge_as_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_as_t -> bool
+    val json_node_uberspark_bridge_as_var_to_jsonstr : json_node_uberspark_bridge_as_t -> string
+
+
+  end
+
 end
 
 

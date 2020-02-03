@@ -413,6 +413,10 @@ struct
 	#include "uberspark_manifest_bridge_ld.ml"
 	end
 
+	module As = struct
+	#include "uberspark_manifest_bridge_as.ml"
+	end
+
 end
 
 

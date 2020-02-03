@@ -3,15 +3,14 @@
 */
 
 {
-	/* uberspark header */
-	"uberspark-hdr":{
-		"coss_version" : "any",
-		"mftype" : "bridge",
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-bridge-as" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
 
-    "bridge-as" : {
+    "uberspark-bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",

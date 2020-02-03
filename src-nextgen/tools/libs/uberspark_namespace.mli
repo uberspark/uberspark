@@ -83,6 +83,8 @@ val namespace_bridge_mf_filename : string
 val namespace_bridge_container_filename : string
 val namespace_bridge_cc_mf_node_type_tag : string
 val namespace_bridge_ld_mf_node_type_tag : string
+val namespace_bridge_as_mf_node_type_tag : string
+
 
 val namespace_bridge_ar_bridge_name : string
 val namespace_bridge_as_bridge_name : string
