@@ -79,7 +79,7 @@ let json_node_uberspark_bridge_cc_var_to_jsonstr
 	let retstr = ref "" in
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-config\":{";
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-bridge-cc\":{";
 
 	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var) ^ ",";
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_obj\" : \"%s\"," json_node_uberspark_bridge_cc_var.params_prefix_obj;
