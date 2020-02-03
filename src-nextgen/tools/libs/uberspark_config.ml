@@ -183,17 +183,11 @@ let load
 		Uberspark_manifest.get_json_for_manifest_node_type config_ns_json_path 
 		Uberspark_namespace.namespace_config_mf_node_type_tag in
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
-
 		if rval then begin
 
 			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var l_json_node_uberspark_manifest json_node_uberspark_manifest_var in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
-
 			if rval then begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
-
 					retval := load_from_json json_node_uberspark_config; 
 			end	else begin
 					retval := false;
@@ -202,8 +196,6 @@ let load
 		end	else begin
 				retval := false;
 		end;
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "retval=%b" !retval;
 
 	(!retval)
 ;;

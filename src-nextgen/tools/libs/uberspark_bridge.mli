@@ -49,8 +49,8 @@ module Cc : sig
 	(*--------------------------------------------------------------------------*)
 	(* cc-bridge data variables *)
 	(*--------------------------------------------------------------------------*)
-	val uberspark_hdr: Uberspark_manifest.hdr_t
-	val bridge_cc : Uberspark_manifest.Bridge.bridge_cc_t 
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_cc_var: Uberspark_manifest.Bridge.Cc.json_node_uberspark_bridge_cc_t 
 
 
 	(*--------------------------------------------------------------------------*)
