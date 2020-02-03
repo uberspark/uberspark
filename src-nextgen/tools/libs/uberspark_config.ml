@@ -192,11 +192,17 @@ let load
 		Uberspark_manifest.get_json_for_manifest_node_type config_ns_json_path 
 		Uberspark_namespace.namespace_config_mf_node_type_tag in
 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
+
 		if rval then begin
 
 			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var l_json_node_uberspark_manifest json_node_uberspark_manifest_var in
 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
+
 			if rval then begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "came";
+
 					retval := load_from_json json_node_uberspark_config; 
 			end	else begin
 					retval := false;
@@ -205,6 +211,8 @@ let load
 		end	else begin
 				retval := false;
 		end;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "retval=%b" !retval;
 
 	(!retval)
 ;;
@@ -277,15 +285,11 @@ let dump_to_file
 	(output_config_filename : string)
 	=
 
-	let oc = open_out output_config_filename in
-
-(*Uberspark_manifest.write_prologue ~prologue_str:"uberSpark config manifest" oc;
-		Uberspark_manifest.write_uberspark_hdr oc uberspark_hdr;
-		Uberspark_manifest.Config.write_config_hdr oc config_hdr;
-		Uberspark_manifest.Config.write_json_node_uberspark_config_var ~continuation:false oc json_node_uberspark_config_var;
-		Uberspark_manifest.write_epilogue oc;
-*)
-	close_out oc;	
+	Uberspark_manifest.write_to_file output_config_filename 
+		[
+			(Uberspark_manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
+			(Uberspark_manifest.Config.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
+		];
 ;;
 
 

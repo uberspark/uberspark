@@ -150,11 +150,12 @@ let parse_manifest
 	end;
 
 	(* parse, load and overlay config-settings node, if one is present *)
-	if (Uberspark_config.load_from_json mf_json) then begin
+	(* TBD: reinstate with new config interface *)
+	(*if (Uberspark_config.load_from_json mf_json) then begin
 		Uberspark_logger.log "loaded and overlaid config-settings from uobjcoll manifest for uobjcoll build";
 	end else begin
 		Uberspark_logger.log "using default config for uobjcoll build";
-    end;
+    end;*)
 
 	(* parse uobjcoll-uobjs node *)
 	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_uobjs mf_json d_uobjcoll_uobjs_mf ) in

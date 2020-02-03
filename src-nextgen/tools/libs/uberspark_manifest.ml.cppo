@@ -162,7 +162,7 @@ let get_manifest_json
 (* on failure: false; json_node_uberspark_manifest_var fields are untouched *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_manifest_to_var 
-	(manifest_json : Yojson.Basic.t)
+	(json_node_uberspark_manifest : Yojson.Basic.t)
 	(json_node_uberspark_manifest_var : json_node_uberspark_manifest_t) 
 	: bool =
 
@@ -170,12 +170,11 @@ let json_node_uberspark_manifest_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let l_json_node_uberspark_manifest = manifest_json |> member "uberspark-manifest" in
-			if(l_json_node_uberspark_manifest <> `Null) then
+			if(json_node_uberspark_manifest <> `Null) then
 				begin
-					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (l_json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
-					json_node_uberspark_manifest_var.f_uberspark_min_version <- l_json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
-					json_node_uberspark_manifest_var.f_uberspark_max_version <- l_json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
+					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
+					json_node_uberspark_manifest_var.f_uberspark_min_version <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
+					json_node_uberspark_manifest_var.f_uberspark_max_version <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
 					retval := true;
 				end
 			;
@@ -240,17 +239,20 @@ let get_json_for_manifest_node_type
 	try
 
 		let manifest_json = Yojson.Basic.from_file manifest_filename in
-		let json_node_uberspark_manifest : json_node_uberspark_manifest_t = 
+		let json_node_uberspark_manifest_var : json_node_uberspark_manifest_t = 
 			{ 	f_manifest_node_types = []; 
 				f_uberspark_max_version = "";
 				f_uberspark_min_version = "";} in
-		let rval_uberspark_manifest_node_parsed = json_node_uberspark_manifest_to_var manifest_json json_node_uberspark_manifest in
+		let json_node_uberspark_manifest = (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag
+			manifest_json) in 
+		let rval_json_node_uberspark_manifest_var = json_node_uberspark_manifest_to_var json_node_uberspark_manifest
+			json_node_uberspark_manifest_var in
 
-		if 	rval_uberspark_manifest_node_parsed = true then begin
+		if 	rval_json_node_uberspark_manifest_var = true then begin
 
-			if (List.mem manifest_node_type json_node_uberspark_manifest.f_manifest_node_types) then begin
+			if (List.mem manifest_node_type json_node_uberspark_manifest_var.f_manifest_node_types) then begin
 				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
-				retjson_uberspark_manifest := (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag manifest_json);
+				retjson_uberspark_manifest := json_node_uberspark_manifest;
 				retval := true;
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "manifest node type '%s' is not listed within uberspark-manifest node within manifest!";
