@@ -193,7 +193,15 @@ let load
 		Uberspark_namespace.namespace_config_mf_node_type_tag in
 
 		if rval then begin
-				retval := load_from_json json_node_uberspark_config; 
+
+			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var l_json_node_uberspark_manifest json_node_uberspark_manifest_var in
+
+			if rval then begin
+					retval := load_from_json json_node_uberspark_config; 
+			end	else begin
+					retval := false;
+			end;
+
 		end	else begin
 				retval := false;
 		end;
