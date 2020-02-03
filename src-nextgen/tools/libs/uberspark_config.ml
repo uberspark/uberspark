@@ -31,15 +31,6 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 };;
 
 
-(*
-(*------------------------------------------------------------------------*)
-(* configuration header variable *)	
-(*------------------------------------------------------------------------*)
-let config_hdr: Uberspark_manifest.Config.config_hdr_t = {
-	name = "";
-};;
-*)
-
 
 (*------------------------------------------------------------------------*)
 (* configuration settings variable *)	

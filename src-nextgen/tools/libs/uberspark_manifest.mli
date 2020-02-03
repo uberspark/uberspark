@@ -162,58 +162,8 @@ module Config : sig
     mutable bridge_ld_bridge : string;
   }
 
-
-  (* config-hdr node type *)
-  type config_hdr_t =
-  {
-      mutable name   : string;			
-  }
-
-  (* config-settings node type *)
-  type config_settings_t = 
-  {
-
-    (* uobj/uobjcoll binary related configuration settings *)	
-    mutable binary_page_size : int;
-    mutable binary_uobj_section_alignment : int;
-    mutable binary_uobj_default_section_size : int;
- 
-    mutable uobj_binary_image_load_address : int;
-    mutable uobj_binary_image_uniform_size : bool;
-    mutable uobj_binary_image_size : int;
-    mutable uobj_binary_image_alignment : int;
-
-    (* uobjcoll related configuration settings *)
-    mutable uobjcoll_binary_image_load_address : int;
-    mutable uobjcoll_binary_image_hdr_section_alignment : int;
-    mutable uobjcoll_binary_image_hdr_section_size : int;
-    mutable uobjcoll_binary_image_section_alignment : int;
-
-    (* bridge related configuration settings *)	
-    mutable bridge_cc_bridge : string;
-    mutable bridge_as_bridge : string;
-    mutable bridge_ld_bridge : string;
-
-  }
-
-
   val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool
   val json_node_uberspark_config_var_to_jsonstr : json_node_uberspark_config_t -> string
-  
-
-  (****************************************************************************)
-  (* manifest parse interfaces *)
-  (****************************************************************************)
-  val parse_config_hdr : Yojson.Basic.t -> config_hdr_t -> bool
-  val parse_config_settings : Yojson.Basic.t -> config_settings_t -> bool
-
-
-  (****************************************************************************)
-  (* manifest write interfaces *)
-  (****************************************************************************)
-  val write_config_hdr : ?continuation:bool -> out_channel -> config_hdr_t -> bool
-  val write_config_settings : ?continuation:bool -> out_channel -> config_settings_t -> bool
-
 
 end
 

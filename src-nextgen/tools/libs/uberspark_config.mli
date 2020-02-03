@@ -19,7 +19,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-(*val config_hdr: Uberspark_manifest.Config.config_hdr_t*)
 val json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t
 
 
