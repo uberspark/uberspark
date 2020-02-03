@@ -231,12 +231,21 @@ class uobject
 	method parse_manifest 
 		()
 		: bool =
+
+		(*(* read manifest JSON *)
+		let (rval, mf_json) = Uberspark_manifest.get_manifest_json 
+			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
 		
-		(* read manifest JSON *)
-		let (rval, mf_json) = Uberspark_manifest.get_manifest_json (self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
+		if (rval == false) then (false)
+		else*)
+
+		let (rval, _, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type 
+			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) 
+			Uberspark_namespace.namespace_uobj_mf_node_type_tag) in
 		
 		if (rval == false) then (false)
 		else
+
 
 		(* store manifest JSON *)
 		let dummy = 0 in begin

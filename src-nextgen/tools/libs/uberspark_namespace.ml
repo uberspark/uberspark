@@ -42,6 +42,7 @@ let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 let namespace_uobj_binary_image_filename = "uobj.bin";;
 let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
+let namespace_uobj_mf_node_type_tag = "uberspark-uobj";;
 
 
 let namespace_uobjcoll = "uobjcoll";;

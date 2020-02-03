@@ -81,7 +81,7 @@ let handler_uobj_build
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
 
-      let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_build (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_uobj_mf_filename) target_def 
+      let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_build (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) target_def 
         Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_load_address) in
       if (rval) then begin
         Uberspark.Logger.log "uobj build success!";

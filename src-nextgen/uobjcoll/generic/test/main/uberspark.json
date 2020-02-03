@@ -1,36 +1,46 @@
 /*
-add uobj json manifest
+main uobj json manifest
 author: amit vasudevan (amitvasudevan@acm.org)
 */
 
 {
-	/* header */
-	"uberspark-hdr":{
-		"coss_version" : "1.0",
-		"mftype" : "uobj",
+
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobj" ],
 		"uberspark_min_version" : "5.1",
 		"uberspark_max_version" : "any"
 	},
 
+
+	"uberspark-uobj" : {
 	/* uobj header */
 	"uobj-hdr":{
-		"namespace" : "uberspark/uobjs/generic/test/add",
+		"namespace" : "uberspark/uobjcoll/generic/test/main",
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic"
 	},
 
+	/* config settings */	
+	/*"config-settings":{
+		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
+		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
+		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
+	},*/
+
+
 	/* sources */
 	"uobj-sources" : {
 		"h-files": [ ],
-		"c-files": [ "add.c" ],
+		"c-files": [ "main.c" ],
 		"casm-files": [ ],
 		"asm-files": [ ]
 	},
 	
 	/* public methods */
 	"uobj-publicmethods" : {
-		"add" : [
+		"main" : [
 			"uint32_t",
 			"(uint32_t param1, uint32_t param2)", 
 			"2" 
@@ -41,7 +51,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		within the same collection
 	*/
 	"uobj-intrauobjcoll-callees" : {
-		/* "uberspark/uobjs/generic/test/sample": ["a_one", "a_two", "a_three"] */
+		"uberspark/uobjs/generic/test/add": ["add"]
 	},
 	
 
@@ -49,7 +59,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		across other collection(s)
 	*/
 	"uobj-interuobjcoll-callees": {
-		/* "uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ] */
+		/*"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]*/
 	} 
 
 
@@ -57,8 +67,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	
 	/* legacy CoSS functions/code that this uobj invokes */
 	"uobj-legacy-callees": [
-		"untrusted_func_1",	
-		"untrusted_func_2"
+		/*"untrusted_func_1",	
+		"untrusted_func_2"*/
 	] 
 
 
@@ -73,7 +83,8 @@ author: amit vasudevan (amitvasudevan@acm.org)
 		}
 	}
 
-	
+}
+
 }
 
 

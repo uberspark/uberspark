@@ -477,7 +477,7 @@ let initialize_uobjs_within_uobjinfo_list
 			| Some uobj ->
 				Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
 				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
-					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) 
+					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) 
 					d_target_def 0) in
 				Uberspark_logger.log "uobj '%s' successfully initialized; size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name 
 					uobj#get_d_size;
