@@ -52,7 +52,6 @@ type slt_info_t =
   	method set_d_builddir : string -> unit 
     method get_d_builddir : string
 
-  	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
 
     val d_publicmethods_hashtbl :
       (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
@@ -144,7 +143,6 @@ type slt_info_t =
  
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
-  	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
@@ -174,6 +172,11 @@ type slt_info_t =
 
   	method prepare_namespace_for_build : unit -> bool
   	method build_image : unit -> bool
+
+
+  	(*val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t *)
+  	(*method write_manifest : string -> bool*)
+
 
 end
 

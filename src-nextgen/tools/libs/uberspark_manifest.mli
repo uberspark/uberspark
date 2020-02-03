@@ -223,7 +223,7 @@ module Uobj : sig
   val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
 
 
-  val write_uobj_mf_json_nodes :	?prologue_str : string -> uobj_mf_json_nodes_t -> out_channel -> unit
+  (*val write_uobj_mf_json_nodes :	?prologue_str : string -> uobj_mf_json_nodes_t -> out_channel -> unit*)
 
 end
 

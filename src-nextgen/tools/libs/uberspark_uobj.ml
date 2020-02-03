@@ -84,16 +84,6 @@ class uobject
 
 
 
-	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
-		f_uberspark_hdr = `Null;
-		f_uobj_hdr = `Null;
-		f_uobj_sources = `Null;
-		f_uobj_publicmethods = `Null;
-		f_uobj_intrauobjcoll_callees = `Null;
-		f_uobj_interuobjcoll_callees = `Null;
-		f_uobj_legacy_callees = `Null;
-		f_uobj_binary = `Null;
-	};
 
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
@@ -233,20 +223,6 @@ class uobject
 	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 
-	(*--------------------------------------------------------------------------*)
-	(* write uobj manifest *)
-	(* uobj_mf_filename = uobj manifest filename *)
-	(*--------------------------------------------------------------------------*)
-	method write_manifest 
-		(uobj_mf_filename : string)
-		: bool =
-
-		let oc = open_out uobj_mf_filename in
-		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
-		close_out oc;	
-
-		(true)
-	;
 
 	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
@@ -267,20 +243,6 @@ class uobject
 		d_mf_json := mf_json;
 		end;
 
-		(* get uobj manifest json nodes *)
-		let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
-
-		if (rval == false) then (false)
-		else
-
-		(* debug *)
-		(*let dummy = 0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
-		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
-		d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
-		self#write_manifest "auto_test.json";		
-		end;*)
 
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
@@ -1604,3 +1566,55 @@ let create_initialize_and_build
 
 	(true, Some uobj)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* FOR FUTURE EXPANSION *)
+(*--------------------------------------------------------------------------*)
+
+(*
+
+	(* get uobj manifest json nodes *)
+	let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
+
+	if (rval == false) then (false)
+	else
+
+	(* debug *)
+	(*let dummy = 0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
+	let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
+	d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
+	self#write_manifest "auto_test.json";		
+	end;*)
+
+
+
+	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
+		f_uberspark_hdr = `Null;
+		f_uobj_hdr = `Null;
+		f_uobj_sources = `Null;
+		f_uobj_publicmethods = `Null;
+		f_uobj_intrauobjcoll_callees = `Null;
+		f_uobj_interuobjcoll_callees = `Null;
+		f_uobj_legacy_callees = `Null;
+		f_uobj_binary = `Null;
+	};
+
+
+	(*--------------------------------------------------------------------------*)
+	(* write uobj manifest *)
+	(* uobj_mf_filename = uobj manifest filename *)
+	(*--------------------------------------------------------------------------*)
+	method write_manifest 
+		(uobj_mf_filename : string)
+		: bool =
+
+		let oc = open_out uobj_mf_filename in
+		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
+		close_out oc;	
+
+		(true)
+	;
+*)
