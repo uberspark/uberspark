@@ -89,7 +89,7 @@ type bridge_ld_t = {
 
 let json_node_bridge_hdr_to_var
 	(json_node_bridge_hdr : Yojson.Basic.t)
-	(json_node_bridge_hdr_var : json_node_uberspark_bridge_hdr_t) 
+	(json_node_bridge_hdr_var : json_node_bridge_hdr_t) 
 	: bool =
 	let retval = ref false in
 
