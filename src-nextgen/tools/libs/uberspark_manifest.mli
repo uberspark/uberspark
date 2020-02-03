@@ -129,6 +129,12 @@ module Bridge : sig
   val write_bridge_as : ?continuation:bool -> out_channel -> bridge_as_t -> bool
   val write_bridge_ld : ?continuation:bool -> out_channel -> bridge_ld_t -> bool
 
+  (****************************************************************************)
+  (* submodules *)
+  (****************************************************************************)
+  module Cc : sig
+  end
+
 end
 
 

@@ -404,6 +404,11 @@ let write_to_file
 module Bridge =
 struct
 #include "uberspark_manifest_bridge.ml"
+
+	module Cc = struct
+	#include "uberspark_manifest_bridge_cc.ml"
+	end
+
 end
 
 
