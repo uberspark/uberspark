@@ -189,6 +189,41 @@ let json_node_uberspark_manifest_to_var
 
 
 
+(*--------------------------------------------------------------------------*)
+(* convert json_node_uberspark_manifest_var to json string *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_manifest_var_to_jsonstr  
+	(json_node_uberspark_manifest_var : json_node_uberspark_manifest_t) 
+	: string =
+	let retstr = ref "" in
+
+
+	retstr := !retstr ^ Printf.sprintf  "\n";
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-manifest\":{";
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"manifest_node_types\" : [ ";
+	for i = 0 to ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) do
+		if i == ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) then begin
+			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+		end else begin
+			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+		end;
+	done;
+	retstr := !retstr ^ Printf.sprintf  "],";
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.f_uberspark_min_version;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.f_uberspark_max_version;
+	retstr := !retstr ^ Printf.sprintf  "\n\t}";
+
+	retstr := !retstr ^ Printf.sprintf  "\n";
+
+	(!retstr)
+;;
+
+
+
+
 
 (*--------------------------------------------------------------------------*)
 (* read manifest file and return json object of specified manifest node type *)
