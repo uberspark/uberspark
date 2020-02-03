@@ -44,7 +44,7 @@ val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojs
 val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
 
-val parse_json_node_uberspark_manifest : Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
+val json_node_uberspark_manifest_to_var :  Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
 val get_json_for_manifest_node_type :  string -> string -> bool * Yojson.Basic.json * Yojson.Basic.json
 
 
