@@ -247,7 +247,7 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_namespace.namespace_json_node_uberspark_bridge_ld_var_bridge ^ "/" ^
+	let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^

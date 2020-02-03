@@ -96,8 +96,8 @@ module Ld : sig
 	(*--------------------------------------------------------------------------*)
 	(* ld-bridge data variables *)
 	(*--------------------------------------------------------------------------*)
-	val uberspark_hdr: Uberspark_manifest.hdr_t
-	val bridge_ld : Uberspark_manifest.Bridge.bridge_ld_t 
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.Ld.json_node_uberspark_bridge_ld_t
 
 
 	(*--------------------------------------------------------------------------*)

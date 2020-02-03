@@ -409,6 +409,10 @@ struct
 	#include "uberspark_manifest_bridge_cc.ml"
 	end
 
+	module Ld = struct
+	#include "uberspark_manifest_bridge_ld.ml"
+	end
+
 end
 
 

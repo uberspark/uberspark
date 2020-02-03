@@ -88,6 +88,7 @@ let namespace_bridge = "bridges";;
 let namespace_bridge_mf_filename = "uberspark-bridge.json";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
+let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 
 
 let namespace_bridge_ar_bridge_name = "ar-bridge";;

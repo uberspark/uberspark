@@ -167,6 +167,22 @@ module Bridge : sig
 
   end
 
+
+  module Ld : sig
+    type json_node_uberspark_bridge_ld_t = 
+    {
+      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable params_prefix_lscript: string;
+      mutable params_prefix_libdir: string;
+      mutable params_prefix_lib: string;
+      mutable params_prefix_output: string;
+    }
+
+    val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_ld_t -> bool
+    val json_node_uberspark_bridge_ld_var_to_jsonstr : json_node_uberspark_bridge_ld_t -> string
+
+  end
+
 end
 
 
