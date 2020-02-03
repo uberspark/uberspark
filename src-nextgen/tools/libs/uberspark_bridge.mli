@@ -72,8 +72,8 @@ module As : sig
 	(*--------------------------------------------------------------------------*)
 	(* as-bridge data variables *)
 	(*--------------------------------------------------------------------------*)
-	val uberspark_hdr: Uberspark_manifest.hdr_t
-	val bridge_as : Uberspark_manifest.Bridge.bridge_as_t 
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_as_var: Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_t
 
 
 	(*--------------------------------------------------------------------------*)
@@ -101,7 +101,7 @@ module Ld : sig
 
 
 	(*--------------------------------------------------------------------------*)
-	(* as-bridge interfaces *)
+	(* interfaces *)
 	(*--------------------------------------------------------------------------*)
 	val load_from_json : Yojson.Basic.json ->  bool
 	val load_from_file : string -> bool
