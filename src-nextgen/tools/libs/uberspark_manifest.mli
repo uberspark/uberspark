@@ -53,6 +53,7 @@ val get_json_for_manifest_node_type :  string -> string -> bool * Yojson.Basic.j
 val write_prologue : ?prologue_str:string -> out_channel -> bool
 val write_uberspark_hdr : ?continuation:bool -> out_channel -> hdr_t -> bool
 val write_epilogue : ?epilogue_str:string -> out_channel -> bool
+val write_to_file : string -> string list -> unit
 
 
 

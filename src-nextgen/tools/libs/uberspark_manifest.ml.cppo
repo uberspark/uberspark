@@ -224,7 +224,6 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 
 
-
 (*--------------------------------------------------------------------------*)
 (* read manifest file and return json object of specified manifest node type *)
 (* return null if the node type is not found in the manifest *)
@@ -365,6 +364,32 @@ let write_epilogue
 	(!retval)
 ;;
 
+
+
+(*--------------------------------------------------------------------------*)
+(* write given list of json node string representations to manifest file *)
+(*--------------------------------------------------------------------------*)
+let write_to_file 
+	(output_manifest_filename : string)
+	(output_jsonstr_list : string list)
+	=
+
+	let oc = open_out output_manifest_filename in
+
+	write_prologue oc;
+
+	for i = 0 to ((List.length output_jsonstr_list)-1) do
+		if i == ((List.length output_jsonstr_list)-1) then begin
+			Printf.fprintf oc "%s" (List.nth output_jsonstr_list i);
+		end else begin
+			Printf.fprintf oc "%s," (List.nth output_jsonstr_list i);
+		end;
+	done;
+
+	write_epilogue oc;
+
+	close_out oc;	
+;;
 
 
 
