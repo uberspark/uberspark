@@ -130,6 +130,13 @@ class uobject
 	method get_d_sections_list_val = !d_sections_list;
 
 
+
+	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
+		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
+		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
+		f_legacy_callees = []; f_sections = []; 
+		};
 (***)
 
 
@@ -264,6 +271,10 @@ class uobject
 		d_mf_json := mf_json;
 		end;
 
+		(* parse uberspark-uobj node *)
+		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
+				json_node_uberspark_uobj_var) in
+
 
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
@@ -275,12 +286,12 @@ class uobject
 		end;
 
 		(* parse uobj-sources node *)
-(*		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
-				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in*)
+		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
+				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
 
-		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_to_var mf_json
+(*		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_to_var mf_json
 				json_node_uberspark_uobj_sources_var) in
-
+*)
 
 		if (rval == false) then (false)
 		else
