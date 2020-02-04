@@ -137,7 +137,7 @@ let json_node_uberspark_uobj_sources_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_publicmethods_to_var
-	(json_node_uberspark_uobj_publicmethods : Yojson.Basic.t)
+	(json_node_uberspark_uobj : Yojson.Basic.t)
 	: bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
 =
 		
@@ -146,7 +146,7 @@ let json_node_uberspark_uobj_publicmethods_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_publicmethods_json = json_node_uberspark_uobj_publicmethods |> member "uobj-publicmethods" in
+			let uobj_publicmethods_json = json_node_uberspark_uobj |> member "uobj-publicmethods" in
 				if uobj_publicmethods_json != `Null then
 					begin
 
@@ -192,6 +192,49 @@ let json_node_uberspark_uobj_publicmethods_to_var
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "intrauobjcoll-callees" into var *)
+(* return: *)
+(* on success: true; var is modified with intrauobjcoll-callees declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
+	(json_node_uberspark_uobj : Yojson.Basic.t)
+	: bool *  ((string * string list) list) =
+	
+	let retval = ref true in
+	let intrauobjcoll_callees_assoc_list : (string * string list) list ref = ref [] in
+	try
+		let open Yojson.Basic.Util in
+			let uobj_callees_json =  json_node_uberspark_uobj |> member "uobj-intrauobjcoll-callees" in
+				if uobj_callees_json != `Null then
+					begin
+
+						let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
+							retval := true;
+							List.iter (fun (x,y) ->
+									let uobj_callees_attribute_list = ref [] in
+										List.iter (fun z ->
+											uobj_callees_attribute_list := !uobj_callees_attribute_list @
+																	[ (z |> to_string) ];
+											()
+										)(Yojson.Basic.Util.to_list y);
+										
+										intrauobjcoll_callees_assoc_list := !intrauobjcoll_callees_assoc_list @ 
+											[ (x, !uobj_callees_attribute_list)];
+									()
+								) uobj_callees_assoc_list;
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !intrauobjcoll_callees_assoc_list)
+;;
 
 
 (* old, soon to be defunct interfaces follow *)
