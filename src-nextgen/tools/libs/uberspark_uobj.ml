@@ -105,9 +105,6 @@ class uobject
 	val d_sources_asm_file_list: string list ref = ref [];
 	method get_d_sources_asm_file_list = !d_sources_asm_file_list;
 
-	val json_node_uberspark_uobj_sources_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_t = 
-		{ f_h_files = []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
-
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
@@ -307,10 +304,6 @@ class uobject
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
 				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
 
-
-(*		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_to_var mf_json
-				json_node_uberspark_uobj_sources_var) in
-*)
 
 		if (rval == false) then (false)
 		else
