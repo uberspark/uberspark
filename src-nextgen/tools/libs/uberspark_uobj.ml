@@ -97,16 +97,6 @@ class uobject
 		};
 
 
-
-	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
-	method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
-
-	val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
-	method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
-
-	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
-	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
-
 	(* association list of uobj binary image sections as parsed from uobj manifest; indexed by section name *)		
 	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
 	method get_d_sections_list_ref = d_sections_list;
@@ -121,6 +111,15 @@ class uobject
 
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
+
+	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+	method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
+
+	val d_interuobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+	method get_d_interuobjcoll_callees_hashtbl = d_interuobjcoll_callees_hashtbl;
+
+	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
+	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
 
 
 	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
@@ -277,11 +276,25 @@ class uobject
 		(** end testing ***)
 
 
-		(**TBD: generate hashtbls ***)
 		(* generate publicmethods hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_publicmethods_hashtbl x y;
 		) json_node_uberspark_uobj_var.f_publicmethods;
+
+		(* generate intrauobjcoll-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_intrauobjcoll_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_intrauobjcoll_callees;
+
+		(* generate interuobjcoll-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_interuobjcoll_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_interuobjcoll_callees;
+
+		(* generate legacy-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_legacy_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_legacy_callees;
 
 
 		let dummy=0 in begin
@@ -304,11 +317,6 @@ class uobject
 					(List.length json_node_uberspark_uobj_var.f_publicmethods); 
 			end;
 
-		(* parse uobj-intrauobjcoll-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_intrauobjcoll_callees mf_json d_intrauobjcoll_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "list of uobj-intrauobjcoll-callees follows:";
@@ -318,21 +326,11 @@ class uobject
 				) self#get_d_intrauobjcoll_callees_hashtbl;
 			end;
 
-		(* parse uobj-interuobjcoll-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_interuobjcoll_callees mf_json d_interuobjcoll_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
 			end;
 
-		(* parse uobj-legacy-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_legacy_callees mf_json d_legacy_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total legacy callees=%u" (Hashtbl.length self#get_d_legacy_callees_hashtbl);
