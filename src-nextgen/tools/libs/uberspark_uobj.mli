@@ -71,10 +71,6 @@ type slt_info_t =
 
     
     
-    val d_sources_c_file_list : string list ref
-    val d_sources_casm_file_list : string list ref
-    val d_sources_h_file_list : string list ref
-    val d_sources_asm_file_list : string list ref
 
     val d_target_def : Defs.Basedefs.target_def_t
 
@@ -129,10 +125,6 @@ type slt_info_t =
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
 
-    method get_d_sources_c_file_list : string list
-    method get_d_sources_casm_file_list : string list
-    method get_d_sources_h_file_list : string list
-    method get_d_sources_asm_file_list : string list
     
  
     method set_d_size : int -> unit
