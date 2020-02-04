@@ -1,6 +1,6 @@
 type publicmethod_info_t =
 {
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 }
 
@@ -54,8 +54,7 @@ type slt_info_t =
 
 
     val d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
-  	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref 
+      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
 
 
   	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
@@ -111,10 +110,9 @@ type slt_info_t =
 
  
     method get_d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
-  	method get_d_publicmethods_assoc_list :
-      (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list
- 
+      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
+    method get_d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list
+
   	method get_d_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_default_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  

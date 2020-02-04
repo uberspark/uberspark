@@ -17,7 +17,7 @@ open Str
 
 type publicmethod_info_t =
 {
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 };;
 
@@ -83,21 +83,19 @@ class uobject
 	;
 
 
+	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
 
 (***)
 
-	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
+	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
+		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
+		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
+		f_legacy_callees = []; f_sections = []; 
+		};
 
-
-
-
-	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
-	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
-
-	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref = ref []; 
-	method get_d_publicmethods_assoc_list = !d_publicmethods_assoc_list;
 
 
 	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
@@ -116,13 +114,13 @@ class uobject
 
 
 
-	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
-		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
-		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
-		f_legacy_callees = []; f_sections = []; 
-		};
 (***)
+
+
+	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.f_publicmethods;
+
+	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t)); 
+	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
 
 
 	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
@@ -279,6 +277,13 @@ class uobject
 		(** end testing ***)
 
 
+		(**TBD: generate hashtbls ***)
+		(* generate publicmethods hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_publicmethods_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_publicmethods;
+
+
 		let dummy=0 in begin
 			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobj_var.f_namespace;
 		end;
@@ -293,16 +298,10 @@ class uobject
 			end;
 
 
-		(* parse uobj-publicmethods node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_publicmethods mf_json d_publicmethods_hashtbl) in
-		let rval_assoc = (Uberspark_manifest.Uobj.parse_uobj_publicmethods_into_assoc_list mf_json d_publicmethods_assoc_list) in
-
-		if (rval == false) || (rval_assoc == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total public methods:%u,%u" (Hashtbl.length self#get_d_publicmethods_hashtbl)
-					(List.length self#get_d_publicmethods_assoc_list); 
+					(List.length json_node_uberspark_uobj_var.f_publicmethods); 
 			end;
 
 		(* parse uobj-intrauobjcoll-callees node *)
@@ -612,7 +611,7 @@ class uobject
 		}) ];
 
 		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
 			let section_name = ("uobj_pm_" ^ pm_name) in 
 			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
 				f_name = section_name;	

@@ -124,7 +124,7 @@ let generate_src_binhdr
 let generate_src_publicmethods_info 
     (output_filename : string)
     (namespace : string)
-    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t))
+    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t))
     : unit = 
 
     (* open public methods info source file *)
@@ -152,7 +152,7 @@ let generate_src_publicmethods_info
     (* generate public methods info *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo\") )) usbinformat_uobj_publicmethod_info_t uobj_pminfo [] = {";
 
-        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
+        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n\t{"; 
 
             (* callee name *)
@@ -556,7 +556,7 @@ let generate_linker_script
 (*--------------------------------------------------------------------------*)
 let generate_top_level_include_header 
     (output_filename : string)
-    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) ) 
+    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ) 
     : unit   =
 
     let oc = open_out output_filename in
@@ -570,7 +570,7 @@ let generate_top_level_include_header
         Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 
         (* define externs *)
-        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t) ->  
+        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n"; 
             Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.f_retvaldecl) (pm_info.f_name) (pm_info.f_paramdecl); 
             Printf.fprintf oc "\n"; 

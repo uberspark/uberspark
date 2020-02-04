@@ -696,10 +696,10 @@ let create_uobjs_publicmethods_list_mforder
 				
 				let publicmethods_hashtbl = uobj#get_d_publicmethods_hashtbl in
 
-				List.iter (fun ((pm_name:string), (throw_away:Uberspark_manifest.Uobj.uobj_publicmethods_t))  ->
+				List.iter (fun ((pm_name:string), (throw_away:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t))  ->
 					let assoc_key = uobjinfo_entry.f_uobjinfo.f_uobj_ns in 
 					let assoc_key_pm_name = ((Uberspark_namespace.get_variable_name_prefix_from_ns assoc_key) ^ "__" ^ pm_name) in
-					let pm_info : Uberspark_manifest.Uobj.uobj_publicmethods_t = (Hashtbl.find publicmethods_hashtbl pm_name) in
+					let pm_info : Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t = (Hashtbl.find publicmethods_hashtbl pm_name) in
 					publicmethods_list := !publicmethods_list @ [ (assoc_key_pm_name, { f_uobjpminfo = pm_info;
 						f_uobjinfo = uobjinfo_entry.f_uobjinfo;}) ];
 				) uobj#get_d_publicmethods_assoc_list;
@@ -741,7 +741,7 @@ let create_uobjs_publicmethods_hashtbl
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "adding public method info for uobj '%s', total public methods=%u" 
 					uobjinfo_entry.f_uobjinfo.f_uobj_name (Hashtbl.length uobj#get_d_publicmethods_hashtbl);
 				
-				Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+				Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
 					let htbl_key = uobjinfo_entry.f_uobjinfo.f_uobj_ns in 
 					let htbl_key_pm_name = ((Uberspark_namespace.get_variable_name_prefix_from_ns htbl_key) ^ "__" ^ pm_name) in
 					Hashtbl.add publicmethods_hashtbl htbl_key_pm_name { f_uobjpminfo = pm_info;

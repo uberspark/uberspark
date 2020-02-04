@@ -48,7 +48,7 @@ module Uobj : sig
     (string * Defs.Basedefs.section_info_t) list ->
     unit
 
-  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) -> unit 
+  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) -> unit 
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit
   val generate_src_interuobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit 
   val generate_src_legacy_callees_info : string -> (string, string list) Hashtbl.t -> unit 
@@ -65,7 +65,7 @@ module Uobj : sig
    bool
 
   val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> unit
-  val generate_top_level_include_header : string -> ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t) ->  unit
+  val generate_top_level_include_header : string -> ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ->  unit
   
 
 end
