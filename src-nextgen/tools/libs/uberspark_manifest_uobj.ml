@@ -237,6 +237,51 @@ let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "interuobjcoll-callees" into var *)
+(* return: *)
+(* on success: true; var is modified with interuobjcoll-callees declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_interuobjcoll_callees_to_var
+	(json_node_uberspark_uobj : Yojson.Basic.t)
+	: bool *  ((string * string list) list) =
+	
+	let retval = ref true in
+	let interuobjcoll_callees_assoc_list : (string * string list) list ref = ref [] in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_callees_json = json_node_uberspark_uobj |> member "uobj-interuobjcoll-callees" in
+				if uobj_callees_json != `Null then
+					begin
+
+						let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
+							retval := true;
+							List.iter (fun (x,y) ->
+									let uobj_callees_attribute_list = ref [] in
+										List.iter (fun z ->
+											uobj_callees_attribute_list := !uobj_callees_attribute_list @
+																	[ (z |> to_string) ];
+											()
+										)(Yojson.Basic.Util.to_list y);
+
+										interuobjcoll_callees_assoc_list := !interuobjcoll_callees_assoc_list @ 
+											[ (x, !uobj_callees_attribute_list)];
+									()
+								) uobj_callees_assoc_list;
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !interuobjcoll_callees_assoc_list)
+;;
+
+
 (* old, soon to be defunct interfaces follow *)
 
 

@@ -232,6 +232,7 @@ module Uobj : sig
   val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
   val json_node_uberspark_uobj_publicmethods_to_var :  Yojson.Basic.t ->  bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
   val json_node_uberspark_uobj_intrauobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
+  val json_node_uberspark_uobj_interuobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
 
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   (*val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool*)
