@@ -85,14 +85,12 @@ class uobject
 
 
 
+(***)
+
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
 	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
 	method get_d_hdr = d_hdr;
-
-	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
-		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
 
 
 	val d_sources_h_file_list: string list ref = ref [];
@@ -106,6 +104,9 @@ class uobject
 
 	val d_sources_asm_file_list: string list ref = ref [];
 	method get_d_sources_asm_file_list = !d_sources_asm_file_list;
+
+	val json_node_uberspark_uobj_sources_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_t = 
+		{ f_h_files = []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
 
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
@@ -127,6 +128,17 @@ class uobject
 	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
 	method get_d_sections_list_ref = d_sections_list;
 	method get_d_sections_list_val = !d_sections_list;
+
+
+(***)
+
+
+	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
+		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
+
+
+
 
 	(* association list of default uobj binary image sections; indexed by section name *)		
 	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -263,8 +275,12 @@ class uobject
 		end;
 
 		(* parse uobj-sources node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
-				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
+(*		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
+				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in*)
+
+		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_to_var mf_json
+				json_node_uberspark_uobj_sources_var) in
+
 
 		if (rval == false) then (false)
 		else

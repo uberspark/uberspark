@@ -212,10 +212,19 @@ module Uobj : sig
     mutable f_addr : int;
   }
 
+  type json_node_uberspark_uobj_sources_t = 
+  {
+    mutable f_h_files: string list;
+    mutable f_c_files: string list;
+    mutable f_casm_files: string list;
+    mutable f_asm_files : string list;
+  }
+
 
   
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
-  val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
+  (*val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool*)
+  val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
   val parse_uobj_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobj_publicmethods_t) list ref -> bool
   val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
