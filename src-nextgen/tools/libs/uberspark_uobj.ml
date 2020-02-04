@@ -95,7 +95,13 @@ class uobject
 		};
 
 
+	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
+		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
+
 	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.f_publicmethods;
+
+
 
 	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
@@ -108,14 +114,6 @@ class uobject
 
 	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
-
-
-	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
-		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
-
-
-
 
 	(* association list of default uobj binary image sections; indexed by section name *)		
 	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -221,49 +219,27 @@ class uobject
 		()
 		: bool =
 
-		(*(* read manifest JSON *)
-		let (rval, mf_json) = Uberspark_manifest.get_manifest_json 
-			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
-		
-		if (rval == false) then (false)
-		else*)
-
-		let (rval, _, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type 
-			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) 
-			Uberspark_namespace.namespace_uobj_mf_node_type_tag) in
-		
-		if (rval == false) then (false)
-		else
-
-
-		(* store manifest JSON *)
-		let dummy = 0 in begin
-		d_mf_json := mf_json;
-		end;
-
-
-		(** testing ***)
-
-
-		let (rval, newmf_json) = (Uberspark_manifest.get_json_for_manifest 
+		(* read manifest JSON *)
+		let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest 
 			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) 
 			) in
 		
 		if (rval == false) then (false)
 		else
 
+		(* store manifest JSON *)
+		let dummy = 0 in begin
+		d_mf_json := mf_json;
+		end;
+
 		(* parse uberspark-uobj node *)
-		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var newmf_json
+		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
 				json_node_uberspark_uobj_var) in
 
-		(*if (rval == false || rval == true) then (false)
-		else*)
+		if (rval == false) then (false)
+		else
 
-
-
-		(** end testing ***)
-
-
+		let dummy = 0 in begin
 		(* generate publicmethods hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_publicmethods_hashtbl x y;
@@ -283,6 +259,7 @@ class uobject
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_legacy_callees_hashtbl x y;
 		) json_node_uberspark_uobj_var.f_legacy_callees;
+		end;
 
 
 		let dummy=0 in begin
