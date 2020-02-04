@@ -271,12 +271,27 @@ class uobject
 		d_mf_json := mf_json;
 		end;
 
+
+		(** testing ***)
+
+
+		let (rval, newmf_json) = (Uberspark_manifest.get_json_for_manifest 
+			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) 
+			) in
+		
+		if (rval == false) then (false)
+		else
+
 		(* parse uberspark-uobj node *)
-		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
+		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var newmf_json
 				json_node_uberspark_uobj_var) in
 
-		if (rval == false || rval == true) then (false)
-		else
+		(*if (rval == false || rval == true) then (false)
+		else*)
+
+
+
+		(** end testing ***)
 
 
 		(* parse uobj-hdr node *)
