@@ -275,6 +275,9 @@ class uobject
 		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
 				json_node_uberspark_uobj_var) in
 
+		if (rval == false || rval == true) then (false)
+		else
+
 
 		(* parse uobj-hdr node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
@@ -288,6 +291,7 @@ class uobject
 		(* parse uobj-sources node *)
 		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
 				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
+
 
 (*		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_sources_to_var mf_json
 				json_node_uberspark_uobj_sources_var) in

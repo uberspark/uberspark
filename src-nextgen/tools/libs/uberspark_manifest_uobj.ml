@@ -418,7 +418,7 @@ let json_node_uberspark_uobj_to_var
 	(json_node_uberspark_uobj_var : json_node_uberspark_uobj_t)
 	: bool =
 
-	let retval = ref true in
+	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
@@ -453,7 +453,8 @@ let json_node_uberspark_uobj_to_var
 			retval := false;
 	;
 
-							
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "json_node_uberspark_uobj_to_var: retval=%b" !retval;		
 	(!retval)
 ;;
 
@@ -507,6 +508,82 @@ let parse_uobj_hdr
 	(!retval)
 ;;
 
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-sources" *)
+(* return: *)
+(* on success: true; h,c,casm,asm file lists are modified with parsed values *)
+(* on failure: false; h,c,casm,asm file lists are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_sources 
+	(mf_json : Yojson.Basic.t)
+	(h_file_list : string list ref)
+	(c_file_list : string list ref)
+	(casm_file_list : string list ref)
+	(asm_file_list : string list ref)
+	: bool =
+
+	let retval = ref true in
+
+	try
+		let open Yojson.Basic.Util in
+			let mf_uobj_sources_json = mf_json |> member "uobj-sources" in
+			if mf_uobj_sources_json != `Null then
+					begin
+
+						let mf_hfiles_json = mf_uobj_sources_json |> member "h-files" in
+							if mf_hfiles_json != `Null then
+								begin
+									let hfiles_json_list = mf_hfiles_json |> 
+											to_list in 
+										List.iter (fun x -> h_file_list := 
+												!h_file_list @ [(x |> to_string)]
+											) hfiles_json_list;
+								end
+							;
+
+						let mf_cfiles_json = mf_uobj_sources_json |> member "c-files" in
+							if mf_cfiles_json != `Null then
+								begin
+									let cfiles_json_list = mf_cfiles_json |> 
+											to_list in 
+										List.iter (fun x -> c_file_list := 
+												!c_file_list @ [(x |> to_string)]
+											) cfiles_json_list;
+								end
+							;
+
+						let mf_casmfiles_json = mf_uobj_sources_json |> member "casm-files" in
+							if mf_casmfiles_json != `Null then
+								begin
+									let casmfiles_json_list = mf_casmfiles_json |> 
+											to_list in 
+										List.iter (fun x -> casm_file_list := 
+												!casm_file_list @ [(x |> to_string)]
+											) casmfiles_json_list;
+								end
+							;
+
+						let mf_asmfiles_json = mf_uobj_sources_json |> member "asm-files" in
+							if mf_asmfiles_json != `Null then
+								begin
+									let asmfiles_json_list = mf_asmfiles_json |> 
+											to_list in 
+										List.iter (fun x -> asm_file_list := 
+												!asm_file_list @ [(x |> to_string)]
+											) asmfiles_json_list;
+								end
+							;
+							
+					end
+				;
+				
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
 
 
 
