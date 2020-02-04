@@ -83,28 +83,16 @@ class uobject
 	;
 
 
+	(* uobj manifest file top-level json *)
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
-
-(***)
-
-
+	(* uobj manifest uberspark-uobj json node var *)
 	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
 		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
 		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
 		f_legacy_callees = []; f_sections = []; 
 		};
-
-
-	(* association list of uobj binary image sections as parsed from uobj manifest; indexed by section name *)		
-	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
-	method get_d_sections_list_ref = d_sections_list;
-	method get_d_sections_list_val = !d_sections_list;
-
-
-
-(***)
 
 
 	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.f_publicmethods;
@@ -337,15 +325,10 @@ class uobject
 			end;
 
 
-		(* parse uobj-binary/uobj-sections node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json self#get_d_sections_list_ref) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 		if (rval == true) then
 			begin
-				Uberspark_logger.log "binary sections override:%u" (List.length self#get_d_sections_list_val);								
+				Uberspark_logger.log "binary sections override:%u" (List.length json_node_uberspark_uobj_var.f_sections);								
 			end;
 
 		(true)
@@ -518,7 +501,7 @@ class uobject
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
 
-		)self#get_d_sections_list_val;
+		)json_node_uberspark_uobj_var.f_sections;
 
 		
 		if (self#get_d_uniform_size) then begin
