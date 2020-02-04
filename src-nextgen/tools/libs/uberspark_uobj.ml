@@ -89,10 +89,6 @@ class uobject
 
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
-	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
-	method get_d_hdr = d_hdr;
-
-
 	val d_sources_h_file_list: string list ref = ref [];
 	method get_d_sources_h_file_list = !d_sources_h_file_list;
 
@@ -291,13 +287,8 @@ class uobject
 		(** end testing ***)
 
 
-		(* parse uobj-hdr node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
-		if (rval == false) then (false)
-		else
-
 		let dummy=0 in begin
-			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ d_hdr.f_namespace;
+			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobj_var.f_namespace;
 		end;
 
 		(* parse uobj-sources node *)
@@ -1053,7 +1044,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
-			(self#get_d_hdr).f_namespace d_publicmethods_hashtbl;
+			(json_node_uberspark_uobj_var).f_namespace d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
@@ -1085,7 +1076,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 		Uberspark_codegen.Uobj.generate_src_binhdr 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
-			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
+			(json_node_uberspark_uobj_var).f_namespace self#get_d_load_addr self#get_d_size 
 			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -1154,7 +1145,7 @@ class uobject
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
-				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
+				(json_node_uberspark_uobj_var).f_platform (json_node_uberspark_uobj_var).f_arch (json_node_uberspark_uobj_var).f_cpu;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
 				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 		end;

@@ -31,7 +31,7 @@ type slt_info_t =
   class uobject :
   object
     val d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
-    val d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
+
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
     val d_legacy_callees_hashtbl :
@@ -94,7 +94,6 @@ type slt_info_t =
     
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
-    method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
 
   
     method get_d_interuobjcoll_callees_hashtbl :
