@@ -318,6 +318,78 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 	(!retval, !legacy_callees_assoc_list)
 ;;
 
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "sections" into var *)
+(* return: *)
+(* on success: true; var is modified with sections declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_sections_to_var
+	(json_node_uberspark_uobj : Yojson.Basic.t)
+	: bool *  ((string * Defs.Basedefs.section_info_t) list) =
+
+	let retval = ref true in
+	let sections_assoc_list : (string * Defs.Basedefs.section_info_t) list ref = ref [] in
+
+	try
+	let open Yojson.Basic.Util in
+
+		let uobj_sections_json = json_node_uberspark_uobj |> member "uobj-sections" in
+			if uobj_sections_json != `Null then
+				begin
+					
+					let uobj_sections_assoc_list = Yojson.Basic.Util.to_assoc uobj_sections_json in
+						retval := true;
+						List.iter (fun (x,y) ->
+								(* x = section name, y = list of section attributes *)
+								let uobj_sections_attribute_list = (Yojson.Basic.Util.to_list y) in
+									if (List.length uobj_sections_attribute_list  < 6 ) then
+										begin
+											Uberspark_logger.log ~lvl:Uberspark_logger.Error "insufficient entries within section attribute list for section: %s" x;															retval := false;
+										end
+									else
+										begin
+											let subsection_list = ref [] in 
+											for index = 5 to ((List.length uobj_sections_attribute_list)-1) do 
+												subsection_list := !subsection_list @	[ ((List.nth uobj_sections_attribute_list index) |> to_string) ]
+											done;
+
+											let section_entry : Defs.Basedefs.section_info_t = 
+											{ 
+												f_name = (x);	
+												f_subsection_list = !subsection_list;	
+												usbinformat = { f_type = int_of_string ((List.nth uobj_sections_attribute_list 0) |> to_string); 
+																				f_prot = int_of_string ((List.nth uobj_sections_attribute_list 1) |> to_string); 
+																				f_size = int_of_string ((List.nth uobj_sections_attribute_list 2) |> to_string);
+																				f_aligned_at = int_of_string ((List.nth uobj_sections_attribute_list 3) |> to_string); 
+																				f_pad_to = int_of_string ((List.nth uobj_sections_attribute_list 4) |> to_string); 
+																				f_addr_start=0; 
+																				f_addr_file = 0;
+																				f_reserved = 0;
+																			};
+											} in
+				
+											sections_assoc_list := !sections_assoc_list @ [ (x, section_entry) ]; 
+											
+											retval := true;
+										end
+									;
+								()
+							) uobj_sections_assoc_list;
+				end
+			;		
+			
+													
+	with Yojson.Basic.Util.Type_error _ -> 
+		retval := false;
+	;
+
+						
+	(!retval, !sections_assoc_list)
+;;
+
 (* old, soon to be defunct interfaces follow *)
 
 
