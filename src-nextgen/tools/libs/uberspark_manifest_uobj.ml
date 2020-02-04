@@ -71,7 +71,7 @@ let json_node_uberspark_uobj_sources_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobj_sources = json_node_uberspark_uobj |> member "uobj-sources" in
+			let json_node_uberspark_uobj_sources = json_node_uberspark_uobj |> member "sources" in
 			if json_node_uberspark_uobj_sources != `Null then
 					begin
 
@@ -146,7 +146,7 @@ let json_node_uberspark_uobj_publicmethods_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_publicmethods_json = json_node_uberspark_uobj |> member "uobj-publicmethods" in
+			let uobj_publicmethods_json = json_node_uberspark_uobj |> member "publicmethods" in
 				if uobj_publicmethods_json != `Null then
 					begin
 
@@ -207,7 +207,7 @@ let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
 	let intrauobjcoll_callees_assoc_list : (string * string list) list ref = ref [] in
 	try
 		let open Yojson.Basic.Util in
-			let uobj_callees_json =  json_node_uberspark_uobj |> member "uobj-intrauobjcoll-callees" in
+			let uobj_callees_json =  json_node_uberspark_uobj |> member "intrauobjcoll-callees" in
 				if uobj_callees_json != `Null then
 					begin
 
@@ -252,7 +252,7 @@ let json_node_uberspark_uobj_interuobjcoll_callees_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_callees_json = json_node_uberspark_uobj |> member "uobj-interuobjcoll-callees" in
+			let uobj_callees_json = json_node_uberspark_uobj |> member "interuobjcoll-callees" in
 				if uobj_callees_json != `Null then
 					begin
 
@@ -297,7 +297,7 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_legacy_callees_json = json_node_uberspark_uobj |> member "uobj-legacy-callees" in
+			let uobj_legacy_callees_json = json_node_uberspark_uobj |> member "legacy-callees" in
 				if uobj_legacy_callees_json != `Null then
 					begin
 
@@ -336,7 +336,7 @@ let json_node_uberspark_uobj_sections_to_var
 	try
 	let open Yojson.Basic.Util in
 
-		let uobj_sections_json = json_node_uberspark_uobj |> member "uobj-sections" in
+		let uobj_sections_json = json_node_uberspark_uobj |> member "sections" in
 			if uobj_sections_json != `Null then
 				begin
 					
