@@ -1,8 +1,16 @@
-(*----------------------------------------------------------------------------*)
-(* uberSpark manifest interface for uobj*)
+(*===========================================================================*)
+(*===========================================================================*)
+(* uberSpark uobj manifest interface implementation *)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(*----------------------------------------------------------------------------*)
+(*===========================================================================*)
+(*===========================================================================*)
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 type uobj_hdr_t =
 {
@@ -30,41 +38,22 @@ type json_node_uberspark_uobj_sources_t =
 	mutable f_asm_files : string list;
 };;
 
+type json_node_uberspark_uobj_publicmethods_t = 
+{
+	mutable f_name: string;
+	mutable f_retvaldecl : string;
+	mutable f_paramdecl: string;
+	mutable f_paramdwords : int;
+	mutable f_addr : int;
+};;
 
 
 
-
-(*--------------------------------------------------------------------------*)
-(* parse manifest json node "uobj-hdr" *)
-(* return: *)
-(* on success: true; uobj_hdr fields are modified with parsed values *)
-(* on failure: false; uobj_hdr fields are untouched *)
-(*--------------------------------------------------------------------------*)
-let parse_uobj_hdr 
-	(mf_json : Yojson.Basic.t)
-	(uobj_hdr : uobj_hdr_t) 
-	: bool =
-	let retval = ref false in
-
-	try
-		let open Yojson.Basic.Util in
-			let json_uobj_hdr = mf_json |> member "uobj-hdr" in
-			if(json_uobj_hdr <> `Null) then
-				begin
-					uobj_hdr.f_namespace <- json_uobj_hdr |> member "namespace" |> to_string;
-					uobj_hdr.f_platform <- json_uobj_hdr |> member "platform" |> to_string;
-					uobj_hdr.f_arch <- json_uobj_hdr |> member "arch" |> to_string;
-					uobj_hdr.f_cpu <- json_uobj_hdr |> member "cpu" |> to_string;
-					retval := true;
-				end
-			;
-
-	with Yojson.Basic.Util.Type_error _ -> 
-			retval := false;
-	;
-
-	(!retval)
-;;
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 (*--------------------------------------------------------------------------*)
@@ -139,6 +128,111 @@ let json_node_uberspark_uobj_sources_to_var
 
 	(!retval)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "publicmethods" into var *)
+(* return: *)
+(* on success: true; var is modified with publicmethod declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_publicmethods_to_var
+	(json_node_uberspark_uobj_publicmethods : Yojson.Basic.t)
+	: bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
+=
+		
+	let retval = ref false in
+	let publicmethods_assoc_list : (string * json_node_uberspark_uobj_publicmethods_t) list ref = ref [] in 
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_publicmethods_json = json_node_uberspark_uobj_publicmethods |> member "uobj-publicmethods" in
+				if uobj_publicmethods_json != `Null then
+					begin
+
+						let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
+							retval := true;
+							
+							List.iter (fun (x,y) ->
+								let uobj_publicmethods_inner_list = (Yojson.Basic.Util.to_list y) in 
+								if (List.length uobj_publicmethods_inner_list) <> 3 then
+									begin
+										retval := false;
+									end
+								else
+									begin
+										let tbl_entry : json_node_uberspark_uobj_publicmethods_t = 
+											{
+												f_name = x;
+												f_retvaldecl = (List.nth uobj_publicmethods_inner_list 0) |> to_string;
+												f_paramdecl = (List.nth uobj_publicmethods_inner_list 1) |> to_string;
+												f_paramdwords = int_of_string ((List.nth uobj_publicmethods_inner_list 2) |> to_string );
+												f_addr = 0; 
+											} in
+
+
+										publicmethods_assoc_list := !publicmethods_assoc_list @ [ (x, tbl_entry)];
+		
+										retval := true; 
+									end
+								;
+					
+								()
+							) uobj_publicmethods_assoc_list;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !publicmethods_assoc_list)
+;;
+
+
+
+
+(* old, soon to be defunct interfaces follow *)
+
+
+
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uobj-hdr" *)
+(* return: *)
+(* on success: true; uobj_hdr fields are modified with parsed values *)
+(* on failure: false; uobj_hdr fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let parse_uobj_hdr 
+	(mf_json : Yojson.Basic.t)
+	(uobj_hdr : uobj_hdr_t) 
+	: bool =
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			let json_uobj_hdr = mf_json |> member "uobj-hdr" in
+			if(json_uobj_hdr <> `Null) then
+				begin
+					uobj_hdr.f_namespace <- json_uobj_hdr |> member "namespace" |> to_string;
+					uobj_hdr.f_platform <- json_uobj_hdr |> member "platform" |> to_string;
+					uobj_hdr.f_arch <- json_uobj_hdr |> member "arch" |> to_string;
+					uobj_hdr.f_cpu <- json_uobj_hdr |> member "cpu" |> to_string;
+					retval := true;
+				end
+			;
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
 
 
 

@@ -220,11 +220,20 @@ module Uobj : sig
     mutable f_asm_files : string list;
   }
 
+  type json_node_uberspark_uobj_publicmethods_t = 
+  {
+    mutable f_name: string;
+    mutable f_retvaldecl : string;
+    mutable f_paramdecl: string;
+    mutable f_paramdwords : int;
+    mutable f_addr : int;
+  }
 
-  
+  val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
+  val json_node_uberspark_uobj_publicmethods_to_var :  Yojson.Basic.t ->  bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
+
   val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
   (*val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool*)
-  val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
   val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
   val parse_uobj_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobj_publicmethods_t) list ref -> bool
   val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
