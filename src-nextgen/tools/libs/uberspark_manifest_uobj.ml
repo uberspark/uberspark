@@ -282,6 +282,42 @@ let json_node_uberspark_uobj_interuobjcoll_callees_to_var
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "legacy-callees" into var *)
+(* return: *)
+(* on success: true; var is modified with legacyl-callees declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_legacy_callees_to_var
+	(json_node_uberspark_uobj : Yojson.Basic.t)
+	: bool *  ((string * string list) list) =
+
+	let retval = ref true in
+	let legacy_callees_assoc_list : (string * string list) list ref = ref [] in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_legacy_callees_json = json_node_uberspark_uobj |> member "uobj-legacy-callees" in
+				if uobj_legacy_callees_json != `Null then
+					begin
+
+						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
+							legacy_callees_assoc_list := !legacy_callees_assoc_list @ 
+								[ ("uberspark_legacy", (json_list_to_string_list uobj_legacy_callees_list))];
+
+							retval := true;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !legacy_callees_assoc_list)
+;;
+
 (* old, soon to be defunct interfaces follow *)
 
 
