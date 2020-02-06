@@ -44,6 +44,16 @@ let d_mf_filename = ref "";;
 (* uobjcoll manifest filename path *)
 let d_path_to_mf_filename = ref "";;
 
+
+(* manifest json node uberspark-uobjcoll var *)
+let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_t = 
+	{
+		f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";
+		f_sentinels_intrauobjcoll = [];
+		f_uobjs = { f_master = ""; f_templars = [];};
+		f_publicmethods = [];
+	};;
+
 (* uobjcoll-hdr node contents as specified in the manifest *)
 let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; };;
 
