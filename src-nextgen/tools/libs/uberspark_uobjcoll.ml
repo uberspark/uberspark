@@ -54,8 +54,6 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		f_publicmethods = [];
 	};;
 
-(* uobjcoll-hdr node contents as specified in the manifest *)
-let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; };;
 
 (* uobjcoll-uobjs node contents as specified in the manifest *)
 let d_uobjcoll_uobjs_mf : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
@@ -152,18 +150,22 @@ let parse_manifest
 	d_path_to_mf_filename := Filename.dirname uobjcoll_mf_filename;
 	
 	(* read manifest JSON *)
-	let (rval, mf_json) = Uberspark_manifest.get_manifest_json uobjcoll_mf_filename in
+	let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest uobjcoll_mf_filename) in
 	
 	if (rval == false) then (false)
 	else
 
-	(* parse uobjcoll-hdr node *)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_hdr mf_json d_hdr_mf ) in
+	(* parse uberspark-uobjcoll node *)
+	let rval = (Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_to_var mf_json
+			json_node_uberspark_uobjcoll_var) in
+
 	if (rval == false) then (false)
 	else
 
+
+
 	let dummy=0 in begin
-		d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ d_hdr_mf.f_namespace;
+		d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobjcoll_var.f_namespace;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
@@ -227,7 +229,7 @@ let get_sentinel_info_for_sentinel_facet_and_type
 
 	let sentinel_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-		d_hdr_mf.f_arch ^ "/" ^ d_hdr_mf.f_cpu ^ "/" ^ d_hdr_mf.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
+		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ json_node_uberspark_uobjcoll_var.f_cpu ^ "/" ^ json_node_uberspark_uobjcoll_var.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
@@ -387,7 +389,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf.f_prime_uobj_ns
-					d_hdr_mf.f_namespace) then begin
+					json_node_uberspark_uobjcoll_var.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -440,7 +442,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
 				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ templar_uobj_ns);
 
-				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns d_hdr_mf.f_namespace) then begin
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns json_node_uberspark_uobjcoll_var.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -961,7 +963,7 @@ let prepare_namespace_for_build
 	(* local variables *)
 	let retval = ref false in
 	let in_namespace_build = ref false in
-	let uobjcoll_canonical_namespace = d_hdr_mf.f_namespace in
+	let uobjcoll_canonical_namespace = json_node_uberspark_uobjcoll_var.f_namespace in
 	let uobjcoll_canonical_namespace_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjcoll_canonical_namespace) in
 
 	(* determine if we are doing an in-namespace build or an out-of-namespace build *)
@@ -1104,9 +1106,9 @@ let build
 	(* sanity check platform, cpu, arch override *)
 	(* TBD: if manifest says generic, we need a command line override *)
 	let dummy = 0 in begin
-	d_hdr_mf.f_arch <- d_target_def.f_arch;
-	d_hdr_mf.f_cpu <- d_target_def.f_cpu;
-	d_hdr_mf.f_platform <- d_target_def.f_platform;
+	json_node_uberspark_uobjcoll_var.f_arch <- d_target_def.f_arch;
+	json_node_uberspark_uobjcoll_var.f_cpu <- d_target_def.f_cpu;
+	json_node_uberspark_uobjcoll_var.f_platform <- d_target_def.f_platform;
 	end;
 
 	(*create uobjcoll_publicmethods and intrauobjcoll sentinels hashtbl *)
