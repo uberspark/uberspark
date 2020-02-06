@@ -5,35 +5,35 @@
 */
 
 {
-	/* header */
-	"uberspark-hdr":{
-		"coss_version" : "1.0",
-		"mftype" : "uobjcoll",
+
+  	/* manifest header */
+	  "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobjcoll" ],
 		"uberspark_min_version" : "5.1",
 		"uberspark_max_version" : "any"
 	},
 
-	/* uobjcoll header */
-	"uobjcoll-hdr":{
+
+	"uberspark-uobjcoll":{
 		"namespace" : "uberspark/uobjcoll/generic/test",
 		"platform" : "generic",
 		"arch" : "generic",
 		"cpu" : "generic",
-		"hpl" : "any"
-	},
+		"hpl" : "any",
+		"sentinels-intrauobjcoll" : [ "call" ],
 
 	/* config settings */	
-	"config-settings":{
+	/*"config-settings":{
 		"binary_uobj_default_size" : "0x1000000",
 		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
 		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
 		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
-	},
+	},*/
 
 
 	/* uobjs */
-	"uobjcoll-uobjs" : {
-		"prime" : "",
+	"uobjs" : {
+		"master" : "",
 		"templars" : [
 			"uberspark/uobjcoll/generic/test/main",
 			"uberspark/uobjs/generic/test/add"
@@ -53,11 +53,8 @@
 	},
 */
 
-	/* uobj collection sentinel definitions  */
-	"uobjcoll-sentinels" : {
-		"intrauobjcoll" : [ "call" ],
 
-		"uobjcoll-publicmethods" : {
+		"publicmethods" : {
 			"uberspark/uobjcoll/generic/test/main" : {
 				"main" : [ "call" ]
 			},
@@ -66,9 +63,8 @@
 				"add" : [ "call" ]
 			}
 		}	
+
 	}
-
-
 
 }
 
