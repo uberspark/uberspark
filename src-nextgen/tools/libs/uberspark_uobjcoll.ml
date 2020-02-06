@@ -44,6 +44,23 @@ let d_mf_filename = ref "";;
 (* uobjcoll manifest filename path *)
 let d_path_to_mf_filename = ref "";;
 
+(* uobjcoll-hdr node contents as specified in the manifest *)
+let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; };;
+
+(* uobjcoll-uobjs node contents as specified in the manifest *)
+let d_uobjcoll_uobjs_mf : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
+
+(* list of intrauobjcoll sentinel types as specified in the manifest *)
+let d_uobjcoll_intrauobjcoll_sentinels_list_mf : string list ref = ref [];;
+
+(* assoc list of uobjcoll publicmethods indexed by canonical publicmethod name *)
+let d_uobjcoll_publicmethods_assoc_list_mf : (string * Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref = ref [];;
+
+
+
+
+
+
 (* uobjcoll namespace filesystem path *)
 let d_path_ns = ref "";;
 
@@ -60,24 +77,15 @@ let d_target_def: Defs.Basedefs.target_def_t = {
 	f_cpu = "";
 };;
 
-(* uobjcoll asm file sources list *)
-let d_sources_asm_file_list: string list ref = ref [];;
-
-(* uobjcoll-hdr node contents as specified in the manifest *)
-let d_hdr_mf: Uberspark_manifest.Uobjcoll.uobjcoll_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = ""; };;
-
-(* uobjcoll-uobjs node contents as specified in the manifest *)
-let d_uobjcoll_uobjs_mf : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
-
-(* list of intrauobjcoll sentinel types as specified in the manifest *)
-let d_uobjcoll_intrauobjcoll_sentinels_list_mf : string list ref = ref [];;
-
-(* assoc list of uobjcoll publicmethods indexed by canonical publicmethod name *)
-let d_uobjcoll_publicmethods_assoc_list_mf : (string * Uberspark_manifest.Uobjcoll.uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref = ref [];;
 
 (* assoc list of intrauobjcoll publicmethods mapping canonical publicmethod names to Uberspark_uobj.publicmethod_info_t 
 as it appears in manifest order*)
 let d_uobjs_publicmethods_assoc_list_mf : (string * Uberspark_uobj.publicmethod_info_t) list ref = ref [];; 
+
+
+(* uobjcoll asm file sources list *)
+let d_sources_asm_file_list: string list ref = ref [];;
+
 
 (* list and hashtbl of uobjs info within uobjcoll *)
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
