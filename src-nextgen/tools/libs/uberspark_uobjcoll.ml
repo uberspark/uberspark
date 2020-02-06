@@ -55,9 +55,6 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 	};;
 
 
-(* uobjcoll-uobjs node contents as specified in the manifest *)
-let d_uobjcoll_uobjs_mf : Uberspark_manifest.Uobjcoll.uobjcoll_uobjs_t = {f_prime_uobj_ns = ""; f_templar_uobjs = []};;
-
 (* list of intrauobjcoll sentinel types as specified in the manifest *)
 let d_uobjcoll_intrauobjcoll_sentinels_list_mf : string list ref = ref [];;
 
@@ -177,13 +174,9 @@ let parse_manifest
 		Uberspark_logger.log "using default config for uobjcoll build";
     end;*)
 
-	(* parse uobjcoll-uobjs node *)
-	let rval = (Uberspark_manifest.Uobjcoll.parse_uobjcoll_uobjs mf_json d_uobjcoll_uobjs_mf ) in
-	if (rval == false) then (false)
-	else
 
 	let dummy=0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length d_uobjcoll_uobjs_mf.f_templar_uobjs);
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection uobjs=%u" (List.length json_node_uberspark_uobjcoll_var.f_uobjs.f_templars);
 	end;
 
 	(* parse uobjcoll-sentinels/intrauobjcoll node *)
@@ -372,9 +365,9 @@ let initialize_uobjs_baseinfo
 	let retval = ref false in
 
 	(* if the uobjcoll has a prime uobj, add it to uobjcoll_uobjinfo first *)
-	if not (d_uobjcoll_uobjs_mf.f_prime_uobj_ns = "") then begin
+	if not (json_node_uberspark_uobjcoll_var.f_uobjs.f_master = "") then begin
 		
-			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns d_uobjcoll_uobjs_mf.f_prime_uobj_ns) in
+			let (rval, uobj_name, uobjcoll_name) = (Uberspark_namespace.get_uobj_uobjcoll_name_from_uobj_ns json_node_uberspark_uobjcoll_var.f_uobjs.f_master) in
 			if (rval) then begin
 				let uobjinfo_entry : uobjcoll_uobjinfo_t = { f_uobj = None; 
 					f_uobjinfo = { f_uobj_name = ""; f_uobj_ns = "";  
@@ -383,12 +376,12 @@ let initialize_uobjs_baseinfo
 
 				uobjinfo_entry.f_uobj <- Some new Uberspark_uobj.uobject;
 				uobjinfo_entry.f_uobjinfo.f_uobj_name <- uobj_name;
-				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- d_uobjcoll_uobjs_mf.f_prime_uobj_ns;
+				uobjinfo_entry.f_uobjinfo.f_uobj_ns <- json_node_uberspark_uobjcoll_var.f_uobjs.f_master;
 				uobjinfo_entry.f_uobjinfo.f_uobj_is_prime <- true;
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
-				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
+				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ json_node_uberspark_uobjcoll_var.f_uobjs.f_master);
 
-				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns d_uobjcoll_uobjs_mf.f_prime_uobj_ns
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns json_node_uberspark_uobjcoll_var.f_uobjs.f_master
 					json_node_uberspark_uobjcoll_var.f_namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
@@ -398,17 +391,17 @@ let initialize_uobjs_baseinfo
 				if uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- (uobjcoll_abs_path ^ "/" ^ uobj_name);
 				end else begin
-					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ d_uobjcoll_uobjs_mf.f_prime_uobj_ns);
+					uobjinfo_entry.f_uobjinfo.f_uobj_srcpath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ json_node_uberspark_uobjcoll_var.f_uobjs.f_master);
 				end;
 
 				d_uobjcoll_uobjinfo_list := !d_uobjcoll_uobjinfo_list @ [ uobjinfo_entry ];
 
-			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf.f_prime_uobj_ns) then begin
+			    if (Hashtbl.mem d_uobjcoll_uobjinfo_hashtbl json_node_uberspark_uobjcoll_var.f_uobjs.f_master) then begin
 					(* there is already another uobj with the same ns within the collection, so bail out *)
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "multiple uobjs with same namespace!";
 					retval := false;
 		    	end else begin
-					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl d_uobjcoll_uobjs_mf.f_prime_uobj_ns uobjinfo_entry;
+					Hashtbl.add d_uobjcoll_uobjinfo_hashtbl json_node_uberspark_uobjcoll_var.f_uobjs.f_master uobjinfo_entry;
 					retval := true;
 		    	end;
 
@@ -468,7 +461,7 @@ let initialize_uobjs_baseinfo
 				retval := false;
 			end;
 
-	) d_uobjcoll_uobjs_mf.f_templar_uobjs;
+	) json_node_uberspark_uobjcoll_var.f_uobjs.f_templars;
 	end;
 
 	if (!retval == false) then (false)
