@@ -213,29 +213,6 @@ end
 
 
 module Uobjcoll : sig
-  type uobjcoll_hdr_t =
-    {
-      mutable f_namespace    : string;			
-      mutable f_platform	   : string;
-      mutable f_arch	       : string;
-      mutable f_cpu				   : string;
-      mutable f_hpl          : string;
-    }
-
-  type uobjcoll_uobjs_t =
-  {
-    mutable f_prime_uobj_ns    : string;
-    mutable f_templar_uobjs    : string list;
-  }
-
-
-  type uobjcoll_sentinels_uobjcoll_publicmethods_t =
-  {
-    mutable f_uobj_ns    : string;
-    mutable f_pm_name	 : string;
-    mutable f_sentinel_type_list : string list;
-  }
-
 
   type json_node_uberspark_uobjcoll_uobjs_t =
   {
@@ -267,12 +244,6 @@ module Uobjcoll : sig
   val json_node_uberspark_uobjcoll_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_t -> bool
 
  
-  val parse_uobjcoll_hdr : Yojson.Basic.t -> uobjcoll_hdr_t -> bool
-  val parse_uobjcoll_uobjs : Yojson.Basic.t -> uobjcoll_uobjs_t -> bool
-  val parse_uobjcoll_sentinels_uobjcoll_publicmethods : Yojson.Basic.t -> (string * uobjcoll_sentinels_uobjcoll_publicmethods_t) list ref -> bool
-  val parse_uobjcoll_sentinels_intrauobjcoll : Yojson.Basic.t -> string list ref -> bool
-
-
 end
 
 
