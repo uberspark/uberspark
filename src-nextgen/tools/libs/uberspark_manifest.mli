@@ -96,7 +96,6 @@ module Bridge : sig
 
   end
 
-
   module Ld : sig
     type json_node_uberspark_bridge_ld_t = 
     {
@@ -162,6 +161,26 @@ module Config : sig
 
   val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool
   val json_node_uberspark_config_var_to_jsonstr : json_node_uberspark_config_t -> string
+
+end
+
+
+module Sentinel : sig
+
+
+  type json_node_uberspark_sentinel_t =
+  {
+    mutable f_namespace    : string;			
+    mutable f_platform	   : string;
+    mutable f_arch	       : string;
+    mutable f_cpu		   : string;
+    mutable f_sizeof_code  : int;
+    mutable f_code		   : string;
+    mutable f_libcode	   : string;
+  };;
+
+
+  val json_node_uberspark_sentinel_to_var : Yojson.Basic.t -> json_node_uberspark_sentinel_t -> bool
 
 end
 
@@ -267,21 +286,3 @@ module Uobjslt : sig
 end
 
 
-module Sentinel : sig
-
-
-  type json_node_uberspark_sentinel_t =
-  {
-    mutable f_namespace    : string;			
-    mutable f_platform	   : string;
-    mutable f_arch	       : string;
-    mutable f_cpu		   : string;
-    mutable f_sizeof_code  : int;
-    mutable f_code		   : string;
-    mutable f_libcode	   : string;
-  };;
-
-
-  val json_node_uberspark_sentinel_to_var : Yojson.Basic.t -> json_node_uberspark_sentinel_t -> bool
-
-end
