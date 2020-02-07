@@ -100,7 +100,7 @@ let get_json_for_manifest
 (* on failure: false; json_node_uberspark_manifest_var fields are untouched *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_manifest_to_var 
-	(json_node_uberspark_manifest : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_manifest_var : json_node_uberspark_manifest_t) 
 	: bool =
 
@@ -108,6 +108,8 @@ let json_node_uberspark_manifest_to_var
 
 	try
 		let open Yojson.Basic.Util in
+			let json_node_uberspark_manifest = mf_json |> member Uberspark_namespace.namespace_root_mf_node_type_tag in
+
 			if(json_node_uberspark_manifest <> `Null) then
 				begin
 					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));

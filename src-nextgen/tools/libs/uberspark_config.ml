@@ -152,12 +152,12 @@ let settings_restore
 
 
 let load_from_json 
-	(json_node : Yojson.Basic.json)
+	(mf_json : Yojson.Basic.json)
 	: bool =
 	let retval = ref false in
 
 	let rval_json_node_uberspark_config_var = 
-		Uberspark_manifest.Config.json_node_uberspark_config_to_var json_node json_node_uberspark_config_var in
+		Uberspark_manifest.Config.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
 	if rval_json_node_uberspark_config_var then begin
 		retval := true;
 	end else begin
@@ -179,16 +179,18 @@ let load
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
 	(* grab uberspark-config json node into var *)
-	let (rval, l_json_node_uberspark_manifest, json_node_uberspark_config) = 
+	(*let (rval, l_json_node_uberspark_manifest, json_node_uberspark_config) = 
 		Uberspark_manifest.get_json_for_manifest_node_type config_ns_json_path 
-		Uberspark_namespace.namespace_config_mf_node_type_tag in
+		Uberspark_namespace.namespace_config_mf_node_type_tag in*)
+
+	let (rval, mf_json) = 	Uberspark_manifest.get_json_for_manifest config_ns_json_path in
 
 		if rval then begin
 
-			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var l_json_node_uberspark_manifest json_node_uberspark_manifest_var in
+			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
 
 			if rval then begin
-					retval := load_from_json json_node_uberspark_config; 
+					retval := load_from_json mf_json; 
 			end	else begin
 					retval := false;
 			end;
