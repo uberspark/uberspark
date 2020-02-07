@@ -167,36 +167,6 @@ end
 
 
 module Uobj : sig
- (*type uobj_mf_json_nodes_t =
-  {
-    mutable f_uberspark_hdr					: Yojson.Basic.t;			
-    mutable f_uobj_hdr   					: Yojson.Basic.t;
-    mutable f_uobj_sources       			: Yojson.Basic.t;
-    mutable f_uobj_publicmethods		   	: Yojson.Basic.t;
-    mutable f_uobj_intrauobjcoll_callees    : Yojson.Basic.t;
-    mutable f_uobj_interuobjcoll_callees	: Yojson.Basic.t;
-    mutable f_uobj_legacy_callees		   	: Yojson.Basic.t;
-    mutable f_uobj_binary		   			: Yojson.Basic.t;
-  }
-  *)
-
- 
-  type uobj_hdr_t =
-    {
-      mutable f_namespace    : string;			
-      mutable f_platform	   : string;
-      mutable f_arch	       : string;
-      mutable f_cpu				   : string;
-    }
-
-  type uobj_publicmethods_t = 
-  {
-    mutable f_name: string;
-    mutable f_retvaldecl : string;
-    mutable f_paramdecl: string;
-    mutable f_paramdwords : int;
-    mutable f_addr : int;
-  }
 
   type json_node_uberspark_uobj_sources_t = 
   {
@@ -238,18 +208,6 @@ module Uobj : sig
   val json_node_uberspark_uobj_sections_to_var :  Yojson.Basic.t -> bool *  ((string * Defs.Basedefs.section_info_t) list)
   val json_node_uberspark_uobj_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_t -> bool
 
-
-  val parse_uobj_hdr : Yojson.Basic.t -> uobj_hdr_t -> bool
-  val parse_uobj_sources : Yojson.Basic.t -> string list ref -> string list ref -> string list ref -> string list ref -> bool
-  val parse_uobj_publicmethods : Yojson.Basic.t -> ((string, uobj_publicmethods_t)  Hashtbl.t) ->  bool
-  val parse_uobj_publicmethods_into_assoc_list : Yojson.Basic.t -> (string * uobj_publicmethods_t) list ref -> bool
-  val parse_uobj_intrauobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
-  val parse_uobj_interuobjcoll_callees  : Yojson.Basic.t -> ((string, string list)  Hashtbl.t) ->  bool
-  val parse_uobj_legacy_callees : Yojson.Basic.t -> (string, string list) Hashtbl.t -> bool
-  val parse_uobj_sections: Yojson.Basic.t -> (string * Defs.Basedefs.section_info_t) list ref -> bool
-
-  (*val get_uobj_mf_json_nodes : Yojson.Basic.t -> uobj_mf_json_nodes_t ->  bool*)
-  (*val write_uobj_mf_json_nodes :	?prologue_str : string -> uobj_mf_json_nodes_t -> out_channel -> unit*)
 
 end
 
