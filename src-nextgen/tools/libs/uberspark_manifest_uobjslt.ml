@@ -41,13 +41,15 @@ type json_node_uberspark_uobjslt_t =
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_uobjslt_to_var 
-	(json_node_uberspark_uobjslt : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_uobjslt_var : json_node_uberspark_uobjslt_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
+			let json_node_uberspark_uobjslt = mf_json |> member Uberspark_namespace.namespace_uobjslt_mf_node_type_tag in
+		
 			if(json_node_uberspark_uobjslt <> `Null) then
 				begin
 

@@ -335,7 +335,7 @@ class uobject
 			Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
 
 			(* read manifest JSON *)
-			let (rval, _, mf_json) = (Uberspark_manifest.get_json_for_manifest_node_type abs_uobjslt_filename Uberspark_namespace.namespace_uobjslt_mf_node_type_tag) in
+			let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest abs_uobjslt_filename) in
 			if(rval == true) then
 			begin
 
