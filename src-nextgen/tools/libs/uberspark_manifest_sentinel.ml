@@ -40,13 +40,14 @@ type json_node_uberspark_sentinel_t =
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_sentinel_to_var 
-	(json_node_uberspark_sentinel : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_sentinel_var : json_node_uberspark_sentinel_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
+			let json_node_uberspark_sentinel = mf_json |> member Uberspark_namespace.namespace_sentinel_mf_node_type_tag in
 			if(json_node_uberspark_sentinel <> `Null) then
 				begin
 					json_node_uberspark_sentinel_var.f_namespace <- json_node_uberspark_sentinel |> member "namespace" |> to_string;
