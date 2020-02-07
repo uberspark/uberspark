@@ -138,7 +138,7 @@ let store
 	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
 		Uberspark_namespace.namespace_bridge_cc_bridge ^ "/" ^ bridge_ns in
 	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
-		Uberspark_namespace.namespace_bridge_mf_filename in
+		Uberspark_namespace.namespace_root_mf_filename in
 
 	(* make the namespace directory *)
 	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);

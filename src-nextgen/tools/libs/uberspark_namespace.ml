@@ -28,11 +28,8 @@ let namespace_root_mf_filename = "uberspark.json";;
 let namespace_root_mf_node_type_tag = "uberspark-manifest";;
 
 
-
-
+(* uobjs *)
 let namespace_uobj = "uobjs";;
-let namespace_uobj_mf_filename = "uberspark-uobj.json";;
-let namespace_uobj_mf_hdr_type = "uobj";;
 let namespace_uobj_build_dir = "_build";;
 let namespace_uobj_binhdr_src_filename = "uobj_binhdr.c";;
 let namespace_uobj_publicmethods_info_src_filename = "uobj_pminfo.c";;
@@ -45,20 +42,18 @@ let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 let namespace_uobj_mf_node_type_tag = "uberspark-uobj";;
 
 
+(* uobjcoll *)
 let namespace_uobjcoll = "uobjcoll";;
-let namespace_uobjcoll_mf_filename = "uberspark-uobjcoll.json";;
 let namespace_uobjcoll_build_dir = "_build";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
 let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.S";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
 let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
 
-
-let namespace_uobjrtl_mf_filename = "uberspark-uobjrtl.json";;
-
+(* legacy *)
 let namespace_legacy = "legacy";;
 
-
+(* uobjslt *)
 let namespace_uobjslt = "uobjslt";;
 let namespace_uobjslt_intrauobjcoll_callees_src_filename = "uobjslt-intrauobjcoll-callees.S";;
 let namespace_uobjslt_interuobjcoll_callees_src_filename = "uobjslt-interuobjcoll-callees.S";;
@@ -66,10 +61,9 @@ let namespace_uobjslt_legacy_callees_src_filename = "uobjslt-legacy-callees.S";;
 let namespace_uobjslt_output_symbols_filename = "uobjslt-symbols.json";;
 let namespace_uobjslt_mf_node_type_tag = "uberspark-uobjslt";;
 
-
+(* sentinels *)
 let namespace_sentinel = "sentinels";;
 let namespace_sentinel_mf_node_type_tag = "uberspark-sentinel";;
-
 
 (* staging *)
 let namespace_staging = "staging";;
@@ -77,21 +71,17 @@ let namespace_staging_current = "current";;
 let namespace_staging_golden = "staging_golden";;
 let namespace_staging_default = "default";;
 
-
+(* config *)
 let namespace_config = "config";;
-let namespace_config_mf_filename = "uberspark-config.json";;
-let namespace_config_current = "current";;
-let namespace_config_default = "default";;
 let namespace_config_mf_node_type_tag = "uberspark-config";;
 
 
+(* bridges *)
 let namespace_bridge = "bridges";;
-let namespace_bridge_mf_filename = "uberspark-bridge.json";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;
-
 
 let namespace_bridge_ar_bridge_name = "ar-bridge";;
 let namespace_bridge_as_bridge_name = "as-bridge";;

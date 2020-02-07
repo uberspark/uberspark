@@ -42,8 +42,8 @@ let dump
 	(output_directory : string)
 	=
 	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
-			Uberspark_namespace.namespace_bridge_mf_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_mf_filename in
+			Uberspark_namespace.namespace_root_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
 	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
 			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
 	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
