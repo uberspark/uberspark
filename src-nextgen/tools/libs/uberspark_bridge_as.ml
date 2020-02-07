@@ -51,13 +51,13 @@ let json_node_uberspark_bridge_as_var: Uberspark_manifest.Bridge.As.json_node_ub
 
 
 let load_from_json
-	(json_node_uberspark_bridge_as : Yojson.Basic.json)
+	(mf_json : Yojson.Basic.json)
 	: bool =
 
 	let retval = ref false in
 
 	let rval_json_node_uberspark_bridge_as_var = Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_to_var  
-		json_node_uberspark_bridge_as json_node_uberspark_bridge_as_var in
+		mf_json json_node_uberspark_bridge_as_var in
 
 	if rval_json_node_uberspark_bridge_as_var then begin
 		retval := true;
@@ -75,17 +75,14 @@ let load_from_file
 	let retval = ref false in
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loading as-bridge settings from file: %s" json_file;
 
-	let (rval, l_json_node_uberspark_manifest, json_node_uberspark_bridge_as) = 
-		Uberspark_manifest.get_json_for_manifest_node_type json_file 
-		Uberspark_namespace.namespace_bridge_as_mf_node_type_tag in
+	let (rval, mf_json) = Uberspark_manifest.get_json_for_manifest json_file in
 
 		if rval then begin
 
-			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var 
-				l_json_node_uberspark_manifest json_node_uberspark_manifest_var in
+			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
 
 			if rval then begin
-					retval := load_from_json json_node_uberspark_bridge_as; 
+					retval := load_from_json mf_json; 
 			end	else begin
 					retval := false;
 			end;

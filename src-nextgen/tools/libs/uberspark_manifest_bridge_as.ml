@@ -37,13 +37,15 @@ type json_node_uberspark_bridge_as_t =
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_bridge_as_to_var
-	(json_node_uberspark_bridge_as : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_bridge_as_var : json_node_uberspark_bridge_as_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
+			let json_node_uberspark_bridge_as = mf_json |> member Uberspark_namespace.namespace_bridge_as_mf_node_type_tag  in
+
 			if(json_node_uberspark_bridge_as <> `Null) then	begin
 					let json_node_bridge_hdr = (Yojson.Basic.Util.member "bridge-hdr" json_node_uberspark_bridge_as) in
 					let rval = json_node_bridge_hdr_to_var json_node_bridge_hdr json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var in
