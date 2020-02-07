@@ -14,16 +14,6 @@ open Yojson
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-(* uberspark generic manifest header *)
-type hdr_t =
-{
-	mutable f_coss_version : string;			
-	mutable f_mftype : string;
-	mutable f_uberspark_min_version   : string;
-	mutable f_uberspark_max_version   : string;
-};;
-
-
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
@@ -73,39 +63,6 @@ let json_node_update key new_value json_node
 ;;
 
 
-(*--------------------------------------------------------------------------*)
-(* parse node: "uberspark-hdr" *)
-(* input: manifest json *)
-(* return: *)
-(* on success: true, manifest header node as hdr_t*)
-(* on failure: false *)
-(*--------------------------------------------------------------------------*)
-let parse_uberspark_hdr 
-	(mf_json : Yojson.Basic.t)
-	(uberspark_hdr : hdr_t) 
-	: bool =
-
-	let retval = ref false in
-
-	try
-		let open Yojson.Basic.Util in
-			let json_mf_hdr = mf_json |> member "uberspark-hdr" in
-			if(json_mf_hdr <> `Null) then
-				begin
-					uberspark_hdr.f_coss_version <- json_mf_hdr |> member "coss_version" |> to_string;
-					uberspark_hdr.f_mftype <- json_mf_hdr |> member "mftype" |> to_string;
-					uberspark_hdr.f_uberspark_min_version <- json_mf_hdr |> member "uberspark_min_version" |> to_string;
-					uberspark_hdr.f_uberspark_max_version <- json_mf_hdr |> member "uberspark_max_version" |> to_string;
-					retval := true;
-				end
-			;
-
-	with Yojson.Basic.Util.Type_error _ -> 
-			retval := false;
-	;
-
-	(!retval)
-;;
 
 
 
@@ -125,52 +82,6 @@ let get_json_for_manifest
 		let mf_json = Yojson.Basic.from_file mf_filename in
 		retjson := mf_json;
 		retval := true;
-
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retval := false;
-	;
-
-	(!retval, !retjson)
-;;
-
-
-(*--------------------------------------------------------------------------*)
-(* read manifest file into json object; sanity checking uberspark version *)
-(*--------------------------------------------------------------------------*)
-let get_manifest_json 
-	?(check_header = true)
-	(mf_filename : string)
-	: bool * Yojson.Basic.json = 
-	let retval = ref false in
-	let retjson = ref `Null in
-
-	try
-
-		let mf_json = Yojson.Basic.from_file mf_filename in
-		retjson := mf_json;
-		retval := true;
-
-		if (check_header) then
-		begin
-			let mf_hdr : hdr_t = { f_coss_version = ""; f_mftype = ""; f_uberspark_max_version = "";
-				f_uberspark_min_version = "";} in
-			let mf_hdr_parsed = parse_uberspark_hdr mf_json mf_hdr in
-			if (mf_hdr_parsed) then 
-				begin
-					(* TBD: sanity check header and version *)
-					retval := true;
-					retjson := mf_json;
-				end
-			else 
-				begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
-					retval := false;
-					retjson := `Null;
-				end
-			;
-		end
-		;
 
 	with Yojson.Json_error s -> 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
@@ -328,42 +239,6 @@ let write_prologue
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n{";
-
-	retval := true;
-
-	(!retval)
-;;
-
-
-(*--------------------------------------------------------------------------*)
-(* write uberspark-hdr manifest node *)
-(*--------------------------------------------------------------------------*)
-let write_uberspark_hdr 
-	?(continuation = true)
-	(oc : out_channel)
-	(uberspark_hdr : hdr_t)
-	: bool = 
-	
-	let retval = ref false in
-
-	Printf.fprintf oc "\n";
-	Printf.fprintf oc "\n\t\"uberspark-hdr\":{";
-	Printf.fprintf oc "\n\t\t\"coss_version\" : \"%s\"," uberspark_hdr.f_coss_version;
-	Printf.fprintf oc "\n\t\t\"mftype\" : \"%s\"," uberspark_hdr.f_mftype;
-	Printf.fprintf oc "\n\t\t\"uberspark_min_version\" : \"%s\"," uberspark_hdr.f_uberspark_min_version;
-	Printf.fprintf oc "\n\t\t\"uberspark_max_version\" : \"%s\"" uberspark_hdr.f_uberspark_max_version;
-
-	if continuation then
-		begin
-			Printf.fprintf oc "\n\t},";
-		end
-	else
-		begin
-			Printf.fprintf oc "\n\t}";
-		end
-	;
-
-	Printf.fprintf oc "\n";
 
 	retval := true;
 

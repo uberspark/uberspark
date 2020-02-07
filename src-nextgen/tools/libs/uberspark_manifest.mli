@@ -12,15 +12,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-(* uberspark generic manifest header *)
-type hdr_t =
-{
-	mutable f_coss_version : string;			
-	mutable f_mftype : string;
-	mutable f_uberspark_min_version   : string;
-  mutable f_uberspark_max_version : string;
-}
-
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
@@ -42,18 +33,13 @@ val json_node_pretty_print_to_string : Yojson.Basic.t -> string
 val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojson.Basic.t
 
 
-val parse_uberspark_hdr : Yojson.Basic.t -> hdr_t -> bool
 val get_json_for_manifest : string -> bool * Yojson.Basic.json
-val get_manifest_json : ?check_header:bool -> string -> bool * Yojson.Basic.t
-
 val json_node_uberspark_manifest_to_var :  Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
 val json_node_uberspark_manifest_var_to_jsonstr : json_node_uberspark_manifest_t -> string
-
 val get_json_for_manifest_node_type :  string -> string -> bool * Yojson.Basic.json * Yojson.Basic.json
 
 
 val write_prologue : ?prologue_str:string -> out_channel -> bool
-val write_uberspark_hdr : ?continuation:bool -> out_channel -> hdr_t -> bool
 val write_epilogue : ?epilogue_str:string -> out_channel -> bool
 val write_to_file : string -> string list -> unit
 
