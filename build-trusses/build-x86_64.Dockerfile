@@ -19,6 +19,9 @@ RUN sudo apk update &&\
 USER docker
 WORKDIR "/home/docker"
 
+# install git
+RUN sudo apk add git
+
 # install sphinx documentation generator and related packages
 RUN sudo apk add python3 &&\
     sudo apk add py3-pip &&\

@@ -10,6 +10,7 @@ include ./commondefs.mk
 ### common documentation build prep
 .PHONY: docs_build_prep
 docs_build_prep:
+	cd $(UBERSPARK_DOCSDIR) && git clone git@github.com:hypcode/uberspark-htmlcss-themes.git _themes
 	mkdir -p $(UBERSPARK_DOCSDIR)/_build
 
 ### generate .pdf documentation
