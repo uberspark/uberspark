@@ -1,35 +1,34 @@
 /*
-add uobj json manifest
+main uobj json manifest
 author: amit vasudevan (amitvasudevan@acm.org)
 */
 
 {
-	/* header */
-	"uberspark-hdr":{
-		"coss_version" : "1.0",
-		"mftype" : "uobj",
+
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobj" ],
 		"uberspark_min_version" : "5.1",
 		"uberspark_max_version" : "any"
 	},
 
-	/* uobj header */
-	"uobj-hdr":{
+
+	"uberspark-uobj" : {
 		"namespace" : "uberspark/uobjcoll/generic/test/main",
 		"platform" : "generic",
 		"arch" : "generic",
-		"cpu" : "generic"
-	},
+		"cpu" : "generic",
 
 	/* config settings */	
-	"config-settings":{
+	/*"config-settings":{
 		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
 		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
 		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
-	},
+	},*/
 
 
 	/* sources */
-	"uobj-sources" : {
+	"sources" : {
 		"h-files": [ ],
 		"c-files": [ "main.c" ],
 		"casm-files": [ ],
@@ -37,7 +36,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	},
 	
 	/* public methods */
-	"uobj-publicmethods" : {
+	"publicmethods" : {
 		"main" : [
 			"uint32_t",
 			"(uint32_t param1, uint32_t param2)", 
@@ -48,7 +47,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		within the same collection
 	*/
-	"uobj-intrauobjcoll-callees" : {
+	"intrauobjcoll-callees" : {
 		"uberspark/uobjs/generic/test/add": ["add"]
 	},
 	
@@ -56,7 +55,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		across other collection(s)
 	*/
-	"uobj-interuobjcoll-callees": {
+	"interuobjcoll-callees": {
 		/*"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]*/
 	} 
 
@@ -64,7 +63,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	,
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"uobj-legacy-callees": [
+	"legacy-callees": [
 		/*"untrusted_func_1",	
 		"untrusted_func_2"*/
 	] 
@@ -74,14 +73,13 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 
 
-	"uobj-binary" : {
-		"uobj-sections": {
+	"sections": {
 			"uobj_testsect" 		: [ "0x0", "0x111", "0x1000", "0x100000", "0x100000", ".testsect", ".testsect1" ]
 
 		}
-	}
 
-	
+}
+
 }
 
 

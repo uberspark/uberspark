@@ -236,8 +236,8 @@ let handler_staging_config_set
     if rval == true then begin
       let config_ns_json_filename = (Uberspark.Namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^
         Uberspark.Namespace.namespace_config ^ "/" ^
-        Uberspark.Namespace.namespace_config_mf_filename in
-      Uberspark.Config.dump config_ns_json_filename;  
+        Uberspark.Namespace.namespace_root_mf_filename in
+      Uberspark.Config.dump_to_file config_ns_json_filename;  
       Uberspark.Logger.log "configuration setting '%s' set to '%s' within current configuration" !l_setting_name !l_setting_value;
       `Ok()  
     end else begin

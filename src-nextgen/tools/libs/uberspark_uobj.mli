@@ -1,6 +1,6 @@
 type publicmethod_info_t =
 {
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 }
 
@@ -31,7 +31,7 @@ type slt_info_t =
   class uobject :
   object
     val d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
-    val d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
+
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
     val d_legacy_callees_hashtbl :
@@ -52,41 +52,23 @@ type slt_info_t =
   	method set_d_builddir : string -> unit 
     method get_d_builddir : string
 
-  	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t 
 
     val d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
-  	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref 
+      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
 
 
-  	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
   	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
 
     val d_size : int ref
-    val d_slt_trampolinecode : string ref
-    val d_slt_trampolinedata : string ref
-    
-   	val d_slt_directxfer_template : string ref 
-  	method get_d_slt_directxfer_template : string
-  	method set_d_slt_directxfer_template : string -> unit
 
-   	val d_slt_indirectxfer_template : string ref 
-  	method get_d_slt_indirectxfer_template : string
-  	method set_d_slt_indirectxfer_template : string -> unit
 
-   	val d_slt_addrdef_template : string ref 
-  	method get_d_slt_addrdef_template : string
-  	method set_d_slt_addrdef_template : string -> unit
-
+ 	
+  	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t 
 
     
     
-    val d_sources_c_file_list : string list ref
-    val d_sources_casm_file_list : string list ref
-    val d_sources_h_file_list : string list ref
-    val d_sources_asm_file_list : string list ref
 
     val d_target_def : Defs.Basedefs.target_def_t
 
@@ -106,11 +88,8 @@ type slt_info_t =
     
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
-    method get_d_hdr : Uberspark_manifest.Uobj.uobj_hdr_t
 
-   	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t
-  	method get_d_uobjslt_hdr : Uberspark_manifest.Uobjslt.uobjslt_hdr_t
-
+  
     method get_d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
 
@@ -130,12 +109,9 @@ type slt_info_t =
 
  
     method get_d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.uobj_publicmethods_t) Hashtbl.t
-  	method get_d_publicmethods_assoc_list :
-      (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list
- 
-  	method get_d_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
-	  method get_d_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
+      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
+    method get_d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list
+
   	method get_d_default_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
 	  method get_d_default_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
   	method get_d_publicmethods_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
@@ -144,12 +120,6 @@ type slt_info_t =
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
 
-    method get_d_slt_trampolinecode : string
-    method get_d_slt_trampolinedata : string
-    method get_d_sources_c_file_list : string list
-    method get_d_sources_casm_file_list : string list
-    method get_d_sources_h_file_list : string list
-    method get_d_sources_asm_file_list : string list
     
  
     method set_d_size : int -> unit
@@ -157,11 +127,8 @@ type slt_info_t =
     method set_d_alignment : int -> unit
     method set_d_uniform_size : bool -> unit
  
-    method set_d_slt_trampolinecode : string -> unit
-    method set_d_slt_trampolinedata : string -> unit
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
-  	method write_manifest : string -> bool
 
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
@@ -191,6 +158,11 @@ type slt_info_t =
 
   	method prepare_namespace_for_build : unit -> bool
   	method build_image : unit -> bool
+
+
+  	(*val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t *)
+  	(*method write_manifest : string -> bool*)
+
 
 end
 

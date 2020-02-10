@@ -1,30 +1,34 @@
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
 (* uberSpark manifest interface implementation *)
 (*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
 
 open Yojson
 
 
-(****************************************************************************)
-(* manifest node types *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
-(* uberspark generic manifest header *)
-type hdr_t =
+(* uberspark manifest json node type *)
+type json_node_uberspark_manifest_t =
 {
-	mutable f_coss_version : string;			
-	mutable f_mftype : string;
+	mutable f_manifest_node_types : string list;
 	mutable f_uberspark_min_version   : string;
 	mutable f_uberspark_max_version   : string;
 };;
 
 
-(****************************************************************************)
-(* manifest helper interfaces *)
-(****************************************************************************)
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 let json_list_to_string_list
@@ -59,34 +63,58 @@ let json_node_update key new_value json_node
 ;;
 
 
-(****************************************************************************)
-(* manifest parse interfaces *)
-(****************************************************************************)
+
 
 
 (*--------------------------------------------------------------------------*)
-(* parse node: "uberspark-hdr" *)
-(* input: manifest json *)
+(* read manifest file into json *)
+(* note: this does not check if this is a valid uberspark manifest; only checked *)
+(* if it is a valid json file *)
+(*--------------------------------------------------------------------------*)
+let get_json_for_manifest 
+	(mf_filename : string)
+	: bool * Yojson.Basic.json = 
+
+	let retval = ref false in
+	let retjson = ref `Null in
+
+	try
+		let mf_json = Yojson.Basic.from_file mf_filename in
+		retjson := mf_json;
+		retval := true;
+
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+
+	(!retval, !retjson)
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* convert json node "uberspark-manifest" into json_node_uberspark_manifest_t variable *)
 (* return: *)
-(* on success: true, manifest header node as hdr_t*)
-(* on failure: false *)
+(* on success: true; json_node_uberspark_manifest_var fields are modified with parsed values *)
+(* on failure: false; json_node_uberspark_manifest_var fields are untouched *)
 (*--------------------------------------------------------------------------*)
-let parse_uberspark_hdr 
+let json_node_uberspark_manifest_to_var 
 	(mf_json : Yojson.Basic.t)
-	(uberspark_hdr : hdr_t) 
+	(json_node_uberspark_manifest_var : json_node_uberspark_manifest_t) 
 	: bool =
 
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
-			let json_mf_hdr = mf_json |> member "uberspark-hdr" in
-			if(json_mf_hdr <> `Null) then
+			let json_node_uberspark_manifest = mf_json |> member Uberspark_namespace.namespace_root_mf_node_type_tag in
+
+			if(json_node_uberspark_manifest <> `Null) then
 				begin
-					uberspark_hdr.f_coss_version <- json_mf_hdr |> member "coss_version" |> to_string;
-					uberspark_hdr.f_mftype <- json_mf_hdr |> member "mftype" |> to_string;
-					uberspark_hdr.f_uberspark_min_version <- json_mf_hdr |> member "uberspark_min_version" |> to_string;
-					uberspark_hdr.f_uberspark_max_version <- json_mf_hdr |> member "uberspark_max_version" |> to_string;
+					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
+					json_node_uberspark_manifest_var.f_uberspark_min_version <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
+					json_node_uberspark_manifest_var.f_uberspark_max_version <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
 					retval := true;
 				end
 			;
@@ -99,57 +127,104 @@ let parse_uberspark_hdr
 ;;
 
 
+
 (*--------------------------------------------------------------------------*)
-(* read manifest file into json object; sanity checking uberspark version *)
+(* convert json_node_uberspark_manifest_var to json string *)
 (*--------------------------------------------------------------------------*)
-let get_manifest_json 
-	?(check_header = true)
-	(mf_filename : string)
-	: bool * Yojson.Basic.json = 
-	let retval = ref false in
-	let retjson = ref `Null in
+let json_node_uberspark_manifest_var_to_jsonstr  
+	(json_node_uberspark_manifest_var : json_node_uberspark_manifest_t) 
+	: string =
+	let retstr = ref "" in
 
-	try
 
-		let mf_json = Yojson.Basic.from_file mf_filename in
-		retjson := mf_json;
-		retval := true;
+	retstr := !retstr ^ Printf.sprintf  "\n";
 
-		if (check_header) then
-		begin
-			let mf_hdr : hdr_t = { f_coss_version = ""; f_mftype = ""; f_uberspark_max_version = "";
-				f_uberspark_min_version = "";} in
-			let mf_hdr_parsed = parse_uberspark_hdr mf_json mf_hdr in
-			if (mf_hdr_parsed) then 
-				begin
-					(* TBD: sanity check header and version *)
-					retval := true;
-					retjson := mf_json;
-				end
-			else 
-				begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
-					retval := false;
-					retjson := `Null;
-				end
-			;
-		end
-		;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-manifest\":{";
 
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retval := false;
-	;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"manifest_node_types\" : [ ";
+	for i = 0 to ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) do
+		if i == ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) then begin
+			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+		end else begin
+			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+		end;
+	done;
+	retstr := !retstr ^ Printf.sprintf  "],";
 
-	(!retval, !retjson)
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.f_uberspark_min_version;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.f_uberspark_max_version;
+	retstr := !retstr ^ Printf.sprintf  "\n\t}";
+
+	retstr := !retstr ^ Printf.sprintf  "\n";
+
+	(!retstr)
 ;;
 
 
 
 
-(****************************************************************************)
-(* write interfaces *)
-(****************************************************************************)
+(*--------------------------------------------------------------------------*)
+(* read manifest file and return json object of specified manifest node type *)
+(* return null if the node type is not found in the manifest *)
+(*--------------------------------------------------------------------------*)
+let get_json_for_manifest_node_type 
+	(manifest_filename : string)
+	(manifest_node_type : string)
+	: bool * Yojson.Basic.json * Yojson.Basic.json = 
+
+	let retval = ref false in
+	let retjson_uberspark_manifest = ref `Null in
+	let retjson = ref `Null in
+
+	try
+
+		let manifest_json = Yojson.Basic.from_file manifest_filename in
+		let json_node_uberspark_manifest_var : json_node_uberspark_manifest_t = 
+			{ 	f_manifest_node_types = []; 
+				f_uberspark_max_version = "";
+				f_uberspark_min_version = "";} in
+		let json_node_uberspark_manifest = (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag
+			manifest_json) in 
+		let rval_json_node_uberspark_manifest_var = json_node_uberspark_manifest_to_var json_node_uberspark_manifest
+			json_node_uberspark_manifest_var in
+
+		if 	rval_json_node_uberspark_manifest_var = true then begin
+
+			if (List.mem manifest_node_type json_node_uberspark_manifest_var.f_manifest_node_types) then begin
+				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
+				retjson_uberspark_manifest := json_node_uberspark_manifest;
+				retval := true;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "manifest node type '%s' is not listed within uberspark-manifest node within manifest!";
+				retjson := `Null;
+				retjson_uberspark_manifest := `Null;
+				retval := false;
+			end;
+
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
+			retjson := `Null;
+			retjson_uberspark_manifest := `Null;
+			retval := false;
+
+		end;	
+		
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retjson_uberspark_manifest := `Null;
+		retjson := `Null;
+		retval := false;
+	;
+
+	(!retval, !retjson_uberspark_manifest, !retjson)
+;;
+
+
+
+
+
+
+
 
 (*--------------------------------------------------------------------------*)
 (* write manifest prologue *)
@@ -166,42 +241,6 @@ let write_prologue
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n";
 	Printf.fprintf oc "\n{";
-
-	retval := true;
-
-	(!retval)
-;;
-
-
-(*--------------------------------------------------------------------------*)
-(* write uberspark-hdr manifest node *)
-(*--------------------------------------------------------------------------*)
-let write_uberspark_hdr 
-	?(continuation = true)
-	(oc : out_channel)
-	(uberspark_hdr : hdr_t)
-	: bool = 
-	
-	let retval = ref false in
-
-	Printf.fprintf oc "\n";
-	Printf.fprintf oc "\n\t\"uberspark-hdr\":{";
-	Printf.fprintf oc "\n\t\t\"coss_version\" : \"%s\"," uberspark_hdr.f_coss_version;
-	Printf.fprintf oc "\n\t\t\"mftype\" : \"%s\"," uberspark_hdr.f_mftype;
-	Printf.fprintf oc "\n\t\t\"uberspark_min_version\" : \"%s\"," uberspark_hdr.f_uberspark_min_version;
-	Printf.fprintf oc "\n\t\t\"uberspark_max_version\" : \"%s\"" uberspark_hdr.f_uberspark_max_version;
-
-	if continuation then
-		begin
-			Printf.fprintf oc "\n\t},";
-		end
-	else
-		begin
-			Printf.fprintf oc "\n\t}";
-		end
-	;
-
-	Printf.fprintf oc "\n";
 
 	retval := true;
 
@@ -233,39 +272,78 @@ let write_epilogue
 
 
 
+(*--------------------------------------------------------------------------*)
+(* write given list of json node string representations to manifest file *)
+(*--------------------------------------------------------------------------*)
+let write_to_file 
+	(output_manifest_filename : string)
+	(output_jsonstr_list : string list)
+	=
+
+	let oc = open_out output_manifest_filename in
+
+	write_prologue oc;
+
+	for i = 0 to ((List.length output_jsonstr_list)-1) do
+		if i == ((List.length output_jsonstr_list)-1) then begin
+			Printf.fprintf oc "%s" (List.nth output_jsonstr_list i);
+		end else begin
+			Printf.fprintf oc "%s," (List.nth output_jsonstr_list i);
+		end;
+	done;
+
+	write_epilogue oc;
+
+	close_out oc;	
+;;
 
 
-(****************************************************************************)
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
-module Bridge =
-struct
-#include "uberspark_manifest_bridge.ml"
+module Bridge = struct
+	#include "uberspark_manifest_bridge.ml"
+
+	module Cc = struct
+	#include "uberspark_manifest_bridge_cc.ml"
+	end
+
+	module Ld = struct
+	#include "uberspark_manifest_bridge_ld.ml"
+	end
+
+	module As = struct
+	#include "uberspark_manifest_bridge_as.ml"
+	end
+
 end
 
 
-module Config =
-struct
-#include "uberspark_manifest_config.ml"
+module Config = struct
+	#include "uberspark_manifest_config.ml"
 end
 
-module Uobj =
-struct
-#include "uberspark_manifest_uobj.ml"
+
+module Sentinel = struct
+	#include "uberspark_manifest_sentinel.ml"
 end
 
-module Uobjcoll =
-struct
-#include "uberspark_manifest_uobjcoll.ml"
+
+module Uobj = struct
+	#include "uberspark_manifest_uobj.ml"
 end
 
-module Uobjslt =
-struct
-#include "uberspark_manifest_uobjslt.ml"
+
+module Uobjcoll = struct
+	#include "uberspark_manifest_uobjcoll.ml"
 end
 
-module Sentinel =
-struct
-#include "uberspark_manifest_sentinel.ml"
+
+module Uobjslt = struct
+	#include "uberspark_manifest_uobjslt.ml"
 end
+

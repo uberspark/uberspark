@@ -1,19 +1,21 @@
-(****************************************************************************)
-(****************************************************************************)
-(* uberSpark bridge module interface implementation *)
-(*	 author: amit vasudevan (amitvasudevan@acm.org) *)
-(****************************************************************************)
-(****************************************************************************)
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark bridge module interface implementation		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
 
 open Unix
 open Yojson
 
 
 
-
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* general submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
 
 module Container =
 struct
@@ -27,10 +29,12 @@ end
 
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
-(****************************************************************************)
-(* general interfaces *)
-(****************************************************************************)
 
 let dump
 	(bridge_ns_path : string)
@@ -38,8 +42,8 @@ let dump
 	(output_directory : string)
 	=
 	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
-			Uberspark_namespace.namespace_bridge_mf_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_mf_filename in
+			Uberspark_namespace.namespace_root_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
 	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
 			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
 	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
@@ -68,10 +72,11 @@ let remove
 
 
 
-
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* bridge submodules *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 module Cc =
 struct
@@ -90,9 +95,11 @@ struct
 end
 
 
-(****************************************************************************)
-(* general interfaces *)
-(****************************************************************************)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
 let initialize_from_config () 
@@ -101,12 +108,12 @@ let initialize_from_config ()
 	let retval = ref false in
 
 	(* handle cc-bridge *)	
-	if Uberspark_config.config_settings.bridge_cc_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (Cc.load Uberspark_config.config_settings.bridge_cc_bridge) then begin
+	if not (Cc.load Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
 		(!retval)
 	end else 
@@ -127,12 +134,12 @@ let initialize_from_config ()
 	end;
 
 	(* handle as-bridge *)	
-	if Uberspark_config.config_settings.bridge_as_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (As.load Uberspark_config.config_settings.bridge_as_bridge) then begin
+	if not (As.load Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
 		(!retval)
 	end else 
@@ -154,12 +161,12 @@ let initialize_from_config ()
 
 
 	(* handle ld-bridge *)	
-	if Uberspark_config.config_settings.bridge_ld_bridge = "" then begin
+	if Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (Ld.load Uberspark_config.config_settings.bridge_ld_bridge) then begin
+	if not (Ld.load Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
 		(!retval)
 	end else 

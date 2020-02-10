@@ -3,34 +3,31 @@
 */
 
 {
-	/* uberspark header */
-	"uberspark-hdr":{
-		"coss_version" : "any",
-		"mftype" : "bridge",
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-bridge-as" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
 
-    "bridge-ld" : {
+    "uberspark-bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",
-			"bname" : "gnu-ld",
-			"execname" : "ld",
+			"bname" : "gnu-as",
+			"execname" : "gcc",
 			"devenv" : "amd64",
 			"arch" : "x86_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
+			"params" : [ "-m32" ],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
-		"params_prefix_lscript" : "-T",
-		"params_prefix_libdir" : "-L",
-		"params_prefix_lib" : "-l",
-		"params_prefix_output" : "-o"
-
+		"params_prefix_obj" : "-c",
+        "params_prefix_output" : "-o",
+        "params_prefix_include" : "-I"
 	}
 
 }

@@ -23,13 +23,9 @@ open Yojson
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-
-(*------------------------------------------------------------------------*)
-(* ubersprk general header variable *)	
-(*------------------------------------------------------------------------*)
-let uberspark_hdr: Uberspark_manifest.hdr_t = {
-	f_coss_version = "any";
-	f_mftype = "config";
+(* uberspark-manifest json node variable *)
+let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
+	f_manifest_node_types = [ "uberspark-config" ];
 	f_uberspark_min_version = "any";
 	f_uberspark_max_version = "any";
 };;
@@ -37,18 +33,9 @@ let uberspark_hdr: Uberspark_manifest.hdr_t = {
 
 
 (*------------------------------------------------------------------------*)
-(* configuration header variable *)	
-(*------------------------------------------------------------------------*)
-let config_hdr: Uberspark_manifest.Config.config_hdr_t = {
-	name = "";
-};;
-
-
-
-(*------------------------------------------------------------------------*)
 (* configuration settings variable *)	
 (*------------------------------------------------------------------------*)
-let config_settings: Uberspark_manifest.Config.config_settings_t = {
+let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -75,7 +62,7 @@ let config_settings: Uberspark_manifest.Config.config_settings_t = {
 };;
 
 
-let saved_config_settings: Uberspark_manifest.Config.config_settings_t = {
+let saved_json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -113,23 +100,23 @@ let saved_config_settings: Uberspark_manifest.Config.config_settings_t = {
 let settings_save 
 	() 
 	: unit =
-	saved_config_settings.binary_page_size <- config_settings.binary_page_size;
-	saved_config_settings.binary_uobj_section_alignment <- config_settings.binary_uobj_section_alignment;
-	saved_config_settings.binary_uobj_default_section_size <- config_settings.binary_uobj_default_section_size;
+	saved_json_node_uberspark_config_var.binary_page_size <- json_node_uberspark_config_var.binary_page_size;
+	saved_json_node_uberspark_config_var.binary_uobj_section_alignment <- json_node_uberspark_config_var.binary_uobj_section_alignment;
+	saved_json_node_uberspark_config_var.binary_uobj_default_section_size <- json_node_uberspark_config_var.binary_uobj_default_section_size;
 
-	saved_config_settings.uobj_binary_image_load_address <- config_settings.uobj_binary_image_load_address;
-	saved_config_settings.uobj_binary_image_uniform_size <- config_settings.uobj_binary_image_uniform_size;
-	saved_config_settings.uobj_binary_image_size <- config_settings.uobj_binary_image_size;
-	saved_config_settings.uobj_binary_image_alignment <- config_settings.uobj_binary_image_alignment;
+	saved_json_node_uberspark_config_var.uobj_binary_image_load_address <- json_node_uberspark_config_var.uobj_binary_image_load_address;
+	saved_json_node_uberspark_config_var.uobj_binary_image_uniform_size <- json_node_uberspark_config_var.uobj_binary_image_uniform_size;
+	saved_json_node_uberspark_config_var.uobj_binary_image_size <- json_node_uberspark_config_var.uobj_binary_image_size;
+	saved_json_node_uberspark_config_var.uobj_binary_image_alignment <- json_node_uberspark_config_var.uobj_binary_image_alignment;
 
-	saved_config_settings.uobjcoll_binary_image_load_address <- config_settings.uobjcoll_binary_image_load_address;
-	saved_config_settings.uobjcoll_binary_image_hdr_section_alignment <- config_settings.uobjcoll_binary_image_hdr_section_alignment;
-	saved_config_settings.uobjcoll_binary_image_hdr_section_size <- config_settings.uobjcoll_binary_image_hdr_section_size;
-	saved_config_settings.uobjcoll_binary_image_section_alignment <- config_settings.uobjcoll_binary_image_section_alignment;
+	saved_json_node_uberspark_config_var.uobjcoll_binary_image_load_address <- json_node_uberspark_config_var.uobjcoll_binary_image_load_address;
+	saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
+	saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
+	saved_json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
 
-	saved_config_settings.bridge_cc_bridge <- config_settings.bridge_cc_bridge;
-	saved_config_settings.bridge_as_bridge <- config_settings.bridge_as_bridge;
-	saved_config_settings.bridge_ld_bridge <- config_settings.bridge_ld_bridge;
+	saved_json_node_uberspark_config_var.bridge_cc_bridge <- json_node_uberspark_config_var.bridge_cc_bridge;
+	saved_json_node_uberspark_config_var.bridge_as_bridge <- json_node_uberspark_config_var.bridge_as_bridge;
+	saved_json_node_uberspark_config_var.bridge_ld_bridge <- json_node_uberspark_config_var.bridge_ld_bridge;
 
 
 	()
@@ -139,23 +126,23 @@ let settings_save
 let settings_restore 
 	() 
 	: unit =
-	config_settings.binary_page_size <- saved_config_settings.binary_page_size;
-	config_settings.binary_uobj_section_alignment <- saved_config_settings.binary_uobj_section_alignment;
-	config_settings.binary_uobj_default_section_size <- saved_config_settings.binary_uobj_default_section_size;
+	json_node_uberspark_config_var.binary_page_size <- saved_json_node_uberspark_config_var.binary_page_size;
+	json_node_uberspark_config_var.binary_uobj_section_alignment <- saved_json_node_uberspark_config_var.binary_uobj_section_alignment;
+	json_node_uberspark_config_var.binary_uobj_default_section_size <- saved_json_node_uberspark_config_var.binary_uobj_default_section_size;
 
-	config_settings.uobj_binary_image_load_address <- saved_config_settings.uobj_binary_image_load_address;
-	config_settings.uobj_binary_image_uniform_size <- saved_config_settings.uobj_binary_image_uniform_size;
-	config_settings.uobj_binary_image_size <- saved_config_settings.uobj_binary_image_size;
-	config_settings.uobj_binary_image_alignment <- saved_config_settings.uobj_binary_image_alignment;
+	json_node_uberspark_config_var.uobj_binary_image_load_address <- saved_json_node_uberspark_config_var.uobj_binary_image_load_address;
+	json_node_uberspark_config_var.uobj_binary_image_uniform_size <- saved_json_node_uberspark_config_var.uobj_binary_image_uniform_size;
+	json_node_uberspark_config_var.uobj_binary_image_size <- saved_json_node_uberspark_config_var.uobj_binary_image_size;
+	json_node_uberspark_config_var.uobj_binary_image_alignment <- saved_json_node_uberspark_config_var.uobj_binary_image_alignment;
 
-	config_settings.uobjcoll_binary_image_load_address <- saved_config_settings.uobjcoll_binary_image_load_address;
-	config_settings.uobjcoll_binary_image_hdr_section_alignment <- saved_config_settings.uobjcoll_binary_image_hdr_section_alignment;
-	config_settings.uobjcoll_binary_image_hdr_section_size <- saved_config_settings.uobjcoll_binary_image_hdr_section_size;
-	config_settings.uobjcoll_binary_image_section_alignment <- saved_config_settings.uobjcoll_binary_image_section_alignment;
+	json_node_uberspark_config_var.uobjcoll_binary_image_load_address <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_load_address;
+	json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
+	json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
+	json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
 
-	config_settings.bridge_cc_bridge <- saved_config_settings.bridge_cc_bridge;
-	config_settings.bridge_as_bridge <- saved_config_settings.bridge_as_bridge;
-	config_settings.bridge_ld_bridge <- saved_config_settings.bridge_ld_bridge;
+	json_node_uberspark_config_var.bridge_cc_bridge <- saved_json_node_uberspark_config_var.bridge_cc_bridge;
+	json_node_uberspark_config_var.bridge_as_bridge <- saved_json_node_uberspark_config_var.bridge_as_bridge;
+	json_node_uberspark_config_var.bridge_ld_bridge <- saved_json_node_uberspark_config_var.bridge_ld_bridge;
 
 
 	()
@@ -165,36 +152,17 @@ let settings_restore
 
 
 let load_from_json 
-	(json_node : Yojson.Basic.json)
+	(mf_json : Yojson.Basic.json)
 	: bool =
 	let retval = ref false in
 
-	let rval_uberspark_hdr = Uberspark_manifest.parse_uberspark_hdr json_node uberspark_hdr in
-
-	if rval_uberspark_hdr then begin
-		(* this is a valid uberspark json tree; TBD: sanity check header fields *)
-
-		let rval_config_hdr = Uberspark_manifest.Config.parse_config_hdr json_node config_hdr in
-
-		(* if we have a config header then this is a load from uberspark configuration file *)
-		(* TBD: sanity check input mftype, for now override with config *)
-		if rval_config_hdr then begin
-			uberspark_hdr.f_mftype <- "config";
-		end;
-
-		(* check for config-settings node *)
-		let rval_config_settings = Uberspark_manifest.Config.parse_config_settings json_node config_settings in
-		if rval_config_settings then begin
-			retval := true;
-		end else begin
-			retval := false;
-		end;
-
+	let rval_json_node_uberspark_config_var = 
+		Uberspark_manifest.Config.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
+	if rval_json_node_uberspark_config_var then begin
+		retval := true;
 	end else begin
-		(* error, we require a uberspark json header *)
 		retval := false;
 	end;
-
 
 	(!retval)
 ;;
@@ -207,42 +175,120 @@ let load
 	let retval = ref false in
 	let config_ns_json_path = (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ 
-		Uberspark_namespace.namespace_config_mf_filename in
+		Uberspark_namespace.namespace_root_mf_filename in
 	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
 
-	let (rval, config_json) = Uberspark_manifest.get_manifest_json config_ns_json_path in
-	if rval then
-		begin
-			retval := load_from_json config_json;
-		end
-	else
-		begin
-			retval := false;
-		end
-	;
-				
+	(* grab uberspark-config json node into var *)
+	(*let (rval, l_json_node_uberspark_manifest, json_node_uberspark_config) = 
+		Uberspark_manifest.get_json_for_manifest_node_type config_ns_json_path 
+		Uberspark_namespace.namespace_config_mf_node_type_tag in*)
+
+	let (rval, mf_json) = 	Uberspark_manifest.get_json_for_manifest config_ns_json_path in
+
+		if rval then begin
+
+			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
+
+			if rval then begin
+					retval := load_from_json mf_json; 
+			end	else begin
+					retval := false;
+			end;
+
+		end	else begin
+				retval := false;
+		end;
+
 	(!retval)
 ;;
 
 
 
-let dump 
-	(output_config_filename : string)
-	=
 
-	let oc = open_out output_config_filename in
 
-		Uberspark_manifest.write_prologue ~prologue_str:"uberSpark config manifest" oc;
-		Uberspark_manifest.write_uberspark_hdr oc uberspark_hdr;
-		Uberspark_manifest.Config.write_config_hdr oc config_hdr;
-		Uberspark_manifest.Config.write_config_settings ~continuation:false oc config_settings;
-		Uberspark_manifest.write_epilogue oc;
 
-	close_out oc;	
+
+let settings_get 
+	(setting_name : string)
+	: (bool * string) =
+
+	let retstatus = ref true in
+	let settings_value = ref "" in
+	match setting_name with
+		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_config_var.binary_page_size);
+		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_config_var.binary_uobj_section_alignment);
+		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_config_var.binary_uobj_default_section_size);
+		| "uobj_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobj_binary_image_load_address);
+		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  json_node_uberspark_config_var.uobj_binary_image_uniform_size);
+		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobj_binary_image_size);
+		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobj_binary_image_alignment);
+		| "uobjcoll_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_load_address);
+		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment);
+		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size);
+		| "uobjcoll_binary_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment);
+		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_cc_bridge);
+		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_as_bridge);
+		| "bridge_ld_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_ld_bridge);
+		| _ -> retstatus := false;
+	;
+	
+	(!retstatus, !settings_value)
+;;
+
+
+let settings_set 
+	(setting_name : string)
+	(setting_value : string)
+	: bool =
+
+	let retval = ref true in
+	match setting_name with
+		| "binary_page_size" -> json_node_uberspark_config_var.binary_page_size <- int_of_string setting_value;
+		| "binary_uobj_section_alignment" -> json_node_uberspark_config_var.binary_uobj_section_alignment <- int_of_string setting_value;
+		| "binary_uobj_default_section_size" -> json_node_uberspark_config_var.binary_uobj_default_section_size <- int_of_string setting_value;
+		| "uobj_binary_image_load_address" -> json_node_uberspark_config_var.uobj_binary_image_load_address <- int_of_string setting_value;
+		| "uobj_binary_image_uniform_size" -> json_node_uberspark_config_var.uobj_binary_image_uniform_size <- bool_of_string setting_value;
+		| "uobj_binary_image_size" -> json_node_uberspark_config_var.uobj_binary_image_size <- int_of_string setting_value;
+		| "uobj_binary_image_alignment" -> json_node_uberspark_config_var.uobj_binary_image_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_load_address" -> json_node_uberspark_config_var.uobjcoll_binary_image_load_address <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_alignment" -> json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_hdr_section_size" -> json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
+		| "uobjcoll_binary_image_section_alignment" -> json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- int_of_string setting_value;
+		| "bridge_cc_bridge" -> json_node_uberspark_config_var.bridge_cc_bridge <- setting_value;
+		| "bridge_as_bridge" -> json_node_uberspark_config_var.bridge_as_bridge <- setting_value;
+		| "bridge_ld_bridge" -> json_node_uberspark_config_var.bridge_ld_bridge <- setting_value;
+		| _ -> retval := false;
+	;
+	
+	!retval
 ;;
 
 
 
+
+let dump_to_file 
+	(output_config_filename : string)
+	=
+
+	Uberspark_manifest.write_to_file output_config_filename 
+		[
+			(Uberspark_manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
+			(Uberspark_manifest.Config.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
+		];
+;;
+
+
+
+
+
+
+
+(*---------------------------------------------------------------------------*)
+(* FOR FUTURE EXPANSION *)
+(*---------------------------------------------------------------------------*)
+
+
+(*
 let create_from_file
 	(input_config_json_pathname : string)
 	(output_config_name : string)
@@ -272,67 +318,7 @@ let create_from_file
 
 	(!retval, !reterrmsg)
 ;;
-
-
-let settings_get 
-	(setting_name : string)
-	: (bool * string) =
-
-	let retstatus = ref true in
-	let settings_value = ref "" in
-	match setting_name with
-		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_page_size);
-		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_section_alignment);
-		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" config_settings.binary_uobj_default_section_size);
-		| "uobj_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_load_address);
-		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  config_settings.uobj_binary_image_uniform_size);
-		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_size);
-		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobj_binary_image_alignment);
-		| "uobjcoll_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_load_address);
-		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_alignment);
-		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_hdr_section_size);
-		| "uobjcoll_binary_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  config_settings.uobjcoll_binary_image_section_alignment);
-		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_cc_bridge);
-		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_as_bridge);
-		| "bridge_ld_bridge" -> settings_value := (Printf.sprintf "%s" config_settings.bridge_ld_bridge);
-		| _ -> retstatus := false;
-	;
-	
-	(!retstatus, !settings_value)
-;;
-
-
-let settings_set 
-	(setting_name : string)
-	(setting_value : string)
-	: bool =
-
-	let retval = ref true in
-	match setting_name with
-		| "binary_page_size" -> config_settings.binary_page_size <- int_of_string setting_value;
-		| "binary_uobj_section_alignment" -> config_settings.binary_uobj_section_alignment <- int_of_string setting_value;
-		| "binary_uobj_default_section_size" -> config_settings.binary_uobj_default_section_size <- int_of_string setting_value;
-		| "uobj_binary_image_load_address" -> config_settings.uobj_binary_image_load_address <- int_of_string setting_value;
-		| "uobj_binary_image_uniform_size" -> config_settings.uobj_binary_image_uniform_size <- bool_of_string setting_value;
-		| "uobj_binary_image_size" -> config_settings.uobj_binary_image_size <- int_of_string setting_value;
-		| "uobj_binary_image_alignment" -> config_settings.uobj_binary_image_alignment <- int_of_string setting_value;
-		| "uobjcoll_binary_image_load_address" -> config_settings.uobjcoll_binary_image_load_address <- int_of_string setting_value;
-		| "uobjcoll_binary_image_hdr_section_alignment" -> config_settings.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
-		| "uobjcoll_binary_image_hdr_section_size" -> config_settings.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
-		| "uobjcoll_binary_image_section_alignment" -> config_settings.uobjcoll_binary_image_section_alignment <- int_of_string setting_value;
-		| "bridge_cc_bridge" -> config_settings.bridge_cc_bridge <- setting_value;
-		| "bridge_as_bridge" -> config_settings.bridge_as_bridge <- setting_value;
-		| "bridge_ld_bridge" -> config_settings.bridge_ld_bridge <- setting_value;
-		| _ -> retval := false;
-	;
-	
-	!retval
-;;
-
-
-(*---------------------------------------------------------------------------*)
-(* FOR FUTURE EXPANSION *)
-(*---------------------------------------------------------------------------*)
+*)
 
 (*
 let create_from_existing_ns

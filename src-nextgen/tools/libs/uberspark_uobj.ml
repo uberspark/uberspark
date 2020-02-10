@@ -17,7 +17,7 @@ open Str
 
 type publicmethod_info_t =
 {
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.uobj_publicmethods_t;
+	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
 	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
 };;
 
@@ -83,45 +83,28 @@ class uobject
 	;
 
 
-
-	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
-		f_uberspark_hdr = `Null;
-		f_uobj_hdr = `Null;
-		f_uobj_sources = `Null;
-		f_uobj_publicmethods = `Null;
-		f_uobj_intrauobjcoll_callees = `Null;
-		f_uobj_interuobjcoll_callees = `Null;
-		f_uobj_legacy_callees = `Null;
-		f_uobj_binary = `Null;
-	};
-
+	(* uobj manifest file top-level json *)
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
-	val d_hdr: Uberspark_manifest.Uobj.uobj_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""};
-	method get_d_hdr = d_hdr;
+	(* uobj manifest uberspark-uobj json node var *)
+	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
+		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
+		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
+		f_legacy_callees = []; f_sections = []; 
+		};
 
-	val d_uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;};
-	method get_d_uobjslt_hdr = d_uobjslt_hdr;
+
+	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
+		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
+
+	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.f_publicmethods;
 
 
-	val d_sources_h_file_list: string list ref = ref [];
-	method get_d_sources_h_file_list = !d_sources_h_file_list;
 
-	val d_sources_c_file_list: string list ref = ref [];
-	method get_d_sources_c_file_list = !d_sources_c_file_list;
-
-	val d_sources_casm_file_list: string list ref = ref [];
-	method get_d_sources_casm_file_list = !d_sources_casm_file_list;
-
-	val d_sources_asm_file_list: string list ref = ref [];
-	method get_d_sources_asm_file_list = !d_sources_asm_file_list;
-
-	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.uobj_publicmethods_t)  Hashtbl.t)); 
+	val d_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t)); 
 	method get_d_publicmethods_hashtbl = d_publicmethods_hashtbl;
-
-	val d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.uobj_publicmethods_t) list ref = ref []; 
-	method get_d_publicmethods_assoc_list = !d_publicmethods_assoc_list;
-
 
 	val d_intrauobjcoll_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_intrauobjcoll_callees_hashtbl = d_intrauobjcoll_callees_hashtbl;
@@ -131,11 +114,6 @@ class uobject
 
 	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
-
-	(* association list of uobj binary image sections as parsed from uobj manifest; indexed by section name *)		
-	val d_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
-	method get_d_sections_list_ref = d_sections_list;
-	method get_d_sections_list_val = !d_sections_list;
 
 	(* association list of default uobj binary image sections; indexed by section name *)		
 	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -169,61 +147,25 @@ class uobject
 		()
 	;
 		
-	val d_slt_trampolinecode : string ref = ref "";
-	method get_d_slt_trampolinecode = !d_slt_trampolinecode;
-	method set_d_slt_trampolinecode (trampolinecode : string)= 
-		d_slt_trampolinecode := trampolinecode;
-		()
-	;
-
-	val d_slt_trampolinedata : string ref = ref "";
-	method get_d_slt_trampolinedata = !d_slt_trampolinedata;
-	method set_d_slt_trampolinedata (trampolinedata : string)= 
-		d_slt_trampolinedata := trampolinedata;
-		()
-	;
-
-
-	val d_slt_directxfer_template : string ref = ref "";
-	method get_d_slt_directxfer_template = !d_slt_directxfer_template;
-	method set_d_slt_directxfer_template (template : string)= 
-		d_slt_directxfer_template := template;
-		()
-	;
-
-
-	val d_slt_indirectxfer_template : string ref = ref "";
-	method get_d_slt_indirectxfer_template = !d_slt_indirectxfer_template;
-	method set_d_slt_indirectxfer_template (template : string)= 
-		d_slt_indirectxfer_template := template;
-		()
-	;
-
-	val d_slt_addrdef_template : string ref = ref "";
-	method get_d_slt_addrdef_template = !d_slt_addrdef_template;
-	method set_d_slt_addrdef_template (template : string)= 
-		d_slt_addrdef_template := template;
-		()
-	;
 
 
 	(* uobj binary image load address *)
-	val d_load_addr = ref Uberspark_config.config_settings.uobj_binary_image_load_address;
+	val d_load_addr = ref Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
 	method set_d_load_addr load_addr = (d_load_addr := load_addr);
 	
 	(* uobj binary image size; will be overwritten with actual size using alignment if uniform_size=false  *)
-	val d_size = ref Uberspark_config.config_settings.uobj_binary_image_size; 
+	val d_size = ref Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_size; 
 	method get_d_size = !d_size;
 	method set_d_size size = (d_size := size);
 
 	(* uobj binary image uniform size flag *)
-	val d_uniform_size = ref Uberspark_config.config_settings.uobj_binary_image_uniform_size; 
+	val d_uniform_size = ref Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_uniform_size; 
 	method get_d_uniform_size = !d_uniform_size;
 	method set_d_uniform_size uniform_size = (d_uniform_size := uniform_size);
 
 	(* uobj binary image alignment *)
-	val d_alignment = ref Uberspark_config.config_settings.uobj_binary_image_alignment; 
+	val d_alignment = ref Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_alignment; 
 	method get_d_alignment = !d_alignment;
 	method set_d_alignment alignment = (d_alignment := alignment);
 
@@ -268,20 +210,6 @@ class uobject
 	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
 
 
-	(*--------------------------------------------------------------------------*)
-	(* write uobj manifest *)
-	(* uobj_mf_filename = uobj manifest filename *)
-	(*--------------------------------------------------------------------------*)
-	method write_manifest 
-		(uobj_mf_filename : string)
-		: bool =
-
-		let oc = open_out uobj_mf_filename in
-		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
-		close_out oc;	
-
-		(true)
-	;
 
 	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
@@ -290,9 +218,11 @@ class uobject
 	method parse_manifest 
 		()
 		: bool =
-		
+
 		(* read manifest JSON *)
-		let (rval, mf_json) = Uberspark_manifest.get_manifest_json (self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) in
+		let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest 
+			(self#get_d_path_to_mf_filename ^ "/" ^ self#get_d_mf_filename) 
+			) in
 		
 		if (rval == false) then (false)
 		else
@@ -302,63 +232,56 @@ class uobject
 		d_mf_json := mf_json;
 		end;
 
-		(* get uobj manifest json nodes *)
-		let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
+		(* parse uberspark-uobj node *)
+		let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
+				json_node_uberspark_uobj_var) in
 
 		if (rval == false) then (false)
 		else
 
-		(* debug *)
-		(*let dummy = 0 in begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
-		let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
-		d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
-		self#write_manifest "auto_test.json";		
-		end;*)
+		let dummy = 0 in begin
+		(* generate publicmethods hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_publicmethods_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_publicmethods;
 
-		(* parse uobj-hdr node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_hdr mf_json d_hdr ) in
-		if (rval == false) then (false)
-		else
+		(* generate intrauobjcoll-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_intrauobjcoll_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_intrauobjcoll_callees;
 
-		let dummy=0 in begin
-			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ d_hdr.f_namespace;
+		(* generate interuobjcoll-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_interuobjcoll_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_interuobjcoll_callees;
+
+		(* generate legacy-callees hashtable *)
+		List.iter ( fun (x,y) -> 
+			Hashtbl.add d_legacy_callees_hashtbl x y;
+		) json_node_uberspark_uobj_var.f_legacy_callees;
 		end;
 
-		(* parse uobj-sources node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_sources mf_json
-				d_sources_h_file_list d_sources_c_file_list d_sources_casm_file_list d_sources_asm_file_list) in
 
-		if (rval == false) then (false)
-		else
+		let dummy=0 in begin
+			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobj_var.f_namespace;
+		end;
+
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total sources: h files=%u, c files=%u, casm files=%u, asm files=%u" 
-					(List.length self#get_d_sources_h_file_list)
-					(List.length self#get_d_sources_c_file_list)
-					(List.length self#get_d_sources_casm_file_list)
-					(List.length self#get_d_sources_asm_file_list);
+					(List.length json_node_uberspark_uobj_var.f_sources.f_h_files)
+					(List.length json_node_uberspark_uobj_var.f_sources.f_c_files)
+					(List.length json_node_uberspark_uobj_var.f_sources.f_casm_files)
+					(List.length json_node_uberspark_uobj_var.f_sources.f_asm_files);
 			end;
 
 
-		(* parse uobj-publicmethods node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_publicmethods mf_json d_publicmethods_hashtbl) in
-		let rval_assoc = (Uberspark_manifest.Uobj.parse_uobj_publicmethods_into_assoc_list mf_json d_publicmethods_assoc_list) in
-
-		if (rval == false) || (rval_assoc == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total public methods:%u,%u" (Hashtbl.length self#get_d_publicmethods_hashtbl)
-					(List.length self#get_d_publicmethods_assoc_list); 
+					(List.length json_node_uberspark_uobj_var.f_publicmethods); 
 			end;
 
-		(* parse uobj-intrauobjcoll-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_intrauobjcoll_callees mf_json d_intrauobjcoll_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "list of uobj-intrauobjcoll-callees follows:";
@@ -368,36 +291,21 @@ class uobject
 				) self#get_d_intrauobjcoll_callees_hashtbl;
 			end;
 
-		(* parse uobj-interuobjcoll-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_interuobjcoll_callees mf_json d_interuobjcoll_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total interuobjcoll callees=%u" (Hashtbl.length self#get_d_interuobjcoll_callees_hashtbl);
 			end;
 
-		(* parse uobj-legacy-callees node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_legacy_callees mf_json d_legacy_callees_hashtbl) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total legacy callees=%u" (Hashtbl.length self#get_d_legacy_callees_hashtbl);
 			end;
 
 
-		(* parse uobj-binary/uobj-sections node *)
-		let rval = (Uberspark_manifest.Uobj.parse_uobj_sections mf_json self#get_d_sections_list_ref) in
-
-		if (rval == false) then (false)
-		else
 		let dummy = 0 in
 		if (rval == true) then
 			begin
-				Uberspark_logger.log "binary sections override:%u" (List.length self#get_d_sections_list_val);								
+				Uberspark_logger.log "binary sections override:%u" (List.length json_node_uberspark_uobj_var.f_sections);								
 			end;
 
 		(true)
@@ -414,59 +322,34 @@ class uobject
 	(* parse sentinel linkage manifest *)
 	(*--------------------------------------------------------------------------*)
 	method parse_manifest_slt	
-		(*(fn_list: string list)*)
-			= 
-			let retval = ref false in 	
-			let target_def = 	self#get_d_target_def in	
-			let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
-				target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
-				Uberspark_namespace.namespace_uobjslt_mf_filename) in 
+		= 
+		let retval = ref false in 	
+		let target_def = self#get_d_target_def in	
+		let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
+			target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
+			Uberspark_namespace.namespace_root_mf_filename) in 
 
-			let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
+		let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
+		if(rval == true) then
+		begin
+			Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
+
+			(* read manifest JSON *)
+			let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest abs_uobjslt_filename) in
 			if(rval == true) then
 			begin
-				(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "fn_list length=%u" (List.length fn_list);*)
-				Uberspark_logger.log "reading slt manifest from:%s" abs_uobjslt_filename;
 
-				(* read manifest JSON *)
-				let (rval, mf_json) = (Uberspark_manifest.get_manifest_json abs_uobjslt_filename) in
-				if(rval == true) then
+				(* convert to var *)
+				let rval =	(Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_to_var mf_json d_mf_json_node_uberspark_uobjslt_var) in
+				if rval then
 				begin
+					retval := true;
 
-					(* parse uobjslt-hdr node *)
-					(*let uobjslt_hdr: Uberspark_manifest.Uobjslt.uobjslt_hdr_t = {f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;} in*)
-					let rval =	(Uberspark_manifest.Uobjslt.parse_uobjslt_hdr mf_json d_uobjslt_hdr) in
-					if rval then
-					begin
-
-						(* read trampoline code and data *)
-						(*let (rval_tcode, tcode) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinecode mf_json) in
-						let (rval_tdata, tdata) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_trampolinedata mf_json) in
-						*)
-						let (rval_tdirectxfer, tdirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_directxfer mf_json) in
-						let (rval_tindirectxfer, tindirectxfer) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_indirectxfer mf_json) in
-						let (rval_addrdef, taddrdef) =	(Uberspark_manifest.Uobjslt.parse_uobjslt_addrdef mf_json) in
-
-						(*if  rval_tcode && rval_tdata then*)
-						if  rval_tdirectxfer && rval_tindirectxfer && rval_addrdef then
-							begin
-								(*self#set_d_slt_trampolinecode tcode;
-								self#set_d_slt_trampolinedata tdata;*)
-								self#set_d_slt_directxfer_template tdirectxfer;
-								self#set_d_slt_indirectxfer_template tindirectxfer;
-								self#set_d_slt_addrdef_template taddrdef;
-								retval := true;
-								(*Uberspark_logger.log "code=%s" (uobjslt_trampolinecode_json |> to_string);								
-								Uberspark_logger.log "data=%s" (uobjslt_trampolinedata_json |> to_string);*)								
-							end;
-
-					end;
 				end;
 			end;
+		end;
 
-
-
-	(!retval)
+		(!retval)
 	;
 
 
@@ -509,11 +392,11 @@ class uobject
 		(* iterate over default sections *)
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
-			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.binary_uobj_section_alignment) in
+			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment) in
 			let padding_size = ref 0 in
 				if remainder_size > 0 then
 					begin
-						padding_size := Uberspark_config.config_settings.binary_uobj_section_alignment - remainder_size;
+						padding_size := Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
 					end
 				else
 					begin
@@ -529,8 +412,8 @@ class uobject
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
 													f_size = section_size;
-													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 													f_addr_start = !uobj_section_load_addr; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -564,11 +447,11 @@ class uobject
 		(* iterate over manifest sections *)
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
-			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.config_settings.binary_uobj_section_alignment) in
+			let remainder_size = (x.usbinformat.f_size mod Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment) in
 			let padding_size = ref 0 in
 				if remainder_size > 0 then
 					begin
-						padding_size := Uberspark_config.config_settings.binary_uobj_section_alignment - remainder_size;
+						padding_size := Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
 					end
 				else
 					begin
@@ -584,8 +467,8 @@ class uobject
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
 													f_size = section_size;
-													f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-													f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+													f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 													f_addr_start = !uobj_section_load_addr; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -595,7 +478,7 @@ class uobject
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
 
-		)self#get_d_sections_list_val;
+		)json_node_uberspark_uobj_var.f_sections;
 
 		
 		if (self#get_d_uniform_size) then begin
@@ -619,8 +502,8 @@ class uobject
 							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-															f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+															f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -641,8 +524,8 @@ class uobject
 						usbinformat = { f_type = Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_PADDING;
 										f_prot=0; 
 										f_size = (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment));
-										f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-										f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+										f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 										f_addr_start = !uobj_section_load_addr; 
 										f_addr_file = 0;
 										f_reserved = 0;
@@ -676,9 +559,9 @@ class uobject
 			f_subsection_list = [ ".uobj_ssa" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -686,16 +569,16 @@ class uobject
 		}) ];
 
 		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.uobj_publicmethods_t)  ->
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
 			let section_name = ("uobj_pm_" ^ pm_name) in 
 			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
 				f_name = section_name;	
 				f_subsection_list = [ "." ^ section_name ];	
 				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
 								f_prot=0; 
-								f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-								f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-								f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+								f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+								f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 								f_addr_start=0; 
 								f_addr_file = 0;
 								f_reserved = 0;
@@ -711,9 +594,9 @@ class uobject
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTCODE; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -726,9 +609,9 @@ class uobject
 			f_subsection_list = [ ".uobj_intrauobjcoll_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTDATA; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -742,9 +625,9 @@ class uobject
 			f_subsection_list = [ ".uobj_interuobjcoll_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTCODE; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -758,9 +641,9 @@ class uobject
 			f_subsection_list = [ ".uobj_interuobjcoll_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTDATA; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -774,9 +657,9 @@ class uobject
 			f_subsection_list = [ ".uobj_legacy_csltcode" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTCODE; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -789,9 +672,9 @@ class uobject
 			f_subsection_list = [ ".uobj_legacy_csltdata" ];	
 			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTDATA; 
 							f_prot=0; 
-							f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 							f_addr_start=0; 
 							f_addr_file = 0;
 							f_reserved = 0;
@@ -805,9 +688,9 @@ class uobject
 				f_subsection_list = [ ".text" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -819,9 +702,9 @@ class uobject
 				f_subsection_list = [".rodata"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA; 
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment;
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -833,9 +716,9 @@ class uobject
 				f_subsection_list = [".data"; ".bss"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment;
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -847,9 +730,9 @@ class uobject
 				f_subsection_list = [".dmadata"];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment;
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -861,9 +744,9 @@ class uobject
 				f_subsection_list = [ ".ustack" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment;
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -875,9 +758,9 @@ class uobject
 				f_subsection_list = [ ".tstack"; ".stack" ];	
 				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
 												f_prot=0; 
-												f_size = Uberspark_config.config_settings.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.config_settings.binary_uobj_section_alignment;
-												f_pad_to = Uberspark_config.config_settings.binary_uobj_section_alignment; 
+												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 												f_addr_start=0; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -954,7 +837,7 @@ class uobject
 
 						slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
 					end;
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -985,7 +868,7 @@ class uobject
 
 							slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + (self#get_d_uobjslt_hdr).f_addr_size;
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
 						end;
 
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -1015,17 +898,17 @@ class uobject
 		: unit =
 
 		(* copy all the uobj c files to build area *)
-		if (List.length self#get_d_sources_c_file_list) > 0 then begin
+		if (List.length json_node_uberspark_uobj_var.f_sources.f_c_files) > 0 then begin
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.c") (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj h files to build area *)
-		if (List.length self#get_d_sources_h_file_list) > 0 then begin
+		if (List.length json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.h") (self#get_d_builddir ^ "/.");
 		end;
 
 		(* copy all the uobj cS files to build area *)
-		if (List.length self#get_d_sources_casm_file_list) > 0 then begin
+		if (List.length json_node_uberspark_uobj_var.f_sources.f_casm_files) > 0 then begin
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.cS") (self#get_d_builddir ^ "/.");
 		end;
 
@@ -1048,9 +931,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" 
-			!d_slt_directxfer_template
-			!d_slt_indirectxfer_template
-			!d_slt_addrdef_template
+			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
 			!d_intrauobjcoll_callees_slt_codegen_info_list
 			".uobj_intrauobjcoll_csltcode"
 			!d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -1066,9 +949,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" 
-			!d_slt_directxfer_template
-			!d_slt_indirectxfer_template
-			!d_slt_addrdef_template
+			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
 			!d_interuobjcoll_callees_slt_codegen_info_list
 			".uobj_interuobjcoll_csltcode"
 			!d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -1085,9 +968,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" 
-			!d_slt_directxfer_template
-			!d_slt_indirectxfer_template
-			!d_slt_addrdef_template
+			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
 			!d_legacy_callees_slt_codegen_info_list
 			".uobj_legacy_csltcode"
 			!d_legacy_callees_slt_indirect_xfer_table_assoc_list
@@ -1103,7 +986,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
-			(self#get_d_hdr).f_namespace d_publicmethods_hashtbl;
+			(json_node_uberspark_uobj_var).f_namespace d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
@@ -1135,7 +1018,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 		Uberspark_codegen.Uobj.generate_src_binhdr 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
-			(self#get_d_hdr).f_namespace self#get_d_load_addr self#get_d_size 
+			(json_node_uberspark_uobj_var).f_namespace self#get_d_load_addr self#get_d_size 
 			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -1149,22 +1032,22 @@ class uobject
 
 
 		(* add all the autogenerated C source files to the list of c sources *)
-		d_sources_c_file_list := [ 
+		json_node_uberspark_uobj_var.f_sources.f_c_files <-  [ 
 			Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename;		
 			Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_binhdr_src_filename;
-		] @ !d_sources_c_file_list;
+		] @ json_node_uberspark_uobj_var.f_sources.f_c_files;
 
 
 		(* add all the autogenerated asm source files to the list of asm sources *)
 		(* TBD: eventually this will just be casm sources *)
-		d_sources_asm_file_list := [ 
+		json_node_uberspark_uobj_var.f_sources.f_asm_files <- [ 
 			Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename;
 			Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename;
 			Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename;
-		] @ !d_sources_asm_file_list;
+		] @ json_node_uberspark_uobj_var.f_sources.f_asm_files;
 
 		()
 	;
@@ -1204,7 +1087,7 @@ class uobject
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
-				(self#get_d_hdr).f_platform (self#get_d_hdr).f_arch (self#get_d_hdr).f_cpu;
+				(json_node_uberspark_uobj_var).f_platform (json_node_uberspark_uobj_var).f_arch (json_node_uberspark_uobj_var).f_cpu;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
 				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
 		end;
@@ -1256,7 +1139,7 @@ class uobject
 
 		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (self#get_d_sources_c_file_list) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+			 (json_node_uberspark_uobj_var.f_sources.f_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1273,7 +1156,7 @@ class uobject
 
 		retval := Uberspark_bridge.As.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (self#get_d_sources_asm_file_list) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+			 (json_node_uberspark_uobj_var.f_sources.f_asm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1293,12 +1176,12 @@ class uobject
 		(* add object files generated from c sources *)
 		List.iter (fun fname ->
 			o_file_list := !o_file_list @ [ fname ^ ".o"];
-		) self#get_d_sources_c_file_list;
+		) json_node_uberspark_uobj_var.f_sources.f_c_files;
 
 		(* add object files generated from asm sources *)
 		List.iter (fun fname ->
 			o_file_list := !o_file_list @ [ fname ^ ".o"];
-		) self#get_d_sources_asm_file_list;
+		) json_node_uberspark_uobj_var.f_sources.f_asm_files;
 
 
 		retval := Uberspark_bridge.Ld.invoke 
@@ -1346,7 +1229,7 @@ class uobject
 		List.iter ( fun h_filename -> 
 			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
 			(uobj_path_ns ^ "/include/" ^ h_filename);
-		) self#get_d_sources_h_file_list;
+		) json_node_uberspark_uobj_var.f_sources.f_h_files;
 
 		(* copy top-level header to namespace *)
 		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
@@ -1529,17 +1412,17 @@ let build
 	(* initialize uobj initial state *)
 	(* TBD: we need to get the load address as argument to the build interface *)
 	uobj#initialize ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir uobj_target_def 
-		Uberspark_config.config_settings.uobj_binary_image_load_address;
+		Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_load_address;
 
-	if (List.length uobj#get_d_sources_c_file_list) > 0 then begin
+	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_c_files) > 0 then begin
 		Uberspark_osservices.cp "*.c" (Uberspark_namespace.namespace_uobj_build_dir ^ "/.");
 	end;
 
-	if (List.length uobj#get_d_sources_h_file_list) > 0 then begin
+	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
 		Uberspark_osservices.cp "*.h" "./_build/.";
 	end;
 
-	if (List.length uobj#get_d_sources_casm_file_list) > 0 then begin
+	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_casm_files) > 0 then begin
 		Uberspark_osservices.cp "*.cS" "./_build/.";
 	end;
 
@@ -1664,3 +1547,55 @@ let create_initialize_and_build
 
 	(true, Some uobj)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* FOR FUTURE EXPANSION *)
+(*--------------------------------------------------------------------------*)
+
+(*
+
+	(* get uobj manifest json nodes *)
+	let rval = (Uberspark_manifest.Uobj.get_uobj_mf_json_nodes mf_json d_uobj_mf_json_nodes) in
+
+	if (rval == false) then (false)
+	else
+
+	(* debug *)
+	(*let dummy = 0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string mf_json);
+	let (rval, new_json) = Uberspark_manifest.json_node_update "namespace" (Yojson.Basic.from_string "\"uberspark/uobjs/wohoo\"") (Yojson.Basic.Util.member "uobj-hdr" mf_json) in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "mf_json=%s" (Uberspark_manifest.json_node_pretty_print_to_string new_json);
+	d_uobj_mf_json_nodes.f_uobj_hdr <- new_json;
+	self#write_manifest "auto_test.json";		
+	end;*)
+
+
+
+	val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t = {
+		f_uberspark_hdr = `Null;
+		f_uobj_hdr = `Null;
+		f_uobj_sources = `Null;
+		f_uobj_publicmethods = `Null;
+		f_uobj_intrauobjcoll_callees = `Null;
+		f_uobj_interuobjcoll_callees = `Null;
+		f_uobj_legacy_callees = `Null;
+		f_uobj_binary = `Null;
+	};
+
+
+	(*--------------------------------------------------------------------------*)
+	(* write uobj manifest *)
+	(* uobj_mf_filename = uobj manifest filename *)
+	(*--------------------------------------------------------------------------*)
+	method write_manifest 
+		(uobj_mf_filename : string)
+		: bool =
+
+		let oc = open_out uobj_mf_filename in
+		Uberspark_manifest.Uobj.write_uobj_mf_json_nodes d_uobj_mf_json_nodes oc;
+		close_out oc;	
+
+		(true)
+	;
+*)
