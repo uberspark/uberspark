@@ -1,4 +1,4 @@
-.. include:: ../macros.rst
+.. include:: /macros.rst
 
 Introduction
 ============
