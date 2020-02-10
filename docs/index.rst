@@ -22,7 +22,7 @@ The salient features of |uspark| include:
 
 This documentation describes the details on the software requirements and
 dependencies, build, verification and intallation of the core |uspark| tools and
-libraries
+libraries and |coss|
 
 .. toctree::
    :maxdepth: 2
@@ -34,8 +34,23 @@ libraries
 
 .. toctree::
    :maxdepth: 2
-   :caption: Next Generation (Experimental) Toolkit:
+   :caption: [ (Experimental) Next-Gen Toolkit ]
+   :includehidden:
+
+   nextgen-toolkit/preface
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: System Integrator's Guide
+
 
    nextgen-toolkit/intro
    nextgen-toolkit/sw-requirements
    nextgen-toolkit/build-install
+
+.. toctree::
+   :maxdepth: 4
+   :caption: CoSS Developer's Guide
+
+   nextgen-toolkit/intro
