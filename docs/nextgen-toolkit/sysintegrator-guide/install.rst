@@ -23,6 +23,7 @@ build the toolkit binaries, and additionally build the ``.html`` version of the 
           command ``make`` as above.
 
 
+
 Building |uspark| Documentation in Other Formats
 ------------------------------------------------
 
@@ -53,6 +54,18 @@ the |uspark| source-tree (the directory where the file RELEASE is located):
     make install
 
 
-.. note:: |uspark| toolkit binaries are installed by default at: ``/usr/bin`` system location. 
+.. note:: |uspark| is installed at ``~/uberspark`` by default and 
+          toolkit binaries are installed by default at: ``/usr/bin`` system location. 
           Your user account must be part of the sudo'ers and you may need to enter your
           sudo password during this step.
+
+.. note:: If you are using Windows Subsystem for Linux (WSL) as your development environment,
+          you will need to issue ``make install ROOT_DIR=<NTFS volume path>`` instead of
+          ``make install`` as above. For example,
+          ``make install ROOT_DIR=/c/workspace/uberspark``; where ``/c/workspace/uberspark`` is
+          where you would like |uspark| to be installed. This is due to the fact that
+          docker is unable to mount host folders that are part of the WSL Linux filesystem (e.g., ``~/``) 
+          under Windows.
+
+
+
