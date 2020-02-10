@@ -1,7 +1,7 @@
 .. uberSpark documentation master index
    author: Amit Vasudevan (amitvasudevan@acm.org)
 
-.. include:: macros.hrst
+.. include:: macros.rst
 
 Welcome to |uspark|'s documentation!
 =====================================
