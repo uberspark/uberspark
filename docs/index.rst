@@ -40,17 +40,29 @@ libraries and |coss|
    nextgen-toolkit/preface
 
 
+
+
 .. toctree::
    :maxdepth: 4
    :caption: System Integrator's Guide
 
 
-   nextgen-toolkit/intro
-   nextgen-toolkit/sw-requirements
-   nextgen-toolkit/build-install
+   nextgen-toolkit/sysintegrator-guide/intro
+   nextgen-toolkit/sysintegrator-guide/swreq
+   nextgen-toolkit/sysintegrator-guide/install
+
+
 
 .. toctree::
    :maxdepth: 4
    :caption: CoSS Developer's Guide
 
-   nextgen-toolkit/intro
+   nextgen-toolkit/cossdev-guide/intro
+
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Contributor's Guide
+
+   nextgen-toolkit/contrib-guide/intro
