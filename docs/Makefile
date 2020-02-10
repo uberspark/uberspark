@@ -13,7 +13,7 @@ UBERSPARK_DOC_BUILDDIR      = $(UBERSPARK_DOC_PATH)_build
 ### common documentation build prep
 .PHONY: docs_build_prep
 docs_build_prep:
-	cd $(UBERSPARK_DOC_PATH) && git clone git@github.com:hypcode/uberspark-htmlcss-themes.git _themes
+	cd $(UBERSPARK_DOC_PATH) && git clone https://github.com/hypcode/uberspark-htmlcss-themes.git _themes
 	mkdir -p $(UBERSPARK_DOC_PATH)/_build
 
 .PHONY: docs_pdf
