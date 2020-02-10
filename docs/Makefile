@@ -10,13 +10,19 @@ UBERSPARK_DOC_BUILDDIR      = $(UBERSPARK_DOC_PATH)_build
 
 ###### targets
 
+### common documentation build prep
+.PHONY: docs_build_prep
+docs_build_prep:
+	cd $(UBERSPARK_DOC_PATH) && git clone git@github.com:hypcode/uberspark-htmlcss-themes.git _themes
+	mkdir -p $(UBERSPARK_DOC_PATH)/_build
+
 .PHONY: docs_pdf
-docs_pdf:
+docs_pdf: docs_build_prep
 	@$(SPHINXBUILD) -b latex "$(UBERSPARK_DOC_SOURCEDIR)" "$(UBERSPARK_DOC_BUILDDIR)"
 	@cd $(UBERSPARK_DOC_BUILDDIR) && make 
 
 .PHONY: docs_html
-docs_html:
+docs_html: docs_build_prep
 	@$(SPHINXBUILD) -b html "$(UBERSPARK_DOC_SOURCEDIR)" "$(UBERSPARK_DOC_BUILDDIR)"
 
 .PHONY: clean
