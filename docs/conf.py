@@ -60,11 +60,11 @@ html_theme_options = {
     'current_version' : 'latest',
 
     'languages' : {
-        'en' : '/'
+        'en' : ''
     },
 
     'versions' : {
-        'latest' : '/'
+        'latest' : ''
     },
 
     'downloads' : {
