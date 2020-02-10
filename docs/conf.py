@@ -50,19 +50,28 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
 
-#html_theme_path = ["_themes", ]
+html_theme = 'rtd_uberspark'
+html_theme_path = ["_themes", ]
+html_theme_options = {
+    'style_external_links': True,
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
+    'current_language' : 'en',
+    'current_version' : 'latest',
 
-html_sidebars = {
-   '**': ['globaltoc.html', 'searchbox.html'],
-   'using/windows': ['windowssidebar.html', 'searchbox.html'],
-}
+    'languages' : {
+        'en' : '/'
+    },
+
+    'versions' : {
+        'latest' : '/'
+    },
+
+    'downloads' : {
+        'PDF' : 'uberspark.pdf'
+    }
+
+}    
 
 
 # -- Options for LaTeX output ---------------------------------------------
