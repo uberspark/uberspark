@@ -50,6 +50,7 @@ libraries and |coss|
    nextgen-toolkit/sysintegrator-guide/intro
    nextgen-toolkit/sysintegrator-guide/swreq
    nextgen-toolkit/sysintegrator-guide/install
+   nextgen-toolkit/sysintegrator-guide/terminology411
 
 
 
