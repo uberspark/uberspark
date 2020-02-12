@@ -76,7 +76,7 @@ The JSON declaration of the ``uberspark-manifesthdr`` node is as below:
    :options uberspark_max_version: "<version>", "any"
 
     
-An example definition of the ``uberspark-manifesthdr`` within |ubersparkmf| follows:
+An example definition of the ``uberspark-manifesthdr`` node within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
@@ -87,4 +87,93 @@ An example definition of the ``uberspark-manifesthdr`` within |ubersparkmf| foll
             "uberspark_max_version" : "any"
         }
     }
+
+
+
+``uberspark-config`` Manifest Node
+---------------------------------------
+
+The ``uberspark-config`` node within the |ubersparkmf| can be (optionally) used to 
+selectively override configuration settings within the current staging environment.
+
+.. note::   You can define only the required node properties that you want to override within
+            the ``uberspark-config`` node definition. See example that follows below.
+
+The JSON declaration of the ``uberspark-config`` node is as below:
+
+.. json:object:: uberspark-config
+
+   :property binary_page_size: size in bytes of a memory page within the |uobj|/|uobjcoll| binary
+   :proptype binary_page_size: string
+   :options binary_page_size: "<hexadecimal integer>", default="0x200000"
+
+   :property binary_uobj_default_section_size: size in bytes of a |uobj| binary section (e.g., code, data)
+   :proptype binary_uobj_default_section_size: string
+   :options binary_uobj_default_section_size: "<hexadecimal integer>", default="0x200000"
+
+   :property binary_uobj_section_alignment: memory alignment in bytes, of |uobj| binary section
+   :proptype binary_uobj_section_alignment: string
+   :options binary_uobj_section_alignment: "<hexadecimal integer>", default="0x200000"
+
+   :property uobj_binary_image_load_address: memory load address of |uobj| binary
+   :proptype uobj_binary_image_load_address: string
+   :options uobj_binary_image_load_address: "<hexadecimal integer>", default="0x200000"
+
+   :property uobj_binary_image_uniform_size: indicates if all |uobjs| within a |uobjcoll| binary have the same size
+   :proptype uobj_binary_image_uniform_size: boolean
+   :options uobj_binary_image_uniform_size: true, false
+
+   :property uobj_binary_image_size: size in bytes of a |uobj| binary
+   :proptype uobj_binary_image_size: string
+   :options uobj_binary_image_size: "<hexadecimal integer>", default="0x2400000"
+
+   :property uobj_binary_image_alignment: memory alignment in bytes of a |uobj| binary image
+   :proptype uobj_binary_image_alignment: string
+   :options uobj_binary_image_alignment: "<hexadecimal integer>", default="0x200000"
+
+   :property uobjcoll_binary_image_load_address: memory load address of |uobjcoll| binary
+   :proptype uobjcoll_binary_image_load_address: string
+   :options uobjcoll_binary_image_load_address: "<hexadecimal integer>", default="0x60000000"
+
+   :property uobjcoll_binary_image_hdr_section_alignment: memory alignment in bytes, of |uobjcoll| binary header section
+   :proptype uobjcoll_binary_image_hdr_section_alignment: string
+   :options uobjcoll_binary_image_hdr_section_alignment: "<hexadecimal integer>", default="0x200000"
+
+   :property uobjcoll_binary_image_hdr_section_size: size in bytes of a |uobjcoll| binary header section
+   :proptype uobjcoll_binary_image_hdr_section_size: string
+   :options uobjcoll_binary_image_hdr_section_size: "<hexadecimal integer>", default="0x200000"
+
+   :property uobjcoll_binary_image_section_alignment: memory alignment in bytes, of |uobjcoll| binary section
+   :proptype uobjcoll_binary_image_section_alignment: string
+   :options uobjcoll_binary_image_section_alignment: "<hexadecimal integer>", default="0x200000"
+
+   :property bridge_cc_bridge: C compiler <bridge namespace path>
+   :proptype bridge_cc_bridge: string
+   :options bridge_cc_bridge: "<bridge namespace path>"
+
+   :property bridge_as_bridge: Assembler <bridge namespace path>
+   :proptype bridge_as_bridge: string
+   :options bridge_as_bridge: "<bridge namespace path>"
+
+   :property bridge_ld_bridge: Linker <bridge namespace path>
+   :proptype bridge_ld_bridge: string
+   :options bridge_ld_bridge: "<bridge namespace path>"
+
+
+An example definition of the ``uberspark-config`` node within |ubersparkmff| follows:
+
+.. code-block:: JSON
+    
+    {
+        "uberspark-config":{
+    		"binary_uobj_section_alignment" : "0x200000",
+    		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0"
+        }
+    }
+
+The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *bridge_cc_bridge* 
+configuration settings within the current staging environment.
+
+
+
 

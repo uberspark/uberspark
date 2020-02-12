@@ -14,8 +14,14 @@
 .. |b_uobjcollcaps| replace:: **üobject Collection** 
 
 
-.. |ubersparkmf| replace:: ``uberspark.json`` 
+.. |ubersparkmf| replace:: überSpark manifest 
+.. |ubersparkmff| replace:: ``uberspark.json`` 
 
 .. |genuser-guide| replace:: *General User's Guide::* 
 .. |cossdev-guide| replace:: *CoSS Developer's Guide::* 
 .. |contrib-guide| replace:: *Contributor's Guide::* 
+
+
+.. |br| raw:: html
+
+    <br>
