@@ -309,4 +309,68 @@ An example definition of the ``uberspark-bridge-as`` node for the GNU-as Assembl
 
 .. note::   Here the Assembler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
             is the container dockerfile that includes the build for running GNU-as within an ``amd64`` 
-            environment (e.g., ubuntu or alpine)s
+            environment (e.g., ubuntu or alpine)
+
+
+
+``uberspark-bridge-cc`` Manifest Node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``uberspark-bridge-cc`` node within the |ubersparkmf| is used to describe a C compiler 
+bridge. The JSON declaration of the ``uberspark-bridge-cc`` node is as below:
+
+.. json:object:: uberspark-bridge-cc
+
+   :property bridge-hdr: the common bridge header declaration
+   :proptype bridge-hdr: :json:object:`bridge-hdr`
+
+   :property params_prefix_obj: command line option prefix to generate object file from C source
+   :proptype params_prefix_obj: string
+
+   :property params_prefix_asm: command line option prefix to generate Assembly source from C source
+   :proptype params_prefix_asm: string
+  
+   :property params_prefix_output: command line option prefix to specify output file name
+   :proptype params_prefix_output: string
+
+   :property params_prefix_include: command line option prefix to include a header file
+   :proptype params_prefix_include: string
+
+An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C compiler, within |ubersparkmff| follows:
+
+
+.. code-block:: JSON
+    
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-bridge-cc" ],
+            "uberspark_min_version" : "any",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-bridge-cc":{
+            "bridge-hdr":{
+                "btype" : "container",
+                "bname" : "gcc",
+                "execname" : "gcc",
+                "devenv" : "amd64",
+                "arch" : "x86_32",
+                "cpu" : "generic",
+                "version" : "v5.4.0",
+                "path" : ".",
+                "params" : [ "-m32" ],
+                "container_fname" : "uberspark_bridges.Dockerfile"
+            },
+
+            "params_prefix_obj" : "-c",
+            "params_prefix_asm" : "-S",
+            "params_prefix_output" : "-o",
+            "params_prefix_include" : "-I"
+        }
+    }
+
+
+.. note::   Here the C compiler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
+            is the container dockerfile that includes the build for running GNU gcc within an ``amd64`` 
+            environment (e.g., ubuntu or alpine)
+
