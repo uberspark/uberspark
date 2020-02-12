@@ -28,6 +28,9 @@ RUN sudo apk add python3 &&\
     sudo pip3 install --upgrade pip &&\
     sudo pip3 install sphinx==2.2.0
 
+# install sphinx documentation extensions
+RUN sudo pip3 install sphinx-jsondomain==0.0.3
+
 # install ocaml compiler and related packages
 RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     eval $(opam env) && \
