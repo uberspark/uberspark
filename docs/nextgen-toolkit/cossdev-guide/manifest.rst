@@ -252,3 +252,61 @@ The JSON declaration of the common ``bridge-hdr`` sub-node is as below:
 
 
 The follow sections describe the bridge specific manifest node declarations for supported bridges. 
+
+
+``uberspark-bridge-as`` Manifest Node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``uberspark-bridge-as`` node within the |ubersparkmf| is used to describe an Assembler 
+bridge. The JSON declaration of the ``uberspark-bridge-as`` node is as below:
+
+.. json:object:: uberspark-bridge-as
+
+   :property bridge-hdr: the common bridge header declaration
+   :proptype bridge-hdr: :json:object:`bridge-hdr`
+
+   :property params_prefix_obj: command line option prefix to generate object file from Assembly source
+   :proptype params_prefix_obj: string
+
+   :property params_prefix_output: command line option prefix to specify output file name
+   :proptype params_prefix_output: string
+
+   :property params_prefix_include: command line option prefix to include a header file
+   :proptype params_prefix_include: string
+
+An example definition of the ``uberspark-bridge-as`` node for the GNU-as Assembler, within |ubersparkmff| follows:
+
+
+.. code-block:: JSON
+    
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-bridge-as" ],
+            "uberspark_min_version" : "any",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-bridge-as":{
+            "bridge-hdr":{
+                "btype" : "container",
+                "bname" : "gnu-as",
+                "execname" : "gcc",
+                "devenv" : "amd64",
+                "arch" : "x86_32",
+                "cpu" : "generic",
+                "version" : "v2.26.1",
+                "path" : ".",
+                "params" : [ "-m32" ],
+                "container_fname" : "uberspark_bridges.Dockerfile"
+            },
+
+            "params_prefix_obj" : "-c",
+            "params_prefix_output" : "-o",
+            "params_prefix_include" : "-I"
+        }
+    }
+
+
+.. note::   Here the Assembler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
+            is the container dockerfile that includes the build for running GNU-as within an ``amd64`` 
+            environment (e.g., ubuntu or alpine)s
