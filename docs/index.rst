@@ -61,7 +61,6 @@ libraries and |coss|
    nextgen-toolkit/cossdev-guide/intro
    nextgen-toolkit/cossdev-guide/uobj
    nextgen-toolkit/cossdev-guide/uobjcoll
-   nextgen-toolkit/cossdev-guide/manifest
 
 
 
@@ -70,3 +69,10 @@ libraries and |coss|
    :caption: Contributor's Guide
 
    nextgen-toolkit/contrib-guide/intro
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Reference
+
+   nextgen-toolkit/reference/manifest
