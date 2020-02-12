@@ -374,3 +374,72 @@ An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C comp
             is the container dockerfile that includes the build for running GNU gcc within an ``amd64`` 
             environment (e.g., ubuntu or alpine)
 
+
+
+
+``uberspark-bridge-ld`` Manifest Node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``uberspark-bridge-ld`` node within the |ubersparkmf| is used to describe a Linker 
+bridge. The JSON declaration of the ``uberspark-bridge-ld`` node is as below:
+
+.. json:object:: uberspark-bridge-ld
+
+   :property bridge-hdr: the common bridge header declaration
+   :proptype bridge-hdr: :json:object:`bridge-hdr`
+
+		"params_prefix_lscript" : "-T",
+		"params_prefix_libdir" : "-L",
+		"params_prefix_lib" : "-l",
+
+   :property params_prefix_lscript: command line option prefix to specify input linker script file
+   :proptype params_prefix_lscript: string
+
+   :property params_prefix_libdir: command line option prefix to specify library directory
+   :proptype params_prefix_libdir: string
+
+   :property params_prefix_lib: command line option prefix to include a library
+   :proptype params_prefix_lib: string
+
+   :property params_prefix_output: command line option prefix to specify output file name
+   :proptype params_prefix_output: string
+
+
+An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker, within |ubersparkmff| follows:
+
+
+.. code-block:: JSON
+    
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-bridge-ld" ],
+            "uberspark_min_version" : "any",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-bridge-ld":{
+            "bridge-hdr":{
+                "btype" : "container",
+                "bname" : "gnu-ld",
+                "execname" : "ld",
+                "devenv" : "amd64",
+                "arch" : "x86_32",
+                "cpu" : "generic",
+                "version" : "v2.26.1",
+                "path" : ".",
+                "params" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
+                "container_fname" : "uberspark_bridges.Dockerfile"
+            },
+
+            "params_prefix_lscript" : "-T",
+            "params_prefix_libdir" : "-L",
+            "params_prefix_lib" : "-l",
+            "params_prefix_output" : "-o"
+        }
+    }
+
+
+.. note::   Here the Linker bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
+            is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
+            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
+
