@@ -1,5 +1,6 @@
 .. include:: /macros.rst
 
+
 |uspark| Manifest
 =================
 
@@ -45,6 +46,8 @@ Here ``manifest_node`` can be one or more of the following specific node definit
           ``uberspark-uobj`` node, whereas a manifest describing a |uobjcoll| will not.
 
 
+
+.. _manifest-intro:
 
 ``uberspark-manifesthdr`` Manifest Node
 ---------------------------------------

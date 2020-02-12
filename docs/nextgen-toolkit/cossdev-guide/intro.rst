@@ -9,3 +9,5 @@ development and verification work-flow and aims to enable seamless integration i
 
 This guide is intended for |coss| stack developers who are interested in refactoring their existing
 legacy code-base to take advantage of |uberspark|'s capabilities.
+
+Testing with |cossdev-guide|:ref:`manifest-intro`

@@ -4,5 +4,5 @@ Introduction
 ============
 
 This documentation describes the details on the pre-requisites, installation and general
-use of the |uspark| framework from a system-integrator and/or end-user perspective.
+use of the |uspark| framework from a end-user and/or system-integrator perspective.
 

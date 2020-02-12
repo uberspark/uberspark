@@ -44,13 +44,13 @@ libraries and |coss|
 
 .. toctree::
    :maxdepth: 4
-   :caption: System Integrator's Guide
+   :caption: General User's Guide
 
 
-   nextgen-toolkit/sysintegrator-guide/intro
-   nextgen-toolkit/sysintegrator-guide/swreq
-   nextgen-toolkit/sysintegrator-guide/install
-   nextgen-toolkit/sysintegrator-guide/terminology411
+   nextgen-toolkit/genuser-guide/intro
+   nextgen-toolkit/genuser-guide/swreq
+   nextgen-toolkit/genuser-guide/install
+   nextgen-toolkit/genuser-guide/terminology411
 
 
 
