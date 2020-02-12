@@ -59,15 +59,32 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 Every |uberspark| manifest needs to define a ``uberspark-manifesthdr`` node at the bare minimum, 
 which describes the 
 types of manifest nodes contained in the manifest along with the |uberspark| framework version 
-requirements. The JSON declaration of the ``uberspark-manifesthdr`` node is as below:
+requirements. 
 
-.. code-block:: console
+The JSON declaration of the ``uberspark-manifesthdr`` node is as below:
 
-    "uberspark-manifest":{
-		"manifest_node_types" : [  ],
-		"uberspark_min_version" : "",
-		"uberspark_max_version" : ""
-	}
+.. json:object:: uberspark-manifesthdr
+
+   :property manifest_node_type: comma seperated list of zero or more manifest node types (as strings) that are part of the manifest
+   :proptype manifest_node_type: string list  
+   :options manifest_node_type: "uberspark-uobj", "uberspark-uobjcoll", "uberspark-config", "uberspark-sentinel"
+   :property uberspark_min_version: minimum <version> of |uberspark| required
+   :proptype uberspark_min_version: string  
+   :options uberspark_min_version: "<version>", "any"
+   :property uberspark_min_version: maximum <version> of |uberspark| supported
+   :proptype uberspark_min_version: string  
+   :options uberspark_min_version: "<version>", "any"
+
+An example definition of the ``uberspark-manifesthdr`` within |ubersparkmf| follows:
+
+.. code-block:: json
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-uobjcoll", "uberspark-config" ],
+            "uberspark_min_version" : "6.0.0",
+            "uberspark_max_version" : "any"
+        }
+    }
 
 The following are the field descriptions, field type and possible values for the ``uberspark-manifesthdr`` node:
 

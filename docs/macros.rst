@@ -13,6 +13,9 @@
 .. |uobjcollcaps| replace:: üobject Collection 
 .. |b_uobjcollcaps| replace:: **üobject Collection** 
 
+
+.. |ubersparkmf| replace:: ``uberspark.json`` 
+
 .. |genuser-guide| replace:: *General User's Guide::* 
 .. |cossdev-guide| replace:: *CoSS Developer's Guide::* 
 .. |contrib-guide| replace:: *Contributor's Guide::* 
