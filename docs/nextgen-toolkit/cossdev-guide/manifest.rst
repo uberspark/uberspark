@@ -16,7 +16,8 @@ See the JSON official specification (https://json.org) for more details on the J
 
 
 .. note:: We chose JSON for its lightweight nature that allows reading and writing of options with ease. JSON
-          also has a `formal specification <https://cswr.github.io/JsonSchema/spec/why/>`_ which is turn
+          also has a `formal specification <https://cswr.github.io/JsonSchema/spec/why/>`_ of its 
+          `schema <https://json-schema.org>`_ which is turn
           enables creation of correct-by-construction parsers and generators for runtime use.
 
 
