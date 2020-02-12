@@ -62,6 +62,8 @@ html_theme = 'rtd_uberspark'
 html_theme_path = ["_themes", ]
 html_theme_options = {
     'style_external_links': True,
+    'collapse_navigation' : False,
+    'navigation_depth': 4,
 
     'current_language' : 'en',
     'current_version' : 'latest',
