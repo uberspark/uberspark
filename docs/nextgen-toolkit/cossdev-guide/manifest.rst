@@ -64,20 +64,22 @@ requirements.
 The JSON declaration of the ``uberspark-manifesthdr`` node is as below:
 
 .. json:object:: uberspark-manifesthdr
-
+    
    :property manifest_node_type: comma seperated list of zero or more manifest node types (as strings) that are part of the manifest
    :proptype manifest_node_type: string list  
    :options manifest_node_type: "uberspark-uobj", "uberspark-uobjcoll", "uberspark-config", "uberspark-sentinel"
    :property uberspark_min_version: minimum <version> of |uberspark| required
    :proptype uberspark_min_version: string  
    :options uberspark_min_version: "<version>", "any"
-   :property uberspark_min_version: maximum <version> of |uberspark| supported
-   :proptype uberspark_min_version: string  
-   :options uberspark_min_version: "<version>", "any"
+   :property uberspark_max_version: maximum <version> of |uberspark| supported
+   :proptype uberspark_max_version: string  
+   :options uberspark_max_version: "<version>", "any"
 
+    
 An example definition of the ``uberspark-manifesthdr`` within |ubersparkmf| follows:
 
-.. code-block:: json
+.. code-block:: JSON
+    
     {
         "uberspark-manifest":{
             "manifest_node_types" : [ "uberspark-uobjcoll", "uberspark-config" ],
@@ -85,18 +87,4 @@ An example definition of the ``uberspark-manifesthdr`` within |ubersparkmf| foll
             "uberspark_max_version" : "any"
         }
     }
-
-The following are the field descriptions, field type and possible values for the ``uberspark-manifesthdr`` node:
-
-.. tabularcolumns:: |c|c|c|c|
-
-.. csv-table:: ``uberspark-manifesthdr`` node
-   :header: "field name", "field type", "description", "possible values"
-   :class: longtable
-   :widths: 20, 20, 20, 20
-   :escape: \
-
-   "manifest_node_types", "string list", "comma seperated list of manifest node types (as strings) that are part of this manifest", "\"``uberspark-uobj``\", \"``uberspark-uobjcoll``\", \"``uberspark-config``\", \"``uberspark-sentinel``\""
-   "uberspark_min_version", "string", "minimum version of |uberspark| required", "version number as string (e.g., \"6.0.0\" ) OR \"any\""
-   "uberspark_max_version", "string", "maximum version of |uberspark| supported", "version number as string (e.g., \"6.0.0\" ) OR \"any\""
 

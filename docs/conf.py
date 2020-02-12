@@ -35,7 +35,8 @@ release = 'Version: 5.0; Release Series: "Chase"'
 # ones.
 
 extensions = [
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'sphinxjsondomain'
 ]
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 4
