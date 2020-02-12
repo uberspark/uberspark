@@ -59,6 +59,8 @@ libraries and |coss|
    :caption: CoSS Developer's Guide
 
    nextgen-toolkit/cossdev-guide/intro
+   nextgen-toolkit/cossdev-guide/uobj
+   nextgen-toolkit/cossdev-guide/uobjcoll
    nextgen-toolkit/cossdev-guide/manifest
 
 

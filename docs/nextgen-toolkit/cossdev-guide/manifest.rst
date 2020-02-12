@@ -1,6 +1,8 @@
 .. include:: /macros.rst
 
 
+.. _manifest-intro:
+
 |uspark| Manifest
 =================
 
@@ -45,9 +47,10 @@ Here ``manifest_node`` can be one or more of the following specific node definit
           manifest is describing. For example, the manifest describing a |uobj| will have a 
           ``uberspark-uobj`` node, whereas a manifest describing a |uobjcoll| will not.
 
+.. seealso:: |cossdev-guide|:ref:`uobj-intro` and |cossdev-guide|:ref:`uobjcoll-intro`
 
 
-.. _manifest-intro:
+
 
 ``uberspark-manifesthdr`` Manifest Node
 ---------------------------------------
