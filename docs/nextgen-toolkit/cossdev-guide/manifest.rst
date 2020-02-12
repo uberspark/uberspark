@@ -165,6 +165,12 @@ An example definition of the ``uberspark-config`` node within |ubersparkmff| fol
 .. code-block:: JSON
     
     {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-config" ],
+            "uberspark_min_version" : "any",
+            "uberspark_max_version" : "any"
+        },
+
         "uberspark-config":{
     		"binary_uobj_section_alignment" : "0x200000",
     		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0"
@@ -175,5 +181,74 @@ The aforementioned definition selectively overrides the *binary_uobj_section_ali
 configuration settings within the current staging environment.
 
 
+Manifest Nodes for Bridges
+--------------------------
+
+|uberspark| supports a variety of bridges such as compilers, assemblers, linkers, verification tools, build system etc.
+A supported bridge is described by a bridge manifest node which follows the general layout given below:
+
+.. code-block:: console
+
+    {
+        "uberspark-bridge-<bridgename>" : {
+            
+            //common bridge header definition
+            "bridge-hdr":{
+                ...
+            },
+
+            //bridge specific properties
+            ...
+        }
+    }
 
 
+The JSON declaration of the common ``bridge-hdr`` sub-node is as below:
+
+.. json:object:: bridge-hdr
+
+   :property btype: bridge type
+   :proptype btype: string
+   :options btype: "container", "native"
+
+   :property bname: <bridge-name> as identified by |uberspark| 
+   :proptype bname: string
+   :options bname: "<brige-name>"
+
+   :property execname: <executable-name> that carries out the functionality of the bridge 
+   :proptype execname: string
+   :options execname: "<executable-name>"
+
+   :property devenv: development environment where the bridge executable runs 
+   :proptype devenv: string
+   :options devenv: "amd64"
+
+   :property devenv: development environment where the bridge executable runs 
+   :proptype devenv: string
+   :options devenv: "amd64"
+
+   :property arch: CPU architecture supported by the bridge 
+   :proptype arch: string
+   :options arch: "x86_32"
+
+   :property cpu: CPU model supported by the bridge 
+   :proptype cpu: string
+   :options cpu: "generic"
+
+   :property version: <version> of the bridge (executable) 
+   :proptype version: string
+   :options version: "<version>"
+
+   :property path: filesystem <path> to the bridge executable (ignored if btype is "container")
+   :proptype path: string
+   :options path: "<path>"
+
+   :property params: comma delimited (optional) string options for the bridge executable
+   :proptype params: string list
+
+   :property container_fname: <filename> of the container dockerfile (ignored if btype is "native")
+   :proptype container_fname: string
+   :options container_fname: "<filename>"
+
+
+The follow sections describe the bridge specific manifest node declarations for supported bridges. 
