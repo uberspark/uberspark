@@ -16,6 +16,7 @@
 
 .. |ubersparkmf| replace:: überSpark manifest 
 .. |ubersparkmff| replace:: ``uberspark.json`` 
+.. |ubersparkexecf| replace:: ``uberspark`` 
 
 .. |genuser-guide| replace:: *General User's Guide::* 
 .. |cossdev-guide| replace:: *CoSS Developer's Guide::* 
