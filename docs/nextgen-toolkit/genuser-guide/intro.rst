@@ -10,6 +10,7 @@ sw requirements
 building and installation
 uberspark arch 411
 prep staging
+    talk about namespaces and establish notion of default namespaces;
     we create a staging from a platform; in this case generic; this populates
     our uberspark staging area and pins down the relevant platform, cpu, arch
     and selects OS
