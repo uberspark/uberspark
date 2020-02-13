@@ -76,3 +76,4 @@ libraries and |coss|
    :caption: Reference
 
    nextgen-toolkit/reference/manifest
+   nextgen-toolkit/reference/frontend-cli
