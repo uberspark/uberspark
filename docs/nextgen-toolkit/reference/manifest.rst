@@ -453,9 +453,8 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
 
 .. json:object:: uberspark-uobj
 
-    :property namespace: <uobj-namespace-path> as identified by |uberspark| 
+    :property namespace: |uobj| namespace path as identified by |uberspark| 
     :proptype namespace: string
-    :options namespace: "<uobj-namespace-path>"
 
     :property arch: |uobj| target hardware platform 
     :proptype arch: string
@@ -472,18 +471,15 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property sources: |uobj| sources definition sub-node 
     :proptype sources: :json:object:`sources`
 
-    :property publicmethods: comma delimited |uobj| public methods declarations of the 
-                             format ``"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-params-decl>", "<publicmethods-numberof-params">]``
+    :property publicmethods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-params-decl>", "<publicmethods-numberof-params">]*
     :proptype publicmethods: {}
 
-    :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
-                                     |uobj| invokes within the same |uobjcoll|. The declarations are of the format:
-                                     ``"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]``
+    :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
     :proptype intrauobjcoll-callees: {}
 
     :property interuobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
                                      |uobj| invokes across |uobjcoll|. The declarations are of the format:
-                                     ``"<uobjcoll-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]``
+                                     *"<uobjcoll-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
     :proptype interuobjcoll-callees: {}
 
     :property legacy-callees: comma delimited legacy |coss| function names that this |uobj| invokes 
@@ -563,3 +559,96 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 
 
 
+
+``uberspark-uobjcoll`` Manifest Node
+------------------------------------
+
+
+The ``uberspark-uobjcoll`` node within the |ubersparkmf| is used to describe a |uobjcoll|.
+The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
+
+.. json:object:: uberspark-uobjcoll
+
+    :property namespace: <uobjcoll-namespace-path> as identified by |uberspark| 
+    :proptype namespace: string
+    :options namespace: "<uobjcoll-namespace-path>"
+
+    :property arch: |uobjcoll| target hardware platform 
+    :proptype arch: string
+    :options arch: "generic"
+
+    :property arch: |uobjcoll| target CPU architecture 
+    :proptype arch: string
+    :options arch: "x86_32"
+
+    :property cpu: |uobjcoll| target CPU model 
+    :proptype cpu: string
+    :options cpu: "generic"
+
+    :property hpl: |uobjcoll| hardware privilege level 
+    :proptype hpl: string
+    :options hpl: "generic"
+
+    :property sentinels-intrauobjcoll: type of intra-|uobjcoll| sentinel 
+    :proptype sentinels-intrauobjcoll: string list
+    :options sentinels-intrauobjcoll: "call"
+
+    :property uobjs: list of |uobjs| within the |uobjcoll| 
+    :proptype uobjs: :json:object:`uobjs`
+
+    :property publicmethods: comma delimited |uobjcoll| public methods declarations of the 
+                             format: *"<uobj-namespace-path>" : { "<uobj-publicmethod-1-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"], ... , "<uobj-publicmethod-n-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"]}*
+    :proptype publicmethods: {}
+    :options publicmethods: <sentinel-type>="call"
+
+ 
+.. json:object:: uobjs
+
+    :property master: <uobj-namespace-path> of the master |uobj| within the |uobjcoll| 
+    :proptype master: string 
+    :options master: "", "<uobj-namespace-path>"
+ 
+    :property templars: comma delimited list of <uobj-namespace-path> for all the templar |uobjs| within the |uobjcoll| 
+    :proptype templars: string list
+    :options templars: "", "<uobj-namespace-path>"
+ 
+An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll| called ``test``, within |ubersparkmff| follows:
+
+.. code-block:: JSON
+
+    {
+
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-uobjcoll" ],
+            "uberspark_min_version" : "5.1",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-uobjcoll":{
+            "namespace" : "uberspark/uobjcoll/generic/test",
+            "platform" : "generic",
+            "arch" : "generic",
+            "cpu" : "generic",
+            "hpl" : "any",
+            "sentinels-intrauobjcoll" : [ "call" ],
+
+            "uobjs" : {
+                "master" : "",
+                "templars" : [
+                    "uberspark/uobjcoll/generic/test/main",
+                    "uberspark/uobjs/generic/test/add"
+                ]
+            },
+
+            "publicmethods" : {
+                "uberspark/uobjcoll/generic/test/main" : {
+                    "main" : [ "call" ]
+                },
+                
+                "uberspark/uobjs/generic/test/add" : {
+                    "add" : [ "call" ]
+                }
+            }	
+
+        }
+    }
