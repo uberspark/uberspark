@@ -443,3 +443,123 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
             environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
 
+
+
+``uberspark-uobj`` Manifest Node
+---------------------------------
+
+The ``uberspark-uobj`` node within the |ubersparkmf| is used to describe a |uobj|.
+The JSON declaration of the ``uberspark-uobj`` node is as below:
+
+.. json:object:: uberspark-uobj
+
+    :property namespace: <uobj-namespace-path> as identified by |uberspark| 
+    :proptype namespace: string
+    :options namespace: "<uobj-namespace-path>"
+
+    :property arch: |uobj| target hardware platform 
+    :proptype arch: string
+    :options arch: "generic"
+
+    :property arch: |uobj| target CPU architecture 
+    :proptype arch: string
+    :options arch: "x86_32"
+
+    :property cpu: |uobj| target CPU model 
+    :proptype cpu: string
+    :options cpu: "generic"
+
+    :property sources: |uobj| sources definition sub-node 
+    :proptype sources: :json:object:`sources`
+
+    :property publicmethods: comma delimited |uobj| public methods declarations of the 
+                             format ``"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-params-decl>", "<publicmethods-numberof-params">]``
+    :proptype publicmethods: {}
+
+    :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
+                                     |uobj| invokes within the same |uobjcoll|. The declarations are of the format:
+                                     ``"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]``
+    :proptype intrauobjcoll-callees: {}
+
+    :property interuobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
+                                     |uobj| invokes across |uobjcoll|. The declarations are of the format:
+                                     ``"<uobjcoll-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]``
+    :proptype interuobjcoll-callees: {}
+
+    :property legacy-callees: comma delimited legacy |coss| function names that this |uobj| invokes 
+    :proptype legacy-callees: string list
+
+
+.. json:object:: sources
+
+    :property h-files: comma delimited list of |uobj| header files 
+    :proptype h-files: string list
+    
+    :property c-files: comma delimited list of |uobj| C source files 
+    :proptype c-files: string list
+ 
+    :property casm-files: comma delimited list of |uobj| CASM source files 
+    :proptype casm-files: string list
+
+    :property asm-files: comma delimited list of |uobj| Assembly source files 
+    :proptype asm-files: string list
+
+ 
+An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
+
+.. code-block:: JSON
+
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-uobj" ],
+            "uberspark_min_version" : "5.1",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-uobj" : {
+            "namespace" : "uberspark/uobjs/generic/test/add",
+            "platform" : "generic",
+            "arch" : "generic",
+            "cpu" : "generic",
+
+            "sources" : {
+                "h-files": [ ],
+                "c-files": [ "add.c" ],
+                "casm-files": [ ],
+                "asm-files": [ ]
+            },
+        
+            "publicmethods" : {
+                "add" : [
+                    "uint32_t",
+                    "(uint32_t param1, uint32_t param2)", 
+                    "2" 
+                ],
+
+                "inc" : [
+                    "uint32_t",
+                    "(uint32_t param1)", 
+                    "1" 
+                ],
+
+            },
+
+            "intrauobjcoll-callees" : {
+            "uberspark/uobjs/generic/test/uobj1": ["pm_one", "pm_two", "pm_three"],
+            "uberspark/uobjs/generic/test/uobj2": ["pm_one"]
+            },
+        
+            "interuobjcoll-callees": {
+                "uberspark/uobjcoll/test" : ["pm_one" ]
+            },
+        
+            "legacy-callees": [
+                "untrusted_func_1",	
+                "untrusted_func_2"
+            ] 
+    
+        }
+    }
+
+
+
