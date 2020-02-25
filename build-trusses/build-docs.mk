@@ -13,7 +13,7 @@ docs_build_prep:
 	mkdir -p $(UBERSPARK_DOCSDIR)/_temp
 	mkdir -p $(UBERSPARK_DOCSDIR)/_build
 	mkdir -p $(UBERSPARK_DOCSDIR)/_themes
-	cd $(UBERSPARK_DOCSDIR)/_temp && git clone https://github.com/hypcode/uberspark-htmlcss-themes.git uberspark-htmlcss-themes.git
+	cd $(UBERSPARK_DOCSDIR)/_temp && git clone https://github.com/uberspark/uberspark-htmlcss-themes.git uberspark-htmlcss-themes.git
 	cd $(UBERSPARK_DOCSDIR)/_themes && ln -sf ../_temp/uberspark-htmlcss-themes.git/rtd_uberspark/sphinx_rtd_theme/ rtd_uberspark
 
 
