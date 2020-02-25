@@ -51,7 +51,9 @@ libraries and |coss|
    nextgen-toolkit/genuser-guide/swreq
    nextgen-toolkit/genuser-guide/install
    nextgen-toolkit/genuser-guide/terminology411
-
+   nextgen-toolkit/genuser-guide/staging
+   nextgen-toolkit/genuser-guide/install-uobjsuobjcolls
+   nextgen-toolkit/genuser-guide/reporting
 
 
 .. toctree::
