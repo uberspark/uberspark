@@ -59,8 +59,12 @@ libraries and |coss|
    :caption: CoSS Developer's Guide
 
    nextgen-toolkit/cossdev-guide/intro
-   nextgen-toolkit/cossdev-guide/uobj
-   nextgen-toolkit/cossdev-guide/uobjcoll
+   nextgen-toolkit/cossdev-guide/idfunctionality
+   nextgen-toolkit/cossdev-guide/prepnamespace
+   nextgen-toolkit/cossdev-guide/create-uobj
+   nextgen-toolkit/cossdev-guide/create-uobjcoll
+   nextgen-toolkit/cossdev-guide/reintegrate-uobjcoll
+   nextgen-toolkit/cossdev-guide/refactor-build
 
 
 

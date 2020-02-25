@@ -1,5 +1,7 @@
 .. include:: /macros.rst
 
+.. _genuser-guide-intro:
+
 Introduction
 ============
 

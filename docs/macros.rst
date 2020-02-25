@@ -18,7 +18,8 @@
 .. |ubersparkmff| replace:: ``uberspark.json`` 
 .. |ubersparkexecf| replace:: ``uberspark`` 
 
-.. |genuser-guide| replace:: *General User's Guide::* 
+.. |genuser-guide| replace:: *General User's Guide* 
+.. |genuser-guide-ref| replace:: *General User's Guide::* 
 .. |cossdev-guide| replace:: *CoSS Developer's Guide::* 
 .. |contrib-guide| replace:: *Contributor's Guide::* 
 
