@@ -1,5 +1,7 @@
 .. include:: /macros.rst
 
+.. _contrib-guide-intro:
+
 Introduction
 ============
 

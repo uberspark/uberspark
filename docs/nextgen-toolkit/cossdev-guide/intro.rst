@@ -1,5 +1,7 @@
 .. include:: /macros.rst
 
+.. _cossdev-guide-intro:
+
 Introduction
 ============
 

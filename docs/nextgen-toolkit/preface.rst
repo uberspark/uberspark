@@ -27,5 +27,5 @@ The salient features of |uspark| include:
             in the near future, will replace the existing toolkit. 
 
 .. note::   The next-generation toollkit documentation currently comprises of three 
-            overarching guides: the system integrator's guide, 
-            the |coss| developer's guide and the contributor's guide. 
+            overarching guides: the |genuser-guide-ref|,   
+            the |cossdev-guide-ref|, and the |contrib-guide-ref|. 
