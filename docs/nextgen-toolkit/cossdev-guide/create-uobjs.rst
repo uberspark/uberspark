@@ -1,9 +1,9 @@
 .. include:: /macros.rst
 
-.. _cossdev-guide-create-uobj:
+.. _cossdev-guide-create-uobjs:
 
-Create |uobj|
-=============
+Create |uobjs|
+==============
 
 ..  note::  This section is still a work-in-progress
 

@@ -48,7 +48,7 @@ Here ``manifest_node`` can be one or more of the following specific node definit
           manifest is describing. For example, the manifest describing a |uobj| will have a 
           ``uberspark-uobj`` node, whereas a manifest describing a |uobjcoll| will not.
 
-.. seealso:: |cossdev-guide|:ref:`uobj-intro` and |cossdev-guide|:ref:`uobjcoll-intro`
+.. seealso:: |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjs` and |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjcoll`
 
 
 
