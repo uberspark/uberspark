@@ -38,9 +38,9 @@ export CAT = @CAT@
 
 
 ###### release variables
-export USPARK_RELEASE_VERSION_MAJOR	:= 5
+export USPARK_RELEASE_VERSION_MAJOR	:= 6
 export USPARK_RELEASE_VERSION_MINOR := 0
-export USPARK_RELEASE_CODENAME := Chase
+export USPARK_RELEASE_CODENAME := Nexus Prime
 
 
 ###### local paths

@@ -1,4 +1,4 @@
-AC_INIT([uberspark], [5.0])
+AC_INIT([uberspark], [6.0.0])
 
 # simple configuration of tools. (just looks for matching binary on PATH)
 

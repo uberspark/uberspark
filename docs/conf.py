@@ -24,9 +24,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = 'überSpark Documentation'
-copyright = '2019, Amit Vasudevan'
+copyright = '2020, Amit Vasudevan'
 author = 'https://uberspark.org'
-release = 'Version: 5.0; Release Series: "Chase"'
+release = 'Version: 6.0.0; Release Series: "Nexus Prime"'
 
 # -- General configuration ---------------------------------------------------
 
@@ -78,7 +78,7 @@ html_theme_options = {
     },
 
     'downloads' : {
-        'PDF' : 'uberspark.pdf'
+        'PDF' : ''
     }
 
 }    
