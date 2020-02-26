@@ -1,0 +1,34 @@
+/* 
+    uberSpark base definitions 
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+	/* header */
+	"hdr":{
+		"type" : "shareddefs",
+		"namespace" : "",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+
+    "basedefs_uobj": 
+    {
+        "constdef": 
+        {
+            "USCONFIG_NAMESPACE_MAX_LENGTH": ["int", "256"],
+            "USCONFIG_CNAME_MAX_LENGTH": ["int", "128"],
+            "USCONFIG_SIZEOF_UOBJ_TSTACK": ["int", "4096"],
+            "USCONFIG_SIZEOF_UOBJ_USTACK": ["int", "4096"],
+            "USCONFIG_UOBJ_MAX_SECTIONS": ["int", "32"],
+            "USCONFIG_UOBJ_MAX_PUBLICMETHODS": ["int", "16"],
+            "USCONFIG_UOBJ_MAX_INTRAUOBJCOLL_CALLEES": ["int", "16"],
+            "USCONFIG_UOBJ_MAX_INTERUOBJCOLL_CALLEES": ["int", "16"]
+        }
+    }
+
+
+
+}

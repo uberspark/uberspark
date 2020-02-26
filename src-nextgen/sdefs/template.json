@@ -1,0 +1,46 @@
+/* 
+    uberSpark shared definitions template 
+    author: amit vasudevan <amitvasudevan@acm.org>
+*/
+
+{
+	/* header */
+	"hdr":{
+		"type" : "shareddefs",
+		"namespace" : "",
+		"platform" : "generic",
+		"arch" : "generic",
+		"cpu" : "generic"
+	},
+
+
+    "defnode_1": 
+    {
+        "constdef": 
+        {
+            "id1_name": "id1_value",
+            "id2_name": "id2_value"
+        }
+    },
+
+
+    "def_node2": 
+    {
+        "constdef" :
+        {
+            "id1_name": "id1_value"
+        }
+    },
+
+    "defnode_1": 
+    {
+        "constdef": 
+        {
+            "id8_name": "id8_value",
+            "id9_name": "id9_value"
+        }
+    }
+
+
+
+}

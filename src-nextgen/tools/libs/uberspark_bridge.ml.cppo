@@ -1,0 +1,191 @@
+(*===========================================================================*)
+(*===========================================================================*)
+(*	uberSpark bridge module interface implementation		 *)
+(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*===========================================================================*)
+(*===========================================================================*)
+
+open Unix
+open Yojson
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* general submodules *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+module Container =
+struct
+#include "uberspark_bridge_container.ml"
+end
+
+module Native =
+struct
+#include "uberspark_bridge_native.ml"
+end
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+let dump
+	(bridge_ns_path : string)
+	?(bridge_exectype = "container")
+	(output_directory : string)
+	=
+	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
+			Uberspark_namespace.namespace_root_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
+	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
+			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	
+	(* copy json file *)
+	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
+
+	(* if container, then dump container file as well *)
+	if(bridge_exectype = "container") then
+		Uberspark_osservices.file_copy src_bridge_container_filename dst_container_filename;
+	;
+
+	()
+;;
+
+
+let remove
+	(bridge_ns_path : string)
+	=
+	let full_bridge_ns_path = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path in
+	
+	(* remove the path and files within *)
+	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
+	()
+;;
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* bridge submodules *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+module Cc =
+struct
+#include "uberspark_bridge_cc.ml"
+end
+
+
+module As =
+struct
+#include "uberspark_bridge_as.ml"
+end
+
+module Ld =
+struct
+#include "uberspark_bridge_ld.ml"
+end
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+let initialize_from_config () 
+	: bool =
+	
+	let retval = ref false in
+
+	(* handle cc-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (Cc.load Uberspark_config.json_node_uberspark_config_var.bridge_cc_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded cc_bridge settings";
+		retval := true;
+	end;
+
+	if not (Cc.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build cc_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "cc_bridge build success";
+		retval := true;
+	end;
+
+	(* handle as-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (As.load Uberspark_config.json_node_uberspark_config_var.bridge_as_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded as_bridge settings";
+		retval := true;
+	end;
+
+	if not (As.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build as_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "as_bridge build success";
+		retval := true;
+	end;
+
+
+	(* handle ld-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (Ld.load Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded ld_bridge settings";
+		retval := true;
+	end;
+
+	if not (Ld.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build ld_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "ld_bridge build success";
+		retval := true;
+	end;
+
+
+	(!retval)
+;;
