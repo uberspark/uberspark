@@ -61,6 +61,7 @@ exclude_patterns = ['_themes', '_temp']
 html_theme = 'rtd_uberspark'
 html_theme_path = ["_themes", ]
 html_theme_options = {
+    'repository' : 'https://github.com/uberspark/uberspark',
     'style_external_links': True,
     'collapse_navigation' : False,
     'navigation_depth': 4,
