@@ -74,11 +74,11 @@ let cmd_uobj =
     Arg.(required & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
 	in
 
-  let doc = "verify, build and/or manage uobjs" in
+  let doc = "Verify, build and/or manage uobjs" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
 		`S Manpage.s_description;
 		`P "The $(tname) command provides several actions to verify, build 
 			and manage uobjs specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -113,11 +113,11 @@ let cmd_uobjcoll =
     Arg.(required & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
 	in
 
-  let doc = "verify, build and/or manage uobj collections" in
+  let doc = "Verify, build and/or manage uobj collections" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
+    	`P "$(mname) $(tname) $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,OPTIONS)]... $(i,PATH) or $(i,NAMESPACE)";
 		`S Manpage.s_description;
 		`P "The $(tname) command provides several actions to verify, build 
 			and manage uobj collections specified by $(i,PATH) or $(i,NAMESPACE).";
@@ -155,11 +155,11 @@ let cmd_bridges =
     Arg.(value & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
 	in
   
-  let doc = "Manage uberspark code bridges" in
+  let doc = "Manage uberspark bridges" in
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i, PATH) or $(i,NAMESPACE)]";
+    	`P "$(mname) $(tname) $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,OPTIONS)]...  [$(i, PATH) or $(i,NAMESPACE)]";
 		`S Manpage.s_description;
      	`P "The $(tname) command provides several actions to manage the
 	 		uberspark code bridge settings, optionally qualified by $(i,PATH) or $(i,NAMESPACE).";
@@ -217,7 +217,7 @@ let cmd_staging =
   let man =
     [
 		`S Manpage.s_synopsis;
-    	`P "$(mname) $(tname) [$(i,OPTIONS)]... $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,NAMESPACE)]";
+    	`P "$(mname) $(tname) $(i,ACTION) [$(i,ACTION_OPTIONS)]... [$(i,OPTIONS)]... [$(i,NAMESPACE)]";
 		`S Manpage.s_description;
      	`P "The $(tname) command provides several actions to manage the
 	 		uberspark staging settings, optionally qualified by $(i,NAMESPACE).";

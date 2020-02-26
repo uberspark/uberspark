@@ -1,7 +1,7 @@
-.. include:: ../macros.hrst
+.. include:: /macros.rst
 
-Introduction
-============
+|uspark| Next-generation
+========================
 
 |uspark| is an innovative system architecture and programming principle for compositional 
 verification of (security) properties of commodity (extensible) system software written in 
@@ -19,11 +19,13 @@ The salient features of |uspark| include:
 - provide runtime local and remote attestation mechanisms to ascertain the load and execution of
   |uobj| collections on a given platform
 
-This documentation describes the details on the pre-requisites, installation and use of the
-|uspark| framework.
 
-.. note:: This is an experimental, work-in-progress, next generation of the |uspark| toolkit
-          that enables stand-alone |uobj| build, verification and runtime attestation mechanisms
+.. note::   |uspark| next-generation toolkit is currently in alpha stage and experimental. 
+            It aims to enable stand-alone |uobj| build, integration into |coss| code-base, 
+            verification and runtime attestation mechanisms. The next-generation toolkit is 
+            under active development and at some point 
+            in the near future, will replace the existing toolkit. 
 
-
-
+.. note::   The next-generation toollkit documentation currently comprises of three 
+            overarching guides: the |genuser-guide-ref|,   
+            the |cossdev-guide-ref|, and the |contrib-guide-ref|. 

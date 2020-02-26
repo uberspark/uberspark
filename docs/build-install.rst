@@ -1,4 +1,4 @@
-.. include:: macros.hrst
+.. include:: /macros.rst
 
 Building and Installing |uspark|
 =================================

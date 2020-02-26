@@ -1,7 +1,7 @@
 .. uberSpark documentation master index
    author: Amit Vasudevan (amitvasudevan@acm.org)
 
-.. include:: macros.hrst
+.. include:: /macros.rst
 
 Welcome to |uspark|'s documentation!
 =====================================
@@ -22,7 +22,7 @@ The salient features of |uspark| include:
 
 This documentation describes the details on the software requirements and
 dependencies, build, verification and intallation of the core |uspark| tools and
-libraries
+libraries and |coss|
 
 .. toctree::
    :maxdepth: 2
@@ -34,8 +34,52 @@ libraries
 
 .. toctree::
    :maxdepth: 2
-   :caption: Next Generation (Experimental) Toolkit:
+   :caption: [ (Experimental) Next-Gen Toolkit ]
+   :includehidden:
 
-   nextgen-toolkit/intro
-   nextgen-toolkit/sw-requirements
-   nextgen-toolkit/build-install
+   nextgen-toolkit/preface
+
+
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: General User's Guide
+
+
+   nextgen-toolkit/genuser-guide/intro
+   nextgen-toolkit/genuser-guide/swreq
+   nextgen-toolkit/genuser-guide/install
+   nextgen-toolkit/genuser-guide/terminology411
+   nextgen-toolkit/genuser-guide/staging
+   nextgen-toolkit/genuser-guide/install-uobjsuobjcolls
+   nextgen-toolkit/genuser-guide/reporting
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: CoSS Developer's Guide
+
+   nextgen-toolkit/cossdev-guide/intro
+   nextgen-toolkit/cossdev-guide/idfunctionality
+   nextgen-toolkit/cossdev-guide/prepnamespace
+   nextgen-toolkit/cossdev-guide/create-uobjs
+   nextgen-toolkit/cossdev-guide/create-uobjcoll
+   nextgen-toolkit/cossdev-guide/reintegrate-uobjcoll
+   nextgen-toolkit/cossdev-guide/refactor-build
+
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Contributor's Guide
+
+   nextgen-toolkit/contrib-guide/intro
+
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Reference
+
+   nextgen-toolkit/reference/manifest
+   nextgen-toolkit/reference/frontend-cli
