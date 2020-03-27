@@ -25,7 +25,6 @@
 .. |contrib-guide| replace:: *Contributor's Guide* 
 .. |contrib-guide-ref| replace:: :ref:`Contributor's Guide<contrib-guide-intro>` 
 
-
 .. |br| raw:: html
 
     <br>

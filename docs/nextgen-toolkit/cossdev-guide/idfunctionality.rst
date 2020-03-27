@@ -5,12 +5,22 @@
 Identify |coss| (Sensitive) Functionality
 =========================================
 
-..  note::  This section is still a work-in-progress
 
-..
-    Notes: 
-        - present example with hello world which has two functions; main and hello world;
-        - take the listing from example
-        - hello world returns the integer
-        - goal is to pare away hello world into a uobj
+The first step in refactoring an existing |coss| source-code base to use |uberspark|, is to
+identify the |coss| (sensitive) functionality that needs to be protected and reasoned about.
 
+As a running example we will use the ``hello-mul`` minimal coss example that is written in C,
+and multiples two integers. The sources to ``hello-mul`` can be found within 
+the ``coss-examples/hello-mul/coss-src`` folder. 
+
+Below is the listing of ``coss-examples/hello-mul/coss-src/main.c``, the main module of ``hello-mul``:
+
+.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/coss-src/main.c
+   :language: c
+   :linenos:
+
+Here the function ``main`` takes two integer parameters ``multiplicand`` and ``multiplier``
+and computes the product before returning the result via the variable ``res_mul``.
+
+We now proceed assuming that we would like to pare-away the ``hello-mul`` application as a single 
+|uobjcoll|
