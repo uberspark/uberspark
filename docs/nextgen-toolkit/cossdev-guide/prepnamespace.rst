@@ -28,10 +28,25 @@ new folder where we will house the the ``main`` |uobj| for the ``hello-mul`` |uo
             that is being pared-away into into a |uobjcoll|
 
 At this point, you are ready to select a relevant staging for the ``hello-ml`` |uobjcoll|. 
-This can be done using the :ref:`genuser-guide-intro` as shown below:
+This can be done using the :ref:`frontend-cli-intro` as shown below:
 
 .. highlight:: bash
 
 ::
 
-    uberspark 
+    uberspark staging switch default --root-dir=~/uberspark
+
+
+With the aforementioned command, we switch to the ``default`` staging which currently
+targets a generic hardware platform.
+
+..  note::  Here ``--root-dir`` is pointed to ``~/uberspark``, the typical installation 
+            location of the framework. However, if you use Windows/WSL as your development
+            environment, you will need to 
+            adjust the path accordingly as described within  
+            |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
+
+..  note::  You can also omit the ``--root-dir`` argument altogether if uberspark is installed to 
+            the default location (``~/uberspark``) within your development environment.
+
+

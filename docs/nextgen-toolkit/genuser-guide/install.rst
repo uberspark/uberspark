@@ -1,5 +1,8 @@
 .. include:: /macros.rst
 
+.. _genuser-guide-install:
+
+
 Building and Installing |uspark|
 =================================
 
@@ -45,6 +48,8 @@ the |uspark| source-tree (the directory where the file RELEASE is located):
 
     make docs_pdf
 
+
+.. _genuser-guide-install-installinguberspark:
 
 
 Installing |uspark|
