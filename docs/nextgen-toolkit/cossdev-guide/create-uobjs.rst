@@ -5,8 +5,6 @@
 Create |uobjs|
 ==============
 
-..  note::  This section is still a work-in-progress
-
 Creating |uobjs| that become part of a given |uobjcoll|, is facilitated by creating 
 a |uberspark| manifest file, |ubersparkmff|, within each |uobj| source folder.
 
@@ -22,30 +20,49 @@ following contents:
    :language: bash
    :linenos:
 
-describe the above listing; manifest header (ref), uobj declaration (ref)
+As seen from the aforementioned listing, a |uobj| manifest consists of a manifest header
+(defined using `uberspark-manifest` JSON node), which identifies the JSON as a |ubersparkmf|.
+The manifest header also includes all the relevant manifest node types (`uberspark-uobj` in our case) 
+that are present within the manifest, in addition to specifying the minimum and maximum version of
+|uberspark| that is required. See 
+|reference-ref|:::ref:`reference-manifest-intro` for further details on the manifest header and 
+definitions.
 
-for now let us just focus on namespace; always begin with uberspark/uobjcoll, 
-for hello-mul, since its architecture agnostic, we decide to house it within uberspark/ubjcoll/generic/hello-mul
-and the main uobj at uberspark/ubjcoll/generic/hello-mul/main
-platform, arch, cpu are set to generic
+The `uberspark-uobj` manifest node declares a |uobj|. At a high level the `uberspark-uobj` node
+declares the |uobj| namespace, the platform, architecture and CPU requirements as well as sources
+and publicmethods in addition to other attributes. See 
+|reference-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark-uobj``
+manifest node and definitions.
 
-within sources we have c-files as main.c; include files gfo into h-files and asm-files into asm-files.
+The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul/main`) has a 
+|uobjcoll| prefix (`uberspark/ubjcoll/generic/hello-mul`) followed by the name 
+of the |uobj| folder (`main`).  Here the |uobjcoll| prefix is required to start with `uberspark/uobjcoll`.
+We choose `generic/hello-mul` as our user-defined |uobjcoll| namespace suffix since ``hello-mul`` is 
+architecture agnostic. Accordingly ``platform``, ``arch``, and ``cpu`` fields are set to ``generic``.
 
-publicmethods define the externally visible interfaces of the uobj and for our example is set to
-the function main within main.c with return value uint32_t, x, y
+|uobj| *sources* can be composed of a mix of C source files (``c-files``), C header files (``h-files``), 
+Assembly source files (``asm-files``), and CASM (``casm-files``).
 
-note: intrauobjcoll, interuobjcoll and legacy are work-in-progress and can be omitted for our
-discussion for the time being
+|uobj| *publicmethods* declare the externally visible interfaces of the |uobj| and for our example is set to
+the function ``main`` within the C source file ``main.c`` with return value ``uint32_t``, parameters
+``(uint32_t multiplicand, uint32_t multiplier)``, followed by the number of positional parameters (``2`` in our case).
 
-within the uobj folder create main.c borrowing from the original coss definition
-list main.c
+..  note::  ``uberspark-uobj`` *intrauobjcoll-callees*, *interuobjcoll-callees*,  and *legacy-callees* 
+            node declarations are still work-in-progress and can be  omitted for discussion for the time being
+
+
+After declararing the |uobj| via the manifest, the next step is to move over the relevant sources as
+specified within the manifest and add the ``uberspark`` header definitions. 
+In our case we move ``main.c`` into our |uobj| folder and add the header definition as below:
 
 .. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/main/main.c
    :language: c
    :linenos:
 
+..  note::  |uberspark| framework headers always have the ``uberspark/include`` prefix and in this case
+            we include ``uberspark/include/uberspark.h`` which brings in top-level framework declarations into
+            scope.
 
-note the inclusion of uberspark.h to bring in uberspark specific definitions
 
 
 

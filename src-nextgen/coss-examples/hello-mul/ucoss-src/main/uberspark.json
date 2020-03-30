@@ -32,7 +32,7 @@
 		"publicmethods" : {
 			"main" : [
 				"uint32_t",
-				"(uint32_t param1, uint32_t param2)", 
+				"(uint32_t multiplicand, uint32_t multiplier)", 
 				"2" 
 			]
 		},

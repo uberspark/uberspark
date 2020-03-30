@@ -1,7 +1,7 @@
 .. include:: /macros.rst
 
 
-.. _manifest-intro:
+.. _reference-manifest-intro:
 
 |uspark| Manifest
 =================
@@ -51,6 +51,7 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 .. seealso:: |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjs` and |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjcoll`
 
 
+.. _reference-manifest-manifesthdr:
 
 
 ``uberspark-manifesthdr`` Manifest Node
@@ -443,6 +444,8 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
             environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
 
+
+.. _reference-manifest-uberspark-uobj:
 
 
 ``uberspark-uobj`` Manifest Node
