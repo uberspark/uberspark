@@ -51,7 +51,7 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 .. seealso:: |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjs` and |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjcoll`
 
 
-.. _reference-manifest-manifesthdr:
+.. _reference-manifest-uberspark-manifesthdr:
 
 
 ``uberspark-manifesthdr`` Manifest Node

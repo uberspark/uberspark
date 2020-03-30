@@ -24,8 +24,9 @@
 .. |cossdev-guide-ref| replace:: :ref:`CoSS Developer's Guide<cossdev-guide-intro>` 
 .. |contrib-guide| replace:: *Contributor's Guide* 
 .. |contrib-guide-ref| replace:: :ref:`Contributor's Guide<contrib-guide-intro>` 
-.. |reference| replace:: *Reference* 
-.. |reference-ref| replace:: :ref:`Reference<reference-intro>` 
+
+.. |reference-manifest| replace:: *überSpark Manifest Reference* 
+.. |reference-manifest-ref| replace:: :ref:`überSpark Manifest Reference<reference-manifest-intro>` 
 
 .. |br| raw:: html
 

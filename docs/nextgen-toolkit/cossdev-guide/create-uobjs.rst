@@ -25,13 +25,13 @@ As seen from the aforementioned listing, a |uobj| manifest consists of a manifes
 The manifest header also includes all the relevant manifest node types (`uberspark-uobj` in our case) 
 that are present within the manifest, in addition to specifying the minimum and maximum version of
 |uberspark| that is required. See 
-|reference-ref|:::ref:`reference-manifest-intro` for further details on the manifest header and 
+|reference-manifest-ref|:::ref:`reference-manifest-uberspark-manifesthdr` for further details on the manifest header and 
 definitions.
 
 The `uberspark-uobj` manifest node declares a |uobj|. At a high level the `uberspark-uobj` node
 declares the |uobj| namespace, the platform, architecture and CPU requirements as well as sources
 and publicmethods in addition to other attributes. See 
-|reference-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark-uobj``
+|reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark-uobj``
 manifest node and definitions.
 
 The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul/main`) has a 
