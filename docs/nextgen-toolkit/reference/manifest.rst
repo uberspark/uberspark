@@ -562,6 +562,8 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 
 
 
+.. _reference-manifest-uberspark-uobjcoll:
+
 
 ``uberspark-uobjcoll`` Manifest Node
 ------------------------------------
