@@ -38,7 +38,7 @@ the build tools related to the |coss| development such as compilers, assemblers,
 
 ::
 
-    uberspark staging create generic-platform --root-dir=~/uberspark
+    uberspark staging create generic-platform --root-dir=/c/workspace/uberspark
 
 
 With the aforementioned command, we create (and automatically switch to) a staging 
@@ -52,20 +52,21 @@ We then configure the compiler, assembler and linker that ``hello-mul`` requires
 
 ::
 
-    uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=container/amd64/x86_32/generic/gcc/v5.4.0 --root-dir=~/uberspark
-    uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=container/amd64/x86_32/generic/gnu-as/v2.26.1 --root-dir=~/uberspark
-    uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=container/amd64/x86_32/generic/gnu-ld/v2.26.1 --root-dir=~/uberspark
+    uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=container/amd64/x86_32/generic/gcc/v5.4.0 --root-dir=/c/workspace/uberspark
+    uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=container/amd64/x86_32/generic/gnu-as/v2.26.1 --root-dir=/c/workspace/uberspark
+    uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=container/amd64/x86_32/generic/gnu-ld/v2.26.1 --root-dir=/c/workspace/uberspark
 
 
 The aforementioned commands will set the staging compiler bridge to use GCC v5.4.0, assembler bridge to use 
 GNU Assembler v2.26.1, and the linker bridge to use GNU ld v2.26.1
 
 
-..  note::  Here ``--root-dir`` is pointed to ``~/uberspark``, the typical installation 
-            location of the framework. However, if you use Windows/WSL as your development
-            environment, you will need to 
-            adjust the path accordingly as described within  
-            |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
+..  note::  Here ``--root-dir`` is pointed to ``/c/workspace/uberspark``,  and assumes |uberspark| to be
+            within a WSL/Ubuntu development environment. You need to replace this with the appropriate
+            directory where |uberspark| is installed based on your development environment.
+            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
+            for more details.
 
 ..  note::  You can also omit the ``--root-dir`` argument altogether if uberspark is installed to 
             the default location (``~/uberspark``) within your development environment.
+            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark` for more details.
