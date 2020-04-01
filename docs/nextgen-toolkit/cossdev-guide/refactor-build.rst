@@ -25,13 +25,18 @@ build the ``hello-mull`` |uobjcoll|. The revised ``Makefile`` is shown below:
    :linenos:
 
 As seen from the aforementioned listing, we amend the ``Makefile`` target ``all`` to first 
-switch to the |uberspark| ``generic-platform`` staging that we created earlier. We then
-use the staging command line interface in order to set our compiler, assembler and
-linker bridges. Finally, we invoke the |uobjcoll| build command in order to build the ``hello-mul``
+switch to the |uberspark| ``generic-platform`` staging that we created earlier.
+Finally, we invoke the |uobjcoll| build command in order to build the ``hello-mul``
 |uobjcoll|. 
 
 Upon successful build, the ``hello-mul`` |uobjcoll| can be found within the ``uobjcoll/_build`` 
 folder.
+
+..  note::  The above ``Makefile`` assumes |uberspark| to be installed within ``/c/workspace/uberspark`` 
+            within a WSL/Ubuntu development environment. You need to replace this with the appropriate
+            directory where |uberspark| is installed based on your development environment.
+            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
+            for more details.
 
 Similarly, we amend the ``Makefile`` ``clean`` target to remove the ``uobjcoll/_build`` folder, which
 will cleanup all the |uobjcoll| build artifacts.

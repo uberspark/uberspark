@@ -12,7 +12,7 @@
 all: 
 	@echo building hello_mul...
 	uberspark staging switch generic-platform
-	uobjcoll && uberspark uobjcoll build --root-dir=~/uberspark -v --platform=generic --arch=x86_32 --cpu=generic .
+	uobjcoll && uberspark uobjcoll build --root-dir=/c/workspace/uberspark -v --platform=generic --arch=x86_32 --cpu=generic .
 	@echo built hello_mul successfully!
 
 
