@@ -52,7 +52,7 @@
 	
 		/* legacy CoSS functions/code that this uobj invokes */
 		"legacy-callees": [
-		],
+		]
 
 	}
 
