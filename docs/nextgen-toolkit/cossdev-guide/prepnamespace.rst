@@ -27,18 +27,21 @@ new folder where we will house the the ``main`` |uobj| for the ``hello-mul`` |uo
             create multiple |uobjs| depending on |coss| code-base modules and functionality
             that is being pared-away into into a |uobjcoll|
 
-At this point, you are ready to select a relevant staging for the ``hello-ml`` |uobjcoll|. 
-This can be done using the :ref:`frontend-cli-intro` as shown below:
+At this point, you are ready to create a relevant staging for the ``hello-ml`` |uobjcoll|. 
+|uberspark| staging environments are essentially development workspaces that target a given hardware platform
+with associated CPU(s) and devices.
+
+|uberspark| staging environments can be created using the :ref:`frontend-cli-intro` as shown below:
 
 .. highlight:: bash
 
 ::
 
-    uberspark staging switch default --root-dir=~/uberspark
+    uberspark staging create generic-platform --root-dir=~/uberspark
 
 
-With the aforementioned command, we switch to the ``default`` staging which currently
-targets a generic hardware platform.
+With the aforementioned command, we create (and automatically switch to) a staging 
+named ``generic-platform`` that supports development on a generic hardware platform. 
 
 ..  note::  Here ``--root-dir`` is pointed to ``~/uberspark``, the typical installation 
             location of the framework. However, if you use Windows/WSL as your development
