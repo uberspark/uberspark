@@ -29,7 +29,8 @@ new folder where we will house the the ``main`` |uobj| for the ``hello-mul`` |uo
 
 At this point, you are ready to create a relevant staging for the ``hello-ml`` |uobjcoll|. 
 |uberspark| staging environments are essentially development workspaces that target a given hardware platform
-with associated CPU(s) and devices.
+with associated CPU(s) and devices. Staging environments also provide configurable settings for 
+the build tools related to the |coss| development such as compilers, assemblers, linkers and verification tools.
 
 |uberspark| staging environments can be created using the :ref:`frontend-cli-intro` as shown below:
 
@@ -43,6 +44,23 @@ with associated CPU(s) and devices.
 With the aforementioned command, we create (and automatically switch to) a staging 
 named ``generic-platform`` that supports development on a generic hardware platform. 
 
+
+We then configure the compiler, assembler and linker that ``hello-mul`` requires. 
+
+
+.. highlight:: bash
+
+::
+
+    uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=container/amd64/x86_32/generic/gcc/v5.4.0 --root-dir=~/uberspark
+    uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=container/amd64/x86_32/generic/gnu-as/v2.26.1 --root-dir=~/uberspark
+    uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=container/amd64/x86_32/generic/gnu-ld/v2.26.1 --root-dir=~/uberspark
+
+
+The aforementioned commands will set the staging compiler bridge to use GCC v5.4.0, assembler bridge to use 
+GNU Assembler v2.26.1, and the linker bridge to use GNU ld v2.26.1
+
+
 ..  note::  Here ``--root-dir`` is pointed to ``~/uberspark``, the typical installation 
             location of the framework. However, if you use Windows/WSL as your development
             environment, you will need to 
@@ -51,5 +69,3 @@ named ``generic-platform`` that supports development on a generic hardware platf
 
 ..  note::  You can also omit the ``--root-dir`` argument altogether if uberspark is installed to 
             the default location (``~/uberspark``) within your development environment.
-
-
