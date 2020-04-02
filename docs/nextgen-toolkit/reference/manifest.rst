@@ -1,7 +1,7 @@
 .. include:: /macros.rst
 
 
-.. _reference-manifest-intro:
+.. _manifest-intro:
 
 |uspark| Manifest
 =================
@@ -51,7 +51,6 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 .. seealso:: |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjs` and |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjcoll`
 
 
-.. _reference-manifest-uberspark-manifesthdr:
 
 
 ``uberspark-manifesthdr`` Manifest Node
@@ -445,8 +444,6 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
 
 
-.. _reference-manifest-uberspark-uobj:
-
 
 ``uberspark-uobj`` Manifest Node
 ---------------------------------
@@ -561,8 +558,6 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
     }
 
 
-
-.. _reference-manifest-uberspark-uobjcoll:
 
 
 ``uberspark-uobjcoll`` Manifest Node

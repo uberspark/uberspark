@@ -83,7 +83,6 @@ After the opam environment switch, install the following opam packages in order:
     opam install menhir.20170712
     opam install ocamlgraph.1.8.8
     opam install ocamlfind.1.7.3
-    eval `opam config env`
  
 
 Coq Proof Assistant 
@@ -95,13 +94,13 @@ You need to install the Coq Proof Assistant via opam as shown below:
 ::
 
     opam install coq.8.6.1
-    eval `opam config env`
+
 
 CompCert Certified Compiler 
 ---------------------------
 
 The CompCert compiler is used to compile the C code for verified uberobjects within 
-|uspark|. The Compcert version currently supported is v3.1 and can be installed 
+|uspark|. The Compcert version currently supported is v3.0.1 and can be installed 
 as shown below:
 
 ::

@@ -16,8 +16,7 @@ RUN sudo apk update &&\
     sudo chown root:root /etc/sudoers.d/docker &&\
     sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
-# Switch to USER docker (from USER opam), currently commented out due to UID conflicts with apline distros. Creating permissions issues.
-# USER docker 
+USER docker
 WORKDIR "/home/docker"
 
 # install git

@@ -76,6 +76,9 @@ let load_from_file
 	let retval = ref false in
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loading ld-bridge settings from file: %s" json_file;
 
+	let (rval, l_json_node_uberspark_manifest, json_node_uberspark_bridge_ld) = 
+		Uberspark_manifest.get_json_for_manifest_node_type json_file 
+		Uberspark_namespace.namespace_bridge_ld_mf_node_type_tag in
 	let (rval, mf_json) = Uberspark_manifest.get_json_for_manifest json_file in
 
 		if rval then begin
