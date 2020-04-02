@@ -10,7 +10,7 @@ a |uberspark| manifest file, |ubersparkmff|, within the top-level |uobjcoll| fol
 
 In our running example, the ``hello-mul`` |uobjcoll| top-level folder is:
 
-``coss-examples/hello-mul/coss-src/uobjcoll``
+``src-nextgen/coss-examples/hello-mul/coss-src/uobjcoll``
 
 Within the aforementioned folder create the |ubersparkmf| file |ubersparkmff| with the
 following contents:
