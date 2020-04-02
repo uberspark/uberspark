@@ -11,11 +11,11 @@
 .PHONY: all
 all: 
 	@echo building hello_mul...
-	uberspark staging switch generic-platform
-	uobjcoll && uberspark uobjcoll build --root-dir=/c/workspace/uberspark -v --platform=generic --arch=x86_32 --cpu=generic .
+	uberspark staging switch generic-platform --root-dir=/c/workspace/uberspark
+	cd uobjcoll && uberspark uobjcoll build --root-dir=/c/workspace/uberspark -v --platform=generic --arch=x86_32 --cpu=generic .
 	@echo built hello_mul successfully!
 
 
 .PHONY: clean
 clean: 
-	rm -f uobjcoll/_build
+	rm -rf uobjcoll/_build

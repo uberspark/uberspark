@@ -11,12 +11,12 @@ a |uberspark| manifest file, |ubersparkmff|, within each |uobj| source folder.
 In our running example, the ``hello-mul`` |uobjcoll| that we want to create consists of
 a single ``main`` |uobj| housed within the folder:
 
-``coss-examples/hello-mul/ucoss-src/main``
+``coss-examples/hello-mul/coss-src/uobjcoll/main``
 
 Within the aforementioned folder create the |ubersparkmf| file |ubersparkmff| with the
 following contents:
 
-.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/main/uberspark.json
+.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/uobjcoll/main/uberspark.json
    :language: bash
    :linenos:
 
@@ -55,7 +55,7 @@ After declararing the |uobj| via the manifest, the next step is to move over the
 specified within the manifest and add the ``uberspark`` header definitions. 
 In our case we move ``main.c`` into our |uobj| folder and add the header definition as below:
 
-.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/main/main.c
+.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/uobjcoll/main/main.c
    :language: c
    :linenos:
 
