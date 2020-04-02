@@ -13,7 +13,7 @@ This guide is primarily intended for |coss| stack developers who are interested 
 legacy code-base to take advantage of |uberspark|'s capabilities.
 
 ..  note::  A working installation and knowledge of the general |uberspark| framework is a pre-requisite for 
-            the |coss| Developer's Guide. See |genuser-guide-ref|:ref:`genuser-guide-intro`
+            the |coss| Developer's Guide. See |genuser-guide-ref|:::ref:`genuser-guide-intro`
             for details.
 
 

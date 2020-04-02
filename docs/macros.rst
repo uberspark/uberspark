@@ -25,6 +25,8 @@
 .. |contrib-guide| replace:: *Contributor's Guide* 
 .. |contrib-guide-ref| replace:: :ref:`Contributor's Guide<contrib-guide-intro>` 
 
+.. |reference-manifest| replace:: *überSpark Manifest Reference* 
+.. |reference-manifest-ref| replace:: :ref:`überSpark Manifest Reference<reference-manifest-intro>` 
 
 .. |br| raw:: html
 
