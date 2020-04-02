@@ -1,13 +1,24 @@
 .. include:: /macros.rst
 
+.. _genuser-guide-install:
+
+
 Building and Installing |uspark|
 =================================
 
 Building |uspark| Tools
 ------------------------
 
-You will need to build the |uspark| toolchain before performing any other task.
-To achieve this, you need to issue the following command while in the top-level directory of 
+You will need to build the |uspark| toolchain before performing any other
+task.
+
+
+.. note:: The |uspark| toolchain requires approximately 2.4 GB of disk space.
+
+	  
+	  
+To achieve this, you need to issue the following command while in the
+top-level directory of 
 the |uspark| source-tree (the directory where the file RELEASE is located):
 
 
@@ -15,12 +26,13 @@ the |uspark| source-tree (the directory where the file RELEASE is located):
 
     make
 
-This will generate the required build truss to build the toolkit and documentation, 
-build the toolkit binaries, and additionally build the ``.html`` version of the documentation.
+This will generate the required build truss to build the toolkit and
+documentation, build the toolkit binaries, and additionally build the
+``.html`` version of the documentation.
 
-.. note:: If you are re-building the tools after a prior build, you can perform a cleanup by
-          issuing the command: ``make clean`` before issuing the 
-          command ``make`` as above.
+.. note:: If you are re-building the tools after a prior build, you can
+	  perform a cleanup by issuing the command: ``make clean`` before
+	  issuing the command ``make`` as above.
 
 
 
@@ -36,6 +48,8 @@ the |uspark| source-tree (the directory where the file RELEASE is located):
 
     make docs_pdf
 
+
+.. _genuser-guide-install-installinguberspark:
 
 
 Installing |uspark|

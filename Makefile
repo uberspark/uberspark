@@ -103,6 +103,14 @@ frontend: build_bootstrap
 install: build_bootstrap
 	$(call docker_run,make -f install.mk, -w all)
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
+	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
+		echo "$(USPARK_NAMESPACEROOTDIR) already exists. "; \
+		read -p "Would you like to continue (rm -rf $(USPARK_NAMESPACEROOTDIR)) [y/N]? " action; \
+		if [ "$$action" != "y" ] && [ "$$action" != "Y" ]; then \
+			echo "Please remove $(USPARK_NAMESPACEROOTDIR) (e.g., rm -rf $(USPARK_NAMESPACEROOTDIR)) in order to allow installation"; \
+			exit 1; \
+		fi; \
+	fi
 	rm -rf $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/docs
