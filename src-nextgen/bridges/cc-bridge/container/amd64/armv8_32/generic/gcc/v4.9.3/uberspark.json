@@ -17,9 +17,9 @@
 			"bname" : "gcc",
 			"execname" : "gcc",
 			"devenv" : "amd64",
-			"arch" : "x86_32",
+			"arch" : "armv8_32",
 			"cpu" : "generic",
-			"version" : "v5.4.0",
+			"version" : "v4.9.3",
 			"path" : ".",
 			"params" : [ "-m32" ],
 			"container_fname" : "uberspark_bridges.Dockerfile"
