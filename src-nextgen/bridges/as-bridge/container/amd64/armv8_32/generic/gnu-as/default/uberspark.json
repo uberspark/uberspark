@@ -17,7 +17,7 @@
 			"bname" : "gnu-as",
 			"execname" : "gcc",
 			"devenv" : "amd64",
-			"arch" : "x86_32",
+			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
