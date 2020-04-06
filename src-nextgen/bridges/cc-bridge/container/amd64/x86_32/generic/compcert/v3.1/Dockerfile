@@ -1,0 +1,114 @@
+FROM ubuntu:18.04
+MAINTAINER David Shepard <djshepard@sei.cmu.edu>
+
+# Pass in the proxy variables from the build boot script, then assign them to
+# local ENV vars. Also pass in the name of the compiler archive file.
+
+ARG hprox
+ARG hsprox
+ARG HPROX
+ARG HSPROX
+ARG archive_name
+
+ENV http_proxy=$hprox
+ENV https_proxy=$hsprox
+ENV HTTP_PROXY=$HPROX
+ENV HTTPS_PROXY=$HSPROX
+
+# Put everything in a known location, so that we can work.
+
+COPY $archive_name /tmp
+COPY install.sh /tmp
+COPY compiler_script.sh /tmp
+
+# This didn't work because Opam likes to ask questions, lots of them. I have a
+# customer version that is in the build directory. We just call that instead.
+# curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh -O &&\
+
+RUN apt-get update &&\
+    apt-get -y install  \
+        gcc-8 \
+        gcc-8-multilib-arm-linux-gnueabihf \
+        gcc-8-multilib-x86-64-linux-gnux32 \
+        binutils \
+        curl \
+        rsync \
+        git \
+        make \
+        m4 \
+        patch \
+        unzip \
+        gawk \
+        findutils \
+        build-essential &&\
+    cd /tmp &&\
+    chmod 755 install.sh &&\
+    chmod 755 compiler_script.sh &&\
+    ./install.sh &&\
+    useradd -ms /bin/bash ubuntu
+
+# I had added this, in an attempt to get Bubblewrap to work. It didn't.
+# Disabled Opam's use of Bubblewrap, instead.
+# sysctl kernel.unprivileged_userns_clone=1 &&\
+
+# Opam is not very script-friendly software. It insists on being run as an
+# unprivileged user, in a kernel-enforced sandbox, and it asks questions,
+# arbitrarily, when you run it. Yikes.
+
+# Opam also has a lot of dependencies that are not documented on its install
+# page, see above, everything after binutils.
+
+USER ubuntu
+WORKDIR /home/ubuntu
+
+RUN opam init --disable-sandboxing &&\
+    opam upgrade &&\
+    opam switch create 4.05.0 &&\
+    opam install conf-findutils &&\
+    opam install conf-m4 &&\
+    opam install conf-m4 &&\
+    opam install ocamlfind=1.8.1 &&\
+    opam install base-num &&\
+    opam install num &&\
+    opam install camlp5=7.11 &&\
+    eval `opam env ` &&\
+    opam install coq=8.6 &&\
+    opam install ocaml-secondary-compiler=4.08.1 &&\
+    opam install ocamlfind-secondary=1.8.1 &&\
+    opam install dune &&\
+    opam install ocamlbuild=0.14.0 &&\
+    opam install menhir.20180528
+
+
+# Build directions say you only need to run like four opam commands to get it
+# installed. If you don't want opam to ask you a lot of questions in your
+# script, since they don't respect any form of auto-answer I could think of
+# running, you need to run thirteen opam commands. Sheesh.
+
+# Now that opam is installed, we can go about building our compiler, which
+# requires us to be root again...
+
+USER root
+WORKDIR /tmp
+RUN echo $archive_name
+
+RUN tar -xzf ${archive_name}
+
+# Apparently, this is a "bash-ism". I.e., this only works in bash. To make it
+# work in Dash, Ubuntu's default shell for /bin/sh, the bin that is called when
+# Docker builds, you need to do substring parsing with an awk script. Yikes.
+
+#RUN archive_dir=${archive_name:0:$archive_string_len-4}
+
+RUN . ./compiler_script.sh
+
+USER ubuntu
+WORKDIR /home/ubuntu
+
+# After your container builds, you can run it with:
+
+# docker run -it -u ubuntu compcert-v3.1:latest /bin/bash
+
+# Please have a look around, see if everything works as expected. We can fix
+# whatever isn't ready for use yet.
+
