@@ -21,7 +21,7 @@
 			"cpu" : "generic",
 			"version" : "v4.9.3",
 			"path" : ".",
-			"params" : [ "-m32" ],
+			"params" : [],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 

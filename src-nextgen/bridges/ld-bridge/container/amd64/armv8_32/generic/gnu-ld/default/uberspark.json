@@ -21,7 +21,7 @@
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
+			"params" : [],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
