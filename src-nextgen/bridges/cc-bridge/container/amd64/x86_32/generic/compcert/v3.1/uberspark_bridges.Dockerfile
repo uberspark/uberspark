@@ -1,23 +1,20 @@
 FROM ubuntu:18.04
 MAINTAINER David Shepard <djshepard@sei.cmu.edu>
 
-# Pass in the proxy variables from the build boot script, then assign them to
-# local ENV vars. Also pass in the name of the compiler archive file.
+# Also pass in the name of the compiler archive file.
 
-ARG hprox
-ARG hsprox
-ARG HPROX
-ARG HSPROX
-ARG archive_name
+ENV archive_name=compcert-3.1.tgz
 
-ENV http_proxy=$hprox
-ENV https_proxy=$hsprox
-ENV HTTP_PROXY=$HPROX
-ENV HTTPS_PROXY=$HSPROX
+RUN apt-get update &&\
+    apt-get -y install wget
 
 # Put everything in a known location, so that we can work.
+RUN wget http://compcert.inria.fr/release/${archive_name}
 
-COPY $archive_name /tmp
+RUN mv compcert-3.1.tgz CompCert-3.1.tgz
+RUN mv CompCert-3.1.tgz /tmp
+ENV archive_name=CompCert-3.1.tgz
+
 COPY install.sh /tmp
 COPY compiler_script.sh /tmp
 
@@ -25,8 +22,7 @@ COPY compiler_script.sh /tmp
 # customer version that is in the build directory. We just call that instead.
 # curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh -O &&\
 
-RUN apt-get update &&\
-    apt-get -y install  \
+RUN apt-get -y install  \
         gcc-8 \
         gcc-8-multilib-arm-linux-gnueabihf \
         gcc-8-multilib-x86-64-linux-gnux32 \

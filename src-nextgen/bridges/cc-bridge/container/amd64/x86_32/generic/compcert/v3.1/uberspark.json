@@ -5,7 +5,7 @@
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-bridge-cc" ],
+		"manifest_node_types" : [ "uberspark-bridge-compcert" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
@@ -14,14 +14,14 @@
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",
-			"bname" : "gcc",
-			"execname" : "gcc",
+			"bname" : "compcert",
+			"execname" : "ccomp",
 			"devenv" : "amd64",
 			"arch" : "x86_32",
 			"cpu" : "generic",
-			"version" : "v5.4.0",
+			"version" : "v3.1",
 			"path" : ".",
-			"params" : [ "-m32" ],
+			"params" : [ "" ],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
