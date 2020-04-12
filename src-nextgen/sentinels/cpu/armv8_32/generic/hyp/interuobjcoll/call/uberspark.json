@@ -14,7 +14,7 @@
 
     "uberspark-sentinel" : {
 
-        "namespace" : "uberspark/sentinels/cpu/armv8_32/generic/any/interuobjcoll/call",
+        "namespace" : "uberspark/sentinels/cpu/armv8_32/generic/hyp/interuobjcoll/call",
 		"platform" : "rpi3",
 		"arch" : "armv8_32",
         "cpu" : "generic",
@@ -26,8 +26,8 @@
         PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
         */ 
         "code": "
-            movl $(PUBLICMETHOD_ADDR), %eax
-            jmpl *%eax
+            ldr r0, = PUBLICMETHOD_ADDR
+            mov pc, r0
         ",
 
         /*  sentinel library code template 
@@ -36,8 +36,8 @@
         PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
         */ 
         "libcode": "
-            movl (PUBLICMETHOD_SENTINEL_ADDR), %eax
-            jmpl *%eax
+            ldr r0, = PUBLICMETHOD_SENTINEL_ADDR
+            mov pc, r0
         "
 
     }
