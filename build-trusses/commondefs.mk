@@ -16,9 +16,9 @@ export UBERSPARK_SDEFSDIR := $(UBERSPARK_SRCDIR)/sdefs
 
 export MAKE := make
 export OCAMLFIND := ocamlfind
-export OCAMLOPT := $(OCAMLFIND) ocamlopt
-export OCAMLC := $(OCAMLFIND) ocamlc
-export OCAML := ocaml
+export OCAMLOPT := $(OCAMLFIND) ocamlopt -g
+export OCAMLC := $(OCAMLFIND) ocamlc -g
+#export OCAML := ocaml
 export RM := rm
 export MKDIR := mkdir
 export CP := cp
