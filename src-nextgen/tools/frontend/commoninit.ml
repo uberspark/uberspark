@@ -9,6 +9,9 @@ let initialize
   
   Uberspark.Logger.current_level := copts.log_level;
 
+  (* turn on exception stack backtrace dump *)
+  Printexc.record_backtrace true;
+
   Uberspark.Logger.log "enforcing verifiable object abstractions for commodity system software stacks";
   Uberspark.Logger.log "front-end tool";
   Uberspark.Logger.log "version: 5.1";
