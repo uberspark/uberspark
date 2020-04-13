@@ -903,9 +903,9 @@ class uobject
 		end;
 
 		(* copy all the uobj h files to build area *)
-		if (List.length json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
-			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.h") (self#get_d_builddir ^ "/.");
-		end;
+		(*if (List.length json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/include/*.h") (self#get_d_builddir ^ "/.");
+		end;*)
 
 		(* copy all the uobj cS files to build area *)
 		if (List.length json_node_uberspark_uobj_var.f_sources.f_casm_files) > 0 then begin
@@ -1227,7 +1227,7 @@ class uobject
 
 		(* copy h files to namespace *)
 		List.iter ( fun h_filename -> 
-			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ h_filename)
+			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/include/" ^ h_filename)
 			(uobj_path_ns ^ "/include/" ^ h_filename);
 		) json_node_uberspark_uobj_var.f_sources.f_h_files;
 
