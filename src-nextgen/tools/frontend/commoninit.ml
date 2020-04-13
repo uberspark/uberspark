@@ -14,7 +14,7 @@ let initialize
 
   Uberspark.Logger.log "enforcing verifiable object abstractions for commodity system software stacks";
   Uberspark.Logger.log "front-end tool";
-  Uberspark.Logger.log "version: 5.1";
+  Uberspark.Logger.log "version: 6.0.0";
   Uberspark.Logger.log "website: https://uberspark.org";
   Uberspark.Logger.log "creator: amit vasudevan <amitvasudevan@acm.org>";
   Uberspark.Logger.log "";
