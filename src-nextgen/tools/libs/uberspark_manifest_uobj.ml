@@ -298,9 +298,13 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 					begin
 
 						let uobj_legacy_callees_list = Yojson.Basic.Util.to_list uobj_legacy_callees_json in
-							legacy_callees_assoc_list := !legacy_callees_assoc_list @ 
-								[ ("uberspark_legacy", (json_list_to_string_list uobj_legacy_callees_list))];
+						let str_list_uobj_callees_list = (json_list_to_string_list uobj_legacy_callees_list) in
 
+							if (List.length str_list_uobj_callees_list) > 0  then begin
+								legacy_callees_assoc_list := !legacy_callees_assoc_list @ 
+									[ ("uberspark_legacy", (json_list_to_string_list uobj_legacy_callees_list))];
+							end;
+							
 							retval := true;
 
 					end
