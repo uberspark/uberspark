@@ -465,24 +465,37 @@ let initialize_uobjs_baseinfo
 (*--------------------------------------------------------------------------*)
 let initialize_uobjs_within_uobjinfo_list
 	()
-	: unit = 
+	: bool = 
+
+	let retval = ref true in 
 
 	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-		match uobjinfo_entry.f_uobj with 
-			| None ->
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+		
+		if(!retval) then begin
+			match uobjinfo_entry.f_uobj with 
+				| None ->
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+					retval := false;
 
-			| Some uobj ->
-				Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
-				let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
-					(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) 
-					d_target_def 0) in
-				Uberspark_logger.log "uobj '%s' successfully initialized; size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name 
-					uobj#get_d_size;
-		;
+				| Some uobj ->
+					Uberspark_logger.log "initializing uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
+					let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
+						(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) 
+						d_target_def 0) in
+					
+					if (rval) then begin
+						Uberspark_logger.log "uobj '%s' successfully initialized; size=0x%08x" uobjinfo_entry.f_uobjinfo.f_uobj_name 
+							uobj#get_d_size;
+					end else begin
+						Uberspark_logger.log "unable to initialize uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
+						retval := false;
+					end;
+			;
+		end;
 
 	)!d_uobjcoll_uobjinfo_list;
 
+	(!retval)
 ;;
 
 
@@ -1149,10 +1162,13 @@ let build
 		public methods populated based on load address of 0 for every uobj
 		uobj size is available for every uobj
 	*)
-	let dummy = 0 in begin
-	initialize_uobjs_within_uobjinfo_list ();
-	Uberspark_logger.log "initialized uobjs within collection";
-	end;
+	let rval = (initialize_uobjs_within_uobjinfo_list ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobjs!";
+		(!retval)
+	end else
+
+
 
 	(* create uobj collection uobjs public methods hashtable and association list *)
 	let dummy = 0 in begin
