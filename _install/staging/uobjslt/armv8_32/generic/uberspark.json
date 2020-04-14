@@ -1,0 +1,50 @@
+/*
+    uberspark uobj sentinel linkage table manifest (armv8_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+   	/* manifest header */
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobjslt" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+    "uberspark-uobjslt" : {
+
+		"namespace" : "/uberspark/uobjslt/armv8_32/generic",
+		"platform" : "generic",
+		"arch" : "armv8_32",
+        "cpu" : "generic",
+        "addr-size" : "4",
+
+        /* uobjslt direct execution transfer code template 
+        inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
+        */
+        "code-directxfer": "
+            ldr r0, = UOBJSLT_SENTINEL_PM_ADDRESS_LOC
+            mov pc, r0
+        ",
+
+        /* uobjslt indirect execution transfer code template 
+        inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
+        */
+        "code-indirectxfer": "
+            ldr r0, = UOBJSLT_SENTINEL_PM_ADDRESS_LOC
+            mov r0, (r0)
+            mov pc, r0
+        ",
+
+        /* uobjslt address definition template 
+        inputs: constant address, UOBJSLT_CONST_ADDRESS
+        */
+        "code-addrdef": "
+            .long UOBJSLT_CONST_ADDRESS
+        "
+
+
+    }
+    
+}
