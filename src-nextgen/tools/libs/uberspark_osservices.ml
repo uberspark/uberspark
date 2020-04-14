@@ -70,6 +70,7 @@ open Sys
 	let cp 
 		?(recurse = false) 
 		?(force = true)
+		?(parents = false)
 		(input_filespec : string)
 		(output_filespec : string)
 		: unit =
@@ -83,7 +84,11 @@ open Sys
 		if force then begin
 			cp_cmd := !cp_cmd ^ "-f ";
 		end;
-		
+
+		if parents then begin
+			cp_cmd := !cp_cmd ^ "--parents ";
+		end;
+
 		ignore(Unix.system (!cp_cmd ^ input_filespec ^ " " ^ output_filespec));
 	;;
 
