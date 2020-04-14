@@ -1227,8 +1227,10 @@ class uobject
 
 		(* copy h files to namespace *)
 		List.iter ( fun h_filename -> 
-			Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/include/" ^ h_filename)
-			(uobj_path_ns ^ "/include/" ^ h_filename);
+			(*Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/include/" ^ h_filename)
+			(uobj_path_ns ^ "/include/" ^ h_filename);*)
+			Uberspark_osservices.cp ~parents:true (uobj_path_to_mf_filename ^ "/" ^ h_filename) 
+				(uobj_path_ns ^ "/.");
 		) json_node_uberspark_uobj_var.f_sources.f_h_files;
 
 		(* copy top-level header to namespace *)
