@@ -11,6 +11,7 @@
 
 # blacklist select directories
 **/_build
+**/_install
 .vscode/
 temp/
 
