@@ -897,20 +897,20 @@ class uobject
 		()
 		: unit =
 
-		(* copy all the uobj c files to build area *)
-		if (List.length json_node_uberspark_uobj_var.f_sources.f_c_files) > 0 then begin
-			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.c") (self#get_d_builddir ^ "/.");
-		end;
+	
+		(* copy uobj c files to namespace *)
+		List.iter ( fun c_filename -> 
+			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname c_filename)) (`Octal 0o0777);
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/" ^ c_filename) (self#get_d_builddir ^ "/" ^ c_filename);
+		) json_node_uberspark_uobj_var.f_sources.f_c_files;
 
-		(* copy all the uobj h files to build area *)
-		(*if (List.length json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
-			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/include/*.h") (self#get_d_builddir ^ "/.");
-		end;*)
 
-		(* copy all the uobj cS files to build area *)
-		if (List.length json_node_uberspark_uobj_var.f_sources.f_casm_files) > 0 then begin
-			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/*.cS") (self#get_d_builddir ^ "/.");
-		end;
+		(* copy uobj asm files to namespace *)
+		List.iter ( fun asm_filename -> 
+			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname asm_filename)) (`Octal 0o0777);
+			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/" ^ asm_filename) (self#get_d_builddir ^ "/" ^ asm_filename);
+		) json_node_uberspark_uobj_var.f_sources.f_asm_files;
+
 
 		(* generate uobj top-level include header file source *)
 		Uberspark_logger.log ~crlf:false "Generating uobj top-level include header source...";
@@ -1227,10 +1227,8 @@ class uobject
 
 		(* copy h files to namespace *)
 		List.iter ( fun h_filename -> 
-			(*Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/include/" ^ h_filename)
-			(uobj_path_ns ^ "/include/" ^ h_filename);*)
-			Uberspark_osservices.cp ~parents:true (uobj_path_to_mf_filename ^ "/" ^ h_filename) 
-				(uobj_path_ns ^ "/.");
+			Uberspark_osservices.mkdir ~parent:true (uobj_path_ns ^ "/" ^ (Filename.dirname h_filename)) (`Octal 0o0777);
+			Uberspark_osservices.cp (uobj_path_to_mf_filename ^ "/" ^ h_filename) (uobj_path_ns ^ "/" ^ h_filename);
 		) json_node_uberspark_uobj_var.f_sources.f_h_files;
 
 		(* copy top-level header to namespace *)
