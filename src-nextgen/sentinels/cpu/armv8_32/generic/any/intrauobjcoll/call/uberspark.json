@@ -1,0 +1,45 @@
+/*
+    uberspark sentinel manifest (armv8_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+	/* manifest header */
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-sentinel" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+    "uberspark-sentinel" : {
+
+		"namespace" : "uberspark/sentinels/cpu/armv8_32/generic/any/intrauobjcoll/call",
+		"platform" : "rpi3",
+		"arch" : "armv8_32",
+        "cpu" : "generic",
+        "sizeof-code" : "0x1000", 
+
+        /*  sentinel code template 
+
+            parameters: 
+            PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
+        */ 
+        "code": "
+            ldr r0, = PUBLICMETHOD_ADDR
+            mov pc, r0
+        ",
+
+        /*  sentinel library code template 
+
+            parameters: 
+            PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
+        */ 
+        "libcode": "
+            ldr r0, = PUBLICMETHOD_SENTINEL_ADDR
+            mov pc, r0
+        "
+    }
+
+
+}
