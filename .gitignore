@@ -23,6 +23,7 @@ temp/
 !*.ml.cppo
 !*.mli
 !*.c
+!*.h
 !*.cS
 !*.json
 !*.us
