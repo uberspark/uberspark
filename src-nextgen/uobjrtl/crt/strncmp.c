@@ -66,9 +66,8 @@
  * From: OpenBSD sys/libkern/strcmp.c
  */
 
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/stdint.h>
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/string.h>
-#include <uberspark/include/uberspark.h>
+#include <uberspark/uobjrtl/crt/include/string.h>
+
 
 /*int
 strncmp(const char *s1, const char *s2, size_t n)
