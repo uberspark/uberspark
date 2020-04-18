@@ -37,8 +37,8 @@
 //based on guidelines in
 //http://pubs.opengroup.org/onlinepubs/007904875/basedefs/stdarg.h.html
 
-#ifndef __STDARG_H__
-#define	__STDARG_H__
+#ifndef __UOBJRTL_CRT_STDARG_H__
+#define	__UOBJRTL_CRT_STDARG_H__
 
 #ifndef __ASSEMBLY__
 
@@ -63,4 +63,4 @@ typedef __builtin_va_list va_list;
 
 #endif //#ifndef __ASSEMBLY__
 
-#endif	/* __STDARG_H__ */
+#endif	/* __UOBJRTL_CRT_STDARG_H__ */

@@ -35,14 +35,10 @@
 /**
  * libc string functions for use in a stand-alone environment
  */
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef __UOBJRTL_CRT_STRING_H__
+#define __UOBJRTL_CRT_STRING_H__
 
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/stdint.h>
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/stdbool.h>
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/stddef.h>
-#include <uberspark/uobjcoll/platform/rpi3/uxmhf/include/libxmhfc/stdarg.h>
-#include <uberspark/include/uberspark.h>
+#include <uberspark/uobjrtl/crt/include/stdint.h>
 
 #ifndef __ASSEMBLY__
 
@@ -231,4 +227,4 @@ size_t strnlen(const char *s, size_t maxlen);
 
 #endif /* __ASSEMBLY__ */
 
-#endif /* __STRING_H__ */
+#endif /* __UOBJRTL_CRT_STRING_H__ */

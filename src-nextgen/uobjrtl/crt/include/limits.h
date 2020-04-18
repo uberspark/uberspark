@@ -67,8 +67,8 @@
  * Modified for XMHF.
  */
 
-#ifndef __LIMITS_H__
-#define __LIMITS_H__
+#ifndef __UOBJRTL_CRT_LIMITS_H__
+#define __UOBJRTL_CRT_LIMITS_H__
 
 /*
  * According to ANSI (section 2.2.4.2), the values below must be usable by
@@ -163,4 +163,4 @@
 #define WORD_BIT        __WORD_BIT
 
 
-#endif /* __LIMITS_H__ */
+#endif /* __UOBJRTL_CRT_LIMITS_H__ */

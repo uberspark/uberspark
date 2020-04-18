@@ -36,8 +36,8 @@
  * Modified for XMHF.
  */
 
-#ifndef _SYS_STDINT_H_
-#define _SYS_STDINT_H_
+#ifndef __UOBJRTL_CRT_STDINT_H__
+#define __UOBJRTL_CRT_STDINT_H__
 
 /*
  * Basic types upon which most other types are built.
@@ -340,4 +340,4 @@ typedef volatile char *v_caddr_t;     /* core address, pointer to volatile */
 
 
 
-#endif /* !_SYS_STDINT_H_ */
+#endif /* __UOBJRTL_CRT_STDINT_H__ */

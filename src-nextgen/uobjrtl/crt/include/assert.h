@@ -32,11 +32,9 @@
  *
  */
 
-#ifndef __ASSERT_H__
-#define __ASSERT_H__
+#ifndef __UOBJRTL_CRT_ASSERT_H__
+#define __UOBJRTL_CRT_ASSERT_H__
 
-#ifndef __XMHF_VERIFICATION__
 #define assert(x) ((void)0)
-#endif
 
-#endif /* __ASSERT_H__ */
+#endif /* __UOBJRTL_CRT_ASSERT_H__ */

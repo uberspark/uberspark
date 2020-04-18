@@ -34,8 +34,8 @@
 
 /* Implemented based on
  * http://pubs.opengroup.org/onlinepubs/007904875/basedefs/stdbool.h.html */
-#ifndef __STDBOOL_H__
-#define __STDBOOL_H__
+#ifndef __UOBJRTL_CRT_STDBOOL_H__
+#define __UOBJRTL_CRT_STDBOOL_H__
 
 typedef int boolean_t;
 typedef boolean_t bool;
@@ -43,4 +43,4 @@ typedef boolean_t bool;
 #define false 0
 #define __bool_true_false_are_defined
 
-#endif /* __STDBOOL_H__ */
+#endif /* __UOBJRTL_CRT_STDBOOL_H__ */
