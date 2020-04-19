@@ -73,19 +73,6 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-/*
- * Compare strings.
- */
-/*int strcmp(s1, s2)
-	register const char *s1, *s2;
-{
-	while (*s1 == *s2++)
-		if (*s1++ == 0)
-			return (0);
-	return (*(const unsigned char *)s1 - *(const unsigned char *)(s2 - 1));
-}*/
-
-
 /*@
   requires \exists integer i; Length_of_str_is(s1,i);
   requires \exists integer i; Length_of_str_is(s2,i);
@@ -105,7 +92,7 @@
 	complete behaviors;
 	disjoint behaviors;
 @*/
-int strcmp(const char *s1, const char *s2) {
+int uberspark_uobjrtl_crt__strcmp(const char *s1, const char *s2) {
   const char *c1 = (const char *)s1;
   const char *c2 = (const char *)s2;
   char ch;

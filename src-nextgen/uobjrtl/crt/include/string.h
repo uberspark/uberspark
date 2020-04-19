@@ -75,7 +75,7 @@
   //complete behaviors;
   //disjoint behaviors;
 @*/
-int memcmp(const void *s1, const void *s2, size_t n);
+int uberspark_uobjrtl_crt__memcmp(const void *s1, const void *s2, size_t n);
 
 
 /*@
@@ -88,7 +88,7 @@ int memcmp(const void *s1, const void *s2, size_t n);
     ensures \forall integer i; 0 <= i < n ==> ((unsigned char*)dst)[i] == ((unsigned char*)src)[i];
     ensures \result == dst;
  */
-unsigned char *memcpy(unsigned char *dst, const unsigned char *src, size_t n);
+unsigned char *uberspark_uobjrtl_crt__memcpy(unsigned char *dst, const unsigned char *src, size_t n);
 
 
 
@@ -101,7 +101,7 @@ unsigned char *memcpy(unsigned char *dst, const unsigned char *src, size_t n);
 	//ensures \forall integer i; 0 <= i < n ==> ((char*)dst)[i] == \old(((char*)src)[i]);
 	//ensures \result == dst;
 @*/
-void *memmove(void *dst, const void *src, size_t n);
+void *uberspark_uobjrtl_crt__memmove(void *dst, const void *src, size_t n);
 
 /*@
 	requires n >= 0;
@@ -111,7 +111,7 @@ void *memmove(void *dst, const void *src, size_t n);
 	ensures \forall integer i; 0 <= i < n ==> (dst[i] == (unsigned char)c);
 	ensures \result == dst;
 @*/
-unsigned char *memset(unsigned char* dst, int c, size_t n);
+unsigned char *uberspark_uobjrtl_crt__memset(unsigned char* dst, int c, size_t n);
 
 
 /*@
@@ -119,7 +119,7 @@ unsigned char *memset(unsigned char* dst, int c, size_t n);
   requires -128 <= c <= 127;
   assigns \nothing;
 @*/
-char *strchr(const char *s, int c);
+char *uberspark_uobjrtl_crt__strchr(const char *s, int c);
 
 
 /*@
@@ -141,7 +141,7 @@ char *strchr(const char *s, int c);
 	complete behaviors;
 	disjoint behaviors;
 @*/
-int strcmp(const char *s1, const char *s2);
+int uberspark_uobjrtl_crt__strcmp(const char *s1, const char *s2);
 
 /*@
    requires \exists integer i; Length_of_str_is(s,i);
@@ -149,7 +149,7 @@ int strcmp(const char *s1, const char *s2);
    //ensures \exists integer i; Length_of_str_is(s,i) && \result == i;
    ensures \result == Length(s);
  @*/
-int strlen(const char *s);
+int uberspark_uobjrtl_crt__strlen(const char *s);
 
 /*@
 	requires n >= 0;
@@ -194,7 +194,7 @@ int strlen(const char *s);
   //complete behaviors;
   //disjoint behaviors;
 @*/
-int strncmp(const char *s1, const char *s2, size_t n);
+int uberspark_uobjrtl_crt__strncmp(const char *s1, const char *s2, size_t n);
 
 /*@
 	requires n >= 0;
@@ -205,7 +205,7 @@ int strncmp(const char *s1, const char *s2, size_t n);
 	assigns dst[0..n-1];
 	ensures \result == dst;
 @*/
-char *strncpy(char *dst, const char *src, size_t n);
+char *uberspark_uobjrtl_crt__strncpy(char *dst, const char *src, size_t n);
 
 /*@
   requires maxlen >= 0;
@@ -221,7 +221,7 @@ char *strncpy(char *dst, const char *src, size_t n);
   complete behaviors;
   disjoint behaviors;
 */
-size_t strnlen(const char *s, size_t maxlen);
+size_t uberspark_uobjrtl_crt__strnlen(const char *s, size_t maxlen);
 
 
 

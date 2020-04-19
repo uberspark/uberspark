@@ -35,27 +35,6 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-/*
-void *memmove(void *dst_void, const void *src_void, u32 length){
-  char *dst = dst_void;
-  const char *src = src_void;
-
-  if (src < dst && dst < src + length){
-      // Have to copy backwards
-      src += length;
-      dst += length;
-      while (length--){
-	     *--dst = *--src;
-	     }
-  }else{
-      while (length--){
-	     *dst++ = *src++;
-	    }
-  }
-
-  return dst_void;
-}*/
-
 
 /*@
 	requires n >= 0;
@@ -66,7 +45,7 @@ void *memmove(void *dst_void, const void *src_void, u32 length){
 	//ensures \forall integer i; 0 <= i < n ==> ((char*)dst)[i] == \old(((char*)src)[i]);
 	//ensures \result == dst;
 @*/
-void *memmove(void *dst, const void *src, size_t n)
+void *uberspark_uobjrtl_crt__memmove(void *dst, const void *src, size_t n)
 {
 	const char *p = src;
 	char *q = dst;

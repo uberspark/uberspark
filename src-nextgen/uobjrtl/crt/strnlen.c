@@ -34,13 +34,6 @@
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
-/*
-u32 strnlen(const char * s, u32 count){
-	const char *sc;
-
-	for (sc = s; count-- && *sc != '\0'; ++sc);
-	return (u32)(sc - s);
-}*/
 
 /*@
   requires maxlen >= 0;
@@ -56,7 +49,7 @@ u32 strnlen(const char * s, u32 count){
   complete behaviors;
   disjoint behaviors;
 */
-size_t strnlen(const char *s, size_t maxlen)
+size_t uberspark_uobjrtl_crt__strnlen(const char *s, size_t maxlen)
 {
   const char *ss = s;
 

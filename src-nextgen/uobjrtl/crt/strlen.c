@@ -69,14 +69,6 @@
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
-/*size_t strlen(str)
-	const char *str;
-{
-	register const char *s;
-
-	for (s = str; *s; ++s);
-	return(s - str);
-}*/
 
 /*@
    requires \exists integer i; Length_of_str_is(s,i);
@@ -84,7 +76,7 @@
    //ensures \exists integer i; Length_of_str_is(s,i) && \result == i;
    ensures \result == Length(s);
  @*/
-int strlen(const char *s) {
+int uberspark_uobjrtl_crt__strlen(const char *s) {
 	const char *ss = s;
 
 	/*@

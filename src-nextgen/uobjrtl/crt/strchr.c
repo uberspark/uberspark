@@ -70,25 +70,6 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-/*
-char *
-strchr(const char *p, int ch)
-{
-        union {
-                const char *cp;
-                char *p;
-        } u;
-
-        u.cp = p;
-        for (;; ++u.p) {
-                if (*u.p == ch)
-                        return(u.p);
-                if (*u.p == '\0')
-                        return(NULL);
-        }
-}
-*/
-
 
 
 /*@
@@ -96,7 +77,7 @@ strchr(const char *p, int ch)
   requires -128 <= c <= 127;
   assigns \nothing;
 @*/
-char *strchr(const char *s, int c)
+char *uberspark_uobjrtl_crt__strchr(const char *s, int c)
 {
   /*@
      loop invariant \base_addr(s) == \base_addr(\at(s, Pre));

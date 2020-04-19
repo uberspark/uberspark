@@ -81,7 +81,7 @@
 	assigns dst[0..n-1];
 	ensures \result == dst;
 @*/
-char *strncpy(char *dst, const char *src, size_t n)
+char *uberspark_uobjrtl_crt__strncpy(char *dst, const char *src, size_t n)
 {
 	char *q = dst;
 	const char *p = src;

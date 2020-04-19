@@ -36,16 +36,6 @@
 
 
 
-/*void *memcpy(void * to, const void * from, u32 n)
-{
-  size_t i;
-  for(i=0; i<n; i++) {
-    ((uint8_t*)to)[i] = ((const uint8_t*)from)[i];
-  }
-  return to;
-}*/
-
-
 /*@
     requires \separated(((unsigned char*)src)+(0..n-1), ((unsigned char*)dst)+(0..n-1));
     requires n >= 0;
@@ -55,7 +45,7 @@
     ensures \forall integer i; 0 <= i < n ==> ((unsigned char*)dst)[i] == ((unsigned char*)src)[i];
     ensures \result == dst;
  */
-unsigned char *memcpy(unsigned char *dst, const unsigned char *src, size_t n)
+unsigned char *uberspark_uobjrtl_crt__memcpy(unsigned char *dst, const unsigned char *src, size_t n)
 {
 	const unsigned char *p = src;
 	unsigned char *q = dst;

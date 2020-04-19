@@ -42,7 +42,7 @@
 	ensures \forall integer i; 0 <= i < n ==> (dst[i] == (unsigned char)c);
 	ensures \result == dst;
 @*/
-unsigned char *memset(unsigned char* dst, int c, size_t n)
+unsigned char *uberspark_uobjrtl_crt__memset(unsigned char* dst, int c, size_t n)
 {
 	size_t i;
 
