@@ -8,7 +8,7 @@ ENV archive_name=compcert-3.1.tgz
 RUN apt-get update &&\
     apt-get -y install wget
 
-# Put everything in a known location, so that we can work.
+# Put everything in the build context.
 RUN wget http://compcert.inria.fr/release/${archive_name}
 
 RUN mv compcert-3.1.tgz CompCert-3.1.tgz
@@ -18,8 +18,8 @@ ENV archive_name=CompCert-3.1.tgz
 COPY install.sh /tmp
 COPY compiler_script.sh /tmp
 
-# This didn't work because Opam likes to ask questions, lots of them. I have a
-# customer version that is in the build directory. We just call that instead.
+# This didn't work because Opam asks questions, lots of them. I have a
+# custom install.sh that is in the build directory. We just call that instead.
 # curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh -O &&\
 
 RUN apt-get -y install  \
@@ -48,8 +48,8 @@ RUN apt-get -y install  \
 # sysctl kernel.unprivileged_userns_clone=1 &&\
 
 # Opam is not very script-friendly software. It insists on being run as an
-# unprivileged user, in a kernel-enforced sandbox, and it asks questions,
-# arbitrarily, when you run it. Yikes.
+# unprivileged user, in a kernel-enforced sandbox, and it asks questions
+# when you run it.
 
 # Opam also has a lot of dependencies that are not documented on its install
 # page, see above, everything after binutils.
@@ -79,10 +79,10 @@ RUN opam init --disable-sandboxing &&\
 # Build directions say you only need to run like four opam commands to get it
 # installed. If you don't want opam to ask you a lot of questions in your
 # script, since they don't respect any form of auto-answer I could think of
-# running, you need to run thirteen opam commands. Sheesh.
+# running, you need to run thirteen opam commands.
 
 # Now that opam is installed, we can go about building our compiler, which
-# requires us to be root again...
+# requires us to be root again.
 
 USER root
 WORKDIR /tmp
@@ -90,9 +90,10 @@ RUN echo $archive_name
 
 RUN tar -xzf ${archive_name}
 
-# Apparently, this is a "bash-ism". I.e., this only works in bash. To make it
+# Apparently, the following is a "bash-ism". I.e., this only works in bash. To make it
 # work in Dash, Ubuntu's default shell for /bin/sh, the bin that is called when
-# Docker builds, you need to do substring parsing with an awk script. Yikes.
+# Docker builds, you need to do substring parsing with an awk script. That's
+# done in compiler_script.sh
 
 #RUN archive_dir=${archive_name:0:$archive_string_len-4}
 
