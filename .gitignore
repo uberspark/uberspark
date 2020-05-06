@@ -29,3 +29,5 @@ temp/
 !*.mk
 !*.Dockerfile
 
+_install
+docs
