@@ -32,10 +32,10 @@
  *
  */
 
-#ifndef __SHA1_H__
-#define __SHA1_H__
+#ifndef __UOBJRTL_CRYPTO__HASHES_SHA1_H__
+#define __UOBJRTL_CRYPTO__HASHES_SHA1_H__
 
-#include <xmhfcrypto.h>
+#include <uberspark/uobjrtl/crypto/include/basedefs.h>
 
 #define SHA1_RESULTLEN      (160/8)
 #define SHA_DIGEST_LENGTH	SHA1_RESULTLEN
@@ -60,4 +60,4 @@ int sha1_memory_multi(unsigned char *out, unsigned long *outlen,
 #endif // __ASSEMBLY__
 
 
-#endif /* __SHA1_H__ */
+#endif /* __UOBJRTL_CRYPTO__HASHES_SHA1_H__ */

@@ -38,16 +38,10 @@
  * adapted from libtomcrypto
  */
 
-//#include <types.h>
-//#include <arm8-32.h>
-//#include <bcm2837.h>
-//#include <miniuart.h>
-//#include <debug.h>
 
-#include <string.h>
-#include <xmhfcrypto.h>
-#include <sha1.h>
-#include <hmac-sha1.h>
+#include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+#include <uberspark/uobjrtl/crypto/include/mac/hmac-sha1/hmac-sha1.h>
+
 
 #define LTC_HMAC_SHA1_BLOCKSIZE 64
 

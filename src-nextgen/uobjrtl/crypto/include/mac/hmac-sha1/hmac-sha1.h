@@ -32,13 +32,13 @@
  *
  */
 
-#ifndef __HMAC_SHA1_H__
-#define __HMAC_SHA1_H__
+#ifndef __UOBJRTL_CRYPTO__MAC_HMACSHA1_H__
+#define __UOBJRTL_CRYPTO__MAC_HMACSHA1_H__
 
 
 #ifndef __ASSEMBLY__
 
-#include <xmhfcrypto.h>
+#include <uberspark/uobjrtl/crypto/include/basedefs.h>
 
 int hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen);
 int hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen);
@@ -54,4 +54,4 @@ int hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
 #endif // __ASSEMBLY__
 
 
-#endif /* __HMAC_SHA1_H__ */
+#endif /* __UOBJRTL_CRYPTO__MAC_HMACSHA1_H__ */

@@ -32,8 +32,13 @@
  *
  */
 
-#ifndef __XMHFCRYPTO_H__
-#define __XMHFCRYPTO_H__
+#ifndef __UOBJRTL_CRYPTO__BASEDEFS_H__
+#define __UOBJRTL_CRYPTO__BASEDEFS_H__
+
+
+#include <uberspark/uobjrtl/crt/include/stdint.h>
+#include <uberspark/uobjrtl/crt/include/string.h>
+
 
 //tomcrypt.h
 
@@ -290,4 +295,4 @@ typedef struct Hmac_state {
 
 
 
-#endif /* __XMHFCRYPTO_H__ */
+#endif /* __UOBJRTL_CRYPTO__BASEDEFS_H__ */

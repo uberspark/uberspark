@@ -49,9 +49,7 @@
 	author: amit vasudevan (amitvasudevan@acm.org)
 */
 
-#include <string.h>
-#include <xmhfcrypto.h>
-#include <aes.h>
+#include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
 /**
    Initialize a CBC context

@@ -58,9 +58,7 @@ Td4[x] = Si[x].[01, 01, 01, 01];
 */
 
 
-#include <string.h>
-#include <xmhfcrypto.h>
-#include <aes.h>
+#include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
 /**
   @file aes_tab.c

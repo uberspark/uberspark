@@ -64,9 +64,7 @@
   Implementation of AES
 */
 
-#include <string.h>
-#include <xmhfcrypto.h>
-#include <aes.h>
+#include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
 #define SETUP    rijndael_setup
 #define ECB_ENC  rijndael_ecb_encrypt

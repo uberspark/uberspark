@@ -32,10 +32,10 @@
  *
  */
 
-#ifndef __AES_H__
-#define __AES_H__
+#ifndef __UOBJRTL_CRYPTO__CIPHERS_AES_H__
+#define __UOBJRTL_CRYPTO__CIPHERS_AES_H__
 
-#include <xmhfcrypto.h>
+#include <uberspark/uobjrtl/crypto/include/basedefs.h>
 
 #define AES_KEY_LEN_BYTES	16
 
@@ -91,4 +91,4 @@ int rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned lo
 #endif // __ASSEMBLY__
 
 
-#endif /* __AES_H__ */
+#endif /* __UOBJRTL_CRYPTO__CIPHERS_AES_H__ */
