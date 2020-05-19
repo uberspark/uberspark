@@ -35,23 +35,6 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-#if 0
-int
-memcmp(const void *s1, const void *s2, size_t n)
-{
-    if (n != 0) {
-        const unsigned char *p1 = s1, *p2 = s2;
-
-        do {
-            if (*p1++ != *p2++)
-                return (*--p1 - *--p2);
-        } while (--n != 0);
-    }
-    return (0);
-}
-#endif // 0
-
-
 /*@
   requires n >= 0;
   requires \valid(((char*)s1)+(0..n-1));
@@ -69,7 +52,7 @@ memcmp(const void *s1, const void *s2, size_t n)
   //complete behaviors;
   //disjoint behaviors;
 @*/
-int memcmp(const void *s1, const void *s2, size_t n)
+int uberspark_uobjrtl_crt__memcmp(const void *s1, const void *s2, size_t n)
 {
   const char *c1 = s1, *c2 = s2;
   int d = 0;

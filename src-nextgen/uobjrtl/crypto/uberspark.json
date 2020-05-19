@@ -1,0 +1,30 @@
+/*
+    überSpark uobjrtl manifest -- crypto
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+	/* manifest header */
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobjrtl" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+    /* uobjrtl node */
+    "uberspark-uobjrtl" : {
+
+        "namespace" : "uberspark/uobjrtl/crypto",
+		"platform" : "generic",
+		"arch" : "generic",
+        "cpu" : "generic",
+
+        "modules-spec" : [
+
+
+
+        ]
+    }        
+
+}
