@@ -63,7 +63,7 @@
 */
 //int cbc_start(int cipher, const unsigned char *IV, const unsigned char *key,
 //             int keylen, int num_rounds, symmetric_CBC *cbc)
-int rijndael_cbc_start(const unsigned char *IV, const unsigned char *key,
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned char *IV, const unsigned char *key,
               int keylen, int num_rounds, symmetric_CBC *cbc)
 {
    int x, err;
@@ -81,13 +81,13 @@ int rijndael_cbc_start(const unsigned char *IV, const unsigned char *key,
    //if ((err = cipher_descriptor[cipher].setup(key, keylen, num_rounds, &cbc->key)) != CRYPT_OK) {
    //   return err;
    // }
-   if ((err = rijndael_setup(key, keylen, num_rounds, &cbc->key)) != CRYPT_OK) {
+   if ((err = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(key, keylen, num_rounds, &cbc->key)) != CRYPT_OK) {
       return err;
    }
 
    /* copy IV */
    //cbc->blocklen = cipher_descriptor[cipher].block_length;
-   cbc->blocklen = rijndael_desc.block_length;
+   cbc->blocklen = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_desc.block_length;
    //cbc->cipher   = cipher;
    for (x = 0; x < cbc->blocklen; x++) {
        cbc->IV[x] = IV[x];
@@ -103,7 +103,7 @@ int rijndael_cbc_start(const unsigned char *IV, const unsigned char *key,
    @param cbc  The CBC state
    @return CRYPT_OK if successful
 */
-int rijndael_cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc)
 {
    LTC_ARGCHK(IV  != NULL);
    LTC_ARGCHK(cbc != NULL);
@@ -122,7 +122,7 @@ int rijndael_cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC
    @param cbc  The CBC state
    @return CRYPT_OK if successful
 */
-int rijndael_cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc)
 {
    LTC_ARGCHK(IV  != NULL);
    LTC_ARGCHK(len != NULL);
@@ -147,7 +147,7 @@ int rijndael_cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc
   @param cbc    CBC state
   @return CRYPT_OK if successful
 */
-int rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len, symmetric_CBC *cbc)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len, symmetric_CBC *cbc)
 {
    int x, err;
 
@@ -182,7 +182,7 @@ int rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned lo
          }
 
          /* encrypt */
-         if ((err = rijndael_ecb_encrypt(cbc->IV, ct, &cbc->key)) != CRYPT_OK) {
+         if ((err = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(cbc->IV, ct, &cbc->key)) != CRYPT_OK) {
             return err;
          }
 
@@ -204,7 +204,7 @@ int rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned lo
   @param cbc    The CBC chain to terminate
   @return CRYPT_OK on success
 */
-int rijndael_cbc_done(symmetric_CBC *cbc)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc)
 {
    LTC_ARGCHK(cbc != NULL);
 
@@ -213,7 +213,7 @@ int rijndael_cbc_done(symmetric_CBC *cbc)
    //   return err;
    //}
    //cipher_descriptor[cbc->cipher].done(&cbc->key);
-   rijndael_done(&cbc->key);
+   uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(&cbc->key);
 
    return CRYPT_OK;
 }
@@ -227,7 +227,7 @@ int rijndael_cbc_done(symmetric_CBC *cbc)
   @param cbc    CBC state
   @return CRYPT_OK if successful
 */
-int rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len, symmetric_CBC *cbc)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len, symmetric_CBC *cbc)
 {
    int x, err;
    unsigned char tmp[16];
@@ -259,7 +259,7 @@ int rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned lo
    //} else {
       while (len) {
          /* decrypt */
-         if ((err = rijndael_ecb_decrypt(ct, tmp, &cbc->key)) != CRYPT_OK) {
+         if ((err = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(ct, tmp, &cbc->key)) != CRYPT_OK) {
             return err;
          }
 

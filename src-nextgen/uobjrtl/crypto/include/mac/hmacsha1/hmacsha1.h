@@ -40,11 +40,11 @@
 
 #include <uberspark/uobjrtl/crypto/include/basedefs.h>
 
-int hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen);
-int hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen);
-int hmac_sha1_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen);
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen);
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
 
-int hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
                 const unsigned char *in,   unsigned long inlen,
                       unsigned char *out,  unsigned long *outlen);
 

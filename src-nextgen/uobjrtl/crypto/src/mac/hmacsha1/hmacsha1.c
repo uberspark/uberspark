@@ -53,7 +53,7 @@
    @param keylen   The length of the secret key (octets)
    @return CRYPT_OK if successful
 **/
-int hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen)
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen)
 {
     unsigned char buf[LTC_HMAC_SHA1_BLOCKSIZE];
     unsigned long hashsize;
@@ -116,7 +116,7 @@ done:
   @param inlen   The length of the data to HMAC (octets)
   @return CRYPT_OK if successful
 **/
-int hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen)
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen)
 {
     LTC_ARGCHK(hmac != NULL);
     LTC_ARGCHK(in != NULL);
@@ -132,7 +132,7 @@ int hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long i
                   authentication tag
    @return CRYPT_OK if successful
 **/
-int hmac_sha1_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen)
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen)
 {
     unsigned char buf[LTC_HMAC_SHA1_BLOCKSIZE], isha[20];
     unsigned long hashsize, i;
@@ -197,7 +197,7 @@ LBL_ERR:
 **/
 
 
-int hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
+int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
                 const unsigned char *in,   unsigned long inlen,
                       unsigned char *out,  unsigned long *outlen)
 {
@@ -209,15 +209,15 @@ int hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
     LTC_ARGCHK(out    != NULL);
     LTC_ARGCHK(outlen != NULL);
 
-    if ((err = hmac_sha1_init(&hmac, key, keylen)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(&hmac, key, keylen)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
-    if ((err = hmac_sha1_process(&hmac, in, inlen)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(&hmac, in, inlen)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
-    if ((err = hmac_sha1_done(&hmac, out, outlen)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(&hmac, out, outlen)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 

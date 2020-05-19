@@ -80,11 +80,11 @@ extern const u32 Tks3[];
 
 extern const u32 rcon[];
 
-int rijndael_cbc_start(const unsigned char * IV, const unsigned char *key,
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned char * IV, const unsigned char *key,
 		       int keylen, int num_rounds, symmetric_CBC *cbc);
-int rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len, symmetric_CBC *cbc);
-int rijndael_cbc_done(symmetric_CBC *cbc);
-int rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len, symmetric_CBC *cbc);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len, symmetric_CBC *cbc);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len, symmetric_CBC *cbc);
 
 
 

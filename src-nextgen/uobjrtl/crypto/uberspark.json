@@ -22,6 +22,58 @@
 
         "modules-spec" : [
 
+            {
+                "module-path" : "src/ciphers/aes/aes.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_test" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize" }
+
+                    ]
+            },
+            
+            {
+                "module-path" : "src/ciphers/aes/aes_cbc.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv",
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_decrypt" }
+
+                    ]
+            },
+
+            {
+                "module-path" : "src/ciphers/aes/aes_tab.c"
+            },
+
+            {
+                "module-path" : "src/hashes/sha1/sha1.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_init" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_process" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory_multi" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/mac/hmacsha1/hmacsha1.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory" }
+                    ]
+            },
+
 
 
         ]

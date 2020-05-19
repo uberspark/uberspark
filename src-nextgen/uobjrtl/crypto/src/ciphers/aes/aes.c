@@ -66,12 +66,12 @@
 
 #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
-#define SETUP    rijndael_setup
-#define ECB_ENC  rijndael_ecb_encrypt
-#define ECB_DEC  rijndael_ecb_decrypt
-#define ECB_DONE rijndael_done
-#define ECB_TEST rijndael_test
-#define ECB_KS   rijndael_keysize
+#define SETUP    uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup
+#define ECB_ENC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt
+#define ECB_DEC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt
+#define ECB_DONE uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done
+#define ECB_TEST uberspark_uobjrtl_crypto__ciphers_aes__rijndael_test
+#define ECB_KS   uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize
 
 const struct ltc_cipher_descriptor rijndael_desc =
 {

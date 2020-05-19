@@ -40,7 +40,7 @@
 #define F2(x,y,z)  ((x & y) | (z & (x | y)))
 #define F3(x,y,z)  (x ^ y ^ z)
 
-int  sha1_compress(hash_state *md, unsigned char *buf)
+int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(hash_state *md, unsigned char *buf)
 {
     uint32_t a,b,c,d,e,W[80],i;
 
@@ -125,7 +125,7 @@ int  sha1_compress(hash_state *md, unsigned char *buf)
    @param md   The hash state you wish to initialize
    @return CRYPT_OK if successful
 */
-int sha1_init(hash_state * md)
+int uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(hash_state * md)
 {
    LTC_ARGCHK(md != NULL);
    md->sha1.state[0] = 0x67452301UL;
@@ -145,7 +145,7 @@ int sha1_init(hash_state * md)
    @param inlen  The length of the data (octets)
    @return CRYPT_OK if successful
 */
-int sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
+int uberspark_uobjrtl_crypto__hashes_sha1__sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
 {
     unsigned long n;
     int           err;
@@ -159,7 +159,7 @@ int sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
     }
     while (inlen > 0) {
         if (md-> sha1 .curlen == 0 && inlen >= 64) {
-           if ((err = sha1_compress (md, (unsigned char *)in)) != CRYPT_OK) {
+           if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress (md, (unsigned char *)in)) != CRYPT_OK) {
               return err;
            }
            md-> sha1 .length += 64 * 8;
@@ -172,7 +172,7 @@ int sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
            in             += n;
            inlen          -= n;
            if (md-> sha1 .curlen == 64) {
-              if ((err = sha1_compress (md, md-> sha1 .buf)) != CRYPT_OK) {
+              if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress (md, md-> sha1 .buf)) != CRYPT_OK) {
                  return err;
               }
               md-> sha1 .length += 8*64;
@@ -190,7 +190,7 @@ int sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
    @param out [out] The destination of the hash (20 bytes)
    @return CRYPT_OK if successful
 */
-int sha1_done(hash_state * md, unsigned char *out)
+int uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(hash_state * md, unsigned char *out)
 {
     int i;
 
@@ -215,7 +215,7 @@ int sha1_done(hash_state * md, unsigned char *out)
         while (md->sha1.curlen < 64) {
             md->sha1.buf[md->sha1.curlen++] = (unsigned char)0;
         }
-        sha1_compress(md, md->sha1.buf);
+        uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(md, md->sha1.buf);
         md->sha1.curlen = 0;
     }
 
@@ -226,7 +226,7 @@ int sha1_done(hash_state * md, unsigned char *out)
 
     /* store length */
     STORE64H(md->sha1.length, md->sha1.buf+56);
-    sha1_compress(md, md->sha1.buf);
+    uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(md, md->sha1.buf);
 
     /* copy output */
     for (i = 0; i < 5; i++) {
@@ -240,7 +240,7 @@ int sha1_done(hash_state * md, unsigned char *out)
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
-int  sha1_test(void)
+int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_test(void)
 {
   static const struct {
       char *msg;
@@ -263,9 +263,9 @@ int  sha1_test(void)
   hash_state md;
 
   for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0]));  i++) {
-      sha1_init(&md);
-      sha1_process(&md, (unsigned char*)tests[i].msg, (unsigned long)strlen(tests[i].msg));
-      sha1_done(&md, tmp);
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&md);
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&md, (unsigned char*)tests[i].msg, (unsigned long)strlen(tests[i].msg));
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&md, tmp);
       //if (compare_testvector(tmp, sizeof(tmp), tests[i].hash, sizeof(tests[i].hash), "SHA1", i)) {
       //   return CRYPT_FAIL_TESTVECTOR;
       //}
@@ -284,7 +284,7 @@ int  sha1_test(void)
   @return CRYPT_OK if successful
 */
 //int hash_memory(int hash, const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
-int sha1_memory(const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
+int uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory(const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 {
     //hash_state *md;
 	hash_state md;
@@ -308,13 +308,13 @@ int sha1_memory(const unsigned char *in, unsigned long inlen, unsigned char *out
     //   return CRYPT_MEM;
     //}
 
-    if ((err = sha1_init(&md)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&md)) != CRYPT_OK) {
        goto LBL_ERR;
     }
-    if ((err = sha1_process(&md, in, inlen)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&md, in, inlen)) != CRYPT_OK) {
        goto LBL_ERR;
     }
-    err = sha1_done(&md, out);
+    err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&md, out);
     *outlen = 20;
 LBL_ERR:
 
@@ -334,7 +334,7 @@ LBL_ERR:
   @param ...    tuples of (data,len) pairs to hash, terminated with a (NULL,x) (x=don't care)
   @return CRYPT_OK if successful
 */
-int sha1_memory_multi(unsigned char *out, unsigned long *outlen,
+int uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory_multi(unsigned char *out, unsigned long *outlen,
                       const unsigned char *in, unsigned long inlen, ...)
 {
     //hash_state          *md;
@@ -362,7 +362,7 @@ int sha1_memory_multi(unsigned char *out, unsigned long *outlen,
     //   return CRYPT_MEM;
     //}
 
-    if ((err = sha1_init(&md)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&md)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
@@ -371,7 +371,7 @@ int sha1_memory_multi(unsigned char *out, unsigned long *outlen,
     curlen = inlen;
     for (;;) {
        /* process buf */
-       if ((err = sha1_process(&md, curptr, curlen)) != CRYPT_OK) {
+       if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&md, curptr, curlen)) != CRYPT_OK) {
           goto LBL_ERR;
        }
        /* step to next */
@@ -381,7 +381,7 @@ int sha1_memory_multi(unsigned char *out, unsigned long *outlen,
        }
        curlen = va_arg(args, unsigned long);
     }
-    err = sha1_done(&md, out);
+    err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&md, out);
     *outlen = 20;
 LBL_ERR:
     //XFREE(md);
