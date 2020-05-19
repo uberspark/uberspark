@@ -286,3 +286,33 @@ module Uobjslt : sig
 end
 
 
+module Uobjrtl : sig
+
+type json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t =
+{
+	mutable f_funcname : string;
+}
+
+
+type json_node_uberspark_uobjrtl_modules_spec_t =
+{
+	mutable f_module_path : string;
+	mutable f_module_funcdecls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
+}
+
+
+type json_node_uberspark_uobjrtl_t =
+{
+	mutable f_namespace : string;
+	mutable f_platform : string;
+	mutable f_arch : string;
+    mutable f_cpu : string;
+   
+    mutable f_modules_spec: json_node_uberspark_uobjrtl_modules_spec_t list;
+}
+
+  val json_node_uberspark_uobjrtl_to_var : Yojson.Basic.t -> json_node_uberspark_uobjrtl_t -> bool
+
+
+end
+

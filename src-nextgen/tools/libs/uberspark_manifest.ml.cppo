@@ -347,3 +347,6 @@ module Uobjslt = struct
 	#include "uberspark_manifest_uobjslt.ml"
 end
 
+module Uobjrtl = struct
+	#include "uberspark_manifest_uobjrtl.ml"
+end
