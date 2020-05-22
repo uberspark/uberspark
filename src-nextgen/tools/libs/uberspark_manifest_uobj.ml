@@ -12,6 +12,12 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_uobj_uobjrtl_t = 
+{
+	mutable f_namespace: string;
+};;
+
+
 type json_node_uberspark_uobj_sources_t = 
 {
 	mutable f_h_files: string list;
@@ -42,6 +48,7 @@ type json_node_uberspark_uobj_t =
 	mutable f_interuobjcoll_callees : (string * string list) list;
 	mutable f_legacy_callees : (string * string list) list;
 	mutable f_sections : (string * Defs.Basedefs.section_info_t) list;
+	mutable f_uobjrtl : json_node_uberspark_uobj_uobjrtl_t list;
 };;
 
 
@@ -390,6 +397,51 @@ let json_node_uberspark_uobj_sections_to_var
 	(!retval, !sections_assoc_list)
 ;;
 
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "uobjrtl" into var *)
+(* return: *)
+(* on success: true; var is modified with uobjrtl declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobj_uobjrtl_to_var
+	(json_node_uberspark_uobj : Yojson.Basic.t)
+	: bool *  (json_node_uberspark_uobj_uobjrtl_t list)
+=
+		
+	let retval = ref false in
+	let uobjrtl_list : json_node_uberspark_uobj_uobjrtl_t list ref = ref [] in 
+
+	try
+		let open Yojson.Basic.Util in
+			let uobj_uobjrtl_json = json_node_uberspark_uobj |> member "uobjrtl" in
+				if uobj_uobjrtl_json != `Null then
+					begin
+
+						let uobj_uobjrtl_list = Yojson.Basic.Util.to_list uobj_uobjrtl_json in
+							retval := true;
+							
+							List.iter (fun x ->
+								let f_uobjrtl_element : json_node_uberspark_uobj_uobjrtl_t = 
+									{ f_namespace = ""; } in
+								
+								f_uobjrtl_element.f_namespace <- Yojson.Basic.Util.to_string (x |> member "namespace");
+
+								uobjrtl_list := !uobjrtl_list @ [ f_uobjrtl_element ];
+													
+								()
+							) uobj_uobjrtl_list;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !uobjrtl_list)
+;;
 
 
 

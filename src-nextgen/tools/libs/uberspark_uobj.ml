@@ -91,7 +91,7 @@ class uobject
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
 		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
 		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
-		f_legacy_callees = []; f_sections = []; 
+		f_legacy_callees = []; f_sections = []; f_uobjrtl = []; 
 		};
 
 
