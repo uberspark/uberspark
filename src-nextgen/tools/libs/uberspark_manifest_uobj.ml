@@ -473,16 +473,35 @@ let json_node_uberspark_uobj_to_var
 					let (rval4, json_node_uberspark_uobj_interuobjcoll_callees_var) = (json_node_uberspark_uobj_interuobjcoll_callees_to_var json_node_uberspark_uobj) in
 					let (rval5, json_node_uberspark_uobj_legacy_callees_var) = (json_node_uberspark_uobj_legacy_callees_to_var json_node_uberspark_uobj) in
 					let (rval6, json_node_uberspark_uobj_sections_var) = (json_node_uberspark_uobj_sections_to_var json_node_uberspark_uobj) in
+					let (rval7, json_node_uberspark_uobj_uobjrtl_var) = (json_node_uberspark_uobj_uobjrtl_to_var json_node_uberspark_uobj) in
 
-					if (rval1 && rval2 && rval3 && rval4 && rval5 && rval6) then begin
+					(* we require sources and publicmethods sub-nodes at the bare minimum *)
+					if (rval1 && rval2 ) then begin
 
 						json_node_uberspark_uobj_var.f_publicmethods <- json_node_uberspark_uobj_publicmethods_var;
-						json_node_uberspark_uobj_var.f_intrauobjcoll_callees <- json_node_uberspark_uobj_intrauobjcoll_callees_var;
-						json_node_uberspark_uobj_var.f_interuobjcoll_callees <- json_node_uberspark_uobj_interuobjcoll_callees_var;
-						json_node_uberspark_uobj_var.f_legacy_callees <- json_node_uberspark_uobj_legacy_callees_var;
-						json_node_uberspark_uobj_var.f_sections <- json_node_uberspark_uobj_sections_var;
+
+						if rval3 then begin
+							json_node_uberspark_uobj_var.f_intrauobjcoll_callees <- json_node_uberspark_uobj_intrauobjcoll_callees_var;
+						end;
+
+						if rval4 then begin
+							json_node_uberspark_uobj_var.f_interuobjcoll_callees <- json_node_uberspark_uobj_interuobjcoll_callees_var;
+						end;
+
+						if rval5 then begin
+							json_node_uberspark_uobj_var.f_legacy_callees <- json_node_uberspark_uobj_legacy_callees_var;
+						end;
+
+						if rval6 then begin
+							json_node_uberspark_uobj_var.f_sections <- json_node_uberspark_uobj_sections_var;
+						end;
+
+						if rval7 then begin
+							json_node_uberspark_uobj_var.f_uobjrtl <- json_node_uberspark_uobj_uobjrtl_var;
+						end;
 
 						retval := true;
+						
 					end;
 
 				end;
