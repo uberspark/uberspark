@@ -899,22 +899,23 @@ class uobject
 		(* then use this filename list to copy to the builddir *)
 		(* add this filename list to start of c files so we can build it *)
 
-		List.iter ( fun (uobjrtl_entry: Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) -> 
+		List.iter ( fun ( (uobjrtl_namespace : string), (uobjrtl_entry : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.f_namespace;
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace root-dir-prefix=%s" !Uberspark_namespace.namespace_root_dir_prefix;
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
 
-			let uobjrtl_manifest_path = (!Uberspark_namespace.namespace_root_dir_prefix ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+			(*let uobjrtl_manifest_path = (!Uberspark_namespace.namespace_root_dir_prefix ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+			*)
 
 			(* parse uobj slt manifest *)
-			let rval = (self#parse_manifest_uobjrtl uobjrtl_manifest_path) in	
+			(*let rval = (self#parse_manifest_uobjrtl uobjrtl_manifest_path) in	
 			if (rval == true) then begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "parsed uobjrtl manifest: %s" uobjrtl_manifest_path;
 
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobjrtl manifest: %s" uobjrtl_manifest_path;
 				retval := false;
-			end;
+			end;*)
 
 			(*json_node_uberspark_uobj_var.f_sources.f_c_files <-  [ 
 				cfilename ] @ json_node_uberspark_uobj_var.f_sources.f_c_files;*)

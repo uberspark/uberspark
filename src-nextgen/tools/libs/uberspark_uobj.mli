@@ -129,7 +129,7 @@ type slt_info_t =
  
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
-  	method prepare_uobjrtl_sources : unit -> unit 
+  	method prepare_uobjrtl_sources : unit -> bool 
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
     (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->

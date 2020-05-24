@@ -48,7 +48,7 @@ type json_node_uberspark_uobj_t =
 	mutable f_interuobjcoll_callees : (string * string list) list;
 	mutable f_legacy_callees : (string * string list) list;
 	mutable f_sections : (string * Defs.Basedefs.section_info_t) list;
-	mutable f_uobjrtl : json_node_uberspark_uobj_uobjrtl_t list;
+	mutable f_uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
 };;
 
 
@@ -406,11 +406,11 @@ let json_node_uberspark_uobj_sections_to_var
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_uobjrtl_to_var
 	(json_node_uberspark_uobj : Yojson.Basic.t)
-	: bool *  (json_node_uberspark_uobj_uobjrtl_t list)
+	: bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
 =
 		
 	let retval = ref false in
-	let uobjrtl_list : json_node_uberspark_uobj_uobjrtl_t list ref = ref [] in 
+	let uobjrtl_assoc_list : (string * json_node_uberspark_uobj_uobjrtl_t) list ref = ref [] in 
 
 	try
 		let open Yojson.Basic.Util in
@@ -425,9 +425,10 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 								let f_uobjrtl_element : json_node_uberspark_uobj_uobjrtl_t = 
 									{ f_namespace = ""; } in
 								
-								f_uobjrtl_element.f_namespace <- Yojson.Basic.Util.to_string (x |> member "namespace");
+								let uobjrtl_namespace = Yojson.Basic.Util.to_string (x |> member "namespace") in
+								f_uobjrtl_element.f_namespace <- uobjrtl_namespace;
 
-								uobjrtl_list := !uobjrtl_list @ [ f_uobjrtl_element ];
+								uobjrtl_assoc_list := !uobjrtl_assoc_list @ [ (uobjrtl_namespace, f_uobjrtl_element) ];
 													
 								()
 							) uobj_uobjrtl_list;
@@ -440,7 +441,7 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 	;
 
 							
-	(!retval, !uobjrtl_list)
+	(!retval, !uobjrtl_assoc_list)
 ;;
 
 
