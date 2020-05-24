@@ -314,7 +314,7 @@ class uobject
 
 
 
-		
+
 
 
 
@@ -350,6 +350,21 @@ class uobject
 		end;
 
 		(!retval)
+	;
+
+
+	(*--------------------------------------------------------------------------*)
+	(* parse uobj uobjrtl manifests *)
+	(*--------------------------------------------------------------------------*)
+	method parse_uobjrtl_manifests 
+		()
+		: bool =
+
+		(* parse each uobjrtl manifest and create hashtable with entry as namespace *)
+		(* entry will be an entry of type uobjrtl_t *)
+
+
+		(true)
 	;
 
 
@@ -1149,6 +1164,14 @@ class uobject
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
 				(rval)
 		end else
+
+		(* parse uobj uobjrtl manifests *)
+		let rval = (self#parse_uobjrtl_manifests ()) in	
+		if (rval == false) then	begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobjrtl manifests!";
+				(rval)
+		end else
+
 
 		let dummy=0 in begin
 		(* add default uobj sections *)

@@ -142,6 +142,7 @@ type slt_info_t =
     method consolidate_sections_with_memory_map : unit -> int
     method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
+    method parse_uobjrtl_manifests : unit -> bool
 
   	method overlay_config_settings : unit -> bool
 
