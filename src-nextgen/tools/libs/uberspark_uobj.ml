@@ -888,6 +888,42 @@ class uobject
 	;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* prepare uobjrtl sources *)
+	(*--------------------------------------------------------------------------*)
+	method prepare_uobjrtl_sources
+		()
+		: bool =
+		let retval = ref true in 
+		(* basically iterate through the uobjrtl list and construct all the filenames we need *)
+		(* then use this filename list to copy to the builddir *)
+		(* add this filename list to start of c files so we can build it *)
+
+		List.iter ( fun (uobjrtl_entry: Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) -> 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.f_namespace;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace root-dir-prefix=%s" !Uberspark_namespace.namespace_root_dir_prefix;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
+
+			let uobjrtl_manifest_path = (!Uberspark_namespace.namespace_root_dir_prefix ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+
+			(* parse uobj slt manifest *)
+			let rval = (self#parse_manifest_uobjrtl uobjrtl_manifest_path) in	
+			if (rval == true) then begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "parsed uobjrtl manifest: %s" uobjrtl_manifest_path;
+
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobjrtl manifest: %s" uobjrtl_manifest_path;
+				retval := false;
+			end;
+
+			(*json_node_uberspark_uobj_var.f_sources.f_c_files <-  [ 
+				cfilename ] @ json_node_uberspark_uobj_var.f_sources.f_c_files;*)
+
+		) json_node_uberspark_uobj_var.f_uobjrtl;
+
+
+		(!retval)
+	;
 
 
 	(*--------------------------------------------------------------------------*)
@@ -897,7 +933,9 @@ class uobject
 		()
 		: unit =
 
-	
+		(* prepare uobjrtl sources *)
+		self#prepare_uobjrtl_sources ();
+
 		(* copy uobj c files to namespace *)
 		List.iter ( fun c_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname c_filename)) (`Octal 0o0777);
