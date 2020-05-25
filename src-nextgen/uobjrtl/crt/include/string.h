@@ -39,6 +39,7 @@
 #define __UOBJRTL_CRT_STRING_H__
 
 #include <uberspark/uobjrtl/crt/include/stdint.h>
+#include <uberspark/uobjrtl/crt/include/stddef.h>
 
 #ifndef __ASSEMBLY__
 

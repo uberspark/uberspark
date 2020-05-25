@@ -40,7 +40,7 @@
 
 
 #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
-#include <uberspark/uobjrtl/crypto/include/mac/hmac-sha1/hmac-sha1.h>
+#include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
 
 
 #define LTC_HMAC_SHA1_BLOCKSIZE 64

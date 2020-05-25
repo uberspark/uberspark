@@ -87,7 +87,7 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned cha
 
    /* copy IV */
    //cbc->blocklen = cipher_descriptor[cipher].block_length;
-   cbc->blocklen = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_desc.block_length;
+   cbc->blocklen = rijndael_desc.block_length;
    //cbc->cipher   = cipher;
    for (x = 0; x < cbc->blocklen; x++) {
        cbc->IV[x] = IV[x];

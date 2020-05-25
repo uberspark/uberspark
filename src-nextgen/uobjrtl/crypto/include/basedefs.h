@@ -37,6 +37,7 @@
 
 
 #include <uberspark/uobjrtl/crt/include/stdint.h>
+#include <uberspark/uobjrtl/crt/include/stdarg.h>
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
