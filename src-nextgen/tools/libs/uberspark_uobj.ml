@@ -376,10 +376,8 @@ class uobject
 				(* entry will be an entry of type uobjrtl_t *)
 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.f_namespace;
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace root-dir-prefix=%s" !Uberspark_namespace.namespace_root_dir_prefix;
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
 
-				let uobjrtl_manifest_path = (!Uberspark_namespace.namespace_root_dir_prefix ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+				let uobjrtl_manifest_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
 			
 				(* read uobjrtl manifest JSON *)
 				let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest uobjrtl_manifest_path) in
@@ -950,7 +948,7 @@ class uobject
 		()
 		: unit =
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace root-dir-prefix=%s" !Uberspark_namespace.namespace_root_dir_prefix;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace staging-dir-prefix=%s" (Uberspark_namespace.get_namespace_staging_dir_prefix ());
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
 
 		(* prepare uobjrtl sources *)
