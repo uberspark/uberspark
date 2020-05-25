@@ -950,8 +950,18 @@ class uobject
 		()
 		: unit =
 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace root-dir-prefix=%s" !Uberspark_namespace.namespace_root_dir_prefix;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
+
 		(* prepare uobjrtl sources *)
-		(*self#prepare_uobjrtl_sources ();*)
+		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
+				let uobjrtl_info = (Hashtbl.find self#get_d_uobjrtl_hashtbl uobjrtl_namespace) in
+				List.iter ( fun ( (uobjrtl_modules_spec : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ) -> 
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.f_module_path;
+				) uobjrtl_info.f_modules_spec;
+		) json_node_uberspark_uobj_var.f_uobjrtl;
+
 
 		(* copy uobj c files to namespace *)
 		List.iter ( fun c_filename -> 
