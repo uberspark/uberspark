@@ -39,7 +39,7 @@
                 "module-path" : "src/ciphers/aes/aes_cbc.c",
                 "module-funcdecls" :  [
                         { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start" },
-                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv",
+                        { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv"},
                         { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv" },
                         { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt" },
                         { "funcname" : "uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done" },
@@ -72,7 +72,7 @@
                         { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done" },
                         { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory" }
                     ]
-            },
+            }
 
 
 

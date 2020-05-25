@@ -365,8 +365,6 @@ class uobject
 		()
 		: bool =
 		let retval = ref true in 
-		let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
-			f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec = []; } in
 
 		(* iterate over uobj uobjrtl manifest node *)
 		List.iter ( fun ( (uobjrtl_namespace : string), (uobjrtl_entry : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
@@ -384,6 +382,8 @@ class uobject
 				if(rval == true) then begin
 					
 					(* convert to var *)
+					let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
+						f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec = []; } in
 					let rval =	(Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json l_uobjrtl_entry_var) in
 					if rval then begin
 						Hashtbl.add d_uobjrtl_hashtbl uobjrtl_namespace l_uobjrtl_entry_var;						
