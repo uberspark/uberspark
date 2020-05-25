@@ -74,7 +74,7 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, con
     /* (1) make sure we have a large enough key */
     if(keylen > LTC_HMAC_SHA1_BLOCKSIZE) {
         z = LTC_HMAC_SHA1_BLOCKSIZE;
-        if ((err = sha1_memory(key, keylen, hmac->key, &z)) != CRYPT_OK) {
+        if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory(key, keylen, hmac->key, &z)) != CRYPT_OK) {
            goto LBL_ERR;
         }
         keylen = hashsize;
@@ -83,7 +83,7 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, con
     }
 
     if(keylen < LTC_HMAC_SHA1_BLOCKSIZE) {
-    	memset((hmac->key) + keylen, 0, (size_t)(LTC_HMAC_BLOCKSIZE - keylen));
+    	XMEMSET((hmac->key) + keylen, 0, (size_t)(LTC_HMAC_BLOCKSIZE - keylen));
     }
 
     /* Create the initial vector for step (3) */
@@ -92,11 +92,11 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, con
     }
 
     /* Pre-pend that to the hash data */
-    if ((err = sha1_init(&hmac->md)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&hmac->md)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
-    if ((err = sha1_process(&hmac->md, buf, LTC_HMAC_SHA1_BLOCKSIZE)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&hmac->md, buf, LTC_HMAC_SHA1_BLOCKSIZE)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
@@ -120,7 +120,7 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, 
 {
     LTC_ARGCHK(hmac != NULL);
     LTC_ARGCHK(in != NULL);
-    return sha1_process(&hmac->md, in, inlen);
+    return uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&hmac->md, in, inlen);
 }
 
 
@@ -145,7 +145,7 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(hmac_state *hmac, uns
     hashsize = 20;
 
     /* Get the hash of the first HMAC vector plus the data */
-    if ((err = sha1_done(&hmac->md, isha)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&hmac->md, isha)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 
@@ -155,16 +155,16 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(hmac_state *hmac, uns
     }
 
     /* Now calculate the "outer" hash for step (5), (6), and (7) */
-    if ((err = sha1_init(&hmac->md)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&hmac->md)) != CRYPT_OK) {
        goto LBL_ERR;
     }
-    if ((err = sha1_process(&hmac->md, buf, LTC_HMAC_SHA1_BLOCKSIZE)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&hmac->md, buf, LTC_HMAC_SHA1_BLOCKSIZE)) != CRYPT_OK) {
        goto LBL_ERR;
     }
-    if ((err = sha1_process(&hmac->md, isha, hashsize)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&hmac->md, isha, hashsize)) != CRYPT_OK) {
        goto LBL_ERR;
     }
-    if ((err = sha1_done(&hmac->md, buf)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&hmac->md, buf)) != CRYPT_OK) {
        goto LBL_ERR;
     }
 

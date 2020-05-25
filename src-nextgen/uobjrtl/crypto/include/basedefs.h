@@ -237,16 +237,17 @@ typedef struct Hmac_state {
 #define LTC_MUTEX_LOCK(x)
 #define LTC_MUTEX_UNLOCK(x)
 
-#define XMEMCMP  memcmp
-#define XMEMCPY  memcpy
-#define XMEMSET	 memset
-#define XMALLOC  malloc
-#define XCALLOC  calloc
-#define XREALLOC realloc
-#define XQSORT	 qsort
-#define XFREE    free
-#define XSTRCMP	 strcmp
+#define XMEMCMP  uberspark_uobjrtl_crt__memcmp
+#define XMEMCPY  uberspark_uobjrtl_crt__memcpy
+#define XMEMSET	 uberspark_uobjrtl_crt__memset
 
+//#define XMALLOC  malloc
+//#define XCALLOC  calloc
+//#define XREALLOC realloc
+//#define XQSORT	 qsort
+//#define XFREE    free
+#define XSTRCMP	 uberspark_uobjrtl_crt__strcmp
+#define XSTRLEN   uberspark_uobjrtl_crt__strlen
 //tomcrypt_prng.h
 //empty for now
 
