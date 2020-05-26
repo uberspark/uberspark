@@ -23,15 +23,6 @@ WORKDIR "/home/docker"
 # install git
 RUN sudo apk add git
 
-# install sphinx documentation generator and related packages
-RUN sudo apk add python3 &&\
-    sudo apk add py3-pip &&\
-    sudo pip3 install --upgrade pip &&\
-    sudo pip3 install sphinx==2.2.0
-
-# install sphinx documentation extensions
-RUN sudo pip3 install sphinx-jsondomain==0.0.3
-
 # install ocaml compiler and related packages
 RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     eval $(opam env) && \
@@ -44,6 +35,17 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y dune.1.11.3 && \
     opam install -y cppo.1.6.6 && \
     opam install -y fileutils.0.6.1 
+
+# install python 3
+RUN sudo apk add python3 &&\
+    sudo apk add py3-pip &&\
+    sudo pip3 install --upgrade pip
+
+# install sphinx documentation extensions
+RUN sudo pip3 install sphinx-jsondomain==0.0.3
+
+# install sphinx documentation generator
+RUN sudo pip3 install -U sphinx==3.0.3
 
 
 # switch to working directory within container
