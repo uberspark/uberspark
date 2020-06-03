@@ -65,6 +65,9 @@ RUN sudo cmake -G "Unix Makefiles" .. &&\
     sudo make install 
 
 
+# install breathe
+RUN sudo pip3 install breathe==4.18.1
+
 
 
 # switch to working directory within container
