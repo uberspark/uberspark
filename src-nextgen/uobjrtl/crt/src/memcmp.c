@@ -34,7 +34,9 @@
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
-
+/** 
+ * this is memcpy
+ */
 /*@
   requires n >= 0;
   requires \valid(((char*)s1)+(0..n-1));

@@ -47,6 +47,25 @@ RUN sudo pip3 install sphinx-jsondomain==0.0.3
 # install sphinx documentation generator
 RUN sudo pip3 install -U sphinx==3.0.3
 
+# install general development tools
+RUN sudo apk add cmake &&\
+    sudo apk add flex &&\
+    sudo apk add bison 
+
+
+# install doxygen
+WORKDIR "/home/opam"
+RUN sudo wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
+RUN sudo tar -xzf ./doxygen-1.8.18.src.tar.gz 
+WORKDIR "/home/opam/doxygen-1.8.18"
+RUN sudo mkdir build
+WORKDIR "/home/opam/doxygen-1.8.18/build"
+RUN sudo cmake -G "Unix Makefiles" .. &&\
+    sudo make &&\
+    sudo make install 
+
+
+
 
 # switch to working directory within container
 WORKDIR "/home/docker/uberspark/build-trusses"
