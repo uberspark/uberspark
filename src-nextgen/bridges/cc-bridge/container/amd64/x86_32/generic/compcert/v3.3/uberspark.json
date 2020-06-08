@@ -5,7 +5,7 @@
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-bridge-compcert" ],
+		"manifest_node_types" : [ "uberspark-bridge-cc" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
