@@ -32,7 +32,7 @@
  *
  */
 
-/**
+/*
  * libc string functions for use in a stand-alone environment
  */
 #ifndef __UOBJRTL_CRT_STRING_H__
@@ -55,7 +55,6 @@
        \forall integer n, char *s ; Length_of_str_is(s, n) ==> Length(s) == n ;
   }
 @*/
-
 
 
 

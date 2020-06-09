@@ -11,7 +11,6 @@ is invoked with a set of options towards a specific task (e.g., managing bridges
 |uobj| and |uobjcoll|, managing staging environments etc.)
 
 
-
 Top-level CLI
 --------------
 

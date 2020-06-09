@@ -36,12 +36,20 @@ release = 'Version: 6.0.0; Release Series: "Nexus Prime"'
 
 extensions = [
     'sphinx.ext.autosectionlabel',
-    'sphinxjsondomain'
+    'sphinxjsondomain',
+    'breathe'
 ]
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 4
 
+breathe_order_parameters_first = True
 
+breathe_implementation_filename_extensions = ['.c']
+breathe_projects = { "uobjrtl-crt": "_build/breathe/doxygen/uobjrtl-crt/xml/" }
+#breathe_doxygen_config_options = {'ALIASES': '"header=\par Header(s)\n"'}
+breathe_projects_source = {
+     "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", "include/string.h"] )
+     }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
