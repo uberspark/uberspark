@@ -46,7 +46,14 @@ breathe_order_parameters_first = True
 
 breathe_implementation_filename_extensions = ['.c']
 breathe_projects = { "uobjrtl-crt": "_build/breathe/doxygen/uobjrtl-crt/xml/" }
-#breathe_doxygen_config_options = {'ALIASES': '"header=\par Header(s)\n"'}
+breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' details_end="\endverbatim ^^"'
+                                                  ' headers_begin="\par Headers(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' headers_end="\endverbatim ^^"'
+                                                  ' comments_begin="\par Comment(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' comments_end="\endverbatim ^^"'
+                                                )
+                                 }
 breathe_projects_source = {
      "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", "include/string.h"] )
      }

@@ -29,38 +29,34 @@
 
 /*
  * Author: Amit Vasudevan (amitvasudevan@acm.org)
- *
  */
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
+
 /** 
- * \brief Compare two blocks of memory
+ * @brief Compare two blocks of memory
  * 
- * \par Details
- *  Compares the first n bytes of the block of memory pointed by s1 to 
- *  the first n bytes pointed by s2, returning zero if they all match or 
+ * @param[in] s1 the first location
+ * @param[in] s2 the second location
+ * @param[in] n the number of bytes
+ * 
+ * @retval int 0 if successful
+ *  
+ * @details_begin 
+ *  Compares the first ``n`` bytes of the block of memory pointed by ``s1`` to 
+ *  the first ``n`` bytes pointed by ``s2``, returning zero if they all match or 
  *  a value different from zero representing which is greater if they do not. 
+ * @details_end
  * 
- * \par Headers 
- *  \code
+ * @headers_begin 
  *  #include <uberspark/uobjrtl/crt/string.h>
- *  \endcode
+ * @headers_end
  * 
- * \par Remarks
- * \verbatim embed:rst:leading-asterisk
- *     Some example code::
- *
- *        int example(int x) {
- *            return x * 2;
- *        }
- * \endverbatim
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
  * 
- * \param[in] s1 the first location
- * \param[in] s2 the second location
- * \param[in] n the number of bytes
- * 
- * \retval int 0 if successful
  * 
  */
 /*@
