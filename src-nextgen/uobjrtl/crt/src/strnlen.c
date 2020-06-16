@@ -35,6 +35,32 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
+
+/** 
+ *
+ * @brief Determine the length of a fixed-size string
+ * 
+ * @param[in] s C string
+ * @param[in] maxlen Maximum length of string allowed
+ * 
+ * @retval length of string in bytes if that is less than maxlen
+ * @retval maxlen if there is no NULL character among the first maxlen characters pointed to by s
+ *  
+ * @details_begin
+ * This function returns the number of bytes in the string pointed to by ``s``, excluding the terminating 
+ * NULL byte ('\0'), but at most ``maxlen``.  In doing this, it looks only at the first ``maxlen``
+ * characters in the string pointed to by ``s`` and never beyond ``s+maxlen``. 
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
   requires maxlen >= 0;
   requires \valid(s+(0..maxlen-1));

@@ -66,13 +66,36 @@
 /*
  * From: FreeBSD sys/libkern/strcmp.c
  */
-/**
- * Modified for XMHF.
- */
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
+/** 
+ *
+ * @brief Compare two strings
+ * 
+ * @param[in] s1 C string to be compared
+ * @param[in] s2 C string to be compared
+ * 
+ * @retval less-than-0 the first character that does not match has a lower value in s1 than in s2
+ * @retval 0 the contents of both strings are equal
+ * @retval greater-than-0 the first character that does not match has a greater value in s1 than in s2
+ *   
+ * @details_begin 
+ * Compares the C string ``s1`` to the C string ``s2``.
+ * This function starts comparing the first character of each string. If they are equal to each other, it continues 
+ * with the following pairs until the characters differ or until a terminating NULL character is reached.
+ * @details_end
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
   requires \exists integer i; Length_of_str_is(s1,i);
   requires \exists integer i; Length_of_str_is(s2,i);

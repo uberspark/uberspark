@@ -63,15 +63,36 @@
 /*
  * From: FreeBSD sys/libkern/strchr.c
  */
-/**
- * Modified for XMHF.
- */
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-
-
+/** 
+ *
+ * @brief Locate first occurrence of character in string
+ * 
+ * @param[in] s NULL terminated C string
+ * @param[in] c Character to be located. It is passed as its int promotion, but it is internally 
+ *            converted back to char for the comparison
+ * 
+ * @retval pointer to the first occurrence of character in s. If the character is not found, the function returns a 
+ *         NULL pointer
+ *  
+ * @details_begin 
+ * Returns a pointer to the first occurrence of character ``c`` in the C string ``s``.
+ * The terminating NULL character is considered part of the C string. Therefore, it can also be located in order to 
+ * retrieve a pointer to the end of a string
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
   requires \exists integer i; Length_of_str_is(s,i);
   requires -128 <= c <= 127;

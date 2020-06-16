@@ -60,6 +60,12 @@ breathe_projects_source = {
                                                       "src/memcpy.c",
                                                       "src/memmove.c",
                                                       "src/memset.c",
+                                                      "src/strchr.c",
+                                                      "src/strcmp.c",
+                                                      "src/strlen.c",
+                                                      "src/strncmp.c",
+                                                      "src/strncpy.c",
+                                                      "src/strnlen.c",
                                                       "include/string.h",
                                                       "include/stdint.h"] )
      }

@@ -66,12 +66,40 @@
 /*
  * From: FreeBSD sys/libkern/strncpy.c
  */
-/**
- * Modified for XMHF.
- */
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
+
+/** 
+ *
+ * @brief Copy characters from string
+ * 
+ * @param[out] dst Pointer to the destination array where the content is to be copied
+ * @param[in] src C string to be copied
+ * @param[in] n Maximum number of characters to be copied from src
+ * 
+ * @retval dst is returned
+ *  
+ * @details_begin 
+ * Copies the first ``n`` characters of ``src`` to ``dst``. If the end of the source C string (which is signaled by a 
+ * NULL character) is found before ``n`` characters have been copied, destination is padded with zeros until a total of 
+ * ``n`` characters have been written to it.
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * No NULL character is implicitly appended at the end of ``dst`` if ``src`` is longer than ``n``. Thus, in this case, 
+ * ``dst`` shall not be considered a NULL terminated C string.
+ *
+ * .. note:: ``dst`` and ``src`` shall not overlap 
+ *
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
 	requires n >= 0;
 	requires \exists integer i; Length_of_str_is(src, i);

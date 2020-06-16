@@ -63,13 +63,33 @@
 /*
  * From: FreeBSD sys/libkern/strlen.c
  */
-/**
- * Modified for XMHF.
- */
 
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
+/** 
+ *
+ * @brief Get string length
+ * 
+ * @param[in] s C string
+ * 
+ * @returns The length of string
+ *
+ * @details_begin 
+ * Returns the length of the C string ``s``.
+ * The length of a C string is determined by the terminating NULL character: A C string is as long as the number of 
+ * characters between the beginning of the string and the terminating null character (without including the terminating NULL character itself).
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
    requires \exists integer i; Length_of_str_is(s,i);
    assigns \nothing;

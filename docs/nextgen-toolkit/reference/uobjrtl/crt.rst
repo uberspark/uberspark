@@ -38,3 +38,44 @@ uberspark_uobjrtl_crt__memset
 .. doxygenfunction:: uberspark_uobjrtl_crt__memset
    :project: uobjrtl-crt
 
+
+uberspark_uobjrtl_crt__strchr
+-----------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strchr
+   :project: uobjrtl-crt
+
+
+uberspark_uobjrtl_crt__strcmp
+-----------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strcmp
+   :project: uobjrtl-crt
+
+
+uberspark_uobjrtl_crt__strlen
+-----------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strlen
+   :project: uobjrtl-crt
+
+
+uberspark_uobjrtl_crt__strncmp
+------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strncmp
+   :project: uobjrtl-crt
+
+
+uberspark_uobjrtl_crt__strncpy
+------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strncpy
+   :project: uobjrtl-crt
+
+
+uberspark_uobjrtl_crt__strnlen
+------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crt__strnlen
+   :project: uobjrtl-crt

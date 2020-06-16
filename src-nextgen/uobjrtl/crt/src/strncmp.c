@@ -69,8 +69,34 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-
-
+/** 
+ *
+ * @brief Compare characters of two strings
+ * 
+ * @param[in] s1 C string to be compared
+ * @param[in] s2 C string to be compared
+ * @param[in] n Maximum number of characters to compare
+ * 
+ * @retval less-than-0 the first character that does not match has a lower value in s1 than in s2
+ * @retval 0 the contents of both strings are equal
+ * @retval greater-than-0 the first character that does not match has a greater value in s1 than in s2
+ * 
+ * @details_begin 
+ * Compares up to ``n`` characters of the C string ``s1`` to those of the C string ``s2``.
+ * This function starts comparing the first character of each string. If they are equal to each other, it continues 
+ * with the following pairs until the characters differ, until a terminating NULL character is reached, or until ``n``
+ * characters match in both strings, whichever happens first.
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
 	requires n >= 0;
 	requires \valid(s1+(0..n-1));
