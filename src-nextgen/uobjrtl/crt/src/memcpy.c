@@ -35,7 +35,34 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
-
+/** 
+ * @brief Copy block of memory
+ * 
+ * @param[out] dst Pointer to the destination memory block where the content is to be copied, type-casted to a pointer of type void*
+ * @param[in] src Pointer to the source of data to be copied, type-casted to a pointer of type const void*
+ * @param[in] n Number of bytes to copy
+ * 
+ * @retval dst is returned
+ *  
+ * @details_begin 
+ * Copies the values of ``n`` bytes from the location pointed to by ``src`` directly to the memory block pointed to 
+ * by ``dst``. The underlying type of the objects pointed to by both the source and destination pointers are irrelevant for 
+ * this function; The result is a binary copy of the data.
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * The size of the blocks pointed to by both the ``dst`` and ``src`` parameters, shall be at least ``n`` bytes, and should not 
+ * overlap. The function does not check for any terminating null character in ``src`` - it always copies exactly ``n`` bytes.
+ * 
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ * 
+ */
 /*@
     requires \separated(((unsigned char*)src)+(0..n-1), ((unsigned char*)dst)+(0..n-1));
     requires n >= 0;

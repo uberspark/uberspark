@@ -35,6 +35,31 @@
 #include <uberspark/uobjrtl/crt/include/string.h>
 
 
+/** 
+ *
+ * @brief Fill block of memory
+ * 
+ * @param[out] dst Pointer to the block of memory to fill
+ * @param[in] c Value to be set. The value is passed as an int, but the function fills the block of memory using the 
+ * 				unsigned char conversion of this value
+ * @param[in] n Number of bytes to be set to the value c
+ * 
+ * @retval dst is returned
+ *  
+ * @details_begin 
+ * Sets the first ``n`` bytes of the block of memory pointed by ``dat`` to the specified value ``c`` (interpreted as an 
+ * unsigned char).
+ * @details_end
+ * 
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crt/string.h>
+ * @headers_end
+ * 
+ * @comments_begin
+ * .. note:: Functional correctness specified
+ * @comments_end
+ * 
+ */
 /*@
 	requires n >= 0;
 	requires \valid(((unsigned char*)dst)+(0..n-1));

@@ -52,10 +52,16 @@ breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details 
                                                   ' headers_end="\endverbatim ^^"'
                                                   ' comments_begin="\par Comment(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
                                                   ' comments_end="\endverbatim ^^"'
-                                                )
+                                                ),
+                                   'EXTRACT_ALL' : 'YES'
                                  }
 breathe_projects_source = {
-     "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", "include/string.h"] )
+     "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", 
+                                                      "src/memcpy.c",
+                                                      "src/memmove.c",
+                                                      "src/memset.c",
+                                                      "include/string.h",
+                                                      "include/stdint.h"] )
      }
 
 # Add any paths that contain templates here, relative to this directory.
