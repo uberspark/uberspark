@@ -52,8 +52,7 @@
 #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
 /**
-   Initialize a CBC context
-   @param cipher      The index of the cipher desired
+   AES CBC initialize a CBC context
    @param IV          The initial vector
    @param key         The secret key
    @param keylen      The length of the secret key (octets)
@@ -97,7 +96,7 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned cha
 
 
 /**
-   Set an initial vector
+   AES CBC Set an initial vector
    @param IV   The initial vector
    @param len  The length of the vector (in octets)
    @param cbc  The CBC state
@@ -116,7 +115,7 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv(const unsigned cha
 
 
 /**
-   Get the current initial vector
+   AES CBC get the current initial vector
    @param IV   [out] The destination of the initial vector
    @param len  [in/out]  The max size and resulting size of the initial vector
    @param cbc  The CBC state
@@ -140,7 +139,7 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv(unsigned char *IV,
 #define LTC_FAST
 
 /**
-  CBC encrypt
+  AES CBC encrypt
   @param pt     Plaintext
   @param ct     [out] Ciphertext
   @param len    The number of bytes to process (must be multiple of block length)
@@ -200,7 +199,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned c
 }
 
 
-/** Terminate the chain
+/** 
+  AES CBC terminate the chain
   @param cbc    The CBC chain to terminate
   @return CRYPT_OK on success
 */
@@ -220,7 +220,7 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc)
 
 
 /**
-  CBC decrypt
+  AES CBC decrypt
   @param ct     Ciphertext
   @param pt     [out] Plaintext
   @param len    The number of bytes to process (must be multiple of block length)

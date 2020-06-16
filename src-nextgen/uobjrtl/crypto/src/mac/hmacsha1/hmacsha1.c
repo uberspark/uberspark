@@ -48,7 +48,6 @@
 /**
    Initialize an HMAC context.
    @param hmac     The HMAC state
-   @param hash     The index of the hash you want to use
    @param key      The secret key
    @param keylen   The length of the secret key (octets)
    @return CRYPT_OK if successful
@@ -185,7 +184,6 @@ LBL_ERR:
 
 /**
    HMAC a block of memory to produce the authentication tag
-   @param hash      The index of the hash to use
    @param key       The secret key
    @param keylen    The length of the secret key (octets)
    @param in        The data to HMAC

@@ -59,10 +59,6 @@
   * @author Paulo Barreto <paulo.barreto@terra.com.br>
 ---
  */
-/**
-  @file aes.c
-  Implementation of AES
-*/
 
 #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
@@ -91,7 +87,7 @@ static u32 setup_mix(u32 temp)
     @param skey The key in as scheduled by this function.
     @return CRYPT_OK if successful
  */
-int SETUP(const unsigned char *key, int keylen, int num_rounds, symmetric_key *skey)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(const unsigned char *key, int keylen, int num_rounds, symmetric_key *skey)
 {
     int i;
     u32 temp, *rk;
@@ -232,7 +228,7 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds, symmetric_key *s
   @param skey The key as scheduled
   @return CRYPT_OK if successful
 */
-int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
 {
     u32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
     int Nr, r;
@@ -360,7 +356,7 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   @param skey The key as scheduled
   @return CRYPT_OK if successful
 */
-int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
 {
     u32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
     int Nr, r;
@@ -482,12 +478,47 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
 }
 
 
+/** Terminate the context
+   @param skey    The scheduled key
+*/
+void uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(symmetric_key *skey)
+{
+  (void)skey;
+}
 
+
+/**
+  Gets suitable key size
+  @param keysize [in/out] The length of the recommended key (in bytes).  This function will store the suitable size back in this variable.
+  @return CRYPT_OK if the input key size is acceptable.
+*/
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize(int *keysize)
+{
+   LTC_ARGCHK(keysize != NULL);
+
+   if (*keysize < 16)
+      return CRYPT_INVALID_KEYSIZE;
+   if (*keysize < 24) {
+      *keysize = 16;
+      return CRYPT_OK;
+   } else if (*keysize < 32) {
+      *keysize = 24;
+      return CRYPT_OK;
+   } else {
+      *keysize = 32;
+      return CRYPT_OK;
+   }
+}
+
+
+
+
+#if 0
 /**
   Performs a self-test of the AES block cipher
   @return CRYPT_OK if functional, CRYPT_NOP if self-test has been disabled
 */
-int ECB_TEST(void)
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_test(void)
 {
  int err;
  static const struct {
@@ -529,57 +560,22 @@ int ECB_TEST(void)
 
   for (i = 0; i < (int)(sizeof(tests)/sizeof(tests[0])); i++) {
     XMEMSET((unsigned char *)&key, 0, sizeof(key));
-    if ((err = SETUP(tests[i].key, tests[i].keylen, 0, &key)) != CRYPT_OK) {
+    if ((err = uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(tests[i].key, tests[i].keylen, 0, &key)) != CRYPT_OK) {
        return err;
     }
 
-    ECB_ENC(tests[i].pt, tmp[0], &key);
-    ECB_DEC(tmp[0], tmp[1], &key);
+    uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(tests[i].pt, tmp[0], &key);
+    uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(tmp[0], tmp[1], &key);
     if (XMEMCMP(tmp[0], tests[i].ct, 16) || XMEMCMP(tmp[1], tests[i].pt, 16)) {
         return CRYPT_FAIL_TESTVECTOR;
     }
 
     /* now see if we can encrypt all zero bytes 1000 times, decrypt and come back where we started */
     for (y = 0; y < 16; y++) tmp[0][y] = 0;
-    for (y = 0; y < 1000; y++) ECB_ENC(tmp[0], tmp[0], &key);
-    for (y = 0; y < 1000; y++) ECB_DEC(tmp[0], tmp[0], &key);
+    for (y = 0; y < 1000; y++) uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(tmp[0], tmp[0], &key);
+    for (y = 0; y < 1000; y++) uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(tmp[0], tmp[0], &key);
     for (y = 0; y < 16; y++) if (tmp[0][y] != 0) return CRYPT_FAIL_TESTVECTOR;
   }
   return CRYPT_OK;
 }
-
-
-
-/** Terminate the context
-   @param skey    The scheduled key
-*/
-void ECB_DONE(symmetric_key *skey)
-{
-  (void)skey;
-}
-
-
-/**
-  Gets suitable key size
-  @param keysize [in/out] The length of the recommended key (in bytes).  This function will store the suitable size back in this variable.
-  @return CRYPT_OK if the input key size is acceptable.
-*/
-int ECB_KS(int *keysize)
-{
-   LTC_ARGCHK(keysize != NULL);
-
-   if (*keysize < 16)
-      return CRYPT_INVALID_KEYSIZE;
-   if (*keysize < 24) {
-      *keysize = 16;
-      return CRYPT_OK;
-   } else if (*keysize < 32) {
-      *keysize = 24;
-      return CRYPT_OK;
-   } else {
-      *keysize = 32;
-      return CRYPT_OK;
-   }
-}
-
-
+#endif

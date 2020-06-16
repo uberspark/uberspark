@@ -40,6 +40,13 @@
 #define F2(x,y,z)  ((x & y) | (z & (x | y)))
 #define F3(x,y,z)  (x ^ y ^ z)
 
+
+/**
+   Perform a SHA-1 compression round
+   @param md     The hash state
+   @param buf    The data to hash
+   @return CRYPT_OK 
+*/
 int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(hash_state *md, unsigned char *buf)
 {
     uint32_t a,b,c,d,e,W[80],i;
@@ -236,47 +243,10 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(hash_state * md, unsigned c
     return CRYPT_OK;
 }
 
-/**
-  Self-test the hash
-  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-*/
-int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_test(void)
-{
-  static const struct {
-      char *msg;
-      unsigned char hash[20];
-  } tests[] = {
-    { "abc",
-      { 0xa9, 0x99, 0x3e, 0x36, 0x47, 0x06, 0x81, 0x6a,
-        0xba, 0x3e, 0x25, 0x71, 0x78, 0x50, 0xc2, 0x6c,
-        0x9c, 0xd0, 0xd8, 0x9d }
-    },
-    { "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
-      { 0x84, 0x98, 0x3E, 0x44, 0x1C, 0x3B, 0xD2, 0x6E,
-        0xBA, 0xAE, 0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5,
-        0xE5, 0x46, 0x70, 0xF1 }
-    }
-  };
-
-  int i;
-  unsigned char tmp[20];
-  hash_state md;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0]));  i++) {
-      uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&md);
-      uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&md, (unsigned char*)tests[i].msg, (unsigned long)XSTRLEN(tests[i].msg));
-      uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&md, tmp);
-      //if (compare_testvector(tmp, sizeof(tmp), tests[i].hash, sizeof(tests[i].hash), "SHA1", i)) {
-      //   return CRYPT_FAIL_TESTVECTOR;
-      //}
-  }
-  return CRYPT_OK;
-}
 
 
 /**
   Hash a block of memory and store the digest.
-  @param hash   The index of the hash you wish to use
   @param in     The data you wish to hash
   @param inlen  The length of the data to hash (octets)
   @param out    [out] Where to store the digest
@@ -326,7 +296,6 @@ LBL_ERR:
 
 /**
   Hash multiple (non-adjacent) blocks of memory at once.
-  @param hash   The index of the hash you wish to use
   @param out    [out] Where to store the digest
   @param outlen [in/out] Max size and resulting size of the digest
   @param in     The data you wish to hash
@@ -388,3 +357,43 @@ LBL_ERR:
     va_end(args);
     return err;
 }
+
+
+#if 0
+/**
+  Self-test the hash
+  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
+*/
+int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_test(void)
+{
+  static const struct {
+      char *msg;
+      unsigned char hash[20];
+  } tests[] = {
+    { "abc",
+      { 0xa9, 0x99, 0x3e, 0x36, 0x47, 0x06, 0x81, 0x6a,
+        0xba, 0x3e, 0x25, 0x71, 0x78, 0x50, 0xc2, 0x6c,
+        0x9c, 0xd0, 0xd8, 0x9d }
+    },
+    { "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+      { 0x84, 0x98, 0x3E, 0x44, 0x1C, 0x3B, 0xD2, 0x6E,
+        0xBA, 0xAE, 0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5,
+        0xE5, 0x46, 0x70, 0xF1 }
+    }
+  };
+
+  int i;
+  unsigned char tmp[20];
+  hash_state md;
+
+  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0]));  i++) {
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(&md);
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_process(&md, (unsigned char*)tests[i].msg, (unsigned long)XSTRLEN(tests[i].msg));
+      uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(&md, tmp);
+      //if (compare_testvector(tmp, sizeof(tmp), tests[i].hash, sizeof(tests[i].hash), "SHA1", i)) {
+      //   return CRYPT_FAIL_TESTVECTOR;
+      //}
+  }
+  return CRYPT_OK;
+}
+#endif

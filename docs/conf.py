@@ -67,7 +67,19 @@ breathe_projects_source = {
                                                       "src/strncpy.c",
                                                       "src/strnlen.c",
                                                       "include/string.h",
-                                                      "include/stdint.h"] )
+                                                      "include/stdint.h"] ),
+
+     "uobjrtl-crypto" : ( "../src-nextgen/uobjrtl/crypto", ["src/ciphers/aes/aes.c", 
+                                                      "src/ciphers/aes/aes_cbc.c",
+                                                      "src/ciphers/aes/aes_tab.c",
+                                                      "src/hashes/sha1/sha1.c",
+                                                      "src/mac/hmacsha1/hmacsha1.c",
+                                                      "include/basedefs.h",
+                                                      "include/ciphers/aes/aes.h",
+                                                      "include/hashes/sha1/sha1.h",
+                                                      "include/mac/hmacsha1/hmacsha1.h"
+                                                        ] )
+
      }
 
 # Add any paths that contain templates here, relative to this directory.

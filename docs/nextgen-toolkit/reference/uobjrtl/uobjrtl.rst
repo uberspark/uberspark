@@ -14,3 +14,4 @@ its functionality. The following |uobj| runtime libraries are currently availabl
    :maxdepth: 4
 
    C Runtime (crt) <crt.rst>
+   Crypto (crypto) <crypto.rst>

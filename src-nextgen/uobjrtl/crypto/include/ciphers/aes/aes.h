@@ -81,19 +81,19 @@ extern const u32 Tks3[];
 extern const u32 rcon[];
 
 
-#define SETUP    uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup
-#define ECB_ENC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt
-#define ECB_DEC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt
-#define ECB_DONE uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done
-#define ECB_TEST uberspark_uobjrtl_crypto__ciphers_aes__rijndael_test
-#define ECB_KS   uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize
+//#define SETUP    uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup
+//#define ECB_ENC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt
+//#define ECB_DEC  uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt
+//#define ECB_DONE uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done
+//#define ECB_TEST uberspark_uobjrtl_crypto__ciphers_aes__rijndael_test
+//#define ECB_KS   uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize
 
 
-int SETUP(const unsigned char *key, int keylen, int num_rounds, symmetric_key *skey);
-int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey);
-int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey);
-void ECB_DONE(symmetric_key *skey);
-int ECB_KS(int *keysize);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(const unsigned char *key, int keylen, int num_rounds, symmetric_key *skey);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct, symmetric_key *skey);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt, symmetric_key *skey);
+void uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(symmetric_key *skey);
+int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize(int *keysize);
 
 
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned char * IV, const unsigned char *key,
