@@ -88,7 +88,7 @@
  * @details_end
  *
  * @headers_begin 
- * #include <uberspark/uobjrtl/crt/string.h>
+ * #include <uberspark/uobjrtl/crt/include/string.h>
  * @headers_end
  * 
  * @comments_begin

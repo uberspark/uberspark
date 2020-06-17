@@ -39,6 +39,8 @@
 #ifndef __ASSEMBLY__
 
 #include <uberspark/uobjrtl/crypto/include/basedefs.h>
+#include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+
 
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen);
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen);

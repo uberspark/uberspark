@@ -83,4 +83,4 @@ libraries and |coss|
 
    nextgen-toolkit/reference/manifest
    nextgen-toolkit/reference/frontend-cli
-   nextgen-toolkit/reference/uobjrtl/uobjrtl
+   nextgen-toolkit/reference/uobjrtl/index

@@ -42,11 +42,15 @@
 
 
 /**
-   Perform a SHA-1 compression round
-   @param md     The hash state
-   @param buf    The data to hash
-   @return CRYPT_OK 
-*/
+ *  Perform a SHA-1 compression round
+ *  @param md     The hash state
+ *  @param buf    The data to hash
+ *  @return CRYPT_OK 
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(hash_state *md, unsigned char *buf)
 {
     uint32_t a,b,c,d,e,W[80],i;
@@ -128,10 +132,14 @@ int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(hash_state *md, unsign
 
 
 /**
-   Initialize the hash state
-   @param md   The hash state you wish to initialize
-   @return CRYPT_OK if successful
-*/
+ *  Initialize the hash state
+ *  @param md   The hash state you wish to initialize
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(hash_state * md)
 {
    LTC_ARGCHK(md != NULL);
@@ -146,12 +154,16 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(hash_state * md)
 }
 
 /**
-   Process a block of memory though the hash
-   @param md     The hash state
-   @param in     The data to hash
-   @param inlen  The length of the data (octets)
-   @return CRYPT_OK if successful
-*/
+ *  Process a block of memory though the hash
+ *  @param md     The hash state
+ *  @param in     The data to hash
+ *  @param inlen  The length of the data (octets)
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__hashes_sha1__sha1_process (hash_state * md, const unsigned char *in, unsigned long inlen)
 {
     unsigned long n;
@@ -192,11 +204,15 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_process (hash_state * md, const 
 
 
 /**
-   Terminate the hash to get the digest
-   @param md  The hash state
-   @param out [out] The destination of the hash (20 bytes)
-   @return CRYPT_OK if successful
-*/
+ *  Terminate the hash to get the digest
+ *  @param md  The hash state
+ *  @param out [out] The destination of the hash (20 bytes)
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(hash_state * md, unsigned char *out)
 {
     int i;
@@ -246,13 +262,17 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(hash_state * md, unsigned c
 
 
 /**
-  Hash a block of memory and store the digest.
-  @param in     The data you wish to hash
-  @param inlen  The length of the data to hash (octets)
-  @param out    [out] Where to store the digest
-  @param outlen [in/out] Max size and resulting size of the digest
-  @return CRYPT_OK if successful
-*/
+ * Hash a block of memory and store the digest.
+ * @param in     The data you wish to hash
+ * @param inlen  The length of the data to hash (octets)
+ * @param out    [out] Where to store the digest
+ * @param outlen [in/out] Max size and resulting size of the digest
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 //int hash_memory(int hash, const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 int uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory(const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen)
 {
@@ -295,14 +315,18 @@ LBL_ERR:
 
 
 /**
-  Hash multiple (non-adjacent) blocks of memory at once.
-  @param out    [out] Where to store the digest
-  @param outlen [in/out] Max size and resulting size of the digest
-  @param in     The data you wish to hash
-  @param inlen  The length of the data to hash (octets)
-  @param ...    tuples of (data,len) pairs to hash, terminated with a (NULL,x) (x=don't care)
-  @return CRYPT_OK if successful
-*/
+ * Hash multiple (non-adjacent) blocks of memory at once.
+ * @param out    [out] Where to store the digest
+ * @param outlen [in/out] Max size and resulting size of the digest
+ * @param in     The data you wish to hash
+ * @param inlen  The length of the data to hash (octets)
+ * @param ...    tuples of (data,len) pairs to hash, terminated with a (NULL,x) (x=don't care)
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory_multi(unsigned char *out, unsigned long *outlen,
                       const unsigned char *in, unsigned long inlen, ...)
 {

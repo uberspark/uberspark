@@ -39,19 +39,22 @@
  */
 
 
-#include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
 #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
 
 
 #define LTC_HMAC_SHA1_BLOCKSIZE 64
 
 /**
-   Initialize an HMAC context.
-   @param hmac     The HMAC state
-   @param key      The secret key
-   @param keylen   The length of the secret key (octets)
-   @return CRYPT_OK if successful
-**/
+ *  Initialize an HMAC context.
+ *  @param hmac     The HMAC state
+ *  @param key      The secret key
+ *  @param keylen   The length of the secret key (octets)
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen)
 {
     unsigned char buf[LTC_HMAC_SHA1_BLOCKSIZE];
@@ -109,12 +112,16 @@ done:
 
 
 /**
-  Process data through HMAC
-  @param hmac    The hmac state
-  @param in      The data to send through HMAC
-  @param inlen   The length of the data to HMAC (octets)
-  @return CRYPT_OK if successful
-**/
+ * Process data through HMAC
+ * @param hmac    The hmac state
+ * @param in      The data to send through HMAC
+ * @param inlen   The length of the data to HMAC (octets)
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen)
 {
     LTC_ARGCHK(hmac != NULL);
@@ -124,13 +131,17 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, 
 
 
 /**
-   Terminate an HMAC session
-   @param hmac    The HMAC state
-   @param out     [out] The destination of the HMAC authentication tag
-   @param outlen  [in/out]  The max size and resulting size of the HMAC 
-                  authentication tag
-   @return CRYPT_OK if successful
-**/
+ *  Terminate an HMAC session
+ *  @param hmac    The HMAC state
+ *  @param out     [out] The destination of the HMAC authentication tag
+ *  @param outlen  [in/out]  The max size and resulting size of the HMAC 
+ *                 authentication tag
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen)
 {
     unsigned char buf[LTC_HMAC_SHA1_BLOCKSIZE], isha[20];
@@ -183,18 +194,20 @@ LBL_ERR:
 
 
 /**
-   HMAC a block of memory to produce the authentication tag
-   @param key       The secret key
-   @param keylen    The length of the secret key (octets)
-   @param in        The data to HMAC
-   @param inlen     The length of the data to HMAC (octets)
-   @param out       [out] Destination of the authentication tag
-   @param outlen    [in/out] Max size and resulting size of 
-                    authentication tag
-   @return CRYPT_OK if successful
-**/
-
-
+ *  HMAC a block of memory to produce the authentication tag
+ *  @param key       The secret key
+ *  @param keylen    The length of the secret key (octets)
+ *  @param in        The data to HMAC
+ *  @param inlen     The length of the data to HMAC (octets)
+ *  @param out       [out] Destination of the authentication tag
+ *  @param outlen    [in/out] Max size and resulting size of 
+ *                   authentication tag
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory(const unsigned char *key,  unsigned long keylen,
                 const unsigned char *in,   unsigned long inlen,
                       unsigned char *out,  unsigned long *outlen)

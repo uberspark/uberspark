@@ -80,13 +80,17 @@ static u32 setup_mix(u32 temp)
 
 
  /**
-    Initialize the AES (Rijndael) block cipher
-    @param key The symmetric key you wish to pass
-    @param keylen The key length in bytes
-    @param num_rounds The number of rounds desired (0 for default)
-    @param skey The key in as scheduled by this function.
-    @return CRYPT_OK if successful
- */
+  *  Initialize the AES (Rijndael) block cipher
+  *  @param key The symmetric key you wish to pass
+  *  @param keylen The key length in bytes
+  *  @param num_rounds The number of rounds desired (0 for default)
+  *  @param skey The key in as scheduled by this function.
+  *  @return CRYPT_OK if successful
+  * 
+  * @headers_begin 
+  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+  * @headers_end
+  */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(const unsigned char *key, int keylen, int num_rounds, symmetric_key *skey)
 {
     int i;
@@ -222,12 +226,16 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(const unsigned char *k
 }
 
 /**
-  Encrypts a block of text with AES
-  @param pt The input plaintext (16 bytes)
-  @param ct The output ciphertext (16 bytes)
-  @param skey The key as scheduled
-  @return CRYPT_OK if successful
-*/
+ * Encrypts a block of text with AES
+ * @param pt The input plaintext (16 bytes)
+ * @param ct The output ciphertext (16 bytes)
+ * @param skey The key as scheduled
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
 {
     u32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
@@ -350,12 +358,16 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(const unsigned c
 
 
 /**
-  Decrypts a block of text with AES
-  @param ct The input ciphertext (16 bytes)
-  @param pt The output plaintext (16 bytes)
-  @param skey The key as scheduled
-  @return CRYPT_OK if successful
-*/
+ * Decrypts a block of text with AES
+ * @param ct The input ciphertext (16 bytes)
+ * @param pt The output plaintext (16 bytes)
+ * @param skey The key as scheduled
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
 {
     u32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
@@ -478,9 +490,14 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(const unsigned c
 }
 
 
-/** Terminate the context
-   @param skey    The scheduled key
-*/
+/** 
+ * Terminate the context
+ * @param skey    The scheduled key
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 void uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(symmetric_key *skey)
 {
   (void)skey;
@@ -488,10 +505,14 @@ void uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(symmetric_key *skey)
 
 
 /**
-  Gets suitable key size
-  @param keysize [in/out] The length of the recommended key (in bytes).  This function will store the suitable size back in this variable.
-  @return CRYPT_OK if the input key size is acceptable.
-*/
+ * Gets suitable key size
+ * @param keysize [in/out] The length of the recommended key (in bytes).  This function will store the suitable size back in this variable.
+ * @return CRYPT_OK if the input key size is acceptable.
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_keysize(int *keysize)
 {
    LTC_ARGCHK(keysize != NULL);

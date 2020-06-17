@@ -45,7 +45,8 @@ autosectionlabel_maxdepth = 4
 breathe_order_parameters_first = True
 
 breathe_implementation_filename_extensions = ['.c']
-breathe_projects = { "uobjrtl-crt": "_build/breathe/doxygen/uobjrtl-crt/xml/" }
+breathe_projects = { "uobjrtl-crt": "_build/breathe/doxygen/uobjrtl-crt/xml/",
+                    "uobjrtl-crypto": "_build/breathe/doxygen/uobjrtl-crypto/xml/" }
 breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details ^^ \\verbatim embed:rst:leading-asterisk ^^"'
                                                   ' details_end="\endverbatim ^^"'
                                                   ' headers_begin="\par Headers(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'

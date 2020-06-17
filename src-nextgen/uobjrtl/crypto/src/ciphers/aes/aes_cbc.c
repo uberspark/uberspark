@@ -52,14 +52,18 @@
 #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
 
 /**
-   AES CBC initialize a CBC context
-   @param IV          The initial vector
-   @param key         The secret key
-   @param keylen      The length of the secret key (octets)
-   @param num_rounds  Number of rounds in the cipher desired (0 for default)
-   @param cbc         The CBC state to initialize
-   @return CRYPT_OK if successful
-*/
+ *  AES CBC initialize a CBC context
+ *  @param IV          The initial vector
+ *  @param key         The secret key
+ *  @param keylen      The length of the secret key (octets)
+ *  @param num_rounds  Number of rounds in the cipher desired (0 for default)
+ *  @param cbc         The CBC state to initialize
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 //int cbc_start(int cipher, const unsigned char *IV, const unsigned char *key,
 //             int keylen, int num_rounds, symmetric_CBC *cbc)
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned char *IV, const unsigned char *key,
@@ -96,12 +100,16 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned cha
 
 
 /**
-   AES CBC Set an initial vector
-   @param IV   The initial vector
-   @param len  The length of the vector (in octets)
-   @param cbc  The CBC state
-   @return CRYPT_OK if successful
-*/
+ *  AES CBC Set an initial vector
+ *  @param IV   The initial vector
+ *  @param len  The length of the vector (in octets)
+ *  @param cbc  The CBC state
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc)
 {
    LTC_ARGCHK(IV  != NULL);
@@ -115,12 +123,16 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv(const unsigned cha
 
 
 /**
-   AES CBC get the current initial vector
-   @param IV   [out] The destination of the initial vector
-   @param len  [in/out]  The max size and resulting size of the initial vector
-   @param cbc  The CBC state
-   @return CRYPT_OK if successful
-*/
+ *  AES CBC get the current initial vector
+ *  @param IV   [out] The destination of the initial vector
+ *  @param len  [in/out]  The max size and resulting size of the initial vector
+ *  @param cbc  The CBC state
+ *  @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc)
 {
    LTC_ARGCHK(IV  != NULL);
@@ -139,13 +151,17 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv(unsigned char *IV,
 #define LTC_FAST
 
 /**
-  AES CBC encrypt
-  @param pt     Plaintext
-  @param ct     [out] Ciphertext
-  @param len    The number of bytes to process (must be multiple of block length)
-  @param cbc    CBC state
-  @return CRYPT_OK if successful
-*/
+ * AES CBC encrypt
+ * @param pt     Plaintext
+ * @param ct     [out] Ciphertext
+ * @param len    The number of bytes to process (must be multiple of block length)
+ * @param cbc    CBC state
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len, symmetric_CBC *cbc)
 {
    int x, err;
@@ -200,10 +216,14 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned c
 
 
 /** 
-  AES CBC terminate the chain
-  @param cbc    The CBC chain to terminate
-  @return CRYPT_OK on success
-*/
+ * AES CBC terminate the chain
+ * @param cbc    The CBC chain to terminate
+ * @return CRYPT_OK on success
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc)
 {
    LTC_ARGCHK(cbc != NULL);
@@ -220,13 +240,17 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc)
 
 
 /**
-  AES CBC decrypt
-  @param ct     Ciphertext
-  @param pt     [out] Plaintext
-  @param len    The number of bytes to process (must be multiple of block length)
-  @param cbc    CBC state
-  @return CRYPT_OK if successful
-*/
+ * AES CBC decrypt
+ * @param ct     Ciphertext
+ * @param pt     [out] Plaintext
+ * @param len    The number of bytes to process (must be multiple of block length)
+ * @param cbc    CBC state
+ * @return CRYPT_OK if successful
+ *
+ * @headers_begin 
+ * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
+ * @headers_end
+ */
 int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len, symmetric_CBC *cbc)
 {
    int x, err;
