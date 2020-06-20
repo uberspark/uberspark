@@ -53,6 +53,7 @@ breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details 
                                                   ' headers_end="\endverbatim ^^"'
                                                   ' comments_begin="\par Comment(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
                                                   ' comments_end="\endverbatim ^^"'
+                                                  ' uobjrtl_namespace{1}="\par üobjrtl Namespace ^^ <em> \\1 </em> ^^"'
                                                 ),
                                    'EXTRACT_ALL' : 'YES'
                                  }

@@ -49,6 +49,8 @@
  * by ``dst``. The underlying type of the objects pointed to by both the source and destination pointers are irrelevant for 
  * this function; The result is a binary copy of the data.
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

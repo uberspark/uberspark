@@ -86,6 +86,8 @@ static u32 setup_mix(u32 temp)
   *  @param num_rounds The number of rounds desired (0 for default)
   *  @param skey The key in as scheduled by this function.
   *  @return CRYPT_OK if successful
+  *
+  *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
   * 
   * @headers_begin 
   * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
@@ -232,6 +234,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup(const unsigned char *k
  * @param skey The key as scheduled
  * @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -364,6 +368,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_encrypt(const unsigned c
  * @param skey The key as scheduled
  * @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -494,6 +500,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt(const unsigned c
  * Terminate the context
  * @param skey    The scheduled key
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -508,6 +516,8 @@ void uberspark_uobjrtl_crypto__ciphers_aes__rijndael_done(symmetric_key *skey)
  * Gets suitable key size
  * @param keysize [in/out] The length of the recommended key (in bytes).  This function will store the suitable size back in this variable.
  * @return CRYPT_OK if the input key size is acceptable.
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>

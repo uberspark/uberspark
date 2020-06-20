@@ -50,6 +50,8 @@
  * Sets the first ``n`` bytes of the block of memory pointed by ``dat`` to the specified value ``c`` (interpreted as an 
  * unsigned char).
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

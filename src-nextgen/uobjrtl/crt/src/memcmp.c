@@ -48,6 +48,8 @@
  *  the first ``n`` bytes pointed by ``s2``, returning zero if they all match or 
  *  a value different from zero representing which is greater if they do not. 
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  *  #include <uberspark/uobjrtl/crt/include/string.h>

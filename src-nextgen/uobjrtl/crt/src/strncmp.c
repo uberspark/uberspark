@@ -87,6 +87,8 @@
  * with the following pairs until the characters differ, until a terminating NULL character is reached, or until ``n``
  * characters match in both strings, whichever happens first.
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

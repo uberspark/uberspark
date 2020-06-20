@@ -60,6 +60,8 @@
  *  @param cbc         The CBC state to initialize
  *  @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -106,6 +108,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_start(const unsigned cha
  *  @param cbc  The CBC state
  *  @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -128,6 +132,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_setiv(const unsigned cha
  *  @param len  [in/out]  The max size and resulting size of the initial vector
  *  @param cbc  The CBC state
  *  @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
@@ -157,6 +163,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_getiv(unsigned char *IV,
  * @param len    The number of bytes to process (must be multiple of block length)
  * @param cbc    CBC state
  * @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
@@ -220,6 +228,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_encrypt(const unsigned c
  * @param cbc    The CBC chain to terminate
  * @return CRYPT_OK on success
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>
  * @headers_end
@@ -246,6 +256,8 @@ int uberspark_uobjrtl_crypto__ciphers_aes__rijndael_cbc_done(symmetric_CBC *cbc)
  * @param len    The number of bytes to process (must be multiple of block length)
  * @param cbc    CBC state
  * @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/ciphers/aes/aes.h>

@@ -47,6 +47,8 @@
  *  @param buf    The data to hash
  *  @return CRYPT_OK 
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
  * @headers_end
@@ -136,6 +138,8 @@ int  uberspark_uobjrtl_crypto__hashes_sha1__sha1_compress(hash_state *md, unsign
  *  @param md   The hash state you wish to initialize
  *  @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
  * @headers_end
@@ -159,6 +163,8 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_init(hash_state * md)
  *  @param in     The data to hash
  *  @param inlen  The length of the data (octets)
  *  @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
@@ -208,6 +214,8 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_process (hash_state * md, const 
  *  @param md  The hash state
  *  @param out [out] The destination of the hash (20 bytes)
  *  @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
@@ -269,6 +277,8 @@ int uberspark_uobjrtl_crypto__hashes_sha1__sha1_done(hash_state * md, unsigned c
  * @param outlen [in/out] Max size and resulting size of the digest
  * @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>
  * @headers_end
@@ -322,6 +332,8 @@ LBL_ERR:
  * @param inlen  The length of the data to hash (octets)
  * @param ...    tuples of (data,len) pairs to hash, terminated with a (NULL,x) (x=don't care)
  * @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/hashes/sha1/sha1.h>

@@ -85,6 +85,8 @@
  * NULL character) is found before ``n`` characters have been copied, destination is padded with zeros until a total of 
  * ``n`` characters have been written to it.
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

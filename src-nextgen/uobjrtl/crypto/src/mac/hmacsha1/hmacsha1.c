@@ -51,6 +51,8 @@
  *  @param keylen   The length of the secret key (octets)
  *  @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
  * @headers_end
@@ -118,6 +120,8 @@ done:
  * @param inlen   The length of the data to HMAC (octets)
  * @return CRYPT_OK if successful
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
  * @headers_end
@@ -137,6 +141,8 @@ int uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_process(hmac_state *hmac, 
  *  @param outlen  [in/out]  The max size and resulting size of the HMAC 
  *                 authentication tag
  *  @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>
@@ -203,6 +209,8 @@ LBL_ERR:
  *  @param outlen    [in/out] Max size and resulting size of 
  *                   authentication tag
  *  @return CRYPT_OK if successful
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crypto}
  *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crypto/include/mac/hmacsha1/hmacsha1.h>

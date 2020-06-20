@@ -87,6 +87,8 @@
  * with the following pairs until the characters differ or until a terminating NULL character is reached.
  * @details_end
  *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
+ *
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>
  * @headers_end

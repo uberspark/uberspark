@@ -83,6 +83,8 @@
  * The terminating NULL character is considered part of the C string. Therefore, it can also be located in order to 
  * retrieve a pointer to the end of a string
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

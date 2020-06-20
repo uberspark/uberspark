@@ -80,6 +80,8 @@
  * The length of a C string is determined by the terminating NULL character: A C string is as long as the number of 
  * characters between the beginning of the string and the terminating null character (without including the terminating NULL character itself).
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>

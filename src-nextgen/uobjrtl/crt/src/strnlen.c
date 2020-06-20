@@ -51,6 +51,8 @@
  * NULL byte ('\0'), but at most ``maxlen``.  In doing this, it looks only at the first ``maxlen``
  * characters in the string pointed to by ``s`` and never beyond ``s+maxlen``. 
  * @details_end
+ *
+ *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
  * 
  * @headers_begin 
  * #include <uberspark/uobjrtl/crt/include/string.h>
