@@ -489,6 +489,10 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :proptype legacy-callees: string list
 
 
+    :property uobjrtl: |uobj| runtime library definition sub-node 
+    :proptype sources: :json:object:`uobjrtl` list
+
+
 .. json:object:: sources
 
     :property h-files: comma delimited list of |uobj| header files 
@@ -503,7 +507,14 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property asm-files: comma delimited list of |uobj| Assembly source files 
     :proptype asm-files: string list
 
- 
+
+.. json:object:: uobjrtl
+
+    :property namespace: namespace of the |uobj| runtime library
+    :proptype namespace: string 
+
+
+
 An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
 
 .. code-block:: JSON
@@ -555,7 +566,18 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
             "legacy-callees": [
                 "untrusted_func_1",	
                 "untrusted_func_2"
-            ] 
+            ],
+
+       		"uobjrtl": [
+    			{
+	    			"namespace" : "uberspark/uobjrtl/crt"
+		    	},
+
+			    {
+				    "namespace" : "uberspark/uobjrtl/crypto"
+			    }
+    		]
+
     
         }
     }

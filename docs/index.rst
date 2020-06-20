@@ -64,6 +64,7 @@ libraries and |coss|
    nextgen-toolkit/cossdev-guide/idfunctionality
    nextgen-toolkit/cossdev-guide/prepnamespace
    nextgen-toolkit/cossdev-guide/create-uobjs
+   nextgen-toolkit/cossdev-guide/use-uobjrtl
    nextgen-toolkit/cossdev-guide/create-uobjcoll
    nextgen-toolkit/cossdev-guide/reintegrate-uobjcoll
    nextgen-toolkit/cossdev-guide/refactor-build
@@ -83,4 +84,4 @@ libraries and |coss|
 
    nextgen-toolkit/reference/manifest
    nextgen-toolkit/reference/frontend-cli
-   nextgen-toolkit/reference/uobjrtl/index
+   nextgen-toolkit/reference/uobjrtl/intro
