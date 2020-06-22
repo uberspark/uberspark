@@ -35,8 +35,8 @@
 /*
  * libc string functions for use in a stand-alone environment
  */
-#ifndef __UOBJRTL_CRT_STRING_H__
-#define __UOBJRTL_CRT_STRING_H__
+#ifndef __UOBJRTL_CRT__STRING_H__
+#define __UOBJRTL_CRT__STRING_H__
 
 #include <uberspark/uobjrtl/crt/include/stdint.h>
 #include <uberspark/uobjrtl/crt/include/stddef.h>
@@ -227,4 +227,4 @@ size_t uberspark_uobjrtl_crt__strnlen(const char *s, size_t maxlen);
 
 #endif /* __ASSEMBLY__ */
 
-#endif /* __UOBJRTL_CRT_STRING_H__ */
+#endif /* __UOBJRTL_CRT__STRING_H__ */
