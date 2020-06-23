@@ -18,8 +18,4 @@ hardware models, loaders, bridges, |uobj| runtime libraries, and the core |ubers
             of C and Assembly programming, including knowledge of the underlying hardware (in case of 
             hardware models).
 
-.. toctree::
-   :maxdepth: 4
-
-   |uobj| Runtime Libraries <uobjrtl.rst>
 

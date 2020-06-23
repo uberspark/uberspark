@@ -76,6 +76,8 @@ libraries and |coss|
    :caption: Contributor's Guide
 
    nextgen-toolkit/contrib-guide/intro
+   Documentation <nextgen-toolkit/contrib-guide/docs.rst>
+   |uobj| Runtime Libraries <nextgen-toolkit/contrib-guide/uobjrtl.rst>
 
 
 .. toctree::

@@ -5,7 +5,7 @@
 .. |cosslong| replace:: Commodity System Software 
 
 .. |uobj| replace:: üobject 
-.. |uobjrtl| replace:: üobjrtl 
+.. |uobjrtl| replace:: üobject runtime library 
 .. |uobjs| replace:: üobjects 
 .. |b_uobj| replace:: **üobject** 
 .. |uobjcoll| replace:: üobject collection 
