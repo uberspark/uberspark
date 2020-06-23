@@ -102,8 +102,8 @@ collection of source modules.
 
 .. _contrib-guide-uobjrtl-srccontents:
 
-Source-file Name and Contents
-------------------------------
+|uobjrtl| Source-file Name and Contents
+----------------------------------------
 
 An |uobjrtl| source module filename can be any name without the ``_`` or ``-`` characters.
 A source module can define one or more functions which are named as follows:
@@ -194,7 +194,7 @@ Adding a new |uobjrtl|
         :language: bash
         :linenos:
 
-    .. seealso:: |reference-manifest-ref|
+    .. seealso:: |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjrtl`
 
 5.  Modify ``docs/conf.py`` (See :ref:`contrib-guide-docs-intro`) to add the new |uobjrtl| XML documentation
     sources within the variable ``breathe_projects``. Use the format
