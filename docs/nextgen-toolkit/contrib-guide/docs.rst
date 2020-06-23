@@ -66,7 +66,35 @@ block comment just before its definition:
 We now dicuss the Doxygen tags as used in the above block comment definition. They fall into two groups: required and
 optional tags
 
-Describe required tags as list
+The required Doxygen tags and their usage are as follows:
 
-Describe optional tags as list
+*   ``@brief`` : Includes a short description of the function
+*   ``@param`` : The function positional parameter names and description. The directions of the parameters are 
+    specified as ``[in]``, ``[out]`` or ``[in,out]`` to denote incoming, outgoing or incoming and outgoing respectively.
+
+    .. note::   Each positional paramter is described using a separate ``@param`` tag
+
+*   ``@retval`` : The return value and its description. The first word is the return value (e.g., a positional parameter
+    or integer) and the remainder is the description
+
+    .. note::   If the function returns a scalar then you can use ``@returns`` instead followed by a
+                string description
+
+*   ``@uobjrtl_namespace{<namespace>}`` : The namespace for the |uobjrtl|
+
+    .. seealso::  |uobjrtl| :ref:`contrib-guide-uobjrtl-nsdirorg`
+ 
+*   ``@headers_begin .. @headers_end`` : This tag pair is used to list the header(s) that need to be included to 
+    bring in this function declaration into scope.
+
+
+The following are the optional Doxygen tags within the block comment definition:
+
+*   ``@details_begin ..  @details_end`` : This tag pair is used to add extra details towards the function 
+    description.
+
+*   ``@comments_begin ..  @comments_end`` : This tag pair is used to add any extra comments or remarks related to
+    the function. 
+        
+.. note::   The text within the aforementioned optional Doxygen tags can use Sphinx/reST syntax.
 
