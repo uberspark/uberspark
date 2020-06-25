@@ -16,8 +16,8 @@ within an existing |uobj| runtime library.
 
 .. _contrib-guide-uobjrtl-nsdirorg:
 
-Namespace and Directory organization
-------------------------------------
+|uobjrtl| Namespace and Directory Layout
+----------------------------------------
 
 A |uobjrtl| namespace starts with the ``uberspark/uobrtl/`` prefix, followed by the name of the |uobjrtl|.
 For example, the ``crt`` |uobjrtl| has the following namespace:
@@ -40,8 +40,8 @@ houses the ``test`` module header (e.g., ``include\test\test.h``).
 
 .. _contrib-guide-uobjrtl-hdrcontents:
 
-Header-file Name and Contents
-------------------------------
+|uobjrtl| Header-file Details
+-----------------------------
 
 An |uobjrtl| source module header filename can match the corresponding source file name or can named differently.
 However, the header filename should always end with a ``.h`` suffix.
@@ -102,8 +102,8 @@ collection of source modules.
 
 .. _contrib-guide-uobjrtl-srccontents:
 
-|uobjrtl| Source-file Name and Contents
-----------------------------------------
+|uobjrtl| Source-file Details
+-----------------------------
 
 An |uobjrtl| source module filename can be any name without the ``_`` or ``-`` characters.
 A source module can define one or more functions which are named as follows:
@@ -147,8 +147,8 @@ markup as described in the next section
 
 .. _contrib-guide-uobjrtl-hdrsrccomments:
 
-Header and Source comments
---------------------------
+|uobjrtl| Header and Source Comments
+------------------------------------
 
 Special comments within the source and header files of the following types are solely reserved for 
 documentation that is generated for the |uobjrtl|:
@@ -228,8 +228,8 @@ Adding a new |uobjrtl|
 
 
 
-Adding or delting functions from an existing |uobjrtl|
--------------------------------------------------------
+Modifying an existing |uobjrtl|
+-------------------------------
 
 1.  Add or delete a given source or header module within the |uobjrtl| directory structure as 
     described in :ref:`contrib-guide-uobjrtl-nsdirorg`

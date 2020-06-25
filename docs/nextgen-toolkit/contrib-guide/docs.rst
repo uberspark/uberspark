@@ -82,7 +82,7 @@ The required Doxygen tags and their usage are as follows:
 
 *   ``@uobjrtl_namespace{<namespace>}`` : The namespace for the |uobjrtl|
 
-    .. seealso::  |uobjrtl| :ref:`contrib-guide-uobjrtl-nsdirorg`
+    .. seealso::  :ref:`contrib-guide-uobjrtl-nsdirorg`
  
 *   ``@headers_begin .. @headers_end`` : This tag pair is used to list the header(s) that need to be included to 
     bring in this function declaration into scope.
