@@ -10,8 +10,11 @@ The |uberspark| |uobj| runtime libraries consist of a set of library functions t
 its functionality. The following sections describe how you can add a new |uobj| runtime library or new functions
 within an existing |uobj| runtime library.
 
-..  note::  See |genuser-guide-ref|:::ref:`reference-uobjrtl-intro` and |reference-uobjrtl-ref| for a description of 
-            currently available |uobj| runtime libraries and associated function documentation.
+..  note::  Refer to  |genuser-guide-ref|:::ref:`reference-uobjrtl-intro` for instructions on how to 
+            include |uobjrtl| functions within a |uobj|
+            
+..  seealso::   |reference-uobjrtl-ref| for a description of  currently available |uobj| runtime libraries and 
+                associated function documentation.
 
 
 .. _contrib-guide-uobjrtl-nsdirorg:
@@ -33,8 +36,11 @@ the header files.
 
 The organization within the ``src`` and ``include`` directories is left upto the library implementation, but must have
 the same sub-directory tree structure. For example if the ``src`` directory contains no sub-directories, the ``include`` 
-directory will house the top-level header. If the ``src`` directory contains a sub-directory ``src\test\`` which
-houses the a hypothetical ``test`` module implementation (e.g., ``src\test\test.c``), then there is a corresponding ``include\test\`` directory that
+directory will house the top-level headers. 
+
+However, if the ``src`` directory contains a sub-directory ``src\test\`` which
+houses the a hypothetical ``test`` module implementation (e.g., ``src\test\test.c``) for example, then there is a 
+corresponding ``include\test\`` directory that
 houses the ``test`` module header (e.g., ``include\test\test.h``).
 
 
@@ -49,7 +55,8 @@ However, the header filename should always end with a ``.h`` suffix.
 The header file contents should be embedded within the following prologue and
 epilogue:
 
-.. code-block: c
+
+.. code-block:: c
 
     #ifndef __UOBJRTL_<RTLNAME>__<RTLHEADERPATHSPEC>_H__
     #define __UOBJRTL_<RTLNAME>__<RTLHEADERPATHSPEC>_H__
@@ -57,11 +64,12 @@ epilogue:
 
     #endif /* __UOBJRTL_<RTLNAME>__<RTLHEADERPATHSPEC>_H__ */
 
+
 Here ``<RTLNAME>`` is the name of the |uobjrtl| (e.g., crt), ``<RTLHEADERPATHSPEC>`` is the path specification
 (delimited by ``_``) of the header file (sans the ``.h`` suffix). For example, for ``string.h`` within ``crt`` 
 |uobjrtl|, the prologue and epilogue will are as shown below:
 
-.. code-block: c
+.. code-block:: c
 
     #ifndef __UOBJRTL_CRT__STRING_H__
     #define __UOBJRTL_CRT__STRING_H__
@@ -70,7 +78,7 @@ Here ``<RTLNAME>`` is the name of the |uobjrtl| (e.g., crt), ``<RTLHEADERPATHSPE
 
 Similarly, for the ``sha1.h`` header within the ``crypto`` |uobjrtl|, the following is the prologue and epilogue.
 
-.. code-block: c
+.. code-block:: c
 
     #ifndef __UOBJRTL_CRYPTO__HASHES_SHA1_H__
     #define __UOBJRTL_CRYPTO__HASHES_SHA1_H__
@@ -85,14 +93,14 @@ Similarly, for the ``sha1.h`` header within the ``crypto`` |uobjrtl|, the follow
 A |uobjrtl| header file can prevent contents from being available to Assembly language source modules via
 the following construct:
 
-.. code-block: c
+.. code-block:: c
 
     #ifndef __ASSEMBLY__
 
     #end /* __ASSEMBLY__ */
 
 
-A |uobjrtl| header file must include declaration for all the functions that are described by the corresponding
+A |uobjrtl| header file must include declarations for all the functions that are described by the corresponding
 collection of source modules.
 
 .. note:: |uobjrtl| header file function declarations must not include special documentation comments 
@@ -151,9 +159,9 @@ markup as described in the next section
 ------------------------------------
 
 Special comments within the source and header files of the following types are solely reserved for 
-documentation that is generated for the |uobjrtl|:
+automatic documentation that is generated for the |uobjrtl|:
 
-.. code-block: c
+.. code-block:: c
 
     /**
 
@@ -161,7 +169,7 @@ documentation that is generated for the |uobjrtl|:
 
 or
 
-.. code-block: c
+.. code-block:: c
 
     /**
     *
@@ -239,7 +247,9 @@ Modifying an existing |uobjrtl|
 
 3.  Modify ``docs/conf.py`` (See :ref:`contrib-guide-docs-intro`) to add or remove the |uobjrtl| 
     sources and headers within the variable ``breathe_projects_source``. 
-    See :ref:`contrib-guide-uobjrtl-adduobjrtl` for details on the format of the ``breathe_projects_source`` variable.
+
+    .. note::   Refer to :ref:`contrib-guide-uobjrtl-adduobjrtl` for details on the format of 
+                the ``breathe_projects_source`` variable.
 
 
 

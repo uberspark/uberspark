@@ -490,7 +490,7 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
 
 
     :property uobjrtl: |uobj| runtime library definition sub-node 
-    :proptype sources: :json:object:`uobjrtl` list
+    :proptype uobjrtl: :json:object:`uobjrtl` list
 
 
 .. json:object:: sources

@@ -6,9 +6,9 @@
 |uspark| Documentation
 ======================
 
-The |uberspark| documentation makes use of Sphinx (with restructured text) at a high-level.
+The |uberspark| documentation makes use of Sphinx and Restructured Text (reST) at a high-level.
 We also use Breathe and Doxygen in order to automatically pull in documentation from C and
-Assembly language code (e.g., |uobj| runtime libraries, sentinels etc.).
+Assembly language code (e.g., |uobjrtl|, sentinels etc.).
 
 
 .. note::   The high level documentation build is controlled by ``docs/conf.py``, the Sphinx documentation
@@ -19,12 +19,12 @@ Assembly language code (e.g., |uobj| runtime libraries, sentinels etc.).
 
 .. _contrib-guide-docs-uobjrtl:
 
-|uobj| Runtime Library Functions
---------------------------------
+|uobjrtlcaps| Functions
+-----------------------
 
-Every |uobj| runtime library function definition must have a special block comment just before
-the definition that describes certain important elements of the function. This is parsed by
-Breathe and Doxygen in order to bring in relevant function documentation. 
+Every |uobjrtl| function definition must have a special block comment just before
+the function definition which describes certain important elements of the function. 
+This is parsed by Breathe and Doxygen in order to bring in relevant function documentation automatically. 
 
 As an example let us consider the function :cpp:func:`uberspark_uobjrtl_crt__memcpy` and its
 block comment just before its definition:

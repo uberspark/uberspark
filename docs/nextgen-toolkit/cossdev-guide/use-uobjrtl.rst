@@ -5,7 +5,7 @@
 Using |uobj| Runtime Libraries
 ==============================
 
-|uobjs| can use pre-defined library functions to support its functionality. Examples of such functions include
+|uobjs| can use pre-defined library functions to support their functionality. Examples of such functions include
 basic C runtime support type definitions (e.g., ``int32_t``) as well as memory, string and crypto functions.
 
 .. note::   See |reference-uobjrtl-ref| for further details on the various libraries 
@@ -18,7 +18,8 @@ The include namespace starts with the following prefix:
  ``uberspark/uobjrtl/<uobjrtl-name>/include/<uobjrtl-specific>``
 
 
-Here ``<uobjrtl-name>`` is the name of the |uobj| runtime library (e.g., crt, crypto, see |reference-uobjrtl-ref|).
+Here ``<uobjrtl-name>`` is the name of the |uobjrtl| (e.g., crt, crypto, see |reference-uobjrtl-ref|). 
+``<uobjrtl-specific-path>`` is the folder path specific to the |uobjrtl|.
 
 For example, 
 
@@ -31,11 +32,13 @@ will bring in string and memory function declarations from the C runtime library
 |uobj| source code.
 
 
-..  note::  |uobj| runtime library header inclusions must come after ``uberspark`` framework headers 
-            (e.g., ``uberspark/include/uberspark.h``). See also :ref:`cossdev-guide-create-uobjs`.
+.. note::  |uobj| runtime library header inclusions must come after ``uberspark`` framework headers 
+            (e.g., ``uberspark/include/uberspark.h``). 
+            
+.. seealso::   See also :ref:`cossdev-guide-create-uobjs`
 
 
-The exact include header can be found within the `Header(s)` field for the function that is being used. 
+The exact include header path can be found within the \` Header(s) \` field for the function that is being used. 
 For example, if the |uobj| wishes to use the :cpp:func:`uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt()`
 for AES descryption functionality, the `Headers(s)` field in the documentation of the above function mandates the
 inclusion of the following header within the |uobj| source code:
@@ -49,8 +52,8 @@ As a final step, the |uobj| manifest needs to include a ``uobjrtl`` manifest sub
 manifest node. See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the 
 ``uobjrtl`` sub-node definition.
 
-Thus, for the |uobj| using the function :cpp:func:`uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt()` as
-described above, we would need to add the ``crypto`` |uobj| runtime library namespace in the |uobj| manifest 
+Thus, for an |uobj| using the function :cpp:func:`uberspark_uobjrtl_crypto__ciphers_aes__rijndael_ecb_decrypt()` as
+described above, we would need to add the ``crypto`` |uobjrtl| namespace in the |uobj| manifest 
 (in addition to other nodes as described in :ref:`cossdev-guide-create-uobjs`) as below:
 
 
@@ -67,5 +70,5 @@ described above, we would need to add the ``crypto`` |uobj| runtime library name
 
 
 ..  note::  The |uobj| runtime library namespace for a given function can be found within the 
-            |uobjrtl| Namespace field in the function documentation (See |reference-uobjrtl-ref|)
+            \` |uobjrtlshort| Namespace \` field in the corresponding function documentation (See |reference-uobjrtl-ref|)
             
