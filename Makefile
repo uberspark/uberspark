@@ -22,7 +22,7 @@ export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/uberspark
 
-
+export SYS_PROC_VERSION := $(shell cat /proc/version)
 
 export SUDO := sudo
 
@@ -104,12 +104,24 @@ frontend: build_bootstrap
 	$(call docker_run,make -f build-frontend.mk, -w all)
 
 
+###### check to see if ROOT_DIR is specified when we are operating under WSL 
+.PHONY: check_wslrootdir
+check_wslrootdir:	
+ifeq "$(findstring Microsoft, $(SYS_PROC_VERSION))" "Microsoft"
+	@echo "Windows Subsystem for Linux (WSL) environment detected"
+ifeq "$(ROOT_DIR)" "~"
+	@echo "Error: ROOT_DIR needs to be specified and has to point to a NTFS path. See documentation!"
+	exit 1
+endif
+endif
+
+
 ###### installation targets
 
 
-# install tool binary to /usr/bin and namespace to ~/uberspark/
+# install tool binary, global configuration manifest and namespace
 .PHONY: install
-install: build_bootstrap
+install: check_wslrootdir build_bootstrap
 	$(call docker_run,make -f install.mk, -w all)
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
