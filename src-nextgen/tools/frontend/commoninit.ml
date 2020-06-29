@@ -20,8 +20,36 @@ let initialize
   Uberspark.Logger.log "";
 
   (* setup namespace root directory *)
-  (*Uberspark.Namespace.namespace_root_dir := copts.root_dir;*)
-  Uberspark.Namespace.set_namespace_root_dir_prefix copts.root_dir;
+  if copts.root_dir = "" then begin
+    (* we open the installation manifest to figure out the root directory *)
+		let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
+          Uberspark.Namespace.namespace_root_mf_filename in
+    let mf_json_node_uberspark_installation_var : Uberspark.Manifest.Installation.json_node_uberspark_installation_t = 
+		  {f_rootDirectory = ""; } in
+    let (rval, mf_json) = (Uberspark.Manifest.get_json_for_manifest installation_manifest_filename ) in
+  		if(rval == true) then	begin
+
+				(* convert to var *)
+				let rval =	(Uberspark.Manifest.Installation.json_node_uberspark_installation_to_var mf_json mf_json_node_uberspark_installation_var) in
+  				if rval then begin
+            Uberspark.Namespace.set_namespace_root_dir_prefix mf_json_node_uberspark_installation_var.f_rootDirectory;
+
+          end else begin
+            Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;
+            ignore (exit 1);
+				  end;
+
+      end else begin
+        Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Could not load installation configuration manifest from: %s" installation_manifest_filename;
+        ignore (exit 1);
+      end;
+
+  end else begin
+    (* --root-dir was specified on the command line, so we simply override *)
+    Uberspark.Namespace.set_namespace_root_dir_prefix copts.root_dir;
+  end;
+  
+  
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_staging_dir_prefix ());
  

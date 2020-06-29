@@ -29,6 +29,7 @@ let namespace_root_mf_node_type_tag = "uberspark-manifest";;
 
 
 (* installation *)
+let namespace_installation_configdir = "/etc/uberspark";;
 let namespace_installation_mf_node_type_tag = "uberspark-installation";;
 
 

@@ -27,6 +27,7 @@ val namespace_root_mf_node_type_tag : string
 
 
 (* installation *)
+val namespace_installation_configdir : string
 val namespace_installation_mf_node_type_tag : string
 
 
