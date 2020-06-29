@@ -36,25 +36,11 @@ verification tools.
 |uberspark| staging environments can be created using the :ref:`frontend-cli-intro` as shown below:
 
 
-..  note::  In the following listings, we assume |uberspark| is installed
-            within a WSL/Ubuntu development environment. Accordingly we use the
-            ``--root-dir=/c/workspace/uberspark`` command-line option,  assuming |uberspark| was installed
-            at: ``/c/workspace/uberspark`` within WSL. You need to replace this with the appropriate
-            directory where |uberspark| is installed based on your development environment.
-            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
-            for more details.
-
-..  note::  You can also omit the ``--root-dir`` argument altogether if uberspark is installed to 
-            the default location (``~/uberspark``) within your development environment (e.g., Ubuntu Linux).
-            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark` for more details.
-
-
-
 .. highlight:: bash
 
 ::
 
-    uberspark staging create generic-platform --root-dir=/c/workspace/uberspark
+    uberspark staging create generic-platform
 
 
 With the aforementioned command, we create (and automatically switch to) a staging 
@@ -68,9 +54,9 @@ are required to build the  ``hello-mul`` |uobjcoll|.
 
 ::
 
-    uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=container/amd64/x86_32/generic/gcc/v5.4.0 --root-dir=/c/workspace/uberspark
-    uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=container/amd64/x86_32/generic/gnu-as/v2.26.1 --root-dir=/c/workspace/uberspark
-    uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=container/amd64/x86_32/generic/gnu-ld/v2.26.1 --root-dir=/c/workspace/uberspark
+    uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=container/amd64/x86_32/generic/gcc/v5.4.0
+    uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=container/amd64/x86_32/generic/gnu-as/v2.26.1
+    uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=container/amd64/x86_32/generic/gnu-ld/v2.26.1
 
 
 The aforementioned commands will set the staging compiler bridge to use GCC v5.4.0, assembler bridge to use 
