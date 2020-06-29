@@ -25,6 +25,11 @@ val namespace_root_dir_prefix : string ref
 val namespace_root_mf_filename : string
 val namespace_root_mf_node_type_tag : string
 
+
+(* installation *)
+val namespace_installation_mf_node_type_tag : string
+
+
 (* uobjs *)
 val namespace_uobj : string
 val namespace_uobj_build_dir : string

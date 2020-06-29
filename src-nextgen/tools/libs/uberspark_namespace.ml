@@ -28,6 +28,11 @@ let namespace_root_mf_filename = "uberspark.json";;
 let namespace_root_mf_node_type_tag = "uberspark-manifest";;
 
 
+(* installation *)
+let namespace_installation_mf_node_type_tag = "uberspark-installation";;
+
+
+
 (* uobjs *)
 let namespace_uobj = "uobjs";;
 let namespace_uobj_build_dir = "_build";;
