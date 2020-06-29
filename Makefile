@@ -5,18 +5,24 @@
 
 ###### paths
 
+###### configuration variables that are inputs to the top-level build process
+ROOT_DIR ?= ~
+export USPARK_INSTALL_BINDIR := /usr/bin
+export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
+export USPARK_VERSION := 6.0.0
+export USPARK_MANIFEST_FILENAME := uberspark.json
+
+
+
+###### automatic configuration variables
 export USPARK_SRCROOTDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 export USPARK_BUILDTRUSSESDIR := $(USPARK_SRCROOTDIR)/build-trusses
 export USPARK_SRCDIR = $(USPARK_SRCROOTDIR)/src-nextgen
 export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
-
-ROOT_DIR ?= ~
 export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/uberspark
 
-###### installation folders
-export USPARK_INSTALL_BINDIR := /usr/bin
-export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
+
 
 export SUDO := sudo
 
