@@ -13,7 +13,10 @@ export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 
 ROOT_DIR ?= ~
 export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/uberspark
+
+###### installation folders
 export USPARK_INSTALL_BINDIR := /usr/bin
+export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
 
 export SUDO := sudo
 
@@ -126,6 +129,10 @@ install: build_bootstrap
 	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark 
 	ln -sf $(USPARK_NAMESPACEROOTDIR)/staging/default $(USPARK_NAMESPACEROOTDIR)/staging/current
 	@echo Populated install namespace successfully
+	@echo Installing global configuration to $(USPARK_INSTALL_CONFIGDIR)...
+	@echo Note: You may need to enter your sudo password. 
+	$(SUDO) mkdir -p $(USPARK_INSTALL_CONFIGDIR)
+	@echo Wrote global configuration.
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
 	$(SUDO) cp -f $(USPARK_INSTALLPREPDIR)/bin/uberspark $(USPARK_INSTALL_BINDIR)/uberspark
