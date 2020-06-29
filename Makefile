@@ -9,8 +9,8 @@
 ROOT_DIR ?= ~
 export USPARK_INSTALL_BINDIR := /usr/bin
 export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
+export USPARK_INSTALL_CONFIGFILENAME := uberspark.json
 export USPARK_VERSION := 6.0.0
-export USPARK_MANIFEST_FILENAME := uberspark.json
 
 
 
@@ -23,6 +23,23 @@ export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/uberspark
 
 export SYS_PROC_VERSION := $(shell cat /proc/version)
+
+define USPARK_CONFIG_CONTENTS 
+{
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-installconfig" ],
+		"uberspark_min_version" : "$(USPARK_VERSION)",
+		"uberspark_max_version" : "$(USPARK_VERSION)"
+	},
+
+    "uberspark-installconfig" : {
+		"rootDirectory" : "$(ROOT_DIR)"
+	}
+}
+endef
+
+export USPARK_INSTALLPREPDIR_CONFIGFILENAME = $(USPARK_INSTALLPREPDIR)/$(USPARK_INSTALL_CONFIGFILENAME)
+
 
 export SUDO := sudo
 
@@ -122,6 +139,7 @@ endif
 # install tool binary, global configuration manifest and namespace
 .PHONY: install
 install: check_wslrootdir build_bootstrap
+	@echo $(USPARK_INSTALLPREPDIR_CONFIGFILENAME)
 	$(call docker_run,make -f install.mk, -w all)
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
@@ -149,7 +167,10 @@ install: check_wslrootdir build_bootstrap
 	@echo Populated install namespace successfully
 	@echo Installing global configuration to $(USPARK_INSTALL_CONFIGDIR)...
 	@echo Note: You may need to enter your sudo password. 
+	$(file >$(USPARK_INSTALL_CONFIGFILENAME), $(USPARK_CONFIG_CONTENTS))
+	@mv ./$(USPARK_INSTALL_CONFIGFILENAME) $(USPARK_INSTALLPREPDIR_CONFIGFILENAME)
 	$(SUDO) mkdir -p $(USPARK_INSTALL_CONFIGDIR)
+	$(SUDO) cp -f $(USPARK_INSTALLPREPDIR_CONFIGFILENAME) $(USPARK_INSTALL_CONFIGDIR)/$(USPARK_INSTALL_CONFIGFILENAME)
 	@echo Wrote global configuration.
 	@echo Installing binary to $(USPARK_INSTALL_BINDIR)...
 	@echo Note: You may need to enter your sudo password. 
