@@ -165,6 +165,23 @@ module Config : sig
 end
 
 
+
+module Installation : sig
+
+  (****************************************************************************)
+  (* manifest node types *)
+  (****************************************************************************)
+
+  type json_node_uberspark_installation_t =
+  {
+    mutable f_rootDirectory : string;
+  }
+
+  val json_node_uberspark_installation_to_var : Yojson.Basic.t -> json_node_uberspark_installation_t -> bool
+
+end
+
+
 module Sentinel : sig
 
 

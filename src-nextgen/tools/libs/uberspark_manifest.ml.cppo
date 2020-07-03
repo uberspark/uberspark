@@ -328,6 +328,11 @@ module Config = struct
 end
 
 
+module Installation = struct
+	#include "uberspark_manifest_installation.ml"
+end
+
+
 module Sentinel = struct
 	#include "uberspark_manifest_sentinel.ml"
 end

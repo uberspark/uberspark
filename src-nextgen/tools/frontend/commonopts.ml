@@ -22,7 +22,8 @@ let handler_opts
 
   match rootdir with
   | None -> 
-    l_rootdir := Unix.getenv "HOME";
+    (*l_rootdir := Unix.getenv "HOME";*)
+    l_rootdir := "";
   | Some l_str ->
     l_rootdir := l_str;
   ;
