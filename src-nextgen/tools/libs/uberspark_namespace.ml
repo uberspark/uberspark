@@ -53,6 +53,11 @@ let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
 (* legacy *)
 let namespace_legacy = "legacy";;
 
+(* uobjrtl *)
+let namespace_uobjrtl = "uobjrtl";;
+let namespace_uobjrtl_mf_node_type_tag = "uberspark-uobjrtl";;
+
+
 (* uobjslt *)
 let namespace_uobjslt = "uobjslt";;
 let namespace_uobjslt_intrauobjcoll_callees_src_filename = "uobjslt-intrauobjcoll-callees.S";;

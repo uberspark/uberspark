@@ -187,6 +187,11 @@ end
 
 module Uobj : sig
 
+  type json_node_uberspark_uobj_uobjrtl_t = 
+  {
+    mutable f_namespace: string;
+  }
+
   type json_node_uberspark_uobj_sources_t = 
   {
     mutable f_h_files: string list;
@@ -216,6 +221,7 @@ module Uobj : sig
     mutable f_interuobjcoll_callees : (string * string list) list;
     mutable f_legacy_callees : (string * string list) list;
     mutable f_sections : (string * Defs.Basedefs.section_info_t) list;
+  	mutable f_uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
 
 
@@ -225,6 +231,7 @@ module Uobj : sig
   val json_node_uberspark_uobj_interuobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_legacy_callees_to_var : Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_sections_to_var :  Yojson.Basic.t -> bool *  ((string * Defs.Basedefs.section_info_t) list)
+  val json_node_uberspark_uobj_uobjrtl_to_var : Yojson.Basic.t -> bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
   val json_node_uberspark_uobj_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_t -> bool
 
 
@@ -285,4 +292,34 @@ module Uobjslt : sig
 
 end
 
+
+module Uobjrtl : sig
+
+type json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t =
+{
+	mutable f_funcname : string;
+}
+
+
+type json_node_uberspark_uobjrtl_modules_spec_t =
+{
+	mutable f_module_path : string;
+	mutable f_module_funcdecls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
+}
+
+
+type json_node_uberspark_uobjrtl_t =
+{
+	mutable f_namespace : string;
+	mutable f_platform : string;
+	mutable f_arch : string;
+    mutable f_cpu : string;
+   
+    mutable f_modules_spec: json_node_uberspark_uobjrtl_modules_spec_t list;
+}
+
+  val json_node_uberspark_uobjrtl_to_var : Yojson.Basic.t -> json_node_uberspark_uobjrtl_t -> bool
+
+
+end
 

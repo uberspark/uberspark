@@ -5,6 +5,11 @@
 .. |cosslong| replace:: Commodity System Software 
 
 .. |uobj| replace:: üobject 
+
+.. |uobjrtl| replace:: üobject runtime library 
+.. |uobjrtlcaps| replace:: üobject Runtime Library 
+.. |uobjrtlshort| replace:: üobjrtl 
+
 .. |uobjs| replace:: üobjects 
 .. |b_uobj| replace:: **üobject** 
 .. |uobjcoll| replace:: üobject collection 
@@ -27,6 +32,8 @@
 
 .. |reference-manifest| replace:: *überSpark Manifest Reference* 
 .. |reference-manifest-ref| replace:: :ref:`überSpark Manifest Reference<reference-manifest-intro>` 
+.. |reference-uobjrtl| replace:: *überSpark üobject Runtime Libraries Reference* 
+.. |reference-uobjrtl-ref| replace:: :ref:`überSpark üobject Runtime Libraries Reference<reference-uobjrtl-intro>` 
 
 .. |br| raw:: html
 

@@ -489,6 +489,10 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :proptype legacy-callees: string list
 
 
+    :property uobjrtl: |uobj| runtime library definition sub-node 
+    :proptype uobjrtl: :json:object:`uobjrtl` list
+
+
 .. json:object:: sources
 
     :property h-files: comma delimited list of |uobj| header files 
@@ -503,7 +507,14 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property asm-files: comma delimited list of |uobj| Assembly source files 
     :proptype asm-files: string list
 
- 
+
+.. json:object:: uobjrtl
+
+    :property namespace: namespace of the |uobj| runtime library
+    :proptype namespace: string 
+
+
+
 An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
 
 .. code-block:: JSON
@@ -555,7 +566,18 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
             "legacy-callees": [
                 "untrusted_func_1",	
                 "untrusted_func_2"
-            ] 
+            ],
+
+       		"uobjrtl": [
+    			{
+	    			"namespace" : "uberspark/uobjrtl/crt"
+		    	},
+
+			    {
+				    "namespace" : "uberspark/uobjrtl/crypto"
+			    }
+    		]
+
     
         }
     }
@@ -657,3 +679,58 @@ An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll|
 
         }
     }
+
+
+
+.. _reference-manifest-uberspark-uobjrtl:
+
+
+``uberspark-uobjrtl`` Manifest Node
+-----------------------------------
+
+The ``uberspark-uobjrtl`` node within the |ubersparkmf| is used to describe a |uobjrtl|.
+The JSON declaration of the ``uberspark-uobjrtl`` node is as below:
+
+.. json:object:: uberspark-uobjrtl
+
+    :property namespace: <uobjrtl-namespace-path> as identified by |uberspark| 
+    :proptype namespace: string
+    :options namespace: "<uobjrtl-namespace-path>"
+
+    :property arch: |uobjrtl| target hardware platform 
+    :proptype arch: string
+    :options arch: "generic"
+
+    :property arch: |uobjrtl| target CPU architecture 
+    :proptype arch: string
+    :options arch: "x86_32"
+
+    :property cpu: |uobjrtl| target CPU model 
+    :proptype cpu: string
+    :options cpu: "generic"
+
+    :property modules-spec: |uobjrtl| modules definition sub-node 
+    :proptype modules-spec: :json:object:`modules-spec` list
+
+.. json:object:: modules-spec
+
+    :property module-path: <module-path> relative to the |uobjrtl| top-level source directory 
+    :proptype module-path: string
+    :options module-path: "src/<module-filename-with-path>"
+
+    :property modules-funcdecls: |uobjrtl| modules function declarations 
+    :proptype modules-funcdecls: :json:object:`modules-funcdecls` list
+
+
+.. json:object:: modules-funcdecls
+
+    :property funcname: canonical function name (See |contrib-guide-ref|:::ref:`contrib-guide-uobjrtl-srccontents`) 
+    :proptype funcname: string
+
+
+An example definition of the ``uberspark-uobjrtl`` node for the ``crt`` |uobjrtl|, within |ubersparkmff| follows:
+
+.. literalinclude:: /../src-nextgen/uobjrtl/crt/uberspark.json
+    :language: bash
+    :linenos:
+

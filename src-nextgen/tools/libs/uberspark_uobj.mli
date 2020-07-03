@@ -120,6 +120,8 @@ type slt_info_t =
 	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
 
 
+  	val d_uobjrtl_hashtbl  : (string, Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t 
+	  method get_d_uobjrtl_hashtbl : (string, Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t
     
  
     method set_d_size : int -> unit
@@ -129,7 +131,6 @@ type slt_info_t =
  
     method set_d_target_def : Defs.Basedefs.target_def_t -> unit
   
-
   	method prepare_sources : unit -> unit 
   	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
     (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->
@@ -142,6 +143,7 @@ type slt_info_t =
     method consolidate_sections_with_memory_map : unit -> int
     method parse_manifest : unit ->  bool
     method parse_manifest_slt : bool
+    method parse_uobjrtl_manifests : unit -> bool
 
   	method overlay_config_settings : unit -> bool
 

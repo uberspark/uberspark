@@ -91,7 +91,7 @@ class uobject
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
 		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
 		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
-		f_legacy_callees = []; f_sections = []; 
+		f_legacy_callees = []; f_sections = []; f_uobjrtl = []; 
 		};
 
 
@@ -114,6 +114,11 @@ class uobject
 
 	val d_legacy_callees_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t)); 
 	method get_d_legacy_callees_hashtbl = d_legacy_callees_hashtbl;
+
+	val d_uobjrtl_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t)); 
+	method get_d_uobjrtl_hashtbl = d_uobjrtl_hashtbl;
+
+
 
 	(* association list of default uobj binary image sections; indexed by section name *)		
 	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref = ref []; 
@@ -314,7 +319,7 @@ class uobject
 
 
 
-		
+
 
 
 
@@ -348,6 +353,51 @@ class uobject
 				end;
 			end;
 		end;
+
+		(!retval)
+	;
+
+
+	(*--------------------------------------------------------------------------*)
+	(* parse uobj uobjrtl manifests *)
+	(*--------------------------------------------------------------------------*)
+	method parse_uobjrtl_manifests 
+		()
+		: bool =
+		let retval = ref true in 
+
+		(* iterate over uobj uobjrtl manifest node *)
+		List.iter ( fun ( (uobjrtl_namespace : string), (uobjrtl_entry : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
+			if !retval == true then begin
+				
+				(* parse each uobjrtl manifest and create a hashtable with entry as namespace *)
+				(* entry will be an entry of type uobjrtl_t *)
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.f_namespace;
+
+				let uobjrtl_manifest_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+			
+				(* read uobjrtl manifest JSON *)
+				let (rval, mf_json) = (Uberspark_manifest.get_json_for_manifest uobjrtl_manifest_path) in
+				if(rval == true) then begin
+					
+					(* convert to var *)
+					let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
+						f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec = []; } in
+					let rval =	(Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json l_uobjrtl_entry_var) in
+					if rval then begin
+						Hashtbl.add d_uobjrtl_hashtbl uobjrtl_namespace l_uobjrtl_entry_var;						
+					end else begin
+						retval := false;
+					end;
+				end else begin
+					retval := false;
+				end;
+
+			end;
+
+		) json_node_uberspark_uobj_var.f_uobjrtl;
+
 
 		(!retval)
 	;
@@ -889,7 +939,6 @@ class uobject
 
 
 
-
 	(*--------------------------------------------------------------------------*)
 	(* prepare uobj sources *)
 	(*--------------------------------------------------------------------------*)
@@ -897,7 +946,29 @@ class uobject
 		()
 		: unit =
 
-	
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace staging-dir-prefix=%s" (Uberspark_namespace.get_namespace_staging_dir_prefix ());
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
+
+		(* prepare uobjrtl sources *)
+		let l_uobjrtl_sources_c_files = ref [] in 
+		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
+				let uobjrtl_info = (Hashtbl.find self#get_d_uobjrtl_hashtbl uobjrtl_namespace) in
+				List.iter ( fun ( (uobjrtl_modules_spec : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ) -> 
+
+					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.f_module_path) in
+					let l_src_module_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_namespace_module_path) in
+					let l_dst_module_path =  (self#get_d_builddir ^ "/" ^ l_namespace_module_path) in 
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.f_module_path;
+					Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname l_namespace_module_path)) (`Octal 0o0777);
+					Uberspark_osservices.cp l_src_module_path l_dst_module_path;
+
+					l_uobjrtl_sources_c_files :=  !l_uobjrtl_sources_c_files @ [ l_namespace_module_path ];
+
+				) uobjrtl_info.f_modules_spec;
+		) json_node_uberspark_uobj_var.f_uobjrtl;
+
+
 		(* copy uobj c files to namespace *)
 		List.iter ( fun c_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname c_filename)) (`Octal 0o0777);
@@ -1031,6 +1102,10 @@ class uobject
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
+		(* add uobjrtl c source files to the list of c sources *)
+		json_node_uberspark_uobj_var.f_sources.f_c_files <- !l_uobjrtl_sources_c_files @ 
+			json_node_uberspark_uobj_var.f_sources.f_c_files;
+			
 		(* add all the autogenerated C source files to the list of c sources *)
 		json_node_uberspark_uobj_var.f_sources.f_c_files <-  [ 
 			Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename;		
@@ -1110,6 +1185,14 @@ class uobject
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobj slt manifest!";
 				(rval)
 		end else
+
+		(* parse uobj uobjrtl manifests *)
+		let rval = (self#parse_uobjrtl_manifests ()) in	
+		if (rval == false) then	begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse uobjrtl manifests!";
+				(rval)
+		end else
+
 
 		let dummy=0 in begin
 		(* add default uobj sections *)

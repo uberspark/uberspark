@@ -49,6 +49,11 @@ val namespace_uobjcoll_binary_image_filename : string
 (* legacy *)
 val namespace_legacy : string
 
+(* uobjrtl *)
+val namespace_uobjrtl : string
+val namespace_uobjrtl_mf_node_type_tag : string
+
+
 (* uobjslt *)
 val namespace_uobjslt : string
 val namespace_uobjslt_intrauobjcoll_callees_src_filename : string

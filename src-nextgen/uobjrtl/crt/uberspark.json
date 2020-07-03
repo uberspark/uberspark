@@ -1,0 +1,98 @@
+/*
+    überSpark uobjrtl manifest -- crt (c runtime memory and string functionality)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+	/* manifest header */
+	"uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-uobjrtl" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+    /* uobjrtl node */
+    "uberspark-uobjrtl" : {
+
+        "namespace" : "uberspark/uobjrtl/crt",
+		"platform" : "generic",
+		"arch" : "generic",
+        "cpu" : "generic",
+
+        "modules-spec" : [
+            {
+                "module-path" : "src/memcmp.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__memcmp" }
+                    ]
+            },
+  
+            {
+                "module-path" : "src/memcpy.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__memcpy" }
+                    ]
+            },
+            
+            {
+                "module-path" : "src/memmove.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__memmove" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/memset.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__memset" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/strchr.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strchr" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/strcmp.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strcmp" }
+                    ]
+            },
+           
+            {
+                "module-path" : "src/strlen.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strlen" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/strncmp.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strncmp" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/strncpy.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strncpy" }
+                    ]
+            },
+
+            {
+                "module-path" : "src/strnlen.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crt__strnlen" }
+                    ]
+            }
+
+
+        ]
+    }        
+
+}

@@ -1,0 +1,100 @@
+.. include:: /macros.rst
+
+
+.. _contrib-guide-docs-intro:
+
+|uspark| Documentation
+======================
+
+The |uberspark| documentation makes use of Sphinx and Restructured Text (reST) at a high-level.
+We also use Breathe and Doxygen in order to automatically pull in documentation from C and
+Assembly language code (e.g., |uobjrtl|, sentinels etc.).
+
+
+.. note::   The high level documentation build is controlled by ``docs/conf.py``, the Sphinx documentation
+            build configuration file. 
+            See `Sphinx Configuration File <https://www.sphinx-doc.org/en/master/usage/configuration.html>`_
+
+
+
+.. _contrib-guide-docs-uobjrtl:
+
+|uobjrtlcaps| Functions
+-----------------------
+
+Every |uobjrtl| function definition must have a special block comment just before
+the function definition which describes certain important elements of the function. 
+This is parsed by Breathe and Doxygen in order to bring in relevant function documentation automatically. 
+
+As an example let us consider the function :cpp:func:`uberspark_uobjrtl_crt__memcpy` and its
+block comment just before its definition:
+
+.. code-block:: c
+   
+    /** 
+    * @brief Copy block of memory
+    * 
+    * @param[out] dst Pointer to the destination memory block where the content is to be copied, type-casted to a pointer of type void*
+    * @param[in] src Pointer to the source of data to be copied, type-casted to a pointer of type const void*
+    * @param[in] n Number of bytes to copy
+    * 
+    * @retval dst is returned
+    *  
+    * @details_begin 
+    * Copies the values of ``n`` bytes from the location pointed to by ``src`` directly to the memory block pointed to 
+    * by ``dst``. The underlying type of the objects pointed to by both the source and destination pointers are irrelevant for 
+    * this function; The result is a binary copy of the data.
+    * @details_end
+    *
+    *  @uobjrtl_namespace{uberspark/uobjrtl/crt}
+    * 
+    * @headers_begin 
+    * #include <uberspark/uobjrtl/crt/include/string.h>
+    * @headers_end
+    * 
+    * @comments_begin
+    * The size of the blocks pointed to by both the ``dst`` and ``src`` parameters, shall be at least ``n`` bytes, and should not 
+    * overlap. The function does not check for any terminating null character in ``src`` - it always copies exactly ``n`` bytes.
+    * 
+    * .. note:: Functional correctness specified
+    * @comments_end
+    * 
+    * 
+    */
+
+
+We now dicuss the Doxygen tags as used in the above block comment definition. They fall into two groups: required and
+optional tags
+
+The required Doxygen tags and their usage are as follows:
+
+*   ``@brief`` : Includes a short description of the function
+*   ``@param`` : The function positional parameter names and description. The directions of the parameters are 
+    specified as ``[in]``, ``[out]`` or ``[in,out]`` to denote incoming, outgoing or incoming and outgoing respectively.
+
+    .. note::   Each positional paramter is described using a separate ``@param`` tag
+
+*   ``@retval`` : The return value and its description. The first word is the return value (e.g., a positional parameter
+    or integer) and the remainder is the description
+
+    .. note::   If the function returns a scalar then you can use ``@returns`` instead followed by a
+                string description
+
+*   ``@uobjrtl_namespace{<namespace>}`` : The namespace for the |uobjrtl|
+
+    .. seealso::  :ref:`contrib-guide-uobjrtl-nsdirorg`
+ 
+*   ``@headers_begin .. @headers_end`` : This tag pair is used to list the header(s) that need to be included to 
+    bring in this function declaration into scope.
+
+
+The following are the optional Doxygen tags within the block comment definition:
+
+*   ``@details_begin ..  @details_end`` : This tag pair is used to add extra details towards the function 
+    description.
+
+*   ``@comments_begin ..  @comments_end`` : This tag pair is used to add any extra comments or remarks related to
+    the function. 
+        
+.. note::   The text within the aforementioned optional Doxygen tags can use Sphinx/reST syntax.
+

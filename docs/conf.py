@@ -36,12 +36,53 @@ release = 'Version: 6.0.0; Release Series: "Nexus Prime"'
 
 extensions = [
     'sphinx.ext.autosectionlabel',
-    'sphinxjsondomain'
+    'sphinxjsondomain',
+    'breathe'
 ]
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 4
 
+breathe_order_parameters_first = True
 
+breathe_implementation_filename_extensions = ['.c']
+breathe_projects = { "uobjrtl-crt": "_build/breathe/doxygen/uobjrtl-crt/xml/",
+                    "uobjrtl-crypto": "_build/breathe/doxygen/uobjrtl-crypto/xml/" }
+breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' details_end="\endverbatim ^^"'
+                                                  ' headers_begin="\par Headers(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' headers_end="\endverbatim ^^"'
+                                                  ' comments_begin="\par Comment(s) ^^ \\verbatim embed:rst:leading-asterisk ^^"'
+                                                  ' comments_end="\endverbatim ^^"'
+                                                  ' uobjrtl_namespace{1}="\par üobjrtl Namespace ^^ <em> \\1 </em> ^^"'
+                                                ),
+                                   'EXTRACT_ALL' : 'YES'
+                                 }
+breathe_projects_source = {
+     "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", 
+                                                      "src/memcpy.c",
+                                                      "src/memmove.c",
+                                                      "src/memset.c",
+                                                      "src/strchr.c",
+                                                      "src/strcmp.c",
+                                                      "src/strlen.c",
+                                                      "src/strncmp.c",
+                                                      "src/strncpy.c",
+                                                      "src/strnlen.c",
+                                                      "include/string.h",
+                                                      "include/stdint.h"] ),
+
+     "uobjrtl-crypto" : ( "../src-nextgen/uobjrtl/crypto", ["src/ciphers/aes/aes.c", 
+                                                      "src/ciphers/aes/aes_cbc.c",
+                                                      "src/ciphers/aes/aes_tab.c",
+                                                      "src/hashes/sha1/sha1.c",
+                                                      "src/mac/hmacsha1/hmacsha1.c",
+                                                      "include/basedefs.h",
+                                                      "include/ciphers/aes/aes.h",
+                                                      "include/hashes/sha1/sha1.h",
+                                                      "include/mac/hmacsha1/hmacsha1.h"
+                                                        ] )
+
+     }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
