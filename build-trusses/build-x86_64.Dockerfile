@@ -23,6 +23,9 @@ WORKDIR "/home/docker"
 # install git
 RUN sudo apk add git
 
+# install tzdata
+RUN sudo apk add tzdata
+
 # install ocaml compiler and related packages
 RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     eval $(opam env) && \
