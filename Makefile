@@ -46,7 +46,7 @@ export SUDO := sudo
 ###### helper functions
 
 define docker_run
-	docker run --rm -i \
+	docker run --rm \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
@@ -55,6 +55,16 @@ define docker_run
 	find  -type f  -exec touch {} + 
 endef
 
+
+define docker_run_interactive
+	docker run --rm -i \
+		-e D_CMD="$(1)" \
+		-e D_CMDARGS="$(2)" \
+		-e MAKE="make" \
+		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
+		-t hypcode/uberspark-build-x86_64 
+	find  -type f  -exec touch {} + 
+endef
 
 
 
@@ -181,7 +191,7 @@ install: check_wslrootdir build_bootstrap
 ###### (debug) shell target
 .PHONY: dbgshell
 dbgshell: generate_buildtruss
-	$(call docker_run,/bin/bash,)
+	$(call docker_run_interactive,/bin/bash,)
 
 
 ###### cleanup targets
