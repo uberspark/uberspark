@@ -1,0 +1,13 @@
+name: CI-Build
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build:
+    # Job name is Build
+    name: Build
+    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: make clean
+        run: make clean
