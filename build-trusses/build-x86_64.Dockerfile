@@ -74,10 +74,15 @@ RUN sudo pip3 install breathe==4.18.1
 WORKDIR "/home/docker/uberspark/build-trusses"
 
 
+#CMD opam switch 4.09.0+flambda && \
+#    eval $(opam env) && \
+#    find  -type f  -exec touch {} + &&\
+#    ${D_CMD} ${D_CMDARGS}
+
 CMD opam switch 4.09.0+flambda && \
     eval $(opam env) && \
-    find  -type f  -exec touch {} + &&\
     ${D_CMD} ${D_CMDARGS}
+
 
 # for debugging only
 #ENTRYPOINT [ "/bin/bash"]
