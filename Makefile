@@ -52,7 +52,6 @@ define docker_run
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
 		-t hypcode/uberspark-build-x86_64 
-	#find  -type f  -exec touch {} + 
 endef
 
 
@@ -63,7 +62,6 @@ define docker_run_interactive
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
 		-t hypcode/uberspark-build-x86_64 
-	#find  -type f  -exec touch {} + 
 endef
 
 
