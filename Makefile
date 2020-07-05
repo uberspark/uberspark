@@ -6,7 +6,7 @@
 ###### paths
 
 ###### configuration variables that are inputs to the top-level build process
-ROOT_DIR ?= ~
+ROOT_DIR ?= ${HOME}
 export USPARK_INSTALL_BINDIR := /usr/bin
 export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
 export USPARK_INSTALL_CONFIGFILENAME := uberspark.json
