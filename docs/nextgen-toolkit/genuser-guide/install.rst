@@ -35,6 +35,12 @@ documentation, build the toolkit binaries, and additionally build the
 	  issuing the command ``make`` as above.
 
 
+.. note:: If you get a make warnings of the form 
+          ``make: warning: Clock skew detected. Your build may be incomplete``, you may
+          have to restart your docker daemon to ensure that time-clocks are synced between
+          the host and the container. The build should still succeed even with this warning.
+          
+
 
 Building |uspark| Documentation in Other Formats
 ------------------------------------------------
