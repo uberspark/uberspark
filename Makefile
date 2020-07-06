@@ -47,22 +47,20 @@ export SUDO := sudo
 
 define docker_run
 	docker run --rm \
-		--privileged \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
-		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
+		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark:rw \
 		-t hypcode/uberspark-build-x86_64 
 endef
 
 
 define docker_run_interactive
 	docker run --rm -i \
-		--privileged \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
-		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark \
+		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark:rw \
 		-t hypcode/uberspark-build-x86_64 
 endef
 
