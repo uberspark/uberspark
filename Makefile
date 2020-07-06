@@ -126,7 +126,7 @@ frontend: build_bootstrap
 check_wslrootdir:	
 ifeq "$(findstring Microsoft, $(SYS_PROC_VERSION))" "Microsoft"
 	@echo "Windows Subsystem for Linux (WSL) environment detected"
-ifeq "$(ROOT_DIR)" "~"
+ifeq "$(ROOT_DIR)" "${HOME}"
 	@echo "Error: ROOT_DIR needs to be specified and has to point to a NTFS path. See documentation!"
 	exit 1
 endif
