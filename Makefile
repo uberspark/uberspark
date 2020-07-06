@@ -47,6 +47,7 @@ export SUDO := sudo
 
 define docker_run
 	docker run --rm \
+		--privileged \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
@@ -57,6 +58,7 @@ endef
 
 define docker_run_interactive
 	docker run --rm -i \
+		--privileged \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
