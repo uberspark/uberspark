@@ -6,6 +6,9 @@ ENV D_CMD=make
 ENV D_CMDARGS=all
 ENV OPAMYES 1
 
+# drop to root
+USER root
+
 RUN sudo apk update &&\
     sudo apk upgrade &&\
     sudo apk add m4 &&\
