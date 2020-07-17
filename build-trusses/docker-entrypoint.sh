@@ -29,7 +29,8 @@ if [ "$(id -u)" = "0" ]; then
     #    usermod -aG docker uberspark
     #fi
 
-    gosu uberspark /docker-entrypoint.sh $@
+    #gosu uberspark /docker-entrypoint.sh $@
+    sudo -u uberspark /docker-entrypoint.sh $@
 else
     uname=`id -u -n`
     echo "NON-ROOT; username: $uname"

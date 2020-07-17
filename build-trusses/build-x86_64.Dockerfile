@@ -31,15 +31,15 @@ RUN adduser -S uberspark &&\
     sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
 # add gosu
-RUN apk add vim && \
-    apk add wget && \
-    set -x && \
-    apk add --no-cache --virtual .gosu-deps dpkg gnupg openssl && \
-    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
-    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" && \
-    chmod +x /usr/local/bin/gosu && \
-    gosu nobody true && \
-    apk del .gosu-deps
+#RUN apk add vim && \
+#    apk add wget && \
+#    set -x && \
+#    apk add --no-cache --virtual .gosu-deps dpkg gnupg openssl && \
+#    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
+#    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" && \
+#    chmod +x /usr/local/bin/gosu && \
+#    gosu nobody true && \
+#    apk del .gosu-deps
 
 # setup entry point script that switches user uid/gid to match host
 COPY docker-entrypoint.sh /docker-entrypoint.sh
