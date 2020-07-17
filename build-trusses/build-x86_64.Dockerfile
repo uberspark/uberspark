@@ -5,81 +5,52 @@ MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 ENV D_CMD=make
 ENV D_CMDARGS=all
 ENV OPAMYES 1
+ENV D_UID=1000
+ENV D_GID=1000
+
+# build time arguments
+ARG GOSU_VERSION=1.10
+
+######
+# build commands
+######
 
 # drop to root
 USER root
 
-RUN sudo apk update &&\
-    sudo apk upgrade &&\
-    sudo apk add m4 &&\
-    sudo adduser -S docker &&\ 
-    sudo touch /etc/sudoers.d/docker &&\
-    sudo sh -c "echo 'docker ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker" &&\
-    sudo chmod 440 /etc/sudoers.d/docker &&\
-    sudo chown root:root /etc/sudoers.d/docker &&\
-    sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
+# update apk
+RUN apk update &&\
+    apk upgrade
 
-# Switch to USER docker (from USER opam), currently commented out due to UID conflicts with apline distros. Creating permissions issues.
-# USER docker 
-WORKDIR "/home/docker"
+# add user uberspark, we will adjust uid and gid via entrypoint.sh
+RUN adduser -S uberspark &&\ 
+    touch /etc/sudoers.d/uberspark &&\
+    sh -c "echo 'uberspark ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/uberspark" &&\
+    chmod 440 /etc/sudoers.d/uberspark &&\
+    chown root:root /etc/sudoers.d/uberspark &&\
+    sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
-# install git
-RUN sudo apk add git
+# add gosu
+RUN apk add vim && \
+    apk add wget && \
+    set -x && \
+    apk add --no-cache --virtual .gosu-deps dpkg gnupg openssl && \
+    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
+    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" && \
+    chmod +x /usr/local/bin/gosu && \
+    gosu nobody true && \
+    apk del .gosu-deps
 
-# install ocaml compiler and related packages
-RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
-    eval $(opam env) && \
-    opam install -y depext &&\
-    opam install -y depext &&\
-    opam install -y ocamlfind && \
-    opam install -y yojson && \
-    opam install -y cmdliner.1.0.4 && \
-    opam install -y astring.0.8.3 && \
-    opam install -y dune.1.11.3 && \
-    opam install -y cppo.1.6.6 && \
-    opam install -y fileutils.0.6.1 
-
-# install python 3
-RUN sudo apk add python3 &&\
-    sudo apk add py3-pip &&\
-    sudo pip3 install --upgrade pip
-
-# install sphinx documentation extensions
-RUN sudo pip3 install sphinx-jsondomain==0.0.3
-
-# install sphinx documentation generator
-RUN sudo pip3 install -U sphinx==3.0.3
-
-# install general development tools
-RUN sudo apk add cmake &&\
-    sudo apk add flex &&\
-    sudo apk add bison 
-
-
-# install doxygen
-WORKDIR "/home/opam"
-RUN sudo wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
-RUN sudo tar -xzf ./doxygen-1.8.18.src.tar.gz 
-WORKDIR "/home/opam/doxygen-1.8.18"
-RUN sudo mkdir build
-WORKDIR "/home/opam/doxygen-1.8.18/build"
-RUN sudo cmake -G "Unix Makefiles" .. &&\
-    sudo make &&\
-    sudo make install 
-
-
-# install breathe
-RUN sudo pip3 install breathe==4.18.1
-
-
+# setup entry point script that switches user uid/gid to match host
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # switch to working directory within container
-WORKDIR "/home/docker/uberspark/build-trusses"
+WORKDIR "/home/uberspark/uberspark/build-trusses"
 
-CMD opam switch 4.09.0+flambda && \
-    eval $(opam env) && \
-    ${D_CMD} ${D_CMDARGS}
+# invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
+CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
 
-
+#CMD /bin/sh
 # for debugging only
 #ENTRYPOINT [ "/bin/bash"]

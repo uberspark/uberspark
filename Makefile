@@ -50,7 +50,7 @@ define docker_run
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
-		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark:rw \
+		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark:rw \
 		-t hypcode/uberspark-build-x86_64 
 endef
 
@@ -60,7 +60,7 @@ define docker_run_interactive
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
 		-e MAKE="make" \
-		-v $(USPARK_SRCROOTDIR):/home/docker/uberspark:rw \
+		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark:rw \
 		-t hypcode/uberspark-build-x86_64 
 endef
 
