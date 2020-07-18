@@ -22,13 +22,16 @@ USER root
 RUN apk update &&\
     apk upgrade
 
+# add shadow package to obtain usermod and groupmod commands
+RUN apk add shadow
+
 # add user uberspark, we will adjust uid and gid via entrypoint.sh
-RUN adduser -S uberspark &&\ 
-    touch /etc/sudoers.d/uberspark &&\
-    sh -c "echo 'uberspark ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/uberspark" &&\
-    chmod 440 /etc/sudoers.d/uberspark &&\
-    chown root:root /etc/sudoers.d/uberspark &&\
-    sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
+#RUN adduser -S uberspark &&\ 
+#    touch /etc/sudoers.d/uberspark &&\
+#    sh -c "echo 'uberspark ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/uberspark" &&\
+#    chmod 440 /etc/sudoers.d/uberspark &&\
+#    chown root:root /etc/sudoers.d/uberspark &&\
+#    sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
 
 # add gosu
 #RUN apk add vim && \

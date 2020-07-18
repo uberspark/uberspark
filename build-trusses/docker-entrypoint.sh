@@ -10,16 +10,29 @@ if [ "$(id -u)" = "0" ]; then
     echo "parameters: $@"
 
     # get uid to set
-    echo "UID to set= $1"
+    uid=$1
+    echo "UID to set= $uid"
   
     # get gid to set
-    echo "GID to set= $2"
+    gid=$2
+    echo "GID to set= $gid"
 
     # revise parameters by removing the uid and gid from command line
     shift 2
 
     echo "revised parameters: $@"
 
+    # create new user uberspark with group uberspark
+    adduser -S uberspark 
+ 
+    # creatr new group uberspark
+    addgroup uberspark
+ 
+    # change uberspark group gid to host GID
+    groupmod -o -g $gid uberspark
+
+    # change uberspark user uid to host UID
+    usermod -o -u $uid -g $gid uberspark
 
     # if they don't match, adjust
     #if [ ! -z "$SOCK_DOCKER_GID" -a "$SOCK_DOCKER_GID" != "$CUR_DOCKER_GID" ]; then
