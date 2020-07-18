@@ -2,7 +2,8 @@
 
 # author: Amit Vasudevan <amitvasudevan@acm.org>
 
-set -x
+# turn off command echo
+set +x
 
 # if we are running as root then drop to user uberspark
 if [ "$(id -u)" = "0" ]; then
