@@ -49,6 +49,8 @@ define docker_run
 	docker run --rm \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
+		-e D_UID="$(3)" \
+		-e D_GID="$(4)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
 		-t hypcode/uberspark-build-x86_64 
@@ -59,6 +61,8 @@ define docker_run_interactive
 	docker run --rm -i \
 		-e D_CMD="$(1)" \
 		-e D_CMDARGS="$(2)" \
+		-e D_UID="$(3)" \
+		-e D_GID="$(4)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
 		-t hypcode/uberspark-build-x86_64 
@@ -108,11 +112,11 @@ generate_buildtruss: buildcontainer-x86_64
 
 .PHONY: docs_html
 docs_html: build_bootstrap
-	$(call docker_run,make -f build-docs.mk, -w docs_html)
+	$(call docker_run,make -f build-docs.mk, -w docs_html, $(shell id -u), $(shell id -g))
 
 .PHONY: docs_pdf
 docs_pdf: build_bootstrap
-	$(call docker_run,make -f build-docs.mk, -w docs_pdf)
+	$(call docker_run,make -f build-docs.mk, -w docs_pdf, $(shell id -u), $(shell id -g))
 
 
 ###### libraries targets
@@ -120,13 +124,13 @@ docs_pdf: build_bootstrap
 ### build libraries
 .PHONY: libs
 libs: build_bootstrap
-	$(call docker_run,make -f build-libs.mk, -w all)
+	$(call docker_run,make -f build-libs.mk, -w all, $(shell id -u), $(shell id -g))
 
 
 ###### frontend build targets
 .PHONY: frontend
 frontend: build_bootstrap
-	$(call docker_run,make -f build-frontend.mk, -w all)
+	$(call docker_run,make -f build-frontend.mk, -w all, $(shell id -u), $(shell id -g))
 
 
 ###### check to see if ROOT_DIR is specified when we are operating under WSL 
@@ -148,7 +152,7 @@ endif
 .PHONY: install
 install: check_wslrootdir build_bootstrap
 	@echo $(USPARK_INSTALLPREPDIR_CONFIGFILENAME)
-	$(call docker_run,make -f install.mk, -w all)
+	$(call docker_run,make -f install.mk, -w all, $(shell id -u), $(shell id -g))
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
 		echo "$(USPARK_NAMESPACEROOTDIR) already exists. "; \
@@ -189,16 +193,16 @@ install: check_wslrootdir build_bootstrap
 ###### (debug) shell target
 .PHONY: dbgshell
 dbgshell: generate_buildtruss
-	$(call docker_run_interactive,/bin/bash,)
+	$(call docker_run_interactive,/bin/bash,, $(shell id -u), $(shell id -g))
 
 
 ###### cleanup targets
 .PHONY: clean
 clean: generate_buildtruss
-	$(call docker_run,make -f sdefpp.mk, -w clean)
-	$(call docker_run,make -f build-docs.mk, -w docs_clean)
-	$(call docker_run,make -f build-frontend.mk, -w clean)
-	$(call docker_run,make -f install.mk, -w clean)
+	$(call docker_run,make -f sdefpp.mk, -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-docs.mk, -w docs_clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-frontend.mk, -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f install.mk, -w clean, $(shell id -u), $(shell id -g))
 
 
 
