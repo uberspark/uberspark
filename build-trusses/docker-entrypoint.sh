@@ -4,23 +4,24 @@
 
 set -x
 
+# if we are running as root then drop to user uberspark
 if [ "$(id -u)" = "0" ]; then
-    uname=`id -u -n`
-    echo "ROOT; username: $uname"
-    echo "parameters: $@"
-
-    # get uid to set
+    #grab host uid and gid passed to us via command line parameters
     uid=$1
-    echo "UID to set= $uid"
-  
-    # get gid to set
     gid=$2
-    echo "GID to set= $gid"
+
+    #debug
+        #uname=`id -u -n`
+        #echo "ROOT; username: $uname"
+        #echo "parameters: $@"
+        #echo "UID to set= $uid"
+        #echo "GID to set= $gid"
 
     # revise parameters by removing the uid and gid from command line
     shift 2
 
-    echo "revised parameters: $@"
+    #debug
+        #echo "revised parameters: $@"
 
     # create new user uberspark with group uberspark
     adduser -S uberspark 
@@ -34,22 +35,18 @@ if [ "$(id -u)" = "0" ]; then
     # change uberspark user uid to host UID
     usermod -o -u $uid -g $gid uberspark
 
-    # if they don't match, adjust
-    #if [ ! -z "$SOCK_DOCKER_GID" -a "$SOCK_DOCKER_GID" != "$CUR_DOCKER_GID" ]; then
-    #    groupmod -g ${SOCK_DOCKER_GID} -o docker
-    #fi
-    #if ! groups uberspark | grep -q docker; then
-    #    usermod -aG docker uberspark
-    #fi
-
-    #gosu uberspark /docker-entrypoint.sh $@
+    # drop to user uberspark and execute this script with the remaining parameters
     sudo -u uberspark /docker-entrypoint.sh $@
+
 else
-    uname=`id -u -n`
-    echo "NON-ROOT; username: $uname"
-    echo "parameters: $@"
-    touch sample.txt
-    #exec "$@"
+    # now we are run as user uberspark, so execute the command
+    #debug
+        #uname=`id -u -n`
+        #echo "NON-ROOT; username: $uname"
+        #echo "parameters: $@"
+
+    # execute the command and actual parameters as user uberspark
+    exec "$@"
 fi
 
 
