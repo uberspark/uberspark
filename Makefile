@@ -85,11 +85,11 @@ build_bootstrap: generate_buildtruss build_sdefpp
 ### shared definitions pre-processing tool
 .PHONY: build_sdefpp
 build_sdefpp: generate_buildtruss
-	$(call docker_run,make -f sdefpp.mk, -w all)
+	$(call docker_run,make -f sdefpp.mk, -w all, $(shell id -u), $(shell id -g))
 
 .PHONY: dbgrun_sdefpp
 dbgrun_sdefpp: build_sdefpp
-	$(call docker_run,make -f sdefpp.mk, -w dbgrun)
+	$(call docker_run,make -f sdefpp.mk, -w dbgrun, $(shell id -u), $(shell id -g))
 
 
 

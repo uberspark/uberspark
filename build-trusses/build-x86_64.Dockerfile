@@ -22,6 +22,70 @@ USER root
 RUN apk update &&\
     apk upgrade
 
+# remove default opam user from image so we don't conflict on uid-->username mappings
+RUN deluser opam
+
+# create user uberspark and group uberspark so we have access to /home/uberspark
+RUN addgroup -S uberspark &&\
+    adduser -S uberspark -G uberspark
+
+# install general development tools
+RUN apk add m4 &&\
+    apk add git &&\
+    apk add cmake &&\
+    apk add flex &&\
+    apk add bison 
+
+# install python 3
+RUN apk add python3 &&\
+    apk add py3-pip &&\
+    pip3 install --upgrade pip
+
+# install sphinx documentation extensions
+RUN pip3 install sphinx-jsondomain==0.0.3
+
+# install sphinx documentation generator
+RUN pip3 install -U sphinx==3.0.3
+
+# install breathe
+RUN pip3 install breathe==4.18.1
+
+# install doxygen
+WORKDIR "/home/uberspark"
+RUN wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
+RUN tar -xzf ./doxygen-1.8.18.src.tar.gz 
+WORKDIR "/home/uberspark/doxygen-1.8.18"
+RUN  mkdir build
+WORKDIR "/home/uberspark/doxygen-1.8.18/build"
+RUN cmake -G "Unix Makefiles" .. &&\
+    make &&\
+    make install 
+
+
+# switch user to uberspark working directory to /home/uberspark
+USER uberspark
+WORKDIR "/home/uberspark"
+
+# install ocaml compiler and related packages
+RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
+    eval $(opam env) && \
+    opam install -y depext &&\
+    opam install -y depext &&\
+    opam install -y ocamlfind && \
+    opam install -y yojson && \
+    opam install -y cmdliner.1.0.4 && \
+    opam install -y astring.0.8.3 && \
+    opam install -y dune.1.11.3 && \
+    opam install -y cppo.1.6.6 && \
+    opam install -y fileutils.0.6.1 
+
+# drop back to root
+USER root
+
+# change permissions of /home/uberspark so everyone can access it
+WORKDIR "/home/uberspark"
+RUN chmod ugo+rwx -R .
+
 # add shadow package to obtain usermod and groupmod commands
 RUN apk add shadow
 
