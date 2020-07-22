@@ -27,9 +27,8 @@ jobs:
         - name: make clean
           run: make clean
 
-        # do a make
-        #- name: make
-        #  run: make
+        - name: make 
+          run: make
 
         - name: debug
           run: ls -lR 
