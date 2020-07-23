@@ -5,23 +5,66 @@ MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 ENV D_CMD=make
 ENV D_CMDARGS=all
 ENV OPAMYES 1
+ENV D_UID=1000
+ENV D_GID=1000
 
-RUN sudo apk update &&\
-    sudo apk upgrade &&\
-    sudo apk add m4 &&\
-    sudo adduser -S docker &&\ 
-    sudo touch /etc/sudoers.d/docker &&\
-    sudo sh -c "echo 'docker ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker" &&\
-    sudo chmod 440 /etc/sudoers.d/docker &&\
-    sudo chown root:root /etc/sudoers.d/docker &&\
-    sudo sed -i.bak 's/^Defaults.*requiretty//g' /etc/sudoers
+# build time arguments
+ARG GOSU_VERSION=1.10
 
-# Switch to USER docker (from USER opam), currently commented out due to UID conflicts with apline distros. Creating permissions issues.
-# USER docker 
-WORKDIR "/home/docker"
+######
+# build commands
+######
 
-# install git
-RUN sudo apk add git
+# drop to root
+USER root
+
+# update apk
+RUN apk update &&\
+    apk upgrade
+
+# remove default opam user from image so we don't conflict on uid-->username mappings
+RUN deluser opam
+
+# create user uberspark and group uberspark so we have access to /home/uberspark
+RUN addgroup -S uberspark &&\
+    adduser -S uberspark -G uberspark
+
+# install general development tools
+RUN apk add m4 &&\
+    apk add git &&\
+    apk add cmake &&\
+    apk add flex &&\
+    apk add bison 
+
+# install python 3
+RUN apk add python3 &&\
+    apk add py3-pip &&\
+    pip3 install --upgrade pip
+
+# install sphinx documentation extensions
+RUN pip3 install sphinx-jsondomain==0.0.3
+
+# install sphinx documentation generator
+RUN pip3 install -U sphinx==3.0.3
+
+# install breathe
+RUN pip3 install breathe==4.18.1
+
+# install doxygen
+WORKDIR "/home/uberspark"
+RUN wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
+RUN tar -xzf ./doxygen-1.8.18.src.tar.gz 
+WORKDIR "/home/uberspark/doxygen-1.8.18"
+RUN  mkdir build
+WORKDIR "/home/uberspark/doxygen-1.8.18/build"
+RUN cmake -G "Unix Makefiles" .. &&\
+    make &&\
+    make install 
+
+
+# switch user to uberspark working directory to /home/uberspark
+USER uberspark
+WORKDIR "/home/uberspark"
 
 # install ocaml compiler and related packages
 RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
@@ -36,48 +79,23 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y cppo.1.6.6 && \
     opam install -y fileutils.0.6.1 
 
-# install python 3
-RUN sudo apk add python3 &&\
-    sudo apk add py3-pip &&\
-    sudo pip3 install --upgrade pip
+# drop back to root
+USER root
 
-# install sphinx documentation extensions
-RUN sudo pip3 install sphinx-jsondomain==0.0.3
+# change permissions of /home/uberspark so everyone can access it
+WORKDIR "/home/uberspark"
+RUN chmod ugo+rwx -R .
 
-# install sphinx documentation generator
-RUN sudo pip3 install -U sphinx==3.0.3
+# add shadow package to obtain usermod and groupmod commands
+RUN apk add shadow
 
-# install general development tools
-RUN sudo apk add cmake &&\
-    sudo apk add flex &&\
-    sudo apk add bison 
-
-
-# install doxygen
-WORKDIR "/home/opam"
-RUN sudo wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
-RUN sudo tar -xzf ./doxygen-1.8.18.src.tar.gz 
-WORKDIR "/home/opam/doxygen-1.8.18"
-RUN sudo mkdir build
-WORKDIR "/home/opam/doxygen-1.8.18/build"
-RUN sudo cmake -G "Unix Makefiles" .. &&\
-    sudo make &&\
-    sudo make install 
-
-
-# install breathe
-RUN sudo pip3 install breathe==4.18.1
-
-
+# setup entry point script that switches user uid/gid to match host
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # switch to working directory within container
-WORKDIR "/home/docker/uberspark/build-trusses"
+WORKDIR "/home/uberspark/uberspark/build-trusses"
 
+# invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
+CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
 
-CMD opam switch 4.09.0+flambda && \
-    eval $(opam env) && \
-    find  -type f  -exec touch {} + &&\
-    ${D_CMD} ${D_CMDARGS}
-
-# for debugging only
-#ENTRYPOINT [ "/bin/bash"]

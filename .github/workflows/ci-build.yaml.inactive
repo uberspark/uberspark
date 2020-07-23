@@ -1,0 +1,34 @@
+name: CI-Build
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build:
+    # Job name is Build
+    name: Build
+    # This job runs on Linux
+    runs-on: ubuntu-latest
+    steps:
+        # checkout the repository
+        - name: Checkout 
+          uses: actions/checkout@v2
+          with:
+             persist-credentials: false
+        
+        - name: debug
+          run: ls -l 
+
+        - name: debug2
+          run: id -u ${USER} 
+
+        - name: debug3
+          run: id -g ${USER} 
+
+        - name: make clean
+          run: make clean
+
+        - name: make 
+          run: make
+
+        - name: debug
+          run: ls -lR 
