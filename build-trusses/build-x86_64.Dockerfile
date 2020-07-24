@@ -52,11 +52,11 @@ RUN pip3 install breathe==4.18.1
 
 # install doxygen
 WORKDIR "/home/uberspark"
-RUN wget http://doxygen.nl/files/doxygen-1.8.18.src.tar.gz 
-RUN tar -xzf ./doxygen-1.8.18.src.tar.gz 
-WORKDIR "/home/uberspark/doxygen-1.8.18"
+RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/archive/Release_1_8_20.tar.gz
+RUN tar -xzf ./doxygen-Release_1_8_20.tar.gz
+WORKDIR "/home/uberspark/doxygen-Release_1_8_20"
 RUN  mkdir build
-WORKDIR "/home/uberspark/doxygen-1.8.18/build"
+WORKDIR "/home/uberspark/doxygen-Release_1_8_20/build"
 RUN cmake -G "Unix Makefiles" .. &&\
     make &&\
     make install 

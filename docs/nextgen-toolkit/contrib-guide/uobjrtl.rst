@@ -233,7 +233,11 @@ Adding a new |uobjrtl|
                                                         "include/stdint.h"] )
         }
 
-
+7.  Use the Python3 tool in ``src-nextgen/tools/docgen/ref_generate.py`` to automatically generate a reference documentation file.
+    (run with ``-h`` for usage help)
+    Once complete, open the generated file and replace ``<REPLACE WITH DESCRIPTION OF THIS UOBJRTL>`` 
+    with a brief description of the library.
+    See ``docs/nextgen-toolkit/reference/uobjrtl/crt.rst`` for a full example.
 
 
 Modifying an existing |uobjrtl|

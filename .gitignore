@@ -6,6 +6,9 @@
 # whitelist the .gitignore
 !.gitignore
 
+# whitelist the docs
+!docs/nextgen-toolkit
+
 # whitelist all directories
 !*/
 
