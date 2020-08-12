@@ -23,6 +23,7 @@
 			"path" : ".",
 		        "params" : [
 			    "-nostdinc",
+			    "-nostdlib",
 			    "-nostartfiles"
 			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
