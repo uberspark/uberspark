@@ -23,8 +23,10 @@
 			"path" : ".",
 		        "params" : [
 			    "-nostdinc",
+			    "-nostdlib",
                  	    "-nostartfiles",
-			    "-mcpu=cortex-a53"
+			    "-mcpu=cortex-a53",
+			    "-ffreestanding"
 			    ],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
