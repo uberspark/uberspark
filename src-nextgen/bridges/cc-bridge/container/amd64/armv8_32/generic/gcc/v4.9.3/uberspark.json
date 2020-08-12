@@ -15,17 +15,21 @@
 		"bridge-hdr":{
 			"btype" : "container",
 			"bname" : "gcc",
-			"execname" : "gcc",
+			"execname" : "arm-linux-gnueabihf-gcc-4.9",
 			"devenv" : "amd64",
 			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v4.9.3",
 			"path" : ".",
-			"params" : [],
+		        "params" : [
+			    "-nostdinc",
+                 	    "-nostartfiles",
+			    "-mcpu=cortex-a53"
+			    ],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
-		"params_prefix_obj" : "-c",
+	"params_prefix_obj" : "-c",
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
         "params_prefix_include" : "-I"

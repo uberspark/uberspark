@@ -15,13 +15,16 @@
 		"bridge-hdr":{
 			"btype" : "container",
 			"bname" : "gnu-ld",
-			"execname" : "ld",
+			"execname" : "arm-linux-gnueabihf-ld",
 			"devenv" : "amd64",
 			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [],
+		        "params" : [
+			    "-nostdinc",
+			    "-nostartfiles"
+			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
