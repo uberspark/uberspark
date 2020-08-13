@@ -31,15 +31,16 @@ Arch
     or software entities called *sentinels*. In principle, |uobjcolls| can also be nested, modulo the 
     platform hardware providing necessary conduits.
 
-
 **Platform Hardware Conduits**
     These are hardware pathways for signaling and data transfer on a given computing platform, 
     such as DMA, inter-processor interrupts,  and mail-boxes.
+
+Hardware Model (HWM)
+    The HWM is a formalized model of various hardware components such as the CPU, memory, I/O devices, and associated hardware-conduit end-points.
+    Every |uobjcoll| is associated with a hardware model, which exposes various hardware interfaces to the |uobjs|.
 
 |b_uobj|/|b_uobjcollcaps| **Public Methods**
     |uobj| public methods are regular function signatures (e.g., ``main()`` but can be restricted to specific caller 
     |uobjs|.
     |uobjcoll| public methods are selected public-methods of the individual |uobjs| that the collection encompasses, but
     which can be restricted to specific caller |uobjcoll| and/or legacy code.
-
-
