@@ -36,7 +36,7 @@ Arch
     such as DMA, inter-processor interrupts,  and mail-boxes.
 
 Hardware Model (HWM)
-    The HWM is a formalized model of various hardware components such as the CPU, memory, I/O devices, and associated hardware-conduit end-points.
+    The HWM is a Transaction Level Model (TLM) of various hardware components such as the CPU, memory, I/O devices, and associated hardware-conduit end-points.
     Every |uobjcoll| is associated with a hardware model, which exposes various hardware interfaces to the |uobjs|.
 
 |b_uobj|/|b_uobjcollcaps| **Public Methods**
