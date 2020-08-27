@@ -34,6 +34,7 @@
 .. |reference-manifest-ref| replace:: :ref:`überSpark Manifest Reference<reference-manifest-intro>` 
 .. |reference-uobjrtl| replace:: *überSpark üobject Runtime Libraries Reference* 
 .. |reference-uobjrtl-ref| replace:: :ref:`überSpark üobject Runtime Libraries Reference<reference-uobjrtl-intro>` 
+.. |reference-hwm-ref| replace:: :ref:`überSpark Hardware Model Reference<reference-hwm-intro>` 
 
 .. |br| raw:: html
 

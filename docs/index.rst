@@ -78,6 +78,7 @@ libraries and |coss|
    nextgen-toolkit/contrib-guide/intro
    nextgen-toolkit/contrib-guide/docs.rst
    nextgen-toolkit/contrib-guide/uobjrtl.rst
+   nextgen-toolkit/contrib-guide/hwm.rst
 
 
 .. toctree::
@@ -86,4 +87,5 @@ libraries and |coss|
 
    nextgen-toolkit/reference/manifest
    nextgen-toolkit/reference/frontend-cli
+   nextgen-toolkit/reference/hwm.rst
    nextgen-toolkit/reference/uobjrtl/intro
