@@ -55,6 +55,7 @@
 #include <uberspark/uobjrtl/crt/include/stdbool.h>
 #include <uberspark/uobjrtl/crt/include/stddef.h>
 #include <uberspark/uobjrtl/crt/include/stdarg.h>
+#include <uberspark/uobjrtl/crt/include/string.h>
 
 
 #include <uberspark/include/basedefs.h>
