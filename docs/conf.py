@@ -57,10 +57,14 @@ breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details 
                                                   ' comments_end="\endverbatim ^^"'
                                                   ' uobjrtl_namespace{1}="\par üobjrtl Namespace ^^ <em> \\1 </em> ^^"'
                                                 ),
+                                   'OPTIMIZE_OUTPUT_FOR_C': 'YES',
                                    'EXTENSION_MAPPING': ('cS=C'),
                                    'FILE_PATTERNS':  'cS',
                                    'EXTRACT_ALL' : 'YES',
                                    'MACRO_EXPANSION': 'YES',
+                                   'EXPAND_ONLY_PREDEF': 'NO', ## expand all macros
+                                #    'GENERATE_HTML': 'YES'  ## just to verify if casm files are being recognized
+                                #    'EXPAND_AS_DEFINED': 'CASM_FUNCDEF \\ CASM_FUNCDEF_FULL \\ CASM_FUNCDECL',
                                  }
 breathe_projects_source = {
      "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", 
@@ -200,6 +204,8 @@ breathe_projects_source = {
                                                     "src/generic/x86_32/intel/vtd_setret.c",
                                                     "src/generic/x86_32/intel/vtd_writereg.c",
                                                     "include/generic/x86_32/intel/hw.h",
+                                                    "../../hwm/include/arch/x86/generic/casm.h",
+                                                    "../crt/include/stdarg.h"
                                                 ] ),
 
      }
