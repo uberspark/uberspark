@@ -52,9 +52,11 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__reloadcs
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] cs_sel
  * 
  * @retval something
  *  

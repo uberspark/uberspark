@@ -364,14 +364,14 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_cpuid.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_cpuid" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_disableintr.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_disable_intr" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__disable_intr" }
                 ]
             },
             
@@ -413,7 +413,7 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_hlt.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_hlt" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__hlt" }
                 ]
             },
             
@@ -441,7 +441,7 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_invvpid.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_invvpid" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__invvpid" }
                 ]
             },
             
@@ -455,21 +455,21 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_loadgdt.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_loadGDT" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__loadGDT" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_loadidt.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_loadIDT" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__loadIDT" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_loadtr.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_loadTR" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__loadTR" }
                 ]
             },
             
@@ -497,7 +497,7 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_pause.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_relax" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__relax" }
                 ]
             },
             
@@ -616,14 +616,14 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_reloadcs.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_reloadcs" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__reloadcs" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_reloaddsregs.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_reloaddsregs" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__reloaddsregs" }
                 ]
             },
             
@@ -658,14 +658,14 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_vmread.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmread" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_vmwrite.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmwrite" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite" }
                 ]
             },
             

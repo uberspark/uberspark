@@ -53,9 +53,12 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] encoding
+ * @param[in] value
  * 
  * @retval something
  *  

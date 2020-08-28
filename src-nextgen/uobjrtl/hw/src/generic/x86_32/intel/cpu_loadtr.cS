@@ -52,9 +52,11 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__loadTR
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] tr_selector
  * 
  * @retval something
  *  

@@ -57,9 +57,13 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] dest
+ * @param[in] src
+ * @param[in] size
  * 
  * @retval something
  *  

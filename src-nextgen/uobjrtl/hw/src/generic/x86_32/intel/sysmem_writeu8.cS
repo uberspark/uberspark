@@ -56,9 +56,12 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu8
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] addr
+ * @param[in] val
  * 
  * @retval something
  *  

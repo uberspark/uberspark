@@ -340,17 +340,17 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__bsrl
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_cpuid
-------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid
+-------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_cpuid
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_disable_intr
--------------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__disable_intr
+--------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_disable_intr
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__disable_intr
    :project: uobjrtl-hw
 
 
@@ -389,10 +389,10 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__gettssbase
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_hlt
-----------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__hlt
+-----------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_hlt
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__hlt
    :project: uobjrtl-hw
 
 
@@ -417,10 +417,10 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_invept
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_invvpid
---------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__invvpid
+---------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_invvpid
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__invvpid
    :project: uobjrtl-hw
 
 
@@ -431,24 +431,24 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__inw
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_loadGDT
---------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__loadGDT
+---------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_loadGDT
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__loadGDT
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_loadIDT
---------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__loadIDT
+---------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_loadIDT
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__loadIDT
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_loadTR
--------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__loadTR
+--------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_loadTR
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__loadTR
    :project: uobjrtl-hw
 
 
@@ -473,10 +473,10 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__outw
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_relax
-------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__relax
+-------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_relax
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__relax
    :project: uobjrtl-hw
 
 
@@ -592,17 +592,17 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__read_tr_sel
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_reloadcs
----------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__reloadcs
+----------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_reloadcs
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__reloadcs
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_reloaddsregs
--------------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__reloaddsregs
+--------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_reloaddsregs
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__reloaddsregs
    :project: uobjrtl-hw
 
 
@@ -634,17 +634,17 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmptrld
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmread
---------------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread
+---------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmread
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmwrite
----------------------------------------------------------
+uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite
+----------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel_x86vmx_vmwrite
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite
    :project: uobjrtl-hw
 
 

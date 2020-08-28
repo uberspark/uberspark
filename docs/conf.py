@@ -61,10 +61,13 @@ breathe_doxygen_config_options = {'ALIASES':    ( ' details_begin="\par Details 
                                    'EXTENSION_MAPPING': ('cS=C'),
                                    'FILE_PATTERNS':  'cS',
                                    'EXTRACT_ALL' : 'YES',
+
+                                   # macro expansion configs
                                    'MACRO_EXPANSION': 'YES',
-                                   'EXPAND_ONLY_PREDEF': 'NO', ## expand all macros
-                                #    'GENERATE_HTML': 'YES'  ## just to verify if casm files are being recognized
-                                #    'EXPAND_AS_DEFINED': 'CASM_FUNCDEF \\ CASM_FUNCDEF_FULL \\ CASM_FUNCDECL',
+                                   'EXPAND_ONLY_PREDEF': 'YES',
+                                   'EXPAND_AS_DEFINED': 'CASM_FUNCDEF CASM_FUNCDEF_FULL CASM_FUNCDECL',
+                                   'SEARCH_INCLUDES': 'YES',
+                                   'INCLUDE_PATH': '/home/uberspark/uberspark/docs/_build/',
                                  }
 breathe_projects_source = {
      "uobjrtl-crt" : ( "../src-nextgen/uobjrtl/crt", ["src/memcmp.c", 
@@ -204,8 +207,6 @@ breathe_projects_source = {
                                                     "src/generic/x86_32/intel/vtd_setret.c",
                                                     "src/generic/x86_32/intel/vtd_writereg.c",
                                                     "include/generic/x86_32/intel/hw.h",
-                                                    "../../hwm/include/arch/x86/generic/casm.h",
-                                                    "../crt/include/stdarg.h"
                                                 ] ),
 
      }
@@ -216,7 +217,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_themes', '_temp']
+exclude_patterns = ['_themes', '_temp', '_build/uberspark']
 
 
 # -- Options for HTML output -------------------------------------------------

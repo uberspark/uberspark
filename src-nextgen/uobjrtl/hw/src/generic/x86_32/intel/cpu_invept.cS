@@ -56,9 +56,14 @@
 //		Invalidate Translations Derived from EPT
 //__attribute__((naked)) void __vmx_invept(uint64_t invalidation_type, uint64_t eptp)
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_invept
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] invalidation_type_lo
+ * @param[in] invalidation_type_hi
+ * @param[in] eptp_lo
+ * @param[in] eptp_hi
  * 
  * @retval something
  *  

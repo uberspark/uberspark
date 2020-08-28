@@ -55,9 +55,14 @@
 // VMX instruction INVVPID
 //////
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__invvpid
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] invalidation_type
+ * @param[in] vpid
+ * @param[in] linear_addr_lo
+ * @param[in] linear_addr_hi
  * 
  * @retval something
  *  

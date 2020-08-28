@@ -52,9 +52,13 @@
 
 
 /** 
- * @brief documentation placeholder
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__xsetbv
  * 
- * @param[in] var1
+ * @brief CASM documentation placeholder
+ * 
+ * @param[in] xcr_reg
+ * @param[in] value_lo
+ * @param[in] value_hi
  * 
  * @retval something
  *  
