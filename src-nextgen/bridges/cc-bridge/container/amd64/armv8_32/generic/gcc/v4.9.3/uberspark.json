@@ -21,20 +21,21 @@
 			"cpu" : "generic",
 			"version" : "v4.9.3",
 			"path" : ".",
-		        "params" : [
+		    "params" : [
 			    "-nostdinc",
 			    "-nostdlib",
-                 	    "-nostartfiles",
-			    "-mcpu=cortex-a53",
-			    "-ffreestanding"
-			    ],
+           	    "-nostartfiles",
+				"-ffreestanding",
+				"-mcpu=cortex-a53"
+			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
 	"params_prefix_obj" : "-c",
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
-        "params_prefix_include" : "-I"
+		"params_prefix_include" : "-I",
+		"params_cclib" : "/usr/lib/gcc-cross/arm-linux-gnueabihf/4.9/libgcc.a"
 	}
 
 }
