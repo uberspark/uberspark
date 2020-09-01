@@ -204,8 +204,9 @@ let invoke
 	(lscript_filename : string)
 	(output_filename : string)
 	(o_file_list : string list)
-	(lib_file_list : string list)
 	(lib_dir_list : string list)
+	(lib_file_list : string list)
+	(lib_abs_list : string list)
 	(context_path : string)
 	: bool =
 
@@ -237,6 +238,11 @@ let invoke
 	List.iter (fun lib_file -> 
 		d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lib ^ lib_file;
 	) lib_file_list;
+
+	(* iterate over libraries provided with absolute pathnames *)
+	List.iter (fun lib_abs_filename -> 
+		d_cmd := !d_cmd ^ " " ^ lib_abs_filename;
+	) lib_abs_list;
 
 	(* add output filename *)
 	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ output_filename;
