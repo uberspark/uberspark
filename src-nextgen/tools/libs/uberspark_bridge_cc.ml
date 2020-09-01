@@ -40,6 +40,7 @@ let json_node_uberspark_bridge_cc_var: Uberspark_manifest.Bridge.Cc.json_node_ub
 	params_prefix_asm = "";
 	params_prefix_output = "";
 	params_prefix_include = "";
+	params_cclib = "";
 };;
 
 
