@@ -22,9 +22,6 @@
 			"version" : "v2.26.1",
 			"path" : ".",
 		        "params" : [
-			    "-nostdinc",
-			    "-nostdlib",
-			    "-nostartfiles"
 			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},

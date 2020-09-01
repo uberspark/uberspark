@@ -73,6 +73,7 @@ let run_image
             cmdline := !cmdline @ [ "/bin/sh" ];
             cmdline := !cmdline @ [ "-c" ];
             cmdline := !cmdline @ [ r_d_cmd ];
+            
 
             let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
                     ~stag:"docker" "docker" !cmdline in

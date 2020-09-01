@@ -221,13 +221,16 @@ let invoke
 	) json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.params;
 
 
-	(* add linker script option and filename*)
- 	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lscript ^ " " ^ lscript_filename;
-
 	(* iterate over object file list and include them into linker command line *)
 	List.iter (fun o_filename -> 
 		d_cmd := !d_cmd ^ " " ^ o_filename;
 	) o_file_list;
+
+	(* add linker script option and filename*)
+ 	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lscript ^ " " ^ lscript_filename;
+
+	(* add output filename *)
+	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ output_filename;
 
 	(* iterate over lib dir list and include them into linker command line *)
 	List.iter (fun lib_dir -> 
@@ -244,11 +247,6 @@ let invoke
 		d_cmd := !d_cmd ^ " " ^ lib_abs_filename;
 	) lib_abs_list;
 
-	(* add output filename *)
-	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ output_filename;
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
-
 	(* construct bridge namespace *)
 	let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
@@ -257,6 +255,11 @@ let invoke
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
+
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "bridge_ns=%s" bridge_ns;
+
 
 	(* invoke the linker *)
 	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then begin
