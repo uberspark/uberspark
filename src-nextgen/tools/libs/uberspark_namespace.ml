@@ -46,6 +46,7 @@ let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 let namespace_uobj_binary_image_filename = "uobj.bin";;
 let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 let namespace_uobj_mf_node_type_tag = "uberspark-uobj";;
+let namespace_uobj_cclib_filename = "cclib.a";;
 
 
 (* uobjcoll *)
@@ -90,6 +91,8 @@ let namespace_config_mf_node_type_tag = "uberspark-config";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
+let namespace_bridge_container_build_mountpath = "/root/src";;
+
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;

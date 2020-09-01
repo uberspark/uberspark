@@ -1272,7 +1272,7 @@ class uobject
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
 			!o_file_list
-			[ ] [ ]	[ "./cclib.a" ] ".";
+			[ ] [ ]	[ ("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename) ] ".";
 
 		(!retval)	
 	;
