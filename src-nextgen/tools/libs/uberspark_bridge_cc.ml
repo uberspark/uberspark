@@ -263,6 +263,9 @@ let invoke
 		
 	end done;
 
+	(* as a final step add command to copy compiler cclib file if any into the current build context *)
+	d_cmd := !d_cmd ^ " && " ^ "cp -f " ^ json_node_uberspark_bridge_cc_var.params_cclib ^ " /root/src/cclib.a";
+
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
