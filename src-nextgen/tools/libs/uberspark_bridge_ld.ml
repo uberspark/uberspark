@@ -258,8 +258,6 @@ let invoke
 
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "bridge_ns=%s" bridge_ns;
-
 
 	(* invoke the linker *)
 	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then begin
