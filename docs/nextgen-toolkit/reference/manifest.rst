@@ -493,10 +493,10 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :proptype legacy-callees: string list
 
 
-    :property uobjrtl: |uobj| runtime library definition sub-node 
+    :property uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
     :proptype uobjrtl: :json:object:`uobjrtl` list
 
-    :property sections: |uobj| additional sections definition sub-node 
+    :property sections: comma delimited list of |uobj| additional sections definition sub-nodes
     :proptype sections: :json:object:`sections` list
 
 

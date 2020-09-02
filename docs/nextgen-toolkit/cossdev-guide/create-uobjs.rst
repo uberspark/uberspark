@@ -6,7 +6,12 @@ Create |uobjs|
 ==============
 
 Creating |uobjs| that become part of a given |uobjcoll|, is facilitated by creating 
-a |uberspark| manifest file, |ubersparkmff|, within each |uobj| source folder.
+a |uberspark| manifest file, |ubersparkmff|, within each |uobj| source folder and 
+organizing and refactoring relevant sources that comprise the corresponding |uobjs|.
+
+
+Create |uobj| Manifest
+----------------------
 
 In our running example, the ``hello-mul`` |uobjcoll| that we want to create consists of
 a single ``main`` |uobj| housed within the folder:
@@ -47,9 +52,66 @@ Assembly source files (``asm-files``), and CASM (``casm-files``).
 the function ``main`` within the C source file ``main.c`` with return value ``uint32_t``, parameters
 ``(uint32_t multiplicand, uint32_t multiplier)``, followed by the number of positional parameters (``2`` in our case).
 
+
+Specify |uobj| callees
+----------------------
+
 ..  note::  ``uberspark-uobj`` *intrauobjcoll-callees*, *interuobjcoll-callees*,  and *legacy-callees* 
             node declarations are still work-in-progress and can be  omitted for discussion for the time being
 
+
+Specify |uobj| Additional Sections
+----------------------------------
+
+A |uobj| binary consists of certain pre-defined sections corresponding to the |uobj| code, data and stack.
+However, if you require variables or functions within the |uobj| to be added to a special section (e.g., 
+for specific padding or memory alignment purposes) you can qualify it within the sources (e.g., via
+__attribute__((section()))) and specify it within the `sections` sub-node of
+the `uberspark-uobj` manifest node.
+
+
+For example, consider the |uobj| C code below, that defines a variable `special` which needs to be output to a special
+section that is aligned on a page-boundary and padded to a page size. 
+
+.. code-block:: c
+   :linenos:
+
+   __attribute__((section(".specialsec"))) unsigned char special[512];
+
+The following is a snippet of the `uberspark-uobj` manifest node specification for the |uobj| that specifies this
+output section for the |uobj| binary.
+
+.. code-block:: json
+   :linenos:
+
+   {
+    	"uberspark-uobj" : {
+         "sections": [
+            {
+               "name" : "specialsec",
+               "output_names" : [ ".specialsec" ],
+               "type" : "0x0",
+               "prot" : "0x0",
+               "size" : "0x1000",
+               "aligned_at" : "0x1000",
+               "pad_to" : "0x1000"
+            }
+         ]
+      }
+   }
+
+
+A similar approach can be used to place |uobj| function definitions within a desired output section in 
+the |uobj| binary.
+
+..  note::  You can have multiple comma delimited output section definitions within the manifest. 
+            See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on 
+            the `sections` sub-node list definition within the `uberspark-uobj` manifest node.
+            
+
+
+Organize |uobj| Sources
+-----------------------
 
 After declararing the |uobj| via the manifest, the next step is to move over the relevant sources as
 specified within the manifest and add the ``uberspark`` header definitions. 
