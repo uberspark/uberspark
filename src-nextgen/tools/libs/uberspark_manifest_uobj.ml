@@ -354,7 +354,7 @@ let json_node_uberspark_uobj_sections_to_var
 								let section_entry : Defs.Basedefs.section_info_t = 
 								{ 
 									f_name = Yojson.Basic.Util.to_string (x |> member "name");	
-									f_subsection_list = [];	
+									f_subsection_list = json_list_to_string_list ( Yojson.Basic.Util.to_list (x |> member "output_names") );	
 									usbinformat = { f_type = int_of_string (Yojson.Basic.Util.to_string (x |> member "type")); 
 													f_prot = int_of_string (Yojson.Basic.Util.to_string (x |> member "prot")); 
 													f_size = int_of_string (Yojson.Basic.Util.to_string (x |> member "size"));
