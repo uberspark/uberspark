@@ -337,6 +337,9 @@ bridge. The JSON declaration of the ``uberspark-bridge-cc`` node is as below:
    :property params_prefix_include: command line option prefix to include a header file
    :proptype params_prefix_include: string
 
+   :property params_cclib: full pathname to compiler runtime library (e.g., libgcc.a)
+   :proptype params_cclib: string
+
 An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C compiler, within |ubersparkmff| follows:
 
 
@@ -366,8 +369,9 @@ An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C comp
             "params_prefix_obj" : "-c",
             "params_prefix_asm" : "-S",
             "params_prefix_output" : "-o",
-            "params_prefix_include" : "-I"
-        }
+            "params_prefix_include" : "-I",
+            "params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/libgcc.a"
+       }
     }
 
 
@@ -492,6 +496,9 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property uobjrtl: |uobj| runtime library definition sub-node 
     :proptype uobjrtl: :json:object:`uobjrtl` list
 
+    :property sections: |uobj| additional sections definition sub-node 
+    :proptype sections: :json:object:`sections` list
+
 
 .. json:object:: sources
 
@@ -513,7 +520,30 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property namespace: namespace of the |uobj| runtime library
     :proptype namespace: string 
 
+.. json:object:: sections
 
+    :property name: name of the |uobj| section 
+    :proptype name: string 
+
+    :property output_names: comma delimited list of |uobj| output section names (e.g., defined via __attribute__((section())) ) 
+    :proptype output_names: string list 
+
+    :property type: hexadecimal type of the section 
+    :proptype type: string 
+    :options type: "0x0"
+
+    :property prot: hexadecimal protection of the section 
+    :proptype prot: string 
+    :options prot: "0x0"
+
+    :property size: hexadecimal size (in bytes) of the section 
+    :proptype size: string 
+
+    :property aligned_at: hexadecimal alignment (in bytes) of the section 
+    :proptype aligned_at: string 
+
+    :property pad_to: hexadecimal padding boundary (in bytes) of the section 
+    :proptype pad_to: string 
 
 An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
 
@@ -576,9 +606,19 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 			    {
 				    "namespace" : "uberspark/uobjrtl/crypto"
 			    }
-    		]
+    		],
 
-    
+    		"sections": [
+                {
+                    "name" : "example_additional_section",
+                    "output_names" : [ ".exaddsec" ],
+                    "type" : "0x0",
+                    "prot" : "0x0",
+                    "size" : "0x200000",
+                    "aligned_at" : "0x1000",
+                    "pad_to" : "0x1000"
+                }
+            ]
         }
     }
 
