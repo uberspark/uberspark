@@ -1030,7 +1030,7 @@ let link_binary_image
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
 		!o_file_list
-		[ ] [ ]	[ Uberspark_bridge.Cc.json_node_uberspark_bridge_cc_var.params_cclib ] ".";
+		[ ] [ ]	[ ] ".";
 
 	(!retval)	
 ;;
