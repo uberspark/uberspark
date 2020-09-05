@@ -559,7 +559,7 @@ let consolidate_sections_with_memory_map
 		
 			(* add section *)
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
-			let key = (".section_uobjcoll_publicmethod_sentinel_" ^ sentinel_name) in 
+			let key = (".section_uobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_publicmethods_sentinels_hashtbl sentinel_type in
 			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
 				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
@@ -602,7 +602,7 @@ let consolidate_sections_with_memory_map
 
 			(* add section *)
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
-			let key = (".section_intrauobjcoll_publicmethod_sentinel_" ^ sentinel_name) in 
+			let key = (".section_intrauobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_intrauobjcoll_sentinels_hashtbl sentinel_type in
 			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
 				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
@@ -796,7 +796,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 			let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
-				f_secname = ".section_uobjcoll_publicmethods_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
+				f_secname = ".section_uobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
 				f_code = sentinel_info.f_code ; 
 				f_libcode= sentinel_info.f_libcode ; 
 				f_sizeof_code= sentinel_info.f_sizeof_code ; 
@@ -820,7 +820,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 			let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
-				f_secname = ".section_intrauobjcoll_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
+				f_secname = ".section_intrauobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
 				f_code = sentinel_info.f_code ; 
 				f_libcode= sentinel_info.f_libcode ; 
 				f_sizeof_code= sentinel_info.f_sizeof_code ; 
@@ -874,7 +874,7 @@ let setup_uobjcoll_publicmethods_sentinel_address_hashtbl
 	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info:Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t))  ->
 		List.iter ( fun (sentinel_type:string) ->
 			let canonical_pm_sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
-			let key = (".section_uobjcoll_publicmethod_sentinel_" ^ canonical_pm_sentinel_name) in 
+			let key = (".section_uobjcoll_publicmethod_sentinel__" ^ canonical_pm_sentinel_name) in 
 
 			(* grab section information for this sentinel *)
 			let section_info = (List.assoc key !d_memorymapped_sections_list) in
@@ -914,7 +914,7 @@ let setup_intrauobjcoll_publicmethods_sentinel_address_hashtbl
 	List.iter (fun ((canonical_pm_name:string) ,(throwaway:Uberspark_uobj.publicmethod_info_t))  ->
 		List.iter ( fun (sentinel_type:string) ->
 			let canonical_pm_sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
-			let key = (".section_intrauobjcoll_publicmethod_sentinel_" ^ canonical_pm_sentinel_name) in 
+			let key = (".section_intrauobjcoll_publicmethod_sentinel__" ^ canonical_pm_sentinel_name) in 
 
 			(* grab section information for this sentinel *)
 			let section_info = (List.assoc key !d_memorymapped_sections_list) in
