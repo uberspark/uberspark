@@ -50,6 +50,7 @@
 #ifndef __UBERSPARK_H__
 #define __UBERSPARK_H__
 
+#ifndef __ASSEMBLY__
 
 #include <uberspark/uobjrtl/crt/include/stdint.h>
 #include <uberspark/uobjrtl/crt/include/stdbool.h>
@@ -57,6 +58,7 @@
 #include <uberspark/uobjrtl/crt/include/stdarg.h>
 #include <uberspark/uobjrtl/crt/include/string.h>
 
+#endif
 
 #include <uberspark/include/basedefs.h>
 

@@ -237,6 +237,9 @@ let invoke
 				add_d_cmd := !add_d_cmd ^ param ^ " ";
 			) json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.params;
 
+			(* add assembly definition since we are working with assembly files *)
+			add_d_cmd := !add_d_cmd ^ " " ^ "-D__ASSEMBLY__" ^ " ";
+
 			(* add includes *)
 			add_d_cmd := !add_d_cmd ^ " " ^ !as_includes ^ " ";
 
