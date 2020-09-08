@@ -113,6 +113,7 @@ module Ld : sig
 		?context_path_builddir : string -> 
 		string ->
 		string ->
+		string ->
 		string list ->
 		string list ->
 		string list ->

@@ -1271,6 +1271,7 @@ class uobject
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
+			Uberspark_namespace.namespace_uobj_binary_flat_image_filename
 			!o_file_list
 			[ ] [ ]	[ ("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename) ] ".";
 

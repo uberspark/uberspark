@@ -203,7 +203,8 @@ let build
 let invoke 
 	?(context_path_builddir = ".")
 	(lscript_filename : string)
-	(output_filename : string)
+	(binary_filename : string)
+	(binary_flat_filename : string)
 	(o_file_list : string list)
 	(lib_dir_list : string list)
 	(lib_file_list : string list)
@@ -231,7 +232,7 @@ let invoke
  	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lscript ^ " " ^ lscript_filename;
 
 	(* add output filename *)
-	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ output_filename;
+	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ binary_filename;
 
 	(* iterate over lib dir list and include them into linker command line *)
 	List.iter (fun lib_dir -> 
@@ -250,7 +251,7 @@ let invoke
 
 	(* add flat binary output generation command *)
  	d_cmd := !d_cmd ^ " " ^ " && " ^ json_node_uberspark_bridge_ld_var.cmd_generate_flat_binary ^ " "  ^
-	 		output_filename ^ " " ^	(output_filename ^ ".obin");
+	 		binary_filename ^ " " ^ binary_flat_filename;
 
 
 	(* construct bridge namespace *)

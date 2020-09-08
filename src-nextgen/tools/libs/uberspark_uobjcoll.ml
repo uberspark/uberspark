@@ -1029,6 +1029,7 @@ let link_binary_image
 			~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
+		Uberspark_namespace.namespace_uobjcoll_binary_flat_image_filename
 		!o_file_list
 		[ ] [ ]	[ ] ".";
 
