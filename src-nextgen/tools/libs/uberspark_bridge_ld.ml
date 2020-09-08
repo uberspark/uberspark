@@ -40,6 +40,7 @@ let json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.Ld.json_node_ub
 	params_prefix_libdir = "";
 	params_prefix_lib = "";
 	params_prefix_output = "";
+	cmd_generate_flat_binary = "";
 };;
 
 
@@ -229,11 +230,6 @@ let invoke
 	(* add linker script option and filename*)
  	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lscript ^ " " ^ lscript_filename;
 
-
-	(* add linker output format *)
- 	(*d_cmd := !d_cmd ^ " " ^ "--oformat=elf32-littlearm";*)
- 	(*d_cmd := !d_cmd ^ " " ^ "--oformat=binary";*)
-
 	(* add output filename *)
 	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ output_filename;
 
@@ -252,9 +248,9 @@ let invoke
 		d_cmd := !d_cmd ^ " " ^ lib_abs_filename;
 	) lib_abs_list;
 
-	(* add binary output generation command; TBD: bring in via ld-bridge manifest *)
- 	d_cmd := !d_cmd ^ " " ^ " && " ^ "arm-linux-gnueabihf-objcopy -O binary " ^ output_filename ^ " " ^
-	 		(output_filename ^ ".obin");
+	(* add flat binary output generation command *)
+ 	d_cmd := !d_cmd ^ " " ^ " && " ^ json_node_uberspark_bridge_ld_var.cmd_generate_flat_binary ^ " "  ^
+	 		output_filename ^ " " ^	(output_filename ^ ".obin");
 
 
 	(* construct bridge namespace *)

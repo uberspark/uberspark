@@ -28,7 +28,9 @@
 		"params_prefix_lscript" : "-T",
 		"params_prefix_libdir" : "-L",
 		"params_prefix_lib" : "-l",
-		"params_prefix_output" : "-o"
+		"params_prefix_output" : "-o",
+
+		"cmd_generate_flat_binary" : "arm-linux-gnueabihf-objcopy -O binary"
 
 	}
 
