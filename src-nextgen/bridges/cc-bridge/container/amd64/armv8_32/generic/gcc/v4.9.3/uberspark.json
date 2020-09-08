@@ -26,7 +26,9 @@
 			    "-nostdlib",
            	    "-nostartfiles",
 				"-ffreestanding",
-				"-mcpu=cortex-a53"
+				"-marm",
+				"-march=armv8-a",
+				"-mno-thumb-interwork"
 			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},

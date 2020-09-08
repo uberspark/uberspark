@@ -26,8 +26,8 @@
         PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
         */ 
         "code": "
-            ldr r0, = PUBLICMETHOD_ADDR
-            mov pc, r0
+            ldr r3, = PUBLICMETHOD_ADDR
+            mov pc, r3
         ",
 
         /*  sentinel library code template 

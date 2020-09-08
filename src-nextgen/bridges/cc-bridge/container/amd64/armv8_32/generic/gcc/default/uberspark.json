@@ -25,7 +25,10 @@
 			    "-nostdinc",
 			    "-nostdlib",
            	    "-nostartfiles",
-				"-ffreestanding"
+				"-ffreestanding",
+				"-marm",
+				"-march=armv8-a",
+				"-mno-thumb-interwork"
 			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
