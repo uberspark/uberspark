@@ -409,6 +409,8 @@ bridge. The JSON declaration of the ``uberspark-bridge-ld`` node is as below:
    :property params_prefix_output: command line option prefix to specify output file name
    :proptype params_prefix_output: string
 
+   :property cmd_generate_flat_binary: command prefix to generate a flat-form binary. note that the input and output file will be added to this automatically
+   :proptype cmd_generate_flat_binary: string
 
 An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker, within |ubersparkmff| follows:
 
@@ -439,14 +441,18 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             "params_prefix_lscript" : "-T",
             "params_prefix_libdir" : "-L",
             "params_prefix_lib" : "-l",
-            "params_prefix_output" : "-o"
+            "params_prefix_output" : "-o",
+
+    		"cmd_generate_flat_binary" : "arm-linux-gnueabihf-objcopy -O binary"
+
         }
     }
 
 
 .. note::   Here the Linker bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
             is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
-            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
+            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary. It also uses the 
+            `objcopy` tool to generate flat-form binary image.
 
 
 .. _reference-manifest-uberspark-uobj:
