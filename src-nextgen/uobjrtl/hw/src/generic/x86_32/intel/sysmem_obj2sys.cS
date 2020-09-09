@@ -57,7 +57,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__sysmem_copy_obj2sys
  * 
  * @brief CASM documentation placeholder
  * 

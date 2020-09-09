@@ -51,7 +51,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__read_segreg_es
  * 
  * @brief CASM documentation placeholder
  * 

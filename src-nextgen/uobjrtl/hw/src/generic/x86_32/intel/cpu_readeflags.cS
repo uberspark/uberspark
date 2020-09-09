@@ -50,7 +50,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__read_eflags
  * 
  * @brief CASM documentation placeholder
  * 

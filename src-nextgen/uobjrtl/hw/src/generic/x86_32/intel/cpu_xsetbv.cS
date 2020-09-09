@@ -52,7 +52,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__xsetbv
  * 
  * @brief CASM documentation placeholder
  * 

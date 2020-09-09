@@ -97,5 +97,4 @@ The following are the optional Doxygen tags within the block comment definition:
     the function. 
         
 .. note::   The text within the aforementioned optional Doxygen tags can use Sphinx/reST syntax.
-.. note::   CASM functions must also use the ``@fn`` tag to specify its function name.
 

@@ -51,7 +51,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__enable_intr
  * 
  * @brief CASM documentation placeholder
  * 

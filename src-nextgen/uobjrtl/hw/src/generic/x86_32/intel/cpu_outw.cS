@@ -54,7 +54,6 @@
 
 //__attribute__((naked)) void outw (uint32_t value, uint32_t port){
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__outw
  * 
  * @brief CASM documentation placeholder
  * 

@@ -51,7 +51,6 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr3
  * 
  * @brief CASM documentation placeholder
  * 
