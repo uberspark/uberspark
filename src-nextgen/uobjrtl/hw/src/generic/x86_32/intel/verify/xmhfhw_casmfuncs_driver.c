@@ -370,13 +370,13 @@ void drv_vmptrld(void){
 void drv_vmread(void){
 	uint32_t result;
 	cabi_establish();
-	result = CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread, framac_nondetu32());
+	result = CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread, framac_nondetu32());
 	cabi_check();
 }
 
 void drv_vmwrite(void){
 	cabi_establish();
-	CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite, framac_nondetu32(), framac_nondetu32());
+	CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmwrite, framac_nondetu32(), framac_nondetu32());
 	cabi_check();
 }
 

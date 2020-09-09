@@ -634,17 +634,17 @@ uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmptrld
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread
+uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread
 ---------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread
    :project: uobjrtl-hw
 
 
-uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite
+uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmwrite
 ----------------------------------------------------------
 
-.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite
+.. doxygenfunction:: uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmwrite
    :project: uobjrtl-hw
 
 

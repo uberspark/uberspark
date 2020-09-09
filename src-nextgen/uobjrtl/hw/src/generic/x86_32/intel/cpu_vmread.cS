@@ -53,7 +53,7 @@
 
 
 /** 
- * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread
+ * @fn uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread
  * 
  * @brief CASM documentation placeholder
  * 
@@ -76,7 +76,7 @@
  * 
  * 
  */
-CASM_FUNCDEF(uint32_t, uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread,
+CASM_FUNCDEF(uint32_t, uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread,
 {
     __casm__movl_mesp_ecx(0x4);
     __casm__vmread_ecx_eax();

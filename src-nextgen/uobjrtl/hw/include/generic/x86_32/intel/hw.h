@@ -602,7 +602,7 @@ CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__hlt(void *noparam
 
 
 
-CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(void *noparam));
+CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__relax(void *noparam));
 
 
 CASM_FUNCDECL(uint64_t uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64(void *noparam));
@@ -693,8 +693,8 @@ CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__tlb_invlpg(uint64
 #ifndef __ASSEMBLY__
 
 CASM_FUNCDECL(bool uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmxon(uint64_t vmxonregion_paddr));
-CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__vmwrite(uint32_t encoding, uint32_t value));
-CASM_FUNCDECL(uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__vmread(uint32_t encoding));
+CASM_FUNCDECL(void uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmwrite(uint32_t encoding, uint32_t value));
+CASM_FUNCDECL(uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread(uint32_t encoding));
 CASM_FUNCDECL(uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmclear(uint64_t vmcs));
 CASM_FUNCDECL(uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmptrld(uint64_t vmcs));
 

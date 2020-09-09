@@ -658,14 +658,14 @@
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_vmread.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmread" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmread" }
                 ]
             },
             
             {
                 "module-path" : "src/generic/x86_32/intel/cpu_vmwrite.cS",
                 "module-funcdecls" : [
-                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__x86vmx_vmwrite" }
+                    { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__vmx_vmwrite" }
                 ]
             },
             
