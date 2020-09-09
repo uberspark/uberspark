@@ -6,23 +6,8 @@ MAINTAINER David Shepard <djshepard@sei.cmu.edu>
 ENV archive_name=compcert-3.7.tgz
 
 RUN apt-get update &&\
-    apt-get -y install wget
-
-# Put everything in the build context.
-RUN wget http://compcert.inria.fr/release/${archive_name}
-
-RUN mv compcert-3.7.tgz CompCert-3.7.tgz
-RUN mv CompCert-3.7.tgz /tmp
-ENV archive_name=CompCert-3.7.tgz
-
-COPY install.sh /tmp
-COPY compiler_script.sh /tmp
-
-# This didn't work because Opam asks questions, lots of them. I have a
-# custom install.sh that is in the build directory. We just call that instead.
-# curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh -O &&\
-
-RUN apt-get -y install  \
+    apt-get -y install \
+        wget \
         gcc-8 \
         gcc-8-multilib-arm-linux-gnueabihf \
         gcc-8-multilib-x86-64-linux-gnux32 \
@@ -36,8 +21,21 @@ RUN apt-get -y install  \
         unzip \
         gawk \
         findutils \
-        build-essential &&\
-    cd /tmp &&\
+        build-essential
+
+# Put everything in the build context.
+RUN wget http://compcert.inria.fr/release/${archive_name}
+
+RUN mv compcert-3.7.tgz /tmp/CompCert-3.7.tgz
+ENV archive_name=CompCert-3.7.tgz
+
+COPY install.sh compiler_script.sh /tmp/
+
+# This didn't work because Opam asks questions, lots of them. I have a
+# custom install.sh that is in the build directory. We just call that instead.
+# curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh -O &&\
+
+RUN cd /tmp &&\
     chmod 755 install.sh &&\
     chmod 755 compiler_script.sh &&\
     ./install.sh &&\
@@ -101,11 +99,3 @@ RUN . ./compiler_script.sh
 
 USER ubuntu
 WORKDIR /home/ubuntu
-
-# After your container builds, you can run it with:
-
-# docker run -it -u ubuntu compcert-v3.6:latest /bin/bash
-
-# Please have a look around, see if everything works as expected. We can fix
-# whatever isn't ready for use yet.
-
