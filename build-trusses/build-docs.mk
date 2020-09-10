@@ -13,6 +13,10 @@ docs_build_prep:
 	mkdir -p $(UBERSPARK_DOCSDIR)/_temp
 	mkdir -p $(UBERSPARK_DOCSDIR)/_build
 	mkdir -p $(UBERSPARK_DOCSDIR)/_themes
+	# create symlink for doxygen include headers
+	ln -s $(UBERSPARK_SRCDIR)/ $(UBERSPARK_DOCSDIR)/_build/
+	mv -T $(UBERSPARK_DOCSDIR)/_build/src-nextgen $(UBERSPARK_DOCSDIR)/_build/uberspark
+
 	cd $(UBERSPARK_DOCSDIR)/_temp && git clone https://github.com/uberspark/uberspark-htmlcss-themes.git uberspark-htmlcss-themes.git
 	cd $(UBERSPARK_DOCSDIR)/_themes && ln -sf ../_temp/uberspark-htmlcss-themes.git/rtd_uberspark/sphinx_rtd_theme/ rtd_uberspark
 

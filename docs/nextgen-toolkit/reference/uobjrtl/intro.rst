@@ -15,3 +15,4 @@ its functionality. The following |uobj| runtime libraries are currently availabl
 
    C Runtime (crt) <crt.rst>
    Cryptography (crypto) <crypto.rst>
+   Hardware (hw) <hw.rst>
