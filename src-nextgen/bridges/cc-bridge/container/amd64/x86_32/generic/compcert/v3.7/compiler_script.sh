@@ -14,10 +14,7 @@ echo "archive_dir: $archive_dir"
 
 cd $archive_dir
 
-#find / -name 'ocaml'
-
 echo "PATH: $PATH"
-ls -alR /home/ubuntu/.opam
 
 su ubuntu
 
