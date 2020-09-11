@@ -13,9 +13,9 @@ You will need to build the |uspark| toolchain before performing any other
 task.
 
 
-.. note:: The |uspark| toolchain requires approximately 2.4 GB of disk space.
+.. note:: The |uspark| toolchain requires approximately 2.4 GB of disk space. Additionally, it is recommended to have configured at least 4GB-6GB of container memory.
 
-	  
+
 	  
 To achieve this, you need to issue the following command while in the
 top-level directory of 
@@ -87,5 +87,4 @@ the |uspark| source-tree (the directory where the file RELEASE is located):
           docker is unable to mount host folders that are part of the WSL Linux filesystem (e.g., ``~/``) 
           under Windows.
 
-
-
+.. note:: Insufficient container memory could manifest as an ``Error 137`` when building bridges. It is recommended to increase your container memory configuration if you experience these errors.

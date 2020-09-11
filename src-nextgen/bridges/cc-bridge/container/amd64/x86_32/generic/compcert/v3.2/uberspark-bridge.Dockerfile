@@ -93,9 +93,8 @@ RUN tar -xzf ${archive_name}
 # Docker builds, you need to do substring parsing with an awk script. That's
 # done in compiler_script.sh
 
-#RUN archive_dir=${archive_name:0:$archive_string_len-4}
-
 RUN . ./compiler_script.sh
 
 USER ubuntu
 WORKDIR /home/ubuntu
+

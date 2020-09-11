@@ -52,15 +52,14 @@ RUN pip3 install breathe==4.18.1
 
 # install doxygen
 WORKDIR "/home/uberspark"
-RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/archive/Release_1_8_20.tar.gz
-RUN tar -xzf ./doxygen-Release_1_8_20.tar.gz
-WORKDIR "/home/uberspark/doxygen-Release_1_8_20"
-RUN  mkdir build
-WORKDIR "/home/uberspark/doxygen-Release_1_8_20/build"
-RUN cmake -G "Unix Makefiles" .. &&\
+RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/archive/Release_1_8_20.tar.gz && \
+    tar -xzf ./doxygen-Release_1_8_20.tar.gz   && \
+    cd doxygen-Release_1_8_20 && \
+    mkdir build && cd build && \
+    cmake -G "Unix Makefiles" .. &&\
     make &&\
-    make install 
-
+    make install && cd ../.. && \
+    rm -rf doxygen-Release_1_8_20.tar.gz 
 
 # switch user to uberspark working directory to /home/uberspark
 USER uberspark
@@ -98,4 +97,3 @@ WORKDIR "/home/uberspark/uberspark/build-trusses"
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
 CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
-
