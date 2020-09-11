@@ -12,20 +12,20 @@
 
     "uberspark-bridge-cc" : {
 		/* bridge header */
-		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "compcert",
-			"execname" : "ccomp",
-			"devenv" : "amd64",
-			"arch" : "x86_32",
-			"cpu" : "generic",
-			"version" : "v3.1",
-			"path" : ".",
-			"params" : [ "" ],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+	        "bridge-hdr":{
+		    "btype" : "container",
+		    "bname" : "compcert",
+		    "execname" : "ccomp",
+		    "devenv" : "amd64",
+		    "arch" : "x86_32",
+		    "cpu" : "generic",
+		    "version" : "v3.1",
+		    "path" : ".",
+		    "params" : [ "" ],
+		    "container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
-		"params_prefix_obj" : "-c",
+	"params_prefix_obj" : "-c",
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
         "params_prefix_include" : "-I"
