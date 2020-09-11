@@ -27,5 +27,4 @@ echo "PATH after mod: $PATH"
 
 ./configure x86_32-linux
 make -j4 all
-exit
 make install
