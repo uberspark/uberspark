@@ -96,7 +96,6 @@ RUN tar -xzf ${archive_name}
 
 RUN . ./compiler_script.sh
 
-USER ubuntu
-WORKDIR /home/ubuntu
+WORKDIR /home
 
 
