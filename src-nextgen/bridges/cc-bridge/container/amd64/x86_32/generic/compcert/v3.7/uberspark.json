@@ -25,7 +25,7 @@
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
-		"params_prefix_obj" : "-c",
+	"params_prefix_obj" : "-c",
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
         "params_prefix_include" : "-I"
