@@ -603,7 +603,7 @@ class uobject
 		()
 		: unit =
 		
-		let add_section (uobj_f_sections: (string * Defs.Basedefs.section_info_t) list)
+		let l_add_section (uobj_f_sections: (string * Defs.Basedefs.section_info_t) list)
 						(section_f_name: string)
 						(section_f_subsection_list : string list)
 						(section_usbinformat_f_type : int)
@@ -613,7 +613,7 @@ class uobject
 						(section_usbinformat_f_pad_to : int)
 						: unit =
 
-			let var_sinfo : Defs.Basedefs.section_info_t = {
+			let l_var_sinfo : Defs.Basedefs.section_info_t = {
 				f_name = section_f_name;	
 				f_subsection_list = section_f_subsection_list;	
 				usbinformat = { f_type= section_usbinformat_f_type; 
@@ -627,32 +627,23 @@ class uobject
 							};
 			} in
 
-			d_default_sections_list := !d_default_sections_list @ [ (section_f_name, var_sinfo) ];
+			(* override size, alignment and padding info if specified in the manifest *)
+			(* also append any extra subsections if specified in the manifest *)
+			if (List.mem_assoc section_f_name uobj_f_sections) then begin
+				let l_var_sinfo_mf : Defs.Basedefs.section_info_t = (List.assoc section_f_name uobj_f_sections) in
+				l_var_sinfo.usbinformat.f_size <- l_var_sinfo_mf.usbinformat.f_size;
+				l_var_sinfo.usbinformat.f_aligned_at <- l_var_sinfo_mf.usbinformat.f_aligned_at;
+				l_var_sinfo.usbinformat.f_pad_to <- l_var_sinfo_mf.usbinformat.f_pad_to;
+				l_var_sinfo.f_subsection_list <- l_var_sinfo.f_subsection_list @ l_var_sinfo_mf.f_subsection_list;
+			end;
+
+			d_default_sections_list := !d_default_sections_list @ [ (section_f_name, l_var_sinfo) ];
 
 			()
 		in
 
-(*		if (List.mem_assoc "uobj_ssa" json_node_uberspark_uobj_var.f_sections) then begin
-			let var_sinfo : Defs.Basedefs.section_info_t = (List.assoc "uobj_ssa" json_node_uberspark_uobj_var.f_sections) in
-			
-			d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
-				f_name = "uobj_ssa";	
-				f_subsection_list = [ ".uobj_ssa" ] @ var_sinfo.f_subsection_list;	
-				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
-								f_prot=0; 
-								f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-								f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-								f_addr_start=0; 
-								f_addr_file = 0;
-								f_reserved = 0;
-							};
-			}) ];
-
-		end else begin
-*)
 		(* start with uobj state save area section *)
-		add_section json_node_uberspark_uobj_var.f_sections
+		l_add_section json_node_uberspark_uobj_var.f_sections
 					"uobj_ssa" [ ".uobj_ssa" ] 
 					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA
 					0 
@@ -660,12 +651,11 @@ class uobject
 					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
 					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-
 		(* create sections for each public method *)
 		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
 			let section_name = ("uobj_pm_" ^ pm_name) in 
 
-			add_section json_node_uberspark_uobj_var.f_sections
+			l_add_section json_node_uberspark_uobj_var.f_sections
 						section_name [ "." ^ section_name ]
 						Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
 						0 
