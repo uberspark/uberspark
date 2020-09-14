@@ -603,28 +603,42 @@ class uobject
 		()
 		: unit =
 		
-		(* start with uobj state save area section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
-			f_name = "uobj_ssa";	
-			f_subsection_list = [ ".uobj_ssa" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
+		let add_section (uobj_f_sections: (string * Defs.Basedefs.section_info_t) list)
+						(section_f_name: string)
+						(section_f_subsection_list : string list)
+						(section_usbinformat_f_type : int)
+						(section_usbinformat_f_prot : int)
+						(section_usbinformat_f_size : int)
+						(section_usbinformat_f_aligned_at : int)
+						(section_usbinformat_f_pad_to : int)
+						: unit =
 
-		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
-			let section_name = ("uobj_pm_" ^ pm_name) in 
-			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
-				f_name = section_name;	
-				f_subsection_list = [ "." ^ section_name ];	
-				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
+			let var_sinfo : Defs.Basedefs.section_info_t = {
+				f_name = section_f_name;	
+				f_subsection_list = section_f_subsection_list;	
+				usbinformat = { f_type= section_usbinformat_f_type; 
+								f_prot= section_usbinformat_f_prot; 
+								f_size = section_usbinformat_f_size;
+								f_aligned_at = section_usbinformat_f_aligned_at; 
+								f_pad_to = section_usbinformat_f_pad_to; 
+								f_addr_start=0; 
+								f_addr_file = 0;
+								f_reserved = 0;
+							};
+			} in
+
+			d_default_sections_list := !d_default_sections_list @ [ (section_f_name, var_sinfo) ];
+
+			()
+		in
+
+(*		if (List.mem_assoc "uobj_ssa" json_node_uberspark_uobj_var.f_sections) then begin
+			let var_sinfo : Defs.Basedefs.section_info_t = (List.assoc "uobj_ssa" json_node_uberspark_uobj_var.f_sections) in
+			
+			d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
+				f_name = "uobj_ssa";	
+				f_subsection_list = [ ".uobj_ssa" ] @ var_sinfo.f_subsection_list;	
+				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
 								f_prot=0; 
 								f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
 								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
@@ -634,6 +648,30 @@ class uobject
 								f_reserved = 0;
 							};
 			}) ];
+
+		end else begin
+*)
+		(* start with uobj state save area section *)
+		add_section json_node_uberspark_uobj_var.f_sections
+					"uobj_ssa" [ ".uobj_ssa" ] 
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+
+
+		(* create sections for each public method *)
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ pm_name) in 
+
+			add_section json_node_uberspark_uobj_var.f_sections
+						section_name [ "." ^ section_name ]
+						Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
+						0 
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		) self#get_d_publicmethods_hashtbl;
 		
