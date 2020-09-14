@@ -3,6 +3,5 @@ LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>, Matt McCormack <matthe
 
 RUN apt-get update &&\
     apt-get -yqq install gcc-5 gcc-5-multilib binutils &&\
-    apt-get clean && rm -rf /var/lib/apt/lists/* &&\
-    ln -s /usr/bin/gcc-5 /usr/bin/gcc
+    apt-get clean && rm -rf /var/lib/apt/lists/* 
 

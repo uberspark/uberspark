@@ -14,10 +14,7 @@ echo "archive_dir: $archive_dir"
 
 cd $archive_dir
 
-#find / -name 'ocaml'
-
 echo "PATH: $PATH"
-ls -alR /home/ubuntu/.opam
 
 su ubuntu
 
@@ -30,5 +27,4 @@ echo "PATH after mod: $PATH"
 
 ./configure x86_32-linux
 make -j4 all
-exit
 make install
