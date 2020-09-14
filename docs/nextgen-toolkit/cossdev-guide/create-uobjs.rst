@@ -60,18 +60,21 @@ Specify |uobj| callees
             node declarations are still work-in-progress and can be  omitted for discussion for the time being
 
 
-Specify |uobj| Additional Sections
-----------------------------------
+Specify |uobj| Sections
+-----------------------
 
-A |uobj| binary consists of certain pre-defined sections corresponding to the |uobj| code, data and stack.
-However, if you require variables or functions within the |uobj| to be added to a special section (e.g., 
-for specific padding or memory alignment purposes) you can qualify it within the sources (e.g., via
-__attribute__((section()))) and specify it within the `sections` sub-node of
+The `section` sub-node of the `uberspark-uobj` manifest node is used to specify |uobj|
+binary sectioning parameters. Such parameters include the section size, alignment and 
+padding.
+
+A |uobj| binary consists of certain standard sections corresponding to the |uobj| code, data and stack.
+In addition, variables or functions within the |uobj| can be added to special developer-defined sections (e.g., 
+for specific padding or memory alignment purposes). Such develper-defined section definitions are appropriately
+qualified within the sources (e.g., via __attribute__((section()))) and specified using the `sections` sub-node of
 the `uberspark-uobj` manifest node.
 
-
 For example, consider the |uobj| C code below, that defines a variable `special` which needs to be output to a special
-section that is aligned on a page-boundary and padded to a page size. 
+section that spans a page in size at maximum, is aligned on a page-boundary, and is padded to a page size. 
 
 .. code-block:: c
    :linenos:
@@ -89,10 +92,8 @@ output section for the |uobj| binary.
          "sections": [
             {
                "name" : "specialsec",
-               "output_names" : [ ".specialsec" ],
-               "type" : "0x0",
-               "prot" : "0x0",
                "size" : "0x1000",
+               "output_names" : [ ".specialsec" ],
                "aligned_at" : "0x1000",
                "pad_to" : "0x1000"
             }
@@ -100,13 +101,44 @@ output section for the |uobj| binary.
       }
    }
 
-
 A similar approach can be used to place |uobj| function definitions within a desired output section in 
 the |uobj| binary.
 
+The `section` sub-node can also be used to specify section sizes, alignment and padding of pre-defined
+|uobj| binary sections such as code, data and stack. 
+
+As an example, the following is a snippet of the `uberspark-uobj` manifest node specification for 
+the |uobj| that specifies the maximum size of the |uobj| code section (in bytes).
+
+.. code-block:: json
+   :linenos:
+
+   {
+    	"uberspark-uobj" : {
+         "sections": [
+            {
+               "name" : "uobj_code",
+               "size" : "0x1000"
+            }
+         ]
+      }
+   }
+
+..  warning:: specifying a section size that is smaller than the actual |uobj| generated section
+              size will result in a |uobj| build error.
+
+..  note::  `uobj_code` is the name allocated to the standard |uobj| code section. 
+            See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on 
+            standar |uobj| section names.
+
+..  note::  *name* and *size* are required fields within the `sections` sub-node for all |uobj| section definitions.
+            For developer-defined sections, the *output_names* field is an additional requirement.
+            See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on 
+            the `sections` sub-node field definitions
+
 ..  note::  You can have multiple comma delimited output section definitions within the manifest. 
             See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on 
-            the `sections` sub-node list definition within the `uberspark-uobj` manifest node.
+            the `sections` sub-node list definition options within the `uberspark-uobj` manifest node.
             
 
 

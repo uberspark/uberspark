@@ -502,7 +502,7 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
     :proptype uobjrtl: :json:object:`uobjrtl` list
 
-    :property sections: comma delimited list of |uobj| additional sections definition sub-nodes
+    :property sections: (optional) comma delimited list of |uobj| additional sections definition sub-nodes
     :proptype sections: :json:object:`sections` list
 
 
@@ -530,25 +530,29 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
 
     :property name: name of the |uobj| section 
     :proptype name: string 
-
-    :property output_names: comma delimited list of |uobj| output section names (e.g., defined via __attribute__((section())) ) 
-    :proptype output_names: string list 
-
-    :property type: hexadecimal type of the section 
-    :proptype type: string 
-    :options type: "0x0"
-
-    :property prot: hexadecimal protection of the section 
-    :proptype prot: string 
-    :options prot: "0x0"
+    :options type: "uobj_code", "uobj_data", "uobj_dmadata", "uobj_ustack", "uobj_tstack", "<developer-defined>" where 
+                   <developer-defined> is a developer defined section name
 
     :property size: hexadecimal size (in bytes) of the section 
     :proptype size: string 
 
-    :property aligned_at: hexadecimal alignment (in bytes) of the section 
+    :property output_names: comma delimited list of |uobj| output section names for developer-defined 
+                            sections (e.g., defined via __attribute__((section())) ). This field is optional for 
+                            standard |uobj| sections (e.g., uobj_code).
+    :proptype output_names: string list 
+
+    :property type: (optional) hexadecimal type of the section 
+    :proptype type: string 
+    :options type: "0x0"
+
+    :property prot: (optional) hexadecimal protection of the section 
+    :proptype prot: string 
+    :options prot: "0x0"
+
+    :property aligned_at: (optional) hexadecimal alignment (in bytes) of the section 
     :proptype aligned_at: string 
 
-    :property pad_to: hexadecimal padding boundary (in bytes) of the section 
+    :property pad_to: (optional) hexadecimal padding boundary (in bytes) of the section 
     :proptype pad_to: string 
 
 An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
