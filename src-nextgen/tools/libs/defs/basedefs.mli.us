@@ -1,12 +1,12 @@
 type usbinformat_section_info_t = {
-  f_type : int;
-  f_prot : int;
-  f_size : int;
-  f_aligned_at : int;
-  f_pad_to : int;
-  f_addr_start : int;
-  f_addr_file : int;
-  f_reserved : int;
+  mutable f_type : int;
+  mutable f_prot : int;
+  mutable f_size : int;
+  mutable f_aligned_at : int;
+  mutable f_pad_to : int;
+  mutable f_addr_start : int;
+  mutable f_addr_file : int;
+  mutable f_reserved : int;
 }
 type target_def_t = {
   mutable f_platform : string;
@@ -14,9 +14,9 @@ type target_def_t = {
   mutable f_cpu : string;
 }
 type section_info_t = {
-  f_name : string;
-  f_subsection_list : string list;
-  usbinformat : usbinformat_section_info_t;
+  mutable f_name : string;
+  mutable f_subsection_list : string list;
+  mutable usbinformat : usbinformat_section_info_t;
 }
 type uobjcoll_sentineltypes_t = { s_type : string; s_type_id : string; }
 type uobjcoll_exitcallee_t = {

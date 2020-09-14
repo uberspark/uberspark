@@ -353,18 +353,59 @@ let json_node_uberspark_uobj_sections_to_var
 							List.iter (fun x ->
 								let section_entry : Defs.Basedefs.section_info_t = 
 								{ 
-									f_name = Yojson.Basic.Util.to_string (x |> member "name");	
-									f_subsection_list = json_list_to_string_list ( Yojson.Basic.Util.to_list (x |> member "output_names") );	
-									usbinformat = { f_type = int_of_string (Yojson.Basic.Util.to_string (x |> member "type")); 
-													f_prot = int_of_string (Yojson.Basic.Util.to_string (x |> member "prot")); 
-													f_size = int_of_string (Yojson.Basic.Util.to_string (x |> member "size"));
-													f_aligned_at = int_of_string (Yojson.Basic.Util.to_string (x |> member "aligned_at")); 
-													f_pad_to = int_of_string (Yojson.Basic.Util.to_string (x |> member "pad_to")); 
+									f_name = "";	
+									f_subsection_list = [];	
+									usbinformat = { f_type = 0; 
+													f_prot = 0; 
+													f_size = 0;
+													f_aligned_at = 0; 
+													f_pad_to = 0; 
 													f_addr_start=0; 
 													f_addr_file = 0;
 													f_reserved = 0;
 													};
 								} in
+
+								(* required field *)
+								section_entry.f_name <- 
+									Yojson.Basic.Util.to_string (x |> member "name");	
+
+								(* required field *)
+								section_entry.usbinformat.f_size <- 
+									int_of_string (Yojson.Basic.Util.to_string (x |> member "size"));
+
+								(* 
+									this is required for developer defined sections, but we dont complain here
+									but allow the linking phase to complain if any references to this
+									section appear
+								*)
+								if (x |> member "output_names") != `Null then begin
+									section_entry.f_subsection_list <- 
+										json_list_to_string_list ( Yojson.Basic.Util.to_list (x |> member "output_names") );	
+								end;
+
+
+								(* the following fields are all optional *)
+								if (x |> member "type") != `Null then begin
+									section_entry.usbinformat.f_type <-
+										int_of_string (Yojson.Basic.Util.to_string (x |> member "type"));
+								end;
+
+								if (x |> member "prot") != `Null then begin
+									section_entry.usbinformat.f_prot <- 
+										int_of_string (Yojson.Basic.Util.to_string (x |> member "prot")); 
+								end;
+
+								if (x |> member "aligned_at") != `Null then begin
+									section_entry.usbinformat.f_aligned_at <- 
+										int_of_string (Yojson.Basic.Util.to_string (x |> member "aligned_at")); 
+								end;
+
+								if (x |> member "pad_to") != `Null then begin
+									section_entry.usbinformat.f_pad_to <- 
+										int_of_string (Yojson.Basic.Util.to_string (x |> member "pad_to")); 
+								end;
+
 
 								sections_assoc_list := !sections_assoc_list @ [ (section_entry.f_name, section_entry) ];
 												
