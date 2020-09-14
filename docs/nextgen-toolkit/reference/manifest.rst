@@ -530,7 +530,7 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
 
     :property name: name of the |uobj| section 
     :proptype name: string 
-    :options type: "uobj_code", "uobj_data", "uobj_dmadata", "uobj_ustack", "uobj_tstack", "<developer-defined>" where 
+    :options type: "uobj_code", "uobj_rodata", "uobj_rwdata", "uobj_dmadata", "uobj_ustack", "uobj_tstack", "<developer-defined>" where 
                    <developer-defined> is a developer defined section name
 
     :property size: hexadecimal size (in bytes) of the section 
