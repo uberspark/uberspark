@@ -1,5 +1,8 @@
-FROM amd64/ubuntu:19.10 AS base
+#FROM amd64/ubuntu:19.10 AS base
+FROM amd64/ubuntu:20.04 AS base
 LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 #USER root
 #WORKDIR /build
