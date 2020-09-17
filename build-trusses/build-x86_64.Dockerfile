@@ -1,20 +1,16 @@
-#FROM ocaml/opam2:alpine-3.9-opam
 FROM amd64/ubuntu:20.04 AS base
 LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
 
+# build time arguments
+ARG GOSU_VERSION=1.10
 ENV DEBIAN_FRONTEND=noninteractive
-
-#MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
+ENV OPAMYES 1
 
 # runtime arguments
 ENV D_CMD=make
 ENV D_CMDARGS=all
-ENV OPAMYES 1
 ENV D_UID=1000
 ENV D_GID=1000
-
-# build time arguments
-ARG GOSU_VERSION=1.10
 
 ######
 # build commands
@@ -23,18 +19,11 @@ ARG GOSU_VERSION=1.10
 # drop to root
 USER root
 
-# update apk
-#RUN apk update &&\
-#    apk upgrade
-
-# remove default opam user from image so we don't conflict on uid-->username mappings
-#RUN deluser opam
-
-# update apt packages and install sudo
+# update apt packages, install sudo, and select non-interactive mode
 RUN apt-get update -y &&\
     apt-get install -y --no-install-recommends apt-utils &&\
-    apt-get install -y sudo
-
+    apt-get install -y sudo &&\
+    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # create user uberspark and group uberspark so we have access to /home/uberspark
 RUN addgroup --system uberspark &&\
@@ -42,18 +31,17 @@ RUN addgroup --system uberspark &&\
     usermod -aG sudo uberspark &&\
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-
 # switch user to uberspark working directory to /home/uberspark
 USER uberspark
 WORKDIR "/home/uberspark"
 
 # install general development tools
-#RUN sudo apt-get install -y git &&\
-#    sudo apt-get install -y build-essential &&\
-#    sudo apt-get install -y cmake &&\
-#    sudo apt-get install -y flex &&\
-#    sudo apt-get install -y bison &&\
-#    sudo apt-get install -y opam
+RUN sudo apt-get install -y git &&\
+    sudo apt-get install -y build-essential &&\
+    sudo apt-get install -y cmake &&\
+    sudo apt-get install -y flex &&\
+    sudo apt-get install -y bison &&\
+    sudo apt-get install -y opam
 
 # install python 3
 #RUN apt-get install -y python3 &&\

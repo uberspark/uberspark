@@ -29,13 +29,6 @@ switch to the |uberspark| ``generic-platform`` staging that we created earlier.
 Finally, we invoke the |uobjcoll| build command in order to build the ``hello-mul``
 |uobjcoll|. 
 
-
-..  note::  The above ``Makefile`` assumes |uberspark| is installed within ``/c/workspace/uberspark`` 
-            using a WSL/Ubuntu development environment. You will need to replace this with the appropriate
-            directory where |uberspark| is installed based on your development environment.
-            See |genuser-guide-ref|:::ref:`genuser-guide-install-installinguberspark`
-            for more details.
-
 Similarly, we amend the ``Makefile`` ``clean`` target to remove the ``uobjcoll/_build`` folder, which
 will cleanup all the |uobjcoll| build artifacts.
 
@@ -63,3 +56,4 @@ folder.
     - link with uobjcoll library to get existing hello_world resolved correctly
     - prep install and/or package manager 
     - package installer should check for uberspark dependency on the platform and instruct user accordingly
+    - describe legacy code build system bridge when we have that ready

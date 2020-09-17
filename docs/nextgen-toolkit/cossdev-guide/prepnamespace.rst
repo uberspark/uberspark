@@ -75,7 +75,7 @@ GNU Assembler v2.26.1, and the linker bridge to use GNU ld v2.26.1
          (via docker containers) but can also exist 
          natively (e.g., installed directly on the development 
          system). In the former case the bridge namespace starts
-         with `container`, while in the latter the bridge namespace
+         with `container`, while in the latter case the bridge namespace
          starts with `native`. See 
          |reference-manifest-ref|:::ref:`reference-manifest-uberspark-bridge` 
          for further details on the manifest nodes that describe
