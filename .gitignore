@@ -36,5 +36,3 @@ temp/
 !*.yaml
 !*.sh
 
-_install
-docs
