@@ -30,57 +30,60 @@ USER root
 # remove default opam user from image so we don't conflict on uid-->username mappings
 #RUN deluser opam
 
+# update apt packages and install sudo
+RUN apt-get update -y &&\
+    apt-get install -y --no-install-recommends apt-utils 
+    
+RUN apt-get install -y sudo 
+
 # create user uberspark and group uberspark so we have access to /home/uberspark
 RUN addgroup --system uberspark &&\
-    adduser --system --ingroup uberspark uberspark
+    adduser --system --disabled-password --ingroup uberspark uberspark &&\
+    usermod -aG sudo uberspark &&\
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# install general development tools
-RUN apt-get update -y &&\
-    apt-get install -y --no-install-recommends apt-utils &&\
-    apt-get install -y git &&\
-    apt-get install -y build-essential &&\
-    apt-get install -y cmake &&\
-    apt-get install -y flex &&\
-    apt-get install -y bison &&\
-    apt-get install -y opam
-
-# install python 3
-RUN apt-get install -y python3 &&\
-    apt-get install -y python3-pip 
-
-RUN pip3 install --upgrade pip
-
-# install sphinx documentation extensions
-RUN pip3 install sphinx-jsondomain==0.0.3
-
-# install sphinx documentation generator
-RUN pip3 install -U sphinx==3.0.3
-
-# install breathe
-RUN pip3 install breathe==4.18.1
-
-# install doxygen
-WORKDIR "/home/uberspark"
-RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/archive/Release_1_8_20.tar.gz && \
-    tar -xzf ./doxygen-Release_1_8_20.tar.gz   && \
-    cd doxygen-Release_1_8_20 && \
-    mkdir build && cd build && \
-    cmake -G "Unix Makefiles" .. &&\
-    make &&\
-    make install && cd ../.. && \
-    rm -rf doxygen-Release_1_8_20.tar.gz 
-
-
-# install sudo
-RUN apt-get install -y sudo
-RUN usermod -aG sudo uberspark
 
 # switch user to uberspark working directory to /home/uberspark
 USER uberspark
 WORKDIR "/home/uberspark"
 
+# install general development tools
+RUN sudo apt-get install -y git &&\
+    sudo apt-get install -y build-essential &&\
+    sudo apt-get install -y cmake &&\
+    sudo apt-get install -y flex &&\
+    sudo apt-get install -y bison &&\
+    sudo apt-get install -y opam
+
+# install python 3
+#RUN apt-get install -y python3 &&\
+#    apt-get install -y python3-pip 
+
+#RUN pip3 install --upgrade pip
+
+# install sphinx documentation extensions
+#RUN pip3 install sphinx-jsondomain==0.0.3
+
+# install sphinx documentation generator
+#RUN pip3 install -U sphinx==3.0.3
+
+# install breathe
+#RUN pip3 install breathe==4.18.1
+
+# install doxygen
+#WORKDIR "/home/uberspark"
+#RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/archive/Release_1_8_20.tar.gz && \
+#    tar -xzf ./doxygen-Release_1_8_20.tar.gz   && \
+#    cd doxygen-Release_1_8_20 && \
+#    mkdir build && cd build && \
+#    cmake -G "Unix Makefiles" .. &&\
+#    make &&\
+#    make install && cd ../.. && \
+#    rm -rf doxygen-Release_1_8_20.tar.gz 
+
+
 # install ocaml compiler
-RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing 
+#RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing 
 
 #RUN eval $(opam env) && \
 #    opam install -y depext &&\
