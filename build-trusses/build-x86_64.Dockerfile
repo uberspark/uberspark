@@ -32,9 +32,9 @@ USER root
 
 # update apt packages and install sudo
 RUN apt-get update -y &&\
-    apt-get install -y --no-install-recommends apt-utils 
-    
-RUN apt-get install -y sudo 
+    apt-get install -y --no-install-recommends apt-utils &&\
+    apt-get install -y sudo
+
 
 # create user uberspark and group uberspark so we have access to /home/uberspark
 RUN addgroup --system uberspark &&\
@@ -48,12 +48,12 @@ USER uberspark
 WORKDIR "/home/uberspark"
 
 # install general development tools
-RUN sudo apt-get install -y git &&\
-    sudo apt-get install -y build-essential &&\
-    sudo apt-get install -y cmake &&\
-    sudo apt-get install -y flex &&\
-    sudo apt-get install -y bison &&\
-    sudo apt-get install -y opam
+#RUN sudo apt-get install -y git &&\
+#    sudo apt-get install -y build-essential &&\
+#    sudo apt-get install -y cmake &&\
+#    sudo apt-get install -y flex &&\
+#    sudo apt-get install -y bison &&\
+#    sudo apt-get install -y opam
 
 # install python 3
 #RUN apt-get install -y python3 &&\

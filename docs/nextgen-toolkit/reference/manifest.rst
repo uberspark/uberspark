@@ -182,6 +182,8 @@ The aforementioned definition selectively overrides the *binary_uobj_section_ali
 configuration settings within the current staging environment.
 
 
+.. _reference-manifest-uberspark-bridge:
+
 Manifest Nodes for Bridges
 --------------------------
 

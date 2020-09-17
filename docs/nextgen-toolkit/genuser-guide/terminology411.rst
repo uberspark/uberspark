@@ -44,3 +44,11 @@ Hardware Model (HWM)
     |uobjs|.
     |uobjcoll| public methods are selected public-methods of the individual |uobjs| that the collection encompasses, but
     which can be restricted to specific caller |uobjcoll| and/or legacy code.
+
+Bridges 
+    |uberspark| bridges are framework connections to existing 
+    development (compiler, assembler, linker, build system) and
+    verification tools. Such connections are typically 
+    containerized (via docker containers) but can also exist
+    natively.
+
