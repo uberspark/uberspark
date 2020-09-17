@@ -21,6 +21,7 @@
 
 .. |ubersparkmf| replace:: überSpark manifest 
 .. |ubersparkmff| replace:: ``uberspark.json`` 
+.. |ubersparkbridgedff| replace:: ``uberspark-bridge.Dockerfile`` 
 .. |ubersparkexecf| replace:: ``uberspark`` 
 
 .. |genuser-guide| replace:: *General User's Guide* 
