@@ -61,6 +61,10 @@ RUN wget -O doxygen-Release_1_8_20.tar.gz https://github.com/doxygen/doxygen/arc
     make install && cd ../.. && \
     rm -rf doxygen-Release_1_8_20.tar.gz 
 
+# install frama-c dependencies
+RUN apk update &&\
+    apk add autoconf gmp-dev graphviz gtk+2.0-dev gtksourceview2-dev perl zlib-dev pkgconfig libgnomecanvas-dev-2.30.3-r1
+
 # switch user to uberspark working directory to /home/uberspark
 USER uberspark
 WORKDIR "/home/uberspark"
@@ -77,6 +81,12 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y dune.1.11.3 && \
     opam install -y cppo.1.6.6 && \
     opam install -y fileutils.0.6.1 
+
+# install frama-c
+RUN eval $(opam env) && \
+    opam depext -y frama-c.20.0 &&\
+    opam install -y frama-c.20.0
+
 
 # drop back to root
 USER root
