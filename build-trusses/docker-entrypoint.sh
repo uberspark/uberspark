@@ -28,9 +28,8 @@ if [ "$(id -u)" = "0" ]; then
     deluser uberspark
 
     # add new uberspark group and user with host uid and gid
-    addgroup --gid $gid --system uberspark
-    adduser --uid $uid --no-create-home --system --disabled-password --ingroup uberspark uberspark &&\
-    usermod -aG sudo uberspark 
+    addgroup -g $gid uberspark
+    adduser -u $uid -G uberspark -D uberspark
 
     # drop to user uberspark and execute this script with the remaining parameters
     sudo -u uberspark /docker-entrypoint.sh $@
