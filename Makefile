@@ -53,7 +53,7 @@ define docker_run
 		-e D_GID="$(4)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
-		-t hypcode/uberspark-build-x86_64 
+		-t hypcode/uberspark-build-amd64 
 endef
 
 
@@ -65,7 +65,7 @@ define docker_run_interactive
 		-e D_GID="$(4)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
-		-t hypcode/uberspark-build-x86_64 
+		-t hypcode/uberspark-build-amd64 
 endef
 
 
@@ -95,17 +95,17 @@ dbgrun_sdefpp: build_sdefpp
 
 ###### build truss generation targets
 
-### generate x86_64 build truss
-.PHONY: buildcontainer-x86_64
-buildcontainer-x86_64: 
-	@echo building x86_64 build truss...
-	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/build-x86_64.Dockerfile -t hypcode/uberspark-build-x86_64 $(USPARK_BUILDTRUSSESDIR)/.
-	@echo successfully built x86_64 build truss!
+### generate amd64 build truss
+.PHONY: buildcontainer-amd64
+buildcontainer-amd64: 
+	@echo building amd64 build truss...
+	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/build-amd64.Dockerfile -t hypcode/uberspark-build-amd64 $(USPARK_BUILDTRUSSESDIR)/.
+	@echo successfully built amd64 build truss!
 
 
 ### arch independent build truss target
 .PHONY: generate_buildtruss
-generate_buildtruss: buildcontainer-x86_64
+generate_buildtruss: buildcontainer-amd64
 
 
 ###### documentation targets

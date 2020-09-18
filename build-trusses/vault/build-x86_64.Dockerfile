@@ -41,8 +41,9 @@ RUN apt-get update -y &&\
     apt-get install -y opam &&\
     apt-get install -y python3 &&\
     apt-get install -y python3-pip &&\
-    apt-get install -y musl musl-dev musl-tools &&\
-    apt-get install -y libexpat1-dev libgtk2.0-dev zlib1g zlib1g-dev
+    apt-get install -y musl musl-dev musl-tools 
+#    apt-get install -y libexpat1-dev libgtk2.0-dev zlib1g zlib1g-dev
+#apt-get install -qq -yy autoconf debianutils graphviz libexpat1-dev libgmp-dev libgnomecanvas2-dev libgtk2.0-dev libgtksourceview2.0-dev m4 perl pkg-config time zlib1g-dev
 
 # upgrade python installer, install python packages 
 # related to documentation: sphinx, sphinx extensions, and breathe
@@ -86,26 +87,46 @@ RUN eval $(opam env) && \
     opam depext -y cppo.1.6.6 && \
     opam install -y cppo.1.6.6 && \
     opam depext -y fileutils.0.6.1 &&\
-    opam install -y fileutils.0.6.1 &&\
-    opam depext -y frama-c.20.0 &&\
+    opam install -y fileutils.0.6.1 
+
+USER root
+
+RUN apt-get update -y &&\
+    apt-get install -y autoconf debianutils graphviz libexpat1-dev libgmp-dev libgnomecanvas2-dev libgtk2.0-dev libgtksourceview2.0-dev m4 musl-tools perl pkg-config zlib1g-dev &&\
+    apt-get install -y libgmp3-dev 
+
+RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/x86_64-linux-musl/gmp.h
+RUN ln -s /usr/lib/x86_64-linux-gnu/libgmp.so /usr/lib/x86_64-linux-musl/libgmp.so
+RUN ln -s /usr/include/zlib.h /usr/include/x86_64-linux-musl/zlib.h
+RUN ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-musl/libz.so
+RUN ln -s /usr/include/gtk-2.0/gdk /usr/include/x86_64-linux-musl/gdk
+RUN ln -s /usr/include/gtk-2.0/gtk /usr/include/x86_64-linux-musl/gtk
+RUN ln -s /usr/include/glib-2.0/glib.h /usr/include/x86_64-linux-musl/glib.h
+
+USER uberspark
+WORKDIR "/home/uberspark"
+
+RUN opam switch 4.09.0+musl+static+flambda &&\
+    eval $(opam env) &&\
+#    opam depext -y frama-c.20.0 &&\
     opam install -y frama-c.20.0
 
 # drop back to root
-USER root
+#USER root
 
 # change permissions of /home/uberspark so everyone can access it
-WORKDIR "/home/uberspark"
-RUN chmod ugo+rwx -R .
+#WORKDIR "/home/uberspark"
+#RUN chmod ugo+rwx -R .
 
 # setup entry point script that switches user uid/gid to match host
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+#COPY docker-entrypoint.sh /docker-entrypoint.sh
+#RUN chmod +x /docker-entrypoint.sh
 
 # switch to working directory within container
-WORKDIR "/home/uberspark/uberspark/build-trusses"
+#WORKDIR "/home/uberspark/uberspark/build-trusses"
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
-CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
+#CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
 
 
 

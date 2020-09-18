@@ -43,7 +43,8 @@ else
         #echo "NON-ROOT; username: $uname"
         #echo "parameters: $@"
 
-    opam switch 4.09.0+flambda
+    #opam switch 4.09.0+flambda
+    opam switch 4.09.0+musl+static+flambda
     eval $(opam env)
     
     # execute the command and actual parameters as user uberspark
