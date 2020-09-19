@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # runtime arguments
 ENV D_CMD=/bin/bash
-ENV D_CMDARGS=
 ENV D_UID=1000
 ENV D_GID=1000
 
@@ -84,5 +83,5 @@ RUN chmod +x /docker-entrypoint.sh
 #WORKDIR "/home/uberspark/uberspark/build-trusses"
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
-CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
+CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD}
 
