@@ -1,54 +1,7 @@
-#FROM amd64/ubuntu:19.10 AS base
 FROM amd64/ubuntu:20.04 AS base
 LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-#USER root
-#WORKDIR /build
-
-#RUN apt-get update -y \
-# && apt-get install -y \
-#    git \
-#    ocaml \
-#    ocaml-native-compilers \
-#    liblablgtk2-ocaml-dev \
-#    liblablgtksourceview2-ocaml-dev \
-#    libocamlgraph-ocaml-dev \
-#    menhir \
-#    why3 \
-#    libyojson-ocaml-dev \
-#    libocamlgraph-ocaml-dev \
-#    libzarith-ocaml-dev \
-#    build-essential \
-# && rm -rf /var/lib/apt/lists/* \
-# && git clone --single-branch https://github.com/Frama-C/Frama-C-snapshot.git . \
-# && git checkout -b tags/20.0 \
-# && ./configure \
-# && make \
-# && make install
-
-#FROM amd64/ubuntu:19.10
-
-#COPY --from=base /usr/local/ /usr/local/
-
-#RUN apt-get update -y \
-# && apt-get install -y \
-#    pkg-config\
-#    libfindlib-ocaml \
-#    libocamlgraph-ocaml-dev \
-#    libzarith-ocaml \
-#    libyojson-ocaml-dev \
-#    opam \
-# && rm -rf /var/lib/apt/lists/* 
-
-# \
-# && groupadd -r frama-c \
-# && useradd --no-log-init -r -g frama-c frama-c
-
-#USER frama-c
-#WORKDIR /src
-
 
 # see https://www.lri.fr/~marche/MPRI-2-36-1/install.html on how to install provers
 
