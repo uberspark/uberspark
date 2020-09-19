@@ -48,9 +48,8 @@ export SUDO := sudo
 define docker_run
 	docker run --rm \
 		-e D_CMD="$(1)" \
-		-e D_CMDARGS="$(2)" \
-		-e D_UID="$(3)" \
-		-e D_GID="$(4)" \
+		-e D_UID="$(2)" \
+		-e D_GID="$(3)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
 		-t hypcode/uberspark-build-amd64 
@@ -60,9 +59,8 @@ endef
 define docker_run_interactive
 	docker run --rm -i \
 		-e D_CMD="$(1)" \
-		-e D_CMDARGS="$(2)" \
-		-e D_UID="$(3)" \
-		-e D_GID="$(4)" \
+		-e D_UID="$(2)" \
+		-e D_GID="$(3)" \
 		-e MAKE="make" \
 		-v $(USPARK_SRCROOTDIR):/home/uberspark/uberspark \
 		-t hypcode/uberspark-build-amd64 
@@ -85,11 +83,11 @@ build_bootstrap: generate_buildtruss build_sdefpp
 ### shared definitions pre-processing tool
 .PHONY: build_sdefpp
 build_sdefpp: generate_buildtruss
-	$(call docker_run,make -f sdefpp.mk, -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f sdefpp.mk -w all, $(shell id -u), $(shell id -g))
 
 .PHONY: dbgrun_sdefpp
 dbgrun_sdefpp: build_sdefpp
-	$(call docker_run,make -f sdefpp.mk, -w dbgrun, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f sdefpp.mk -w dbgrun, $(shell id -u), $(shell id -g))
 
 
 
@@ -112,11 +110,11 @@ generate_buildtruss: buildcontainer-amd64
 
 .PHONY: docs_html
 docs_html: build_bootstrap
-	$(call docker_run,make -f build-docs.mk, -w docs_html, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-docs.mk -w docs_html, $(shell id -u), $(shell id -g))
 
 .PHONY: docs_pdf
 docs_pdf: build_bootstrap
-	$(call docker_run,make -f build-docs.mk, -w docs_pdf, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-docs.mk -w docs_pdf, $(shell id -u), $(shell id -g))
 
 
 ###### libraries targets
@@ -124,13 +122,13 @@ docs_pdf: build_bootstrap
 ### build libraries
 .PHONY: libs
 libs: build_bootstrap
-	$(call docker_run,make -f build-libs.mk, -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-libs.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### frontend build targets
 .PHONY: frontend
 frontend: build_bootstrap
-	$(call docker_run,make -f build-frontend.mk, -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### check to see if ROOT_DIR is specified when we are operating under WSL 
@@ -152,7 +150,7 @@ endif
 .PHONY: install
 install: check_wslrootdir build_bootstrap
 	@echo $(USPARK_INSTALLPREPDIR_CONFIGFILENAME)
-	$(call docker_run,make -f install.mk, -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f install.mk -w all, $(shell id -u), $(shell id -g))
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
 		echo "$(USPARK_NAMESPACEROOTDIR) already exists. "; \
@@ -193,16 +191,16 @@ install: check_wslrootdir build_bootstrap
 ###### (debug) shell target
 .PHONY: dbgshell
 dbgshell: generate_buildtruss
-	$(call docker_run_interactive,/bin/bash,, $(shell id -u), $(shell id -g))
+	$(call docker_run_interactive,/bin/bash, $(shell id -u), $(shell id -g))
 
 
 ###### cleanup targets
 .PHONY: clean
 clean: generate_buildtruss
-	$(call docker_run,make -f sdefpp.mk, -w clean, $(shell id -u), $(shell id -g))
-	$(call docker_run,make -f build-docs.mk, -w docs_clean, $(shell id -u), $(shell id -g))
-	$(call docker_run,make -f build-frontend.mk, -w clean, $(shell id -u), $(shell id -g))
-	$(call docker_run,make -f install.mk, -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f sdefpp.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-docs.mk -w docs_clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f build-frontend.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run,make -f install.mk -w clean, $(shell id -u), $(shell id -g))
 
 
 

@@ -2,8 +2,7 @@ FROM ocaml/opam2:alpine-3.9-opam
 MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 
 # runtime arguments
-ENV D_CMD=make
-ENV D_CMDARGS=all
+ENV D_CMD="make all"
 ENV OPAMYES 1
 ENV D_UID=1000
 ENV D_GID=1000
@@ -96,4 +95,4 @@ RUN chmod +x /docker-entrypoint.sh
 WORKDIR "/home/uberspark/uberspark/build-trusses"
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
-CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD} ${D_CMDARGS}
+CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD}
