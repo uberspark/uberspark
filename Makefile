@@ -135,10 +135,15 @@ libs: build_bootstrap
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-libs.mk -w all, $(shell id -u), $(shell id -g))
 
 
-###### frontend build targets
+### frontend build targets
 .PHONY: frontend
 frontend: build_bootstrap
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
+
+### build vbridge plugin
+.PHONY: vbridge-plugin
+vbridge-plugin: libs
+	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), make -f build-vbridge-plugin.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### check to see if ROOT_DIR is specified when we are operating under WSL 
@@ -210,6 +215,8 @@ clean: generate_buildtruss
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f sdefpp.mk -w clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-docs.mk -w docs_clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-frontend.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-libs.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), make -f build-vbridge-plugin.mk -w clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f install.mk -w clean, $(shell id -u), $(shell id -g))
 
 
