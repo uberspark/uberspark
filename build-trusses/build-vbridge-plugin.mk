@@ -9,9 +9,9 @@ include ./commondefs.mk
 
 .PHONY: all
 all: 
-	cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && $(MAKE) -w all
+	#cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && $(MAKE) -w all
 
 .PHONY: clean
 clean: 
-	cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && $(MAKE) -w clean
+	#cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && $(MAKE) -w clean
 

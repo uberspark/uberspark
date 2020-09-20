@@ -92,7 +92,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 # switch to working directory within container
-WORKDIR "/home/uberspark/uberspark/build-trusses"
+#WORKDIR "/home/uberspark/uberspark/build-trusses"
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
 CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD}

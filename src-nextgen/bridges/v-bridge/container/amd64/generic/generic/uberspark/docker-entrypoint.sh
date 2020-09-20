@@ -38,16 +38,18 @@ if [ "$(id -u)" = "0" ]; then
    
 else
     # now we are run as user uberspark, so execute the command
+    parm=$@
     #debug
         #uname=`id -u -n`
         #echo "NON-ROOT; username: $uname"
-        #echo "parameters: $@"
+        #echo "parameters: $parm"
 
     opam switch 4.09.0+flambda
     eval $(opam env)
     
     # execute the command and actual parameters as user uberspark
-    exec "$@"
+    
+    exec /bin/sh -c "$parm"
 
 fi
 
