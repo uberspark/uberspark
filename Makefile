@@ -22,6 +22,15 @@ export USPARK_DOCSDIR = $(USPARK_SRCROOTDIR)/docs
 export USPARK_INSTALLPREPDIR = $(USPARK_SRCROOTDIR)/_install
 export USPARK_NAMESPACEROOTDIR := $(ROOT_DIR)/uberspark
 
+export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/v-bridge/container/amd64/generic/generic/uberspark
+export USPARK_VBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
+export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__v-bridge__container__amd64__generic__generic__uberspark
+
+export USPARK_BLDBRIDGE_DIR := $(USPARK_BUILDTRUSSESDIR)
+export USPARK_BLDBRIDGE_DIR_DOCKERFILE := build-amd64.Dockerfile
+export USPARK_BLDBRIDGE_NS_AMD64 := uberspark/uberspark:build-trusses__container__amd64
+
+
 export SYS_PROC_VERSION := $(shell cat /proc/version)
 
 define USPARK_CONFIG_CONTENTS 
@@ -83,11 +92,11 @@ build_bootstrap: generate_buildtruss build_sdefpp
 ### shared definitions pre-processing tool
 .PHONY: build_sdefpp
 build_sdefpp: generate_buildtruss
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f sdefpp.mk -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f sdefpp.mk -w all, $(shell id -u), $(shell id -g))
 
 .PHONY: dbgrun_sdefpp
 dbgrun_sdefpp: build_sdefpp
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f sdefpp.mk -w dbgrun, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f sdefpp.mk -w dbgrun, $(shell id -u), $(shell id -g))
 
 
 
@@ -97,7 +106,8 @@ dbgrun_sdefpp: build_sdefpp
 .PHONY: buildcontainer-amd64
 buildcontainer-amd64: 
 	@echo building amd64 build truss...
-	docker build --rm -f $(USPARK_BUILDTRUSSESDIR)/build-amd64.Dockerfile -t hypcode/uberspark-build-amd64 $(USPARK_BUILDTRUSSESDIR)/.
+	docker build --rm -f $(USPARK_BLDBRIDGE_DIR)/$(USPARK_BLDBRIDGE_DIR_DOCKERFILE) -t $(USPARK_BLDBRIDGE_NS_AMD64) $(USPARK_BLDBRIDGE_DIR)/.
+	docker build --rm -f $(USPARK_VBRIDGE_DIR)/$(USPARK_VBRIDGE_DIR_DOCKERFILE) -t $(USPARK_VBRIDGE_NS_AMD64) $(USPARK_VBRIDGE_DIR)/.
 	@echo successfully built amd64 build truss!
 
 
@@ -110,11 +120,11 @@ generate_buildtruss: buildcontainer-amd64
 
 .PHONY: docs_html
 docs_html: build_bootstrap
-	$(call docker_run,  hypcode/uberspark-build-amd64, make -f build-docs.mk -w docs_html, $(shell id -u), $(shell id -g))
+	$(call docker_run,  $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-docs.mk -w docs_html, $(shell id -u), $(shell id -g))
 
 .PHONY: docs_pdf
 docs_pdf: build_bootstrap
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f build-docs.mk -w docs_pdf, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-docs.mk -w docs_pdf, $(shell id -u), $(shell id -g))
 
 
 ###### libraries targets
@@ -122,13 +132,13 @@ docs_pdf: build_bootstrap
 ### build libraries
 .PHONY: libs
 libs: build_bootstrap
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f build-libs.mk -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-libs.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### frontend build targets
 .PHONY: frontend
 frontend: build_bootstrap
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### check to see if ROOT_DIR is specified when we are operating under WSL 
@@ -150,7 +160,7 @@ endif
 .PHONY: install
 install: check_wslrootdir build_bootstrap
 	@echo $(USPARK_INSTALLPREPDIR_CONFIGFILENAME)
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f install.mk -w all, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f install.mk -w all, $(shell id -u), $(shell id -g))
 	@echo Populating namespace within: $(USPARK_NAMESPACEROOTDIR)...
 	@if [ -d $(USPARK_NAMESPACEROOTDIR) ]; then \
 		echo "$(USPARK_NAMESPACEROOTDIR) already exists. "; \
@@ -191,16 +201,16 @@ install: check_wslrootdir build_bootstrap
 ###### (debug) shell target
 .PHONY: dbgshell
 dbgshell: generate_buildtruss
-	$(call docker_run_interactive, hypcode/uberspark-build-amd64, /bin/bash, $(shell id -u), $(shell id -g))
+	$(call docker_run_interactive, $(USPARK_BLDBRIDGE_NS_AMD64), /bin/bash, $(shell id -u), $(shell id -g))
 
 
 ###### cleanup targets
 .PHONY: clean
 clean: generate_buildtruss
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f sdefpp.mk -w clean, $(shell id -u), $(shell id -g))
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f build-docs.mk -w docs_clean, $(shell id -u), $(shell id -g))
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f build-frontend.mk -w clean, $(shell id -u), $(shell id -g))
-	$(call docker_run, hypcode/uberspark-build-amd64, make -f install.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f sdefpp.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-docs.mk -w docs_clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f build-frontend.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), make -f install.mk -w clean, $(shell id -u), $(shell id -g))
 
 
 
