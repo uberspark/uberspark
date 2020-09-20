@@ -1,2 +1,4 @@
-(∗∗ Hello World plug−in.
-No function is exported. ∗)
+(*
+Hello World plug−in.
+No function is exported. 
+*)
