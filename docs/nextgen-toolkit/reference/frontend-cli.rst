@@ -82,6 +82,8 @@ usage and description are as shown below:
 .. highlight:: default
 
 
+.. _frontend-cli-bridges:
+
 
 Bridge Management CLI
 ---------------------

@@ -47,7 +47,7 @@ are housed within the following framework source directory:
 The following is a description of the various placeholders
 within the aforementioned namespace and source directory layout:
 
-    * `<type>` is the type of bridge and can be one of *cc-bridge* (compiler bridge), *as-bridge* (assembler bridge) or *ld-bridge* (linker bridge)
+    * `<type>` is the type of bridge and can be one of *cc-bridge* (compiler bridge), *as-bridge* (assembler bridge), *ld-bridge* (linker bridge), or *v-bridge* (verification bridge)
     * `<arch>` is the CPU architecture the bridge is tailored for    
     * `<cpu>` is the CPU model supported the bridge is tailored for
     * `<name>` is the name of the bridge. This can be any non-conflicting
@@ -85,17 +85,70 @@ bridge installation environment.
 Adding a new Bridge
 -------------------
 
+The following sequence of steps are followed to add a new bridge
+to the framework source:
+
+1. Identify the `<type>` of bridge you want to add. See 
+   :ref:`contrib-guide-bridges-nsdirlayout` to see the current
+   bridge types supported.
+
+2. Follow instructions within :ref:`contrib-guide-bridges-nsdirlayout` 
+   to construct the bridge namespace and source directory
+   depending on whether the 
+   bridge will be natively supported or supported via containers.
+
+3. Add a bridge |ubersparkmff| manifest file describing the
+   bridge. See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-bridge` 
+   for further details on the |uspark| bridge manifest JSON file
+   format and bridge node and field descriptions
+            
+4. For bridges supported via containers, add The bridge dockerfile 
+   and other dockerfile build scripts within the bridge source 
+   directory
+
+
 
 .. _contrib-guide-bridges-remove:
 
 Removing a Bridge
 -----------------
 
+1. Identify the `<type>` of bridge you want to add. See 
+   :ref:`contrib-guide-bridges-nsdirlayout` to see the current
+   bridge types supported.
+
+2. Follow instructions within :ref:`contrib-guide-bridges-nsdirlayout` 
+   to construct the bridge namespace and source directory
+   depending on whether the 
+   bridge will be natively supported or supported via containers.
+
+3. Remove the bridge source directory (as identified the 
+   previous step) and contents
 
 
 .. _contrib-guide-bridges-configtest:
 
-Testing a Bridge
-----------------
+Building/Testing a Bridge
+-------------------------
+
+Briges supported by containers can be built and tested via
+the commaldn line tool interface (see :ref:`frontend-cli-intro`) as below:
+
+``uberspark bridge config --cc-bridge --build <bridge-ns>``
+
+where `<bridge-ns>` is the bridge namespace as described in
+:ref:`contrib-guide-bridges-nsdirlayout`.
+
+The following example builds the Compcert v3.1 compiler bridge:
+
+``uberspark bridge config --cc-bridge --build amd64/x86_32/generic/compcert/v3.1``
+
+..  note::  The above command uses `--cc-bridge` to identify a 
+            compiler bridge. See and |reference-manifest-ref|:::ref:`frontend-cli-bridges`
+            for flags and more details on 
+            how to select other (e.g., assembler, linker
+            and verification) bridges.
+
+
 
 
