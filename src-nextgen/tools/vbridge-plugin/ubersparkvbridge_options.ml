@@ -1,3 +1,16 @@
+(* 
+    überSpark verification bridge (frama-c) plugin
+
+    author: Amit Vasudevan <amitvasudevan@acm.org>
+*)
+
+(*
+    note that frama-c -then command will cause the previously
+    set options to return true again in the segment following the
+    -then
+
+*)
+
 let help_msg = "output a warm welcome message to the user"
 
 module Self = Plugin.Register
@@ -7,11 +20,19 @@ module Self = Plugin.Register
         let help = help_msg
     end)
 
-module Enabled = Self.False
+module Start = Self.False
     (struct
-        let option_name = "-hello"
+        let option_name = "-hstart"
         let help = "when on (off by default), " ^ help_msg
     end)
+
+
+module Finish = Self.False
+    (struct
+        let option_name = "-hfinish"
+        let help = "when on (off by default), " ^ help_msg
+    end)
+
 
 module Output_file = Self.String
     (struct
