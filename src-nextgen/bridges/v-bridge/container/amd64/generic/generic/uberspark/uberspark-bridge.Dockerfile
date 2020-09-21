@@ -62,6 +62,11 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam depext -y frama-c.20.0 &&\
     opam install -y frama-c.20.0 
 
+# install packages required by uberspark lib
+RUN eval $(opam env) && \
+    opam depext -y fileutils.0.6.1 &&\
+    opam install -y fileutils.0.6.1 
+
 
 # update why3 with installed provers
 RUN eval $(opam env) && \

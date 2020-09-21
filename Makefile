@@ -146,7 +146,7 @@ frontend: build_bootstrap
 
 ### build vbridge plugin
 .PHONY: vbridge-plugin
-vbridge-plugin: libs
+vbridge-plugin: build_bootstrap
 	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-vbridge-plugin.mk -w all, $(shell id -u), $(shell id -g))
 
 

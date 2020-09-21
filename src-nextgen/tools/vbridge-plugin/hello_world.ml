@@ -1,3 +1,9 @@
+open Cil_types
+open Unix
+open Filename
+open Yojson
+open Uberspark
+
 let help_msg = "output a warm welcome message to the user"
 
 module Self = Plugin.Register
