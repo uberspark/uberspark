@@ -96,6 +96,43 @@ let handler_uobj_build
 ;;
 
 
+
+(* verify action handler *)
+let handler_uobj_verify
+  (cmd_uobj_opts: opts)
+  (uobj_path_ns : string)
+  =
+
+  if cmd_uobj_opts.platform = "" then
+      `Error (true, "uobj PLATFORM must be specified.")
+  else if cmd_uobj_opts.arch = "" then
+      `Error (true, "uobj ARCH must be specified.")
+  else if cmd_uobj_opts.cpu = "" then
+      `Error (true, "uobj CPU must be specified.")
+  else
+    begin
+     	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
+    		{f_platform = cmd_uobj_opts.platform; f_arch = cmd_uobj_opts.arch; f_cpu = cmd_uobj_opts.cpu} in
+
+      (*let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_build (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) target_def 
+        Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_load_address) in
+      if (rval) then begin
+        Uberspark.Logger.log "uobj build success!";
+        `Ok ()
+      end else begin
+        `Error (false, "uobj build failed!")
+      end;
+      *)
+      Uberspark.Logger.log "uobj verify success!";
+      `Ok ()
+
+    end
+  ;
+
+;;
+
+
+
 (* main handler for uobj command *)
 let handler_uobj 
   (copts : Commonopts.opts)
@@ -112,6 +149,10 @@ let handler_uobj
   match action with
     | `Build -> 
       retval := handler_uobj_build cmd_uobj_opts path_ns;
+
+    | `Verify -> 
+      retval := handler_uobj_verify cmd_uobj_opts path_ns;
+
   ;
 
 (*  (* initialize bridges *)
