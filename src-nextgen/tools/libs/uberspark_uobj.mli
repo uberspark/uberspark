@@ -160,6 +160,7 @@ type slt_info_t =
 
   	method prepare_namespace_for_build : unit -> bool
   	method build_image : unit -> bool
+  	method verify : unit -> bool
 
 
   	(*val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t *)
@@ -170,3 +171,4 @@ end
 
 val create_initialize : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
 val create_initialize_and_build : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
+val create_initialize_and_verify : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option

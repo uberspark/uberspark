@@ -1372,6 +1372,62 @@ class uobject
 	;
 	
 
+	(* verify the uobj *)
+	method verify
+		()
+		: bool =
+
+		let retval = ref false in
+
+		(* switch working directory to uobj_path build folder *)
+		let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change (self#get_d_builddir)) in
+		if(rval == false) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" self#get_d_builddir;
+			(!retval)
+		end else
+
+		(*let dummy =0 in begin
+	   	Uberspark_logger.log "proceeding to compile c files...";
+		end;
+
+		if not (self#compile_c_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled c files successfully!";
+		Uberspark_logger.log "proceeding to compile asm files...";
+		end;
+
+		if not (self#compile_asm_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
+			(!retval)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log "compiled asm files successfully!";
+		Uberspark_logger.log "proceeding to link object files...";
+		end;
+
+		if not (self#link_object_files ()) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
+			(!retval)
+		end else
+		*)
+
+		let dummy = 0 in begin
+
+		(* restore working directory *)
+		ignore(Uberspark_osservices.dir_change r_prevpath);
+
+		Uberspark_logger.log "cleaned up verification";
+		retval := true;
+		end;
+
+		(!retval)
+	;
+
 end;;
 
 
@@ -1479,6 +1535,43 @@ let create_initialize_and_build
 
 	(true, Some uobj)
 ;;
+
+
+let create_initialize_and_verify
+	(uobj_mf_filename : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	(uobj_load_address : int)
+	: bool * uobject option =
+
+	(* create uobj instance and initialize *)
+    let (rval, uobjopt) = (create_initialize 
+		uobj_mf_filename uobj_target_def uobj_load_address) in
+    if (rval == false) then begin
+		(false, None)
+	end else
+
+	match uobjopt with 
+	| None ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj instance!";
+		(false, None)
+
+	| Some uobj ->
+
+	(* build uobj binary image *)
+	let rval = (uobj#verify ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to verify uobj!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "uobj verification successful.";
+	end;
+
+	(true, Some uobj)
+;;
+
+
 
 
 (*--------------------------------------------------------------------------*)
