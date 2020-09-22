@@ -168,5 +168,5 @@ type slt_info_t =
 
 end
 
-
+val create_initialize : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
 val create_initialize_and_build : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option

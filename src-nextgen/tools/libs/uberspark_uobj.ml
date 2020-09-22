@@ -1375,15 +1375,23 @@ class uobject
 end;;
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* stand-alone interfaces that are invoked for one-short create, initialize *)
+(* and perform specific operation (compile, verify, build) *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
-let create_initialize_and_build
+
+(* create and initialize a uobj and return uobj object if successful *)
+let create_initialize
 	(uobj_mf_filename : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
 	(uobj_load_address : int)
 	: bool * uobject option =
 
 	(* create uobj instance and initialize *)
-	let uobj = new uobject in
+	let uobj:uobject = new uobject in
 	let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
 		uobj_mf_filename uobj_target_def uobj_load_address) in	
     if (rval == false) then	begin
@@ -1433,6 +1441,30 @@ let create_initialize_and_build
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
 		(false, None)
 	end else
+
+	(true, Some uobj)
+;;
+
+
+let create_initialize_and_build
+	(uobj_mf_filename : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	(uobj_load_address : int)
+	: bool * uobject option =
+
+	(* create uobj instance and initialize *)
+    let (rval, uobjopt) = (create_initialize 
+		uobj_mf_filename uobj_target_def uobj_load_address) in
+    if (rval == false) then begin
+		(false, None)
+	end else
+
+	match uobjopt with 
+	| None ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj instance!";
+		(false, None)
+
+	| Some uobj ->
 
 	(* build uobj binary image *)
 	let rval = (uobj#build_image ()) in	
