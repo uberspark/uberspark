@@ -98,6 +98,7 @@ let namespace_bridge_container_build_mountpath = "/root/src";;
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;
+let namespace_bridge_vf_mf_node_type_tag = "uberspark-bridge-vf";;
 
 let namespace_bridge_ar_bridge_name = "ar-bridge";;
 let namespace_bridge_as_bridge_name = "as-bridge";;
