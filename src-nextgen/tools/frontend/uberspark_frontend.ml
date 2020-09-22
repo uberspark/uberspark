@@ -101,6 +101,7 @@ let cmd_uobj =
 let cmd_uobjcoll =
  	let action = 
 	let action = [ 	"build", `Build; 
+					"verify", `Verify;
 				] in
   	let doc = strf "The action to perform. $(docv) must be one of %s."
       (Arg.doc_alts_enum action) in
@@ -113,7 +114,7 @@ let cmd_uobjcoll =
     Arg.(required & pos 1 (some string) None & info [] ~docv:"PATH or NAMESPACE" ~doc)
 	in
 
-  let doc = "Verify, build and/or manage uobj collections" in
+  let doc = "Verify, compile, build and/or manage uobj collections" in
   let man =
     [
 		`S Manpage.s_synopsis;
@@ -125,6 +126,8 @@ let cmd_uobjcoll =
  		`S "ACTIONS";
     	`I ("$(b,build)",
         	"build the uobj collection binary.");
+    	`I ("$(v,verify)",
+        	"verify the uobj collection.");
 	 	`S "ACTION OPTIONS";
 	  	`P "These options qualify the aforementioned actions.";
 		`Blocks manpage_sec_common_options;

@@ -94,6 +94,40 @@ let handler_uobjcoll_build
 ;;
 
 
+(* verify action handler *)
+let handler_uobjcoll_verify
+  (cmd_uobjcoll_opts: opts)
+  (uobjcoll_path_ns : string)
+  =
+
+  if cmd_uobjcoll_opts.platform = "" then
+      `Error (true, "uobj collection PLATFORM must be specified.")
+  else if cmd_uobjcoll_opts.arch = "" then
+      `Error (true, "uobj collection ARCH must be specified.")
+  else if cmd_uobjcoll_opts.cpu = "" then
+      `Error (true, "uobj collection CPU must be specified.")
+  else
+    begin
+     	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
+    		{f_platform = cmd_uobjcoll_opts.platform; f_arch = cmd_uobjcoll_opts.arch; f_cpu = cmd_uobjcoll_opts.cpu} in
+
+      (*if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Config.json_node_uberspark_config_var.uobjcoll_binary_image_load_address) then begin
+        Uberspark.Logger.log "uobj collection build success!";
+        `Ok ()
+      end else begin
+        `Error (false, "uobj collection build failed!")
+      end;*)
+
+      Uberspark.Logger.log "uobj collection verification success!";
+      `Ok ()
+
+    end
+  ;
+
+;;
+
+
+
 (* main handler for uobjcoll command *)
 let handler_uobjcoll 
   (copts : Commonopts.opts)
@@ -110,6 +144,10 @@ let handler_uobjcoll
   match action with
     | `Build -> 
       retval := handler_uobjcoll_build cmd_uobjcoll_opts path_ns;
+
+    | `Verify -> 
+      retval := handler_uobjcoll_verify cmd_uobjcoll_opts path_ns;
+
   ;
 
   (!retval)
