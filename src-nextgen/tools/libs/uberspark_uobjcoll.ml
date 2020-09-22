@@ -1053,7 +1053,6 @@ let initialize_common_operation_context
 	let r_prevpath_result = ref "" in 
 
 	let dummy = 0 in begin
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection build start...";
 	
 	(* store global initialization variables *)
 	d_load_address := uobjcoll_load_address;
@@ -1254,7 +1253,7 @@ let initialize_common_operation_context
 	(* store return path which the caller can use to change back to *)
 	r_prevpath_result := r_prevpath;
 
-	(!retval, !r_prevpath_result)
+	(true, !r_prevpath_result)
 ;;
 
 
@@ -1267,199 +1266,18 @@ let build
 
 	(* local variables *)
 	let retval = ref false in
-	let in_namespace_build = ref false in
-
+	
 	let dummy = 0 in begin
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection build start...";
-	
-	(* store global initialization variables *)
-	d_load_address := uobjcoll_load_address;
-	d_target_def.f_platform <- target_def.f_platform;
-	d_target_def.f_cpu <- target_def.f_cpu;
-	d_target_def.f_arch <- target_def.f_arch;
-	
 	end;
 
-
-	(* get uobj collection absolute path *)
-	let (rval, abs_uobjcoll_path) = (Uberspark_osservices.abspath uobjcoll_path_ns) in
+	(* initialize common operation context *)
+	let (rval, r_prevpath) = (initialize_common_operation_context
+						uobjcoll_path_ns target_def uobjcoll_load_address) in
 	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobjcoll: %s" abs_uobjcoll_path;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize common operation context";
 		(!retval)
 	end else
-
-	(* switch working directory to uobjcoll source path *)
-	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobjcoll_path) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll source directory: %s" abs_uobjcoll_path;
-		(!retval)
-	end else
-
-	(* create _build folder *)
-	let dummy = 0 in begin
-	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
-	end;
-
-	(* switch working directory to uobjcoll _build folder *)
-	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_build_dir)) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll build folder: %s" 
-			(abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_build_dir);
-		(!retval)
-	end else
-
-    (* parse uobjcoll manifest *)
-	let uobjcoll_mf_filename = (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
-	let rval = (parse_manifest uobjcoll_mf_filename) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobjcoll: %s" uobjcoll_mf_filename;
-		(!retval)
-	end else
-
-	(* sanity check platform, cpu, arch override *)
-	(* TBD: if manifest says generic, we need a command line override *)
-	let dummy = 0 in begin
-	json_node_uberspark_uobjcoll_var.f_arch <- d_target_def.f_arch;
-	json_node_uberspark_uobjcoll_var.f_cpu <- d_target_def.f_cpu;
-	json_node_uberspark_uobjcoll_var.f_platform <- d_target_def.f_platform;
-	end;
-
-	(*create uobjcoll_publicmethods and intrauobjcoll sentinels hashtbl *)
-	let rval = (create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl ()) in 
-
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not create uobj collection sentinels hashtbl!";
-		(false)
-	end else
-	
-	let dummy = 0 in begin
-	Uberspark_logger.log "created uobj collection uobjcoll_publicmethods and intrauobjcoll sentinels hashtbl";
-	end;
-
-
-	(* initialize uobj collection bridges *)
-	let rval = (Uberspark_bridge.initialize_from_config ()) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
-		(!retval)
-	end else
-
-
-    (* collect uobj collection uobj info *)
-	let rval = (initialize_uobjs_baseinfo abs_uobjcoll_path Uberspark_namespace.namespace_uobjcoll_build_dir) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to collect uobj information for uobj collection!";
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "successfully collected uobj information";
-	end;
-
-	(* setup uobj collection canonical namespace for build *)
-	let rval = (prepare_namespace_for_build abs_uobjcoll_path) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to prepare uobjcoll canonical build namespace!";
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "uobjcoll canonical build namespace ready";
-	end;
-
-	(* provision all uobj sources within uobjcoll _build folder *)
-	let dummy = 0 in begin
-	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-
-		Uberspark_osservices.mkdir ~parent:true uobjinfo_entry.f_uobjinfo.f_uobj_buildpath (`Octal 0o0777);
-		Uberspark_osservices.cp ~recurse:true ~force:true (uobjinfo_entry.f_uobjinfo.f_uobj_srcpath ^ "/*") 
-			(uobjinfo_entry.f_uobjinfo.f_uobj_buildpath ^ "/.")	
-
-	)!d_uobjcoll_uobjinfo_list;
-	end;
-
-
-	(* initialize uobjs within uobj collection *)
-	(* after this, we all the uobj manifests parsed, build folders created, 
-		public methods populated based on load address of 0 for every uobj
-		uobj size is available for every uobj
-	*)
-	let rval = (initialize_uobjs_within_uobjinfo_list ()) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobjs!";
-		(!retval)
-	end else
-
-
-
-	(* create uobj collection uobjs public methods hashtable and association list *)
-	let dummy = 0 in begin
-	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl;
-	create_uobjs_publicmethods_list_mforder d_uobjs_publicmethods_assoc_list_mf;
-	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list";
-	end;
-
-	(* create uobjcoll memory map *)
-	let (rval, uobjcoll_size) = (consolidate_sections_with_memory_map ()) in 
-
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not create uobj collection memory map!";
-		(false)
-	end else
-
-	(* store uobj collection computed size *)
-	let dummy = 0 in begin
-	d_size := uobjcoll_size;
-	Uberspark_logger.log "consolidated uobj collection sections, total size=0x%08x" !d_size;
-	end;
-
-	(* compute uobj section memory map for all uobjs based on uobjcoll memory map *)
-	let dummy = 0 in begin
-	compute_uobjs_section_memory_map_within_uobjinfo_list ();
-	Uberspark_logger.log "computed uobj section memory map for all uobjs within collection";
-	end;
-
-	(* create uobj collection uobjs public methods hashtable and association list with address *)
-	let dummy = 0 in begin
-	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
-	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list with address";
-	end;
-
-	(* create sentinel address hashtbls for uobjcoll, intrauobjcoll, interuobjcoll and legacy publicmethods *)
-	(* TBD: interuobjcoll and legacy *)
-	let dummy = 0 in begin
-	setup_uobjcoll_publicmethods_sentinel_address_hashtbl ();
-	setup_intrauobjcoll_publicmethods_sentinel_address_hashtbl ();
-	Uberspark_logger.log "created sentinel address hashtbls";
-	end;
-
-	(* prepare inputs for sentinel code generation *)
-	let dummy = 0 in begin
-	prepare_for_uobjcoll_sentinel_codegen ();
-	Uberspark_logger.log "prepared inputs for sentinel code generation";
-	end;
-
-	(* generate uobj collection sentinel code *)
-	let rval = (Uberspark_codegen.Uobjcoll.generate_sentinel_code 
-		Uberspark_namespace.namespace_uobjcoll_sentinel_definitions_src_filename
-		!d_sentinel_info_for_codegen_list
-		) in 
-	
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate source for uobj collection sentinel definitions!";
-		(false)
-	end else
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "generated source for  uobj collection sentinel definitions";
-	end;
-
-	(* setup intrauobjcoll callees sentinel type hashtbl *)
-	let dummy = 0 in begin
-	setup_intrauobjcoll_callees_sentinel_type_hashtbl ();
-	Uberspark_logger.log "setup intrauobjcoll callees sentinel type hashtbl";
-	end;
-
 
 	(* build all uobjs *)
 	let dummy = 0 in begin
@@ -1560,15 +1378,6 @@ let build
 
 	(* generate uobjcoll linker script *)
 	let dummy = 0 in begin
-(*	let uobjinfo_list : Defs.Basedefs.uobjinfo_t list ref = ref [] in
-	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
-		uobjinfo_list := !uobjinfo_list @ [ uobjinfo_entry.f_uobjinfo ];
-	)!d_uobjcoll_uobjinfo_list;
-*)
-(*	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
-		(Uberspark_namespace.namespace_uobjcoll_linkerscript_filename)
-		 !uobjinfo_list !d_load_address !d_size;
-*)
 	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename 
 		!d_load_address !d_size !d_memorymapped_sections_list;
@@ -1585,7 +1394,6 @@ let build
 	(* TBD: eventually this will just be casm sources *)
 	d_sources_asm_file_list := [ 
 		Uberspark_namespace.namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename;		
-		Uberspark_namespace.namespace_uobjcoll_sentinel_definitions_src_filename
 	] @ !d_sources_asm_file_list;
 	end;
 	
