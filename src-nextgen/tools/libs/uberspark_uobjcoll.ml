@@ -1258,6 +1258,127 @@ let initialize_common_operation_context
 
 
 
+let verify
+	(uobjcoll_path_ns : string)
+	(target_def : Defs.Basedefs.target_def_t)
+	(uobjcoll_load_address : int)
+	: bool =
+
+	(* local variables *)
+	let retval = ref false in
+	
+	let dummy = 0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection verification start...";
+	end;
+
+	(* initialize common operation context *)
+	let (rval, r_prevpath) = (initialize_common_operation_context
+						uobjcoll_path_ns target_def uobjcoll_load_address) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize common operation context";
+		(!retval)
+	end else
+
+	(* verify all uobjs *)
+	let dummy = 0 in begin
+	retval := true;
+	List.iter ( fun (uobjinfo_entry : uobjcoll_uobjinfo_t) -> 
+		Uberspark_logger.log "Verifying uobj '%s'..." uobjinfo_entry.f_uobjinfo.f_uobj_name;
+
+		match uobjinfo_entry.f_uobj with 
+			| None ->
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj!";
+				retval := false;
+
+			| Some uobj ->
+				begin
+					let uobj_bridges_override = ref false in
+
+					let uobj_slt_info : Uberspark_uobj.slt_info_t = {
+						f_intrauobjcoll_callees_sentinel_type_hashtbl = d_intrauobjcoll_callees_sentinel_type_hashtbl;
+						f_intrauobjcoll_callees_sentinel_address_hashtbl = d_intrauobjcoll_publicmethods_sentinel_address_hashtbl;
+						f_interuobjcoll_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+						f_interuobjcoll_callees_sentinel_address_hashtbl =((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));
+						f_legacy_callees_sentinel_type_hashtbl = ((Hashtbl.create 32) : ((string, string list)  Hashtbl.t));
+						f_legacy_callees_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));  
+					} in
+					uobj#set_d_slt_info uobj_slt_info;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "setup uobj sentinel linkage table information";
+					
+					uobj#prepare_sources ();
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepared uobj sources";
+
+					if !retval &&  not (uobj#prepare_namespace_for_build ()) then begin
+						retval := false;
+					end;
+
+					if (uobj#overlay_config_settings ()) then begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initializing bridges with uobj manifest override...";
+						(* save current config settings *)
+						Uberspark_config.settings_save ();
+
+						if not (Uberspark_bridge.initialize_from_config ()) then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not build uobj specific bridges!";
+							retval := false;
+						end;
+						
+						uobj_bridges_override := true;
+					end else begin
+						(* uobj manifest did not have any config-settings specified, so use the collection default *)
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "using uobj collection default bridges...";
+						retval := true
+					end;
+
+					if !retval &&  not (uobj#verify ()) then begin
+						retval := false;
+					end;
+
+					if !retval then begin					
+						Uberspark_logger.log "Successfully verified uobj '%s'" uobjinfo_entry.f_uobjinfo.f_uobj_name;
+					end;
+
+					(* restore config settings if we saved them*)
+					if !uobj_bridges_override then begin
+						Uberspark_config.settings_restore ();
+						(* reload bridges *)
+						if not (Uberspark_bridge.initialize_from_config ()) then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not build uobjcoll bridges during config restoration!";
+							retval := false;
+						end;
+
+					end;
+				end
+		;
+
+
+	)!d_uobjcoll_uobjinfo_list;
+	end;
+
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not verify uobj(s)!";
+		(!retval)
+	end else
+
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "verified uobjcoll successfully";
+	end;
+
+
+	(* restore working directory *)
+	let dummy = 0 in begin
+	ignore(Uberspark_osservices.dir_change r_prevpath);
+	Uberspark_logger.log "cleaned up operation workspace";
+	retval := true;
+	end;
+
+	(!retval)
+;;
+
+
+
+
+
 let build
 	(uobjcoll_path_ns : string)
 	(target_def : Defs.Basedefs.target_def_t)

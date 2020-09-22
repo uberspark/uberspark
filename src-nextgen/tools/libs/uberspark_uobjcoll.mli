@@ -13,3 +13,4 @@ val initialize_common_operation_context :
 	bool * string
 
 val build : string -> Defs.Basedefs.target_def_t -> int -> bool
+val verify : string -> Defs.Basedefs.target_def_t -> int -> bool

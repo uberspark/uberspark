@@ -111,12 +111,12 @@ let handler_uobjcoll_verify
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{f_platform = cmd_uobjcoll_opts.platform; f_arch = cmd_uobjcoll_opts.arch; f_cpu = cmd_uobjcoll_opts.cpu} in
 
-      (*if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Config.json_node_uberspark_config_var.uobjcoll_binary_image_load_address) then begin
-        Uberspark.Logger.log "uobj collection build success!";
+      if (Uberspark.Uobjcoll.verify uobjcoll_path_ns target_def Uberspark.Config.json_node_uberspark_config_var.uobjcoll_binary_image_load_address) then begin
+        Uberspark.Logger.log "uobj collection verification [SUCCESS]!";
         `Ok ()
       end else begin
-        `Error (false, "uobj collection build failed!")
-      end;*)
+        `Error (false, "uobj collection verification [FAILED]!")
+      end;
 
       Uberspark.Logger.log "uobj collection verification success!";
       `Ok ()
