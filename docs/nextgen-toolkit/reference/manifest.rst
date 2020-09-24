@@ -395,10 +395,6 @@ bridge. The JSON declaration of the ``uberspark-bridge-ld`` node is as below:
    :property bridge-hdr: the common bridge header declaration
    :proptype bridge-hdr: :json:object:`bridge-hdr`
 
-		"params_prefix_lscript" : "-T",
-		"params_prefix_libdir" : "-L",
-		"params_prefix_lib" : "-l",
-
    :property params_prefix_lscript: command line option prefix to specify input linker script file
    :proptype params_prefix_lscript: string
 
@@ -455,6 +451,61 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
             environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary. It also uses the 
             `objcopy` tool to generate flat-form binary image.
+
+
+``uberspark-bridge-vf`` Manifest Node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``uberspark-bridge-vf`` node within the |ubersparkmf| is used to describe a
+verification bridge. The JSON declaration of the ``uberspark-bridge-vf`` node is 
+as below:
+
+.. json:object:: uberspark-bridge-vf
+
+   :property bridge-hdr: the common bridge header declaration
+   :proptype bridge-hdr: :json:object:`bridge-hdr`
+
+   :property bridge_cmd: list of command line strings that will be executed towards verification. Note: environment variable ``$(SOURCE_C_FILES)`` contains space seperated list of C source files.
+   :proptype bridge_cmd: string list
+
+An example definition of the ``uberspark-bridge-vf`` node for the 
+Frama-C verification framework, within |ubersparkmff| follows:
+
+
+.. code-block:: JSON
+    
+    {
+        "uberspark-manifest":{
+            "manifest_node_types" : [ "uberspark-bridge-vf" ],
+            "uberspark_min_version" : "any",
+            "uberspark_max_version" : "any"
+        },
+
+        "uberspark-bridge-vf":{
+            "bridge-hdr":{
+                "btype" : "container",
+                "bname" : "frama-c",
+                "execname" : "frama-c",
+                "devenv" : "amd64",
+                "arch" : "generic",
+                "cpu" : "generic",
+                "version" : "v20.0",
+                "path" : ".",
+                "params" : [ ],
+                "container_fname" : "uberspark-bridge.Dockerfile"
+            },
+
+            "bridge_cmd" : []
+        }
+    }
+
+
+.. note::   Here the Frama-C verification bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
+            is the container dockerfile that includes the build for running Frama-C within an ``amd64`` 
+            environment (e.g., ubuntu or alpine)
+
+
+
 
 
 .. _reference-manifest-uberspark-uobj:

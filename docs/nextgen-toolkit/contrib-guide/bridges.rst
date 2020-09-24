@@ -47,7 +47,7 @@ are housed within the following framework source directory:
 The following is a description of the various placeholders
 within the aforementioned namespace and source directory layout:
 
-    * `<type>` is the type of bridge and can be one of *cc-bridge* (compiler bridge), *as-bridge* (assembler bridge), *ld-bridge* (linker bridge), or *v-bridge* (verification bridge)
+    * `<type>` is the type of bridge and can be one of *cc-bridge* (compiler bridge), *as-bridge* (assembler bridge), *ld-bridge* (linker bridge), or *vf-bridge* (verification bridge)
     * `<arch>` is the CPU architecture the bridge is tailored for    
     * `<cpu>` is the CPU model supported the bridge is tailored for
     * `<name>` is the name of the bridge. This can be any non-conflicting

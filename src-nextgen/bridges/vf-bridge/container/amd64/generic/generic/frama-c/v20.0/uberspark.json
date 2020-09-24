@@ -5,12 +5,12 @@
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-bridge-v" ],
+		"manifest_node_types" : [ "uberspark-bridge-vf" ],
 		"uberspark_min_version" : "any",
 		"uberspark_max_version" : "any"
 	},
 
-    "uberspark-bridge-v" : {
+    "uberspark-bridge-vf" : {
 		/* bridge header */
 		"bridge-hdr":{
 			"btype" : "container",
@@ -23,7 +23,9 @@
 			"path" : ".",
 			"params" : [ ],
 			"container_fname" : "uberspark-bridge.Dockerfile"
-		}
+		},
+
+		"bridge_cmd" : []
 
 	}
 
