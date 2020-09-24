@@ -192,5 +192,34 @@ let initialize_from_config ()
 	end;
 
 
+	(* handle uberspark vf-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.bridge_vf_bridge_uberspark = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "uberspark vf_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (Vf.load Uberspark_config.json_node_uberspark_config_var.bridge_vf_bridge_uberspark) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load uberspark vf_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded uberspark vf_bridge settings";
+		retval := true;
+	end;
+
+	if not (Vf.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uberspark vf_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "uberspark vf_bridge build success";
+		retval := true;
+	end;
+
+
+
+
 	(!retval)
 ;;

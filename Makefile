@@ -26,9 +26,9 @@ export USPARK_SRCDIR_MOUNT = /home/uberspark/uberspark
 export USPARK_BUILDTRUSSESDIR_MOUNT := $(USPARK_SRCDIR_MOUNT)/build-trusses
 
 
-export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/v-bridge/container/amd64/generic/generic/uberspark
+export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/vf-bridge/container/amd64/generic/generic/uberspark/v6.0.0
 export USPARK_VBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
-export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__v-bridge__container__amd64__generic__generic__uberspark
+export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__vf-bridge__container__amd64__generic__generic__uberspark
 
 export USPARK_BLDBRIDGE_DIR := $(USPARK_BUILDTRUSSESDIR)
 export USPARK_BLDBRIDGE_DIR_DOCKERFILE := build-amd64.Dockerfile

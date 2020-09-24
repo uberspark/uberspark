@@ -174,6 +174,8 @@ module Config : sig
     mutable bridge_cc_bridge : string;
     mutable bridge_as_bridge : string;
     mutable bridge_ld_bridge : string;
+  	mutable bridge_vf_bridge_uberspark : string;
+
   }
 
   val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool

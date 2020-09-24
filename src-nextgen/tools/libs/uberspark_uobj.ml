@@ -1557,7 +1557,7 @@ let create_initialize_and_verify
 
 	| Some uobj ->
 
-	(* build uobj binary image *)
+	(* verify uobj binary image *)
 	let rval = (uobj#verify ()) in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to verify uobj!";

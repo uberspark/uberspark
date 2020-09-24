@@ -36,6 +36,7 @@ type json_node_uberspark_config_t =
 	mutable bridge_cc_bridge : string;
 	mutable bridge_as_bridge : string;
 	mutable bridge_ld_bridge : string;
+	mutable bridge_vf_bridge_uberspark : string;
 };;
 
 
@@ -109,6 +110,8 @@ let json_node_uberspark_config_to_var
 					if (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config) <> `Null then
 						json_node_uberspark_config_var.bridge_ld_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config);
 
+					if (Yojson.Basic.Util.member "bridge_vf_bridge_uberspark" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.bridge_vf_bridge_uberspark <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_vf_bridge_uberspark" json_node_uberspark_config);
 
 					retval := true;
 				end
