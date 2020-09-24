@@ -214,13 +214,21 @@ let invoke
 	) c_file_list;
 
 	(* construct command line using bridge_cmd variable from bridge definition *)
-	List.iter (fun b_cmd -> 
+	for li = 0 to (List.length json_node_uberspark_bridge_vf_var.bridge_cmd) - 1 do begin
+		let b_cmd = (List.nth json_node_uberspark_bridge_vf_var.bridge_cmd li) in
+
 		(* substitute SOURCE_C_FILES within b_cmd if any *)
         let b_cmd_substituted = Str.global_replace (Str.regexp "$(SOURCE_C_FILES)") 
                 !c_files_str b_cmd in
 
-		d_cmd := !d_cmd ^ " && " ^ b_cmd_substituted;
-	) json_node_uberspark_bridge_vf_var.bridge_cmd;
+		if li == 0 then begin
+			d_cmd := b_cmd_substituted;
+		end else begin
+			d_cmd := !d_cmd ^ " && " ^ b_cmd_substituted;
+		end;
+
+	end done;
+
 	
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 

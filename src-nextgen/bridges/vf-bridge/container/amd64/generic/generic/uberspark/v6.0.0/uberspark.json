@@ -27,9 +27,11 @@
 
 		"bridge_cmd" : [
 			"
-				cd sample && 
-				mkdir sample &&
-				chdir xcali
+				pwd && 
+				id -u &&
+				id -g &&
+				frama-c --version &&
+				echo \" we are done \"
 			"
 		] 
 

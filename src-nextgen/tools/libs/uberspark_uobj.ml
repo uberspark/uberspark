@@ -1386,46 +1386,29 @@ class uobject
 			(!retval)
 		end else
 
-		(*let dummy =0 in begin
-	   	Uberspark_logger.log "proceeding to compile c files...";
+		let dummy =0 in begin
+	   	Uberspark_logger.log "proceeding to verify...";
 		end;
 
-		if not (self#compile_c_files ()) then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
-			(!retval)
+		let rval = Uberspark_bridge.Vf.invoke 
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (json_node_uberspark_uobj_var.f_sources.f_c_files)  "." in
+
+		if (rval == false ) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not verify one or more uobj sources!";
+			(false)
 		end else
 
 		let dummy = 0 in begin
-		Uberspark_logger.log "compiled c files successfully!";
-		Uberspark_logger.log "proceeding to compile asm files...";
-		end;
-
-		if not (self#compile_asm_files ()) then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
-			(!retval)
-		end else
-
-		let dummy = 0 in begin
-		Uberspark_logger.log "compiled asm files successfully!";
-		Uberspark_logger.log "proceeding to link object files...";
-		end;
-
-		if not (self#link_object_files ()) then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
-			(!retval)
-		end else
-		*)
-
-		let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "verification successful!";
 
 		(* restore working directory *)
 		ignore(Uberspark_osservices.dir_change r_prevpath);
 
 		Uberspark_logger.log "cleaned up verification";
-		retval := true;
 		end;
 
-		(!retval)
+		(true)
 	;
 
 end;;
