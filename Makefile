@@ -58,6 +58,22 @@ export SUDO := sudo
 
 ###### helper functions
 
+# this function installs the bridge common infrastructure
+# as a "common" folder into every
+# container bridge that is part of the bridge namespace
+# $(1) = source directory of the bridge common infrastructure
+# $(2) = bridge namespace root folder
+
+define install_bridges_common
+	@echo Installing bridge common infrastructure from: $(1)
+	@echo Installing to bridge namespace: $(2)
+	@find $(2) -name '*.Dockerfile' -exec sh -c \
+		' bdir=`dirname {}` && mkdir -p $$bdir/common && \
+		cp -Rf $(1)/* $$bdir/common/. \
+		' \;
+	@echo Done
+endef
+
 define docker_run
 	docker run --rm \
 		-e D_CMD="$(2)" \
@@ -106,6 +122,16 @@ dbgrun_sdefpp: build_sdefpp
 
 ###### build truss generation targets
 
+
+### provision bridge common infrastructure for container bridges
+.PHONY: provision-bridge-common-infrastructure
+provision-bridge-common-infrastructure: 
+	@echo Provisioning bridge common infrastructure for container bridges...
+	$(call install_bridges_common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges/common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges )
+	@echo Successfully populated bridge common infrastructure
+
+
+
 ### generate amd64 build truss
 .PHONY: buildcontainer-amd64
 buildcontainer-amd64: 
@@ -117,7 +143,7 @@ buildcontainer-amd64:
 
 ### arch independent build truss target
 .PHONY: generate_buildtruss
-generate_buildtruss: buildcontainer-amd64
+generate_buildtruss: provision-bridge-common-infrastructure buildcontainer-amd64
 
 
 ###### documentation targets
