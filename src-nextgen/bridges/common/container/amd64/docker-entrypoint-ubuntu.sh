@@ -34,7 +34,7 @@ if [ "$(id -u)" = "0" ]; then
     usermod -aG sudo uberspark 
 
     # drop to user uberspark and execute this script with the remaining parameters
-    sudo -u uberspark /docker-entrypoint.sh $@
+    sudo -u uberspark /docker-entrypoint-ubuntu.sh $@
 
    
 else

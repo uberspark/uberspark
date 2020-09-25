@@ -81,9 +81,9 @@ WORKDIR "/home/uberspark"
 RUN chmod ugo+rwx -R .
 
 # setup entry point script that switches user uid/gid to match host
-COPY common/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+COPY common/container/amd64/docker-entrypoint-ubuntu.sh /docker-entrypoint-ubuntu.sh
+RUN chmod +x /docker-entrypoint-ubuntu.sh
 
 # invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
-CMD /docker-entrypoint.sh ${D_UID} ${D_GID} ${D_CMD}
+CMD /docker-entrypoint-ubuntu.sh ${D_UID} ${D_GID} ${D_CMD}
 
