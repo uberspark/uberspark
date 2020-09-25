@@ -310,6 +310,20 @@ let helper_bridges_action_config_do
           end
           ;  
 
+        | "vf-bridge" -> 
+
+          if (Uberspark.Bridge.Vf.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded vf-bridge settings";
+            if ( Uberspark.Bridge.Vf.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build vf-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load vf-bridge settings!");
+          end
+          ;  
+
 
         | _ ->
             retval := `Error (false, "unknown bridge type!");
@@ -361,6 +375,9 @@ let handler_bridges_action_config
 
           end else if cmd_bridges_opts.ld_bridge then begin
               retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_ld_bridge_name bridge_ns cmd_bridges_opts;
+
+          end else if cmd_bridges_opts.vf_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_vf_bridge_name bridge_ns cmd_bridges_opts;
 
           end else begin
               retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
