@@ -118,9 +118,6 @@ let handler_uobjcoll_verify
         `Error (false, "uobj collection verification [FAILED]!")
       end;
 
-      Uberspark.Logger.log "uobj collection verification success!";
-      `Ok ()
-
     end
   ;
 

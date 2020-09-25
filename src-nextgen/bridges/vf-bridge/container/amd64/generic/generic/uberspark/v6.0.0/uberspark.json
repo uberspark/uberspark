@@ -26,12 +26,10 @@
 		},
 
 		"bridge_cmd" : [
-			"
-				pwd && 
-				id -u &&
-				id -g &&
-				frama-c --version &&
-				echo \" we are done \"
+			"	
+				pwd &&	
+				ls -l && 
+				frama-c --version
 			"
 		] 
 

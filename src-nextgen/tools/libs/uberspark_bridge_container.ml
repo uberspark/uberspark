@@ -56,24 +56,28 @@ let run_image
     if(rval == true) then begin
 
         Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path=%s" context_path_abs;
-        let r_d_cmd = ("cd /root/src && " ^ !revised_d_cmd) in 
+        let r_d_cmd = ("cd /home/uberspark/src && " ^ !revised_d_cmd) in 
         (*let bridge_ns_docker = ((Str.string_after Uberspark_namespace.namespace_root 1) ^ "/" ^ bridge_ns) in *)
         let bridge_ns_docker = Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
         let cmdline = ref [] in
         
             cmdline := !cmdline @ [ "run" ];
             cmdline := !cmdline @ [ "--rm" ];
-            cmdline := !cmdline @ [ "-i" ];
+            (* cmdline := !cmdline @ [ "-i" ];*)
+            cmdline := !cmdline @ [ "-e" ];
+            cmdline := !cmdline @ [ "D_CMD=\"" ^ r_d_cmd ^ "\"" ];
             cmdline := !cmdline @ [ "-v" ];
             cmdline := !cmdline @ [ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ ":" ^ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ];
             cmdline := !cmdline @ [ "-v" ];
-            cmdline := !cmdline @ [ context_path_abs ^ ":/root/src" ];
+            cmdline := !cmdline @ [ context_path_abs ^ ":/home/uberspark/src" ];
             cmdline := !cmdline @ [ "-t" ];
             cmdline := !cmdline @ [ bridge_ns_docker ];
-            cmdline := !cmdline @ [ "/bin/sh" ];
+            (*cmdline := !cmdline @ [ "/bin/sh" ];
             cmdline := !cmdline @ [ "-c" ];
             cmdline := !cmdline @ [ r_d_cmd ];
-            
+            *)
+
+            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "exec=%s" (String.concat " " !cmdline);
 
             let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
                     ~stag:"docker" "docker" !cmdline in
