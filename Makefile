@@ -30,12 +30,12 @@ export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/vf-bridge/
 export USPARK_VBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
 export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__vf-bridge__container__amd64__generic__generic__uberspark
 
-export USPARK_BLDBRIDGE_DIR := $(USPARK_BUILDTRUSSESDIR)
-export USPARK_BLDBRIDGE_DIR_DOCKERFILE := build-amd64.Dockerfile
-export USPARK_BLDBRIDGE_NS_AMD64 := uberspark/uberspark:build-trusses__container__amd64
-
+export USPARK_BLDBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/bldsys-bridge/uberspark/container/amd64/
+export USPARK_BLDBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
+export USPARK_BLDBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__bldsys-bridge__uberspark__container__amd64
 
 export SYS_PROC_VERSION := $(shell cat /proc/version)
+
 
 define USPARK_CONFIG_CONTENTS 
 {

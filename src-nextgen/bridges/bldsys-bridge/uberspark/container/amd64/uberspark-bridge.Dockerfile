@@ -3,11 +3,11 @@ MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
 
 # runtime arguments
 ENV D_CMD="make all"
+ENV OPAMYES 1
 ENV D_UID=1000
 ENV D_GID=1000
 
 # build time arguments
-ENV OPAMYES 1
 ARG GOSU_VERSION=1.10
 
 ######

@@ -32,7 +32,7 @@ if [ "$(id -u)" = "0" ]; then
     adduser -u $uid -G uberspark -D uberspark
 
     # drop to user uberspark and execute this script with the remaining parameters
-    sudo -u uberspark /docker-entrypoint.sh $@
+    sudo -u uberspark /docker-entrypoint-alpine.sh $@
 
    
 else
