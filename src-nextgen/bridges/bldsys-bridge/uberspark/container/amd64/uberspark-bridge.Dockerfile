@@ -1,15 +1,24 @@
+##############################################################################
+#
+# uberSpark bridge docker container template -- alpine distribution
+#
+##############################################################################
+
+##############################################################################
+# basic distro and maintainer -- CUSTOMIZABLE
+##############################################################################
+
 FROM ocaml/opam2:alpine-3.9-opam
 LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
 
-# runtime arguments
+
+##############################################################################
+# required boilerplate commands below -- DO NOT CHANGE
+##############################################################################
+
 ENV D_CMD=/bin/bash
 ENV D_UID=1000
 ENV D_GID=1000
-
-# build time arguments
-#ARG GOSU_VERSION=1.10
-#ENV OPAMYES 1
-
 
 # drop to root
 USER root
@@ -19,12 +28,17 @@ RUN apk update &&\
     apk upgrade &&\
     apk add shadow
 
-
 # create user uberspark and group uberspark so we have access to /home/uberspark
 RUN addgroup -S uberspark &&\
     adduser -S uberspark -G uberspark
 
 
+##############################################################################
+# bridge specific installation commands -- CUSTOMIZABLE
+# note: must remove any pre-defined user the FROM image may come
+# with so that we don't conflict on uid/gid mappings. i.e., the
+# container should only contain users root and uberspark 
+##############################################################################
 
 # remove default opam user from image so we don't conflict on uid-->username mappings
 RUN deluser opam
@@ -79,6 +93,10 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y fileutils.0.6.1 
 
 
+
+##############################################################################
+# entry point and permissions biolerplate -- DO NOT CHANGE
+##############################################################################
 
 # drop back to root
 USER root
