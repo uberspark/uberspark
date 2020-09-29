@@ -1,6 +1,20 @@
+##############################################################################
+#
+# uberSpark bridge docker container template -- alpine distribution
+#
+##############################################################################
+
+##############################################################################
+# basic distro and maintainer -- CUSTOMIZABLE
+##############################################################################
+
 FROM amd64/ubuntu:20.04 AS base
 LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
-# see https://www.lri.fr/~marche/MPRI-2-36-1/install.html on how to install provers
+
+
+##############################################################################
+# required boilerplate commands below -- DO NOT CHANGE
+##############################################################################
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,6 +23,7 @@ ENV D_CMD=/bin/bash
 ENV D_UID=1000
 ENV D_GID=1000
 
+# switch to root
 USER root
 
 # update apt packages, install sudo, and select non-interactive mode
@@ -22,6 +37,13 @@ RUN addgroup --system uberspark &&\
     adduser --system --disabled-password --ingroup uberspark uberspark &&\
     usermod -aG sudo uberspark &&\
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+##############################################################################
+# bridge specific installation commands -- CUSTOMIZABLE
+# note: must remove any pre-defined user the FROM image may come
+# with so that we don't conflict on uid/gid mappings. i.e., the
+# container should only contain users root and uberspark 
+##############################################################################
 
 # install base system packages
 RUN apt-get update -y && \
@@ -66,6 +88,12 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
 RUN eval $(opam env) && \
     why3 config --detect && \
     why3 --list-provers
+
+
+
+##############################################################################
+# entry point and permissions biolerplate -- DO NOT CHANGE
+##############################################################################
 
 # drop back to root
 USER root
