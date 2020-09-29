@@ -1,5 +1,50 @@
+##############################################################################
+#
+# uberSpark bridge docker container template -- alpine distribution
+#
+##############################################################################
+
+##############################################################################
+# basic distro and maintainer -- CUSTOMIZABLE
+##############################################################################
+
 FROM ubuntu:18.04
 MAINTAINER David Shepard <djshepard@sei.cmu.edu>
+
+
+##############################################################################
+# required boilerplate commands below -- DO NOT CHANGE
+##############################################################################
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# runtime arguments
+ENV D_CMD=/bin/bash
+ENV D_UID=1000
+ENV D_GID=1000
+
+# switch to root
+USER root
+
+# update apt packages, install sudo, and select non-interactive mode
+RUN apt-get update -y &&\
+    apt-get install -y --no-install-recommends apt-utils &&\
+    apt-get install -y sudo &&\
+    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+# create user uberspark and group uberspark so we have access to /home/uberspark
+RUN addgroup --system uberspark &&\
+    adduser --system --disabled-password --ingroup uberspark uberspark &&\
+    usermod -aG sudo uberspark &&\
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+##############################################################################
+# bridge specific installation commands -- CUSTOMIZABLE
+# note: must remove any pre-defined user the FROM image may come
+# with so that we don't conflict on uid/gid mappings. i.e., the
+# container should only contain users root and uberspark 
+##############################################################################
+
 
 # Also pass in the name of the compiler archive file.
 ENV archive_name=compcert-3.3.tgz
@@ -37,8 +82,7 @@ COPY install.sh compiler_script.sh /tmp/
 RUN cd /tmp &&\
     chmod 755 install.sh &&\
     chmod 755 compiler_script.sh &&\
-    ./install.sh &&\
-    useradd -ms /bin/bash ubuntu
+    ./install.sh 
 
 # I had added this, in an attempt to get Bubblewrap to work. It didn't.
 # Disabled Opam's use of Bubblewrap, instead.
@@ -51,8 +95,8 @@ RUN cd /tmp &&\
 # Opam also has a lot of dependencies that are not documented on its install
 # page, see above, everything after binutils.
 
-USER ubuntu
-WORKDIR /home/ubuntu
+USER uberspark
+WORKDIR /home/uberspark
 
 RUN opam init --disable-sandboxing &&\
     opam upgrade &&\
@@ -96,6 +140,26 @@ RUN tar -xzf ${archive_name}
 
 RUN . ./compiler_script.sh
 
-WORKDIR /home
 
+
+
+
+
+##############################################################################
+# entry point and permissions biolerplate -- DO NOT CHANGE
+##############################################################################
+
+# drop back to root
+USER root
+
+# change permissions of /home/uberspark so everyone can access it
+WORKDIR "/home/uberspark"
+RUN chmod ugo+rwx -R .
+
+# setup entry point script that switches user uid/gid to match host
+COPY common/container/amd64/docker-entrypoint-ubuntu.sh /docker-entrypoint-ubuntu.sh
+RUN chmod +x /docker-entrypoint-ubuntu.sh
+
+# invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
+CMD /docker-entrypoint-ubuntu.sh ${D_UID} ${D_GID} ${D_CMD}
 

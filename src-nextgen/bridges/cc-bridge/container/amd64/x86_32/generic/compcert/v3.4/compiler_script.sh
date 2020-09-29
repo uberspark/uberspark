@@ -16,13 +16,13 @@ cd $archive_dir
 
 echo "PATH: $PATH"
 
-su ubuntu
+su uberspark
 
 echo "PATH before mod: $PATH"
 
-echo "PATH=/home/ubuntu/.opam/4.05.0/bin:$PATH" >> /home/ubuntu/.bashrc
+echo "PATH=/home/uberspark/.opam/4.05.0/bin:$PATH" >> /home/uberspark/.bashrc
 
-PATH=/home/ubuntu/.opam/4.05.0/bin:$PATH
+PATH=/home/uberspark/.opam/4.05.0/bin:$PATH
 echo "PATH after mod: $PATH"
 
 ./configure x86_32-linux
