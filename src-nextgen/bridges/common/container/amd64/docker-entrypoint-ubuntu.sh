@@ -51,9 +51,15 @@ else
         #echo "NON-ROOT; username: $uname"
         #echo "parameters: $parm"
 
-    opam switch 4.09.0+flambda
-    eval $(opam env)
-    
+    opam_present=`command -v opam`
+    if [ -z "$opam_present" ]
+    then 
+        echo No opam detected. Skipping opam initialization...
+    else
+        opam switch 4.09.0+flambda
+        eval $(opam env)
+    fi
+
     # execute the command and actual parameters as user uberspark
     
     exec /bin/sh -c "$parm"
