@@ -148,7 +148,7 @@ the commaldn line tool interface (see :ref:`frontend-cli-intro`) as below:
 ``uberspark bridge config --cc-bridge --build <bridge-ns>``
 
 where `<bridge-ns>` is the bridge namespace as described in
-:ref:`contrib-guide-bridges-nsdirlayout`.
+:ref:`contrib-guide-bridges-nsdirlayout` without the `container` prefix.
 
 The following example builds the Compcert v3.1 compiler bridge:
 
