@@ -102,9 +102,20 @@ to the framework source:
    for further details on the |uspark| bridge manifest JSON file
    format and bridge node and field descriptions
             
-4. For bridges supported via containers, add The bridge dockerfile 
+4. For bridges supported via containers, add the bridge dockerfile 
    and other dockerfile build scripts within the bridge source 
-   directory
+   directory. 
+
+   ..  note::  The bridge dockerfile *must* use a specific template
+               for the specific container architecture and distribution.
+               Templates for Ubuntu and Alpine distributions for
+               ``amd64`` architecture can be found within:
+               ``src-nextgen/bridges/common/container/amd64``. 
+               Copy the relevant ``.template`` file to the bridge 
+               |ubersparkbridgedff| and customize sections labeled
+               as *CUSTOMIZABLE* with the bridge specific details
+               and commands.
+
 
 
 
