@@ -1,0 +1,62 @@
+##############################################################################
+#
+# uberSpark bridge docker container template -- alpine distribution
+#
+##############################################################################
+
+##############################################################################
+# basic distro and maintainer -- CUSTOMIZABLE
+##############################################################################
+
+FROM ocaml/opam2:alpine-3.9-opam
+LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
+
+
+##############################################################################
+# required boilerplate commands below -- DO NOT CHANGE
+##############################################################################
+
+ENV D_CMD=/bin/bash
+ENV D_UID=1000
+ENV D_GID=1000
+
+# drop to root
+USER root
+
+# update apk and install package shadow for sudo
+RUN apk update &&\
+    apk upgrade &&\
+    apk add shadow
+
+# create user uberspark and group uberspark so we have access to /home/uberspark
+RUN addgroup -S uberspark &&\
+    adduser -S uberspark -G uberspark
+
+
+##############################################################################
+# bridge specific installation commands -- CUSTOMIZABLE
+# note: must remove any pre-defined user the FROM image may come
+# with so that we don't conflict on uid/gid mappings. i.e., the
+# container should only contain users root and uberspark 
+##############################################################################
+
+
+
+
+##############################################################################
+# entry point and permissions biolerplate -- DO NOT CHANGE
+##############################################################################
+
+# drop back to root
+USER root
+
+# change permissions of /home/uberspark so everyone can access it
+WORKDIR "/home/uberspark"
+RUN chmod ugo+rwx -R .
+
+# setup entry point script that switches user uid/gid to match host
+COPY common/container/amd64/docker-entrypoint-alpine.sh /docker-entrypoint-alpine.sh
+RUN chmod +x /docker-entrypoint-alpine.sh
+
+# invoke the entrypoint script which will adjust uid/gid and invoke d_cmd with d_cmdargs as user uberspark
+CMD /docker-entrypoint-alpine.sh ${D_UID} ${D_GID} ${D_CMD}

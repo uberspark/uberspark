@@ -36,8 +36,15 @@ if [ "$(id -u)" = "0" ]; then
 
    
 else
+
     # now we are run as user uberspark, so execute the command
-    parm=$@
+    temp=$@
+    
+    # remove leading and trailing double quotes if any
+    # this can happen when we pass environment variables via exec system calls
+    parm="${temp%\"}"
+    parm="${parm#\"}"
+
     #debug
         #uname=`id -u -n`
         #echo "NON-ROOT; username: $uname"

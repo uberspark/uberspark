@@ -1,32 +1,33 @@
 FROM ocaml/opam2:alpine-3.9-opam
-MAINTAINER Amit Vasudevan <amitvasudevan@acm.org>
+LABEL maintainer="Amit Vasudevan <amitvasudevan@acm.org>" author="Amit Vasudevan <amitvasudevan@acm.org>"
 
 # runtime arguments
-ENV D_CMD="make all"
-ENV OPAMYES 1
+ENV D_CMD=/bin/bash
 ENV D_UID=1000
 ENV D_GID=1000
 
 # build time arguments
-ARG GOSU_VERSION=1.10
+#ARG GOSU_VERSION=1.10
+#ENV OPAMYES 1
 
-######
-# build commands
-######
 
 # drop to root
 USER root
 
-# update apk
+# update apk and install package shadow for sudo
 RUN apk update &&\
-    apk upgrade
+    apk upgrade &&\
+    apk add shadow
 
-# remove default opam user from image so we don't conflict on uid-->username mappings
-RUN deluser opam
 
 # create user uberspark and group uberspark so we have access to /home/uberspark
 RUN addgroup -S uberspark &&\
     adduser -S uberspark -G uberspark
+
+
+
+# remove default opam user from image so we don't conflict on uid-->username mappings
+RUN deluser opam
 
 # install general development tools
 RUN apk add m4 &&\
@@ -77,15 +78,14 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     opam install -y cppo.1.6.6 && \
     opam install -y fileutils.0.6.1 
 
+
+
 # drop back to root
 USER root
 
 # change permissions of /home/uberspark so everyone can access it
 WORKDIR "/home/uberspark"
 RUN chmod ugo+rwx -R .
-
-# add shadow package to obtain usermod and groupmod commands
-RUN apk add shadow
 
 # setup entry point script that switches user uid/gid to match host
 COPY common/container/amd64/docker-entrypoint-alpine.sh /docker-entrypoint-alpine.sh

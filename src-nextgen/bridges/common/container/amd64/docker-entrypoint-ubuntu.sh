@@ -47,9 +47,9 @@ else
     parm="${parm#\"}"
     
     #debug
-        uname=`id -u -n`
-        echo "NON-ROOT; username: $uname"
-        echo "parameters: $parm"
+        #uname=`id -u -n`
+        #echo "NON-ROOT; username: $uname"
+        #echo "parameters: $parm"
 
     opam switch 4.09.0+flambda
     eval $(opam env)
