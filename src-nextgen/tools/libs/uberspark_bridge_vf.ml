@@ -218,7 +218,7 @@ let invoke
 		let b_cmd = (List.nth json_node_uberspark_bridge_vf_var.bridge_cmd li) in
 
 		(* substitute SOURCE_C_FILES within b_cmd if any *)
-        let b_cmd_substituted = Str.global_replace (Str.regexp "$(SOURCE_C_FILES)") 
+        let b_cmd_substituted = Str.global_replace (Str.regexp "@@BRIDGE_SOURCE_C_FILES@@") 
                 !c_files_str b_cmd in
 
 		if li == 0 then begin

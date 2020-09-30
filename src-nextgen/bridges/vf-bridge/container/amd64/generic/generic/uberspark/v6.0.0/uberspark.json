@@ -27,7 +27,8 @@
 
 		"bridge_cmd" : [
 			"	
-				frama-c --version
+				echo source C files: @@BRIDGE_SOURCE_C_FILES@@ &&
+				frama-c -val @@BRIDGE_SOURCE_C_FILES@@
 			"
 		] 
 
