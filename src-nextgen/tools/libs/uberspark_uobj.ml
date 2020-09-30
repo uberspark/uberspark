@@ -1392,7 +1392,9 @@ class uobject
 
 		let rval = Uberspark_bridge.Vf.invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (json_node_uberspark_uobj_var.f_sources.f_c_files)  "." in
+			 (json_node_uberspark_uobj_var.f_sources.f_c_files)  
+			 [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]
+			 "." in
 
 		if (rval == false ) then begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not verify one or more uobj sources!";

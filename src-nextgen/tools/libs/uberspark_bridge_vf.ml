@@ -201,25 +201,39 @@ let build
 let invoke 
 	?(context_path_builddir = ".")
 	(c_file_list : string list)
+	(include_dir_list : string list)
 	(context_path : string)
 	: bool =
 
 	let retval = ref false in
 	let d_cmd = ref "" in
-	let c_files_str = ref "" in
+	let bridge_source_c_files = ref "" in
+	let bridge_include_dirs = ref "" in
+	let bridge_include_dirs_with_prefix = ref "" in
+
 
 	(* iterate over c file list and build a string *)
 	List.iter (fun c_filename -> 
-		c_files_str := !c_files_str ^ " " ^ c_filename;
+		bridge_source_c_files := !bridge_source_c_files ^ " " ^ c_filename;
 	) c_file_list;
+
+	(* iterate over include dir list and build include command line options *)
+	List.iter (fun include_dir_name -> 
+		bridge_include_dirs := !bridge_include_dirs ^ " " ^ include_dir_name;
+		(*TBD: get include directory prefix from bridge manifest *)
+		bridge_include_dirs_with_prefix := !bridge_include_dirs_with_prefix ^ " -I" ^ include_dir_name;
+	) include_dir_list;
 
 	(* construct command line using bridge_cmd variable from bridge definition *)
 	for li = 0 to (List.length json_node_uberspark_bridge_vf_var.bridge_cmd) - 1 do begin
 		let b_cmd = (List.nth json_node_uberspark_bridge_vf_var.bridge_cmd li) in
 
-		(* substitute SOURCE_C_FILES within b_cmd if any *)
-        let b_cmd_substituted = Str.global_replace (Str.regexp "@@BRIDGE_SOURCE_C_FILES@@") 
-                !c_files_str b_cmd in
+        let b_cmd_substituted_0 = Str.global_replace (Str.regexp "@@BRIDGE_SOURCE_C_FILES@@") 
+                !bridge_source_c_files b_cmd in
+        let b_cmd_substituted_1 = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS@@") 
+                !bridge_include_dirs b_cmd_substituted_0 in
+        let b_cmd_substituted = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@") 
+                !bridge_include_dirs_with_prefix b_cmd_substituted_1 in
 
 		if li == 0 then begin
 			d_cmd := b_cmd_substituted;
