@@ -27,8 +27,6 @@
 
 		"bridge_cmd" : [
 			"	
-				pwd &&	
-				ls -l && 
 				frama-c --version
 			"
 		] 
