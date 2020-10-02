@@ -30,6 +30,7 @@
 				echo source C files: @@BRIDGE_SOURCE_C_FILES@@ &&
 				echo include dirs: @@BRIDGE_INCLUDE_DIRS@@ &&
 				echo include dirs with prefix: @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ &&
+				echo bridge plugin dir: @@BRIDGE_PLUGIN_DIR@@ &&
 				export var_bridge_include_dirs &&
 				export vararray_bridge_include_dirs &&
 				export include_prefix=\"-I\" &&
