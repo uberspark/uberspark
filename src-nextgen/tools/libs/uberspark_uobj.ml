@@ -603,219 +603,157 @@ class uobject
 		()
 		: unit =
 		
-		(* start with uobj state save area section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ssa", {
-			f_name = "uobj_ssa";	
-			f_subsection_list = [ ".uobj_ssa" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
+		let l_add_section (section_f_name: string)
+						(section_f_subsection_list : string list)
+						(section_usbinformat_f_type : int)
+						(section_usbinformat_f_prot : int)
+						(section_usbinformat_f_size : int)
+						(section_usbinformat_f_aligned_at : int)
+						(section_usbinformat_f_pad_to : int)
+						: unit =
 
-		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
-			let section_name = ("uobj_pm_" ^ pm_name) in 
-			d_default_sections_list := !d_default_sections_list @ [ (section_name, {
-				f_name = section_name;	
-				f_subsection_list = [ "." ^ section_name ];	
-				usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO; 
-								f_prot=0; 
-								f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-								f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+			let l_var_sinfo : Defs.Basedefs.section_info_t = {
+				f_name = section_f_name;	
+				f_subsection_list = section_f_subsection_list;	
+				usbinformat = { f_type= section_usbinformat_f_type; 
+								f_prot= section_usbinformat_f_prot; 
+								f_size = section_usbinformat_f_size;
+								f_aligned_at = section_usbinformat_f_aligned_at; 
+								f_pad_to = section_usbinformat_f_pad_to; 
 								f_addr_start=0; 
 								f_addr_file = 0;
 								f_reserved = 0;
 							};
-			}) ];
+			} in
+
+			(* override size, alignment and padding info if specified in the manifest *)
+			(* also append any extra subsections if specified in the manifest *)
+			if (List.mem_assoc section_f_name json_node_uberspark_uobj_var.f_sections) then begin
+				let l_var_sinfo_mf : Defs.Basedefs.section_info_t = (List.assoc section_f_name json_node_uberspark_uobj_var.f_sections) in
+				l_var_sinfo.usbinformat.f_size <- l_var_sinfo_mf.usbinformat.f_size;
+				l_var_sinfo.usbinformat.f_aligned_at <- l_var_sinfo_mf.usbinformat.f_aligned_at;
+				l_var_sinfo.usbinformat.f_pad_to <- l_var_sinfo_mf.usbinformat.f_pad_to;
+				l_var_sinfo.f_subsection_list <- l_var_sinfo.f_subsection_list @ l_var_sinfo_mf.f_subsection_list;
+				json_node_uberspark_uobj_var.f_sections <- List.remove_assoc section_f_name json_node_uberspark_uobj_var.f_sections;
+			end;
+
+			d_default_sections_list := !d_default_sections_list @ [ (section_f_name, l_var_sinfo) ];
+
+			()
+		in
+
+		(* start with uobj state save area section *)
+		l_add_section "uobj_ssa" [ ".uobj_ssa" ] 
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+
+		(* create sections for each public method *)
+		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ pm_name) in 
+
+			l_add_section section_name [ "." ^ section_name ]
+						Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
+						0 
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+						Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		) self#get_d_publicmethods_hashtbl;
 		
 
 		(* intrauobjcoll callees slt code section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltcode", {
-			f_name = "uobj_intrauobjcoll_csltcode";	
-			f_subsection_list = [ ".uobj_intrauobjcoll_csltcode" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTCODE; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
+		l_add_section "uobj_intrauobjcoll_csltcode" [ ".uobj_intrauobjcoll_csltcode" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTCODE
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* intrauobjcoll callees slt data section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_intrauobjcoll_csltdata", {
-			f_name = "uobj_intrauobjcoll_csltdata";	
-			f_subsection_list = [ ".uobj_intrauobjcoll_csltdata" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTDATA; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		l_add_section "uobj_intrauobjcoll_csltdata" [ ".uobj_intrauobjcoll_csltdata" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTDATA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* interuobjcoll callees slt code section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltcode", {
-			f_name = "uobj_interuobjcoll_csltcode";	
-			f_subsection_list = [ ".uobj_interuobjcoll_csltcode" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTCODE; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		l_add_section "uobj_interuobjcoll_csltcode" [ ".uobj_interuobjcoll_csltcode" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTCODE
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* interuobjcoll callees slt data section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_interuobjcoll_csltdata", {
-			f_name = "uobj_interuobjcoll_csltdata";	
-			f_subsection_list = [ ".uobj_interuobjcoll_csltdata" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTDATA; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		l_add_section "uobj_interuobjcoll_csltdata" [ ".uobj_interuobjcoll_csltdata" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTDATA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* legacy callees slt code section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltcode", {
-			f_name = "uobj_legacy_csltcode";	
-			f_subsection_list = [ ".uobj_legacy_csltcode" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTCODE; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
+		l_add_section "uobj_legacy_csltcode" [ ".uobj_legacy_csltcode" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTCODE
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* legacy callees slt data section *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_legacy_csltdata", {
-			f_name = "uobj_legacy_csltdata";	
-			f_subsection_list = [ ".uobj_legacy_csltdata" ];	
-			usbinformat = { f_type= Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTDATA; 
-							f_prot=0; 
-							f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-							f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-							f_addr_start=0; 
-							f_addr_file = 0;
-							f_reserved = 0;
-						};
-		}) ];
-
+		l_add_section "uobj_legacy_csltdata" [ ".uobj_legacy_csltdata" ]
+					Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTDATA 
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* uobj code, data, dmadata and stack sections follow *)
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_code", {
-				 f_name = "uobj_code";	
-				f_subsection_list = [ ".text" ];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; 
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_code" [ ".text" ]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE 
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_rodata", {
-			 f_name = "uobj_rodata";	
-				f_subsection_list = [".rodata"];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA; 
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_rodata" [".rodata"]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_rwdata", {
-			 f_name = "uobj_rwdata";	
-				f_subsection_list = [".data"; ".bss"];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; 
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_rwdata" [".data"; ".bss"]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA 
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_dmadata", {
-			 f_name = "uobj_dmadata";	
-				f_subsection_list = [".dmadata"];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA;
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_dmadata" [".dmadata"]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_ustack", {
-			 f_name = "uobj_ustack";	
-				f_subsection_list = [ ".ustack" ];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; 
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_ustack" [ ".ustack" ]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK 
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
-		d_default_sections_list := !d_default_sections_list @ [ ("uobj_tstack", {
-			 f_name = "uobj_tstack";	
-				f_subsection_list = [ ".tstack"; ".stack" ];	
-				usbinformat = { f_type=Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; 
-												f_prot=0; 
-												f_size = Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size;
-												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
-												f_pad_to = Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-												f_addr_start=0; 
-												f_addr_file = 0;
-												f_reserved = 0;
-											};
-		}) ];
+		l_add_section "uobj_tstack" [ ".tstack"; ".stack" ]
+					Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK 
+					0 
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		()
 	;
@@ -1271,8 +1209,9 @@ class uobject
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
+			Uberspark_namespace.namespace_uobj_binary_flat_image_filename
 			!o_file_list
-			[ ] [ ]	".";
+			[ ] [ ]	[ ("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename) ] ".";
 
 		(!retval)	
 	;

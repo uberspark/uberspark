@@ -43,9 +43,11 @@ let namespace_uobj_intrauobjcoll_callees_info_src_filename = "uobj_intrauobjcoll
 let namespace_uobj_interuobjcoll_callees_info_src_filename = "uobj_interuobjcoll_callees_info.c";;
 let namespace_uobj_legacy_callees_info_src_filename = "uobj_legacy_callees_info.c";;
 let namespace_uobj_linkerscript_filename = "uobj.lscript";;
-let namespace_uobj_binary_image_filename = "uobj.bin";;
+let namespace_uobj_binary_image_filename = "uobj.exe";;
+let namespace_uobj_binary_flat_image_filename = "uobj.exe.flat";;
 let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
 let namespace_uobj_mf_node_type_tag = "uberspark-uobj";;
+let namespace_uobj_cclib_filename = "cclib.a";;
 
 
 (* uobjcoll *)
@@ -54,7 +56,8 @@ let namespace_uobjcoll_build_dir = "_build";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
 let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.S";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
-let namespace_uobjcoll_binary_image_filename = "uobjcoll.bin";;
+let namespace_uobjcoll_binary_image_filename = "uobjcoll.exe";;
+let namespace_uobjcoll_binary_flat_image_filename = "uobjcoll.exe.flat";;
 
 (* legacy *)
 let namespace_legacy = "legacy";;
@@ -90,6 +93,8 @@ let namespace_config_mf_node_type_tag = "uberspark-config";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
+let namespace_bridge_container_build_mountpath = "/root/src";;
+
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;

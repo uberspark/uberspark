@@ -21,7 +21,11 @@
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [],
+			"params" : [
+				"-marm",
+				"-march=armv8-a",
+				"-mno-thumb-interwork"
+			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 

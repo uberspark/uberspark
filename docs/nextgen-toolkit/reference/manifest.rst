@@ -337,6 +337,9 @@ bridge. The JSON declaration of the ``uberspark-bridge-cc`` node is as below:
    :property params_prefix_include: command line option prefix to include a header file
    :proptype params_prefix_include: string
 
+   :property params_cclib: full pathname to compiler runtime library (e.g., libgcc.a)
+   :proptype params_cclib: string
+
 An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C compiler, within |ubersparkmff| follows:
 
 
@@ -366,8 +369,9 @@ An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C comp
             "params_prefix_obj" : "-c",
             "params_prefix_asm" : "-S",
             "params_prefix_output" : "-o",
-            "params_prefix_include" : "-I"
-        }
+            "params_prefix_include" : "-I",
+            "params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/libgcc.a"
+       }
     }
 
 
@@ -405,6 +409,8 @@ bridge. The JSON declaration of the ``uberspark-bridge-ld`` node is as below:
    :property params_prefix_output: command line option prefix to specify output file name
    :proptype params_prefix_output: string
 
+   :property cmd_generate_flat_binary: command prefix to generate a flat-form binary. note that the input and output file will be added to this automatically
+   :proptype cmd_generate_flat_binary: string
 
 An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker, within |ubersparkmff| follows:
 
@@ -435,14 +441,18 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
             "params_prefix_lscript" : "-T",
             "params_prefix_libdir" : "-L",
             "params_prefix_lib" : "-l",
-            "params_prefix_output" : "-o"
+            "params_prefix_output" : "-o",
+
+    		"cmd_generate_flat_binary" : "arm-linux-gnueabihf-objcopy -O binary"
+
         }
     }
 
 
 .. note::   Here the Linker bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
             is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
-            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary
+            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary. It also uses the 
+            `objcopy` tool to generate flat-form binary image.
 
 
 .. _reference-manifest-uberspark-uobj:
@@ -489,8 +499,11 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :proptype legacy-callees: string list
 
 
-    :property uobjrtl: |uobj| runtime library definition sub-node 
+    :property uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
     :proptype uobjrtl: :json:object:`uobjrtl` list
+
+    :property sections: (optional) comma delimited list of |uobj| additional sections definition sub-nodes
+    :proptype sections: :json:object:`sections` list
 
 
 .. json:object:: sources
@@ -513,7 +526,34 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property namespace: namespace of the |uobj| runtime library
     :proptype namespace: string 
 
+.. json:object:: sections
 
+    :property name: name of the |uobj| section 
+    :proptype name: string 
+    :options type: "uobj_code", "uobj_rodata", "uobj_rwdata", "uobj_dmadata", "uobj_ustack", "uobj_tstack", "<developer-defined>" where 
+                   <developer-defined> is a developer defined section name
+
+    :property size: hexadecimal size (in bytes) of the section 
+    :proptype size: string 
+
+    :property output_names: comma delimited list of |uobj| output section names for developer-defined 
+                            sections (e.g., defined via __attribute__((section())) ). This field is optional for 
+                            standard |uobj| sections (e.g., uobj_code).
+    :proptype output_names: string list 
+
+    :property type: (optional) hexadecimal type of the section 
+    :proptype type: string 
+    :options type: "0x0"
+
+    :property prot: (optional) hexadecimal protection of the section 
+    :proptype prot: string 
+    :options prot: "0x0"
+
+    :property aligned_at: (optional) hexadecimal alignment (in bytes) of the section 
+    :proptype aligned_at: string 
+
+    :property pad_to: (optional) hexadecimal padding boundary (in bytes) of the section 
+    :proptype pad_to: string 
 
 An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
 
@@ -576,9 +616,19 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 			    {
 				    "namespace" : "uberspark/uobjrtl/crypto"
 			    }
-    		]
+    		],
 
-    
+    		"sections": [
+                {
+                    "name" : "example_additional_section",
+                    "output_names" : [ ".exaddsec" ],
+                    "type" : "0x0",
+                    "prot" : "0x0",
+                    "size" : "0x200000",
+                    "aligned_at" : "0x1000",
+                    "pad_to" : "0x1000"
+                }
+            ]
         }
     }
 

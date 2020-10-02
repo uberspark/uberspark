@@ -41,8 +41,11 @@ val namespace_uobj_interuobjcoll_callees_info_src_filename : string
 val namespace_uobj_legacy_callees_info_src_filename : string
 val namespace_uobj_linkerscript_filename : string
 val namespace_uobj_binary_image_filename : string
+val namespace_uobj_binary_flat_image_filename : string
 val namespace_uobj_top_level_include_header_src_filename : string
 val namespace_uobj_mf_node_type_tag : string
+val namespace_uobj_cclib_filename : string
+
 
 (* uobjcoll *)
 val namespace_uobjcoll : string
@@ -51,6 +54,7 @@ val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
 val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
 val namespace_uobjcoll_binary_image_filename : string
+val namespace_uobjcoll_binary_flat_image_filename : string
 
 (* legacy *)
 val namespace_legacy : string
@@ -86,6 +90,7 @@ val namespace_config_mf_node_type_tag : string
 (* bridges *)
 val namespace_bridge : string
 val namespace_bridge_container_filename : string
+val namespace_bridge_container_build_mountpath : string
 val namespace_bridge_cc_mf_node_type_tag : string
 val namespace_bridge_ld_mf_node_type_tag : string
 val namespace_bridge_as_mf_node_type_tag : string

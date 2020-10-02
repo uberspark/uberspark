@@ -21,14 +21,22 @@
 			"cpu" : "generic",
 			"version" : "v5.5.0",
 			"path" : ".",
-			"params" : [ "-m32" ],
+			"params" : [ 
+				"-nostdinc",
+			    "-nostdlib",
+           	    "-nostartfiles",
+				"-ffreestanding",
+				"-m32" 
+			],
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
 		"params_prefix_obj" : "-c",
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
-        "params_prefix_include" : "-I"
+		"params_prefix_include" : "-I",
+		"params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/libgcc.a"
+
 	}
 
 }

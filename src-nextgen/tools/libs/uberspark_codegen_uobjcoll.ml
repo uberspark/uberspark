@@ -154,8 +154,8 @@ let generate_uobj_binary_image_section_mapping
             
             List.iter ( fun (uobjinfo_entry : Defs.Basedefs.uobjinfo_t) ->
                 Printf.fprintf oc "\n";
-                Printf.fprintf oc "\n.section .uobj_%s" uobjinfo_entry.f_uobj_name;
-                Printf.fprintf oc "\n.incbin \"%s\"" ("./" ^ uobjinfo_entry.f_uobj_name ^ "/" ^ Uberspark_namespace.namespace_uobj_build_dir ^ "/uobj.bin");
+                Printf.fprintf oc "\n.section .section_uobj_%s" uobjinfo_entry.f_uobj_name;
+                Printf.fprintf oc "\n.incbin \"%s\"" ("./" ^ uobjinfo_entry.f_uobj_name ^ "/" ^ Uberspark_namespace.namespace_uobj_build_dir ^ "/" ^ Uberspark_namespace.namespace_uobj_binary_flat_image_filename);
                 Printf.fprintf oc "\n";
             ) uobjcoll_uobjinfo_list;
 
