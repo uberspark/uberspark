@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# uberSpark bridge docker container template -- alpine distribution
+# uberSpark bridge docker container template
 #
 ##############################################################################
 
