@@ -16,4 +16,4 @@ all:
 clean: 
 	$(MAKE) -f build-libs.mk -w clean
 	cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && $(MAKE) -w clean
-
+	cd $(UBERSPARK_SRCDIR)/tools/vbridge-plugin && rm -rf top/

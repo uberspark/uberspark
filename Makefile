@@ -100,7 +100,7 @@ endef
 ###### default target
 
 .PHONY: all
-all: build_bootstrap docs_html frontend
+all: build_bootstrap docs_html frontend vbridge-plugin
 	@echo uberspark toolkit build success!
 
 
@@ -167,12 +167,12 @@ libs: build_bootstrap
 
 ### frontend build targets
 .PHONY: frontend
-frontend: build_bootstrap
+frontend: libs
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
 
 ### build vbridge plugin
 .PHONY: vbridge-plugin
-vbridge-plugin: build_bootstrap
+vbridge-plugin: libs
 	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-vbridge-plugin.mk -w all, $(shell id -u), $(shell id -g))
 
 
