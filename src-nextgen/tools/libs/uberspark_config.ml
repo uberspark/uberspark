@@ -58,6 +58,7 @@ let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspar
 	bridge_cc_bridge = "";
 	bridge_as_bridge = "";
 	bridge_ld_bridge = "";
+	bridge_vf_bridge_uberspark = "";
 	
 };;
 
@@ -85,7 +86,8 @@ let saved_json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_ub
 	bridge_cc_bridge = "";
 	bridge_as_bridge = "";
 	bridge_ld_bridge = "";
-	
+	bridge_vf_bridge_uberspark = "";
+
 };;
 
 

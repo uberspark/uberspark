@@ -1372,140 +1372,67 @@ class uobject
 	;
 	
 
+	(* verify the uobj *)
+	method verify
+		()
+		: bool =
+
+		let retval = ref false in
+
+		(* switch working directory to uobj_path build folder *)
+		let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change (self#get_d_builddir)) in
+		if(rval == false) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" self#get_d_builddir;
+			(!retval)
+		end else
+
+		let dummy =0 in begin
+	   	Uberspark_logger.log "proceeding to verify...";
+		end;
+
+		let rval = Uberspark_bridge.Vf.invoke 
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (json_node_uberspark_uobj_var.f_sources.f_c_files)  
+			 [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]
+			 "." in
+
+		if (rval == false ) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not verify one or more uobj sources!";
+			(false)
+		end else
+
+		let dummy = 0 in begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "verification successful!";
+
+		(* restore working directory *)
+		ignore(Uberspark_osservices.dir_change r_prevpath);
+
+		Uberspark_logger.log "cleaned up verification";
+		end;
+
+		(true)
+	;
+
 end;;
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* stand-alone interfaces that are invoked for one-short create, initialize *)
+(* and perform specific operation (compile, verify, build) *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 
 
-(*
-let build
-	(uobj_path : string)
-	(uobj_target_def : Defs.Basedefs.target_def_t)
-	: bool =
-
-	let retval = ref false in
-	let in_namespace_build = ref false in
-
-	let (rval, abs_uobj_path) = (Uberspark_osservices.abspath uobj_path) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not obtain absolute path for uobj: %s" abs_uobj_path;
-		(!retval)
-	end else
-
-	(* switch working directory to uobj_path *)
-	let (rval, r_prevpath, r_curpath) = (Uberspark_osservices.dir_change abs_uobj_path) in
-	if(rval == false) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobj path: %s" abs_uobj_path;
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-
-	(* create _build folder *)
-	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobj_build_dir (`Octal 0o0777);
-
-	end;
-
-	if not (Uberspark_bridge.initialize_from_config ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize bridges!";
-		(!retval)
-	end else
-	
-
-	let uobj_mf_filename = (abs_uobj_path ^ "/" ^ Uberspark_namespace.namespace_uobj_mf_filename) in
-	let dummy = 0 in begin
-    Uberspark_logger.log "initialized bridges";
-	Uberspark_logger.log "parsing uobj manifest: %s" uobj_mf_filename;
-	end;
-
-    (* create uobj instance and parse manifest *)
-	let uobj = new uobject in
-	let rval = (uobj#parse_manifest ()) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to stat/parse manifest for uobj: %s" uobj_mf_filename;
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-
-	Uberspark_logger.log "successfully parsed uobj manifest";
-	(*TBD: validate platform, arch, cpu target def with uobj target spec*)
-
-	(* initialize uobj initial state *)
-	(* TBD: we need to get the load address as argument to the build interface *)
-	uobj#initialize ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir uobj_target_def 
-		Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_load_address;
-
-	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_c_files) > 0 then begin
-		Uberspark_osservices.cp "*.c" (Uberspark_namespace.namespace_uobj_build_dir ^ "/.");
-	end;
-
-	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_h_files) > 0 then begin
-		Uberspark_osservices.cp "*.h" "./_build/.";
-	end;
-
-	if (List.length uobj#get_json_node_uberspark_uobj_var.f_sources.f_casm_files) > 0 then begin
-		Uberspark_osservices.cp "*.cS" "./_build/.";
-	end;
-
-
-    Uberspark_logger.log "proceeding to compile c files...";
-	end;
-
-	if not (uobj#compile_c_files ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj c files!";
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "compiled c files successfully!";
-    Uberspark_logger.log "proceeding to compile asm files...";
-	end;
-
-	if not (uobj#compile_asm_files ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not compile one or more uobj asm files!";
-		(!retval)
-	end else
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "compiled asm files successfully!";
-    Uberspark_logger.log "proceeding to link object files...";
-	end;
-
-	if not (uobj#link_object_files ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not link uobj object files!";
-		(!retval)
-	end else
-
-
-	let dummy = 0 in begin
-	Uberspark_logger.log "linked object files successfully!";
-
-	(* cleanup namespace if we are doing an out-of-namespace build *)
-	(*if not !in_namespace_build then begin
-		uobj#remove_ns ();
-	end;*)
-
-	(* restore working directory *)
-	ignore(Uberspark_osservices.dir_change r_prevpath);
-
-	Uberspark_logger.log "cleaned up build";
-	retval := true;
-	end;
-
-	(!retval)
-;;
-*)
-
-	
-let create_initialize_and_build
+(* create and initialize a uobj and return uobj object if successful *)
+let create_initialize
 	(uobj_mf_filename : string)
 	(uobj_target_def : Defs.Basedefs.target_def_t)
 	(uobj_load_address : int)
 	: bool * uobject option =
 
 	(* create uobj instance and initialize *)
-	let uobj = new uobject in
+	let uobj:uobject = new uobject in
 	let rval = (uobj#initialize ~builddir:Uberspark_namespace.namespace_uobj_build_dir 
 		uobj_mf_filename uobj_target_def uobj_load_address) in	
     if (rval == false) then	begin
@@ -1556,6 +1483,30 @@ let create_initialize_and_build
 		(false, None)
 	end else
 
+	(true, Some uobj)
+;;
+
+
+let create_initialize_and_build
+	(uobj_mf_filename : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	(uobj_load_address : int)
+	: bool * uobject option =
+
+	(* create uobj instance and initialize *)
+    let (rval, uobjopt) = (create_initialize 
+		uobj_mf_filename uobj_target_def uobj_load_address) in
+    if (rval == false) then begin
+		(false, None)
+	end else
+
+	match uobjopt with 
+	| None ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj instance!";
+		(false, None)
+
+	| Some uobj ->
+
 	(* build uobj binary image *)
 	let rval = (uobj#build_image ()) in	
     if (rval == false) then	begin
@@ -1569,6 +1520,43 @@ let create_initialize_and_build
 
 	(true, Some uobj)
 ;;
+
+
+let create_initialize_and_verify
+	(uobj_mf_filename : string)
+	(uobj_target_def : Defs.Basedefs.target_def_t)
+	(uobj_load_address : int)
+	: bool * uobject option =
+
+	(* create uobj instance and initialize *)
+    let (rval, uobjopt) = (create_initialize 
+		uobj_mf_filename uobj_target_def uobj_load_address) in
+    if (rval == false) then begin
+		(false, None)
+	end else
+
+	match uobjopt with 
+	| None ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid uobj instance!";
+		(false, None)
+
+	| Some uobj ->
+
+	(* verify uobj binary image *)
+	let rval = (uobj#verify ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to verify uobj!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "uobj verification successful.";
+	end;
+
+	(true, Some uobj)
+;;
+
+
 
 
 (*--------------------------------------------------------------------------*)

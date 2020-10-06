@@ -124,6 +124,36 @@ module Ld : sig
 end
 
 
+module Vf : sig
+
+	(*--------------------------------------------------------------------------*)
+	(* vf-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.Vf.json_node_uberspark_bridge_vf_t
+
+
+	(*--------------------------------------------------------------------------*)
+	(* interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke : 
+		?context_path_builddir : string -> 
+		string list ->
+		string list ->
+		string ->
+		bool
+
+end
+
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* interface definitions *)

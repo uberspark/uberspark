@@ -82,6 +82,8 @@ usage and description are as shown below:
 .. highlight:: default
 
 
+.. _frontend-cli-bridges:
+
 
 Bridge Management CLI
 ---------------------
@@ -309,16 +311,17 @@ usage and description are as shown below:
 ::
 
     SYNOPSIS
-        uberspark uobj ACTION [ACTION_OPTIONS]... [OPTIONS]... PATH or
+        uberspark uobj ACTION [ACTION_OPTIONS]... [OPTIONS]... PATH or        
         NAMESPACE
 
     DESCRIPTION
-        The uobj command provides several actions to verify, build and manage
+        The uobj command provides several actions to verify, build and manage 
         uobjs specified by PATH or NAMESPACE.
 
     ARGUMENTS
         ACTION (required)
-            The action to perform. ACTION must be one of `build'.
+            The action to perform. ACTION must be one of either `build' or    
+            `verify'.
 
         PATH or NAMESPACE (required)
             The path to the uobj sources or a uobj namespace.
@@ -326,6 +329,9 @@ usage and description are as shown below:
     ACTIONS
         build
             build the uobj binary.
+
+        verify
+            verify the uobj.
 
     ACTION OPTIONS
         These options qualify the aforementioned actions.
@@ -335,7 +341,7 @@ usage and description are as shown below:
 
         -c CPU, --cpu=CPU
             Specify uobj target CPU.
-    
+
         -p PLATFORM, --platform=PLATFORM
             Specify uobj target PLATFORM.
 
@@ -362,8 +368,8 @@ usage and description are as shown below:
         -v, --verbose
             Give verbose output. Same as `--log-level=5'
 
-        --version
-            Show version information.
+       --version
+           Show version information.
 
     EXIT STATUS
         0   on success.
@@ -385,25 +391,33 @@ usage and description are as shown below:
 
 ::
 
+    NAME
+        uberspark-uobjcoll - Verify, compile, build and/or manage uobj
+        collections
+
     SYNOPSIS
-        uberspark uobjcoll ACTION [ACTION_OPTIONS]... [OPTIONS]... PATH or
+        uberspark uobjcoll ACTION [ACTION_OPTIONS]... [OPTIONS]... PATH or     
         NAMESPACE
 
     DESCRIPTION
-        The uobjcoll command provides several actions to verify, build and
+        The uobjcoll command provides several actions to verify, build and     
         manage uobj collections specified by PATH or NAMESPACE.
 
     ARGUMENTS
         ACTION (required)
-            The action to perform. ACTION must be one of `build'.
+            The action to perform. ACTION must be one of either `build' or     
+            `verify'.
 
         PATH or NAMESPACE (required)
-            The path to the uobj collection sources or a uobj collection
+            The path to the uobj collection sources or a uobj collection       
             namespace.
 
     ACTIONS
         build
             build the uobj collection binary.
+
+        verify
+            verify the uobj collection.
 
     ACTION OPTIONS
         These options qualify the aforementioned actions.

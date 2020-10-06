@@ -30,7 +30,7 @@
 		"params_prefix_lib" : "-l",
 		"params_prefix_output" : "-o",
 
-		"cmd_generate_flat_binary" : "arm-linux-gnueabihf-objcopy -O binary"
+		"cmd_generate_flat_binary" : "objcopy -O binary"
 
 	}
 

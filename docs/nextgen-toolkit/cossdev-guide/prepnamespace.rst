@@ -46,8 +46,17 @@ verification tools.
 With the aforementioned command, we create (and automatically switch to) a staging 
 named ``generic-platform`` that supports development on a generic hardware platform. 
 
-As the next step, we configure the staging with the compiler, assembler and linker that
-are required to build the  ``hello-mul`` |uobjcoll|. 
+Choosing |uobj| Build Bridges
+-----------------------------
+
+|uobj| build bridges are framework connections to existing 
+development (compiler, assembler, linker) and verification 
+tools. 
+
+|uobj| build bridges can be configured as part of the
+staging configuration. In our example below, we configure the staging with the 
+compiler, assembler and linker bridges that
+are required to build the ``hello-mul`` |uobjcoll|. 
 
 
 .. highlight:: bash
@@ -62,4 +71,14 @@ are required to build the  ``hello-mul`` |uobjcoll|.
 The aforementioned commands will set the staging compiler bridge to use GCC v5.4.0, assembler bridge to use 
 GNU Assembler v2.26.1, and the linker bridge to use GNU ld v2.26.1
 
+.. note: |uberspark| bridges are are typically containerized
+         (via docker containers) but can also exist 
+         natively (e.g., installed directly on the development 
+         system). In the former case the bridge namespace starts
+         with `container`, while in the latter case the bridge namespace
+         starts with `native`. See 
+         |reference-manifest-ref|:::ref:`reference-manifest-uberspark-bridge` 
+         for further details on the manifest nodes that describe
+         bridges.
+         
 

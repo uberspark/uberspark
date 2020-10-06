@@ -320,6 +320,10 @@ module Bridge = struct
 	#include "uberspark_manifest_bridge_as.ml"
 	end
 
+	module Vf = struct
+	#include "uberspark_manifest_bridge_vf.ml"
+	end
+
 end
 
 

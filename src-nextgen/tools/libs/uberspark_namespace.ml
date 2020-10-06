@@ -26,7 +26,7 @@ let namespace_root = "uberspark";;
 let namespace_root_dir_prefix = ref "";; 
 let namespace_root_mf_filename = "uberspark.json";;
 let namespace_root_mf_node_type_tag = "uberspark-manifest";;
-
+let namespace_root_vf_bridge_plugin = "tools/vbridge-plugin";;
 
 (* installation *)
 let namespace_installation_configdir = "/etc/uberspark";;
@@ -93,11 +93,11 @@ let namespace_config_mf_node_type_tag = "uberspark-config";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
-let namespace_bridge_container_build_mountpath = "/root/src";;
-
+let namespace_bridge_container_mountpoint = "/home/uberspark/src";;
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;
+let namespace_bridge_vf_mf_node_type_tag = "uberspark-bridge-vf";;
 
 let namespace_bridge_ar_bridge_name = "ar-bridge";;
 let namespace_bridge_as_bridge_name = "as-bridge";;

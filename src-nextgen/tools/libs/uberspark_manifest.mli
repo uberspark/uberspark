@@ -128,6 +128,21 @@ module Bridge : sig
 
   end
 
+  module Vf : sig
+    type json_node_uberspark_bridge_vf_t = 
+    {
+      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable bridge_cmd: string list;
+    }
+
+    val json_node_uberspark_bridge_vf_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_vf_t -> bool
+    val json_node_uberspark_bridge_vf_var_to_jsonstr : json_node_uberspark_bridge_vf_t -> string
+
+  end
+
+
+
+
 end
 
 
@@ -159,6 +174,8 @@ module Config : sig
     mutable bridge_cc_bridge : string;
     mutable bridge_as_bridge : string;
     mutable bridge_ld_bridge : string;
+  	mutable bridge_vf_bridge_uberspark : string;
+
   }
 
   val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool
