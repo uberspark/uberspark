@@ -18,6 +18,7 @@ type json_node_uberspark_bridge_as_t =
 	mutable params_prefix_obj : string;
 	mutable params_prefix_output : string;
 	mutable params_prefix_include : string;
+	mutable bridge_cmd : string list;
 }
 ;;
 
@@ -54,6 +55,7 @@ let json_node_uberspark_bridge_as_to_var
 						json_node_uberspark_bridge_as_var.params_prefix_obj <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_obj" json_node_uberspark_bridge_as);
 						json_node_uberspark_bridge_as_var.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_node_uberspark_bridge_as);
 						json_node_uberspark_bridge_as_var.params_prefix_include <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_include" json_node_uberspark_bridge_as);
+						json_node_uberspark_bridge_as_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "bridge_cmd" json_node_uberspark_bridge_as));
 
 						retval := true;
 					end;
