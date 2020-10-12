@@ -5,29 +5,36 @@
 {
 	/* manifest header */
 	"uberspark-manifest":{
-	 "manifest_node_types" : [ "uberspark-bridge-as" ],
-	 "uberspark_min_version" : "any",
-	 "uberspark_max_version" : "any"
- },
+		"manifest_node_types" : [ "uberspark-bridge-as" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+ 	},
 
- "uberspark-bridge-as" : {
-	 /* bridge header */
-	 "bridge-hdr":{
-		 "btype" : "container",
-		 "bname" : "casm",
-		 "execname" : "casm",
-		 "devenv" : "amd64",
-		 "arch" : "x86_32",
-		 "cpu" : "generic",
-		 "version" : "vlatest",
-		 "path" : ".",
-		 "params" : [ ],
-		 "container_fname" : "uberspark_bridges.Dockerfile"
-	 },
+	"uberspark-bridge-as" : {
+		/* bridge header */
+		"bridge-hdr":{
+			"btype" : "container",
+			"bname" : "casm",
+			"execname" : "casm",
+			"devenv" : "amd64",
+			"arch" : "x86_32",
+			"cpu" : "generic",
+			"version" : "vlatest",
+			"path" : ".",
+			"params" : [ ],
+			"container_fname" : "uberspark_bridges.Dockerfile"
+		},
 
-	 "params_prefix_obj" : "-c",
-	 "params_prefix_output" : "-o",
-	 "params_prefix_include" : "-I"
- }
+		"params_prefix_obj" : "-c",
+		"params_prefix_output" : "-o",
+		"params_prefix_include" : "-I",
+
+		"bridge_cmd" : [
+			"	
+				echo casm bridge invoked
+			"
+		] 
+
+	}
 
 }
