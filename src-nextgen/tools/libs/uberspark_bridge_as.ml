@@ -214,6 +214,8 @@ let invoke
 	let bridge_source_files = ref "" in
 	let bridge_include_dirs = ref "" in
 	let bridge_include_dirs_with_prefix = ref "" in
+	let bridge_compiledefs = "__ASSEMBLY__" in
+	let bridge_compiledefs_with_prefix = "-D__ASSEMBLY__" in
 	let bridge_uberspark_plugin_dir = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin in
 
@@ -241,8 +243,12 @@ let invoke
                 !bridge_include_dirs b_cmd_substituted_0 in
         let b_cmd_substituted_2 = Str.global_replace (Str.regexp "@@BRIDGE_PLUGIN_DIR@@") 
                 bridge_uberspark_plugin_dir b_cmd_substituted_1 in
-        let b_cmd_substituted = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@") 
-                !bridge_include_dirs_with_prefix b_cmd_substituted_2 in
+        let b_cmd_substituted_3 = Str.global_replace (Str.regexp "@@BRIDGE_COMPILEDEFS@@") 
+                bridge_compiledefs b_cmd_substituted_2 in
+        let b_cmd_substituted_4 = Str.global_replace (Str.regexp "@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@") 
+                bridge_compiledefs_with_prefix b_cmd_substituted_3 in
+         let b_cmd_substituted = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@") 
+                !bridge_include_dirs_with_prefix b_cmd_substituted_4 in
 
 		if li == 0 then begin
 			d_cmd := b_cmd_substituted;

@@ -34,28 +34,12 @@
 		"params_prefix_include" : "-I",
 		
 		"bridge_cmd" : [
-			"	
-				echo source files: @@BRIDGE_SOURCE_FILES@@ &&
-				echo include dirs: @@BRIDGE_INCLUDE_DIRS@@ &&
-				echo include dirs with prefix: @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ &&
-				echo bridge plugin dir: @@BRIDGE_PLUGIN_DIR@@ &&
-				export var_bridge_include_dirs &&
-				export var_bridge_source_files &&
-				export vararray_bridge_include_dirs &&
-				export vararray_bridge_source_files &&
-				export include_prefix=\"-I\" &&
-				export include_string &&
-				var_bridge_include_dirs=\" @@BRIDGE_INCLUDE_DIRS@@ \" &&
-				var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \" &&
-				vararray_bridge_include_dirs=$(echo $var_bridge_include_dirs | tr \" \" \"\\n\") &&
-				for include_dir_name in $vararray_bridge_include_dirs; do include_string=\"${include_string} ${include_prefix}${include_dir_name}\"; done &&
-				echo \"include_string=$include_string\" &&
-				vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\") &&
-				for source_file_name in $vararray_bridge_source_files; do \\
-					echo Compiling file: $source_file_name ...; \\
-				done &&
-
-			"
+			"export var_bridge_include_dirs_with_prefix",
+			"export var_bridge_source_files",
+			"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+			"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+			"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+			"for source_file_name in $vararray_bridge_source_files; do echo \"Compiling ${source_file_name} ...\" && arm-linux-gnueabihf-gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -marm -march=armv8-a -mno-thumb-interwork -c ${var_bridge_include_dirs_with_prefix} ${source_file_name} -o ${source_file_name}.o ; done"
 		] 
 
 	}
