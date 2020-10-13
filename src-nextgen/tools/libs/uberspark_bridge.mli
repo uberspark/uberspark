@@ -91,6 +91,29 @@ end
 
 
 
+module Casm : sig
+
+	(*--------------------------------------------------------------------------*)
+	(* as-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_casm_var: Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_t
+
+
+	(*--------------------------------------------------------------------------*)
+	(* as-bridge interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+
+end
+
+
 module Ld : sig
 
 	(*--------------------------------------------------------------------------*)
