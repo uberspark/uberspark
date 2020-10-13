@@ -171,6 +171,34 @@ let initialize_from_config ()
 	end;
 
 
+	(* handle casm as-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.bridge_casm_bridge = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "casm as_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (Casm.load Uberspark_config.json_node_uberspark_config_var.bridge_casm_bridge) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load casm as_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded casm as_bridge settings";
+		retval := true;
+	end;
+
+	if not (Casm.build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build casm as_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "casm as_bridge build success";
+		retval := true;
+	end;
+
+
+
 	(* handle ld-bridge *)	
 	if Uberspark_config.json_node_uberspark_config_var.bridge_ld_bridge = "" then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";

@@ -174,6 +174,7 @@ module Config : sig
     (* bridge related configuration settings *)	
     mutable bridge_cc_bridge : string;
     mutable bridge_as_bridge : string;
+    mutable bridge_casm_bridge : string;
     mutable bridge_ld_bridge : string;
   	mutable bridge_vf_bridge_uberspark : string;
 

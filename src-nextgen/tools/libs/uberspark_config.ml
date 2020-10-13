@@ -57,6 +57,7 @@ let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspar
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
 	bridge_as_bridge = "";
+	bridge_casm_bridge = "";
 	bridge_ld_bridge = "";
 	bridge_vf_bridge_uberspark = "";
 	
@@ -85,6 +86,7 @@ let saved_json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_ub
 	(* bridge related configuration settings *)	
 	bridge_cc_bridge = "";
 	bridge_as_bridge = "";
+	bridge_casm_bridge = "";
 	bridge_ld_bridge = "";
 	bridge_vf_bridge_uberspark = "";
 
@@ -118,7 +120,9 @@ let settings_save
 
 	saved_json_node_uberspark_config_var.bridge_cc_bridge <- json_node_uberspark_config_var.bridge_cc_bridge;
 	saved_json_node_uberspark_config_var.bridge_as_bridge <- json_node_uberspark_config_var.bridge_as_bridge;
+	saved_json_node_uberspark_config_var.bridge_casm_bridge <- json_node_uberspark_config_var.bridge_casm_bridge;
 	saved_json_node_uberspark_config_var.bridge_ld_bridge <- json_node_uberspark_config_var.bridge_ld_bridge;
+	saved_json_node_uberspark_config_var.bridge_vf_bridge_uberspark <- json_node_uberspark_config_var.bridge_vf_bridge_uberspark;
 
 
 	()
@@ -144,7 +148,9 @@ let settings_restore
 
 	json_node_uberspark_config_var.bridge_cc_bridge <- saved_json_node_uberspark_config_var.bridge_cc_bridge;
 	json_node_uberspark_config_var.bridge_as_bridge <- saved_json_node_uberspark_config_var.bridge_as_bridge;
+	json_node_uberspark_config_var.bridge_casm_bridge <- saved_json_node_uberspark_config_var.bridge_casm_bridge;
 	json_node_uberspark_config_var.bridge_ld_bridge <- saved_json_node_uberspark_config_var.bridge_ld_bridge;
+	json_node_uberspark_config_var.bridge_vf_bridge_uberspark <- saved_json_node_uberspark_config_var.bridge_vf_bridge_uberspark;
 
 
 	()
@@ -230,7 +236,9 @@ let settings_get
 		| "uobjcoll_binary_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment);
 		| "bridge_cc_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_cc_bridge);
 		| "bridge_as_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_as_bridge);
+		| "bridge_casm_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_casm_bridge);
 		| "bridge_ld_bridge" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_ld_bridge);
+		| "bridge_vf_bridge_uberspark" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.bridge_vf_bridge_uberspark);
 		| _ -> retstatus := false;
 	;
 	
@@ -258,7 +266,9 @@ let settings_set
 		| "uobjcoll_binary_image_section_alignment" -> json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- int_of_string setting_value;
 		| "bridge_cc_bridge" -> json_node_uberspark_config_var.bridge_cc_bridge <- setting_value;
 		| "bridge_as_bridge" -> json_node_uberspark_config_var.bridge_as_bridge <- setting_value;
+		| "bridge_casm_bridge" -> json_node_uberspark_config_var.bridge_casm_bridge <- setting_value;
 		| "bridge_ld_bridge" -> json_node_uberspark_config_var.bridge_ld_bridge <- setting_value;
+		| "bridge_vf_bridge_uberspark" -> json_node_uberspark_config_var.bridge_vf_bridge_uberspark <- setting_value;
 		| _ -> retval := false;
 	;
 	
