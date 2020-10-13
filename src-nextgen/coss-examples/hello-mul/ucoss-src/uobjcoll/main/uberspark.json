@@ -24,7 +24,7 @@
 		"sources" : {
 			"h-files": [ ],
 			"c-files": [ "main.c" ],
-			"casm-files": [ ],
+			"casm-files": [ "nullfunc.cS" ],
 			"asm-files": [ ]
 		},
 	

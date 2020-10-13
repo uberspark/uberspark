@@ -7,7 +7,9 @@
 */
 
 #include <uberspark/include/uberspark.h>
+#include <uberspark/hwm/include/arch/x86_32/generic/hwm.h>
 
+CASM_FUNCDECL(void main_nullfunc(void));
 
 uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     uint32_t result;
