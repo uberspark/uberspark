@@ -19,5 +19,5 @@ CASM_FUNCDEF(void, main_nullfunc,
     __casm__popl_esi();
     __casm__ret();
 },
-void)
+void *noparam)
 
