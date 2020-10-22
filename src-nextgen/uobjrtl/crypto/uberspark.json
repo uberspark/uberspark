@@ -20,7 +20,7 @@
 		"arch" : "generic",
         "cpu" : "generic",
 
-        "modules-spec" : [
+        "modules-spec-c" : [
 
             {
                 "module-path" : "src/ciphers/aes/aes.c",

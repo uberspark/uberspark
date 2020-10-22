@@ -32,7 +32,7 @@ type json_node_uberspark_uobjrtl_t =
 	mutable f_arch : string;
     mutable f_cpu : string;
    
-    mutable f_modules_spec: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
 };;
 
 
@@ -69,7 +69,7 @@ let json_node_uberspark_uobjrtl_to_var
 					json_node_uberspark_uobjrtl_var.f_arch <- json_node_uberspark_uobjrtl |> member "arch" |> to_string;
 					json_node_uberspark_uobjrtl_var.f_cpu <- json_node_uberspark_uobjrtl |> member "cpu" |> to_string;
 
-					let json_node_uberspark_uobjrtl_modules_spec_list =  json_node_uberspark_uobjrtl |> member "modules-spec" |> to_list in
+					let json_node_uberspark_uobjrtl_modules_spec_list =  json_node_uberspark_uobjrtl |> member "modules-spec-c" |> to_list in
 					List.iter (fun x -> 
 						let f_modules_spec_element : json_node_uberspark_uobjrtl_modules_spec_t = 
 							{ f_module_path = ""; f_module_funcdecls = []; } in
@@ -78,7 +78,7 @@ let json_node_uberspark_uobjrtl_to_var
 
 			
 						(* add to f)modules_spec list *)
-						json_node_uberspark_uobjrtl_var.f_modules_spec <- json_node_uberspark_uobjrtl_var.f_modules_spec @ [ f_modules_spec_element ];
+						json_node_uberspark_uobjrtl_var.f_modules_spec_c <- json_node_uberspark_uobjrtl_var.f_modules_spec_c @ [ f_modules_spec_element ];
 					) json_node_uberspark_uobjrtl_modules_spec_list;
 
 

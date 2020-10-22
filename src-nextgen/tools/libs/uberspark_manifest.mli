@@ -353,7 +353,7 @@ type json_node_uberspark_uobjrtl_t =
 	mutable f_arch : string;
     mutable f_cpu : string;
    
-    mutable f_modules_spec: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
 }
 
   val json_node_uberspark_uobjrtl_to_var : Yojson.Basic.t -> json_node_uberspark_uobjrtl_t -> bool
