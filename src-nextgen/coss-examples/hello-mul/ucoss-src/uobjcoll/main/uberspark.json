@@ -57,6 +57,10 @@
 		/* uobjrtl */
 		"uobjrtl": [
 			{
+				"namespace" : "uberspark/uobjrtl/crt"
+			},
+
+			{
 				"namespace" : "uberspark/uobjrtl/hw"
 			}
 

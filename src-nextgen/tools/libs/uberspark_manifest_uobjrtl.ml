@@ -82,18 +82,22 @@ let json_node_uberspark_uobjrtl_to_var
 						json_node_uberspark_uobjrtl_var.f_modules_spec_c <- json_node_uberspark_uobjrtl_var.f_modules_spec_c @ [ f_modules_spec_c_element ];
 					) json_node_uberspark_uobjrtl_modules_spec_c_list;
 
-					let json_node_uberspark_uobjrtl_modules_spec_casm_list =  json_node_uberspark_uobjrtl |> member "modules-spec-casm" |> to_list in
-					List.iter (fun x -> 
-						let f_modules_spec_casm_element : json_node_uberspark_uobjrtl_modules_spec_t = 
-							{ f_module_path = ""; f_module_funcdecls = []; } in
+					if (json_node_uberspark_uobjrtl |> member "modules-spec-casm") <> `Null then
+						begin
 
-						f_modules_spec_casm_element.f_module_path <- x |> member "module-path" |> to_string;
+							let json_node_uberspark_uobjrtl_modules_spec_casm_list =  json_node_uberspark_uobjrtl |> member "modules-spec-casm" |> to_list in
+							List.iter (fun x -> 
+								let f_modules_spec_casm_element : json_node_uberspark_uobjrtl_modules_spec_t = 
+									{ f_module_path = ""; f_module_funcdecls = []; } in
 
-			
-						(* add to f)modules_spec list *)
-						json_node_uberspark_uobjrtl_var.f_modules_spec_casm <- json_node_uberspark_uobjrtl_var.f_modules_spec_casm @ [ f_modules_spec_casm_element ];
-					) json_node_uberspark_uobjrtl_modules_spec_casm_list;
+								f_modules_spec_casm_element.f_module_path <- x |> member "module-path" |> to_string;
 
+					
+								(* add to f)modules_spec list *)
+								json_node_uberspark_uobjrtl_var.f_modules_spec_casm <- json_node_uberspark_uobjrtl_var.f_modules_spec_casm @ [ f_modules_spec_casm_element ];
+							) json_node_uberspark_uobjrtl_modules_spec_casm_list;
+						end
+					;
 
 					retval := true;
 				end
