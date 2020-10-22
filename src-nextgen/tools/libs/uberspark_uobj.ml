@@ -383,7 +383,7 @@ class uobject
 					
 					(* convert to var *)
 					let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
-						f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec_c = []; } in
+						f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec_c = []; f_modules_spec_casm = [];} in
 					let rval =	(Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json l_uobjrtl_entry_var) in
 					if rval then begin
 						Hashtbl.add d_uobjrtl_hashtbl uobjrtl_namespace l_uobjrtl_entry_var;						
@@ -887,7 +887,7 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace staging-dir-prefix=%s" (Uberspark_namespace.get_namespace_staging_dir_prefix ());
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl builddir prefix=%s" self#get_d_builddir;
 
-		(* prepare uobjrtl sources *)
+		(* prepare uobjrtl c sources *)
 		let l_uobjrtl_sources_c_files = ref [] in 
 		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
@@ -905,6 +905,28 @@ class uobject
 
 				) uobjrtl_info.f_modules_spec_c;
 		) json_node_uberspark_uobj_var.f_uobjrtl;
+
+
+		(* prepare uobjrtl casm sources *)
+		let l_uobjrtl_sources_casm_files = ref [] in 
+		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
+				let uobjrtl_info = (Hashtbl.find self#get_d_uobjrtl_hashtbl uobjrtl_namespace) in
+				List.iter ( fun ( (uobjrtl_modules_spec : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ) -> 
+
+					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.f_module_path) in
+					let l_src_module_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_namespace_module_path) in
+					let l_dst_module_path =  (self#get_d_builddir ^ "/" ^ l_namespace_module_path) in 
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.f_module_path;
+					Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname l_namespace_module_path)) (`Octal 0o0777);
+					Uberspark_osservices.cp l_src_module_path l_dst_module_path;
+
+					l_uobjrtl_sources_casm_files :=  !l_uobjrtl_sources_casm_files @ [ l_namespace_module_path ];
+
+				) uobjrtl_info.f_modules_spec_casm;
+		) json_node_uberspark_uobj_var.f_uobjrtl;
+
+
 
 
 		(* copy uobj c files to namespace *)

@@ -52,7 +52,16 @@
 	
 		/* legacy CoSS functions/code that this uobj invokes */
 		"legacy-callees": [
+		],
+
+		/* uobjrtl */
+		"uobjrtl": [
+			{
+				"namespace" : "uberspark/uobjrtl/hw"
+			}
+
 		]
+
 
 
 
