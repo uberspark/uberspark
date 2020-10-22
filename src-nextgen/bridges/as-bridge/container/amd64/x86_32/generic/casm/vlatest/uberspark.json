@@ -35,7 +35,7 @@
 			"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
 			"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
 			"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
-			"for source_file_name in $vararray_bridge_source_files; do echo \"Compiling CASM source file ${source_file_name} ...\" && cp -f ${source_file_name} ${source_file_name}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -fpacked-structs -c -dmach ${source_file_name}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name}.mach -casm-outfile ${source_file_name}.s ; done"
+			"for source_file_name in $vararray_bridge_source_files; do echo \"Compiling CASM source file ${source_file_name} ...\" && cp -f ${source_file_name} ${source_file_name}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name}.mach -casm-outfile ${source_file_name}.s ; done"
 		] 
 
 	}
