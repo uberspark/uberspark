@@ -29,7 +29,7 @@
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
 		"params_prefix_include" : "-I",
-		"params_cclib" : ""
+		"params_cclib" : "/usr/local/lib/compcert/libcompcert.a"
 
 	}
 
