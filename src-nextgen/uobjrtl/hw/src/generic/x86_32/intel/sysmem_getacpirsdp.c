@@ -104,7 +104,7 @@ static uint32_t _acpi_computetablechecksum(char *table, uint32_t size){
 	requires \valid(rsdp);
 	assigns \nothing;
 @*/
-uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp){
+uint32_t uberspark_uobjrtl_hw__generic_x86_32_intel__acpi_getRSDP(ACPI_RSDP *rsdp){
   uint16_t ebdaseg;
   uint32_t ebdaphys;
   uint32_t i, found=0;
