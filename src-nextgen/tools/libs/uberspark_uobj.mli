@@ -151,6 +151,7 @@ type slt_info_t =
  	
 
     method compile_c_files : unit -> bool
+    method compile_casm_files : unit -> bool
     method compile_asm_files : unit -> bool
     method link_object_files : unit -> bool
 

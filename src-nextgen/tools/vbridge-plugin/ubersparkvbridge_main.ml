@@ -23,6 +23,18 @@ let run () =
 
     end;
 
+
+    if Ubersparkvbridge_options.Casm.get() then begin
+        Ubersparkvbridge_options.Casm.set(false);
+        Ubersparkvbridge_print.output (Printf.sprintf "Calling CASM extractor...");
+        let input_file = Ubersparkvbridge_options.CasmInputFile.get() in
+        let output_file = Ubersparkvbridge_options.CasmOutputFile.get() in
+            Ubersparkvbridge_print.output (Printf.sprintf "CASM inputfile=%s, outputfile=%s" input_file output_file);
+            Ubersparkvbridge_casm.casm_extract input_file output_file;
+    end;
+
+
+
     ()
 
 let () = Db.Main.extend run

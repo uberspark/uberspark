@@ -90,6 +90,6 @@ void uberspark_uobjrtl_hw__generic_x86_32_intel__reboot(void){
 	CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__outb,0xFE, 0x64);
 
 	//never get here
-	HALT();
+	CASM_FUNCCALL(uberspark_uobjrtl_hw__generic_x86_32_intel__hlt, CASM_NOPARAM);
 }
 

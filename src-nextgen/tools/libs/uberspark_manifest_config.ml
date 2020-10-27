@@ -35,6 +35,7 @@ type json_node_uberspark_config_t =
 	(* bridge related configuration settings *)	
 	mutable bridge_cc_bridge : string;
 	mutable bridge_as_bridge : string;
+	mutable bridge_casm_bridge : string;
 	mutable bridge_ld_bridge : string;
 	mutable bridge_vf_bridge_uberspark : string;
 };;
@@ -107,6 +108,9 @@ let json_node_uberspark_config_to_var
 					if (Yojson.Basic.Util.member "bridge_as_bridge" json_node_uberspark_config) <> `Null then
 						json_node_uberspark_config_var.bridge_as_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_as_bridge" json_node_uberspark_config);
 
+					if (Yojson.Basic.Util.member "bridge_casm_bridge" json_node_uberspark_config) <> `Null then
+						json_node_uberspark_config_var.bridge_casm_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_casm_bridge" json_node_uberspark_config);
+
 					if (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config) <> `Null then
 						json_node_uberspark_config_var.bridge_ld_bridge <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_ld_bridge" json_node_uberspark_config);
 
@@ -151,7 +155,9 @@ let json_node_uberspark_config_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uobjcoll_binary_image_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_cc_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_cc_bridge;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_as_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_as_bridge;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_ld_bridge\" : \"%s\"" json_node_uberspark_config_var.bridge_ld_bridge;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_casm_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_casm_bridge;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_ld_bridge\" : \"%s\"," json_node_uberspark_config_var.bridge_ld_bridge;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_vf_bridge_uberspark\" : \"%s\"" json_node_uberspark_config_var.bridge_vf_bridge_uberspark;
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t}";
 

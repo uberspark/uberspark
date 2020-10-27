@@ -42,3 +42,27 @@ module Output_file = Self.String
         let help =
             "file where the message is output (default: output to the console)"
     end)
+
+
+module Casm = Self.False
+    (struct
+        let option_name = "-casm"
+        let help = "when on (off by default), " ^ help_msg
+    end)
+
+
+module CasmInputFile = Self.String
+	(struct
+		let option_name = "-casm-infile"
+		let default = "casm.mach"
+		let arg_name = "input-file"
+		let help = "CASM input file"
+	end)
+
+module CasmOutputFile = Self.String
+	(struct
+		let option_name = "-casm-outfile"
+		let default = "casm.s"
+		let arg_name = "output-file"
+		let help = "CASM Assembly output file"
+	end)

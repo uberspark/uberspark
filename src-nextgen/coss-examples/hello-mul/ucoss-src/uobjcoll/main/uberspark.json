@@ -24,7 +24,7 @@
 		"sources" : {
 			"h-files": [ ],
 			"c-files": [ "main.c" ],
-			"casm-files": [ ],
+			"casm-files": [ "nullfunc.cS" ],
 			"asm-files": [ ]
 		},
 	
@@ -52,7 +52,22 @@
 	
 		/* legacy CoSS functions/code that this uobj invokes */
 		"legacy-callees": [
+		],
+
+		/* uobjrtl */
+		"uobjrtl": [
+			{
+				"namespace" : "uberspark/uobjrtl/crt"
+			},
+
+			{
+				"namespace" : "uberspark/uobjrtl/hw"
+			}
+
 		]
+
+
+
 
 	}
 
