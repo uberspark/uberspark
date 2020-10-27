@@ -13,6 +13,7 @@ CASM_FUNCDECL(void main_nullfunc(void *noparam));
 
 uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     uint32_t result;
+    char l_mybuf[5];
 
     CASM_FUNCCALL(main_nullfunc, CASM_NOPARAM);
     

@@ -23,14 +23,14 @@ all: prep build
 
 
 .PHONY: build
-build:
+build: prep
 	@echo building hello_mul...
 	uberspark staging switch generic-platform
 	cd uobjcoll && uberspark uobjcoll build -v --platform=generic --arch=x86_32 --cpu=generic .
 	@echo built hello_mul successfully!
 
 .PHONY: verify
-verify:
+verify: prep
 	@echo verifying hello_mul...
 	uberspark staging switch generic-platform
 	cd uobjcoll && uberspark uobjcoll verify -v --platform=generic --arch=x86_32 --cpu=generic .
