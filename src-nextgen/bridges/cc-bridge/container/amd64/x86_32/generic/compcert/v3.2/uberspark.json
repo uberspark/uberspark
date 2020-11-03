@@ -1,36 +1,37 @@
 /*
     uberSpark code bridges json definition
 */
-
 {
-   	/* manifest header */
-	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-bridge-cc" ],
-		"uberspark_min_version" : "any",
-		"uberspark_max_version" : "any"
+	/* manifest header */
+	"uberspark-manifest": {
+		"manifest_node_types": [
+			"uberspark-bridge-cc"
+		],
+		"uberspark_min_version": "any",
+		"uberspark_max_version": "any"
 	},
-
-    "uberspark-bridge-cc" : {
+	"uberspark-bridge-cc": {
 		/* bridge header */
-		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "compcert",
-			"execname" : "ccomp",
-			"devenv" : "amd64",
-			"arch" : "x86_32",
-			"cpu" : "generic",
-			"version" : "v3.2",
-			"path" : ".",
-			"params" : [ "" ],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+		"bridge-hdr": {
+			"btype": "container",
+			"bname": "compcert",
+			"execname": "ccomp",
+			"devenv": "amd64",
+			"arch": "x86_32",
+			"cpu": "generic",
+			"version": "v3.2",
+			"path": ".",
+			"params": [
+				"-fpacked-structs",
+				"-fstruct-passing",
+				"-Wno-c11-extensions"
+			],
+			"container_fname": "uberspark_bridges.Dockerfile"
 		},
-
-	"params_prefix_obj" : "-c",
-        "params_prefix_asm" : "-S",
-        "params_prefix_output" : "-o",
-		"params_prefix_include" : "-I",
-		"params_cclib" : ""
-
+		"params_prefix_obj": "-c",
+		"params_prefix_asm": "-S",
+		"params_prefix_output": "-o",
+		"params_prefix_include": "-I",
+		"params_cclib": "/usr/local/lib/compcert/libcompcert.a"
 	}
-
 }

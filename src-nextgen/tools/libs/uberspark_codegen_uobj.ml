@@ -232,7 +232,22 @@ let generate_src_intrauobjcoll_callees_info
                 slt_ordinal := !slt_ordinal + 1;
             ) value;
         ) intrauobjcoll_callees_hashtbl;
-    
+
+        (* add terminating record *)
+            Printf.fprintf oc "\n\t{"; 
+            
+            (* namespace *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* cname *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* slt_ordinal *)
+            Printf.fprintf oc "\n\t0xFFFFFFFFUL";
+            
+            Printf.fprintf oc "\n\t}"; 
+
+
     Printf.fprintf oc "\n};";
 
     (* generate epilogue *)
@@ -280,6 +295,8 @@ let generate_src_interuobjcoll_callees_info
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_interuobjcoll_cinfo\") )) usbinformat_uobj_callee_info_t uobj_interuobjcoll_callee_info [] = {";
 
         let slt_ordinal = ref 0 in
+        
+      
         Hashtbl.iter (fun key value ->  
             List.iter (fun pm_name -> 
                 Printf.fprintf oc "\n\t{"; 
@@ -297,7 +314,22 @@ let generate_src_interuobjcoll_callees_info
                 slt_ordinal := !slt_ordinal + 1;
             ) value;
         ) interuobjcoll_callees_hashtbl;
-    
+
+        (* add terminating record *)
+            Printf.fprintf oc "\n\t{"; 
+            
+            (* namespace *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* cname *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* slt_ordinal *)
+            Printf.fprintf oc "\n\t0xFFFFFFFFUL";
+            
+            Printf.fprintf oc "\n\t}"; 
+
+
     Printf.fprintf oc "\n};";
 
     (* generate epilogue *)
@@ -355,6 +387,9 @@ let generate_src_legacy_callees_info
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_legacy_cinfo\") )) usbinformat_uobj_callee_info_t uobj_legacy_callees [] = {";
 
     let slt_ordinal = ref 0 in
+
+
+     
     Hashtbl.iter (fun key value ->
         List.iter (fun callee_name ->  
             Printf.fprintf oc "\n\t{"; 
@@ -370,6 +405,22 @@ let generate_src_legacy_callees_info
             slt_ordinal := !slt_ordinal + 1;
         ) value;
     )legacy_callees_hashtbl;
+
+
+        (* add terminating record *)
+            Printf.fprintf oc "\n\t{"; 
+            
+            (* namespace *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* cname *)
+            Printf.fprintf oc "\n\t\t\"NULL\"," ; 
+            
+            (* slt_ordinal *)
+            Printf.fprintf oc "\n\t0xFFFFFFFFUL";
+            
+            Printf.fprintf oc "\n\t}"; 
+
 
     Printf.fprintf oc "\n};";
 

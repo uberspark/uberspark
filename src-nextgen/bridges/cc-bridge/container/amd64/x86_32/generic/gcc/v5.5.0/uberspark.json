@@ -35,7 +35,7 @@
         "params_prefix_asm" : "-S",
         "params_prefix_output" : "-o",
 		"params_prefix_include" : "-I",
-		"params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/libgcc.a"
+		"params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/32/libgcc.a"
 
 	}
 
