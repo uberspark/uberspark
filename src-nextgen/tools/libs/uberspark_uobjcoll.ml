@@ -205,9 +205,11 @@ let get_sentinel_info_for_sentinel_facet_and_type
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0; f_code = ""; f_libcode = "";} in
 
 
+	(* construct the path to sentinel manifest *)
 	let sentinel_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
-		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ json_node_uberspark_uobjcoll_var.f_cpu ^ "/" ^ json_node_uberspark_uobjcoll_var.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/" ^
+		sentinel_facet ^ "/" ^
+		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
@@ -254,7 +256,7 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
 		List.iter ( fun (sentinel_type: string) -> 
 			if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
-				Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "interuobjcoll";
+				Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "inter-uobjcoll";
 			end;
 		) pm_sentinel_info.f_sentinel_type_list;
 	) json_node_uberspark_uobjcoll_var.f_publicmethods;
@@ -288,7 +290,7 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 	let sentinel_type_to_sentinel_facet = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t)) in 
 	List.iter ( fun (sentinel_type: string) -> 
 		if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
-			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intrauobjcoll";
+			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intra-uobjcoll";
 		end;
 	) json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll;
 
@@ -1100,6 +1102,7 @@ let initialize_common_operation_context
 
 	(* sanity check platform, cpu, arch override *)
 	(* TBD: if manifest says generic, we need a command line override *)
+	(* TBD: at the very least we need an arch override if uobjcoll says generic arch *)
 	let dummy = 0 in begin
 	json_node_uberspark_uobjcoll_var.f_arch <- d_target_def.f_arch;
 	json_node_uberspark_uobjcoll_var.f_cpu <- d_target_def.f_cpu;
