@@ -34,7 +34,16 @@
 				"uint32_t",
 				"(uint32_t multiplicand, uint32_t multiplier)", 
 				"2" 
+			],
+
+			"init" : [
+				"uint32_t",
+				"(void)", 
+				"0" 
 			]
+
+
+
 		},
 
 		/* public methods of other uobjs that this uobj invokes 
