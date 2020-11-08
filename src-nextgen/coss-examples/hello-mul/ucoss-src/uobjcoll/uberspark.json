@@ -30,6 +30,16 @@
 			]
 		},
 
+		/* uobjcoll init method */
+		"initmethod" : {
+			"uobj_ns" : "uberspark/uobjcoll/generic/hello-mul/main",
+			"pm_name" : "init",
+			"sentinel_types" : [
+				"generic/generic/any/call"
+			]
+		},	
+
+
 		/* uobjcoll public methods */
 		"publicmethods" : {
 			"uberspark/uobjcoll/generic/hello-mul/main" : {

@@ -51,6 +51,7 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";
 		f_sentinels_intrauobjcoll = [];
 		f_uobjs = { f_master = ""; f_templars = [];};
+		f_initmethod = {f_uobj_ns = ""; f_pm_name = ""; f_sentinel_type_list = [];};
 		f_publicmethods = [];
 	};;
 

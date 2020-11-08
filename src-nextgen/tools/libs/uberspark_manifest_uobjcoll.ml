@@ -36,6 +36,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable f_hpl		   : string;
 	mutable f_sentinels_intrauobjcoll : string list;
 	mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
+	mutable f_initmethod	: json_node_uberspark_uobjcoll_publicmethods_t;
 	mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
 };;
 
@@ -78,6 +79,43 @@ let json_node_uberspark_uobjcoll_uobjs_to_var
 	;
 
 	(!retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "initmethod" into var *)
+(* return: *)
+(* on success: true; var is modified with initmethod declarations and sentinels *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobjcoll_initmethod_to_var 
+	(json_node_uberspark_uobjcoll : Yojson.Basic.t)
+	: bool * json_node_uberspark_uobjcoll_publicmethods_t =
+
+	let retval = ref true in
+	let entry : json_node_uberspark_uobjcoll_publicmethods_t = {
+			f_uobj_ns = "";
+			f_pm_name = "";
+			f_sentinel_type_list = [];
+		} in
+
+	try
+		let open Yojson.Basic.Util in
+			let uobjcoll_initmethod_json = json_node_uberspark_uobjcoll |> member "initmethod" in
+			if uobjcoll_initmethod_json != `Null then	begin
+				entry.f_uobj_ns <- uobjcoll_initmethod_json |> member "uobj_ns" |> to_string;
+				entry.f_pm_name <- uobjcoll_initmethod_json |> member "pm_name" |> to_string;
+				entry.f_sentinel_type_list <- (json_list_to_string_list  (uobjcoll_initmethod_json |> member "sentinel_types" |> to_list));
+
+				retval := true;
+			end;
+
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, entry)
 ;;
 
 
@@ -156,10 +194,13 @@ let json_node_uberspark_uobjcoll_to_var
 					json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "sentinels-intrauobjcoll" |> to_list));
 
 					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var json_node_uberspark_uobjcoll json_node_uberspark_uobjcoll_var.f_uobjs) in
-					let (rval2, json_node_uberspark_uobjcoll_publicmethods_var) = 
+					let (rval2, json_node_uberspark_uobjcoll_initmethod_var) = 
+						(json_node_uberspark_uobjcoll_initmethod_to_var json_node_uberspark_uobjcoll) in
+					let (rval3, json_node_uberspark_uobjcoll_publicmethods_var) = 
 						(json_node_uberspark_uobjcoll_publicmethods_to_var json_node_uberspark_uobjcoll) in
 
-					if (rval1 && rval2) then begin
+					if (rval1 && rval2 && rval3) then begin
+						json_node_uberspark_uobjcoll_var.f_initmethod <- json_node_uberspark_uobjcoll_initmethod_var;
 						json_node_uberspark_uobjcoll_var.f_publicmethods <- json_node_uberspark_uobjcoll_publicmethods_var;
 						retval := true;
 					end;
