@@ -595,10 +595,20 @@ let consolidate_sections_with_memory_map
 		let sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
 		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
 		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
-		let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+		(*let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
 			(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+		*)
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
+		let section_top_addr = 	ref 0 in
+		section_top_addr := sentinel_info.f_sizeof_code + !uobjcoll_section_load_addr;
+		if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+			section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+		end;
+
+		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code section_size;
 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 			{ f_name = key;	
