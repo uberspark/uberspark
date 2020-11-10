@@ -24,7 +24,8 @@
 		"sources" : {
 			"h-files": [ ],
 			"c-files": [ "main.c" ],
-			"casm-files": [ "nullfunc.cS" ],
+			/*"casm-files": [ "nullfunc.cS" ],*/
+			"casm-files" : [],
 			"asm-files": [ ]
 		},
 	
@@ -67,11 +68,11 @@
 		"uobjrtl": [
 			{
 				"namespace" : "uberspark/uobjrtl/crt"
-			},
-
-			{
-				"namespace" : "uberspark/uobjrtl/hw"
 			}
+
+			/*{
+				"namespace" : "uberspark/uobjrtl/hw"
+			}*/
 
 		]
 

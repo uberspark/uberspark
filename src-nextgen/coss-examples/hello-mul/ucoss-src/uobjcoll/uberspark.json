@@ -35,7 +35,7 @@
 			"uobj_ns" : "uberspark/uobjcoll/generic/hello-mul/main",
 			"pm_name" : "init",
 			"sentinel_types" : [
-				"generic/generic/any/call"
+				"baremetal/vccore/srot/generic/rpi3/hyp/call"
 			]
 		},	
 

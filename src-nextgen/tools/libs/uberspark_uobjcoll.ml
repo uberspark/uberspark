@@ -578,9 +578,10 @@ let consolidate_sections_with_memory_map
 	(* add init-uobjcoll sentinels *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add init-uobjcoll sentinel sections...";
 	List.iter ( fun (sentinel_type:string) ->
-	
+
 		(* add section *)
-		let sentinel_name = json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name ^ "__" ^ sentinel_type in 
+		let canonical_pm_name = (Uberspark_namespace.get_variable_name_prefix_from_ns json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns) ^ "__" ^ json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name in
+		let sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
 		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
 		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
 		let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 

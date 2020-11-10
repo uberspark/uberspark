@@ -14,7 +14,7 @@
 
     "uberspark-sentinel" : {
 
-		"namespace" : "uberspark/sentinels/cpu/armv8_32/generic/hyp/intrauobjcoll/call",
+		"namespace" : "uberspark/sentinels/init-uobjcoll/baremetal/vccore/srot/armv8_32/generic/rpi3/hyp/call",
 		"platform" : "rpi3",
 		"arch" : "armv8_32",
         "cpu" : "generic",
