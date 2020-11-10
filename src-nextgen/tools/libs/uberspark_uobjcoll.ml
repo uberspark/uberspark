@@ -269,6 +269,14 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 				retval := false;
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod_sentinels_hashtbl: adding key=%s" sentinel_entry.f_sentinel_type; 
+
+				(*override f_sizeof_code if sentinel_size was specified within manifest *)
+				if sentinel_entry.f_sentinel_size > 0 then begin
+					sinfo.f_sizeof_code <- sentinel_entry.f_sentinel_size;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel f_sizeof_code with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
+				end;
+
+				
 				Hashtbl.add d_uobjcoll_initmethod_sentinels_hashtbl sentinel_entry.f_sentinel_type sinfo;
 			end;
 		end;
