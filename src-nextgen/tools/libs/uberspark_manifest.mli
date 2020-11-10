@@ -284,6 +284,22 @@ module Uobjcoll : sig
     mutable f_templars  : string list;
   }
 
+
+  type json_node_uberspark_uobjcoll_initmethod_sentinels_t =
+  {
+    mutable f_sentinel_type    : string;
+    mutable f_sentinel_size	 : int;
+  }
+
+
+  type json_node_uberspark_uobjcoll_initmethod_t =
+  {
+    mutable f_uobj_ns    : string;
+    mutable f_pm_name	 : string;
+    mutable f_sentinels : json_node_uberspark_uobjcoll_initmethod_sentinels_t list;
+  }
+
+
   type json_node_uberspark_uobjcoll_publicmethods_t =
   {
     mutable f_uobj_ns    : string;
@@ -300,12 +316,12 @@ module Uobjcoll : sig
     mutable f_hpl		   : string;
     mutable f_sentinels_intrauobjcoll : string list;
     mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
-    mutable f_initmethod : json_node_uberspark_uobjcoll_publicmethods_t;
+    mutable f_initmethod : json_node_uberspark_uobjcoll_initmethod_t;
     mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
   }
 
   val json_node_uberspark_uobjcoll_uobjs_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_uobjs_t -> bool
-  val json_node_uberspark_uobjcoll_initmethod_to_var : Yojson.Basic.t -> bool * json_node_uberspark_uobjcoll_publicmethods_t
+  val json_node_uberspark_uobjcoll_initmethod_to_var : Yojson.Basic.t -> bool * json_node_uberspark_uobjcoll_initmethod_t
   val json_node_uberspark_uobjcoll_publicmethods_to_var : Yojson.Basic.t -> bool * ((string * json_node_uberspark_uobjcoll_publicmethods_t) list)
   val json_node_uberspark_uobjcoll_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_t -> bool
 

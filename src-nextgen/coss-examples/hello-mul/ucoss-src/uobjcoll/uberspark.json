@@ -34,8 +34,11 @@
 		"initmethod" : {
 			"uobj_ns" : "uberspark/uobjcoll/generic/hello-mul/main",
 			"pm_name" : "init",
-			"sentinel_types" : [
-				"baremetal/vccore/srot/generic/rpi3/hyp/call"
+			"sentinels" : [
+				{
+					"sentinel_type" : "baremetal/vccore/srot/generic/rpi3/hyp/call",
+					"sentinel_size" : "0x10000"	
+				}	
 			]
 		},	
 
