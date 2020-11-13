@@ -986,6 +986,8 @@ let setup_uobjcoll_initmethod_sentinel_address_hashtbl
 	: unit = 
 
 	let canonical_pm_name = (Uberspark_namespace.get_variable_name_prefix_from_ns json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns) ^ "__" ^ json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod canonical_pm_name=%s" canonical_pm_name;
+
 	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) ->
 
 		let sentinel_type = sentinel_entry.f_sentinel_type in
