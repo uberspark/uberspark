@@ -9,6 +9,10 @@ ARCHIVE = libubersparkcrypto.a
 ###### compute source directory where this Makefile resides
 srcdir := $(dir $(lastword $(MAKEFILE_LIST)))
 vpath %.c $(srcdir) $(srcdir)/hashes/sha1
+vpath %.c $(srcdir) $(srcdir)/hashes/sha2
+vpath %.c $(srcdir) $(srcdir)/cipher/aes
+vpath %.c $(srcdir) $(srcdir)/mac/hmac-sha1
+vpath %.c $(srcdir) $(srcdir)/mac/hmac-sha2
 
 ###### populate sources and objects
 C_SOURCES := hashes/sha1/sha1.c
