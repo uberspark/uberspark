@@ -1,0 +1,34 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+   	/* manifest header */
+	   "uberspark-manifest":{
+		"manifest_node_types" : [ "uberspark-bridge-loader" ],
+		"uberspark_min_version" : "any",
+		"uberspark_max_version" : "any"
+	},
+
+    "uberspark-bridge-cc" : {
+		/* bridge header */
+		"bridge-hdr":{
+			"btype" : "container",
+			"bname" : "gcc",
+			"execname" : "gcc",
+			"devenv" : "amd64",
+			"arch" : "x86_32",
+			"cpu" : "generic",
+			"version" : "v5.5.0",
+			"path" : ".",
+			"params" : [ ],
+			"container_fname" : "uberspark_bridges.Dockerfile"
+		},
+
+		"bridge_cmd" : [
+			"echo Default loader bridge command. Nothing to do!"
+		] 
+
+	}
+
+}
