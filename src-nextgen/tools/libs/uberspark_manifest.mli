@@ -141,6 +141,17 @@ module Bridge : sig
 
   end
 
+  module Loader : sig
+    type json_node_uberspark_bridge_loader_t = 
+    {
+      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable bridge_cmd: string list;
+    }
+
+    val json_node_uberspark_bridge_loader_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_loader_t -> bool
+    val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_loader_t -> string
+
+  end
 
 
 

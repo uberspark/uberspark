@@ -324,6 +324,10 @@ module Bridge = struct
 	#include "uberspark_manifest_bridge_vf.ml"
 	end
 
+	module Loader = struct
+	#include "uberspark_manifest_bridge_loader.ml"
+	end
+
 end
 
 
