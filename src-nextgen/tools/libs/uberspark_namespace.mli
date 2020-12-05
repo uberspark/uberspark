@@ -105,6 +105,7 @@ val namespace_bridge_cc_bridge_name : string
 val namespace_bridge_ld_bridge_name : string
 val namespace_bridge_pp_bridge_name : string
 val namespace_bridge_vf_bridge_name : string
+val namespace_bridge_loader_bridge_name : string
 val namespace_bridge_bldsys_bridge_name : string
 
 val namespace_bridge_ar_bridge : string
@@ -113,6 +114,7 @@ val namespace_bridge_cc_bridge : string
 val namespace_bridge_ld_bridge : string
 val namespace_bridge_pp_bridge : string
 val namespace_bridge_vf_bridge : string
+val namespace_bridge_loader_bridge : string
 val namespace_bridge_bldsys_bridge : string
 
 
