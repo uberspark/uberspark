@@ -145,6 +145,7 @@ module Bridge : sig
     type json_node_uberspark_bridge_loader_t = 
     {
       mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+      mutable bridge_prefix : string;
       mutable bridge_cmd: string list;
     }
 

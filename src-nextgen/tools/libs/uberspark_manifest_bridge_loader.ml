@@ -15,6 +15,7 @@
 type json_node_uberspark_bridge_loader_t = 
 {
 	mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
+	mutable bridge_prefix : string;
 	mutable bridge_cmd : string list;
 }
 ;;
@@ -49,6 +50,7 @@ let json_node_uberspark_bridge_loader_to_var
 					let rval = json_node_bridge_hdr_to_var json_node_bridge_hdr json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var in
 
 					if rval then begin
+						json_node_uberspark_bridge_loader_var.bridge_prefix <- ( Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "bridge_prefix" json_node_uberspark_bridge_loader));
 						json_node_uberspark_bridge_loader_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "bridge_cmd" json_node_uberspark_bridge_loader));
 
 						retval := true;
@@ -78,6 +80,8 @@ let json_node_uberspark_bridge_loader_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-bridge-loader\":{";
 
 	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var) ^ ",";
+
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_prefix\" : \"%s\"," json_node_uberspark_bridge_loader_var.bridge_prefix;
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_cmd\" : [ ";
 	for i = 0 to ((List.length json_node_uberspark_bridge_loader_var.bridge_cmd)-1) do

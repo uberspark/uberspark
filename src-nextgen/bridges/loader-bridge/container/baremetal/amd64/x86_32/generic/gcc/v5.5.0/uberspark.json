@@ -25,6 +25,7 @@
 			"container_fname" : "uberspark_bridges.Dockerfile"
 		},
 
+		"bridge_prefix" : "baremetal",
 		"bridge_cmd" : [
 			"echo Default loader bridge command. Nothing to do!"
 		] 

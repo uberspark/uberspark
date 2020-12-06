@@ -36,6 +36,7 @@ let json_node_uberspark_bridge_loader_var: Uberspark_manifest.Bridge.Loader.json
 				container_fname = "";
 				namespace = "";
 	};
+	bridge_prefix = "";
 	bridge_cmd = [];
 };;
 
@@ -124,6 +125,7 @@ let store
 	: bool =
 	let retval = ref false in 
     let bridge_ns = json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.btype ^ "/" ^
+		json_node_uberspark_bridge_loader_var.bridge_prefix ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.devenv ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.arch ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.cpu ^ "/" ^
@@ -162,6 +164,7 @@ let build
 		begin
 			let bridge_ns = Uberspark_namespace.namespace_bridge_loader_bridge ^ "/" ^
 				json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.btype ^ "/" ^
+				json_node_uberspark_bridge_loader_var.bridge_prefix ^ "/" ^
 				json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.devenv ^ "/" ^
 				json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.arch ^ "/" ^
 				json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.cpu ^ "/" ^
@@ -214,6 +217,7 @@ let invoke
 	(* construct bridge namespace *)
 	let bridge_ns = Uberspark_namespace.namespace_bridge_loader_bridge ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.btype ^ "/" ^
+		json_node_uberspark_bridge_loader_var.bridge_prefix ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.devenv ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.arch ^ "/" ^
 		json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var.cpu ^ "/" ^
