@@ -1,0 +1,21 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+    /* manifest header */
+    "uberspark-manifest":{
+        "manifest_node_types" : [ "uberspark-loader" ],
+        "uberspark_min_version" : "any",
+        "uberspark_max_version" : "any"
+    },
+
+    "uberspark-loader" : {
+        "loader_bridge_ns" : "baremetal/amd64/x86_32/generic/gcc/v5.5.0",
+        "loader_bridge_cmd" : [
+            "make all"
+        ]
+        
+    }
+
+}
