@@ -11,8 +11,13 @@
     },
 
     "uberspark-loader" : {
-        "loader_bridge_ns" : "baremetal/amd64/x86_32/generic/gcc/v5.5.0",
-        "loader_bridge_cmd" : [
+		"namespace" : "uberspark/loaders/baremetal/x86_32/grub-legacy",
+		"platform" : "any",
+		"arch" : "x86_32",
+        "cpu" : "generic",
+
+        "bridge_ns" : "baremetal/amd64/x86_32/generic/gcc/v5.5.0",
+        "bridge_cmd" : [
             "make all"
         ]
         
