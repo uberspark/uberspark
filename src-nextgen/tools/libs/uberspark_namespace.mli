@@ -117,6 +117,9 @@ val namespace_bridge_vf_bridge : string
 val namespace_bridge_loader_bridge : string
 val namespace_bridge_bldsys_bridge : string
 
+(* loader *)
+val namespace_loader_build_dir : string
+
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)

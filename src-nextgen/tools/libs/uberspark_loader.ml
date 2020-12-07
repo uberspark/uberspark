@@ -107,13 +107,90 @@ class uobjcoll_loader
 	;
 
 
+	(*--------------------------------------------------------------------------*)
+	(* build image *)
+	(*--------------------------------------------------------------------------*)
+	method build_image	
+    	()
+		: bool =
+
+
+		(true)	
+	;
+
+
+
 end;;
 
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* stand-alone interfaces that are invoked for one-short create, initialize *)
-(* and perform specific operation (compile, verify, build) *)
+(* and build *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+(* create and initialize a loader object and return object if successful *)
+let create_initialize
+	(loader_ns : string)
+	: bool * uobjcoll_loader option =
+
+	(* create loader instance and initialize *)
+	let loader:uobjcoll_loader = new uobjcoll_loader in
+	let rval = (loader#initialize ~builddir:Uberspark_namespace.namespace_loader_build_dir 
+		loader_ns) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize loader object!";
+		(false, None)
+	end else
+
+	(* initialize loader bridge *)
+	let l_rval = ref true in 
+	let dummy = 0 in begin
+
+        (* logic for initializing loader bridge; borrow from
+        uberspark_bridge.initialize_from_config *)
+    
+    end;
+
+    if (!l_rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize loader bridge!";
+		(false, None)
+	end else
+
+	(true, Some loader)
+;;
+
+
+let create_initialize_and_build
+	(loader_ns : string)
+    : bool * uobjcoll_loader option =
+
+	(* create loader instance and initialize *)
+    let (rval, loaderopt) = (create_initialize 
+		loader_ns) in
+    if (rval == false) then begin
+		(false, None)
+	end else
+
+	match loaderopt with 
+	| None ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "invalid loader instance!";
+		(false, None)
+
+	| Some loader ->
+
+	(* build loader  *)
+	let rval = (loader#build_image ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uobj binary image!";
+		(false, None)
+	end else
+
+	let dummy = 0 in begin
+	Uberspark_logger.log "generated uobj binary image";
+	end;
+
+	(true, Some loader)
+;;
 

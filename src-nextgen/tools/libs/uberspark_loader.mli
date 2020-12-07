@@ -16,5 +16,12 @@ object
 	method parse_manifest : unit -> bool
     method initialize : ?builddir:string -> string -> bool
 
+	method build_image : unit -> bool
+
+
 
 end
+
+val create_initialize : string -> bool * uobjcoll_loader option
+val create_initialize_and_build : string -> bool * uobjcoll_loader option
+

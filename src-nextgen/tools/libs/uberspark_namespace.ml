@@ -118,6 +118,9 @@ let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_br
 let namespace_bridge_loader_bridge = namespace_bridge ^ "/" ^ namespace_bridge_loader_bridge_name;;
 let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_bldsys_bridge_name;;
 
+(* loader *)
+let namespace_loader_build_dir = "_build";;
+
 
 
 (*---------------------------------------------------------------------------*)
