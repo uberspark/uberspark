@@ -330,6 +330,7 @@ module Uobjcoll : sig
     mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
     mutable f_initmethod : json_node_uberspark_uobjcoll_initmethod_t;
     mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
+    mutable f_loaders : string list;
   }
 
   val json_node_uberspark_uobjcoll_uobjs_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_uobjs_t -> bool

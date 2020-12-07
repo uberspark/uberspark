@@ -53,6 +53,7 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		f_uobjs = { f_master = ""; f_templars = [];};
 		f_initmethod = {f_uobj_ns = ""; f_pm_name = ""; f_sentinels = [];};
 		f_publicmethods = [];
+		f_loaders = [];
 	};;
 
 

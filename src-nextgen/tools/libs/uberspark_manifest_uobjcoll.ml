@@ -54,6 +54,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
 	mutable f_initmethod	: json_node_uberspark_uobjcoll_initmethod_t;
 	mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
+	mutable f_loaders : string list;
 };;
 
 
@@ -230,6 +231,11 @@ let json_node_uberspark_uobjcoll_to_var
 					json_node_uberspark_uobjcoll_var.f_hpl <- json_node_uberspark_uobjcoll |> member "hpl" |> to_string;
 					json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "sentinels-intrauobjcoll" |> to_list));
 
+					(* check for loaders if any *)
+					if (json_node_uberspark_uobjcoll |> member "loaders") != `Null then begin
+						json_node_uberspark_uobjcoll_var.f_loaders <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "loaders" |> to_list));
+					end;
+					
 					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var json_node_uberspark_uobjcoll json_node_uberspark_uobjcoll_var.f_uobjs) in
 					let (rval2, json_node_uberspark_uobjcoll_initmethod_var) = 
 						(json_node_uberspark_uobjcoll_initmethod_to_var json_node_uberspark_uobjcoll) in
