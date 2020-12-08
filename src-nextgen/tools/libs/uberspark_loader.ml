@@ -193,12 +193,12 @@ let create_initialize_and_build
 	(* build loader  *)
 	let rval = (loader#build_image ()) in	
     if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uobj binary image!";
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build loader binary image!";
 		(false, None)
 	end else
 
 	let dummy = 0 in begin
-	Uberspark_logger.log "generated uobj binary image";
+	Uberspark_logger.log "generated loader binary image";
 	end;
 
 	(true, Some loader)
