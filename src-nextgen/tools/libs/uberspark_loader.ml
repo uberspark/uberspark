@@ -43,6 +43,13 @@ class uobjcoll_loader
 	val d_mf_json : Yojson.Basic.t ref = ref `Null;
 
 
+	(* uobj manifest uberspark-loader json node var *)
+	val json_node_uberspark_loader_var : Uberspark_manifest.Loader.json_node_uberspark_loader_t =
+		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
+         f_bridge_ns = ""; f_bridge_cmd = []; 
+		};
+
+
 	(*--------------------------------------------------------------------------*)
 	(* parse loader manifest *)
 	(* usmf_filename = canonical uobj manifest filename *)
@@ -63,12 +70,12 @@ class uobjcoll_loader
 		d_mf_json := mf_json;
 		end;
 
-		(* parse uberspark-uobj node *)
-		(*let rval = (Uberspark_manifest.Uobj.json_node_uberspark_uobj_to_var mf_json
-				json_node_uberspark_uobj_var) in
+		(* parse uberspark-loader node *)
+		let rval = (Uberspark_manifest.Loader.json_node_uberspark_loader_to_var mf_json
+				json_node_uberspark_loader_var) in
 
 		if (rval == false) then (false)
-		else*)
+		else
 
 		(true)
 	;
@@ -113,6 +120,9 @@ class uobjcoll_loader
 	method build_image	
     	()
 		: bool =
+
+		Uberspark_logger.log "building loader...";
+        (* execute bridge_cmd command of the bridge_ns *)
 
 
 		(true)	

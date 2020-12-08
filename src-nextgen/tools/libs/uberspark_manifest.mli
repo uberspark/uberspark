@@ -234,6 +234,21 @@ module Sentinel : sig
 
 end
 
+module Loader : sig
+
+type json_node_uberspark_loader_t =
+{
+	mutable f_namespace    : string;			
+	mutable f_platform	   : string;
+	mutable f_arch	       : string;
+	mutable f_cpu		   : string;
+	mutable f_bridge_ns    : string;
+	mutable f_bridge_cmd : string list;
+};;
+
+val json_node_uberspark_loader_to_var : Yojson.Basic.t -> json_node_uberspark_loader_t -> bool
+
+end
 
 module Uobj : sig
 

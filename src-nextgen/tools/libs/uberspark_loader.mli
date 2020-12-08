@@ -13,6 +13,8 @@ object
 
 	val d_mf_json : Yojson.Basic.t ref
 
+	val json_node_uberspark_loader_var : Uberspark_manifest.Loader.json_node_uberspark_loader_t
+
 	method parse_manifest : unit -> bool
     method initialize : ?builddir:string -> string -> bool
 
