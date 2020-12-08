@@ -1559,6 +1559,29 @@ let build
 		(!retval)
 	end else
 
+	(* build uobjcoll loaders *)
+	let dummy = 0 in begin
+		retval := true;
+		List.iter ( fun (loader_ns: string) ->
+			if (!retval == true) then begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "building loader: '%s'..." loader_ns;
+				let (rval, uobjcoll_loader) = Uberspark_loader.create_initialize_and_build loader_ns in
+				if(rval == false) then begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build loader";
+					retval := false;
+				end;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping loader: '%s'..." loader_ns;
+			end;
+		)json_node_uberspark_uobjcoll_var.f_loaders;
+	end;
+    
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build loader(s)!";
+		(!retval)
+	end else
+
+
 	(* build all uobjs *)
 	let dummy = 0 in begin
 	retval := true;
