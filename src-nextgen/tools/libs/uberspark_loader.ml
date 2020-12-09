@@ -122,11 +122,26 @@ class uobjcoll_loader
     	()
 		: bool =
 
+        let retval = ref true in
+
 		Uberspark_logger.log "building loader...";
         (* execute bridge_cmd command of the bridge_ns *)
 
+    	List.iter ( fun (bcmd: string) -> 
+    		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "executing command:%s" bcmd;
+            if !retval == true then begin
+       	        if not (Uberspark_bridge.Loader.invoke bcmd) then begin
+		            Uberspark_logger.log ~lvl:Uberspark_logger.Error "command exited with non-zero value!";
+		            retval := false;
+                end else begin
+		            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "executed loader bridge command successfully!";
+                end;
+            end else begin
+	            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping command: %s" bcmd;
+            end;
+        ) json_node_uberspark_loader_var.f_bridge_cmd;
 
-		(true)	
+		(!retval)	
 	;
 
 
@@ -169,9 +184,7 @@ let create_initialize
     		    l_rval := false;
             end else begin
         		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "built loader bridge successfully";
-
             end;
-
         end;
     
     end;
