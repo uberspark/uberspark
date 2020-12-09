@@ -48,6 +48,7 @@ class uobjcoll_loader
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
          f_bridge_ns = ""; f_bridge_cmd = []; 
 		};
+	method get_d_json_node_uberspark_loader_var = json_node_uberspark_loader_var;
 
 
 	(*--------------------------------------------------------------------------*)
@@ -158,8 +159,20 @@ let create_initialize
 	let l_rval = ref true in 
 	let dummy = 0 in begin
 
-        (* logic for initializing loader bridge; borrow from
-        uberspark_bridge.initialize_from_config *)
+       	if not (Uberspark_bridge.Loader.load (loader#get_d_json_node_uberspark_loader_var).f_bridge_ns) then begin
+		    Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load loader bridge!";
+		    l_rval := false;
+    	end else begin
+    		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loaded loader bridge";
+           	if not (Uberspark_bridge.Loader.build ()) then begin
+		        Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build loader bridge!";
+    		    l_rval := false;
+            end else begin
+        		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "built loader bridge successfully";
+
+            end;
+
+        end;
     
     end;
 

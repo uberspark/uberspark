@@ -16,7 +16,7 @@
 		"arch" : "x86_32",
         "cpu" : "generic",
 
-        "bridge_ns" : "baremetal/amd64/x86_32/generic/gcc/v5.5.0",
+        "bridge_ns" : "container/baremetal/amd64/x86_32/generic/gcc/v5.5.0",
         "bridge_cmd" : [
             "make all"
         ]
