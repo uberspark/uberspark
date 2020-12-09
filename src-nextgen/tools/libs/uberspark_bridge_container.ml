@@ -63,7 +63,7 @@ let run_image
         
             cmdline := !cmdline @ [ "run" ];
             cmdline := !cmdline @ [ "--rm" ];
-            (* cmdline := !cmdline @ [ "-i" ];*)
+            (* cmdline := !cmdline @ [ "-i" ]; *)
             cmdline := !cmdline @ [ "-e" ];
             cmdline := !cmdline @ [ "D_CMD=\"" ^ r_d_cmd ^ "\"" ];
             cmdline := !cmdline @ [ "-v" ];

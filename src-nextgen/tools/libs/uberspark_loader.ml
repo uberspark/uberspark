@@ -123,14 +123,20 @@ class uobjcoll_loader
 		: bool =
 
         let retval = ref true in
+        let r_bcmd = ref "" in
 
 		Uberspark_logger.log "building loader...";
         (* execute bridge_cmd command of the bridge_ns *)
 
     	List.iter ( fun (bcmd: string) -> 
     		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "executing command:%s" bcmd;
+    		
+            r_bcmd := "cd " ^ (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
+                self#get_d_loader_ns ^ " && " ^ bcmd;
+            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "revised command:%s" !r_bcmd;
+
             if !retval == true then begin
-       	        if not (Uberspark_bridge.Loader.invoke bcmd) then begin
+       	        if not (Uberspark_bridge.Loader.invoke !r_bcmd) then begin
 		            Uberspark_logger.log ~lvl:Uberspark_logger.Error "command exited with non-zero value!";
 		            retval := false;
                 end else begin

@@ -46,7 +46,7 @@ RUN addgroup --system uberspark &&\
 ##############################################################################
 
 RUN apt-get update &&\
-    apt-get -yqq install gcc-5 gcc-5-multilib binutils &&\
+    apt-get -yqq install gcc-5 gcc-5-multilib binutils make &&\
     apt-get clean && rm -rf /var/lib/apt/lists/* 
 
 
