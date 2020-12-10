@@ -57,13 +57,13 @@ uart_config_t g_uart_config = {115200,
 //low-level UART character output
 void dbg_x86_uart_putc_bare(char ch){
   //wait for xmit hold register to be empty
-  while ( ! (uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__inb(g_uart_config.port+0x5) & 0x20) );
+  while ( ! (uberspark_uobjrtl_hw__generic_x86_32_intel__inb(g_uart_config.port+0x5) & 0x20) );
 
   //write the character
-  uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)ch, g_uart_config.port);
+  uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)ch, g_uart_config.port);
 
   //wait for xmit hold register to be empty and line is idle
-  while ( ! (uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__inb(g_uart_config.port+0x5) & 0x40) );
+  while ( ! (uberspark_uobjrtl_hw__generic_x86_32_intel__inb(g_uart_config.port+0x5) & 0x40) );
 
   return;
 }
@@ -112,33 +112,33 @@ void xmhfhw_platform_serial_init(char *params){
   g_uart_config.fifo = 0;
 
   // disable UART interrupts
-  uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)0, g_uart_config.port+0x1); //clear interrupt enable register
+  uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)0, g_uart_config.port+0x1); //clear interrupt enable register
 
   //disable FIFO
-  uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)0, g_uart_config.port+0x2); //fifo disable
+  uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)0, g_uart_config.port+0x2); //fifo disable
 
 
   //compute divisor latch data from baud-rate and set baud-rate
   {
 	uint16_t divisor_latch_data = g_uart_config.clock_hz / (g_uart_config.baud * 16);
 
-	uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(0x80, g_uart_config.port+0x3); //enable divisor latch access by
+	uberspark_uobjrtl_hw__generic_x86_32_intel__outb(0x80, g_uart_config.port+0x3); //enable divisor latch access by
 									    //writing to line control register
 
-	uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)divisor_latch_data, g_uart_config.port); //write low 8-bits of divisor latch data
-	uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)(divisor_latch_data >> 8), g_uart_config.port+0x1); //write high 8-bits of divisor latch data
+	uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)divisor_latch_data, g_uart_config.port); //write low 8-bits of divisor latch data
+	uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)(divisor_latch_data >> 8), g_uart_config.port+0x1); //write high 8-bits of divisor latch data
 
    }
 
   //set data bits, stop bits and parity info. by writing to
   //line control register
-  uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)((g_uart_config.data_bits - 5) |
+  uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)((g_uart_config.data_bits - 5) |
                ((g_uart_config.stop_bits - 1) << 2) |
                       g_uart_config.parity), g_uart_config.port+0x3);
 
   //signal ready by setting DTR and RTS high in
   //modem control register
-  uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__oubb((uint8_t)0x3, g_uart_config.port+0x4);
+  uberspark_uobjrtl_hw__generic_x86_32_intel__outb((uint8_t)0x3, g_uart_config.port+0x4);
 
   return;
 }
@@ -156,9 +156,9 @@ void dbgprintf (const char *fmt, ...){
 
 	va_start(ap, fmt);
 	retval = vsnprintf((char *)&buffer, 1024, (const char *)fmt, ap);
-	uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__spin_lock(&libxmhfdebug_lock);
+	uberspark_uobjrtl_hw__generic_x86_32_intel__spin_lock(&libxmhfdebug_lock);
 	xmhfhw_platform_serial_puts((char *)&buffer);
-	uberspark_uobjrtl_hw__generic_x86_32_intel__uberspark_uobjrtl_hw__generic_x86_32_intel__spin_unlock(&libxmhfdebug_lock);
+	uberspark_uobjrtl_hw__generic_x86_32_intel__spin_unlock(&libxmhfdebug_lock);
     va_end(ap);
 }
 
