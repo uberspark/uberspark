@@ -696,8 +696,8 @@ typedef uint8_t tpm_reg_data_fifo_t;
  *********************************************************************/
 
 /* TODO: Give these a more appropriate home */
-#define readb(va)       xmhfhw_sysmemaccess_readu8(va)
-#define writeb(va, d)   xmhfhw_sysmemaccess_writeu8(va, d)
+#define readb(va)       uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_readu8(va)
+#define writeb(va, d)   uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu8(va, d)
 
 /*#ifndef __XMHF_VERIFICATION__
 
@@ -824,7 +824,7 @@ static inline bool tpm_validate_locality(uint32_t locality)
         }
         if ( reg_acc.tpm_reg_valid_sts == 1 && reg_acc.seize == 0)
             return true;
-        cpu_relax(CASM_NOPARAM);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
     }
 
     //if ( i <= 0 )
@@ -1044,7 +1044,7 @@ static inline bool release_locality(uint32_t locality)
         if ( reg_acc.active_locality == 0 )
             return true;
         else
-            cpu_relax(CASM_NOPARAM);
+            uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
         i++;
     } while ( i <= TPM_ACTIVE_LOCALITY_TIME_OUT );
 
@@ -1141,7 +1141,7 @@ static inline uint32_t tpm_wait_cmd_ready(uint32_t locality)
         if ( reg_acc.active_locality == 1 )
             break;
         else
-            cpu_relax(CASM_NOPARAM);
+            uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
         i++;
     } while ( i <= TPM_ACTIVE_LOCALITY_TIME_OUT);
 
@@ -1163,7 +1163,7 @@ static inline uint32_t tpm_wait_cmd_ready(uint32_t locality)
             uint32_t value = pack_tpm_reg_sts_t(&reg_sts);
             _write_tpm_reg(locality, TPM_REG_STS, &value, SIZE_TPM_REG_STS);
         }
-        cpu_relax(CASM_NOPARAM);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
 
         /* then see if it has */
         {
@@ -1177,7 +1177,7 @@ static inline uint32_t tpm_wait_cmd_ready(uint32_t locality)
         if ( reg_sts.command_ready == 1 )
             break;
         else
-            cpu_relax(CASM_NOPARAM);
+            uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
         i++;
     } while ( i <= TPM_CMD_READY_TIME_OUT );
 //#ifdef TPM_TRACE
@@ -1283,7 +1283,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
             if ( row_size > 0 )
                 break;
             else
-                cpu_relax(CASM_NOPARAM);
+                uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
             i++;
         } while ( i <= TPM_CMD_WRITE_TIME_OUT );
         if ( i > TPM_CMD_WRITE_TIME_OUT ) {
@@ -1315,7 +1315,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
         if ( reg_sts.sts_valid == 1 && reg_sts.data_avail == 1 )
             break;
         else
-            cpu_relax(CASM_NOPARAM);
+            uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
         i++;
     } while ( i <= TPM_DATA_AVAIL_TIME_OUT );
     if ( i > TPM_DATA_AVAIL_TIME_OUT ) {
@@ -1339,7 +1339,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
             if ( row_size > 0 )
                 break;
             else
-                cpu_relax(CASM_NOPARAM);
+                uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_relax(CASM_NOPARAM);
             i++;
         } while ( i <= TPM_RSP_READ_TIME_OUT );
         if ( i > TPM_RSP_READ_TIME_OUT ) {
@@ -1412,16 +1412,16 @@ static inline int xmhf_tpm_arch_x86vmx_open_locality(int locality){
         txt_ver_fsbif_emif_t ver;
 
         // display chipset fuse and device and vendor id info
-        unpack_txt_didvid_t(&didvid, read_pub_config_reg(TXTCR_DIDVID));
+        unpack_txt_didvid_t(&didvid, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_DIDVID));
         //_XDPRINTF_("\n%s: chipset ids: vendor: 0x%x, device: 0x%x, revision: 0x%x", __FUNCTION__,
         //       didvid.vendor_id, didvid.device_id, didvid.revision_id);
-        unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_FSBIF));
+        unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_FSBIF));
         if ( (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0xffffffff ||
              (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0x00 )         /* need to use VER.EMIF */
-            unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_EMIF));
+            unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_EMIF));
         //_XDPRINTF_("\n%s: chipset production fused: %x", __FUNCTION__, ver.prod_fused);
 
-        if(txt_is_launched()) {
+        if(uberspark_uobjrtl_hw__generic_x86_32_intel__txt_is_launched()) {
             write_priv_config_reg(locality == 1 ? TXTCR_CMD_OPEN_LOCALITY1
                                   : TXTCR_CMD_OPEN_LOCALITY2, 0x01);
             read_priv_config_reg(TXTCR_E2STS);   /* just a fence, so ignore return */
@@ -1568,10 +1568,10 @@ static inline uint32_t tpm_submit_cmd(uint32_t locality, uint32_t cmd,
     uint32_t rv;
     //uint64_t start, end;
 
-    //start = rdtsc64();
+    //start = uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64();
     rv = _tpm_submit_cmd(locality, TPM_TAG_RQU_COMMAND, cmd,
                          arg_size, out_size);
-    //end = rdtsc64();
+    //end = uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64();
     //_XDPRINTF_("TPM: PERF: Command 0x%08x consumed %lld cycles\n", cmd, end-start);
     return rv;
 }

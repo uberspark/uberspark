@@ -429,10 +429,10 @@ bool does_acmod_match_chipset(acm_hdr_t* hdr)
      * check if fusing is same
      */
     txt_ver_fsbif_emif_t ver;
-    unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_FSBIF));
+    unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_FSBIF));
     if ( (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0xffffffff ||
          (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0x00 )         /* need to use VER.EMIF */
-        unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_EMIF));
+        unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_EMIF));
     if ( ver.prod_fused != !(hdr->flags & ACM_FLAGS_T_DEBUG_SIGNED) ) {
         _XDPRINTF_("\t production/debug mismatch between chipset and ACM\n");
         return false;
@@ -446,7 +446,7 @@ bool does_acmod_match_chipset(acm_hdr_t* hdr)
         return false;
 
     /* get chipset device and vendor id info */
-    unpack_txt_didvid_t(&didvid, read_pub_config_reg(TXTCR_DIDVID));
+    unpack_txt_didvid_t(&didvid, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_DIDVID));
 
     _XDPRINTF_("\t %x ACM chipset id entries:\n", chipset_id_list->count);
     for ( i = 0; i < chipset_id_list->count; i++ ) {
@@ -480,15 +480,15 @@ acm_hdr_t *copy_sinit(acm_hdr_t *sinit)
 
     /* get BIOS-reserved region from LT.SINIT.BASE config reg */
     sinit_region_base =
-        (void*)(unsigned long)read_pub_config_reg(TXTCR_SINIT_BASE);
-    sinit_region_size = (uint32_t)read_pub_config_reg(TXTCR_SINIT_SIZE);
+        (void*)(unsigned long)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_SINIT_BASE);
+    sinit_region_size = (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_SINIT_SIZE);
 
     /*
      * check if BIOS already loaded an SINIT module there
      */
-    txt_heap = get_txt_heap();
-    xmhfhw_sysmemaccess_copy(&bios_data,
-			get_bios_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    txt_heap = uberspark_uobjrtl_hw__generic_x86_32_intel__get_txt_heap();
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&bios_data,
+			get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			sizeof(bios_data_t));
     /* BIOS has loaded an SINIT module, so verify that it is valid */
     if ( bios_data.bios_sinit_size != 0 ) {

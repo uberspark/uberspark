@@ -179,30 +179,30 @@ void udelay(uint32_t usecs){
     uint32_t latchregval;
 
     //enable 8254 ch-2 counter
-    val = inb(0x61);
+    val = uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61);
     val &= 0x0d; //turn PC speaker off
     val |= 0x01; //turn on ch-2
-    outb(val, 0x61);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x61);
 
     //program ch-2 as one-shot
-    outb(0xB0, 0x43);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(0xB0, 0x43);
 
     //compute appropriate latch register value depending on usecs
     latchregval = (1193182 * usecs) / 1000000;
 
     //write latch register to ch-2
     val = (uint8_t)latchregval;
-    outb(val, 0x42);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x42);
     val = (uint8_t)((uint32_t)latchregval >> (uint32_t)8);
-    outb(val , 0x42);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val , 0x42);
 
     //wait for countdown
-    while(!(inb(0x61) & 0x20));
+    while(!(uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61) & 0x20));
 
     //disable ch-2 counter
-    val = inb(0x61);
+    val = uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61);
     val &= 0x0c;
-    outb(val, 0x61);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x61);
 }
 
 
@@ -214,7 +214,7 @@ void send_init_ipi_to_all_APs(void) {
     uint32_t timeout = 0x01000000;
 
     //read LAPIC base address from MSR
-	msr_value = rdmsr64( MSR_APIC_BASE);
+	msr_value = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64( MSR_APIC_BASE);
 	eax = (uint32_t)msr_value;
 	edx = (uint32_t)(msr_value >> 32);
 
@@ -407,8 +407,8 @@ bool txt_supports_txt(void) {
     uint64_t feat_ctrl_msr;
     capabilities_t cap;
 
-    xmhfhw_cpu_cpuid(1, &dummy, &dummy, &cpuid_ext_feat_info, &dummy);
-    feat_ctrl_msr = rdmsr64(MSR_EFCR);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid(1, &dummy, &dummy, &cpuid_ext_feat_info, &dummy);
+    feat_ctrl_msr = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_EFCR);
 
     /* Check for VMX support */
     if ( !(cpuid_ext_feat_info & CPUID_X86_FEATURE_VMX) ) {
@@ -441,13 +441,13 @@ bool txt_supports_txt(void) {
     _XDPRINTF_("SENTER should work.\n");
 
     /* testing for chipset support requires enabling SMX on the processor */
-    write_cr4(read_cr4(CASM_NOPARAM) | CR4_SMXE);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr4(uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr4(CASM_NOPARAM) | CR4_SMXE);
     _XDPRINTF_("SMX enabled in CR4\n");
 
     /* Verify that an TXT-capable chipset is present and check that
      * all needed SMX capabilities are supported. */
 
-    unpack_capabilities_t(&cap, __getsec_capabilities(0));
+    unpack_capabilities_t(&cap, uberspark_uobjrtl_hw__generic_x86_32_intel__getsec_capabilities(0));
     if(!cap.chipset_present) {
         _XDPRINTF_("ERR: TXT-capable chipset not present\n");
         return false;
@@ -477,8 +477,8 @@ tb_error_t txt_verify_platform(void)
     }
 
     /* check is TXT_RESET.STS is set, since if it is SENTER will fail */
-    //ests = (txt_ests_t)read_pub_config_reg(TXTCR_ESTS);
-    unpack_txt_ests_t(&ests, read_pub_config_reg(TXTCR_ESTS));
+    //ests = (txt_ests_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ESTS);
+    unpack_txt_ests_t(&ests, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ESTS));
     if ( ests.txt_reset_sts ) {
         _XDPRINTF_("TXT_RESET.STS is set and SENTER is disabled (%llx)\n",
                pack_txt_ests_t(&ests));
@@ -486,7 +486,7 @@ tb_error_t txt_verify_platform(void)
     }
 
     /* verify BIOS to OS data */
-    txt_heap = get_txt_heap();
+    txt_heap = uberspark_uobjrtl_hw__generic_x86_32_intel__get_txt_heap();
     if ( !verify_bios_data(txt_heap) )
         return TB_ERR_FATAL;
 
@@ -503,8 +503,8 @@ void txt_status_regs(void) {
     txt_errorcode_sw_t sw_err;
     acmod_error_t acmod_err;
 
-    //err = (txt_errorcode_t)read_pub_config_reg(TXTCR_ERRORCODE);
-    unpack_txt_errorcode_t(&err, read_pub_config_reg(TXTCR_ERRORCODE));
+    //err = (txt_errorcode_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ERRORCODE);
+    unpack_txt_errorcode_t(&err, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ERRORCODE));
     _XDPRINTF_("TXT.ERRORCODE=%llx\n", pack_txt_errorcode_t(&err));
 
     /* AC module error (don't know how to parse other errors) */
@@ -530,8 +530,8 @@ void txt_status_regs(void) {
     /*
      * display LT.ESTS error
      */
-    //ests = (txt_ests_t)read_pub_config_reg(TXTCR_ESTS);
-    unpack_txt_ests_t(&ests, read_pub_config_reg(TXTCR_ESTS));
+    //ests = (txt_ests_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ESTS);
+    unpack_txt_ests_t(&ests, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_ESTS));
     _XDPRINTF_("LT.ESTS=%llx\n", pack_txt_ests_t(&ests));
 
     /*
@@ -539,8 +539,8 @@ void txt_status_regs(void) {
      * - only valid if LT.WAKE-ERROR.STS set in LT.STS reg
      */
     if ( ests.txt_wake_error_sts ) {
-        //e2sts = (txt_e2sts_t)read_pub_config_reg(TXTCR_E2STS);
-        unpack_txt_e2sts_t(&e2sts, read_pub_config_reg(TXTCR_E2STS));
+        //e2sts = (txt_e2sts_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_E2STS);
+        unpack_txt_e2sts_t(&e2sts, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_E2STS));
         _XDPRINTF_("LT.E2STS=%llx\n", pack_txt_e2sts_t(&e2sts));
     }
 }
@@ -620,7 +620,7 @@ static bool svm_verify_platform(void)
     uint64_t msr_value;
     uint64_t efer;
 
-    xmhfhw_cpu_cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
 
     if ((ecx & SVM_CPUID_FEATURE) == 0) {
         _XDPRINTF_("ERR: CPU does not support AMD SVM\n");
@@ -628,7 +628,7 @@ static bool svm_verify_platform(void)
     }
 
     /* Check whether SVM feature is disabled in BIOS */
-	msr_value = rdmsr64( VM_CR_MSR);
+	msr_value = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64( VM_CR_MSR);
 	eax = (uint32_t)msr_value;
 	edx = (uint32_t)(msr_value >> 32);
 
@@ -639,15 +639,15 @@ static bool svm_verify_platform(void)
     }
 
     /* Turn on SVM */
-    efer = rdmsr64(MSR_EFER) | (1<<EFER_SVME);
-    wrmsr64(MSR_EFER, (uint32_t)efer, (uint32_t)((uint64_t)efer >> 32));
-    efer = rdmsr64(MSR_EFER);
+    efer = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_EFER) | (1<<EFER_SVME);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__wrmsr64(MSR_EFER, (uint32_t)efer, (uint32_t)((uint64_t)efer >> 32));
+    efer = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_EFER);
     if ((efer & (1<<EFER_SVME)) == 0) {
         _XDPRINTF_("ERR: Could not enable AMD SVM\n");
         return false;
     }
 
-    xmhfhw_cpu_cpuid(0x8000000A, &eax, &ebx, &ecx, &edx);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__cpuid(0x8000000A, &eax, &ebx, &ecx, &edx);
     _XDPRINTF_("AMD SVM version %d enabled\n", eax & 0xff);
 
     return true;
@@ -668,14 +668,14 @@ static bool svm_prepare_cpu(void)
     /* since our bootstrap code loads a GDT, etc. */
 
     /* must be in protected mode */
-    cr0 = read_cr0(CASM_NOPARAM);
+    cr0 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr0(CASM_NOPARAM);
     if (!(cr0 & CR0_PE)) {
         _XDPRINTF_("ERR: not in protected mode\n");
         return false;
     }
 
     /* make sure the APIC is enabled */
-    apicbase = rdmsr64(MSR_APIC_BASE);
+    apicbase = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_APIC_BASE);
     if (!(apicbase & MSR_IA32_APICBASE_ENABLE)) {
         _XDPRINTF_("APIC disabled\n");
         return false;
@@ -684,17 +684,17 @@ static bool svm_prepare_cpu(void)
     /* verify all machine check status registers are clear */
 
     /* no machine check in progress (IA32_MCG_STATUS.MCIP=1) */
-    mcg_stat = rdmsr64(MSR_MCG_STATUS);
+    mcg_stat = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MCG_STATUS);
     if (mcg_stat & 0x04) {
         _XDPRINTF_("machine check in progress\n");
         return false;
     }
 
     /* all machine check regs are clear */
-    mcg_cap = rdmsr64(MSR_MCG_CAP);
+    mcg_cap = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MCG_CAP);
     bound = (uint32_t)mcg_cap & 0x000000ff;
     for (i = 0; i < bound; i++) {
-        mcg_stat = rdmsr64(MSR_MC0_STATUS + 4*i);
+        mcg_stat = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MC0_STATUS + 4*i);
         if (mcg_stat & (1ULL << 63)) {
             _XDPRINTF_("MCG[%d] = %llx ERROR\n", i, mcg_stat);
             return false;
@@ -816,7 +816,7 @@ void wakeupAPs(void){
     uint64_t msr_value;
 
     //read LAPIC base address from MSR
-	msr_value = rdmsr64( MSR_APIC_BASE);
+	msr_value = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64( MSR_APIC_BASE);
 	eax = (uint32_t)msr_value;
 	edx = (uint32_t)(msr_value >> 32);
 
@@ -946,7 +946,7 @@ void cstartup(multiboot_info_t *mbi){
 
 
     //check CPU type (Intel vs AMD)
-	cpu_vendor = xmhf_baseplatform_arch_getcpuvendor();
+	cpu_vendor = uberspark_uobjrtl_hw__generic_x86_32_intel__getcpuvendor();
 
     if(CPU_VENDOR_INTEL == cpu_vendor) {
         _XDPRINTF_("INIT(early): detected an Intel CPU\n");
@@ -1128,7 +1128,7 @@ uint32_t isbsp(void){
     uint64_t msr_value;
 
     //read LAPIC base address from MSR
-	msr_value = rdmsr64( MSR_APIC_BASE);
+	msr_value = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64( MSR_APIC_BASE);
 	eax = (uint32_t)msr_value;
 	edx = (uint32_t)(msr_value >> 32);
 
@@ -1149,7 +1149,7 @@ void svm_clear_microcode(BOOTVCPU *vcpu){
     uint64_t msr_value, clear_value;
 
     // Current microcode patch level available via MSR read
-	msr_value = rdmsr64( MSR_AMD64_PATCH_LEVEL);
+	msr_value = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64( MSR_AMD64_PATCH_LEVEL);
 	ucode_rev = (uint32_t)msr_value;
 	dummy = (uint32_t)(msr_value >> 32);
 
@@ -1159,7 +1159,7 @@ void svm_clear_microcode(BOOTVCPU *vcpu){
 
 	clear_value = (uint64_t)(((uint64_t)dummy << 32) | dummy);
     if(ucode_rev != 0) {
-        wrmsr64(MSR_AMD64_PATCH_CLEAR, (uint32_t)clear_value, (uint32_t)((uint64_t)clear_value >> 32) );
+        uberspark_uobjrtl_hw__generic_x86_32_intel__wrmsr64(MSR_AMD64_PATCH_CLEAR, (uint32_t)clear_value, (uint32_t)((uint64_t)clear_value >> 32) );
         _XDPRINTF_("\nCPU(0x%02x): microcode CLEARED", vcpu->id);
     }
 }
@@ -1194,9 +1194,9 @@ void mp_cstartup (BOOTVCPU *vcpu){
         _XDPRINTF_("\nBSP(0x%02x): Rallying APs...", vcpu->id);
 
         //increment a CPU to account for the BSP
-        spin_lock(&lock_cpus_active);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__spin_lock(&lock_cpus_active);
         cpus_active++;
-        spin_unlock(&lock_cpus_active);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__spin_unlock(&lock_cpus_active);
 
         //wait for cpus_active to become midtable_numentries -1 to indicate
         //that all APs have been successfully started
@@ -1221,9 +1221,9 @@ void mp_cstartup (BOOTVCPU *vcpu){
         }
 
         //update the AP startup counter
-        spin_lock(&lock_cpus_active);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__spin_lock(&lock_cpus_active);
         cpus_active++;
-        spin_unlock(&lock_cpus_active);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__spin_unlock(&lock_cpus_active);
 
         _XDPRINTF_("\nAP(0x%02x): Waiting for DRTM establishment...", vcpu->id);
 

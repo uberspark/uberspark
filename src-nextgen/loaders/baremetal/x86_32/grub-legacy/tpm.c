@@ -190,7 +190,7 @@ uint32_t _tpm_submit_cmd(uint32_t locality, uint16_t tag, uint32_t cmd,
 }
 
 /* from emhf's processor.h */
-//static inline uint64_t rdtsc64(void)
+//static inline uint64_t uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64(void)
 //{
  // uint64_t rv;
 //
@@ -205,10 +205,10 @@ uint32_t tpm_submit_cmd(uint32_t locality, uint32_t cmd,
     uint32_t rv;
     uint64_t start, end;
 
-    start = rdtsc64();
+    start = uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64();
     rv = _tpm_submit_cmd(locality, TPM_TAG_RQU_COMMAND, cmd,
                          arg_size, out_size);
-    end = rdtsc64();
+    end = uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64();
     _XDPRINTF_("TPM: PERF: Command 0x%08x consumed %lld cycles\n", cmd, end-start);
     return rv;
 }

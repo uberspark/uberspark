@@ -119,8 +119,8 @@ bool verify_bios_data(txt_heap_t *txt_heap)
     bios_data_t bios_data;
 
     /* check size */
-    heap_size = read_pub_config_reg(TXTCR_HEAP_SIZE);
-    size = get_bios_data_size(txt_heap, (uint32_t)heap_size);
+    heap_size = uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE);
+    size = uberspark_uobjrtl_hw__generic_x86_32_intel__get_bios_data_size(txt_heap, (uint32_t)heap_size);
     if ( size == 0 ) {
         _XDPRINTF_("BIOS data size is 0\n");
         return false;
@@ -131,8 +131,8 @@ bool verify_bios_data(txt_heap_t *txt_heap)
         return false;
     }
 
-    xmhfhw_sysmemaccess_copy(&bios_data,
-			get_bios_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&bios_data,
+			get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			sizeof(bios_data_t));
 
     /* check version */
@@ -177,8 +177,8 @@ static bool verify_os_mle_data(txt_heap_t *txt_heap)
     os_mle_data_t os_mle_data;
 
     /* check size */
-    heap_size = read_pub_config_reg(TXTCR_HEAP_SIZE);
-    size = get_os_mle_data_size(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE));
+    heap_size = uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE);
+    size = uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_size(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
     if ( size == 0 ) {
         _XDPRINTF_("OS to MLE data size is 0\n");
         return false;
@@ -194,7 +194,7 @@ static bool verify_os_mle_data(txt_heap_t *txt_heap)
         return false;
     }
 
-    xmhfhw_sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 				sizeof(os_mle_data_t));
 
     /* check version */
@@ -244,8 +244,8 @@ static bool verify_os_sinit_data(txt_heap_t *txt_heap)
     os_sinit_data_t os_sinit_data;
 
     /* check size */
-    heap_size = read_pub_config_reg(TXTCR_HEAP_SIZE);
-    size = get_os_sinit_data_size(txt_heap, (uint32_t)heap_size);
+    heap_size = uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE);
+    size = uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_size(txt_heap, (uint32_t)heap_size);
     if ( size == 0 ) {
         _XDPRINTF_("OS to SINIT data size is 0\n");
         return false;
@@ -256,8 +256,8 @@ static bool verify_os_sinit_data(txt_heap_t *txt_heap)
         return false;
     }
 
-    xmhfhw_sysmemaccess_copy(&os_sinit_data,
-	get_os_sinit_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_sinit_data,
+	get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 	sizeof(os_sinit_data_t));
 
     /* check version (but since we create this, it should always be OK) */
@@ -335,8 +335,8 @@ static bool verify_sinit_mle_data(txt_heap_t *txt_heap)
     sinit_mle_data_t sinit_mle_data;
 
     /* check size */
-    heap_size = read_pub_config_reg(TXTCR_HEAP_SIZE);
-    size = get_sinit_mle_data_size(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE));
+    heap_size = uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE);
+    size = uberspark_uobjrtl_hw__generic_x86_32_intel__get_sinit_mle_data_size(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
     if ( size == 0 ) {
         _XDPRINTF_("SINIT to MLE data size is 0\n");
         return false;
@@ -347,8 +347,8 @@ static bool verify_sinit_mle_data(txt_heap_t *txt_heap)
         return false;
     }
 
-    xmhfhw_sysmemaccess_copy(&sinit_mle_data,
-	get_sinit_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&sinit_mle_data,
+	get_sinit_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 	sizeof(sinit_mle_data_t));
 
     /* check version */
@@ -382,12 +382,12 @@ bool verify_txt_heap(txt_heap_t *txt_heap, bool bios_data_only)
         return true;
 
     /* check that total size is within the heap */
-    heap_size = read_pub_config_reg(TXTCR_HEAP_SIZE);
+    heap_size = uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE);
 
-    size1 = get_bios_data_size(txt_heap, (uint32_t)heap_size);
-    size2 = get_os_mle_data_size(txt_heap, (uint32_t)heap_size);
-    size3 = get_os_sinit_data_size(txt_heap, (uint32_t)heap_size);
-    size4 = get_sinit_mle_data_size(txt_heap, (uint32_t)heap_size);
+    size1 = uberspark_uobjrtl_hw__generic_x86_32_intel__get_bios_data_size(txt_heap, (uint32_t)heap_size);
+    size2 = uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_size(txt_heap, (uint32_t)heap_size);
+    size3 = uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_size(txt_heap, (uint32_t)heap_size);
+    size4 = uberspark_uobjrtl_hw__generic_x86_32_intel__get_sinit_mle_data_size(txt_heap, (uint32_t)heap_size);
 
     /* overflow? */
     if ( plus_overflow_u64(size1, size2) ) {
@@ -404,10 +404,10 @@ bool verify_txt_heap(txt_heap_t *txt_heap, bool bios_data_only)
     }
 
     if ( (size1 + size2 + size3 + size4) >
-         read_pub_config_reg(TXTCR_HEAP_SIZE) ) {
+         uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE) ) {
         _XDPRINTF_("TXT heap data sizes (%llx, %llx, %llx, %llx) are larger than\n"
                "heap total size (%llx)\n", size1, size2, size3, size4,
-               read_pub_config_reg(TXTCR_HEAP_SIZE));
+               uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
         return false;
     }
 

@@ -128,28 +128,28 @@ bool set_mtrrs_for_acmod(acm_hdr_t *hdr)
      */
 
     /* disable interrupts */
-    eflags = read_eflags(CASM_NOPARAM);
+    eflags = uberspark_uobjrtl_hw__generic_x86_32_intel__read_eflags(CASM_NOPARAM);
 
-    xmhfhw_cpu_disable_intr(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_disable_intr(CASM_NOPARAM);
 
     /* save CR0 then disable cache (CRO.CD=1, CR0.NW=0) */
-    cr0 = read_cr0(CASM_NOPARAM);
-    write_cr0((cr0 & ~CR0_NW) | CR0_CD);
+    cr0 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr0(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr0((cr0 & ~CR0_NW) | CR0_CD);
 
     /* flush caches */
-    wbinvd(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__wbinvd(CASM_NOPARAM);
 
     /* save CR4 and disable global pages (CR4.PGE=0) */
-    cr4 = read_cr4(CASM_NOPARAM);
-    write_cr4(cr4 & ~CR4_PGE);
+    cr4 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr4(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr4(cr4 & ~CR4_PGE);
 
     /* disable MTRRs */
-    set_all_mtrrs(false);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__set_all_mtrrs(false);
 
     /*
      * now set MTRRs for AC mod and rest of memory
      */
-    if ( !set_mem_type(hdr, hdr->size*4, MTRR_TYPE_WRBACK) )
+    if ( !uberspark_uobjrtl_hw__generic_x86_32_intel__set_mem_type(hdr, hdr->size*4, MTRR_TYPE_WRBACK) )
         return false;
 
     /*
@@ -157,19 +157,19 @@ bool set_mtrrs_for_acmod(acm_hdr_t *hdr)
      */
 
     /* flush caches */
-    wbinvd(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__wbinvd(CASM_NOPARAM);
 
     /* enable MTRRs */
-    set_all_mtrrs(true);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__set_all_mtrrs(true);
 
     /* restore CR0 (cacheing) */
-    write_cr0(cr0);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr0(cr0);
 
     /* restore CR4 (global pages) */
-    write_cr4(cr4);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr4(cr4);
 
     /* enable interrupts */
-    write_eflags(eflags);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_eflags(eflags);
 
 
 
@@ -297,13 +297,13 @@ static bool check_sinit_module(void *base, size_t size)
         return false;
 
     /* display chipset fuse and device and vendor id info */
-    unpack_txt_didvid_t(&didvid, read_pub_config_reg(TXTCR_DIDVID));
+    unpack_txt_didvid_t(&didvid, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_DIDVID));
     _XDPRINTF_("chipset ids: vendor: 0x%x, device: 0x%x, revision: 0x%x\n",
            didvid.vendor_id, didvid.device_id, didvid.revision_id);
-    unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_FSBIF));
+    unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_FSBIF));
     if ( (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0xffffffff ||
          (pack_txt_ver_fsbif_emif_t(&ver) & 0xffffffff) == 0x00 )         /* need to use VER.EMIF */
-        unpack_txt_ver_fsbif_emif_t(&ver, read_pub_config_reg(TXTCR_VER_EMIF));
+        unpack_txt_ver_fsbif_emif_t(&ver, uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_VER_EMIF));
     _XDPRINTF_("chipset production fused: %x\n", ver.prod_fused );
 
     if ( is_sinit_acmod(base, size, false) &&
@@ -333,7 +333,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 
 (void)mle_size;
 
-    txt_heap = get_txt_heap();
+    txt_heap = uberspark_uobjrtl_hw__generic_x86_32_intel__get_txt_heap();
 
     /*
      * BIOS data already setup by BIOS
@@ -344,26 +344,26 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
     /*
      * OS/loader to MLE data
      */
-    //os_mle_data =get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE));
+    //os_mle_data =get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
     //size = (uint64_t *)((uint32_t)os_mle_data - sizeof(uint64_t));
     //*size = sizeof(*os_mle_data) + sizeof(uint64_t);
     //uberspark_uobjrtl_crt__memset(os_mle_data, 0, sizeof(*os_mle_data));
     //os_mle_data->version = 0x02;
     //os_mle_data->mbi = NULL;
-    //os_mle_data->saved_misc_enable_msr = rdmsr64(MSR_IA32_MISC_ENABLE);
+    //os_mle_data->saved_misc_enable_msr = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_IA32_MISC_ENABLE);
 
 
-	xmhfhw_sysmemaccess_writeu64(
-		(get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu64(
+		(get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
 		(uint32_t)(sizeof(os_mle_data) + sizeof(uint64_t)),
 		(uint32_t)((uint64_t)(sizeof(os_mle_data) + sizeof(uint64_t)) >> 32) );
 
 	    uberspark_uobjrtl_crt__memset(&os_mle_data, 0, sizeof(os_mle_data));
 	    os_mle_data.version = 0x02;
 	    os_mle_data.mbi = NULL;
-	    os_mle_data.saved_misc_enable_msr = rdmsr64(MSR_IA32_MISC_ENABLE);
+	    os_mle_data.saved_misc_enable_msr = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_IA32_MISC_ENABLE);
 
-	xmhfhw_sysmemaccess_copy(get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			&os_mle_data, sizeof(os_mle_data_t));
 
 	//_XDPRINTF_("Came %s:%u\n", __func__, __LINE__);
@@ -375,12 +375,12 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
      * OS/loader to SINIT data
      */
 
-	//os_sinit_data = get_os_sinit_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE));
+	//os_sinit_data = get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
 	//size = (uint64_t *)((uint32_t)os_sinit_data - sizeof(uint64_t));
 	// *size = sizeof(*os_sinit_data) + sizeof(uint64_t);
 
-	xmhfhw_sysmemaccess_writeu64(
-		(get_os_sinit_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu64(
+		(get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
 		(uint32_t)(sizeof(os_sinit_data) + sizeof(uint64_t)),
 		(uint32_t)((uint64_t)(sizeof(os_sinit_data) + sizeof(uint64_t)) >> 32) );
 
@@ -421,8 +421,8 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 	print_os_sinit_data(&os_sinit_data);
 
 
-	xmhfhw_sysmemaccess_copy(
-		get_os_sinit_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(
+		get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 		&os_sinit_data,
 		sizeof(os_sinit_data));
 
@@ -439,9 +439,9 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 
 void delay(uint64_t cycles)
 {
-    uint64_t start = rdtsc64(CASM_NOPARAM);
+    uint64_t start = uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64(CASM_NOPARAM);
 
-    while ( rdtsc64(CASM_NOPARAM)-start < cycles ) ;
+    while ( uberspark_uobjrtl_hw__generic_x86_32_intel__rdtsc64(CASM_NOPARAM)-start < cycles ) ;
 }
 
 
@@ -485,10 +485,10 @@ tb_error_t txt_launch_environment(void *sinit_ptr, size_t sinit_size,
         return TB_ERR_FATAL;
 
     /* save MTRRs before we alter them for SINIT launch */
-    xmhfhw_sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 				sizeof(os_mle_data_t));
     xmhfhw_cpu_x86_save_mtrrs(&(os_mle_data.saved_mtrr_state));
-    xmhfhw_sysmemaccess_copy( get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE)), &os_mle_data,
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy( get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)), &os_mle_data,
 				sizeof(os_mle_data_t));
 
     /* set MTRRs properly for AC module (SINIT) */
@@ -512,7 +512,7 @@ tb_error_t txt_launch_environment(void *sinit_ptr, size_t sinit_size,
 //    }
 //#endif
 
-    __getsec_senter((uint32_t)sinit, (sinit->size)*4);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__getsec_senter((uint32_t)sinit, (sinit->size)*4);
     _XDPRINTF_("ERROR--we should not get here!\n");
     return TB_ERR_FATAL;
 }
@@ -527,7 +527,7 @@ bool txt_prepare_cpu(void)
 
     /* must be running at CPL 0 => this is implicit in even getting this far */
     /* since our bootstrap code loads a GDT, etc. */
-    cr0 = read_cr0(CASM_NOPARAM);
+    cr0 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr0(CASM_NOPARAM);
 
     /* must be in protected mode */
     if ( !(cr0 & CR0_PE) ) {
@@ -552,14 +552,14 @@ bool txt_prepare_cpu(void)
         cr0 |= CR0_NE;
     }
 
-    write_cr0(cr0);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__write_cr0(cr0);
 
     /* cannot be in virtual-8086 mode (EFLAGS.VM=1) */
-    eflags = read_eflags(CASM_NOPARAM);
+    eflags = uberspark_uobjrtl_hw__generic_x86_32_intel__read_eflags(CASM_NOPARAM);
 
     if ( eflags & EFLAGS_VM ) {
         _XDPRINTF_("EFLAGS.VM set; clearing it.\n");
-        write_eflags(eflags | ~EFLAGS_VM);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__write_eflags(eflags | ~EFLAGS_VM);
 
     }
 
@@ -568,7 +568,7 @@ bool txt_prepare_cpu(void)
     /*
      * verify that we're not already in a protected environment
      */
-    if ( txt_is_launched() ) {
+    if ( uberspark_uobjrtl_hw__generic_x86_32_intel__txt_is_launched() ) {
         _XDPRINTF_("already in protected environment\n");
         return false;
     }
@@ -579,7 +579,7 @@ bool txt_prepare_cpu(void)
      */
 
     /* no machine check in progress (IA32_MCG_STATUS.MCIP=1) */
-    mcg_stat = rdmsr64(MSR_MCG_STATUS);
+    mcg_stat = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MCG_STATUS);
     if ( mcg_stat & 0x04 ) {
         _XDPRINTF_("machine check in progress\n");
         return false;
@@ -591,9 +591,9 @@ bool txt_prepare_cpu(void)
     }
 
     /* check if all machine check regs are clear */
-    mcg_cap = rdmsr64(MSR_MCG_CAP);
+    mcg_cap = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MCG_CAP);
     for ( i = 0; i < (mcg_cap & 0xff); i++ ) {
-        mcg_stat = rdmsr64(MSR_MC0_STATUS + 4*i);
+        mcg_stat = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_MC0_STATUS + 4*i);
         if ( mcg_stat & (1ULL << 63) ) {
             _XDPRINTF_("MCG[%u] = %llx ERROR\n", i, mcg_stat);
             if ( !params.preserve_mce )
@@ -636,7 +636,7 @@ bool get_parameters(getsec_parameters_t *params)
     int param_type;
 
     /* sanity check because GETSEC[PARAMETERS] will fail if not set */
-    cr4 = read_cr4(CASM_NOPARAM);
+    cr4 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr4(CASM_NOPARAM);
     if ( !(cr4 & CR4_SMXE) ) {
         _XDPRINTF_("SMXE not enabled, can't read parameters\n");
         return false;
@@ -651,7 +651,7 @@ bool get_parameters(getsec_parameters_t *params)
 
     index = 0;
     do {
-        __getsec_parameters(index++, &param_type, &eax, &ebx, &ecx);
+        uberspark_uobjrtl_hw__generic_x86_32_intel__getsec_parameters(index++, &param_type, &eax, &ebx, &ecx);
         /* the code generated for a 'switch' statement doesn't work in this */
         /* environment, so use if/else blocks instead */
 

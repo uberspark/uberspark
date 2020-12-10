@@ -222,7 +222,7 @@ void cmdline_parse(const char *cmdline, const cmdline_option_t *options,
 
                     /* value found, so copy it */
                     for ( i = 0; options[i].name != NULL; i++ ) {
-                        if ( strncmp(options[i].name, opt_start, opt_name_size ) == 0 ) {
+                        if ( uberspark_uobjrtl_crt__strncmp(options[i].name, opt_start, opt_name_size ) == 0 ) {
                             uberspark_uobjrtl_crt__strncpy(vals[i], val_start, copy_size);
                             vals[i][copy_size] = '\0'; /* add '\0' to the end of string */
                             break;
