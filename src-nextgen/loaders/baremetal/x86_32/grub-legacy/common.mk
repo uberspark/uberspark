@@ -10,7 +10,7 @@ srcdir := $(realpath $(srcdir))
 
 export MKDIR := mkdir
 export CP := cp
-export CC := gcc
+export CC := gcc-8
 export CCOMP := ccomp
 export FRAMAC := frama-c
 export LD := ld
@@ -64,5 +64,3 @@ ASMFLAGS := -m32 $(INCFLAGS) -D__ASSEMBLY__
 CFLAGS := -nostdinc -nostdlib -nostartfiles -ffreestanding -m32 $(INCFLAGS)
 CCOMPFLAGS := $(INCFLAGS) -O0 -fpacked-structs -c -dmach
 CCLIB := $(shell $(CC) -m32 --print-lib)
-
-

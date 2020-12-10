@@ -53,6 +53,13 @@ all: $(THE_ARCHIVE)
 #	echo $(UOBJRTL_CRT_C_SOURCES_FILENAMEONLY)
 #	echo $(UOBJRTL_CRT_A_SOURCES_FILENAMEONLY)
 #	echo $(OBJECTS)
+#	echo $(CCLIBX)
+#	echo $(CCLIB)
+#	which gcc
+#	gcc --version
+#	gcc-8 --version
+#	gcc-8 --print-lib
+#	ls -lR /usr/lib/gcc/x86_64-linux-gnu/
 #	ls -l /m/*
 
 $(THE_ARCHIVE): $(OBJECTS)

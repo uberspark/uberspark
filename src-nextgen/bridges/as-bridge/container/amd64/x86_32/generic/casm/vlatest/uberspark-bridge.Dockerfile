@@ -60,6 +60,7 @@ RUN apt-get update -y && \
         gcc-8 \
         gcc-8-multilib-arm-linux-gnueabihf \
         gcc-8-multilib-x86-64-linux-gnux32 \
+        gcc-8-multilib \
         binutils \
         curl \
         rsync \
