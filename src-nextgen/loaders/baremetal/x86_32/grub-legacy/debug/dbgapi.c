@@ -105,7 +105,7 @@ void xmhfhw_platform_serial_init(char *params){
   //override default UART parameters with the one passed via the
   //command line (if any)
   if(params){
-    uberspark_uobjrtl_crt__uberspark_uobjrtl_crt__memcpy((void *)&g_uart_config, (unsigned char const *)params, sizeof(uart_config_t));
+    uberspark_uobjrtl_crt__memcpy((void *)&g_uart_config, (unsigned char const *)params, sizeof(uart_config_t));
   }
 
   // FIXME: work-around for issue #143

@@ -69,6 +69,14 @@ $(THE_ARCHIVE): $(OBJECTS)
 	@echo Building "$(@F)" from "$<"
 	$(CC) -c $(CFLAGS) -o $(XMHF_BOOTLOADER_OBJECTS_DIR)/$(@F) $<
 
+%.o: %.cS
+	$(MKDIR) -p $(XMHF_BOOTLOADER_OBJECTS_DIR)
+	@echo Building "$(@F)" from "$<" 
+	$(CP) -f $< $(XMHF_BOOTLOADER_OBJECTS_DIR)/$(notdir $<).c
+	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CCOMP) $(CCOMPFLAGS) $(notdir $<).c 
+	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(FRAMAC) -load-module $(DIR_UBERSPARK_VBRIDGE_PLUGIN)/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile $(notdir $<).mach -casm-outfile $(notdir $<).s 
+	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CC) -c $(ASMFLAGS) -o $(@F) $(notdir $<).s
+
 
 .PHONY: clean
 clean:

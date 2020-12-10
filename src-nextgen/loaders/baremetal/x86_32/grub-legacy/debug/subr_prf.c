@@ -430,7 +430,7 @@ reswitch:	switch (ch = (u_char)*fmt++) {
 			if (p == NULL)
 				p = "(null)";
 			if (!dot)
-				n = uberspark_uobjrtl_crt__uberspark_uobjrtl_crt__strlen (p);
+				n = uberspark_uobjrtl_crt__strlen (p);
 			else
 				for (n = 0; n < dwidth && p[n]; n++)
 					continue;
