@@ -91,10 +91,12 @@
  * wheel when the time comes.
  */
 
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
+*/
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
 #include "_txt_hash.h"
 #include "_txt_acmod.h"
@@ -247,9 +249,9 @@ static void *build_mle_pagetable(uint32_t mle_start, uint32_t mle_size)
     ptab_size = 3 * PAGE_SIZE_4K;      /* pgdir ptr + pgdir + ptab = 3 */
     ptab_base = (void *)(mle_start - ptab_size);
 
-    /* NB: This memset will clobber the AMD-specific SL header.  That
+    /* NB: This uberspark_uobjrtl_crt__memset will clobber the AMD-specific SL header.  That
      * is okay, as we are launching on an Intel TXT system. */
-    memset(ptab_base, 0, ptab_size);
+    uberspark_uobjrtl_crt__memset(ptab_base, 0, ptab_size);
     _XDPRINTF_("ptab_size=%x, ptab_base=%p\n", ptab_size, ptab_base);
 
     pg_dir_ptr_tab = (void *)ptab_base;
@@ -345,7 +347,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
     //os_mle_data =get_os_mle_data_start(txt_heap, (uint32_t)read_pub_config_reg(TXTCR_HEAP_SIZE));
     //size = (uint64_t *)((uint32_t)os_mle_data - sizeof(uint64_t));
     //*size = sizeof(*os_mle_data) + sizeof(uint64_t);
-    //memset(os_mle_data, 0, sizeof(*os_mle_data));
+    //uberspark_uobjrtl_crt__memset(os_mle_data, 0, sizeof(*os_mle_data));
     //os_mle_data->version = 0x02;
     //os_mle_data->mbi = NULL;
     //os_mle_data->saved_misc_enable_msr = rdmsr64(MSR_IA32_MISC_ENABLE);
@@ -356,7 +358,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 		(uint32_t)(sizeof(os_mle_data) + sizeof(uint64_t)),
 		(uint32_t)((uint64_t)(sizeof(os_mle_data) + sizeof(uint64_t)) >> 32) );
 
-	    memset(&os_mle_data, 0, sizeof(os_mle_data));
+	    uberspark_uobjrtl_crt__memset(&os_mle_data, 0, sizeof(os_mle_data));
 	    os_mle_data.version = 0x02;
 	    os_mle_data.mbi = NULL;
 	    os_mle_data.saved_misc_enable_msr = rdmsr64(MSR_IA32_MISC_ENABLE);
@@ -383,14 +385,14 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 		(uint32_t)((uint64_t)(sizeof(os_sinit_data) + sizeof(uint64_t)) >> 32) );
 
 
-	memset(&os_sinit_data, 0, sizeof(os_sinit_data));
+	uberspark_uobjrtl_crt__memset(&os_sinit_data, 0, sizeof(os_sinit_data));
 
 	os_sinit_data.version = 5;
 	os_sinit_data.mle_ptab = (uint64_t)(unsigned long)ptab_base;
 	os_sinit_data.mle_size = g_mle_hdr.mle_end_off - g_mle_hdr.mle_start_off;
 
 	HALT_ON_ERRORCOND(sizeof(mle_hdr_t) < TEMPORARY_MAX_MLE_HEADER_SIZE);
-	memcpy(phys_mle_start, &g_mle_hdr, sizeof(mle_hdr_t));
+	uberspark_uobjrtl_crt__memcpy(phys_mle_start, &g_mle_hdr, sizeof(mle_hdr_t));
 	_XDPRINTF_("Copied mle_hdr (0x%08x, 0x%x bytes) into SL (0x%08x)\n",
 	   (uint32_t)&g_mle_hdr, sizeof(mle_hdr_t), (uint32_t)phys_mle_start);
 
@@ -640,7 +642,7 @@ bool get_parameters(getsec_parameters_t *params)
         return false;
     }
 
-    memset(params, 0, sizeof(*params));
+    uberspark_uobjrtl_crt__memset(params, 0, sizeof(*params));
     params->acm_max_size = DEF_ACM_MAX_SIZE;
     params->acm_mem_types = DEF_ACM_MEM_TYPES;
     params->senter_controls = DEF_SENTER_CTRLS;

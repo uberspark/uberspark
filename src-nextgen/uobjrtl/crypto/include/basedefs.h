@@ -40,6 +40,7 @@
 #include <uberspark/uobjrtl/crt/include/stdarg.h>
 #include <uberspark/uobjrtl/crt/include/string.h>
 
+#ifndef __ASSEMBLY__
 
 //tomcrypt.h
 
@@ -294,7 +295,7 @@ typedef struct Hmac_state {
 
 
 
-
+#endif
 
 
 #endif /* __UOBJRTL_CRYPTO__BASEDEFS_H__ */

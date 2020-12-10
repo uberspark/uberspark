@@ -48,14 +48,17 @@
 //author: amit vasudevan (amitvasudevan@acm.org)
 
 //---includes-------------------------------------------------------------------
-#include <xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
 
 //#include <xc.h>
 
-#include <xmhfcrypto.h>
+#include <xmhfcrypto.h>*/
+
 //#include <tpm.h>
 #include "cmdline.h"
 
@@ -67,6 +70,10 @@
 ////libxmhfdebug
 //uint32_t libxmhfdebug_lock = 1;
 
+
+#if defined (__DEBUG_SERIAL__)
+    extern uart_config_t g_uart_config;
+#endif
 
 
 
@@ -246,7 +253,7 @@ uint32_t dealwithE820(multiboot_info_t *mbi, uint32_t runtimesize __attribute__(
     }
 
     //zero out grub e820 list
-    memset((void *)&grube820list, 0, sizeof(GRUBE820)*MAX_E820_ENTRIES);
+    uberspark_uobjrtl_crt__memset((void *)&grube820list, 0, sizeof(GRUBE820)*MAX_E820_ENTRIES);
 
     //grab e820 list into grube820list
     {
@@ -323,7 +330,7 @@ uint32_t dealwithE820(multiboot_info_t *mbi, uint32_t runtimesize __attribute__(
 
 				//copy all entries from original E820 table until index i
 				for(j=0; j < i; j++)
-					memcpy((void *)&te820[j], (void *)&grube820list[j], sizeof(GRUBE820));
+					uberspark_uobjrtl_crt__memcpy((void *)&te820[j], (void *)&grube820list[j], sizeof(GRUBE820));
 
 				//we need a maximum of 2 extra entries for the final table, make a sanity check
 				HALT_ON_ERRORCOND( (grube820list_numentries+2) < MAX_E820_ENTRIES );
@@ -361,14 +368,14 @@ uint32_t dealwithE820(multiboot_info_t *mbi, uint32_t runtimesize __attribute__(
 
 				//copy entries i through end of original E820 list into temporary E820 list starting at index j
 				while(i < grube820list_numentries){
-					memcpy((void *)&te820[j], (void *)&grube820list[i], sizeof(GRUBE820));
+					uberspark_uobjrtl_crt__memcpy((void *)&te820[j], (void *)&grube820list[i], sizeof(GRUBE820));
 					i++;
 					j++;
 				}
 
 				//copy temporary E820 list into global E20 list and setup final E820 entry count
 				grube820list_numentries = j;
-				memcpy((void *)&grube820list, (void *)&te820, (grube820list_numentries * sizeof(GRUBE820)) );
+				uberspark_uobjrtl_crt__memcpy((void *)&grube820list, (void *)&te820, (grube820list_numentries * sizeof(GRUBE820)) );
 		}
 
 		_XDPRINTF_("\nE820 revision complete.");
@@ -714,7 +721,7 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
 #if !defined (__DRT__)
 		uint32_t sl_entry_point;
 		uint16_t *sl_entry_point_offset = (uint16_t *)slbase;
-		//typedef void(*FCALL)(void);
+		typedef void(*FCALL)(void);
 		FCALL invokesl;
 #endif
 
@@ -788,7 +795,7 @@ void setupvcpus(uint32_t cpu_vendor, MIDTAB *midtable, uint32_t midtable_numentr
 
     for(i=0; i < midtable_numentries; i++){
         vcpu = (BOOTVCPU *)((uint32_t)vcpubuffers + (uint32_t)(i * SIZE_STRUCT_BOOTVCPU));
-        memset((void *)vcpu, 0, sizeof(BOOTVCPU));
+        uberspark_uobjrtl_crt__memset((void *)vcpu, 0, sizeof(BOOTVCPU));
 
         vcpu->cpu_vendor = cpu_vendor;
 
@@ -821,7 +828,7 @@ void wakeupAPs(void){
 
     {
         extern uint32_t _ap_bootstrap_start[], _ap_bootstrap_end[];
-        memcpy((void *)0x10000, (void *)_ap_bootstrap_start, (uint32_t)_ap_bootstrap_end - (uint32_t)_ap_bootstrap_start + 1);
+        uberspark_uobjrtl_crt__memcpy((void *)0x10000, (void *)_ap_bootstrap_start, (uint32_t)_ap_bootstrap_end - (uint32_t)_ap_bootstrap_start + 1);
     }
 
     //our test code is at 1000:0000, we need to send 10 as vector
@@ -895,9 +902,9 @@ void cstartup(multiboot_info_t *mbi){
 	size_t hypapp_size;
 
     /* parse command line */
-    memset(g_cmdline, '\0', sizeof(g_cmdline));
-    strncpy(g_cmdline, (char*)mbi->cmdline, sizeof(g_cmdline)-1);
-    g_cmdline[sizeof(g_cmdline)-1] = '\0'; /* in case strncpy truncated */
+    uberspark_uobjrtl_crt__memset(g_cmdline, '\0', sizeof(g_cmdline));
+    uberspark_uobjrtl_crt__strncpy(g_cmdline, (char*)mbi->cmdline, sizeof(g_cmdline)-1);
+    g_cmdline[sizeof(g_cmdline)-1] = '\0'; /* in case uberspark_uobjrtl_crt__strncpy truncated */
     tboot_parse_cmdline();
 
 #if defined (__DEBUG_SERIAL__)
@@ -971,7 +978,7 @@ void cstartup(multiboot_info_t *mbi){
 	//load address of XMHF bootloader = 30MB
 	//sizeof ( XMHF bootloader) = 2MB
 	//sizeof ( XMHF hypervisor binary + guest OS boot-sector + SINIT module (if any) + hypapp specific modules (if any) )
-	//should not be greater than 224MB since we will be loading our system at absolute address 256MB and our current memcpy does not tackle overlaps
+	//should not be greater than 224MB since we will be loading our system at absolute address 256MB and our current uberspark_uobjrtl_crt__memcpy does not tackle overlaps
 	//if ( mod_array[mods_count-1].mod_end >= __TARGET_BASE_XMHF ){
 	//	_XDPRINTF_("XMHF boot-loader: Halting! XMHF load memory map limits violated. TOMM=0x%08x\n", mod_array[mods_count-1].mod_end);
 	//	HALT();
@@ -992,7 +999,7 @@ void cstartup(multiboot_info_t *mbi){
 
     //_XDPRINTF_("xmhf-bootloader: %s:%u\n", __func__, __LINE__);
     ////relocate XMHF hypervisor binary to preferred load address
-    // memcpy((void*)__TARGET_BASE_XMHF, (void*)(__TARGET_BASE_BOOTLOADER+__TARGET_SIZE_BOOTLOADER), sl_rt_size);
+    // uberspark_uobjrtl_crt__memcpy((void*)__TARGET_BASE_XMHF, (void*)(__TARGET_BASE_BOOTLOADER+__TARGET_SIZE_BOOTLOADER), sl_rt_size);
     //_XDPRINTF_("xmhf-bootloader: %s:%u\n", __func__, __LINE__);
 
 
@@ -1026,10 +1033,10 @@ void cstartup(multiboot_info_t *mbi){
         HALT_ON_ERRORCOND(xslbootinfo->magic == SL_PARAMETER_BLOCK_MAGIC);
         xslbootinfo->memmapinfo_numentries = grube820list_numentries;
         HALT_ON_ERRORCOND(xslbootinfo->memmapinfo_numentries <= 64);
-		memcpy((void *)&xslbootinfo->memmapinfo_buffer, (void *)&grube820list, (sizeof(GRUBE820) * grube820list_numentries));
+		uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->memmapinfo_buffer, (void *)&grube820list, (sizeof(GRUBE820) * grube820list_numentries));
         xslbootinfo->cpuinfo_numentries = pcpus_numentries;
         HALT_ON_ERRORCOND(xslbootinfo->cpuinfo_numentries <= 8);
-        memcpy((void *)&xslbootinfo->cpuinfo_buffer, (void *)&pcpus, (sizeof(PCPU) * pcpus_numentries));
+        uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->cpuinfo_buffer, (void *)&pcpus, (sizeof(PCPU) * pcpus_numentries));
         //xslbootinfo->runtime_size = sl_rt_size - PAGE_SIZE_2M;
         //xslbootinfo->xmhf_size = sl_rt_size;
         xslbootinfo->richguest_bootmodule_base = mod_array[1].mod_start;
@@ -1058,9 +1065,9 @@ void cstartup(multiboot_info_t *mbi){
 
 #if defined (__DEBUG_SERIAL__)
         //xslbootinfo->uart_config = g_uart_config;
-        memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
+        uberspark_uobjrtl_crt__memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
 #endif
-        strncpy(xslbootinfo->cmdline_buffer, (const char *)mbi->cmdline, sizeof(xslbootinfo->cmdline_buffer));
+        uberspark_uobjrtl_crt__strncpy(xslbootinfo->cmdline_buffer, (const char *)mbi->cmdline, sizeof(xslbootinfo->cmdline_buffer));
     }
 #endif //old parameter block fill logic
 
@@ -1072,19 +1079,19 @@ void cstartup(multiboot_info_t *mbi){
         HALT_ON_ERRORCOND(xslbootinfo->magic == RUNTIME_PARAMETER_BLOCK_MAGIC);
         xslbootinfo->memmapinfo_numentries = grube820list_numentries;
         HALT_ON_ERRORCOND(xslbootinfo->memmapinfo_numentries <= 64);
-		memcpy((void *)&xslbootinfo->memmapinfo_buffer, (void *)&grube820list, (sizeof(GRUBE820) * grube820list_numentries));
+		uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->memmapinfo_buffer, (void *)&grube820list, (sizeof(GRUBE820) * grube820list_numentries));
         xslbootinfo->cpuinfo_numentries = pcpus_numentries;
         HALT_ON_ERRORCOND(xslbootinfo->cpuinfo_numentries <= 8);
-        memcpy((void *)&xslbootinfo->cpuinfo_buffer, (void *)&pcpus, (sizeof(PCPU) * pcpus_numentries));
+        uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->cpuinfo_buffer, (void *)&pcpus, (sizeof(PCPU) * pcpus_numentries));
         //xslbootinfo->xmhf_size = sl_rt_size;
         xslbootinfo->richguest_bootmodule_base = mod_array[0].mod_start;
         xslbootinfo->richguest_bootmodule_size = (mod_array[0].mod_end - mod_array[0].mod_start);
 
 
 		#if defined (__DEBUG_SERIAL__)
-        memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
+        uberspark_uobjrtl_crt__memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
 		#endif
-        strncpy(xslbootinfo->cmdline_buffer, (const char *)mbi->cmdline, sizeof(xslbootinfo->cmdline_buffer));
+        uberspark_uobjrtl_crt__strncpy(xslbootinfo->cmdline_buffer, (const char *)mbi->cmdline, sizeof(xslbootinfo->cmdline_buffer));
     }
 
     _XDPRINTF_("xmhf-bootloader: %s:%u\n", __func__, __LINE__);

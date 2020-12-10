@@ -89,13 +89,15 @@
  * Adapted for libtpm - generic TPM library
  * by Amit Vasudevan amitvasudevan@acm.org
  */
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
+*/
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
-#include <stddef.h>
-#include <string.h>
+/*#include <stddef.h>
+#include <string.h>*/
 //#include <stdio.h>
 //#include <print_hex.h>
 //#include <tpm.h>
@@ -237,7 +239,7 @@ uint32_t tpm_pcr_read(uint32_t locality, uint32_t pcr, tpm_pcr_value_t *out)
 
     if ( out_size > sizeof(*out) )
         out_size = sizeof(*out);
-    memcpy((void *)out, WRAPPER_OUT_BUF, out_size);
+    uberspark_uobjrtl_crt__memcpy((void *)out, WRAPPER_OUT_BUF, out_size);
 
 #ifdef TPM_TRACE
     {
@@ -266,7 +268,7 @@ uint32_t tpm_pcr_extend(uint32_t locality, uint32_t pcr,
     /* copy pcr into buf in reversed byte order, then copy in data */
     reverse_copy(WRAPPER_IN_BUF, &pcr, sizeof(pcr));
     in_size += sizeof(pcr);
-    memcpy(WRAPPER_IN_BUF + in_size, (const void *)in, sizeof(*in));
+    uberspark_uobjrtl_crt__memcpy(WRAPPER_IN_BUF + in_size, (const void *)in, sizeof(*in));
     in_size += sizeof(*in);
 
     ret = tpm_submit_cmd(locality, TPM_ORD_PCR_EXTEND, in_size, &out_size);
@@ -281,7 +283,7 @@ uint32_t tpm_pcr_extend(uint32_t locality, uint32_t pcr,
 
     if ( out != NULL && out_size > 0 ) {
        out_size = (out_size > sizeof(*out)) ? sizeof(*out) : out_size;
-       memcpy((void *)out, WRAPPER_OUT_BUF, out_size);
+       uberspark_uobjrtl_crt__memcpy((void *)out, WRAPPER_OUT_BUF, out_size);
     }
 
 #ifdef TPM_TRACE
@@ -430,10 +432,10 @@ uint32_t tpm_get_random(uint32_t locality, uint8_t *random_data,
     out_size -= sizeof(*data_size);
     reverse_copy(data_size, WRAPPER_OUT_BUF, sizeof(*data_size));
     if ( *data_size > 0 )
-        memcpy(random_data, WRAPPER_OUT_BUF + sizeof(*data_size), *data_size);
+        uberspark_uobjrtl_crt__memcpy(random_data, WRAPPER_OUT_BUF + sizeof(*data_size), *data_size);
 
     /* data might be used as key, so clear from buffer memory */
-    memset(WRAPPER_OUT_BUF + sizeof(*data_size), 0, *data_size);
+    uberspark_uobjrtl_crt__memset(WRAPPER_OUT_BUF + sizeof(*data_size), 0, *data_size);
 
     /* if TPM doesn't return all requested random bytes, try one more time */
     if ( *data_size < requested_size ) {

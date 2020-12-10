@@ -47,9 +47,11 @@
 // init low-level support routines
 // author: amit vasudevan (amitvasudevan@acm.org)
 
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
+*/
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
 .extern midtable_numentries
 .extern mp_cstartup

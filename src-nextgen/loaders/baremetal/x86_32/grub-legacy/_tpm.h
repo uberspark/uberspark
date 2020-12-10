@@ -945,7 +945,7 @@ static inline bool is_tpm_ready(uint32_t locality)
     }
 
     /* make sure tpm is not disabled/deactivated */
-    memset(&pflags, 0, sizeof(pflags));
+    uberspark_uobjrtl_crt__memset(&pflags, 0, sizeof(pflags));
     ret = tpm_get_flags(locality, TPM_CAP_FLAG_PERMANENT,
                         (uint8_t *)&pflags, sizeof(pflags));
     if ( ret != TPM_SUCCESS ) {
@@ -957,7 +957,7 @@ static inline bool is_tpm_ready(uint32_t locality)
         return false;
     }
 
-    memset(&vflags, 0, sizeof(vflags));
+    uberspark_uobjrtl_crt__memset(&vflags, 0, sizeof(vflags));
     ret = tpm_get_flags(locality, TPM_CAP_FLAG_VOLATILE,
                         (uint8_t *)&vflags, sizeof(vflags));
     if ( ret != TPM_SUCCESS ) {
@@ -1026,7 +1026,7 @@ static inline bool release_locality(uint32_t locality)
     /* make inactive by writing a 1 */
     unpack_tpm_reg_access_t(&reg_acc, 0);
     //reg_acc._raw[0]= 0;
-    //memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
+    //uberspark_uobjrtl_crt__memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
     reg_acc.active_locality = 1;
 
     {
@@ -1124,7 +1124,7 @@ static inline uint32_t tpm_wait_cmd_ready(uint32_t locality)
 
     /* request access to the TPM from locality N */
     unpack_tpm_reg_access_t(&reg_acc, 0);
-    //memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
+    //uberspark_uobjrtl_crt__memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
     reg_acc.request_use = 1;
 
     {
@@ -1157,7 +1157,7 @@ static inline uint32_t tpm_wait_cmd_ready(uint32_t locality)
     i = 0;
     do {
         /* write 1 to TPM_STS_x.commandReady to let TPM enter ready state */
-        memset((void *)&reg_sts, 0, sizeof(reg_sts));
+        uberspark_uobjrtl_crt__memset((void *)&reg_sts, 0, sizeof(reg_sts));
         reg_sts.command_ready = 1;
         {
             uint32_t value = pack_tpm_reg_sts_t(&reg_sts);
@@ -1298,7 +1298,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
     } while ( offset < in_size );
 
     /* command has been written to the TPM, it is time to execute it. */
-    memset(&reg_sts, 0,  sizeof(reg_sts));
+    uberspark_uobjrtl_crt__memset(&reg_sts, 0,  sizeof(reg_sts));
     reg_sts.tpm_go = 1;
     {
         uint32_t value = pack_tpm_reg_sts_t(&reg_sts);
@@ -1381,7 +1381,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
 //    }
 //#endif
 
-    memset(&reg_sts, 0, sizeof(reg_sts));
+    uberspark_uobjrtl_crt__memset(&reg_sts, 0, sizeof(reg_sts));
     reg_sts.command_ready = 1;
     {
         uint32_t value = pack_tpm_reg_sts_t(&reg_sts);
@@ -1390,7 +1390,7 @@ static inline uint32_t tpm_write_cmd_fifo(uint32_t locality, uint8_t *in,
 RelinquishControl:
     /* deactivate current locality */
     unpack_tpm_reg_access_t(&reg_acc, 0);
-    //memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
+    //uberspark_uobjrtl_crt__memset(&reg_acc, 0, SIZE_TPM_REG_ACCESS);
     reg_acc.active_locality = 1;
     {
         uint8_t value = pack_tpm_reg_access_t(&reg_acc);

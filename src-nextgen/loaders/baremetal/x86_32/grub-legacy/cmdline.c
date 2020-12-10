@@ -83,10 +83,13 @@
  * Modified for XMHF by Amit Vasudevan (amitvasudevan@acm.org)
  */
 
-#include <xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
+*/
 
 #include "cmdline.h"
 
@@ -163,7 +166,7 @@ const char* cmdline_get_option_val(const cmdline_option_t *options,
 {
     int i;
     for ( i = 0; options[i].name != NULL; i++ ) {
-        if ( strcmp(options[i].name, opt_name) == 0 )
+        if ( uberspark_uobjrtl_crt__strcmp(options[i].name, opt_name) == 0 )
             return vals[i];
     }
     _XDPRINTF_("requested unknown option: %s\n", opt_name);
@@ -178,7 +181,7 @@ void cmdline_parse(const char *cmdline, const cmdline_option_t *options,
 
     /* copy default values to vals[] */
     for ( i = 0; options[i].name != NULL; i++ ) {
-        strncpy(vals[i], options[i].def_val, MAX_VALUE_LEN-1);
+        uberspark_uobjrtl_crt__strncpy(vals[i], options[i].def_val, MAX_VALUE_LEN-1);
         vals[i][MAX_VALUE_LEN-1] = '\0';
     }
 
@@ -197,14 +200,14 @@ void cmdline_parse(const char *cmdline, const cmdline_option_t *options,
         {
             /* find end of current option */
             const char *opt_start = p;
-            const char *opt_end = strchr(opt_start, ' ');
+            const char *opt_end = uberspark_uobjrtl_crt__strchr(opt_start, ' ');
             if ( opt_end == NULL )
-                opt_end = opt_start + strlen(opt_start);
+                opt_end = opt_start + uberspark_uobjrtl_crt__strlen(opt_start);
             p = opt_end;
 
             {
                 /* find value part; if no value found, use default and continue */
-                const char *val_start = strchr(opt_start, '=');
+                const char *val_start = uberspark_uobjrtl_crt__strchr(opt_start, '=');
                 if ( val_start == NULL || val_start > opt_end )
                     continue;
                 val_start++;
@@ -220,7 +223,7 @@ void cmdline_parse(const char *cmdline, const cmdline_option_t *options,
                     /* value found, so copy it */
                     for ( i = 0; options[i].name != NULL; i++ ) {
                         if ( strncmp(options[i].name, opt_start, opt_name_size ) == 0 ) {
-                            strncpy(vals[i], val_start, copy_size);
+                            uberspark_uobjrtl_crt__strncpy(vals[i], val_start, copy_size);
                             vals[i][copy_size] = '\0'; /* add '\0' to the end of string */
                             break;
                         }
@@ -285,6 +288,9 @@ void tboot_parse_cmdline(void)
 
 #if defined (__DEBUG_SERIAL__)
 
+extern uart_config_t g_uart_config;
+
+
 static bool parse_com_fmt(const char **fmt)
 {
     /* fmt:  <5|6|7|8><n|o|e|m|s><0|1> */
@@ -294,7 +300,7 @@ static bool parse_com_fmt(const char **fmt)
     /* uint8_t stop_bits = 1; */
 
     /* must specify all values */
-    if ( strlen(*fmt) < 3 )
+    if ( uberspark_uobjrtl_crt__strlen(*fmt) < 3 )
         return false;
 
     /* data bits */

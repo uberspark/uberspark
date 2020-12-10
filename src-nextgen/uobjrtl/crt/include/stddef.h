@@ -38,6 +38,7 @@
 #ifndef __UOBJRTL_CRT_STDDEF_H__
 #define __UOBJRTL_CRT_STDDEF_H__
 
+#ifndef __ASSEMBLY__
 
 #ifndef NULL
 
@@ -56,6 +57,8 @@ typedef __ptrdiff_t     ptrdiff_t;
     #define offsetof(type, field)   __builtin_offsetof(type, field)
 #else
     #define offsetof(type,field) (int)&(((type *)0)->field)
+#endif
+
 #endif
 
 #endif // __UOBJRTL_CRT_STDDEF_H__

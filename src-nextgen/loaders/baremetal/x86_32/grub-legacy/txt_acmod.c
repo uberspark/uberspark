@@ -84,10 +84,12 @@
  * Modified for XMHF by jonmccune@cmu.edu, 2011.01.04
  */
 
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
-#include <xmhf-debug.h>
+#include <xmhf-debug.h>*/
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+
 
 #include "_txt_hash.h"
 #include "_txt_acmod.h"
@@ -216,7 +218,7 @@ void print_uuid(const uuid_t *uuid)
 
 static inline bool are_uuids_equal(const uuid_t *uuid1, const uuid_t *uuid2)
 {
-    return (memcmp((const char *)uuid1, (const char *)uuid2, sizeof(*uuid1)) == 0);
+    return (uberspark_uobjrtl_crt__memcmp((const char *)uuid1, (const char *)uuid2, sizeof(*uuid1)) == 0);
 }
 
 static void print_acm_hdr(acm_hdr_t *hdr, const char *mod_name)
@@ -528,7 +530,7 @@ acm_hdr_t *copy_sinit(acm_hdr_t *sinit)
     }
 
     /* copy it there */
-    memcpy(sinit_region_base, sinit, sinit->size*4);
+    uberspark_uobjrtl_crt__memcpy(sinit_region_base, sinit, sinit->size*4);
 
     _XDPRINTF_("copied SINIT (size=%x) to %p\n", sinit->size*4,
            sinit_region_base);

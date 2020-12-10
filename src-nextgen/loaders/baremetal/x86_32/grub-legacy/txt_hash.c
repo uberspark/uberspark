@@ -83,10 +83,13 @@
  * Modified for XMHF by jonmccune@cmu.edu, 2011.01.04
  */
 
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
+*/
+
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
 #include "_txt_hash.h"
 #include "_txt_acmod.h"
@@ -107,7 +110,7 @@ bool are_hashes_equal(const tb_hash_t *hash1, const tb_hash_t *hash2,
     }
 
     if ( hash_alg == TB_HALG_SHA1 )
-        return (memcmp((const char*)hash1, (const char*)hash2, SHA1_LENGTH) == 0);
+        return (uberspark_uobjrtl_crt__memcmp((const char*)hash1, (const char*)hash2, SHA1_LENGTH) == 0);
     else {
         _XDPRINTF_("unsupported hash alg (%u)\n", hash_alg);
         return false;
@@ -154,8 +157,8 @@ bool hash_buffer(const unsigned char* buf, size_t size, tb_hash_t *hash,
     }
 
     if ( hash_alg == TB_HALG_SHA1 ) {
-        memcpy(buf, &(hash1->sha1), sizeof(hash1->sha1));
-        memcpy(buf + sizeof(hash1->sha1), &(hash2->sha1), sizeof(hash1->sha1));
+        uberspark_uobjrtl_crt__memcpy(buf, &(hash1->sha1), sizeof(hash1->sha1));
+        uberspark_uobjrtl_crt__memcpy(buf + sizeof(hash1->sha1), &(hash2->sha1), sizeof(hash1->sha1));
         sha1(buf, 2*sizeof(hash1->sha1), hash1->sha1);
         return true;
     }
@@ -189,7 +192,7 @@ void copy_hash(tb_hash_t *dest_hash, const tb_hash_t *src_hash,
     }
 
     if ( hash_alg == TB_HALG_SHA1 )
-        memcpy(dest_hash, src_hash, SHA1_LENGTH);
+        uberspark_uobjrtl_crt__memcpy(dest_hash, src_hash, SHA1_LENGTH);
     else
         _XDPRINTF_("unsupported hash alg (%u)\n", hash_alg);
 }

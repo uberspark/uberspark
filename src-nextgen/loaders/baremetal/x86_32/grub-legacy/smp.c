@@ -50,11 +50,12 @@
 //returns the number of cores/CPUs as well as their LAPIC id,
 //version, base and BSP indications
 //author: amit vasudevan (amitvasudevan@acm.org)
-#include <xmhf.h>
+/*#include <xmhf.h>
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>
-
+*/
+#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
 
 //forward prototypes

@@ -35,6 +35,10 @@
 #ifndef __UOBJRTL_CRT_ASSERT_H__
 #define __UOBJRTL_CRT_ASSERT_H__
 
+#ifndef __ASSEMBLY__
+
 #define assert(x) ((void)0)
+
+#endif
 
 #endif /* __UOBJRTL_CRT_ASSERT_H__ */
