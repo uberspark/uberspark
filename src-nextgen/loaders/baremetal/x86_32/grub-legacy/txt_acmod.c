@@ -488,7 +488,7 @@ acm_hdr_t *copy_sinit(acm_hdr_t *sinit)
      */
     txt_heap = uberspark_uobjrtl_hw__generic_x86_32_intel__get_txt_heap();
     uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&bios_data,
-			get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+			uberspark_uobjrtl_hw__generic_x86_32_intel__get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			sizeof(bios_data_t));
     /* BIOS has loaded an SINIT module, so verify that it is valid */
     if ( bios_data.bios_sinit_size != 0 ) {

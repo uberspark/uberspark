@@ -91,6 +91,7 @@
 
 #include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
 
+#include "sha1.h"
 #include "_txt_hash.h"
 #include "_txt_acmod.h"
 

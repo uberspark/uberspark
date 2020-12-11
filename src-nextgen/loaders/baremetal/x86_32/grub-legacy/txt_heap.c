@@ -132,7 +132,7 @@ bool verify_bios_data(txt_heap_t *txt_heap)
     }
 
     uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&bios_data,
-			get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+			uberspark_uobjrtl_hw__generic_x86_32_intel__get_bios_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			sizeof(bios_data_t));
 
     /* check version */
@@ -194,7 +194,7 @@ static bool verify_os_mle_data(txt_heap_t *txt_heap)
         return false;
     }
 
-    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 				sizeof(os_mle_data_t));
 
     /* check version */
@@ -257,7 +257,7 @@ static bool verify_os_sinit_data(txt_heap_t *txt_heap)
     }
 
     uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_sinit_data,
-	get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 	sizeof(os_sinit_data_t));
 
     /* check version (but since we create this, it should always be OK) */
@@ -348,7 +348,7 @@ static bool verify_sinit_mle_data(txt_heap_t *txt_heap)
     }
 
     uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&sinit_mle_data,
-	get_sinit_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__get_sinit_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 	sizeof(sinit_mle_data_t));
 
     /* check version */

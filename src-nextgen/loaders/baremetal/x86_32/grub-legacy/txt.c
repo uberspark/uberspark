@@ -344,7 +344,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
     /*
      * OS/loader to MLE data
      */
-    //os_mle_data =get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
+    //os_mle_data =uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
     //size = (uint64_t *)((uint32_t)os_mle_data - sizeof(uint64_t));
     //*size = sizeof(*os_mle_data) + sizeof(uint64_t);
     //uberspark_uobjrtl_crt__memset(os_mle_data, 0, sizeof(*os_mle_data));
@@ -354,7 +354,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 
 
 	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu64(
-		(get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
+		(uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
 		(uint32_t)(sizeof(os_mle_data) + sizeof(uint64_t)),
 		(uint32_t)((uint64_t)(sizeof(os_mle_data) + sizeof(uint64_t)) >> 32) );
 
@@ -363,7 +363,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 	    os_mle_data.mbi = NULL;
 	    os_mle_data.saved_misc_enable_msr = uberspark_uobjrtl_hw__generic_x86_32_intel__rdmsr64(MSR_IA32_MISC_ENABLE);
 
-	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 			&os_mle_data, sizeof(os_mle_data_t));
 
 	//_XDPRINTF_("Came %s:%u\n", __func__, __LINE__);
@@ -375,12 +375,12 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
      * OS/loader to SINIT data
      */
 
-	//os_sinit_data = get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
+	//os_sinit_data = uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE));
 	//size = (uint64_t *)((uint32_t)os_sinit_data - sizeof(uint64_t));
 	// *size = sizeof(*os_sinit_data) + sizeof(uint64_t);
 
 	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_writeu64(
-		(get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
+		(uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)) - sizeof(uint64_t)),
 		(uint32_t)(sizeof(os_sinit_data) + sizeof(uint64_t)),
 		(uint32_t)((uint64_t)(sizeof(os_sinit_data) + sizeof(uint64_t)) >> 32) );
 
@@ -422,7 +422,7 @@ static txt_heap_t *init_txt_heap(void *ptab_base, acm_hdr_t *sinit,
 
 
 	uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(
-		get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+		uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_sinit_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 		&os_sinit_data,
 		sizeof(os_sinit_data));
 
@@ -485,10 +485,10 @@ tb_error_t txt_launch_environment(void *sinit_ptr, size_t sinit_size,
         return TB_ERR_FATAL;
 
     /* save MTRRs before we alter them for SINIT launch */
-    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy(&os_mle_data, uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)),
 				sizeof(os_mle_data_t));
-    xmhfhw_cpu_x86_save_mtrrs(&(os_mle_data.saved_mtrr_state));
-    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy( get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)), &os_mle_data,
+    uberspark_uobjrtl_hw__generic_x86_32_intel__save_mtrrs(&(os_mle_data.saved_mtrr_state));
+    uberspark_uobjrtl_hw__generic_x86_32_intel__sysmemaccess_copy( uberspark_uobjrtl_hw__generic_x86_32_intel__get_os_mle_data_start(txt_heap, (uint32_t)uberspark_uobjrtl_hw__generic_x86_32_intel__read_pub_config_reg(TXTCR_HEAP_SIZE)), &os_mle_data,
 				sizeof(os_mle_data_t));
 
     /* set MTRRs properly for AC module (SINIT) */

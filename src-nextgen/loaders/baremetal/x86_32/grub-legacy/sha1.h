@@ -44,69 +44,19 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
-/*OUTPUT_FORMAT("pe-i386")*/
-OUTPUT_ARCH(i386)
+#ifndef __SHA1_H__
+#define __SHA1_H__
 
-ENTRY(init_start)
+#define SHA1_RESULTLEN      (160/8)
+#define SHA_DIGEST_LENGTH	SHA1_RESULTLEN
 
-MEMORY
-{
-  all (rwxai) : ORIGIN = 0x1E00000, LENGTH = 20M
-  bl_hdr (rwxai) : ORIGIN = 0x1E00000, LENGTH = 0x1000	 /*4K*/
-  bl_code (rwxai) : ORIGIN = 0x1E01000, LENGTH = 0x10000 /*64K*/
-  bl_data (rwxai) : ORIGIN = 0x1E11000, LENGTH = 0xF000  /*32K*/
-  bl_stack (rwxai) : ORIGIN = 0x1E20000, LENGTH = 0x500000 /*5M*/
-  bl_filler (rwxai) : ORIGIN = 0x2320000, LENGTH = 0x3EE0000 
-  unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
-}
+//int sha1(const unsigned char *buffer, size_t len,
+//                unsigned char md[SHA_DIGEST_LENGTH]);
 
-SECTIONS
-{
+int sha1(const uint8_t *message, uint32_t len, unsigned char md[SHA_DIGEST_LENGTH]);
 
-	. = 0x1E00000;
+/*int sha1_init(hash_state * md);
+int sha1_process(hash_state * md, const unsigned char *in, unsigned long inlen);
+int sha1_done(hash_state * md, unsigned char *hash);*/
 
-	.hdr : {
-		*(.multiboot_header)
-		. = 0x1000;
-	} >bl_hdr=0x0000
-
-	.code : {
-		*(.text)
-		*(.text.*)
-		*(.got*)
-		. = 0x10000;
-	} >bl_code=0x9090
-
-	.data : {
-		*(.data)
-		*(.rodata)
-		*(.rodata.str1.1)
-		*(.eh_frame)
-		*(.bss)
-		*(.comment)
-		*(.data.*)
-		. = 0xF000;
-	} >bl_data=0x0000
-
-	.stack : {
-		*(.stack)
-		. = 0x500000;
-	} >bl_stack=0x0000
-
-
-	.filler : {
-		LONG(0)
-		. = 0x3EE0000;
-	} >bl_filler=0x9090
-
-	/* this is to cause the link to fail if there is
-	* anything we didn't explicitly place.
-	* when this does cause link to fail, temporarily comment
-	* this part out to see what sections end up in the output
-	* which are not handled above, and handle them.
-	*/
-	/*.unaccounted : {
-	*(*)
-	} >unaccounted*/
-
-}
+#endif /* __SHA1_H__ */
