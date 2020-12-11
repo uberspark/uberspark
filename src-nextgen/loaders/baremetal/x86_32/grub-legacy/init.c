@@ -182,19 +182,19 @@ void udelay(uint32_t usecs){
     val = uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61);
     val &= 0x0d; //turn PC speaker off
     val |= 0x01; //turn on ch-2
-    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x61);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__outb(val, 0x61);
 
     //program ch-2 as one-shot
-    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(0xB0, 0x43);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__outb(0xB0, 0x43);
 
     //compute appropriate latch register value depending on usecs
     latchregval = (1193182 * usecs) / 1000000;
 
     //write latch register to ch-2
     val = (uint8_t)latchregval;
-    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x42);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__outb(val, 0x42);
     val = (uint8_t)((uint32_t)latchregval >> (uint32_t)8);
-    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val , 0x42);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__outb(val , 0x42);
 
     //wait for countdown
     while(!(uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61) & 0x20));
@@ -202,7 +202,7 @@ void udelay(uint32_t usecs){
     //disable ch-2 counter
     val = uberspark_uobjrtl_hw__generic_x86_32_intel__inb(0x61);
     val &= 0x0c;
-    uberspark_uobjrtl_hw__generic_x86_32_intel__oubb(val, 0x61);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__outb(val, 0x61);
 }
 
 
@@ -918,7 +918,7 @@ void cstartup(multiboot_info_t *mbi){
     }
 
     //initialize debugging early on
-	xmhf_debug_init((char *)&g_uart_config);
+	uberspark_uobjrtl_debug__init((char *)&g_uart_config);
 #endif
 
     mod_array = (module_t*)mbi->mods_addr;

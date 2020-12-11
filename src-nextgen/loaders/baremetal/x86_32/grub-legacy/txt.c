@@ -130,7 +130,7 @@ bool set_mtrrs_for_acmod(acm_hdr_t *hdr)
     /* disable interrupts */
     eflags = uberspark_uobjrtl_hw__generic_x86_32_intel__read_eflags(CASM_NOPARAM);
 
-    uberspark_uobjrtl_hw__generic_x86_32_intel__cpu_disable_intr(CASM_NOPARAM);
+    uberspark_uobjrtl_hw__generic_x86_32_intel__disable_intr(CASM_NOPARAM);
 
     /* save CR0 then disable cache (CRO.CD=1, CR0.NW=0) */
     cr0 = uberspark_uobjrtl_hw__generic_x86_32_intel__read_cr0(CASM_NOPARAM);
