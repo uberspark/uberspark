@@ -38,10 +38,10 @@ OBJECTS += $(UOBJRTL_HW_OBJECTS)
 
 
 # folder where objects go
-XMHF_BOOTLOADER_OBJECTS_DIR = _objs_xmhf-bootloader
+XMHF_BOOTLOADER_OBJECTS_DIR = _build
 
 # archive name
-THE_ARCHIVE = xmhf-bootloader
+THE_ARCHIVE = loader
 
 # targets
 .PHONY: all
@@ -64,7 +64,7 @@ all: $(THE_ARCHIVE)
 
 $(THE_ARCHIVE): $(OBJECTS)
 	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(LD) --oformat elf32-i386 -T $(srcdir)/init.lds -o $(THE_ARCHIVE).exe $(OBJECTS_ARCHIVE) $(CCLIB)
-	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(OBJCOPY) --output-format=binary $(THE_ARCHIVE).exe $(THE_ARCHIVE).bin
+	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(OBJCOPY) --output-format=binary $(THE_ARCHIVE).exe $(THE_ARCHIVE).exe.flat
 
 %.o: %.S
 	$(MKDIR) -p $(XMHF_BOOTLOADER_OBJECTS_DIR)

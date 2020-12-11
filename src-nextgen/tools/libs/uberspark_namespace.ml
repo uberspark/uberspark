@@ -120,6 +120,8 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 
 (* loader *)
 let namespace_loader_build_dir = "_build";;
+let namespace_loader_binary_image_filename = "loader.exe";;
+let namespace_loader_binary_flat_image_filename = "loader.exe.flat";;
 
 
 

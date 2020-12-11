@@ -119,6 +119,8 @@ val namespace_bridge_bldsys_bridge : string
 
 (* loader *)
 val namespace_loader_build_dir : string
+val namespace_loader_binary_image_filename : string
+val namespace_loader_binary_flat_image_filename : string
 
 
 (*---------------------------------------------------------------------------*)

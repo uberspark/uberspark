@@ -1569,6 +1569,24 @@ let build
 				if(rval == false) then begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build loader";
 					retval := false;
+				end else begin
+					let loader_binary_src_dir = (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^
+												loader_ns ^ "/" ^ 
+												Uberspark_namespace.namespace_loader_build_dir in
+					let loader_binary_dst_dir =  !d_path_to_mf_filename ^ "/" ^
+										Uberspark_namespace.namespace_uobjcoll_build_dir ^ "/" ^ 
+										loader_ns ^ "/" ^ Uberspark_namespace.namespace_loader_build_dir in
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loader_binary_src_dir=%s" loader_binary_src_dir;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loader_binary_dst_dir=%s" loader_binary_dst_dir;
+					Uberspark_osservices.mkdir ~parent:true (loader_ns ^ "/" ^ 
+												Uberspark_namespace.namespace_loader_build_dir) (`Octal 0o0777);
+
+					Uberspark_osservices.cp (loader_binary_src_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_image_filename)
+											(loader_binary_dst_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_image_filename);
+
+					Uberspark_osservices.cp (loader_binary_src_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_flat_image_filename)
+											(loader_binary_dst_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_flat_image_filename);
+
 				end;
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping loader: '%s'..." loader_ns;
