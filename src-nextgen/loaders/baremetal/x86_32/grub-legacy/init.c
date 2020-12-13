@@ -762,6 +762,7 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
         skinit((uint32_t)slbase);
     } else {
         _XDPRINTF_("\n******  INIT(early): Begin TXT Stuff  ******\n");
+        HALT();
         txt_do_senter((void*)(slbase+3*PAGE_SIZE_4K), TEMPORARY_HARDCODED_MLE_SIZE);
         _XDPRINTF_("\nINIT(early): error(fatal), should never come here!");
         HALT();
@@ -1074,7 +1075,8 @@ void cstartup(multiboot_info_t *mbi){
 
     //fill in bootinfo
     {
-        xslbootinfo = (XMHF_BOOTINFO *)((uint32_t)__TARGET_BASE_SL + PAGE_SIZE_2M);
+        xslbootinfo = (XMHF_BOOTINFO *)((uint32_t)RUNTIME_PARAMETER_BLOCK_BASE);
+        _XDPRINTF_("xmhf-bootloader: RUNTIME_PARAMETER_BLOCK_BASE=%08x\n", (uint32_t)RUNTIME_PARAMETER_BLOCK_BASE);
         _XDPRINTF_("xmhf-bootloader: xslbootinfo=%08x, magic=%x\n", (uint32_t)xslbootinfo, xslbootinfo->magic);
         HALT_ON_ERRORCOND(xslbootinfo->magic == RUNTIME_PARAMETER_BLOCK_MAGIC);
         xslbootinfo->memmapinfo_numentries = grube820list_numentries;
