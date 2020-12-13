@@ -762,7 +762,6 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
         skinit((uint32_t)slbase);
     } else {
         _XDPRINTF_("\n******  INIT(early): Begin TXT Stuff  ******\n");
-        HALT();
         txt_do_senter((void*)(slbase+3*PAGE_SIZE_4K), TEMPORARY_HARDCODED_MLE_SIZE);
         _XDPRINTF_("\nINIT(early): error(fatal), should never come here!");
         HALT();

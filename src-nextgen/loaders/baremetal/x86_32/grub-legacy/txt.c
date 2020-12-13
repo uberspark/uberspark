@@ -496,6 +496,7 @@ tb_error_t txt_launch_environment(void *sinit_ptr, size_t sinit_size,
         return TB_ERR_FATAL;
 
     _XDPRINTF_("executing GETSEC[SENTER]...\n");
+
     /* pause before executing GETSEC[SENTER] */
     delay(0x80000000);
 
