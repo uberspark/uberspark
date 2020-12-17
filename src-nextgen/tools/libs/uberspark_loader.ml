@@ -109,6 +109,13 @@ class uobjcoll_loader
 
 		let dummy = 0 in begin
 		Uberspark_logger.log "successfully parsed loader manifest";
+
+		(* TBD: figure out build time-stamps before nuking this *)
+		Uberspark_osservices.rmdir_recurse [ (Uberspark_namespace.get_namespace_staging_dir_prefix () ^ 
+                "/" ^ self#get_d_loader_ns ^
+                "/" ^ Uberspark_namespace.namespace_loader_build_dir) ];
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "removed loader build folder";
+		
 		end;
 
 		(true)	
