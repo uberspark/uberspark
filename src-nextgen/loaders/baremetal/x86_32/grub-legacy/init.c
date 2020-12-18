@@ -721,7 +721,7 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
 #if !defined (__DRT__)
 		uint32_t sl_entry_point;
 		uint16_t *sl_entry_point_offset = (uint16_t *)slbase;
-		typedef void(*FCALL)(void);
+		//typedef void(*FCALL)(void);
 		FCALL invokesl;
 #endif
 
