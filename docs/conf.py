@@ -90,10 +90,13 @@ breathe_projects_source = {
                                                             "src/hashes/sha1/sha1.c",
                                                             "src/hashes/sha256/sha256.c",
                                                             "src/mac/hmacsha1/hmacsha1.c",
+                                                            "src/mac/hmacsha256/hmacsha256.c",
                                                             "include/basedefs.h",
                                                             "include/ciphers/aes/aes.h",
                                                             "include/hashes/sha1/sha1.h",
-                                                            "include/mac/hmacsha1/hmacsha1.h"
+                                                            "include/hashes/sha256/sha256.h",
+                                                            "include/mac/hmacsha1/hmacsha1.h",
+                                                            "include/mac/hmacsha256/hmacsha256.h"
                                                         ] ),
     
      "uobjrtl-hw" : ( "../src-nextgen/uobjrtl/hw", ["src/generic/x86_32/intel/cpu_bsrl.cS",

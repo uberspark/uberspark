@@ -117,6 +117,34 @@ uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory
    :project: uobjrtl-crypto
 
 
+uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_init
+----------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_init
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_process
+-------------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_process
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_done
+----------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_done
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_memory
+------------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_memory
+   :project: uobjrtl-crypto
+
+
 uberspark_uobjrtl_crypto__ciphers_aes__rijndael_setup
 -----------------------------------------------------
 

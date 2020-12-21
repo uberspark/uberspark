@@ -65,6 +65,18 @@
             },
 
             {
+                "module-path" : "src/hashes/sha256/sha256.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_compress" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_init" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_process" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory_multi" }
+                    ]
+            },
+
+            {
                 "module-path" : "src/mac/hmacsha1/hmacsha1.c",
                 "module-funcdecls" :  [
                         { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init" },
@@ -72,7 +84,19 @@
                         { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_done" },
                         { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_memory" }
                     ]
+            },
+
+            {
+                "module-path" : "src/mac/hmacsha256/hmacsha256.c",
+                "module-funcdecls" :  [
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_init" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_process" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_done" },
+                        { "funcname" : "uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_memory" }
+                    ]
             }
+
+        
 
 
 

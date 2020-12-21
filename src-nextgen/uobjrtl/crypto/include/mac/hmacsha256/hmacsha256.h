@@ -29,30 +29,27 @@
 
 /*
  * Author: Amit Vasudevan (amitvasudevan@acm.org)
- *         Matt McCormack (matthew.mccormack@live.com)
+ *         matt mccormack (matthew.mccormack@live.com)
  *
  */
 
+#ifndef __UOBJRTL_CRYPTO__MAC_HMACSHA256_H__
+#define __UOBJRTL_CRYPTO__MAC_HMACSHA256_H__
 
-#ifndef __UOBJRTL_CRYPTO__HASHES_SHA256_H__
-#define __UOBJRTL_CRYPTO__HASHES_SHA256_H__
-
-#include <uberspark/uobjrtl/crypto/include/basedefs.h>
-
-#define SHA2_RESULTLEN          (256/8)
-#define SHA_DIGEST_LENGTH	SHA2_RESULTLEN
 
 #ifndef __ASSEMBLY__
 
+#include <uberspark/uobjrtl/crypto/include/basedefs.h>
+#include <uberspark/uobjrtl/crypto/include/hashes/sha256/sha256.h>
 
 
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_compress(hash_state *md, const unsigned char *buf);
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_init(hash_state * md);
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_process (hash_state * md, const unsigned char *in, unsigned long inlen);
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_done(hash_state * md, unsigned char *out);
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory(const unsigned char *in, unsigned long inlen, unsigned char *out, unsigned long *outlen);
-int uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory_multi(unsigned char *out, unsigned long *outlen,
-                      const unsigned char *in, unsigned long inlen, ...);
+int uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_init(hmac_state *hmac, const unsigned char *key, unsigned long keylen);
+int uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_process(hmac_state *hmac, const unsigned char *in, unsigned long inlen);
+int uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
+
+int uberspark_uobjrtl_crypto__mac_hmacsha256__hmac_sha256_memory(const unsigned char *key,  unsigned long keylen,
+                const unsigned char *in,   unsigned long inlen,
+                      unsigned char *out,  unsigned long *outlen);
 
 
 
@@ -60,5 +57,4 @@ int uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory_multi(unsigned char *
 #endif // __ASSEMBLY__
 
 
-#endif /* __UOBJRTL_CRYPTO__HASHES_SHA1_H__ */
-
+#endif /* __UOBJRTL_CRYPTO__MAC_HMACSHA1_H__ */
