@@ -54,6 +54,41 @@ uberspark_uobjrtl_crypto__hashes_sha1__sha1_memory_multi
    :project: uobjrtl-crypto
 
 
+uberspark_uobjrtl_crypto__hashes_sha256__sha256_init
+----------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__hashes_sha256__sha256_init
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__hashes_sha256__sha256_process
+-------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__hashes_sha256__sha256_process
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__hashes_sha256__sha256_done
+----------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__hashes_sha256__sha256_done
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory
+------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory
+   :project: uobjrtl-crypto
+
+
+uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory_multi
+------------------------------------------------------------
+
+.. doxygenfunction:: uberspark_uobjrtl_crypto__hashes_sha256__sha256_memory_multi
+   :project: uobjrtl-crypto
+
+
 uberspark_uobjrtl_crypto__mac_hmacsha1__hmac_sha1_init
 ------------------------------------------------------
 

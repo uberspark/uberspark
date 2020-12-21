@@ -88,6 +88,7 @@ breathe_projects_source = {
                                                             "src/ciphers/aes/aes_cbc.c",
                                                             "src/ciphers/aes/aes_tab.c",
                                                             "src/hashes/sha1/sha1.c",
+                                                            "src/hashes/sha256/sha256.c",
                                                             "src/mac/hmacsha1/hmacsha1.c",
                                                             "include/basedefs.h",
                                                             "include/ciphers/aes/aes.h",
