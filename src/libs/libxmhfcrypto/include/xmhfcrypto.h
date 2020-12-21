@@ -90,7 +90,9 @@ enum {
    CRYPT_PK_INVALID_SIZE,  /* Invalid size input for PK parameters */
 
    CRYPT_INVALID_PRIME_SIZE,/* Invalid size of prime requested */
-   CRYPT_PK_INVALID_PADDING /* Invalid padding on input */
+   CRYPT_PK_INVALID_PADDING, /* Invalid padding on input */
+
+   CRYPT_HASH_OVERFLOW      /* Hash applied to too many bits */
 };
 
 
@@ -98,9 +100,9 @@ enum {
 
 
 
-
-
-
+//tomcrypt_cfg.h
+typedef uint32_t LTC_FAST_TYPE;
+#define LTC_FAST_TYPE_PTR_CAST(x) ((LTC_FAST_TYPE*)(void*)(x))
 
 
 //tomcrypt_macros.h
@@ -135,25 +137,47 @@ enum {
 
 
 
-
-
-
-
-
-
-
-
 //tomcrypt_cipher.h
-//Empty for now
+
+struct rijndael_key{
+  uint32_t eK[60], dK[60];
+  int Nr;
+};
+
+typedef union Symmetric_key {
+  struct rijndael_key rijndael;
+  void *data;
+} symmetric_key;
 
 
+/** A block cipher CBC structure */
+trypdef struct {
+  /** The index of the cipher chosen */
+  int cipher,
+  /**The block size of the given cipher */
+    blocklen;
+  /** The current IV */
+  unsigned char IV[MAXBLOCKSIZE];
+  /** The scheduled key */
+  symmetric_key key;
+} symmetric_CBC;
+  
 
-
-
-
-
-
-
+/** cipher descriptor table, last entry has "name == NULL" to mark the end of the table */
+struct ltc_cipher_descriptor{
+  /** name of the cipher */
+  char *name;
+  /** internal ID */
+  unsigned char ID;
+  /** min keysize (octets) */
+  int min_key_length,
+  /** max keysize (octets) */
+    max_key_length,
+  /** block size (octets) */
+    block_length,
+  /** default number of rounds */
+    default_rounds;
+};
 
 
 
@@ -164,10 +188,16 @@ struct sha1_state {
     uint8_t buf[64];
 };
 
+struct sha256_state {
+    uint64_t length;
+    uint32_t state[8], curlen;
+    uint8_t buf[64];
+};
 
 typedef union Hash_state {
     char dummy[1];
     struct sha1_state sha1;
+    struct sha256_state sha256;
     void *data;
 } hash_state;
 
@@ -212,7 +242,16 @@ int func_name (hash_state * md, const unsigned char *in, unsigned long inlen)   
 
 
 //tomcrypt_mac.h
-//empty for now
+
+#define LTC_HMAC_BLOCKSIZE 64
+
+typedef struct Hmac_state {
+  hash_state md;
+  int        hash;
+  hash_state hashstate;
+  unsigned char key[LTC_HMAC_BLOCKSIZE];
+} hmac_state;
+
 
 
 
@@ -260,7 +299,9 @@ int func_name (hash_state * md, const unsigned char *in, unsigned long inlen)   
    #define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
-#define CHAR_BIT 	8
+#ifndef CHAR_BIT
+   #define CHAR_BIT 	8
+#endif
 
 
 
