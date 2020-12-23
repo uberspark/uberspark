@@ -15,8 +15,13 @@ let handler_opts
   (verb : int)
   (loglvl : int)
   (rootdir : string option)
+  (configdefs : string list)
   : opts = 
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "verb=%u, loglvl=%u" verb loglvl;
+  (*Uberspark.Logger.log "verb=%u, loglvl=%u" verb loglvl; *)
+  (*Uberspark.Logger.log "configdefs length=%u" (List.length configdefs);
+  List.iter (fun (value: string) -> 
+    Uberspark.Logger.log "value->%s" value;
+  ) configdefs;*)
 
   let l_rootdir = ref "" in
 
@@ -67,4 +72,9 @@ let opts_t =
       Arg.(value & opt (some string) None & info ["rd"; "root-dir"] ~docs ~docv:"DIR" ~doc)
   in
 
-  Term.(const handler_opts $ verb $ loglvl $ rootdir)
+  let configdefs =
+    let doc = "set value of configuration option $(docv)."  in
+      Arg.(value & opt_all string [] & info ["cfd"; "configdef"] ~docs ~docv:"CDEF" ~doc)
+  in
+
+  Term.(const handler_opts $ verb $ loglvl $ rootdir $ configdefs)
