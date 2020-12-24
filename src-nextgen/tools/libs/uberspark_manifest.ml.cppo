@@ -112,9 +112,9 @@ let json_node_uberspark_manifest_to_var
 
 			if(json_node_uberspark_manifest <> `Null) then
 				begin
-					json_node_uberspark_manifest_var.namespace <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
-					json_node_uberspark_manifest_var.version_min <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
-					json_node_uberspark_manifest_var.version_max <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
+					json_node_uberspark_manifest_var.namespace <- (json_list_to_string_list (json_node_uberspark_manifest |> member "namespace" |> to_list));
+					json_node_uberspark_manifest_var.version_min <- json_node_uberspark_manifest |> member "version_min" |> to_string;
+					json_node_uberspark_manifest_var.version_max <- json_node_uberspark_manifest |> member "version_max" |> to_string;
 					retval := true;
 				end
 			;
@@ -141,7 +141,7 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-manifest\":{";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"manifest_node_types\" : [ ";
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"namespace\" : [ ";
 	for i = 0 to ((List.length json_node_uberspark_manifest_var.namespace)-1) do
 		if i == ((List.length json_node_uberspark_manifest_var.namespace)-1) then begin
 			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.namespace i);
@@ -151,8 +151,8 @@ let json_node_uberspark_manifest_var_to_jsonstr
 	done;
 	retstr := !retstr ^ Printf.sprintf  "],";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.version_min;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.version_max;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"version_min\" : \"%s\"," json_node_uberspark_manifest_var.version_min;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"version_max\" : \"%s\"" json_node_uberspark_manifest_var.version_max;
 	retstr := !retstr ^ Printf.sprintf  "\n\t}";
 
 	retstr := !retstr ^ Printf.sprintf  "\n";

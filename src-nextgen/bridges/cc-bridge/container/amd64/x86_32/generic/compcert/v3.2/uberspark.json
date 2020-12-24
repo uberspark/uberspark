@@ -4,11 +4,11 @@
 {
 	/* manifest header */
 	"uberspark-manifest": {
-		"manifest_node_types": [
+		"namespace": [
 			"uberspark-bridge-cc"
 		],
-		"uberspark_min_version": "any",
-		"uberspark_max_version": "any"
+		"version_min": "any",
+		"version_max": "any"
 	},
 	"uberspark-bridge-cc": {
 		/* bridge header */

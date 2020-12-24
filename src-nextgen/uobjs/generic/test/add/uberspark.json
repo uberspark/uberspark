@@ -6,9 +6,9 @@ author: amit vasudevan (amitvasudevan@acm.org)
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-uobj" ],
-		"uberspark_min_version" : "5.1",
-		"uberspark_max_version" : "any"
+		"namespace" : [ "uberspark-uobj" ],
+		"version_min" : "5.1",
+		"version_max" : "any"
 	},
 
 	"uberspark-uobj" : {

@@ -4,9 +4,9 @@
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-config" ],
-		"uberspark_min_version" : "any",
-		"uberspark_max_version" : "any"
+		"namespace" : [ "uberspark-config" ],
+		"version_min" : "any",
+		"version_max" : "any"
 	},
 
 	"uberspark-config":{

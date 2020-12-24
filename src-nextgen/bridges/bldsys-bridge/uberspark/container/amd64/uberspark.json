@@ -5,9 +5,9 @@
 {
    	/* manifest header */
 	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-bridge-bldsys" ],
-		"uberspark_min_version" : "any",
-		"uberspark_max_version" : "any"
+		"namespace" : [ "uberspark-bridge-bldsys" ],
+		"version_min" : "any",
+		"version_max" : "any"
 	},
 
     "uberspark-bridge-bldsys" : {
