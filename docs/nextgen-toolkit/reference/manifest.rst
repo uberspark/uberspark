@@ -83,9 +83,9 @@ An example definition of the ``uberspark-manifesthdr`` node within |ubersparkmff
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobjcoll", "uberspark-config" ],
-            "uberspark_min_version" : "6.0.0",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-uobjcoll", "uberspark-config" ],
+            "version_min" : "6.0.0",
+            "version_max" : "any"
         }
     }
 
@@ -167,9 +167,9 @@ An example definition of the ``uberspark-config`` node within |ubersparkmff| fol
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-config" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-config" ],
+            "version_min" : "any",
+            "version_max" : "any"
         },
 
         "uberspark-config":{
@@ -284,9 +284,9 @@ An example definition of the ``uberspark-bridge-as`` node for the GNU-as Assembl
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-as" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-bridge-as" ],
+            "version_min" : "any",
+            "version_max" : "any"
         },
 
         "uberspark-bridge-as":{
@@ -349,9 +349,9 @@ An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C comp
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-cc" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-bridge-cc" ],
+            "version_min" : "any",
+            "version_max" : "any"
         },
 
         "uberspark-bridge-cc":{
@@ -417,9 +417,9 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-ld" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-bridge-ld" ],
+            "version_min" : "any",
+            "version_max" : "any"
         },
 
         "uberspark-bridge-ld":{
@@ -476,9 +476,9 @@ Frama-C verification framework, within |ubersparkmff| follows:
     
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-vf" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-bridge-vf" ],
+            "version_min" : "any",
+            "version_max" : "any"
         },
 
         "uberspark-bridge-vf":{
@@ -614,9 +614,9 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 
     {
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobj" ],
-            "uberspark_min_version" : "5.1",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-uobj" ],
+            "version_min" : "5.1",
+            "version_max" : "any"
         },
 
         "uberspark-uobj" : {
@@ -749,9 +749,9 @@ An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll|
     {
 
         "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobjcoll" ],
-            "uberspark_min_version" : "5.1",
-            "uberspark_max_version" : "any"
+            "namespace" : [ "uberspark-uobjcoll" ],
+            "version_min" : "5.1",
+            "version_max" : "any"
         },
 
         "uberspark-uobjcoll":{
