@@ -24,16 +24,16 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 
 (* uberspark-bridge-cc json node variable *)	
 let json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.Ld.json_node_uberspark_bridge_ld_t = {
-	json_node_bridge_hdr_var = { btype = "";
-				bname = "";
-				execname = "";
+	json_node_bridge_hdr_var = { category = "";
+				name = "";
+				executable_name = "";
 				path = "";
-				devenv = "";
+				dev_environment = "";
 				arch = "";
 				cpu = "";
 				version = "";
-				params = [];
-				container_fname = "";
+				parameters = [];
+				container_filename = "";
 				namespace = "";
 	};
 	params_prefix_lscript = "";
@@ -127,11 +127,11 @@ let store
 	()
 	: bool =
 	let retval = ref false in 
-    let bridge_ns = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
+    let bridge_ns = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category ^ "/" ^
+		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
+		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.name ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
 	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
 		Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^ bridge_ns in
@@ -144,9 +144,9 @@ let store
 	retval := store_to_file bridge_ns_json_filename;
 
 	(* check if bridge type is container, if so store dockerfile *)
-	if !retval && json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then
+	if !retval && json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category = "container" then
 		begin
-			let input_bridge_dockerfile = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.container_fname in 
+			let input_bridge_dockerfile = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.container_filename in 
 			let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
 				Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 		end
@@ -162,14 +162,14 @@ let build
 
 	let retval = ref false in
 
-	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then
+	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category = "container" then
 		begin
 			let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
+				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category ^ "/" ^
+				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
 				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
 				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
+				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.name ^ "/" ^
 				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
 			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
 
@@ -217,10 +217,10 @@ let invoke
 	let cc_includes = ref "" in
 
 	(* add linker executable and base parameters *)
-	d_cmd := json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.execname;
+	d_cmd := json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.executable_name;
 	List.iter (fun param ->
 		d_cmd := !d_cmd ^ " " ^ param ^ " ";
-	) json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.params;
+	) json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.parameters;
 
 
 	(* iterate over object file list and include them into linker command line *)
@@ -256,18 +256,18 @@ let invoke
 
 	(* construct bridge namespace *)
 	let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
+		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category ^ "/" ^
+		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
+		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.name ^ "/" ^
 		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
 
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* invoke the linker *)
-	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then begin
+	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.category = "container" then begin
 		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin

@@ -13,16 +13,16 @@
     "uberspark-bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "gnu-as",
-			"execname" : "gcc",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "gnu-as",
+			"executable_name" : "gcc",
+			"dev_environment" : "amd64",
 			"arch" : "x86_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [ "-m32" ],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"parameters" : [ "-m32" ],
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 		"params_prefix_obj" : "-c",

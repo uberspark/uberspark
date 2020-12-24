@@ -39,7 +39,7 @@
             },
             
             {
-                "module-path" : "src/generic/x86_32/intel/cpu_getsecparams.c",
+                "module-path" : "src/generic/x86_32/intel/cpu_getsecparameters.c",
                 "module-funcdecls" :  [
                         { "funcname" : "uberspark_uobjrtl_hw__generic_x86_32_intel__getsec_parameters" }
                     ]

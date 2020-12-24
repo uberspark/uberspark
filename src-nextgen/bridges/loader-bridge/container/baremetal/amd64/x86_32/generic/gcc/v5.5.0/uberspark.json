@@ -13,16 +13,16 @@
     "uberspark-bridge-loader" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "gcc",
-			"execname" : "gcc",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "gcc",
+			"executable_name" : "gcc",
+			"dev_environment" : "amd64",
 			"arch" : "x86_32",
 			"cpu" : "generic",
 			"version" : "v5.5.0",
 			"path" : ".",
-			"params" : [ ],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"parameters" : [ ],
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 		"bridge_prefix" : "baremetal",

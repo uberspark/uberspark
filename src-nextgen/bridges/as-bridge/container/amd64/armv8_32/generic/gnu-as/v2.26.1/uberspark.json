@@ -13,20 +13,20 @@
     "uberspark-bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "gnu-as",
-			"execname" : "arm-linux-gnueabihf-gcc",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "gnu-as",
+			"executable_name" : "arm-linux-gnueabihf-gcc",
+			"dev_environment" : "amd64",
 			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-			"params" : [
+			"parameters" : [
 				"-marm",
 				"-march=armv8-a",
 				"-mno-thumb-interwork"
 			],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 		"params_prefix_obj" : "-c",

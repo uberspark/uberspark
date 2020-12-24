@@ -13,16 +13,16 @@
     "uberspark-bridge-vf" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "frama-c",
-			"execname" : "frama-c",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "frama-c",
+			"executable_name" : "frama-c",
+			"dev_environment" : "amd64",
 			"arch" : "generic",
 			"cpu" : "generic",
 			"version" : "v20.0",
 			"path" : ".",
-			"params" : [ ],
-			"container_fname" : "uberspark-bridge.Dockerfile"
+			"parameters" : [ ],
+			"container_filename" : "uberspark-bridge.Dockerfile"
 		},
 
 		"bridge_cmd" : []

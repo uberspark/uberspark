@@ -302,7 +302,7 @@
 		let (pestatus, pesignal) = 
 				(Usextbinutils.mklib  
 					p_uobj#get_o_uobj_publicmethods_sentinels_lib_source_file_list
-					(p_uobj#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
+					(p_uobj#get_o_uobj_publicmethods_sentinels_liname ^ ".a")
 				) in
 				if (pesignal == true) || (pestatus != 0) then
 					begin

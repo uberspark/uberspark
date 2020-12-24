@@ -48,8 +48,8 @@ class uobject = object(self)
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
 		
-		val o_usmf_hdr_subtype = ref "";
-		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
+		val o_usmf_hdr_sucategory = ref "";
+		method get_o_usmf_hdr_sucategory = !o_usmf_hdr_sucategory;
 
 		val o_usmf_hdr_id = ref "";
 		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
@@ -78,8 +78,8 @@ class uobject = object(self)
 		val o_uobj_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_publicmethods_sentinels_hashtbl = o_uobj_publicmethods_sentinels_hashtbl;
 
-		val o_uobj_publicmethods_sentinels_libname = ref "";
-		method get_o_uobj_publicmethods_sentinels_libname = !o_uobj_publicmethods_sentinels_libname;
+		val o_uobj_publicmethods_sentinels_liname = ref "";
+		method get_o_uobj_publicmethods_sentinels_liname = !o_uobj_publicmethods_sentinels_liname;
 
 		val o_uobj_publicmethods_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_uobj_publicmethods_sentinels_lib_source_file_list = !o_uobj_publicmethods_sentinels_lib_source_file_list;
@@ -269,7 +269,7 @@ class uobject = object(self)
 			if (rval == false) then (false)
 			else
 			(* parse usmf-hdr node *)
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
+			let (rval, usmf_hdr_type, usmf_hdr_sucategory, usmf_hdr_id,
 					usmf_hdr_platform, usmf_hdr_cpu, usmf_hdr_arch) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
@@ -282,7 +282,7 @@ class uobject = object(self)
 			let dummy = 0 in
 				begin
 					o_usmf_hdr_type := usmf_hdr_type;								
-					o_usmf_hdr_subtype := usmf_hdr_subtype;
+					o_usmf_hdr_sucategory := usmf_hdr_sucategory;
 					o_usmf_hdr_id := usmf_hdr_id;
 					o_usmf_hdr_platform := usmf_hdr_platform;
 					o_usmf_hdr_cpu := usmf_hdr_cpu;
@@ -405,7 +405,7 @@ class uobject = object(self)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
 
 			(* initialize uobj sentinels lib name *)
-			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+			o_uobj_publicmethods_sentinels_liname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
 									
 			(true)
@@ -826,7 +826,7 @@ class uobject = object(self)
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
 			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
-				self#get_o_uobj_publicmethods_sentinels_libname;
+				self#get_o_uobj_publicmethods_sentinels_liname;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_uobj_publicmethods_sentinels_lib_source_file_list
@@ -840,7 +840,7 @@ class uobject = object(self)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
 						!o_uobj_publicmethods_sentinels_lib_source_file_list
-						(self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
+						(self#get_o_uobj_publicmethods_sentinels_liname ^ ".a")
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
@@ -1050,8 +1050,8 @@ class uobject = object(self)
 	
 			(* copy sentinels lib *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
-															self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
-				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_libname ^ ".a"); 
+															self#get_o_uobj_publicmethods_sentinels_liname ^ ".a")
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_liname ^ ".a"); 
 			
 							
 		()

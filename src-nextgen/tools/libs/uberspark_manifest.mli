@@ -60,16 +60,16 @@ module Bridge : sig
 
   (* bridge-hdr json node type *)
   type json_node_bridge_hdr_t = {
-    mutable btype : string;
-    mutable bname : string;
-    mutable execname: string;
-    mutable devenv: string;
+    mutable category : string;
+    mutable name : string;
+    mutable executable_name: string;
+    mutable dev_environment: string;
     mutable arch: string;
     mutable cpu: string;
     mutable version: string;
     mutable path: string;
-    mutable params: string list;
-    mutable container_fname: string;
+    mutable parameters: string list;
+    mutable container_filename: string;
     mutable namespace: string;
   }
 

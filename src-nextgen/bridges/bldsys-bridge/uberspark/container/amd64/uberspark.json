@@ -13,16 +13,16 @@
     "uberspark-bridge-bldsys" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "uberspark",
-			"execname" : "uberspark",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "uberspark",
+			"executable_name" : "uberspark",
+			"dev_environment" : "amd64",
 			"arch" : "generic",
 			"cpu" : "generic",
 			"version" : "v6.0.0",
 			"path" : ".",
-			"params" : [ ],
-			"container_fname" : "uberspark-bridge.Dockerfile"
+			"parameters" : [ ],
+			"container_filename" : "uberspark-bridge.Dockerfile"
 		},
 
         "bridge_cmd" : []

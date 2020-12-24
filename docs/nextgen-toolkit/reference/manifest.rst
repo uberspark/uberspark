@@ -210,25 +210,25 @@ The JSON declaration of the common ``bridge-hdr`` sub-node is as below:
 
 .. json:object:: bridge-hdr
 
-   :property btype: bridge type
-   :proptype btype: string
-   :options btype: "container", "native"
+   :property category: bridge type
+   :proptype category: string
+   :options category: "container", "native"
 
-   :property bname: <bridge-name> as identified by |uberspark| 
-   :proptype bname: string
-   :options bname: "<brige-name>"
+   :property name: <bridge-name> as identified by |uberspark| 
+   :proptype name: string
+   :options name: "<brige-name>"
 
-   :property execname: <executable-name> that carries out the functionality of the bridge 
-   :proptype execname: string
-   :options execname: "<executable-name>"
+   :property executable_name: <executable-name> that carries out the functionality of the bridge 
+   :proptype executable_name: string
+   :options executable_name: "<executable-name>"
 
-   :property devenv: development environment where the bridge executable runs 
-   :proptype devenv: string
-   :options devenv: "amd64"
+   :property dev_environment: development environment where the bridge executable runs 
+   :proptype dev_environment: string
+   :options dev_environment: "amd64"
 
-   :property devenv: development environment where the bridge executable runs 
-   :proptype devenv: string
-   :options devenv: "amd64"
+   :property dev_environment: development environment where the bridge executable runs 
+   :proptype dev_environment: string
+   :options dev_environment: "amd64"
 
    :property arch: CPU architecture supported by the bridge 
    :proptype arch: string
@@ -242,16 +242,16 @@ The JSON declaration of the common ``bridge-hdr`` sub-node is as below:
    :proptype version: string
    :options version: "<version>"
 
-   :property path: filesystem <path> to the bridge executable (ignored if btype is "container")
+   :property path: filesystem <path> to the bridge executable (ignored if category is "container")
    :proptype path: string
    :options path: "<path>"
 
-   :property params: comma delimited (optional) string options for the bridge executable
-   :proptype params: string list
+   :property parameters: comma delimited (optional) string options for the bridge executable
+   :proptype parameters: string list
 
-   :property container_fname: <filename> of the container dockerfile (ignored if btype is "native")
-   :proptype container_fname: string
-   :options container_fname: "<filename>"
+   :property container_filename: <filename> of the container dockerfile (ignored if category is "native")
+   :proptype container_filename: string
+   :options container_filename: "<filename>"
 
 
 The follow sections describe the bridge specific manifest node declarations for supported bridges. 
@@ -291,16 +291,16 @@ An example definition of the ``uberspark-bridge-as`` node for the GNU-as Assembl
 
         "uberspark-bridge-as":{
             "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gnu-as",
-                "execname" : "gcc",
-                "devenv" : "amd64",
+                "category" : "container",
+                "name" : "gnu-as",
+                "executable_name" : "gcc",
+                "dev_environment" : "amd64",
                 "arch" : "x86_32",
                 "cpu" : "generic",
                 "version" : "v2.26.1",
                 "path" : ".",
-                "params" : [ "-m32" ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
+                "parameters" : [ "-m32" ],
+                "container_filename" : "uberspark_bridges.Dockerfile"
             },
 
             "params_prefix_obj" : "-c",
@@ -356,16 +356,16 @@ An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C comp
 
         "uberspark-bridge-cc":{
             "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gcc",
-                "execname" : "gcc",
-                "devenv" : "amd64",
+                "category" : "container",
+                "name" : "gcc",
+                "executable_name" : "gcc",
+                "dev_environment" : "amd64",
                 "arch" : "x86_32",
                 "cpu" : "generic",
                 "version" : "v5.4.0",
                 "path" : ".",
-                "params" : [ "-m32" ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
+                "parameters" : [ "-m32" ],
+                "container_filename" : "uberspark_bridges.Dockerfile"
             },
 
             "params_prefix_obj" : "-c",
@@ -424,16 +424,16 @@ An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker,
 
         "uberspark-bridge-ld":{
             "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gnu-ld",
-                "execname" : "ld",
-                "devenv" : "amd64",
+                "category" : "container",
+                "name" : "gnu-ld",
+                "executable_name" : "ld",
+                "dev_environment" : "amd64",
                 "arch" : "x86_32",
                 "cpu" : "generic",
                 "version" : "v2.26.1",
                 "path" : ".",
-                "params" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
+                "parameters" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
+                "container_filename" : "uberspark_bridges.Dockerfile"
             },
 
             "params_prefix_lscript" : "-T",
@@ -483,16 +483,16 @@ Frama-C verification framework, within |ubersparkmff| follows:
 
         "uberspark-bridge-vf":{
             "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "frama-c",
-                "execname" : "frama-c",
-                "devenv" : "amd64",
+                "category" : "container",
+                "name" : "frama-c",
+                "executable_name" : "frama-c",
+                "dev_environment" : "amd64",
                 "arch" : "generic",
                 "cpu" : "generic",
                 "version" : "v20.0",
                 "path" : ".",
-                "params" : [ ],
-                "container_fname" : "uberspark-bridge.Dockerfile"
+                "parameters" : [ ],
+                "container_filename" : "uberspark-bridge.Dockerfile"
             },
 
             "bridge_cmd" : []
@@ -537,7 +537,7 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property sources: |uobj| sources definition sub-node 
     :proptype sources: :json:object:`sources`
 
-    :property publicmethods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-params-decl>", "<publicmethods-numberof-params">]*
+    :property publicmethods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-parameters-decl>", "<publicmethods-numberof-parameters">]*
     :proptype publicmethods: {}
 
     :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*

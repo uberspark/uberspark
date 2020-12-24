@@ -30,7 +30,7 @@ let usmf_memoffsets = ref false;;
 
 let slab_idtoname = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 let slab_idtotype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
-let slab_idtosubtype = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
+let slab_idtosucategory = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
 
 let slab_nametoid = ((Hashtbl.create 32) : ((string,int)  Hashtbl.t));;
 let slab_idtodir = ((Hashtbl.create 32) : ((int,string)  Hashtbl.t));;
@@ -136,7 +136,7 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 		 	let open Yojson.Basic.Util in
 		 	let uobj_name = uobj_entry |> member "uobj-name" |> to_string in
 		 	let uobj_type = uobj_entry |> member "uobj-type" |> to_string in
-		 	let uobj_subtype = uobj_entry |> member "uobj-subtype" |> to_string in
+		 	let uobj_sucategory = uobj_entry |> member "uobj-sucategory" |> to_string in
 			(* let uobj_dir = (Filename.dirname uobj_mf_filename) in *)
 			(*let uobj_dir = (!usmf_rootdir ^ uobj_mf_filename) in 
 			let uobj_gsmfile = (!usmf_rootdir ^ uobj_dir ^ "/" ^ uobj_name ^ ".gsm.pp") in
@@ -145,10 +145,10 @@ let usmf_populate_uobj_base_characteristics uobj_entry uobj_mf_filename uobj_id 
 
 				Uslog.logf "libusmf" Uslog.Debug "uobj-name:%s" uobj_name;
 				Uslog.logf "libusmf" Uslog.Debug "uobj-type:%s" uobj_type;
-				Uslog.logf "libusmf" Uslog.Debug "uobj-subtype:%s" uobj_subtype;
+				Uslog.logf "libusmf" Uslog.Debug "uobj-sucategory:%s" uobj_sucategory;
 				(*Hashtbl.add slab_idtoname uobj_id uobj_name;*)
 				Hashtbl.add slab_idtotype uobj_id uobj_type;
-				Hashtbl.add slab_idtosubtype uobj_id uobj_subtype;
+				Hashtbl.add slab_idtosucategory uobj_id uobj_sucategory;
 				(*Hashtbl.add slab_nametoid uobj_name uobj_id;
 				Hashtbl.add slab_idtodir uobj_id uobj_dir;
 				Hashtbl.add slab_idtogsm uobj_id uobj_gsmfile;
@@ -183,7 +183,7 @@ let usmf_populate_uobj_uapifunctions uobj_entry uobj_id =
 							let tag_ufn_uapikey = ref "" in
 									
 							(* uapi function definition tag, should only appear in uapi slabs *)
-							if (compare (Hashtbl.find slab_idtosubtype uobj_id) "UAPI") = 0 then
+							if (compare (Hashtbl.find slab_idtosucategory uobj_id) "UAPI") = 0 then
 								begin
 									
 									(* make key *)
@@ -229,32 +229,32 @@ let usmf_populate_uobj_callmasks uobj_entry uobj_id =
 				begin
 					while (!i < (List.length uobj_0_callees_list)) do
 						begin
-		            let tag_s_destslabname = (trim (List.nth uobj_0_callees_list !i)) in
+		            let tag_s_destslaname = (trim (List.nth uobj_0_callees_list !i)) in
 		            let tag_s_mask = ref 0 in
-									Uslog.logf "libusmf" Uslog.Debug "destslabname=%s, id=%d\n" tag_s_destslabname (Hashtbl.find slab_nametoid tag_s_destslabname);
+									Uslog.logf "libusmf" Uslog.Debug "destslaname=%s, id=%d\n" tag_s_destslaname (Hashtbl.find slab_nametoid tag_s_destslaname);
 		            	
-		            	if (Hashtbl.mem slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname)) then
+		            	if (Hashtbl.mem slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslaname)) then
 		            		begin
-		            			tag_s_mask := Hashtbl.find slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname);
+		            			tag_s_mask := Hashtbl.find slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslaname);
 		            			tag_s_mask := !tag_s_mask lor (1 lsl uobj_id);
-		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslaname) !tag_s_mask;
 		            		end
 		            	else
 		            		begin
 		            			tag_s_mask := (1 lsl uobj_id);
-		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslabname) !tag_s_mask;
+		            			Hashtbl.add slab_idtocallmask (Hashtbl.find slab_nametoid tag_s_destslaname) !tag_s_mask;
 		            		end
 		            	;
 		            
 		            	if (Hashtbl.mem slab_idtocalleemask uobj_id) then
 		            		begin
 		            			tag_s_mask := Hashtbl.find slab_idtocalleemask uobj_id;
-		            			tag_s_mask := !tag_s_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			tag_s_mask := !tag_s_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_s_destslaname));
 		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
 		            		end
 		            	else
 		            		begin
-		            			tag_s_mask := (1 lsl (Hashtbl.find slab_nametoid tag_s_destslabname));
+		            			tag_s_mask := (1 lsl (Hashtbl.find slab_nametoid tag_s_destslaname));
 		            			Hashtbl.add slab_idtocalleemask uobj_id !tag_s_mask;
 		            		end
 		            	;
@@ -317,8 +317,8 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 					while (!i < (List.length uobj_0_uapifn)) do
 						begin
 
-									let tag_u_destslabname = (trim (List.nth uobj_0_uapifn_uobjname !i)) in
-									let tag_u_destslabid = (Hashtbl.find slab_nametoid tag_u_destslabname) in
+									let tag_u_destslaname = (trim (List.nth uobj_0_uapifn_uobjname !i)) in
+									let tag_u_destslabid = (Hashtbl.find slab_nametoid tag_u_destslaname) in
 									let tag_u_uapifn = int_of_string (trim (List.nth uobj_0_uapifn_id !i)) in
 									let tag_u_uapifnpre = (trim (List.nth uobj_0_uapifn_opt1 !i)) in
 									let tag_u_uapifncheckassert = (trim (List.nth uobj_0_uapifn_opt2 !i)) in
@@ -344,7 +344,7 @@ let usmf_populate_uobj_uapicallmasks uobj_entry uobj_id =
 										;
 
 										(* make key *)
-										tag_u_uapikey := tag_u_destslabname ^ "_" ^ (trim (List.nth uobj_0_uapifn_id !i));
+										tag_u_uapikey := tag_u_destslaname ^ "_" ^ (trim (List.nth uobj_0_uapifn_id !i));
 										Uslog.logf "libusmf" Uslog.Debug "usmf_populate_uobj_uapicallmasks:uapi key = %s\n" !tag_u_uapikey;
 										if (Hashtbl.mem uapi_fnccomppre !tag_u_uapikey) then
 											begin
@@ -527,7 +527,7 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 					while (!i < (List.length uobj_0_mem)) do
 						begin
 		            let tag_rm_qual =  (trim (List.nth uobj_0_mem_accesstype !i)) in
-		            let tag_rm_slabname =  (trim (List.nth uobj_0_mem_uobj_name !i)) in
+		            let tag_rm_slaname =  (trim (List.nth uobj_0_mem_uobj_name !i)) in
     						let tag_rm_mask = ref 0 in
     
     						if (compare tag_rm_qual "read") = 0 then 
@@ -535,12 +535,12 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 					                if (Hashtbl.mem slab_idtomemgrantreadcaps uobj_id) then
 					                	begin
 						                    tag_rm_mask := Hashtbl.find slab_idtomemgrantreadcaps uobj_id; 
-						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slaname));
 						                    Hashtbl.add slab_idtomemgrantreadcaps uobj_id !tag_rm_mask;
 					                	end
 					                else
 					                	begin
-						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slaname));
 						                    Hashtbl.add slab_idtomemgrantreadcaps uobj_id !tag_rm_mask;
 					                	end
 					                ;
@@ -550,12 +550,12 @@ let usmf_populate_uobj_resource_memory uobj_entry uobj_id =
 					                if (Hashtbl.mem slab_idtomemgrantwritecaps uobj_id) then
 					                	begin
 						                    tag_rm_mask := Hashtbl.find slab_idtomemgrantwritecaps uobj_id; 
-						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    tag_rm_mask := !tag_rm_mask lor (1 lsl (Hashtbl.find slab_nametoid tag_rm_slaname));
 						                    Hashtbl.add slab_idtomemgrantwritecaps uobj_id !tag_rm_mask;
 					                	end
 					                else
 					                	begin
-						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slabname));
+						                    tag_rm_mask := (1 lsl (Hashtbl.find slab_nametoid tag_rm_slaname));
 						                    Hashtbl.add slab_idtomemgrantwritecaps uobj_id !tag_rm_mask;
 					                	end
 					                ;
@@ -1033,7 +1033,7 @@ let usmf_parse_uobj_mf uobj_mf_filename uobj_mmap_filename =
 						usmf_populate_uobj_uapicallmasks uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_devices uobj_entry !uobj_id;
 						usmf_populate_uobj_resource_memory uobj_entry !uobj_id;
-	          if (!usmf_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !uobj_id) "XRICHGUEST") <> 0) ) then
+	          if (!usmf_memoffsets && ((compare (Hashtbl.find slab_idtosucategory !uobj_id) "XRICHGUEST") <> 0) ) then
 							begin
 								usmf_parse_uobj_mmap uobj_mmap_filename !uobj_id;
 								usmf_populate_uobj_export_functions uobj_entry !uobj_id;
@@ -1067,9 +1067,9 @@ let usmf_parse_uobjs g_memoffsets =
 				Uslog.logf "libusmf" Uslog.Debug "Finished uobj_id=%d" !i;      			
 				Uslog.logf "libusmf" Uslog.Debug "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
 				Uslog.logf "libusmf" Uslog.Debug "  slabdir=%s" (Hashtbl.find slab_idtodir !i);      			
-				Uslog.logf "libusmf" Uslog.Debug "  slabname=%s" (Hashtbl.find slab_idtoname !i);      			
-				Uslog.logf "libusmf" Uslog.Debug "  slabtype=%s" (Hashtbl.find slab_idtotype !i);      			
-				Uslog.logf "libusmf" Uslog.Debug "  slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i);      			
+				Uslog.logf "libusmf" Uslog.Debug "  slaname=%s" (Hashtbl.find slab_idtoname !i);      			
+				Uslog.logf "libusmf" Uslog.Debug "  slacategory=%s" (Hashtbl.find slab_idtotype !i);      			
+				Uslog.logf "libusmf" Uslog.Debug "  slabsucategory=%s" (Hashtbl.find slab_idtosucategory !i);      			
 				Uslog.logf "libusmf" Uslog.Debug "  slabgsmfile=%s" (Hashtbl.find slab_idtogsm !i);      			
 				Uslog.logf "libusmf" Uslog.Debug "  slabmmapfile=%s" (Hashtbl.find slab_idtommapfile !i);      			
 

@@ -13,15 +13,15 @@
     "uberspark-bridge-cc" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "gcc",
-			"execname" : "arm-linux-gnueabihf-gcc-4.9",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "gcc",
+			"executable_name" : "arm-linux-gnueabihf-gcc-4.9",
+			"dev_environment" : "amd64",
 			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v4.9.3",
 			"path" : ".",
-		    "params" : [
+		    "parameters" : [
 			    "-nostdinc",
 			    "-nostdlib",
            	    "-nostartfiles",
@@ -30,7 +30,7 @@
 				"-march=armv8-a",
 				"-mno-thumb-interwork"
 			],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 	"params_prefix_obj" : "-c",

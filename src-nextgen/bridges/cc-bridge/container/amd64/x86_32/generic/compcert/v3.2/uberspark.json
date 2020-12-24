@@ -13,20 +13,20 @@
 	"uberspark-bridge-cc": {
 		/* bridge header */
 		"bridge-hdr": {
-			"btype": "container",
-			"bname": "compcert",
-			"execname": "ccomp",
-			"devenv": "amd64",
+			"category": "container",
+			"name": "compcert",
+			"executable_name": "ccomp",
+			"dev_environment": "amd64",
 			"arch": "x86_32",
 			"cpu": "generic",
 			"version": "v3.2",
 			"path": ".",
-			"params": [
+			"parameters": [
 				"-fpacked-structs",
 				"-fstruct-passing",
 				"-Wno-c11-extensions"
 			],
-			"container_fname": "uberspark_bridges.Dockerfile"
+			"container_filename": "uberspark_bridges.Dockerfile"
 		},
 		"params_prefix_obj": "-c",
 		"params_prefix_asm": "-S",

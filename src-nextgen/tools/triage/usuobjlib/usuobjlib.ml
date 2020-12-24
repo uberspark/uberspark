@@ -35,7 +35,7 @@ module Usuobjlib =
 
 			Uslog.logf log_tag Uslog.Info "Done.\n";
 
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
+			let (rval, usmf_hdr_type, usmf_hdr_sucategory, usmf_hdr_id,
 					usmf_platform, usmf_cpu, usmf_arch) =
 					Usmanifest.parse_node_usmf_hdr mf_json in
 				

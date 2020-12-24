@@ -13,17 +13,17 @@
 	"uberspark-bridge-ld" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "gnu-ld",
-			"execname" : "arm-linux-gnueabihf-ld",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "gnu-ld",
+			"executable_name" : "arm-linux-gnueabihf-ld",
+			"dev_environment" : "amd64",
 			"arch" : "armv8_32",
 			"cpu" : "generic",
 			"version" : "v2.26.1",
 			"path" : ".",
-		        "params" : [
+		        "parameters" : [
 			],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 		"params_prefix_lscript" : "-T",

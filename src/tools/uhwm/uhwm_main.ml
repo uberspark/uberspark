@@ -365,7 +365,7 @@ class embed_hwm_visitor = object (self)
 		    		| TFun(rettype, args, isva, a) -> 
 		    			(
 							let argslist = (Cil.argsToList args) in
-								Self.result "\n    params=%u" (List.length argslist);	          
+								Self.result "\n    parameters=%u" (List.length argslist);	          
 								for index = 0 to ((List.length argslist)-1) do
 									begin
 									let tuple = (List.nth argslist index) in
@@ -815,7 +815,7 @@ class embed_hwm_visitor = object (self)
 					    	| TFun(rettype, args, isva, a) -> 
 					    		(
 									let argslist = (Cil.argsToList args) in
-										Self.result "\n function type consistent, params=%u" (List.length argslist);	          
+										Self.result "\n function type consistent, parameters=%u" (List.length argslist);	          
 										Hashtbl.add g_func_decls f.svar.vname f.svar;
 										(*for index = 0 to ((List.length argslist)-1) do
 											begin
@@ -874,7 +874,7 @@ class embed_hwm_visitor = object (self)
 							if (!g_uhwm_pass = uhwm_pass_1) then
 								begin
 									let argslist = (Cil.argsToList args) in
-										Self.result "\nvar decl: function type, params=%u" (List.length argslist);	          
+										Self.result "\nvar decl: function type, parameters=%u" (List.length argslist);	          
 										Hashtbl.add g_func_decls var.vname var;
 										(*for index = 0 to ((List.length argslist)-1) do
 											begin

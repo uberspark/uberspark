@@ -13,16 +13,16 @@
 	"uberspark-bridge-as" : {
 		/* bridge header */
 		"bridge-hdr":{
-			"btype" : "container",
-			"bname" : "casm",
-			"execname" : "casm",
-			"devenv" : "amd64",
+			"category" : "container",
+			"name" : "casm",
+			"executable_name" : "casm",
+			"dev_environment" : "amd64",
 			"arch" : "x86_32",
 			"cpu" : "generic",
 			"version" : "vlatest",
 			"path" : ".",
-			"params" : [ ],
-			"container_fname" : "uberspark_bridges.Dockerfile"
+			"parameters" : [ ],
+			"container_filename" : "uberspark_bridges.Dockerfile"
 		},
 
 		"params_prefix_obj" : "-c",
