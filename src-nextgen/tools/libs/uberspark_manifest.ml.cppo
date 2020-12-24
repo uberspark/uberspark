@@ -17,9 +17,9 @@ open Yojson
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
-	mutable f_manifest_node_types : string list;
-	mutable f_uberspark_min_version   : string;
-	mutable f_uberspark_max_version   : string;
+	mutable namespace : string list;
+	mutable version_min   : string;
+	mutable version_max   : string;
 };;
 
 
@@ -112,9 +112,9 @@ let json_node_uberspark_manifest_to_var
 
 			if(json_node_uberspark_manifest <> `Null) then
 				begin
-					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
-					json_node_uberspark_manifest_var.f_uberspark_min_version <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
-					json_node_uberspark_manifest_var.f_uberspark_max_version <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
+					json_node_uberspark_manifest_var.namespace <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
+					json_node_uberspark_manifest_var.version_min <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
+					json_node_uberspark_manifest_var.version_max <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
 					retval := true;
 				end
 			;
@@ -142,17 +142,17 @@ let json_node_uberspark_manifest_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-manifest\":{";
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"manifest_node_types\" : [ ";
-	for i = 0 to ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) do
-		if i == ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) then begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+	for i = 0 to ((List.length json_node_uberspark_manifest_var.namespace)-1) do
+		if i == ((List.length json_node_uberspark_manifest_var.namespace)-1) then begin
+			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.namespace i);
 		end else begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
+			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.namespace i);
 		end;
 	done;
 	retstr := !retstr ^ Printf.sprintf  "],";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.f_uberspark_min_version;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.f_uberspark_max_version;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.version_min;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.version_max;
 	retstr := !retstr ^ Printf.sprintf  "\n\t}";
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
@@ -180,9 +180,9 @@ let get_json_for_manifest_node_type
 
 		let manifest_json = Yojson.Basic.from_file manifest_filename in
 		let json_node_uberspark_manifest_var : json_node_uberspark_manifest_t = 
-			{ 	f_manifest_node_types = []; 
-				f_uberspark_max_version = "";
-				f_uberspark_min_version = "";} in
+			{ 	namespace = []; 
+				version_max = "";
+				version_min = "";} in
 		let json_node_uberspark_manifest = (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag
 			manifest_json) in 
 		let rval_json_node_uberspark_manifest_var = json_node_uberspark_manifest_to_var json_node_uberspark_manifest
@@ -190,7 +190,7 @@ let get_json_for_manifest_node_type
 
 		if 	rval_json_node_uberspark_manifest_var = true then begin
 
-			if (List.mem manifest_node_type json_node_uberspark_manifest_var.f_manifest_node_types) then begin
+			if (List.mem manifest_node_type json_node_uberspark_manifest_var.namespace) then begin
 				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
 				retjson_uberspark_manifest := json_node_uberspark_manifest;
 				retval := true;

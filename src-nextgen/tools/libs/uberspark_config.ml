@@ -25,9 +25,9 @@ open Yojson
 
 (* uberspark-manifest json node variable *)
 let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
-	f_manifest_node_types = [ "uberspark-config" ];
-	f_uberspark_min_version = "any";
-	f_uberspark_max_version = "any";
+	namespace = [ "uberspark-config" ];
+	version_min = "any";
+	version_max = "any";
 };;
 
 
