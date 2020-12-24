@@ -23,11 +23,11 @@
 		"uobjcoll_binary_image_hdr_section_size" : "0x200000",
 		"uobjcoll_binary_image_section_alignment" : "0x200000",
 	
-		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
-		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
-		"bridge_casm_bridge" : "container/amd64/x86_32/generic/casm/vlatest",
-		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1",
-		"bridge_vf_bridge_uberspark" : "container/amd64/generic/generic/uberspark/v6.0.0"
+		"cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0",
+		"as_bridge_namespace" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
+		"casm_bridge_namespace" : "container/amd64/x86_32/generic/casm/vlatest",
+		"ld_bridge_namespace" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1",
+		"uberspark_vf_bridge_namespace" : "container/amd64/generic/generic/uberspark/v6.0.0"
 
 	}
 

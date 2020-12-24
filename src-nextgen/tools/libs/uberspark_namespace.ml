@@ -110,9 +110,9 @@ let namespace_bridge_loader_bridge_name = "loader-bridge";;
 let namespace_bridge_bldsys_bridge_name = "bldsys-bridge";;
 
 let namespace_bridge_ar_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ar_bridge_name;;
-let namespace_bridge_as_bridge = namespace_bridge ^ "/" ^ namespace_bridge_as_bridge_name;;
-let namespace_bridge_cc_bridge = namespace_bridge ^ "/" ^ namespace_bridge_cc_bridge_name;;
-let namespace_bridge_ld_bridge = namespace_bridge ^ "/" ^ namespace_bridge_ld_bridge_name;;
+let namespace_as_bridge_namespace = namespace_bridge ^ "/" ^ namespace_bridge_as_bridge_name;;
+let namespace_cc_bridge_namespace = namespace_bridge ^ "/" ^ namespace_bridge_cc_bridge_name;;
+let namespace_ld_bridge_namespace = namespace_bridge ^ "/" ^ namespace_bridge_ld_bridge_name;;
 let namespace_bridge_pp_bridge = namespace_bridge ^ "/" ^ namespace_bridge_pp_bridge_name;;
 let namespace_bridge_vf_bridge = namespace_bridge ^ "/" ^ namespace_bridge_vf_bridge_name;;
 let namespace_bridge_loader_bridge = namespace_bridge ^ "/" ^ namespace_bridge_loader_bridge_name;;

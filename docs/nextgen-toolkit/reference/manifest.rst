@@ -148,17 +148,17 @@ The JSON declaration of the ``uberspark-config`` node is as below:
    :proptype uobjcoll_binary_image_section_alignment: string
    :options uobjcoll_binary_image_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property bridge_cc_bridge: C compiler <bridge namespace path>
-   :proptype bridge_cc_bridge: string
-   :options bridge_cc_bridge: "<bridge namespace path>"
+   :property cc_bridge_namespace: C compiler <bridge namespace path>
+   :proptype cc_bridge_namespace: string
+   :options cc_bridge_namespace: "<bridge namespace path>"
 
-   :property bridge_as_bridge: Assembler <bridge namespace path>
-   :proptype bridge_as_bridge: string
-   :options bridge_as_bridge: "<bridge namespace path>"
+   :property as_bridge_namespace: Assembler <bridge namespace path>
+   :proptype as_bridge_namespace: string
+   :options as_bridge_namespace: "<bridge namespace path>"
 
-   :property bridge_ld_bridge: Linker <bridge namespace path>
-   :proptype bridge_ld_bridge: string
-   :options bridge_ld_bridge: "<bridge namespace path>"
+   :property ld_bridge_namespace: Linker <bridge namespace path>
+   :proptype ld_bridge_namespace: string
+   :options ld_bridge_namespace: "<bridge namespace path>"
 
 
 An example definition of the ``uberspark-config`` node within |ubersparkmff| follows:
@@ -174,11 +174,11 @@ An example definition of the ``uberspark-config`` node within |ubersparkmff| fol
 
         "uberspark-config":{
     		"binary_uobj_section_alignment" : "0x200000",
-    		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0"
+    		"cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0"
         }
     }
 
-The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *bridge_cc_bridge* 
+The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *cc_bridge_namespace* 
 configuration settings within the current staging environment.
 
 

@@ -184,11 +184,11 @@ module Config : sig
     mutable uobjcoll_binary_image_section_alignment : int;
 
     (* bridge related configuration settings *)	
-    mutable bridge_cc_bridge : string;
-    mutable bridge_as_bridge : string;
-    mutable bridge_casm_bridge : string;
-    mutable bridge_ld_bridge : string;
-  	mutable bridge_vf_bridge_uberspark : string;
+    mutable cc_bridge_namespace : string;
+    mutable as_bridge_namespace : string;
+    mutable casm_bridge_namespace : string;
+    mutable ld_bridge_namespace : string;
+  	mutable uberspark_vf_bridge_namespace : string;
 
   }
 

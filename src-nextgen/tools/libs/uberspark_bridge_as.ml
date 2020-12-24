@@ -101,7 +101,7 @@ let load
 	(bridge_ns : string)
 	: bool =
 	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^ bridge_ns ^ "/" ^
+		Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^ bridge_ns ^ "/" ^
 		Uberspark_namespace.namespace_root_mf_filename in
 		(load_from_file bridge_ns_json_path)
 ;;
@@ -133,7 +133,7 @@ let store
 		json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.name ^ "/" ^
 		json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.version in
 	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^ bridge_ns in
+		Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^ bridge_ns in
 	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
 		Uberspark_namespace.namespace_root_mf_filename in
 
@@ -163,7 +163,7 @@ let build
 
 	if json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.category = "container" then
 		begin
-			let bridge_ns = Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^
+			let bridge_ns = Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^
 				json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.category ^ "/" ^
 				json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
 				json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.arch ^ "/" ^
@@ -262,7 +262,7 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_namespace.namespace_bridge_as_bridge ^ "/" ^
+	let bridge_ns = Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^
 		json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.category ^ "/" ^
 		json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
 		json_node_uberspark_bridge_as_var.json_node_bridge_hdr_var.arch ^ "/" ^

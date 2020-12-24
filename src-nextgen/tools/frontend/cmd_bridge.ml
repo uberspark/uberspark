@@ -218,11 +218,11 @@ let handler_bridges_action_dump
                       if cmd_bridges_opts.ar_bridge then begin            
                         bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; end
                       else if cmd_bridges_opts.as_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_as_bridge_namespace; end
                       else if cmd_bridges_opts.cc_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_cc_bridge_namespace; end
                       else if cmd_bridges_opts.ld_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_ld_bridge_namespace; end
                       else if cmd_bridges_opts.pp_bridge then begin
                         bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; end
                       else if cmd_bridges_opts.vf_bridge then begin
@@ -410,7 +410,7 @@ let handler_bridges_action_config
 
 
           (*
-            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; 
+            bridge_ns_prefix := Uberspark.Namespace.namespace_cc_bridge_namespace; 
             bridge_type := [ Uberspark.Namespace.namespace_bridge_cc_bridge_name ]; end
           
           
@@ -421,13 +421,13 @@ let handler_bridges_action_config
             bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; 
             bridge_type := [ Uberspark.Namespace.namespace_bridge_ar_bridge_name ]; end
           else if cmd_bridges_opts.as_bridge then begin
-            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; 
+            bridge_ns_prefix := Uberspark.Namespace.namespace_as_bridge_namespace; 
             bridge_type := [ Uberspark.Namespace.namespace_bridge_as_bridge_name ]; end
           else if cmd_bridges_opts.cc_bridge then begin
-            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; 
+            bridge_ns_prefix := Uberspark.Namespace.namespace_cc_bridge_namespace; 
             bridge_type := [ Uberspark.Namespace.namespace_bridge_cc_bridge_name ]; end
           else if cmd_bridges_opts.ld_bridge then begin
-            bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; 
+            bridge_ns_prefix := Uberspark.Namespace.namespace_ld_bridge_namespace; 
             bridge_type := [ Uberspark.Namespace.namespace_bridge_ld_bridge_name ]; end
           else if cmd_bridges_opts.pp_bridge then begin
             bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; 
@@ -521,11 +521,11 @@ let handler_bridges_action_remove
                       if cmd_bridges_opts.ar_bridge then begin            
                         bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ar_bridge; end
                       else if cmd_bridges_opts.as_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_as_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_as_bridge_namespace; end
                       else if cmd_bridges_opts.cc_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_cc_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_cc_bridge_namespace; end
                       else if cmd_bridges_opts.ld_bridge then begin
-                        bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_ld_bridge; end
+                        bridge_ns_prefix := Uberspark.Namespace.namespace_ld_bridge_namespace; end
                       else if cmd_bridges_opts.pp_bridge then begin
                         bridge_ns_prefix := Uberspark.Namespace.namespace_bridge_pp_bridge; end
                       else if cmd_bridges_opts.vf_bridge then begin
