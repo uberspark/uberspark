@@ -41,7 +41,7 @@
 	},
 
 	/* inter uobj collection public methods */
-/*	"uobjcoll-interuobjcoll-publicmethods" : {
+/*	"uobjcoll-interuobjcoll-public_methods" : {
 		
 		"uberspark/uobjcoll/generic/test/main" : {
 			"main" : [ "call" ]
@@ -54,7 +54,7 @@
 */
 
 
-		"publicmethods" : {
+		"public_methods" : {
 			"uberspark/uobjcoll/generic/test/main" : {
 				"main" : [ "call" ]
 			},

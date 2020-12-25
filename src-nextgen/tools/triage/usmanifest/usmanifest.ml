@@ -105,7 +105,7 @@ module Usmanifest =
 	(* return true on successful parse, false if not *)
 	(* return: if true then lists of h-files, c-files and casm files *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_usmf_sources usmf_json =
+	let parse_node_usmsources usmf_json =
 		let retval = ref true in
 		let usmf_hfiles_list = ref [] in
 		let usmf_cfiles_list = ref [] in

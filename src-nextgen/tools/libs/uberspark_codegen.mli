@@ -81,12 +81,12 @@ module Uobjcoll : sig
 type sentinel_info_t =
 {
 	mutable f_type          : string; 	
-    mutable f_name          : string;
+    mutable fn_name          : string;
     mutable f_secname       : string;
 	mutable code_template		    : string;
 	mutable library_code_template  	    : string;	
 	mutable sizeof_code_template   : int;	
-	mutable f_addr          : int;
+	mutable fn_address          : int;
     mutable f_pm_addr       : int;
 }
 

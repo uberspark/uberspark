@@ -55,7 +55,7 @@ module Usuobjlib =
 			
 						
 			let(rval, uobjlib_hfiles, uobjlib_cfiles, uobjlib_casmfiles) = 
-				Usmanifest.parse_node_usmf_sources	mf_json in
+				Usmanifest.parse_node_usmsources	mf_json in
 
 			if (rval == false) then
 				begin

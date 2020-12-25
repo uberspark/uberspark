@@ -53,7 +53,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable f_sentinels_intrauobjcoll : string list;
 	mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
 	mutable f_initmethod	: json_node_uberspark_uobjcoll_initmethod_t;
-	mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
+	mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
 	mutable f_loaders : string list;
 };;
 
@@ -244,7 +244,7 @@ let json_node_uberspark_uobjcoll_to_var
 
 					if (rval1 && rval2 && rval3) then begin
 						json_node_uberspark_uobjcoll_var.f_initmethod <- json_node_uberspark_uobjcoll_initmethod_var;
-						json_node_uberspark_uobjcoll_var.f_publicmethods <- json_node_uberspark_uobjcoll_publicmethods_var;
+						json_node_uberspark_uobjcoll_var.public_methods <- json_node_uberspark_uobjcoll_publicmethods_var;
 						retval := true;
 					end;
 				end;

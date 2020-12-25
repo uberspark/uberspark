@@ -16,12 +16,12 @@
 type sentinel_info_t =
 {
 	mutable f_type          : string; 	
-    mutable f_name          : string;
+    mutable fn_name          : string;
     mutable f_secname       : string;
 	mutable code_template		    : string;
 	mutable library_code_template  	    : string;	
 	mutable sizeof_code_template   : int;	
-	mutable f_addr          : int;
+	mutable fn_address          : int;
     mutable f_pm_addr       : int;
 };;
 
@@ -63,10 +63,10 @@ let generate_sentinel_code
 
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n";
-            Printf.fprintf oc "\n/* sentinel canonical name: %s */" sinfo_entry.f_name;
+            Printf.fprintf oc "\n/* sentinel canonical name: %s */" sinfo_entry.fn_name;
             Printf.fprintf oc "\n.section %s" sinfo_entry.f_secname;
-            (*Printf.fprintf oc "\n.global %s" sinfo_entry.f_name;
-            Printf.fprintf oc "\n%s:" sinfo_entry.f_name;
+            (*Printf.fprintf oc "\n.global %s" sinfo_entry.fn_name;
+            Printf.fprintf oc "\n%s:" sinfo_entry.fn_name;
             *)
             let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_ADDR") (Printf.sprintf "0x%08x" sinfo_entry.f_pm_addr) sinfo_entry.code_template in
             let tcode_1 = Str.global_replace (Str.regexp "SENTINEL_SIZE") (Printf.sprintf "0x%08x" sinfo_entry.sizeof_code_template) tcode in
@@ -200,7 +200,7 @@ let generate_linker_script
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
                 (* new section memory *)
                 Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
-                    ("mem_" ^ x.f_name)
+                    ("mem_" ^ x.fn_name)
                     ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
         ) sections_list;
 
@@ -215,13 +215,13 @@ let generate_linker_script
 
         List.iter ( fun ( (key:string), (section_info:Defs.Basedefs.section_info_t)) ->
 
-                        Printf.fprintf oc "\n %s : {" section_info.f_name;
+                        Printf.fprintf oc "\n %s : {" section_info.fn_name;
                         List.iter (fun subsection ->
                                     Printf.fprintf oc "\n *(%s)" subsection;
                         ) section_info.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ section_info.f_name) ("mem_" ^ section_info.f_name);
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ section_info.fn_name) ("mem_" ^ section_info.fn_name);
                         Printf.fprintf oc "\n BYTE(0xAA)";
-                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ section_info.f_name);
+                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ section_info.fn_name);
                         Printf.fprintf oc "\n";
 
         ) sections_list;

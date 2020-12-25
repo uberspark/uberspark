@@ -19,14 +19,14 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 	/* sources */
 	"sources" : {
-		"h-files": [ ],
-		"c-files": [ "add.c" ],
-		"casm-files": [ ],
-		"asm-files": [ ]
+		"h_files": [ ],
+		"c_files": [ "add.c" ],
+		"casm_files": [ ],
+		"asm_files": [ ]
 	},
 	
 	/* public methods */
-	"publicmethods" : {
+	"public_methods" : {
 		"add" : [
 			"uint32_t",
 			"(uint32_t param1, uint32_t param2)", 
@@ -37,7 +37,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		within the same collection
 	*/
-	"intrauobjcoll-callees" : {
+	"intra_uobjcoll_callees" : {
 		/* "uberspark/uobjs/generic/test/sample": ["a_one", "a_two", "a_three"] */
 	},
 	
@@ -45,7 +45,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		across other collection(s)
 	*/
-	"interuobjcoll-callees": {
+	"inter_uobjcoll_callees": {
 		/* "uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ] */
 	} 
 
@@ -53,7 +53,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	,
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"legacy-callees": [
+	"legacy_callees": [
 		"untrusted_func_1",	
 		"untrusted_func_2"
 	] 

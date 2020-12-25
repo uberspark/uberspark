@@ -185,7 +185,7 @@
 
 		let uobjcoll_hdr_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_hdr_lscript_sections 0 
-							{f_name = "data";	
+							{fn_name = "data";	
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; 
 								(*f_va_offset=0; f_file_offset=0;

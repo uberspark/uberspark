@@ -259,19 +259,19 @@ module Uobj : sig
 
   type json_node_uberspark_uobj_sources_t = 
   {
-    mutable f_h_files: string list;
-    mutable f_c_files: string list;
-    mutable f_casm_files: string list;
-    mutable f_asm_files : string list;
+    mutable source_h_files: string list;
+    mutable source_c_files: string list;
+    mutable source_casm_files: string list;
+    mutable source_asm_files : string list;
   }
 
   type json_node_uberspark_uobj_publicmethods_t = 
   {
-    mutable f_name: string;
-    mutable f_retvaldecl : string;
-    mutable f_paramdecl: string;
-    mutable f_paramdwords : int;
-    mutable f_addr : int;
+    mutable fn_name: string;
+    mutable fn_decl_return_value : string;
+    mutable fn_decl_parameters: string;
+    mutable fn_decl_parameter_size : int;
+    mutable fn_address : int;
   }
 
   type json_node_uberspark_uobj_t = 
@@ -280,13 +280,13 @@ module Uobj : sig
     mutable platform : string;
     mutable arch: string;
     mutable cpu : string;
-    mutable f_sources : json_node_uberspark_uobj_sources_t;
-    mutable f_publicmethods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
-    mutable f_intrauobjcoll_callees : (string * string list) list;
-    mutable f_interuobjcoll_callees : (string * string list) list;
-    mutable f_legacy_callees : (string * string list) list;
-    mutable f_sections : (string * Defs.Basedefs.section_info_t) list;
-  	mutable f_uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
+    mutable sources : json_node_uberspark_uobj_sources_t;
+    mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
+    mutable intra_uobjcoll_callees : (string * string list) list;
+    mutable inter_uobjcoll_callees : (string * string list) list;
+    mutable legacy_callees : (string * string list) list;
+    mutable sections : (string * Defs.Basedefs.section_info_t) list;
+  	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
 
 
@@ -344,7 +344,7 @@ module Uobjcoll : sig
     mutable f_sentinels_intrauobjcoll : string list;
     mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
     mutable f_initmethod : json_node_uberspark_uobjcoll_initmethod_t;
-    mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
+    mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
     mutable f_loaders : string list;
   }
 

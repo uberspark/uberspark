@@ -31,7 +31,7 @@
 		},
 
 		/* uobjcoll public methods */
-		"publicmethods" : {
+		"public_methods" : {
 			"uberspark/uobjcoll/generic/hello-mul/main" : {
 				"main" : [ "call" ]
 			}

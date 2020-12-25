@@ -22,15 +22,15 @@
 
 		/* sources */
 		"sources" : {
-			"h-files": [ ],
-			"c-files": [ "main.c" ],
-			/*"casm-files": [ "nullfunc.cS" ],*/
-			"casm-files" : [],
-			"asm-files": [ ]
+			"h_files": [ ],
+			"c_files": [ "main.c" ],
+			/*"casm_files": [ "nullfunc.cS" ],*/
+			"casm_files" : [],
+			"asm_files": [ ]
 		},
 	
 		/* public methods */
-		"publicmethods" : {
+		"public_methods" : {
 			"main" : [
 				"uint32_t",
 				"(uint32_t multiplicand, uint32_t multiplier)", 
@@ -50,18 +50,18 @@
 		/* public methods of other uobjs that this uobj invokes 
 			within the same collection
 		*/
-		"intrauobjcoll-callees" : {
+		"intra_uobjcoll_callees" : {
 		},
 	
 
 		/* public methods of other uobjs that this uobj invokes 
 			across other collection(s)
 		*/
-		"interuobjcoll-callees": {
+		"inter_uobjcoll_callees": {
 		},
 	
 		/* legacy CoSS functions/code that this uobj invokes */
-		"legacy-callees": [
+		"legacy_callees": [
 		],
 
 		/* uobjrtl */

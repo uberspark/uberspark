@@ -537,19 +537,19 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property sources: |uobj| sources definition sub-node 
     :proptype sources: :json:object:`sources`
 
-    :property publicmethods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-parameters-decl>", "<publicmethods-numberof-parameters">]*
-    :proptype publicmethods: {}
+    :property public_methods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-parameters-decl>", "<public_methods-numberof-parameters">]*
+    :proptype public_methods: {}
 
-    :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
-    :proptype intrauobjcoll-callees: {}
+    :property intra_uobjcoll_callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
+    :proptype intra_uobjcoll_callees: {}
 
-    :property interuobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
+    :property inter_uobjcoll_callees: comma delimited declarations of public methods of other |uobjs| that this 
                                      |uobj| invokes across |uobjcoll|. The declarations are of the format:
                                      *"<uobjcoll-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
-    :proptype interuobjcoll-callees: {}
+    :proptype inter_uobjcoll_callees: {}
 
-    :property legacy-callees: comma delimited legacy |coss| function names that this |uobj| invokes 
-    :proptype legacy-callees: string list
+    :property legacy_callees: comma delimited legacy |coss| function names that this |uobj| invokes 
+    :proptype legacy_callees: string list
 
 
     :property uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
@@ -561,17 +561,17 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
 
 .. json:object:: sources
 
-    :property h-files: comma delimited list of |uobj| header files 
-    :proptype h-files: string list
+    :property h_files: comma delimited list of |uobj| header files 
+    :proptype h_files: string list
     
-    :property c-files: comma delimited list of |uobj| C source files 
-    :proptype c-files: string list
+    :property c_files: comma delimited list of |uobj| C source files 
+    :proptype c_files: string list
  
-    :property casm-files: comma delimited list of |uobj| CASM source files 
-    :proptype casm-files: string list
+    :property casm_files: comma delimited list of |uobj| CASM source files 
+    :proptype casm_files: string list
 
-    :property asm-files: comma delimited list of |uobj| Assembly source files 
-    :proptype asm-files: string list
+    :property asm_files: comma delimited list of |uobj| Assembly source files 
+    :proptype asm_files: string list
 
 
 .. json:object:: uobjrtl
@@ -626,13 +626,13 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
             "cpu" : "generic",
 
             "sources" : {
-                "h-files": [ ],
-                "c-files": [ "add.c" ],
-                "casm-files": [ ],
-                "asm-files": [ ]
+                "h_files": [ ],
+                "c_files": [ "add.c" ],
+                "casm_files": [ ],
+                "asm_files": [ ]
             },
         
-            "publicmethods" : {
+            "public_methods" : {
                 "add" : [
                     "uint32_t",
                     "(uint32_t param1, uint32_t param2)", 
@@ -647,16 +647,16 @@ An example definition of the ``uberspark-uobj`` node for a sample |uobj| called 
 
             },
 
-            "intrauobjcoll-callees" : {
+            "intra_uobjcoll_callees" : {
             "uberspark/uobjs/generic/test/uobj1": ["pm_one", "pm_two", "pm_three"],
             "uberspark/uobjs/generic/test/uobj2": ["pm_one"]
             },
         
-            "interuobjcoll-callees": {
+            "inter_uobjcoll_callees": {
                 "uberspark/uobjcoll/test" : ["pm_one" ]
             },
         
-            "legacy-callees": [
+            "legacy_callees": [
                 "untrusted_func_1",	
                 "untrusted_func_2"
             ],
@@ -726,10 +726,10 @@ The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
     :property uobjs: list of |uobjs| within the |uobjcoll| 
     :proptype uobjs: :json:object:`uobjs`
 
-    :property publicmethods: comma delimited |uobjcoll| public methods declarations of the 
+    :property public_methods: comma delimited |uobjcoll| public methods declarations of the 
                              format: *"<uobj-namespace-path>" : { "<uobj-publicmethod-1-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"], ... , "<uobj-publicmethod-n-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"]}*
-    :proptype publicmethods: {}
-    :options publicmethods: <sentinel-type>="call"
+    :proptype public_methods: {}
+    :options public_methods: <sentinel-type>="call"
 
  
 .. json:object:: uobjs
@@ -770,7 +770,7 @@ An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll|
                 ]
             },
 
-            "publicmethods" : {
+            "public_methods" : {
                 "uberspark/uobjcoll/generic/test/main" : {
                     "main" : [ "call" ]
                 },
