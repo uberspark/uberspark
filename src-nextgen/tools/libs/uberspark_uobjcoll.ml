@@ -24,7 +24,7 @@ type uobjcoll_sentinel_info_t =
 {
 	mutable code_template			: string;
 	mutable library_code_template  	: string;	
-	mutable sizeocode_template : int;	
+	mutable sizeof_code_template : int;	
 	mutable f_type : string; 	
 };;
 
@@ -209,9 +209,9 @@ let get_sentinel_info_for_sentinel_facet_and_type
 	: (bool * uobjcoll_sentinel_info_t) = 
 
 	let retval = ref true in 
-	let sentinel_info : uobjcoll_sentinel_info_t = { code_template = ""; library_code_template= ""; sizeocode_template=0; f_type="";} in
+	let sentinel_info : uobjcoll_sentinel_info_t = { code_template = ""; library_code_template= ""; sizeof_code_template=0; f_type="";} in
 	let sentinel_json_var: Uberspark_manifest.Sentinel.json_node_uberspark_sentinel_t = 
-		{namespace = ""; platform = ""; arch = ""; cpu = ""; sizeocode_template = 0; code_template = ""; library_code_template = "";} in
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; sizeof_code_template = 0; code_template = ""; library_code_template = "";} in
 
 
 	(* construct the path to sentinel manifest *)
@@ -242,7 +242,7 @@ let get_sentinel_info_for_sentinel_facet_and_type
 	if !retval then begin 			
 		sentinel_info.code_template <- sentinel_json_var.code_template;
 		sentinel_info.library_code_template <- sentinel_json_var.library_code_template;
-		sentinel_info.sizeocode_template <- sentinel_json_var.sizeocode_template;
+		sentinel_info.sizeof_code_template <- sentinel_json_var.sizeof_code_template;
 		sentinel_info.f_type <- sentinel_type;
 	end;
 
@@ -271,10 +271,10 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod_sentinels_hashtbl: adding key=%s" sentinel_entry.f_sentinel_type; 
 
-				(*override sizeocode_template if sentinel_size was specified within manifest *)
+				(*override sizeof_code_template if sentinel_size was specified within manifest *)
 				if sentinel_entry.f_sentinel_size > 0 then begin
-					sinfo.sizeocode_template <- sentinel_entry.f_sentinel_size;
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel sizeocode_template with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
+					sinfo.sizeof_code_template <- sentinel_entry.f_sentinel_size;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel sizeof_code_template with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
 				end;
 
 				
@@ -596,12 +596,12 @@ let consolidate_sections_with_memory_map
 		let sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
 		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
 		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
-		(*let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-			(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+		(*let section_size = 	sentinel_info.sizeof_code_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(sentinel_info.sizeof_code_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 		*)
 
 		let section_top_addr = 	ref 0 in
-		section_top_addr := sentinel_info.sizeocode_template + !uobjcoll_section_load_addr;
+		section_top_addr := sentinel_info.sizeof_code_template + !uobjcoll_section_load_addr;
 		if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
 			section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
 			(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
@@ -609,7 +609,7 @@ let consolidate_sections_with_memory_map
 
 		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template section_size;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.sizeof_code_template section_size;
 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 			{ f_name = key;	
@@ -647,10 +647,10 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_uobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_publicmethods_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeof_code_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeof_code_template;
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = key;	
@@ -690,10 +690,10 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_intrauobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_intrauobjcoll_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeof_code_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeof_code_template;
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = key;	
@@ -890,7 +890,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 			f_secname = ".section_uobjcoll_initmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
 			code_template = sentinel_info.code_template ; 
 			library_code_template= sentinel_info.library_code_template ; 
-			sizeocode_template= sentinel_info.sizeocode_template ; 
+			sizeof_code_template= sentinel_info.sizeof_code_template ; 
 			f_addr= (Hashtbl.find d_uobjcoll_initmethod_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 			f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 		} in 
@@ -913,7 +913,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 				f_secname = ".section_uobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
 				code_template = sentinel_info.code_template ; 
 				library_code_template= sentinel_info.library_code_template ; 
-				sizeocode_template= sentinel_info.sizeocode_template ; 
+				sizeof_code_template= sentinel_info.sizeof_code_template ; 
 				f_addr= (Hashtbl.find d_uobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 			} in 
@@ -937,7 +937,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 				f_secname = ".section_intrauobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
 				code_template = sentinel_info.code_template ; 
 				library_code_template= sentinel_info.library_code_template ; 
-				sizeocode_template= sentinel_info.sizeocode_template ; 
+				sizeof_code_template= sentinel_info.sizeof_code_template ; 
 				f_addr= (Hashtbl.find d_intrauobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 			} in 

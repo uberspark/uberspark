@@ -224,7 +224,7 @@ module Sentinel : sig
     mutable platform	   : string;
     mutable arch	       : string;
     mutable cpu		   : string;
-    mutable sizeocode_template  : int;
+    mutable sizeof_code_template  : int;
     mutable code_template		   : string;
     mutable library_code_template	   : string;
   };;
