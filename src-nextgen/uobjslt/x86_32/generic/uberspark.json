@@ -18,12 +18,12 @@
 		"platform" : "generic",
 		"arch" : "x86_32",
         "cpu" : "generic",
-        "addr-size" : "4",
+        "sizeof_addressing" : "4",
 
         /* uobjslt direct execution transfer code template 
         inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
         */
-        "code-directxfer": "
+        "code_template_directxfer": "
             movl $(UOBJSLT_SENTINEL_PM_ADDRESS), %eax
             jmpl *%eax
         ",
@@ -31,7 +31,7 @@
         /* uobjslt indirect execution transfer code template 
         inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
         */
-        "code-indirectxfer": "
+        "code_template_indirectxfer": "
             movl $(UOBJSLT_SENTINEL_PM_ADDRESS_LOC), %eax
             movl (%eax), %eax
             jmpl *%eax
@@ -40,7 +40,7 @@
         /* uobjslt address definition template 
         inputs: constant address, UOBJSLT_CONST_ADDRESS
         */
-        "code-addrdef": "
+        "code_template_data_definition": "
             .long UOBJSLT_CONST_ADDRESS
         "
 

@@ -365,10 +365,10 @@ module Uobjslt : sig
     mutable platform : string;
     mutable arch : string;
     mutable cpu : string;
-    mutable f_addr_size : int;
-    mutable f_code_directxfer : string;
-    mutable f_code_indirectxfer : string;
-    mutable f_code_addrdef : string;
+    mutable sizeof_addressing : int;
+    mutable code_template_directxfer : string;
+    mutable code_template_indirectxfer : string;
+    mutable code_template_data_definition : string;
   }
 
   val json_node_uberspark_uobjslt_to_var : Yojson.Basic.t -> json_node_uberspark_uobjslt_t -> bool

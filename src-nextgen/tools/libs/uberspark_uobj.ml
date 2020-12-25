@@ -96,8 +96,8 @@ class uobject
 
 
 	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
-		{namespace = ""; platform = ""; arch = ""; cpu = ""; f_addr_size=0;
-		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; sizeof_addressing=0;
+		 code_template_directxfer = ""; code_template_indirectxfer = ""; code_template_data_definition = ""; };
 
 	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.public_methods;
 
@@ -828,7 +828,7 @@ class uobject
 
 						slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.sizeof_addressing;
 					end;
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -859,7 +859,7 @@ class uobject
 
 							slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.sizeof_addressing;
 						end;
 
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
@@ -972,9 +972,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_intrauobjcoll_callees_slt_codegen_info_list
 			".uobj_intrauobjcoll_csltcode"
 			!d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -990,9 +990,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_interuobjcoll_callees_slt_codegen_info_list
 			".uobj_interuobjcoll_csltcode"
 			!d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -1009,9 +1009,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_legacy_callees_slt_codegen_info_list
 			".uobj_legacy_csltcode"
 			!d_legacy_callees_slt_indirect_xfer_table_assoc_list

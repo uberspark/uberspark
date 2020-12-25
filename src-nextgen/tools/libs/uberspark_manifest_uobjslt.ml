@@ -19,10 +19,10 @@ type json_node_uberspark_uobjslt_t =
 	mutable platform : string;
 	mutable arch : string;
     mutable cpu : string;
-    mutable f_addr_size : int;
-	mutable f_code_directxfer : string;
-    mutable f_code_indirectxfer : string;
-    mutable f_code_addrdef : string;
+    mutable sizeof_addressing : int;
+	mutable code_template_directxfer : string;
+    mutable code_template_indirectxfer : string;
+    mutable code_template_data_definition : string;
 };;
 
 
@@ -57,10 +57,10 @@ let json_node_uberspark_uobjslt_to_var
 					json_node_uberspark_uobjslt_var.platform <- json_node_uberspark_uobjslt |> member "platform" |> to_string;
 					json_node_uberspark_uobjslt_var.arch <- json_node_uberspark_uobjslt |> member "arch" |> to_string;
 					json_node_uberspark_uobjslt_var.cpu <- json_node_uberspark_uobjslt |> member "cpu" |> to_string;
-					json_node_uberspark_uobjslt_var.f_addr_size <- int_of_string (json_node_uberspark_uobjslt |> member "addr-size" |> to_string);
-					json_node_uberspark_uobjslt_var.f_code_directxfer <- json_node_uberspark_uobjslt |> member "code-directxfer" |> to_string;
-					json_node_uberspark_uobjslt_var.f_code_indirectxfer <- json_node_uberspark_uobjslt |> member "code-indirectxfer" |> to_string;
-					json_node_uberspark_uobjslt_var.f_code_addrdef <- json_node_uberspark_uobjslt |> member "code-addrdef" |> to_string;
+					json_node_uberspark_uobjslt_var.sizeof_addressing <- int_of_string (json_node_uberspark_uobjslt |> member "sizeof_addressing" |> to_string);
+					json_node_uberspark_uobjslt_var.code_template_directxfer <- json_node_uberspark_uobjslt |> member "code_template_directxfer" |> to_string;
+					json_node_uberspark_uobjslt_var.code_template_indirectxfer <- json_node_uberspark_uobjslt |> member "code_template_indirectxfer" |> to_string;
+					json_node_uberspark_uobjslt_var.code_template_data_definition <- json_node_uberspark_uobjslt |> member "code_template_data_definition" |> to_string;
 
 					retval := true;
 				end
