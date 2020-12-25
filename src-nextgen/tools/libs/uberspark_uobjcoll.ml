@@ -22,9 +22,9 @@ type uobjcoll_uobjinfo_t =
 
 type uobjcoll_sentinel_info_t =
 {
-	mutable f_code			: string;
-	mutable f_libcode  	: string;	
-	mutable f_sizeof_code : int;	
+	mutable code_template			: string;
+	mutable library_code_template  	: string;	
+	mutable sizeocode_template : int;	
 	mutable f_type : string; 	
 };;
 
@@ -48,7 +48,7 @@ let d_path_to_mf_filename = ref "";;
 (* manifest json node uberspark-uobjcoll var *)
 let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_t = 
 	{
-		f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";
+		namespace = ""; platform = ""; arch = ""; cpu = ""; f_hpl = "";
 		f_sentinels_intrauobjcoll = [];
 		f_uobjs = { f_master = ""; f_templars = [];};
 		f_initmethod = {f_uobj_ns = ""; f_pm_name = ""; f_sentinels = [];};
@@ -74,9 +74,9 @@ let d_size : int ref = ref 0;;
 
 (* uobjcoll target definition *)
 let d_target_def: Defs.Basedefs.target_def_t = {
-	f_platform = ""; 
-	f_arch = ""; 
-	f_cpu = "";
+	platform = ""; 
+	arch = ""; 
+	cpu = "";
 };;
 
 
@@ -166,7 +166,7 @@ let parse_manifest
 
 
 	let dummy=0 in begin
-		d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobjcoll_var.f_namespace;
+		d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobjcoll_var.namespace;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj collection path ns=%s" !d_path_ns;
 	end;
 
@@ -209,16 +209,16 @@ let get_sentinel_info_for_sentinel_facet_and_type
 	: (bool * uobjcoll_sentinel_info_t) = 
 
 	let retval = ref true in 
-	let sentinel_info : uobjcoll_sentinel_info_t = { f_code = ""; f_libcode= ""; f_sizeof_code=0; f_type="";} in
+	let sentinel_info : uobjcoll_sentinel_info_t = { code_template = ""; library_code_template= ""; sizeocode_template=0; f_type="";} in
 	let sentinel_json_var: Uberspark_manifest.Sentinel.json_node_uberspark_sentinel_t = 
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0; f_code = ""; f_libcode = "";} in
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; sizeocode_template = 0; code_template = ""; library_code_template = "";} in
 
 
 	(* construct the path to sentinel manifest *)
 	let sentinel_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/" ^
 		sentinel_facet ^ "/" ^
-		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ 
+		json_node_uberspark_uobjcoll_var.arch ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
@@ -240,9 +240,9 @@ let get_sentinel_info_for_sentinel_facet_and_type
 
 	(* populate sentinel_info fields *)
 	if !retval then begin 			
-		sentinel_info.f_code <- sentinel_json_var.f_code;
-		sentinel_info.f_libcode <- sentinel_json_var.f_libcode;
-		sentinel_info.f_sizeof_code <- sentinel_json_var.f_sizeof_code;
+		sentinel_info.code_template <- sentinel_json_var.code_template;
+		sentinel_info.library_code_template <- sentinel_json_var.library_code_template;
+		sentinel_info.sizeocode_template <- sentinel_json_var.sizeocode_template;
 		sentinel_info.f_type <- sentinel_type;
 	end;
 
@@ -271,10 +271,10 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod_sentinels_hashtbl: adding key=%s" sentinel_entry.f_sentinel_type; 
 
-				(*override f_sizeof_code if sentinel_size was specified within manifest *)
+				(*override sizeocode_template if sentinel_size was specified within manifest *)
 				if sentinel_entry.f_sentinel_size > 0 then begin
-					sinfo.f_sizeof_code <- sentinel_entry.f_sentinel_size;
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel f_sizeof_code with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
+					sinfo.sizeocode_template <- sentinel_entry.f_sentinel_size;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel sizeocode_template with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
 				end;
 
 				
@@ -402,7 +402,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ json_node_uberspark_uobjcoll_var.f_uobjs.f_master);
 
 				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns json_node_uberspark_uobjcoll_var.f_uobjs.f_master
-					json_node_uberspark_uobjcoll_var.f_namespace) then begin
+					json_node_uberspark_uobjcoll_var.namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -455,7 +455,7 @@ let initialize_uobjs_baseinfo
 				uobjinfo_entry.f_uobjinfo.f_uobj_buildpath <- (uobjcoll_abs_path ^ "/" ^ uobjcoll_builddir ^ "/" ^ uobj_name);
 				uobjinfo_entry.f_uobjinfo.f_uobj_nspath <- ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ templar_uobj_ns);
 
-				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns json_node_uberspark_uobjcoll_var.f_namespace) then begin
+				if (Uberspark_namespace.is_uobj_ns_in_uobjcoll_ns templar_uobj_ns json_node_uberspark_uobjcoll_var.namespace) then begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- true;
 				end else begin
 					uobjinfo_entry.f_uobjinfo.f_uobj_is_incollection <- false;
@@ -596,12 +596,12 @@ let consolidate_sections_with_memory_map
 		let sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
 		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
 		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
-		(*let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-			(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+		(*let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 		*)
 
 		let section_top_addr = 	ref 0 in
-		section_top_addr := sentinel_info.f_sizeof_code + !uobjcoll_section_load_addr;
+		section_top_addr := sentinel_info.sizeocode_template + !uobjcoll_section_load_addr;
 		if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
 			section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
 			(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
@@ -609,7 +609,7 @@ let consolidate_sections_with_memory_map
 
 		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code section_size;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template section_size;
 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 			{ f_name = key;	
@@ -647,10 +647,10 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_uobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_publicmethods_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template;
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = key;	
@@ -690,10 +690,10 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = pm_name ^ "__" ^ sentinel_type in 
 			let key = (".section_intrauobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_intrauobjcoll_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeocode_template + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeocode_template mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeocode_template;
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
 				{ f_name = key;	
@@ -888,9 +888,9 @@ let prepare_for_uobjcoll_sentinel_codegen
 			f_type= sentinel_type;
 			f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
 			f_secname = ".section_uobjcoll_initmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
-			f_code = sentinel_info.f_code ; 
-			f_libcode= sentinel_info.f_libcode ; 
-			f_sizeof_code= sentinel_info.f_sizeof_code ; 
+			code_template = sentinel_info.code_template ; 
+			library_code_template= sentinel_info.library_code_template ; 
+			sizeocode_template= sentinel_info.sizeocode_template ; 
 			f_addr= (Hashtbl.find d_uobjcoll_initmethod_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 			f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 		} in 
@@ -911,9 +911,9 @@ let prepare_for_uobjcoll_sentinel_codegen
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
 				f_secname = ".section_uobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
-				f_code = sentinel_info.f_code ; 
-				f_libcode= sentinel_info.f_libcode ; 
-				f_sizeof_code= sentinel_info.f_sizeof_code ; 
+				code_template = sentinel_info.code_template ; 
+				library_code_template= sentinel_info.library_code_template ; 
+				sizeocode_template= sentinel_info.sizeocode_template ; 
 				f_addr= (Hashtbl.find d_uobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 			} in 
@@ -935,9 +935,9 @@ let prepare_for_uobjcoll_sentinel_codegen
 				f_type= sentinel_type;
 				f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
 				f_secname = ".section_intrauobjcoll_publicmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
-				f_code = sentinel_info.f_code ; 
-				f_libcode= sentinel_info.f_libcode ; 
-				f_sizeof_code= sentinel_info.f_sizeof_code ; 
+				code_template = sentinel_info.code_template ; 
+				library_code_template= sentinel_info.library_code_template ; 
+				sizeocode_template= sentinel_info.sizeocode_template ; 
 				f_addr= (Hashtbl.find d_intrauobjcoll_publicmethods_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.f_addr;
 			} in 
@@ -1111,7 +1111,7 @@ let prepare_namespace_for_build
 	(* local variables *)
 	let retval = ref false in
 	let in_namespace_build = ref false in
-	let uobjcoll_canonical_namespace = json_node_uberspark_uobjcoll_var.f_namespace in
+	let uobjcoll_canonical_namespace = json_node_uberspark_uobjcoll_var.namespace in
 	let uobjcoll_canonical_namespace_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjcoll_canonical_namespace) in
 
 	(* determine if we are doing an in-namespace build or an out-of-namespace build *)
@@ -1213,9 +1213,9 @@ let initialize_common_operation_context
 	
 	(* store global initialization variables *)
 	d_load_address := uobjcoll_load_address;
-	d_target_def.f_platform <- target_def.f_platform;
-	d_target_def.f_cpu <- target_def.f_cpu;
-	d_target_def.f_arch <- target_def.f_arch;
+	d_target_def.platform <- target_def.platform;
+	d_target_def.cpu <- target_def.cpu;
+	d_target_def.arch <- target_def.arch;
 	
 	end;
 
@@ -1259,9 +1259,9 @@ let initialize_common_operation_context
 	(* TBD: if manifest says generic, we need a command line override *)
 	(* TBD: at the very least we need an arch override if uobjcoll says generic arch *)
 	let dummy = 0 in begin
-	json_node_uberspark_uobjcoll_var.f_arch <- d_target_def.f_arch;
-	json_node_uberspark_uobjcoll_var.f_cpu <- d_target_def.f_cpu;
-	json_node_uberspark_uobjcoll_var.f_platform <- d_target_def.f_platform;
+	json_node_uberspark_uobjcoll_var.arch <- d_target_def.arch;
+	json_node_uberspark_uobjcoll_var.cpu <- d_target_def.cpu;
+	json_node_uberspark_uobjcoll_var.platform <- d_target_def.platform;
 	end;
 
 	(*create uobjcoll_publicmethods and intrauobjcoll sentinels hashtbl *)

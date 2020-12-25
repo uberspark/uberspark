@@ -14,7 +14,7 @@
 
 type json_node_uberspark_uobj_uobjrtl_t = 
 {
-	mutable f_namespace: string;
+	mutable namespace: string;
 };;
 
 
@@ -38,10 +38,10 @@ type json_node_uberspark_uobj_publicmethods_t =
 
 type json_node_uberspark_uobj_t = 
 {
-	mutable f_namespace: string;
-	mutable f_platform : string;
-	mutable f_arch: string;
-	mutable f_cpu : string;
+	mutable namespace: string;
+	mutable platform : string;
+	mutable arch: string;
+	mutable cpu : string;
 	mutable f_sources : json_node_uberspark_uobj_sources_t;
 	mutable f_publicmethods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
 	mutable f_intrauobjcoll_callees : (string * string list) list;
@@ -450,10 +450,10 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 							
 							List.iter (fun x ->
 								let f_uobjrtl_element : json_node_uberspark_uobj_uobjrtl_t = 
-									{ f_namespace = ""; } in
+									{ namespace = ""; } in
 								
 								let uobjrtl_namespace = Yojson.Basic.Util.to_string (x |> member "namespace") in
-								f_uobjrtl_element.f_namespace <- uobjrtl_namespace;
+								f_uobjrtl_element.namespace <- uobjrtl_namespace;
 
 								uobjrtl_assoc_list := !uobjrtl_assoc_list @ [ (uobjrtl_namespace, f_uobjrtl_element) ];
 													
@@ -490,10 +490,10 @@ let json_node_uberspark_uobj_to_var
 		let open Yojson.Basic.Util in
 			let json_node_uberspark_uobj = mf_json |> member "uberspark-uobj" in
 				if json_node_uberspark_uobj != `Null then begin
-					json_node_uberspark_uobj_var.f_namespace <- json_node_uberspark_uobj |> member "namespace" |> to_string;
-					json_node_uberspark_uobj_var.f_platform <- json_node_uberspark_uobj |> member "platform" |> to_string;
-					json_node_uberspark_uobj_var.f_arch <- json_node_uberspark_uobj |> member "arch" |> to_string;
-					json_node_uberspark_uobj_var.f_cpu <- json_node_uberspark_uobj |> member "cpu" |> to_string;
+					json_node_uberspark_uobj_var.namespace <- json_node_uberspark_uobj |> member "namespace" |> to_string;
+					json_node_uberspark_uobj_var.platform <- json_node_uberspark_uobj |> member "platform" |> to_string;
+					json_node_uberspark_uobj_var.arch <- json_node_uberspark_uobj |> member "arch" |> to_string;
+					json_node_uberspark_uobj_var.cpu <- json_node_uberspark_uobj |> member "cpu" |> to_string;
 					
 					let rval1 = (json_node_uberspark_uobj_sources_to_var json_node_uberspark_uobj json_node_uberspark_uobj_var.f_sources) in
 					let (rval2, json_node_uberspark_uobj_publicmethods_var) = (json_node_uberspark_uobj_publicmethods_to_var json_node_uberspark_uobj) in

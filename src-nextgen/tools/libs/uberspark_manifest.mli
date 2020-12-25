@@ -207,7 +207,7 @@ module Installation : sig
 
   type json_node_uberspark_installation_t =
   {
-    mutable f_rootDirectory : string;
+    mutable root_directory : string;
   }
 
   val json_node_uberspark_installation_to_var : Yojson.Basic.t -> json_node_uberspark_installation_t -> bool
@@ -220,13 +220,13 @@ module Sentinel : sig
 
   type json_node_uberspark_sentinel_t =
   {
-    mutable f_namespace    : string;			
-    mutable f_platform	   : string;
-    mutable f_arch	       : string;
-    mutable f_cpu		   : string;
-    mutable f_sizeof_code  : int;
-    mutable f_code		   : string;
-    mutable f_libcode	   : string;
+    mutable namespace    : string;			
+    mutable platform	   : string;
+    mutable arch	       : string;
+    mutable cpu		   : string;
+    mutable sizeocode_template  : int;
+    mutable code_template		   : string;
+    mutable library_code_template	   : string;
   };;
 
 
@@ -238,12 +238,12 @@ module Loader : sig
 
 type json_node_uberspark_loader_t =
 {
-	mutable f_namespace    : string;			
-	mutable f_platform	   : string;
-	mutable f_arch	       : string;
-	mutable f_cpu		   : string;
-	mutable f_bridge_ns    : string;
-	mutable f_bridge_cmd : string list;
+	mutable namespace    : string;			
+	mutable platform	   : string;
+	mutable arch	       : string;
+	mutable cpu		   : string;
+	mutable bridge_namespace    : string;
+	mutable bridge_cmd : string list;
 };;
 
 val json_node_uberspark_loader_to_var : Yojson.Basic.t -> json_node_uberspark_loader_t -> bool
@@ -254,7 +254,7 @@ module Uobj : sig
 
   type json_node_uberspark_uobj_uobjrtl_t = 
   {
-    mutable f_namespace: string;
+    mutable namespace: string;
   }
 
   type json_node_uberspark_uobj_sources_t = 
@@ -276,10 +276,10 @@ module Uobj : sig
 
   type json_node_uberspark_uobj_t = 
   {
-    mutable f_namespace: string;
-    mutable f_platform : string;
-    mutable f_arch: string;
-    mutable f_cpu : string;
+    mutable namespace: string;
+    mutable platform : string;
+    mutable arch: string;
+    mutable cpu : string;
     mutable f_sources : json_node_uberspark_uobj_sources_t;
     mutable f_publicmethods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
     mutable f_intrauobjcoll_callees : (string * string list) list;
@@ -336,10 +336,10 @@ module Uobjcoll : sig
 
   type json_node_uberspark_uobjcoll_t =
   {
-    mutable f_namespace    : string;			
-    mutable f_platform	   : string;
-    mutable f_arch	       : string;
-    mutable f_cpu		   : string;
+    mutable namespace    : string;			
+    mutable platform	   : string;
+    mutable arch	       : string;
+    mutable cpu		   : string;
     mutable f_hpl		   : string;
     mutable f_sentinels_intrauobjcoll : string list;
     mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
@@ -361,10 +361,10 @@ module Uobjslt : sig
 
   type json_node_uberspark_uobjslt_t =
   {
-    mutable f_namespace : string;
-    mutable f_platform : string;
-    mutable f_arch : string;
-    mutable f_cpu : string;
+    mutable namespace : string;
+    mutable platform : string;
+    mutable arch : string;
+    mutable cpu : string;
     mutable f_addr_size : int;
     mutable f_code_directxfer : string;
     mutable f_code_indirectxfer : string;
@@ -394,10 +394,10 @@ type json_node_uberspark_uobjrtl_modules_spec_t =
 
 type json_node_uberspark_uobjrtl_t =
 {
-	mutable f_namespace : string;
-	mutable f_platform : string;
-	mutable f_arch : string;
-    mutable f_cpu : string;
+	mutable namespace : string;
+	mutable platform : string;
+	mutable arch : string;
+    mutable cpu : string;
    
     mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
     mutable f_modules_spec_casm: json_node_uberspark_uobjrtl_modules_spec_t list;

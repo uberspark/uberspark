@@ -45,10 +45,10 @@ type json_node_uberspark_uobjcoll_initmethod_t =
 
 type json_node_uberspark_uobjcoll_t =
 {
-	mutable f_namespace    : string;			
-	mutable f_platform	   : string;
-	mutable f_arch	       : string;
-	mutable f_cpu		   : string;
+	mutable namespace    : string;			
+	mutable platform	   : string;
+	mutable arch	       : string;
+	mutable cpu		   : string;
 	mutable f_hpl		   : string;
 	mutable f_sentinels_intrauobjcoll : string list;
 	mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
@@ -224,10 +224,10 @@ let json_node_uberspark_uobjcoll_to_var
 		let open Yojson.Basic.Util in
 			let json_node_uberspark_uobjcoll = mf_json |> member "uberspark-uobjcoll" in
 				if json_node_uberspark_uobjcoll != `Null then begin
-					json_node_uberspark_uobjcoll_var.f_namespace <- json_node_uberspark_uobjcoll |> member "namespace" |> to_string;
-					json_node_uberspark_uobjcoll_var.f_platform <- json_node_uberspark_uobjcoll |> member "platform" |> to_string;
-					json_node_uberspark_uobjcoll_var.f_arch <- json_node_uberspark_uobjcoll |> member "arch" |> to_string;
-					json_node_uberspark_uobjcoll_var.f_cpu <- json_node_uberspark_uobjcoll |> member "cpu" |> to_string;
+					json_node_uberspark_uobjcoll_var.namespace <- json_node_uberspark_uobjcoll |> member "namespace" |> to_string;
+					json_node_uberspark_uobjcoll_var.platform <- json_node_uberspark_uobjcoll |> member "platform" |> to_string;
+					json_node_uberspark_uobjcoll_var.arch <- json_node_uberspark_uobjcoll |> member "arch" |> to_string;
+					json_node_uberspark_uobjcoll_var.cpu <- json_node_uberspark_uobjcoll |> member "cpu" |> to_string;
 					json_node_uberspark_uobjcoll_var.f_hpl <- json_node_uberspark_uobjcoll |> member "hpl" |> to_string;
 					json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "sentinels-intrauobjcoll" |> to_list));
 

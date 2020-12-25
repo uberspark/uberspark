@@ -46,7 +46,7 @@ define USPARK_CONFIG_CONTENTS
 	},
 
     "uberspark-installation" : {
-		"rootDirectory" : "$(ROOT_DIR)"
+		"root_directory" : "$(ROOT_DIR)"
 	}
 }
 endef

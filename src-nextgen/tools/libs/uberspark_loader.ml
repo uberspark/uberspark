@@ -45,8 +45,8 @@ class uobjcoll_loader
 
 	(* uobj manifest uberspark-loader json node var *)
 	val json_node_uberspark_loader_var : Uberspark_manifest.Loader.json_node_uberspark_loader_t =
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
-         f_bridge_ns = ""; f_bridge_cmd = []; 
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; 
+         bridge_namespace = ""; bridge_cmd = []; 
 		};
 	method get_d_json_node_uberspark_loader_var = json_node_uberspark_loader_var;
 
@@ -152,7 +152,7 @@ class uobjcoll_loader
             end else begin
 	            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping command: %s" bcmd;
             end;
-        ) json_node_uberspark_loader_var.f_bridge_cmd;
+        ) json_node_uberspark_loader_var.bridge_cmd;
 
 		(!retval)	
 	;
@@ -187,7 +187,7 @@ let create_initialize
 	let l_rval = ref true in 
 	let dummy = 0 in begin
 
-       	if not (Uberspark_bridge.Loader.load (loader#get_d_json_node_uberspark_loader_var).f_bridge_ns) then begin
+       	if not (Uberspark_bridge.Loader.load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
 		    Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load loader bridge!";
 		    l_rval := false;
     	end else begin

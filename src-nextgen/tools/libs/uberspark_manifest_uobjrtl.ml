@@ -27,10 +27,10 @@ type json_node_uberspark_uobjrtl_modules_spec_t =
 
 type json_node_uberspark_uobjrtl_t =
 {
-	mutable f_namespace : string;
-	mutable f_platform : string;
-	mutable f_arch : string;
-    mutable f_cpu : string;
+	mutable namespace : string;
+	mutable platform : string;
+	mutable arch : string;
+    mutable cpu : string;
    
     mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
     mutable f_modules_spec_casm: json_node_uberspark_uobjrtl_modules_spec_t list;
@@ -65,10 +65,10 @@ let json_node_uberspark_uobjrtl_to_var
 			if(json_node_uberspark_uobjrtl <> `Null) then
 				begin
 
-					json_node_uberspark_uobjrtl_var.f_namespace <- json_node_uberspark_uobjrtl |> member "namespace" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_platform <- json_node_uberspark_uobjrtl |> member "platform" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_arch <- json_node_uberspark_uobjrtl |> member "arch" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_cpu <- json_node_uberspark_uobjrtl |> member "cpu" |> to_string;
+					json_node_uberspark_uobjrtl_var.namespace <- json_node_uberspark_uobjrtl |> member "namespace" |> to_string;
+					json_node_uberspark_uobjrtl_var.platform <- json_node_uberspark_uobjrtl |> member "platform" |> to_string;
+					json_node_uberspark_uobjrtl_var.arch <- json_node_uberspark_uobjrtl |> member "arch" |> to_string;
+					json_node_uberspark_uobjrtl_var.cpu <- json_node_uberspark_uobjrtl |> member "cpu" |> to_string;
 
 					let json_node_uberspark_uobjrtl_modules_spec_c_list =  json_node_uberspark_uobjrtl |> member "modules-spec-c" |> to_list in
 					List.iter (fun x -> 

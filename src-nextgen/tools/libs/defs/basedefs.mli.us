@@ -9,9 +9,9 @@ type usbinformat_section_info_t = {
   mutable f_reserved : int;
 }
 type target_def_t = {
-  mutable f_platform : string;
-  mutable f_arch : string;
-  mutable f_cpu : string;
+  mutable platform : string;
+  mutable arch : string;
+  mutable cpu : string;
 }
 type section_info_t = {
   mutable f_name : string;

@@ -25,14 +25,14 @@ let initialize
 		let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
           Uberspark.Namespace.namespace_root_mf_filename in
     let mf_json_node_uberspark_installation_var : Uberspark.Manifest.Installation.json_node_uberspark_installation_t = 
-		  {f_rootDirectory = ""; } in
+		  {root_directory = ""; } in
     let (rval, mf_json) = (Uberspark.Manifest.get_json_for_manifest installation_manifest_filename ) in
   		if(rval == true) then	begin
 
 				(* convert to var *)
 				let rval =	(Uberspark.Manifest.Installation.json_node_uberspark_installation_to_var mf_json mf_json_node_uberspark_installation_var) in
   				if rval then begin
-            Uberspark.Namespace.set_namespace_root_dir_prefix mf_json_node_uberspark_installation_var.f_rootDirectory;
+            Uberspark.Namespace.set_namespace_root_dir_prefix mf_json_node_uberspark_installation_var.root_directory;
 
           end else begin
             Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;

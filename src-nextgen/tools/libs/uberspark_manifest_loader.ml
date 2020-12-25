@@ -16,12 +16,12 @@
 
 type json_node_uberspark_loader_t =
 {
-	mutable f_namespace    : string;			
-	mutable f_platform	   : string;
-	mutable f_arch	       : string;
-	mutable f_cpu		   : string;
-	mutable f_bridge_ns    : string;
-	mutable f_bridge_cmd : string list;
+	mutable namespace    : string;			
+	mutable platform	   : string;
+	mutable arch	       : string;
+	mutable cpu		   : string;
+	mutable bridge_namespace    : string;
+	mutable bridge_cmd : string list;
 };;
 
 
@@ -49,12 +49,12 @@ let json_node_uberspark_loader_to_var
 		let open Yojson.Basic.Util in
 			let json_node_uberspark_loader = mf_json |> member "uberspark-loader" in
 				if json_node_uberspark_loader != `Null then begin
-					json_node_uberspark_loader_var.f_namespace <- json_node_uberspark_loader |> member "namespace" |> to_string;
-					json_node_uberspark_loader_var.f_platform <- json_node_uberspark_loader |> member "platform" |> to_string;
-					json_node_uberspark_loader_var.f_arch <- json_node_uberspark_loader |> member "arch" |> to_string;
-					json_node_uberspark_loader_var.f_cpu <- json_node_uberspark_loader |> member "cpu" |> to_string;
-					json_node_uberspark_loader_var.f_bridge_ns <- json_node_uberspark_loader |> member "bridge_ns" |> to_string;
-					json_node_uberspark_loader_var.f_bridge_cmd <- (json_list_to_string_list (json_node_uberspark_loader |> member "bridge_cmd" |> to_list));
+					json_node_uberspark_loader_var.namespace <- json_node_uberspark_loader |> member "namespace" |> to_string;
+					json_node_uberspark_loader_var.platform <- json_node_uberspark_loader |> member "platform" |> to_string;
+					json_node_uberspark_loader_var.arch <- json_node_uberspark_loader |> member "arch" |> to_string;
+					json_node_uberspark_loader_var.cpu <- json_node_uberspark_loader |> member "cpu" |> to_string;
+					json_node_uberspark_loader_var.bridge_namespace <- json_node_uberspark_loader |> member "bridge_ns" |> to_string;
+					json_node_uberspark_loader_var.bridge_cmd <- (json_list_to_string_list (json_node_uberspark_loader |> member "bridge_cmd" |> to_list));
 
 					retval := true;
 				end;
