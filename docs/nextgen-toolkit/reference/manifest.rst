@@ -817,9 +817,9 @@ The JSON declaration of the ``uberspark-uobjrtl`` node is as below:
 
 .. json:object:: modules-spec
 
-    :property module-path: <module-path> relative to the |uobjrtl| top-level source directory 
-    :proptype module-path: string
-    :options module-path: "src/<module-filename-with-path>"
+    :property path: <path> relative to the |uobjrtl| top-level source directory 
+    :proptype path: string
+    :options path: "src/<module-filename-with-path>"
 
     :property modules-funcdecls: |uobjrtl| modules function declarations 
     :proptype modules-funcdecls: :json:object:`modules-funcdecls` list
@@ -827,8 +827,8 @@ The JSON declaration of the ``uberspark-uobjrtl`` node is as below:
 
 .. json:object:: modules-funcdecls
 
-    :property funcname: canonical function name (See |contrib-guide-ref|:::ref:`contrib-guide-uobjrtl-srccontents`) 
-    :proptype funcname: string
+    :property fn_name: canonical function name (See |contrib-guide-ref|:::ref:`contrib-guide-uobjrtl-srccontents`) 
+    :proptype fn_name: string
 
 
 An example definition of the ``uberspark-uobjrtl`` node for the ``crt`` |uobjrtl|, within |ubersparkmff| follows:

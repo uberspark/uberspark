@@ -20,74 +20,74 @@
 		"arch" : "generic",
         "cpu" : "generic",
 
-        "modules-spec-c" : [
+        "source_c_files" : [
             {
-                "module-path" : "src/memcmp.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__memcmp" }
+                "path" : "src/memcmp.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__memcmp" }
                     ]
             },
   
             {
-                "module-path" : "src/memcpy.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__memcpy" }
+                "path" : "src/memcpy.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__memcpy" }
                     ]
             },
             
             {
-                "module-path" : "src/memmove.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__memmove" }
+                "path" : "src/memmove.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__memmove" }
                     ]
             },
 
             {
-                "module-path" : "src/memset.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__memset" }
+                "path" : "src/memset.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__memset" }
                     ]
             },
 
             {
-                "module-path" : "src/strchr.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strchr" }
+                "path" : "src/strchr.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strchr" }
                     ]
             },
 
             {
-                "module-path" : "src/strcmp.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strcmp" }
+                "path" : "src/strcmp.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strcmp" }
                     ]
             },
            
             {
-                "module-path" : "src/strlen.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strlen" }
+                "path" : "src/strlen.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strlen" }
                     ]
             },
 
             {
-                "module-path" : "src/strncmp.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strncmp" }
+                "path" : "src/strncmp.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strncmp" }
                     ]
             },
 
             {
-                "module-path" : "src/strncpy.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strncpy" }
+                "path" : "src/strncpy.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strncpy" }
                     ]
             },
 
             {
-                "module-path" : "src/strnlen.c",
-                "module-funcdecls" :  [
-                        { "funcname" : "uberspark_uobjrtl_crt__strnlen" }
+                "path" : "src/strnlen.c",
+                "fn_decls" :  [
+                        { "fn_name" : "uberspark_uobjrtl_crt__strnlen" }
                     ]
             }
 

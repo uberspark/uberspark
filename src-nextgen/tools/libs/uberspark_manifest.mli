@@ -381,14 +381,14 @@ module Uobjrtl : sig
 
 type json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t =
 {
-	mutable f_funcname : string;
+	mutable fn_name : string;
 }
 
 
 type json_node_uberspark_uobjrtl_modules_spec_t =
 {
-	mutable f_module_path : string;
-	mutable f_module_funcdecls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
+	mutable path : string;
+	mutable fn_decls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
 }
 
 
@@ -399,8 +399,8 @@ type json_node_uberspark_uobjrtl_t =
 	mutable arch : string;
     mutable cpu : string;
    
-    mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
-    mutable f_modules_spec_casm: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable source_c_files: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable source_casm_files: json_node_uberspark_uobjrtl_modules_spec_t list;
 
 }
 
