@@ -108,7 +108,7 @@ typedef struct {
 //////
 
 typedef struct {
-	uint32_t total_publicmethods;	// total number of public methods
+	uint32_t total_public_methods;	// total number of public methods
 } __attribute__((packed)) usbinformat_uobj_publicmethod_info_hdr_t;
 
 
@@ -170,7 +170,7 @@ typedef struct {
 	uint32_t sizeof_sections_record; //size (in bytes) of a section record
 	uint32_t offsetosections;	//offset (in bytes) of section definitions
 	
-	uint32_t total_publicmethods;	//number of public methods
+	uint32_t total_public_methods;	//number of public methods
 	uint32_t sizeof_publicmethod_record; //size (in bytes) of a publicmethod record
 	uint32_t offsetopublic_methods;	//offset (in bytes) of publicmethod definitions from start of header
 

@@ -20,7 +20,7 @@
 		"arch" : "generic",
 		"cpu" : "generic",
 		"hpl" : "any",
-		"sentinels-intrauobjcoll" : [ "generic/generic/any/call" ],
+		"sentinels_intra_uobjcoll" : [ "generic/generic/any/call" ],
 
 		/* uobjs */
 		"uobjs" : {
@@ -31,9 +31,9 @@
 		},
 
 		/* uobjcoll init method */
-		"initmethod" : {
-			"uobj_ns" : "uberspark/uobjcoll/generic/hello-mul/main",
-			"pm_name" : "init",
+		"init_method" : {
+			"uobj_namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
+			"public_method" : "init",
 			"sentinels" : [
 				{
 					"sentinel_type" : "baremetal/vccore/srot/generic/rpi3/hyp/call",

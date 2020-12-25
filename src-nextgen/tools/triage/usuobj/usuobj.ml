@@ -303,9 +303,9 @@ class uobject = object(self)
 				end;
 
 
-			(* parse uobj-publicmethods node *)
+			(* parse uobj-public_methods node *)
 			let (rval, uobj_publicmethods_list) = 
-										Usmanifest.parse_node_uobj_publicmethods mf_json in
+										Usmanifest.parse_node_uobj_public_methods mf_json in
 
 			if (rval == false) then (false)
 			else

@@ -134,7 +134,7 @@ let json_node_uberspark_uobj_sources_to_var
 
 
 (*--------------------------------------------------------------------------*)
-(* parse manifest json sub-node "publicmethods" into var *)
+(* parse manifest json sub-node "public_methods" into var *)
 (* return: *)
 (* on success: true; var is modified with publicmethod declarations *)
 (* on failure: false; var is unmodified *)
@@ -503,7 +503,7 @@ let json_node_uberspark_uobj_to_var
 					let (rval6, json_node_uberspark_uobj_sections_var) = (json_node_uberspark_uobj_sections_to_var json_node_uberspark_uobj) in
 					let (rval7, json_node_uberspark_uobj_uobjrtl_var) = (json_node_uberspark_uobj_uobjrtl_to_var json_node_uberspark_uobj) in
 
-					(* we require sources and publicmethods sub-nodes at the bare minimum *)
+					(* we require sources and public_methods sub-nodes at the bare minimum *)
 					if (rval1 && rval2 ) then begin
 
 						json_node_uberspark_uobj_var.public_methods <- json_node_uberspark_uobj_publicmethods_var;

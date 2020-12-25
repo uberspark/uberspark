@@ -185,28 +185,28 @@ let get_variable_name_prefix_from_ns
 
 
 
-let get_uobj_uobjcoll_name_from_uobj_ns
-	(uobj_ns : string)
+let get_uobj_uobjcoll_name_from_uobj_namespace
+	(uobj_namespace : string)
 	: (bool * string * string) =
 	
 	let retval = ref false in
 	let uobj_name = ref "" in 
 	let uobjcoll_name = ref "" in 
 	
-	if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobj ^ "/")) uobj_ns 0) then begin
+	if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobj ^ "/")) uobj_namespace 0) then begin
 		(* this is a uobj within the uberspark uobj namespace *)
-		uobj_name := Filename.basename ("/" ^ uobj_ns);
+		uobj_name := Filename.basename ("/" ^ uobj_namespace);
 		uobjcoll_name := "";
 		retval := true;
 	
-	end else if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobjcoll ^ "/")) uobj_ns 0) then begin
+	end else if (Str.string_match (Str.regexp_string (namespace_root ^ "/" ^ namespace_uobjcoll ^ "/")) uobj_namespace 0) then begin
 		(* this is a uobj within a uobjcoll wihin the uberspark uobjcoll namespace *)
-		uobj_name := Filename.basename ("/" ^ uobj_ns);
-		let uobjcoll_ns = Filename.dirname ("/" ^ uobj_ns) in 
+		uobj_name := Filename.basename ("/" ^ uobj_namespace);
+		let uobjcoll_ns = Filename.dirname ("/" ^ uobj_namespace) in 
 		uobjcoll_name := Filename.basename ("/" ^ uobjcoll_ns);
 		retval := true;
 
-	end else if uobj_ns = "legacy" then begin 
+	end else if uobj_namespace = "legacy" then begin 
 		(* this is legacy code namespace *)
 		uobj_name := "";
 		uobjcoll_name := "legacy";
@@ -247,13 +247,13 @@ let is_uobj_uobjcoll_canonical_namespace
 
 
 let is_uobj_ns_in_uobjcoll_ns
-	(uobj_ns : string)
+	(uobj_namespace : string)
 	(uobjcoll_ns : string)
 	: bool =
 
 	let retval = ref false in
 
-	if (Str.string_match (Str.regexp_string (uobjcoll_ns)) uobj_ns 0) then begin
+	if (Str.string_match (Str.regexp_string (uobjcoll_ns)) uobj_namespace 0) then begin
 		(* this is a uobj within the given uobjcoll namespace *)
 		retval := true;
 	

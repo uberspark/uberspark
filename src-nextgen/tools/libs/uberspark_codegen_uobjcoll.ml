@@ -109,13 +109,13 @@ let generate_sentinel_libcode
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n";
 
-        Hashtbl.iter (fun canonical_pm_name pm_addr  ->
+        Hashtbl.iter (fun canonical_public_method pm_addr  ->
 
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n";
             Printf.fprintf oc "\n.section %s" sentinel_libcode_section_name;
-            Printf.fprintf oc "\n.global %s" canonical_pm_name;
-            Printf.fprintf oc "\n%s:" canonical_pm_name;
+            Printf.fprintf oc "\n.global %s" canonical_public_method;
+            Printf.fprintf oc "\n%s:" canonical_public_method;
             let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_SENTINEL_ADDR") (string_of_int pm_addr) sentinel_libcode in
             Printf.fprintf oc "\n%s" tcode;
             Printf.fprintf oc "\n";

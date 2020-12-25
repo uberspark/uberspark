@@ -719,9 +719,9 @@ The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
     :proptype hpl: string
     :options hpl: "generic"
 
-    :property sentinels-intrauobjcoll: type of intra-|uobjcoll| sentinel 
-    :proptype sentinels-intrauobjcoll: string list
-    :options sentinels-intrauobjcoll: "call"
+    :property sentinels_intra_uobjcoll: type of intra-|uobjcoll| sentinel 
+    :proptype sentinels_intra_uobjcoll: string list
+    :options sentinels_intra_uobjcoll: "call"
 
     :property uobjs: list of |uobjs| within the |uobjcoll| 
     :proptype uobjs: :json:object:`uobjs`
@@ -760,7 +760,7 @@ An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll|
             "arch" : "generic",
             "cpu" : "generic",
             "hpl" : "any",
-            "sentinels-intrauobjcoll" : [ "call" ],
+            "sentinels_intra_uobjcoll" : [ "call" ],
 
             "uobjs" : {
                 "master" : "",

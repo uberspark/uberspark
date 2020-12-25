@@ -11,7 +11,7 @@
 (****************************************************************************)
 type slt_codegen_info_t =
 {
-	mutable f_canonical_pm_name     : string;
+	mutable f_canonical_public_method     : string;
 	mutable f_pm_sentinel_addr : int;			
     mutable f_codegen_type : string; (* direct or indirect *)	
     mutable f_pm_sentinel_addr_loc : int;
@@ -29,7 +29,7 @@ type slt_codegen_info_t =
 (*--------------------------------------------------------------------------*)
 let generate_src_binhdr
     (output_filename : string)
-    (uobj_ns : string)
+    (uobj_namespace : string)
     (load_addr : int)
     (image_size : int)
     (sections_list : (string * Defs.Basedefs.section_info_t) list)
@@ -77,7 +77,7 @@ let generate_src_binhdr
         Printf.fprintf oc "\n\t\t0x%08xUL," (List.length sections_list); 
 
         (*namespace*)
-        Printf.fprintf oc "\n\t\"%s\"" uobj_ns; 
+        Printf.fprintf oc "\n\t\"%s\"" uobj_namespace; 
 
     Printf.fprintf oc "\n};"; 
 
@@ -119,7 +119,7 @@ let generate_src_binhdr
 
 
 (*--------------------------------------------------------------------------*)
-(* generate uobj publicmethods info  *)
+(* generate uobj public_methods info  *)
 (*--------------------------------------------------------------------------*)
 let generate_src_publicmethods_info 
     (output_filename : string)
@@ -144,7 +144,7 @@ let generate_src_publicmethods_info
     (* generate public methods info header *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo_hdr\") )) usbinformat_uobj_publicmethod_info_hdr_t uobj_pminfo_hdr = {";
 
-        (*total_publicmethods*)
+        (*total_public_methods*)
         Printf.fprintf oc "\n\t0x%08xUL" (Hashtbl.length publicmethods_hashtbl);
 
     Printf.fprintf oc "\n};";
@@ -216,14 +216,14 @@ let generate_src_intrauobjcoll_callees_info
 
         let slt_ordinal = ref 0 in
         Hashtbl.iter (fun key value ->  
-            List.iter (fun pm_name -> 
+            List.iter (fun public_method -> 
                 Printf.fprintf oc "\n\t{"; 
                 
                 (* namespace *)
                 Printf.fprintf oc "\n\t\t\"%s\"," key; 
                 
                 (* cname *)
-                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                Printf.fprintf oc "\n\t\t\"%s\"," public_method; 
                 
                 (* slt_ordinal *)
                 Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
@@ -298,14 +298,14 @@ let generate_src_interuobjcoll_callees_info
         
       
         Hashtbl.iter (fun key value ->  
-            List.iter (fun pm_name -> 
+            List.iter (fun public_method -> 
                 Printf.fprintf oc "\n\t{"; 
                 
                 (* namespace *)
                 Printf.fprintf oc "\n\t\t\"%s\"," key; 
                 
                 (* cname *)
-                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                Printf.fprintf oc "\n\t\t\"%s\"," public_method; 
                 
                 (* slt_ordinal *)
                 Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
@@ -478,8 +478,8 @@ let generate_slt
         and corresponding direct or indirect xfer template *)
         List.iter ( fun (slt_codegen_info: slt_codegen_info_t) ->
             Printf.fprintf oc "\n";
-            Printf.fprintf oc "\n.global %s" slt_codegen_info.f_canonical_pm_name;
-            Printf.fprintf oc "\n%s:" slt_codegen_info.f_canonical_pm_name;
+            Printf.fprintf oc "\n.global %s" slt_codegen_info.f_canonical_public_method;
+            Printf.fprintf oc "\n%s:" slt_codegen_info.f_canonical_public_method;
 
             if slt_codegen_info.f_codegen_type = "direct" then begin
 

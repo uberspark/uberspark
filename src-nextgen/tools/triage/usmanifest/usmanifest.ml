@@ -267,17 +267,17 @@ module Usmanifest =
 
 
 	(*--------------------------------------------------------------------------*)
-	(* parse manifest node "uobj-publicmethods" *)
+	(* parse manifest node "uobj-public_methods" *)
 	(* return true on successful parse, false if not *)
 	(* return: if true then list public methods *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_uobj_publicmethods usmf_json =
+	let parse_node_uobj_public_methods usmf_json =
 		let retval = ref false in
 		let uobj_publicmethods_list = ref [] in
 
 		try
 			let open Yojson.Basic.Util in
-		  	let uobj_publicmethods_json = usmf_json |> member "uobj-publicmethods" in
+		  	let uobj_publicmethods_json = usmf_json |> member "uobj-public_methods" in
 					if uobj_publicmethods_json != `Null then
 						begin
 

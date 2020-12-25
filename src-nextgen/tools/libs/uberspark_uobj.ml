@@ -245,7 +245,7 @@ class uobject
 		else
 
 		let dummy = 0 in begin
-		(* generate publicmethods hashtable *)
+		(* generate public_methods hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_publicmethods_hashtbl x y;
 		) json_node_uberspark_uobj_var.public_methods;
@@ -476,14 +476,14 @@ class uobject
 
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 
-			(* if this section is for a public method, then update publicmethods hashtable with address *)
+			(* if this section is for a public method, then update public_methods hashtable with address *)
 			if x.usbinformat.f_type == Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO then begin
-				let pm_name = (Str.string_after x.fn_name 8) in  (* grab public method name after uobj_pm_ *)
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" pm_name;
-			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl pm_name) then begin
-					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl pm_name) in
+				let public_method = (Str.string_after x.fn_name 8) in  (* grab public method name after uobj_pm_ *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" public_method;
+			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl public_method) then begin
+					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl public_method) in
 						pm_info.fn_address <- !uobj_section_load_addr;
-					Hashtbl.replace self#get_d_publicmethods_hashtbl pm_name pm_info;
+					Hashtbl.replace self#get_d_publicmethods_hashtbl public_method pm_info;
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updated publicmethod address as 0x%08x" pm_info.fn_address;
 		    	end else begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unable to match public method name to section definition!";
@@ -654,8 +654,8 @@ class uobject
 					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
-			let section_name = ("uobj_pm_" ^ pm_name) in 
+		Hashtbl.iter (fun (public_method:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ public_method) in 
 
 			l_add_section section_name [ "." ^ section_name ]
 						Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
@@ -780,12 +780,12 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "length of callees_sentinel_type_hashtbl=%u" (Hashtbl.length callees_sentinel_type_hashtbl);
 
   		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
-	        List.iter (fun (pm_name:string) -> 
+	        List.iter (fun (public_method:string) -> 
 				let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
-				let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
-				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
+				let canonical_public_method = (ns_var ^ "__" ^ public_method) in
+				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_public_method in
 				List.iter ( fun (sentinel_type: string) ->
-					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
+					let canonical_pm_name_with_sentinel_suffix = (canonical_public_method ^ "__" ^ sentinel_type) in  
 					let pm_sentinel_addr = ref 0 in 
 					let codegen_type = ref "" in 
 
@@ -808,7 +808,7 @@ class uobject
 					end;
 
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
-						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
+						f_canonical_public_method = canonical_pm_name_with_sentinel_suffix;
 						f_pm_sentinel_addr = !pm_sentinel_addr;
 						f_codegen_type = !codegen_type;
 						f_pm_sentinel_addr_loc = 0;
@@ -817,8 +817,8 @@ class uobject
 
 					if !codegen_type = "indirect" then begin
 						let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
-							f_canonical_pm_name = canonical_pm_name;
-							f_sentinel_type = sentinel_type;
+							f_canonical_public_method = canonical_public_method;
+							sentinel_type = sentinel_type;
 							f_table_offset = !slt_indirect_xfer_table_offset;
 							fn_address = !pm_sentinel_addr;
 						} in
@@ -834,12 +834,12 @@ class uobject
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
-						slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+						slt_codegen_info.f_canonical_public_method slt_codegen_info.f_pm_sentinel_addr;
 
-					(* if sentinel type is call, then add entry with just canonical_pm_name in addition *)
+					(* if sentinel type is call, then add entry with just canonical_public_method in addition *)
 					if sentinel_type = "call" then begin
 						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
-							f_canonical_pm_name = canonical_pm_name;
+							f_canonical_public_method = canonical_public_method;
 							f_pm_sentinel_addr = !pm_sentinel_addr;
 							f_codegen_type = !codegen_type;
 							f_pm_sentinel_addr_loc = 0;
@@ -848,8 +848,8 @@ class uobject
 
 						if !codegen_type = "indirect" then begin
 							let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
-								f_canonical_pm_name = canonical_pm_name;
-								f_sentinel_type = sentinel_type;
+								f_canonical_public_method = canonical_public_method;
+								sentinel_type = sentinel_type;
 								f_table_offset = !slt_indirect_xfer_table_offset;
 								fn_address = !pm_sentinel_addr;
 							} in
@@ -865,7 +865,7 @@ class uobject
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
-							slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+							slt_codegen_info.f_canonical_public_method slt_codegen_info.f_pm_sentinel_addr;
 					end;
 
 				) callees_sentinel_type_list;
@@ -1661,7 +1661,7 @@ let create_initialize_and_verify
 		f_uberspark_hdr = `Null;
 		f_uobj_hdr = `Null;
 		f_uobj_sources = `Null;
-		f_uobj_publicmethods = `Null;
+		f_uobj_public_methods = `Null;
 		f_uobj_intrauobjcoll_callees = `Null;
 		f_uobj_interuobjcoll_callees = `Null;
 		f_uobj_legacy_callees = `Null;

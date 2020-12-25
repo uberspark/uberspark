@@ -55,7 +55,7 @@
 type uobjinfo_t =
 {
 	mutable f_uobj_name    			: string;			
-	mutable f_uobj_ns				: string;
+	mutable uobj_namespace				: string;
 	mutable f_uobj_srcpath	   		: string;	(* path where uobj sources reside *)
 	mutable f_uobj_buildpath 		: string;	(* path where uobj sources are copied for build *)
 	mutable f_uobj_nspath 			: string; 	(* path for uobj namsepace *)
@@ -73,8 +73,8 @@ type uobjcoll_sentinel_address_t =
 	
 type slt_indirect_xfer_table_info_t =
 {
-	mutable f_canonical_pm_name : string;
-	mutable f_sentinel_type : string;
+	mutable f_canonical_public_method : string;
+	mutable sentinel_type : string;
 	mutable f_table_offset : int;
 	mutable fn_address : int;
 };;

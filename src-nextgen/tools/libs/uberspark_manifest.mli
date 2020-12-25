@@ -307,31 +307,31 @@ module Uobjcoll : sig
 
   type json_node_uberspark_uobjcoll_uobjs_t =
   {
-    mutable f_master    : string;
-    mutable f_templars  : string list;
+    mutable master    : string;
+    mutable templars  : string list;
   }
 
 
   type json_node_uberspark_uobjcoll_initmethod_sentinels_t =
   {
-    mutable f_sentinel_type    : string;
-    mutable f_sentinel_size	 : int;
+    mutable sentinel_type    : string;
+    mutable sentinel_size	 : int;
   }
 
 
   type json_node_uberspark_uobjcoll_initmethod_t =
   {
-    mutable f_uobj_ns    : string;
-    mutable f_pm_name	 : string;
-    mutable f_sentinels : json_node_uberspark_uobjcoll_initmethod_sentinels_t list;
+    mutable uobj_namespace    : string;
+    mutable public_method	 : string;
+    mutable sentinels : json_node_uberspark_uobjcoll_initmethod_sentinels_t list;
   }
 
 
   type json_node_uberspark_uobjcoll_publicmethods_t =
   {
-    mutable f_uobj_ns    : string;
-    mutable f_pm_name	 : string;
-    mutable f_sentinel_type_list : string list;
+    mutable uobj_namespace    : string;
+    mutable public_method	 : string;
+    mutable sentinel_type_list : string list;
   }
 
   type json_node_uberspark_uobjcoll_t =
@@ -340,12 +340,12 @@ module Uobjcoll : sig
     mutable platform	   : string;
     mutable arch	       : string;
     mutable cpu		   : string;
-    mutable f_hpl		   : string;
-    mutable f_sentinels_intrauobjcoll : string list;
-    mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
-    mutable f_initmethod : json_node_uberspark_uobjcoll_initmethod_t;
+    mutable hpl		   : string;
+    mutable sentinels_intra_uobjcoll : string list;
+    mutable uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
+    mutable init_method : json_node_uberspark_uobjcoll_initmethod_t;
     mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
-    mutable f_loaders : string list;
+    mutable loaders : string list;
   }
 
   val json_node_uberspark_uobjcoll_uobjs_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_uobjs_t -> bool

@@ -20,7 +20,7 @@
 		"arch" : "generic",
 		"cpu" : "generic",
 		"hpl" : "any",
-		"sentinels-intrauobjcoll" : [ "call" ],
+		"sentinels_intra_uobjcoll" : [ "call" ],
 
 		/* uobjs */
 		"uobjs" : {
