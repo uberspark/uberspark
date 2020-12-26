@@ -2,13 +2,10 @@
 
 
 {
-   	/* manifest header */
-	   "uberspark-manifest":{
-		"namespace" : [ "uberspark-config" ],
-		"version_min" : "any",
-		"version_max" : "any"
-	},
-
+   		"uberspark.manifest.namespace" : [ "uberspark-config" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+	
 	"uberspark-config":{
 		"binary_page_size" : "0x200000",
 		"binary_uobj_section_alignment" : "0x200000",

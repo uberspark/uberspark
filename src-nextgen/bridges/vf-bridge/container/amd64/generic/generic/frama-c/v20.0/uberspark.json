@@ -3,12 +3,9 @@
 */
 
 {
-   	/* manifest header */
-	   "uberspark-manifest":{
-		"namespace" : [ "uberspark-bridge-vf" ],
-		"version_min" : "any",
-		"version_max" : "any"
-	},
+		"uberspark.manifest.namespace" : [ "uberspark-bridge-vf" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any"
 
     "uberspark-bridge-vf" : {
 		/* bridge header */

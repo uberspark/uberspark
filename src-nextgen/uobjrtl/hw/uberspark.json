@@ -5,12 +5,9 @@
 
 {
 
-	/* manifest header */
-	"uberspark-manifest":{
-		"namespace" : [ "uberspark-uobjrtl" ],
-		"version_min" : "any",
-		"version_max" : "any"
-	},
+		"uberspark.manifest.namespace" : [ "uberspark-uobjrtl" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
 
     /* uobjrtl node */
     "uberspark-uobjrtl" : {
