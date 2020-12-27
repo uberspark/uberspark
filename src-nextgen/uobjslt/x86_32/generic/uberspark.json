@@ -9,18 +9,16 @@
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 
-    "uberspark-uobjslt" : {
-
-		"namespace" : "/uberspark/uobjslt/x86_32/generic",
-		"platform" : "generic",
-		"arch" : "x86_32",
-        "cpu" : "generic",
-        "sizeof_addressing" : "4",
+		"uberspark.uobjslt.namespace" : "/uberspark/uobjslt/x86_32/generic",
+		"uberspark.uobjslt.platform" : "generic",
+		"uberspark.uobjslt.arch" : "x86_32",
+        "uberspark.uobjslt.cpu" : "generic",
+        "uberspark.uobjslt.sizeof_addressing" : "4",
 
         /* uobjslt direct execution transfer code template 
         inputs: constant address, UOBJSLT_SENTINEL_PM_ADDRESS
         */
-        "code_template_directxfer": "
+        "uberspark.uobjslt.code_template_directxfer": "
             movl $(UOBJSLT_SENTINEL_PM_ADDRESS), %eax
             jmpl *%eax
         ",
@@ -28,7 +26,7 @@
         /* uobjslt indirect execution transfer code template 
         inputs: constant address of (table) location where sentinel/pm address resides, UOBJSLT_SENTINEL_PM_ADDRESS_LOC
         */
-        "code_template_indirectxfer": "
+        "uberspark.uobjslt.code_template_indirectxfer": "
             movl $(UOBJSLT_SENTINEL_PM_ADDRESS_LOC), %eax
             movl (%eax), %eax
             jmpl *%eax
@@ -37,11 +35,9 @@
         /* uobjslt address definition template 
         inputs: constant address, UOBJSLT_CONST_ADDRESS
         */
-        "code_template_data_definition": "
+        "uberspark.uobjslt.code_template_data_definition": "
             .long UOBJSLT_CONST_ADDRESS
         "
 
 
-    }
-    
 }

@@ -48,23 +48,15 @@ let json_node_uberspark_uobjslt_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobjslt = mf_json |> member Uberspark_namespace.namespace_uobjslt_mf_node_type_tag in
-		
-			if(json_node_uberspark_uobjslt <> `Null) then
-				begin
-
-					json_node_uberspark_uobjslt_var.namespace <- json_node_uberspark_uobjslt |> member "namespace" |> to_string;
-					json_node_uberspark_uobjslt_var.platform <- json_node_uberspark_uobjslt |> member "platform" |> to_string;
-					json_node_uberspark_uobjslt_var.arch <- json_node_uberspark_uobjslt |> member "arch" |> to_string;
-					json_node_uberspark_uobjslt_var.cpu <- json_node_uberspark_uobjslt |> member "cpu" |> to_string;
-					json_node_uberspark_uobjslt_var.sizeof_addressing <- int_of_string (json_node_uberspark_uobjslt |> member "sizeof_addressing" |> to_string);
-					json_node_uberspark_uobjslt_var.code_template_directxfer <- json_node_uberspark_uobjslt |> member "code_template_directxfer" |> to_string;
-					json_node_uberspark_uobjslt_var.code_template_indirectxfer <- json_node_uberspark_uobjslt |> member "code_template_indirectxfer" |> to_string;
-					json_node_uberspark_uobjslt_var.code_template_data_definition <- json_node_uberspark_uobjslt |> member "code_template_data_definition" |> to_string;
-
-					retval := true;
-				end
-			;
+			json_node_uberspark_uobjslt_var.namespace <- mf_json |> member "uberspark.uobjslt.namespace" |> to_string;
+			json_node_uberspark_uobjslt_var.platform <- mf_json |> member "uberspark.uobjslt.platform" |> to_string;
+			json_node_uberspark_uobjslt_var.arch <- mf_json |> member "uberspark.uobjslt.arch" |> to_string;
+			json_node_uberspark_uobjslt_var.cpu <- mf_json |> member "uberspark.uobjslt.cpu" |> to_string;
+			json_node_uberspark_uobjslt_var.sizeof_addressing <- int_of_string (mf_json |> member "uberspark.uobjslt.sizeof_addressing" |> to_string);
+			json_node_uberspark_uobjslt_var.code_template_directxfer <- mf_json |> member "uberspark.uobjslt.code_template_directxfer" |> to_string;
+			json_node_uberspark_uobjslt_var.code_template_indirectxfer <- mf_json |> member "uberspark.uobjslt.code_template_indirectxfer" |> to_string;
+			json_node_uberspark_uobjslt_var.code_template_data_definition <- mf_json |> member "uberspark.uobjslt.code_template_data_definition" |> to_string;
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
