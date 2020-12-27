@@ -9,15 +9,12 @@
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 
-    /* uobjrtl node */
-    "uberspark-uobjrtl" : {
+        "uberspark.uobjrtl.namespace" : "uberspark/uobjrtl/hw",
+		"uberspark.uobjrtl.platform" : "pc",
+		"uberspark.uobjrtl.arch" : "x86_32",
+        "uberspark.uobjrtl.cpu" : "generic",
 
-        "namespace" : "uberspark/uobjrtl/hw",
-		"platform" : "pc",
-		"arch" : "x86_32",
-        "cpu" : "generic",
-
-        "source_c_files" : [
+        "uberspark.uobjrtl.source_c_files" : [
         /*************** C modules ***************/
 
         /* cpu */
@@ -350,7 +347,7 @@
             }
         ],
         
-        "source_casm_files" : [
+        "uberspark.uobjrtl.source_casm_files" : [
 
             /****************************** CASM Modules ****************************/
 
@@ -810,6 +807,5 @@
             }
             
         ]
-    }        
 
 }

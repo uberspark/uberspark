@@ -9,15 +9,12 @@
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 
-    /* uobjrtl node */
-    "uberspark-uobjrtl" : {
+        "uberspark.uobjrtl.namespace" : "uberspark/uobjrtl/crt",
+		"uberspark.uobjrtl.platform" : "generic",
+		"uberspark.uobjrtl.arch" : "generic",
+        "uberspark.uobjrtl.cpu" : "generic",
 
-        "namespace" : "uberspark/uobjrtl/crt",
-		"platform" : "generic",
-		"arch" : "generic",
-        "cpu" : "generic",
-
-        "source_c_files" : [
+        "uberspark.uobjrtl.source_c_files" : [
             {
                 "path" : "src/memcmp.c",
                 "fn_decls" :  [
@@ -90,6 +87,5 @@
 
 
         ]
-    }        
 
 }

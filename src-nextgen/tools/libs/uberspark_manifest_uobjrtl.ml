@@ -60,17 +60,13 @@ let json_node_uberspark_uobjrtl_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobjrtl = mf_json |> member Uberspark_namespace.namespace_uobjrtl_mf_node_type_tag in
-		
-			if(json_node_uberspark_uobjrtl <> `Null) then
-				begin
 
-					json_node_uberspark_uobjrtl_var.namespace <- json_node_uberspark_uobjrtl |> member "namespace" |> to_string;
-					json_node_uberspark_uobjrtl_var.platform <- json_node_uberspark_uobjrtl |> member "platform" |> to_string;
-					json_node_uberspark_uobjrtl_var.arch <- json_node_uberspark_uobjrtl |> member "arch" |> to_string;
-					json_node_uberspark_uobjrtl_var.cpu <- json_node_uberspark_uobjrtl |> member "cpu" |> to_string;
+					json_node_uberspark_uobjrtl_var.namespace <- mf_json |> member "uberspark.uobjrtl.namespace" |> to_string;
+					json_node_uberspark_uobjrtl_var.platform <- mf_json |> member "uberspark.uobjrtl.platform" |> to_string;
+					json_node_uberspark_uobjrtl_var.arch <- mf_json |> member "uberspark.uobjrtl.arch" |> to_string;
+					json_node_uberspark_uobjrtl_var.cpu <- mf_json |> member "uberspark.uobjrtl.cpu" |> to_string;
 
-					let json_node_uberspark_uobjrtl_modules_spec_c_list =  json_node_uberspark_uobjrtl |> member "source_c_files" |> to_list in
+					let json_node_uberspark_uobjrtl_modules_spec_c_list =  mf_json |> member "uberspark.uobjrtl.source_c_files" |> to_list in
 					List.iter (fun x -> 
 						let f_modules_spec_c_element : json_node_uberspark_uobjrtl_modules_spec_t = 
 							{ path = ""; fn_decls = []; } in
@@ -82,10 +78,10 @@ let json_node_uberspark_uobjrtl_to_var
 						json_node_uberspark_uobjrtl_var.source_c_files <- json_node_uberspark_uobjrtl_var.source_c_files @ [ f_modules_spec_c_element ];
 					) json_node_uberspark_uobjrtl_modules_spec_c_list;
 
-					if (json_node_uberspark_uobjrtl |> member "source_casm_files") <> `Null then
+					if (mf_json |> member "uberspark.uobjrtl.source_casm_files") <> `Null then
 						begin
 
-							let json_node_uberspark_uobjrtl_modules_spec_casm_list =  json_node_uberspark_uobjrtl |> member "source_casm_files" |> to_list in
+							let json_node_uberspark_uobjrtl_modules_spec_casm_list =  mf_json |> member "uberspark.uobjrtl.source_casm_files" |> to_list in
 							List.iter (fun x -> 
 								let f_modules_spec_casm_element : json_node_uberspark_uobjrtl_modules_spec_t = 
 									{ path = ""; fn_decls = []; } in
@@ -100,8 +96,6 @@ let json_node_uberspark_uobjrtl_to_var
 					;
 
 					retval := true;
-				end
-			;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
