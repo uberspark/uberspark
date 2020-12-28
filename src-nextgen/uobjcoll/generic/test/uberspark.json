@@ -11,25 +11,17 @@
 		"uberspark.manifest.version_max" : "any",
 
 
-	"uberspark-uobjcoll":{
-		"namespace" : "uberspark/uobjcoll/generic/test",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic",
-		"hpl" : "any",
-		"sentinels_intra_uobjcoll" : [ "call" ],
+		"uberspark.uobjcoll.namespace" : "uberspark/uobjcoll/generic/test",
+		"uberspark.uobjcoll.platform" : "generic",
+		"uberspark.uobjcoll.arch" : "generic",
+		"uberspark.uobjcoll.cpu" : "generic",
+		"uberspark.uobjcoll.hpl" : "any",
+		"uberspark.uobjcoll.sentinels_intra_uobjcoll" : [ "call" ],
 
-	/* config settings */	
-	/*"config-settings":{
-		"binary_uobj_default_size" : "0x1000000",
-		"cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0",
-		"as_bridge_namespace" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
-		"ld_bridge_namespace" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
-	},*/
 
 
 	/* uobjs */
-	"uobjs" : {
+	"uberspark.uobjcoll.uobjs" : {
 		"master" : "",
 		"templars" : [
 			"uberspark/uobjcoll/generic/test/main",
@@ -37,21 +29,9 @@
 		]
 	},
 
-	/* inter uobj collection public methods */
-/*	"uobjcoll-interuobjcoll-public_methods" : {
-		
-		"uberspark/uobjcoll/generic/test/main" : {
-			"main" : [ "call" ]
-		},
-		
-		"uberspark/uobjs/generic/test/add" : {
-			"add" : [ "call" ]
-		}
-	},
-*/
 
 
-		"public_methods" : {
+		"uberspark.uobjcoll.public_methods" : {
 			"uberspark/uobjcoll/generic/test/main" : {
 				"main" : [ "call" ]
 			},
@@ -61,7 +41,6 @@
 			}
 		}	
 
-	}
 
 }
 
