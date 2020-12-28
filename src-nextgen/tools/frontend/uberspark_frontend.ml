@@ -173,16 +173,16 @@ let cmd_bridges =
  		`S "ACTIONS";
     	`I ("$(b,config)",
         	"configure a bridge specified by the $(i,NAMESPACE) argument; only valid for bridges backed by containers. 
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--build)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,-loader), and $(b,--build)");
     	`I ("$(b,create)",
         	"create a new bridge namespaces from a file $(i,PATH) argument.
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bare)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,-loader), and $(b,--bare)");
     	`I ("$(b,dump)",
         	"store a bridge configuration specified by the $(i,NAMESPACE) argument to the specified output directory. 
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,--bridge-exectype), and $(b,--output-directory)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,-loader), $(b,--bridge-exectype), and $(b,--output-directory)");
      	`I ("$(b,remove)",
         	"remove a bridge configuration namespace specified by the $(i,NAMESPACE) argument.
-			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), and $(b,--bridge-exectype)");
+			Uses the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), $(b,-loader), and $(b,--bridge-exectype)");
 	 	`S "ACTION OPTIONS";
 	  	`P "These options qualify the aforementioned actions.";
 		`Blocks manpage_sec_common_options;

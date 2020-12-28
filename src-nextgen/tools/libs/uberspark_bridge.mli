@@ -174,6 +174,30 @@ module Vf : sig
 
 end
 
+module Loader : sig
+
+	(*--------------------------------------------------------------------------*)
+	(* loader-bridge data variables *)
+	(*--------------------------------------------------------------------------*)
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
+	val json_node_uberspark_bridge_loader_var: Uberspark_manifest.Bridge.Loader.json_node_uberspark_bridge_loader_t
+
+
+	(*--------------------------------------------------------------------------*)
+	(* interfaces *)
+	(*--------------------------------------------------------------------------*)
+	val load_from_json : Yojson.Basic.json ->  bool
+	val load_from_file : string -> bool
+	val load : string -> bool
+	val store_to_file : string -> bool
+	val store : unit -> bool
+	val build : unit -> bool
+	val invoke : 
+		?context_path_builddir : string -> 
+		string ->
+		bool
+
+end
 
 
 

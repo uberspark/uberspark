@@ -40,6 +40,7 @@
 #include <uberspark/uobjrtl/crt/include/stdarg.h>
 #include <uberspark/uobjrtl/crt/include/string.h>
 
+#ifndef __ASSEMBLY__
 
 //tomcrypt.h
 
@@ -202,10 +203,17 @@ struct sha1_state {
     uint8_t buf[64];
 };
 
+struct sha256_state {
+    uint64_t length;
+    uint32_t state[8], curlen;
+    uint8_t buf[64];
+};
+
 
 typedef union Hash_state {
     char dummy[1];
     struct sha1_state sha1;
+    struct sha256_state sha256;
     void *data;
 } hash_state;
 
@@ -294,7 +302,7 @@ typedef struct Hmac_state {
 
 
 
-
+#endif
 
 
 #endif /* __UOBJRTL_CRYPTO__BASEDEFS_H__ */

@@ -10,6 +10,7 @@ module Osservices = Uberspark_osservices
 module Bridge = Uberspark_bridge
 module Manifest = Uberspark_manifest
 module Binary = Uberspark_binary
+module Loader = Uberspark_loader
 module Uobj = Uberspark_uobj
 module Uobjcoll = Uberspark_uobjcoll
 

@@ -6,9 +6,9 @@
 #    author: amit vasudevan <amitvasudevan@acm.org>
 #
 
-COMPILER := container/amd64/x86_32/generic/gcc/v5.4.0
-ASSEMBLER := container/amd64/x86_32/generic/gnu-as/v2.26.1
-LINKER := container/amd64/x86_32/generic/gnu-ld/v2.26.1
+COMPILER := container/amd64/armv8_32/generic/gcc/v4.9.3
+ASSEMBLER := container/amd64/armv8_32/generic/gnu-as/v2.26.1
+LINKER := container/amd64/armv8_32/generic/gnu-ld/v2.26.1
 
 UBERSPARK_NAMESPACE := $(shell uberspark staging list | grep generic-platform)
 UBERSPARK_CC := $(shell uberspark staging --setting-name=bridge_cc_bridge config-get)
@@ -26,14 +26,14 @@ all: prep build
 build: prep
 	@echo building hello_mul...
 	uberspark staging switch generic-platform
-	cd uobjcoll && uberspark uobjcoll build -v --platform=generic --arch=x86_32 --cpu=generic .
+	cd uobjcoll && uberspark uobjcoll build -v --platform=generic --arch=armv8_32 --cpu=generic .
 	@echo built hello_mul successfully!
 
 .PHONY: verify
 verify: prep
 	@echo verifying hello_mul...
 	uberspark staging switch generic-platform
-	cd uobjcoll && uberspark uobjcoll verify -v --platform=generic --arch=x86_32 --cpu=generic .
+	cd uobjcoll && uberspark uobjcoll verify -v --platform=generic --arch=armv8_32 --cpu=generic .
 	@echo verified hello_mul successfully!
 
 

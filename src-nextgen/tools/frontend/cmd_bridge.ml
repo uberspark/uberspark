@@ -11,6 +11,7 @@ type opts = {
   ld_bridge: bool;
   pp_bridge: bool;
   vf_bridge: bool;
+  loader_bridge: bool;
   build: bool;
   output_directory: string option;
   bridge_exectype : string option;
@@ -24,6 +25,7 @@ let cmd_bridge_opts_handler
   (ld_bridge: bool)
   (pp_bridge: bool)
   (vf_bridge: bool)
+  (loader_bridge: bool)
   (build : bool)
   (output_directory: string option)
   (bridge_exectype : string option)
@@ -34,6 +36,7 @@ let cmd_bridge_opts_handler
     ld_bridge=ld_bridge;
     pp_bridge=pp_bridge;
     vf_bridge=vf_bridge;
+    loader_bridge=loader_bridge;
     build=build;
     output_directory=output_directory;
     bridge_exectype=bridge_exectype;
@@ -74,6 +77,11 @@ let cmd_bridge_opts_t =
   Arg.(value & flag & info ["vf"; "vf-bridge"] ~doc ~docs)
   in
 
+  let loader_bridge =
+  let doc = "Select loader bridge namespace prefix." in
+  Arg.(value & flag & info ["loader"; "loader-bridge"] ~doc ~docs)
+  in
+
   let build =
   let doc = "Build the bridge if bridge execution type is 'container'" in
   Arg.(value & flag & info ["b"; "build"] ~doc ~docs)
@@ -90,7 +98,7 @@ let cmd_bridge_opts_t =
   in
 
 
-  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ build $ output_directory $ bridge_exectype)
+  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ loader_bridge $ build $ output_directory $ bridge_exectype)
 
 
 
@@ -324,6 +332,20 @@ let helper_bridges_action_config_do
           end
           ;  
 
+        | "loader-bridge" -> 
+
+          if (Uberspark.Bridge.Loader.load bridge_ns) then begin
+            Uberspark.Logger.log "loaded loader-bridge settings";
+            if ( Uberspark.Bridge.Loader.build () ) then begin
+              retval := `Ok();
+            end else begin
+              retval := `Error (false, "could not build loader-bridge!");
+            end;
+          end else begin
+            retval := `Error (false, "unable to load loader-bridge settings!");
+          end
+          ;  
+
 
         | _ ->
             retval := `Error (false, "unknown bridge type!");
@@ -379,8 +401,11 @@ let handler_bridges_action_config
           end else if cmd_bridges_opts.vf_bridge then begin
               retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_vf_bridge_name bridge_ns cmd_bridges_opts;
 
+          end else if cmd_bridges_opts.loader_bridge then begin
+              retval := helper_bridges_action_config_do Uberspark.Namespace.namespace_bridge_loader_bridge_name bridge_ns cmd_bridges_opts;
+
           end else begin
-              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), and $(b,-vf)");
+              retval := `Error (true, "need one of the following action options: $(b,-ar), $(b,-as), $(b,-cc), $(b,-ld), $(b,-pp), $(b,-vf), or $(b,-loader)");
           end;
 
 

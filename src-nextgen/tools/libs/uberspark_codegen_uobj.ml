@@ -583,6 +583,7 @@ let generate_linker_script
             i := !i + 1;
         done;
 
+        
         Printf.fprintf oc "\n";
         Printf.fprintf oc "\n	/* this is to cause the link to fail if there is";
         Printf.fprintf oc "\n	* anything we didn't explicitly place.";
@@ -593,6 +594,8 @@ let generate_linker_script
         Printf.fprintf oc "\n	/DISCARD/ : {";
         Printf.fprintf oc "\n	*(*)";
         Printf.fprintf oc "\n	}";
+        
+        
         Printf.fprintf oc "\n}";
         Printf.fprintf oc "\n";
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

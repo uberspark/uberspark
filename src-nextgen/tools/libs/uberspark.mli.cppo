@@ -62,6 +62,13 @@ module Binary : sig
 
 end
 
+module Loader : sig
+
+#include "uberspark_loader.mli"  
+
+end
+
+
 module Uobj : sig
   
 #include "uberspark_uobj.mli"

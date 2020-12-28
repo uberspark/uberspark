@@ -104,6 +104,11 @@ struct
 #include "uberspark_bridge_casm.ml"
 end
 
+module Loader =
+struct
+#include "uberspark_bridge_loader.ml"
+end
+
 
 
 (*---------------------------------------------------------------------------*)

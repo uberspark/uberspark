@@ -75,6 +75,8 @@
 #ifndef __UOBJRTL_CRT_CTYPE_H__
 #define __UOBJRTL_CRT_CTYPE_H__
 
+#ifndef __ASSEMBLY__
+
 #define isspace(c)      ((c) == ' ' || ((c) >= '\t' && (c) <= '\r'))
 #define isascii(c)      (((c) & ~0x7f) == 0)
 #define isupper(c)      ((c) >= 'A' && (c) <= 'Z')
@@ -88,5 +90,8 @@
 
 #define toupper(c)      ((c) - 0x20 * (((c) >= 'a') && ((c) <= 'z')))
 #define tolower(c)      ((c) + 0x20 * (((c) >= 'A') && ((c) <= 'Z')))
+
+#endif
+
 
 #endif // __UOBJRTL_CRT_CTYPE_H__

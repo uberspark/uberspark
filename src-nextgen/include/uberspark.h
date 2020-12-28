@@ -57,6 +57,10 @@
 #include <uberspark/uobjrtl/crt/include/stddef.h>
 #include <uberspark/uobjrtl/crt/include/stdarg.h>
 #include <uberspark/uobjrtl/crt/include/string.h>
+#include <uberspark/uobjrtl/crt/include/ctype.h>
+
+#else
+
 
 #endif
 

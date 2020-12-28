@@ -27,6 +27,22 @@ type json_node_uberspark_uobjcoll_publicmethods_t =
 };;
 
 
+type json_node_uberspark_uobjcoll_initmethod_sentinels_t =
+{
+	mutable f_sentinel_type    : string;
+	mutable f_sentinel_size	 : int;
+};;
+
+
+type json_node_uberspark_uobjcoll_initmethod_t =
+{
+	mutable f_uobj_ns    : string;
+	mutable f_pm_name	 : string;
+	mutable f_sentinels : json_node_uberspark_uobjcoll_initmethod_sentinels_t list;
+};;
+
+
+
 type json_node_uberspark_uobjcoll_t =
 {
 	mutable f_namespace    : string;			
@@ -36,7 +52,9 @@ type json_node_uberspark_uobjcoll_t =
 	mutable f_hpl		   : string;
 	mutable f_sentinels_intrauobjcoll : string list;
 	mutable f_uobjs 		: json_node_uberspark_uobjcoll_uobjs_t;
+	mutable f_initmethod	: json_node_uberspark_uobjcoll_initmethod_t;
 	mutable f_publicmethods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
+	mutable f_loaders : string list;
 };;
 
 
@@ -78,6 +96,64 @@ let json_node_uberspark_uobjcoll_uobjs_to_var
 	;
 
 	(!retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "initmethod" into var *)
+(* return: *)
+(* on success: true; var is modified with initmethod declarations and sentinels *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobjcoll_initmethod_to_var 
+	(json_node_uberspark_uobjcoll : Yojson.Basic.t)
+	: bool * json_node_uberspark_uobjcoll_initmethod_t =
+
+	let retval = ref true in
+	let entry : json_node_uberspark_uobjcoll_initmethod_t = {
+			f_uobj_ns = "";
+			f_pm_name = "";
+			f_sentinels = [];
+		} in
+	let f_sentinels_list : json_node_uberspark_uobjcoll_initmethod_sentinels_t list ref = ref [] in 
+
+
+	try
+		let open Yojson.Basic.Util in
+			let uobjcoll_initmethod_json = json_node_uberspark_uobjcoll |> member "initmethod" in
+			if uobjcoll_initmethod_json != `Null then	begin
+				entry.f_uobj_ns <- uobjcoll_initmethod_json |> member "uobj_ns" |> to_string;
+				entry.f_pm_name <- uobjcoll_initmethod_json |> member "pm_name" |> to_string;
+	
+				let uobjcoll_initmethod_sentinels_json_list = uobjcoll_initmethod_json |> member "sentinels" |> to_list in
+
+				List.iter (fun (sentinel_entry_json:Yojson.Basic.t) ->
+					let sentinel_entry : json_node_uberspark_uobjcoll_initmethod_sentinels_t = {
+							f_sentinel_type = "";
+							f_sentinel_size = 0;
+					} in
+
+					sentinel_entry.f_sentinel_type <- sentinel_entry_json |> member "sentinel_type" |> to_string;
+
+					if ( sentinel_entry_json |> member "sentinel_size") != `Null then begin
+						sentinel_entry.f_sentinel_size <- int_of_string ( sentinel_entry_json |> member "sentinel_size" |> to_string);
+					end;
+					
+					
+					f_sentinels_list := !f_sentinels_list @ [ sentinel_entry ];
+				) uobjcoll_initmethod_sentinels_json_list;
+
+				entry.f_sentinels <- !f_sentinels_list;
+
+				retval := true;
+			end;
+
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, entry)
 ;;
 
 
@@ -155,11 +231,19 @@ let json_node_uberspark_uobjcoll_to_var
 					json_node_uberspark_uobjcoll_var.f_hpl <- json_node_uberspark_uobjcoll |> member "hpl" |> to_string;
 					json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "sentinels-intrauobjcoll" |> to_list));
 
+					(* check for loaders if any *)
+					if (json_node_uberspark_uobjcoll |> member "loaders") != `Null then begin
+						json_node_uberspark_uobjcoll_var.f_loaders <- (json_list_to_string_list (json_node_uberspark_uobjcoll |> member "loaders" |> to_list));
+					end;
+					
 					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var json_node_uberspark_uobjcoll json_node_uberspark_uobjcoll_var.f_uobjs) in
-					let (rval2, json_node_uberspark_uobjcoll_publicmethods_var) = 
+					let (rval2, json_node_uberspark_uobjcoll_initmethod_var) = 
+						(json_node_uberspark_uobjcoll_initmethod_to_var json_node_uberspark_uobjcoll) in
+					let (rval3, json_node_uberspark_uobjcoll_publicmethods_var) = 
 						(json_node_uberspark_uobjcoll_publicmethods_to_var json_node_uberspark_uobjcoll) in
 
-					if (rval1 && rval2) then begin
+					if (rval1 && rval2 && rval3) then begin
+						json_node_uberspark_uobjcoll_var.f_initmethod <- json_node_uberspark_uobjcoll_initmethod_var;
 						json_node_uberspark_uobjcoll_var.f_publicmethods <- json_node_uberspark_uobjcoll_publicmethods_var;
 						retval := true;
 					end;

@@ -51,7 +51,9 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_hpl = "";
 		f_sentinels_intrauobjcoll = [];
 		f_uobjs = { f_master = ""; f_templars = [];};
+		f_initmethod = {f_uobj_ns = ""; f_pm_name = ""; f_sentinels = [];};
 		f_publicmethods = [];
+		f_loaders = [];
 	};;
 
 
@@ -91,6 +93,9 @@ let d_sources_asm_file_list: string list ref = ref [];;
 let d_uobjcoll_uobjinfo_list : uobjcoll_uobjinfo_t list ref = ref [];;
 let d_uobjcoll_uobjinfo_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_uobjinfo_t)  Hashtbl.t));; 
 
+(* hashtbl of uobjcoll sentinels mapping sentinel type to sentinel info for uobjcoll initmethod sentinels *)
+let d_uobjcoll_initmethod_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t)  Hashtbl.t));; 
+
 (* hashtbl of uobjcoll sentinels mapping sentinel type to sentinel info for uobjcoll publicmethods sentinels *)
 let d_uobjcoll_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, uobjcoll_sentinel_info_t)  Hashtbl.t));; 
 
@@ -103,6 +108,10 @@ let d_uobjs_publicmethods_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_u
 (* hashtbl of intrauobjcoll publicmethods mapping canonical publicmethod names to Uberspark_uobj.publicmethod_info_t; with 
 computed publicmethod address *)
 let d_uobjs_publicmethods_hashtbl_with_address = ((Hashtbl.create 32) : ((string, Uberspark_uobj.publicmethod_info_t)  Hashtbl.t));; 
+
+(* hashtbl of canonical init-medhod sentinel name to sentinel address mapping for uobjcoll initmethod *)
+let d_uobjcoll_initmethod_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));; 
+
 
 (* hashtbl of canonical public-medhod sentinel name to sentinel address mapping for uobjcoll publicmethods *)
 let d_uobjcoll_publicmethods_sentinel_address_hashtbl = ((Hashtbl.create 32) : ((string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t));; 
@@ -205,9 +214,11 @@ let get_sentinel_info_for_sentinel_facet_and_type
 		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_sizeof_code = 0; f_code = ""; f_libcode = "";} in
 
 
+	(* construct the path to sentinel manifest *)
 	let sentinel_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
-		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/cpu/" ^
-		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ json_node_uberspark_uobjcoll_var.f_cpu ^ "/" ^ json_node_uberspark_uobjcoll_var.f_hpl ^ "/" ^ sentinel_facet ^ "/" ^ 
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_sentinel ^ "/" ^
+		sentinel_facet ^ "/" ^
+		json_node_uberspark_uobjcoll_var.f_arch ^ "/" ^ 
 		sentinel_type ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_mf_filename=%s" sentinel_mf_filename;
 	
@@ -249,12 +260,36 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 
 	let retval = ref true in 
 
+	(* iterate over uobjcoll initmethod sentinel list and add sentinel info to 
+		d_uobjcoll_initmethod_sentinels_hashtbl *)
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) -> 
+		
+		if !retval then begin
+			let (rval, sinfo) = (get_sentinel_info_for_sentinel_facet_and_type "init-uobjcoll" sentinel_entry.f_sentinel_type) in
+			if (rval == false) then begin
+				retval := false;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod_sentinels_hashtbl: adding key=%s" sentinel_entry.f_sentinel_type; 
+
+				(*override f_sizeof_code if sentinel_size was specified within manifest *)
+				if sentinel_entry.f_sentinel_size > 0 then begin
+					sinfo.f_sizeof_code <- sentinel_entry.f_sentinel_size;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updating sentinel f_sizeof_code with manifest value = 0x%08x" sentinel_entry.f_sentinel_size; 
+				end;
+
+				
+				Hashtbl.add d_uobjcoll_initmethod_sentinels_hashtbl sentinel_entry.f_sentinel_type sinfo;
+			end;
+		end;
+	) json_node_uberspark_uobjcoll_var.f_initmethod.f_sentinels;
+
+
 	(* iterate over uobjcoll_publicmethods sentinel list and build sentinel type to sentinel facet hashtbl *)
 	let sentinel_type_to_sentinel_facet = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t)) in 
 	List.iter ( fun ( (canonical_pm_name:string), (pm_sentinel_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
 		List.iter ( fun (sentinel_type: string) -> 
 			if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
-				Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "interuobjcoll";
+				Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "inter-uobjcoll";
 			end;
 		) pm_sentinel_info.f_sentinel_type_list;
 	) json_node_uberspark_uobjcoll_var.f_publicmethods;
@@ -288,7 +323,7 @@ let create_uobjcoll_publicmethods_intrauobjcoll_sentinels_hashtbl
 	let sentinel_type_to_sentinel_facet = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t)) in 
 	List.iter ( fun (sentinel_type: string) -> 
 		if not (Hashtbl.mem sentinel_type_to_sentinel_facet sentinel_type) then begin
-			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intrauobjcoll";
+			Hashtbl.add sentinel_type_to_sentinel_facet sentinel_type "intra-uobjcoll";
 		end;
 	) json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll;
 
@@ -549,6 +584,57 @@ let consolidate_sections_with_memory_map
 	uobjcoll_section_load_addr := !d_load_address;
 	d_memorymapped_sections_list := []; 
 
+
+	(* add init-uobjcoll sentinels *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add init-uobjcoll sentinel sections...";
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) ->
+
+		let sentinel_type = sentinel_entry.f_sentinel_type in
+
+		(* add section *)
+		let canonical_pm_name = (Uberspark_namespace.get_variable_name_prefix_from_ns json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns) ^ "__" ^ json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name in
+		let sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
+		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
+		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
+		(*let section_size = 	sentinel_info.f_sizeof_code + (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(sentinel_info.f_sizeof_code mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+		*)
+
+		let section_top_addr = 	ref 0 in
+		section_top_addr := sentinel_info.f_sizeof_code + !uobjcoll_section_load_addr;
+		if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+			section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+		end;
+
+		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_info.f_type sentinel_info.f_sizeof_code section_size;
+
+		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
+			{ f_name = key;	
+				f_subsection_list = [ key; ];	
+				usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_INITMETHOD_SENTINEL; 
+								f_prot=0; 
+								f_size = section_size;
+								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_addr_start = !uobjcoll_section_load_addr; 
+								f_addr_file = 0;
+								f_reserved = 0;
+							};
+			}) ];
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobjcoll_initmethod sentinel '%s' at 0x%08x, size=%08x..." 
+			key !uobjcoll_section_load_addr section_size;
+
+		(* update next section address *)
+		uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+	
+	) json_node_uberspark_uobjcoll_var.f_initmethod.f_sentinels;
+
+
+
 	(* add inter-uobjcoll entry point sentinels *)
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to add inter-uobjcoll sentinel sections...";
 	
@@ -784,8 +870,36 @@ let prepare_for_uobjcoll_sentinel_codegen
 	()
 	: unit = 
 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_for_uobjcoll_sentinel_codegen: uobjcoll_initmethod=%s:%s" 
+		json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns
+		json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name;
+
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "prepare_for_uobjcoll_sentinel_codegen: uobjcoll_publicmethods publicmethods=%u" 
 		(List.length json_node_uberspark_uobjcoll_var.f_publicmethods);
+
+	(* add uobjcoll_initmethod sentinels *)
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) ->
+
+		let sentinel_type = sentinel_entry.f_sentinel_type in
+		let canonical_pm_name = (Uberspark_namespace.get_variable_name_prefix_from_ns json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns) ^ "__" ^ json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name in
+		let sentinel_info : uobjcoll_sentinel_info_t = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
+		let pm_info : Uberspark_uobj.publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+		let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
+			f_type= sentinel_type;
+			f_name = canonical_pm_name ^ "__" ^ sentinel_type; 
+			f_secname = ".section_uobjcoll_initmethod_sentinel__" ^ (canonical_pm_name ^ "__" ^ sentinel_type);
+			f_code = sentinel_info.f_code ; 
+			f_libcode= sentinel_info.f_libcode ; 
+			f_sizeof_code= sentinel_info.f_sizeof_code ; 
+			f_addr= (Hashtbl.find d_uobjcoll_initmethod_sentinel_address_hashtbl (canonical_pm_name ^ "__" ^ sentinel_type)).f_sentinel_addr; 
+			f_pm_addr = pm_info.f_uobjpminfo.f_addr;
+		} in 
+
+		d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll_initmethod; added sentinel type %s for public-method %s" sentinel_type canonical_pm_name;
+
+	) json_node_uberspark_uobjcoll_var.f_initmethod.f_sentinels; 
+
 
 	(* add uobjcoll_publicmethods publicmethods sentinels *)
 	List.iter ( fun ((canonical_pm_name:string), (pm_sentinel_info:Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) ->
@@ -859,6 +973,49 @@ let setup_intrauobjcoll_callees_sentinel_type_hashtbl
 	List.iter ( fun ( (canonical_pm_name:string), (pm_info: Uberspark_uobj.publicmethod_info_t)) ->
 		Hashtbl.add d_intrauobjcoll_callees_sentinel_type_hashtbl canonical_pm_name json_node_uberspark_uobjcoll_var.f_sentinels_intrauobjcoll;
 	) !d_uobjs_publicmethods_assoc_list_mf;
+
+	()
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* setup contents of uobjcoll initmethod seninel address hashtbl *)
+(*--------------------------------------------------------------------------*)
+let setup_uobjcoll_initmethod_sentinel_address_hashtbl
+	()
+	: unit = 
+
+	let canonical_pm_name = (Uberspark_namespace.get_variable_name_prefix_from_ns json_node_uberspark_uobjcoll_var.f_initmethod.f_uobj_ns) ^ "__" ^ json_node_uberspark_uobjcoll_var.f_initmethod.f_pm_name in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initmethod canonical_pm_name=%s" canonical_pm_name;
+
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) ->
+
+		let sentinel_type = sentinel_entry.f_sentinel_type in
+		let canonical_pm_sentinel_name = (canonical_pm_name ^ "__" ^ sentinel_type) in 
+		let key = (".section_uobjcoll_initmethod_sentinel__" ^ canonical_pm_sentinel_name) in 
+
+		(* grab section information for this sentinel *)
+		let section_info = (List.assoc key !d_memorymapped_sections_list) in
+		(* grab sentinel address *)
+		let sentinel_addr = section_info.usbinformat.f_addr_start in
+		let pm_info : Uberspark_uobj.publicmethod_info_t = Hashtbl.find d_uobjs_publicmethods_hashtbl_with_address canonical_pm_name in
+		(*grab public method address *)
+		let pm_addr = pm_info.f_uobjpminfo.f_addr in
+
+
+		(* add entry into d_uobjcoll_initmethod_sentinel_address_hashtbl *)
+		let sentinel_addr_info : Defs.Basedefs.uobjcoll_sentinel_address_t = {
+			f_pm_addr = pm_addr;
+			f_sentinel_addr = sentinel_addr;
+		} in 
+		if (Hashtbl.mem d_uobjcoll_initmethod_sentinel_address_hashtbl canonical_pm_sentinel_name) then begin
+			Hashtbl.replace d_uobjcoll_initmethod_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
+		end else begin
+			Hashtbl.add d_uobjcoll_initmethod_sentinel_address_hashtbl canonical_pm_sentinel_name sentinel_addr_info;
+		end;
+
+	) json_node_uberspark_uobjcoll_var.f_initmethod.f_sentinels;
 
 	()
 ;;
@@ -1100,6 +1257,7 @@ let initialize_common_operation_context
 
 	(* sanity check platform, cpu, arch override *)
 	(* TBD: if manifest says generic, we need a command line override *)
+	(* TBD: at the very least we need an arch override if uobjcoll says generic arch *)
 	let dummy = 0 in begin
 	json_node_uberspark_uobjcoll_var.f_arch <- d_target_def.f_arch;
 	json_node_uberspark_uobjcoll_var.f_cpu <- d_target_def.f_cpu;
@@ -1210,6 +1368,7 @@ let initialize_common_operation_context
 	(* create sentinel address hashtbls for uobjcoll, intrauobjcoll, interuobjcoll and legacy publicmethods *)
 	(* TBD: interuobjcoll and legacy *)
 	let dummy = 0 in begin
+	setup_uobjcoll_initmethod_sentinel_address_hashtbl ();
 	setup_uobjcoll_publicmethods_sentinel_address_hashtbl ();
 	setup_intrauobjcoll_publicmethods_sentinel_address_hashtbl ();
 	Uberspark_logger.log "created sentinel address hashtbls";
@@ -1399,6 +1558,47 @@ let build
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not initialize common operation context";
 		(!retval)
 	end else
+
+	(* build uobjcoll loaders *)
+	let dummy = 0 in begin
+		retval := true;
+		List.iter ( fun (loader_ns: string) ->
+			if (!retval == true) then begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "building loader: '%s'..." loader_ns;
+				let (rval, uobjcoll_loader) = Uberspark_loader.create_initialize_and_build loader_ns in
+				if(rval == false) then begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build loader";
+					retval := false;
+				end else begin
+					let loader_binary_src_dir = (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^
+												loader_ns ^ "/" ^ 
+												Uberspark_namespace.namespace_loader_build_dir in
+					let loader_binary_dst_dir =  !d_path_to_mf_filename ^ "/" ^
+										Uberspark_namespace.namespace_uobjcoll_build_dir ^ "/" ^ 
+										loader_ns ^ "/" ^ Uberspark_namespace.namespace_loader_build_dir in
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loader_binary_src_dir=%s" loader_binary_src_dir;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loader_binary_dst_dir=%s" loader_binary_dst_dir;
+					Uberspark_osservices.mkdir ~parent:true (loader_ns ^ "/" ^ 
+												Uberspark_namespace.namespace_loader_build_dir) (`Octal 0o0777);
+
+					Uberspark_osservices.cp (loader_binary_src_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_image_filename)
+											(loader_binary_dst_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_image_filename);
+
+					Uberspark_osservices.cp (loader_binary_src_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_flat_image_filename)
+											(loader_binary_dst_dir ^ "/" ^ Uberspark_namespace.namespace_loader_binary_flat_image_filename);
+
+				end;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping loader: '%s'..." loader_ns;
+			end;
+		)json_node_uberspark_uobjcoll_var.f_loaders;
+	end;
+    
+	if(!retval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build loader(s)!";
+		(!retval)
+	end else
+
 
 	(* build all uobjs *)
 	let dummy = 0 in begin

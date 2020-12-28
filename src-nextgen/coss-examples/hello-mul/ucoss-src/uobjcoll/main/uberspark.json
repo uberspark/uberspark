@@ -24,7 +24,8 @@
 		"sources" : {
 			"h-files": [ ],
 			"c-files": [ "main.c" ],
-			"casm-files": [ "nullfunc.cS" ],
+			/*"casm-files": [ "nullfunc.cS" ],*/
+			"casm-files" : [],
 			"asm-files": [ ]
 		},
 	
@@ -34,7 +35,16 @@
 				"uint32_t",
 				"(uint32_t multiplicand, uint32_t multiplier)", 
 				"2" 
+			],
+
+			"init" : [
+				"uint32_t",
+				"(void)", 
+				"0" 
 			]
+
+
+
 		},
 
 		/* public methods of other uobjs that this uobj invokes 
@@ -58,11 +68,11 @@
 		"uobjrtl": [
 			{
 				"namespace" : "uberspark/uobjrtl/crt"
-			},
-
-			{
-				"namespace" : "uberspark/uobjrtl/hw"
 			}
+
+			/*{
+				"namespace" : "uberspark/uobjrtl/hw"
+			}*/
 
 		]
 

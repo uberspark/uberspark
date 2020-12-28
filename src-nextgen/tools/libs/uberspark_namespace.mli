@@ -97,6 +97,7 @@ val namespace_bridge_cc_mf_node_type_tag : string
 val namespace_bridge_ld_mf_node_type_tag : string
 val namespace_bridge_as_mf_node_type_tag : string
 val namespace_bridge_vf_mf_node_type_tag : string
+val namespace_bridge_loader_mf_node_type_tag : string
 
 val namespace_bridge_ar_bridge_name : string
 val namespace_bridge_as_bridge_name : string
@@ -104,6 +105,7 @@ val namespace_bridge_cc_bridge_name : string
 val namespace_bridge_ld_bridge_name : string
 val namespace_bridge_pp_bridge_name : string
 val namespace_bridge_vf_bridge_name : string
+val namespace_bridge_loader_bridge_name : string
 val namespace_bridge_bldsys_bridge_name : string
 
 val namespace_bridge_ar_bridge : string
@@ -112,7 +114,13 @@ val namespace_bridge_cc_bridge : string
 val namespace_bridge_ld_bridge : string
 val namespace_bridge_pp_bridge : string
 val namespace_bridge_vf_bridge : string
+val namespace_bridge_loader_bridge : string
 val namespace_bridge_bldsys_bridge : string
+
+(* loader *)
+val namespace_loader_build_dir : string
+val namespace_loader_binary_image_filename : string
+val namespace_loader_binary_flat_image_filename : string
 
 
 (*---------------------------------------------------------------------------*)

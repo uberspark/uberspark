@@ -324,6 +324,10 @@ module Bridge = struct
 	#include "uberspark_manifest_bridge_vf.ml"
 	end
 
+	module Loader = struct
+	#include "uberspark_manifest_bridge_loader.ml"
+	end
+
 end
 
 
@@ -341,6 +345,9 @@ module Sentinel = struct
 	#include "uberspark_manifest_sentinel.ml"
 end
 
+module Loader = struct
+	#include "uberspark_manifest_loader.ml"
+end
 
 module Uobj = struct
 	#include "uberspark_manifest_uobj.ml"

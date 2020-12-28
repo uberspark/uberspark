@@ -35,4 +35,8 @@ temp/
 !Doxyfile
 !*.yaml
 !*.sh
+!*.S
+!*.lds
+
+
 

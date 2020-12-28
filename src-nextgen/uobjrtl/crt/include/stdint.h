@@ -39,6 +39,9 @@
 #ifndef __UOBJRTL_CRT_STDINT_H__
 #define __UOBJRTL_CRT_STDINT_H__
 
+#ifndef __ASSEMBLY__
+
+
 /*
  * Basic types upon which most other types are built.
  */
@@ -337,7 +340,7 @@ typedef const char *  c_caddr_t;      /* core address, pointer to const */
 typedef volatile char *v_caddr_t;     /* core address, pointer to volatile */
 
 
-
+#endif
 
 
 #endif /* __UOBJRTL_CRT_STDINT_H__ */
