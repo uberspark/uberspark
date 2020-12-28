@@ -10,24 +10,19 @@
 		"uberspark.manifest.version_max" : "any",
 
 
-  	/* uobj declaration */
-	"uberspark-uobj" : {
-		"namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic",
+		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
+		"uberspark.uobj.platform" : "generic",
+		"uberspark.uobj.arch" : "generic",
+		"uberspark.uobj.cpu" : "generic",
 
-		/* sources */
-		"sources" : {
-			"h_files": [ ],
-			"c_files": [ "main.c" ],
+			"uberspark.uobj.source_h_files": [ ],
+			"uberspark.uobj.source_c_files": [ "main.c" ],
 			/*"casm_files": [ "nullfunc.cS" ],*/
-			"casm_files" : [],
-			"asm_files": [ ]
-		},
+			"uberspark.uobj.source_casm_files" : [],
+			"uberspark.uobj.source_asm_files": [ ],
 	
 		/* public methods */
-		"public_methods" : {
+		"uberspark.uobj.public_methods" : {
 			"main" : [
 				"uint32_t",
 				"(uint32_t multiplicand, uint32_t multiplier)", 
@@ -47,22 +42,22 @@
 		/* public methods of other uobjs that this uobj invokes 
 			within the same collection
 		*/
-		"intra_uobjcoll_callees" : {
+		"uberspark.uobj.intra_uobjcoll_callees" : {
 		},
 	
 
 		/* public methods of other uobjs that this uobj invokes 
 			across other collection(s)
 		*/
-		"inter_uobjcoll_callees": {
+		"uberspark.uobj.inter_uobjcoll_callees": {
 		},
 	
 		/* legacy CoSS functions/code that this uobj invokes */
-		"legacy_callees": [
+		"uberspark.uobj.legacy_callees": [
 		],
 
 		/* uobjrtl */
-		"uobjrtl": [
+		"uberspark.uobj.uobjrtl": [
 			{
 				"namespace" : "uberspark/uobjrtl/crt"
 			}
@@ -74,9 +69,6 @@
 		]
 
 
-
-
-	}
 
 }
 

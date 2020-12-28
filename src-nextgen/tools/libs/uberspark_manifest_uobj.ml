@@ -66,7 +66,7 @@ type json_node_uberspark_uobj_t =
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_sources_to_var 
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_uobj_source_var : json_node_uberspark_uobj_sources_t)
 	: bool =
 
@@ -74,11 +74,8 @@ let json_node_uberspark_uobj_sources_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobj_sources = json_node_uberspark_uobj |> member "sources" in
-			if json_node_uberspark_uobj_sources != `Null then
-					begin
 
-						let mf_hfiles_json = json_node_uberspark_uobj_sources |> member "h_files" in
+						let mf_hfiles_json = mf_json |> member "uberspark.uobj.source_h_files" in
 							if mf_hfiles_json != `Null then
 								begin
 									let hfiles_json_list = mf_hfiles_json |> 
@@ -89,7 +86,7 @@ let json_node_uberspark_uobj_sources_to_var
 								end
 							;
 
-						let mf_cfiles_json = json_node_uberspark_uobj_sources |> member "c_files" in
+						let mf_cfiles_json = mf_json |> member "uberspark.uobj.source_c_files" in
 							if mf_cfiles_json != `Null then
 								begin
 									let cfiles_json_list = mf_cfiles_json |> 
@@ -100,7 +97,7 @@ let json_node_uberspark_uobj_sources_to_var
 								end
 							;
 
-						let mf_casmfiles_json = json_node_uberspark_uobj_sources |> member "casm_files" in
+						let mf_casmfiles_json = mf_json |> member "uberspark.uobj.source_casm_files" in
 							if mf_casmfiles_json != `Null then
 								begin
 									let casmfiles_json_list = mf_casmfiles_json |> 
@@ -111,7 +108,7 @@ let json_node_uberspark_uobj_sources_to_var
 								end
 							;
 
-						let mf_asmfiles_json = json_node_uberspark_uobj_sources |> member "asm_files" in
+						let mf_asmfiles_json = mf_json |> member "uberspark.uobj.source_asm_files" in
 							if mf_asmfiles_json != `Null then
 								begin
 									let asmfiles_json_list = mf_asmfiles_json |> 
@@ -122,8 +119,6 @@ let json_node_uberspark_uobj_sources_to_var
 								end
 							;
 							
-					end
-				;
 				
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
@@ -140,7 +135,7 @@ let json_node_uberspark_uobj_sources_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_publicmethods_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
 =
 		
@@ -149,7 +144,7 @@ let json_node_uberspark_uobj_publicmethods_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_publicmethods_json = json_node_uberspark_uobj |> member "public_methods" in
+			let uobj_publicmethods_json = mf_json |> member "uberspark.uobj.public_methods" in
 				if uobj_publicmethods_json != `Null then
 					begin
 
@@ -203,14 +198,14 @@ let json_node_uberspark_uobj_publicmethods_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * string list) list) =
 	
 	let retval = ref true in
 	let intrauobjcoll_callees_assoc_list : (string * string list) list ref = ref [] in
 	try
 		let open Yojson.Basic.Util in
-			let uobj_callees_json =  json_node_uberspark_uobj |> member "intra_uobjcoll_callees" in
+			let uobj_callees_json =  mf_json |> member "uberspark.uobj.intra_uobjcoll_callees" in
 				if uobj_callees_json != `Null then
 					begin
 
@@ -247,7 +242,7 @@ let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_interuobjcoll_callees_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * string list) list) =
 	
 	let retval = ref true in
@@ -255,7 +250,7 @@ let json_node_uberspark_uobj_interuobjcoll_callees_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_callees_json = json_node_uberspark_uobj |> member "inter_uobjcoll_callees" in
+			let uobj_callees_json = mf_json |> member "uberspark.uobj.inter_uobjcoll_callees" in
 				if uobj_callees_json != `Null then
 					begin
 
@@ -292,7 +287,7 @@ let json_node_uberspark_uobj_interuobjcoll_callees_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_legacy_callees_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * string list) list) =
 
 	let retval = ref true in
@@ -300,7 +295,7 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_legacy_callees_json = json_node_uberspark_uobj |> member "legacy_callees" in
+			let uobj_legacy_callees_json = mf_json |> member "uberspark.uobj.legacy_callees" in
 				if uobj_legacy_callees_json != `Null then
 					begin
 
@@ -334,7 +329,7 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_sections_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * Defs.Basedefs.section_info_t) list) =
 
 	let retval = ref true in
@@ -343,7 +338,7 @@ let json_node_uberspark_uobj_sections_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_sections_json = json_node_uberspark_uobj |> member "sections" in
+			let uobj_sections_json = mf_json |> member "uberspark.uobj.sections" in
 				if uobj_sections_json != `Null then
 					begin
 
@@ -391,9 +386,9 @@ let json_node_uberspark_uobj_sections_to_var
 										int_of_string (Yojson.Basic.Util.to_string (x |> member "type"));
 								end;
 
-								if (x |> member "prot") != `Null then begin
+								if (x |> member "attribute") != `Null then begin
 									section_entry.usbinformat.f_prot <- 
-										int_of_string (Yojson.Basic.Util.to_string (x |> member "prot")); 
+										int_of_string (Yojson.Basic.Util.to_string (x |> member "attribute")); 
 								end;
 
 								if (x |> member "aligned_at") != `Null then begin
@@ -432,7 +427,7 @@ let json_node_uberspark_uobj_sections_to_var
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_uobjrtl_to_var
-	(json_node_uberspark_uobj : Yojson.Basic.t)
+	(mf_json : Yojson.Basic.t)
 	: bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
 =
 		
@@ -441,7 +436,7 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let uobj_uobjrtl_json = json_node_uberspark_uobj |> member "uobjrtl" in
+			let uobj_uobjrtl_json = mf_json |> member "uberspark.uobj.uobjrtl" in
 				if uobj_uobjrtl_json != `Null then
 					begin
 
@@ -488,20 +483,18 @@ let json_node_uberspark_uobj_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobj = mf_json |> member "uberspark-uobj" in
-				if json_node_uberspark_uobj != `Null then begin
-					json_node_uberspark_uobj_var.namespace <- json_node_uberspark_uobj |> member "namespace" |> to_string;
-					json_node_uberspark_uobj_var.platform <- json_node_uberspark_uobj |> member "platform" |> to_string;
-					json_node_uberspark_uobj_var.arch <- json_node_uberspark_uobj |> member "arch" |> to_string;
-					json_node_uberspark_uobj_var.cpu <- json_node_uberspark_uobj |> member "cpu" |> to_string;
+					json_node_uberspark_uobj_var.namespace <- mf_json |> member "uberspark.uobj.namespace" |> to_string;
+					json_node_uberspark_uobj_var.platform <- mf_json |> member "uberspark.uobj.platform" |> to_string;
+					json_node_uberspark_uobj_var.arch <- mf_json |> member "uberspark.uobj.arch" |> to_string;
+					json_node_uberspark_uobj_var.cpu <- mf_json |> member "uberspark.uobj.cpu" |> to_string;
 					
-					let rval1 = (json_node_uberspark_uobj_sources_to_var json_node_uberspark_uobj json_node_uberspark_uobj_var.sources) in
-					let (rval2, json_node_uberspark_uobj_publicmethods_var) = (json_node_uberspark_uobj_publicmethods_to_var json_node_uberspark_uobj) in
-					let (rval3, json_node_uberspark_uobj_intrauobjcoll_callees_var) = (json_node_uberspark_uobj_intrauobjcoll_callees_to_var json_node_uberspark_uobj) in
-					let (rval4, json_node_uberspark_uobj_interuobjcoll_callees_var) = (json_node_uberspark_uobj_interuobjcoll_callees_to_var json_node_uberspark_uobj) in
-					let (rval5, json_node_uberspark_uobj_legacy_callees_var) = (json_node_uberspark_uobj_legacy_callees_to_var json_node_uberspark_uobj) in
-					let (rval6, json_node_uberspark_uobj_sections_var) = (json_node_uberspark_uobj_sections_to_var json_node_uberspark_uobj) in
-					let (rval7, json_node_uberspark_uobj_uobjrtl_var) = (json_node_uberspark_uobj_uobjrtl_to_var json_node_uberspark_uobj) in
+					let rval1 = (json_node_uberspark_uobj_sources_to_var mf_json json_node_uberspark_uobj_var.sources) in
+					let (rval2, json_node_uberspark_uobj_publicmethods_var) = (json_node_uberspark_uobj_publicmethods_to_var mf_json) in
+					let (rval3, json_node_uberspark_uobj_intrauobjcoll_callees_var) = (json_node_uberspark_uobj_intrauobjcoll_callees_to_var mf_json) in
+					let (rval4, json_node_uberspark_uobj_interuobjcoll_callees_var) = (json_node_uberspark_uobj_interuobjcoll_callees_to_var mf_json) in
+					let (rval5, json_node_uberspark_uobj_legacy_callees_var) = (json_node_uberspark_uobj_legacy_callees_to_var mf_json) in
+					let (rval6, json_node_uberspark_uobj_sections_var) = (json_node_uberspark_uobj_sections_to_var mf_json) in
+					let (rval7, json_node_uberspark_uobj_uobjrtl_var) = (json_node_uberspark_uobj_uobjrtl_to_var mf_json) in
 
 					(* we require sources and public_methods sub-nodes at the bare minimum *)
 					if (rval1 && rval2 ) then begin
@@ -531,8 +524,6 @@ let json_node_uberspark_uobj_to_var
 						retval := true;
 						
 					end;
-
-				end;
 														
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
