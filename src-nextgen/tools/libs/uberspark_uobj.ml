@@ -1279,8 +1279,9 @@ class uobject
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
 			Uberspark_namespace.namespace_uobj_binary_flat_image_filename
+			("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename)
 			!o_file_list
-			[ ] [ ]	[ ("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename) ] ".";
+			".";
 
 		(!retval)	
 	;

@@ -108,6 +108,7 @@ module Bridge : sig
       mutable params_prefix_lib: string;
       mutable params_prefix_output: string;
       mutable cmd_generate_flat_binary: string;
+      mutable bridge_cmd : string list;
     }
 
     val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_ld_t -> bool

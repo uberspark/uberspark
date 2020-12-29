@@ -1183,12 +1183,13 @@ let link_binary_image
 
 
 	retval := Uberspark_bridge.Ld.invoke 
-			~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
+		~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_flat_image_filename
+		""
 		!o_file_list
-		[ ] [ ]	[ ] ".";
+		".";
 
 	(!retval)	
 ;;

@@ -134,17 +134,18 @@ module Ld : sig
 	val store_to_file : string -> bool
 	val store : unit -> bool
 	val build : unit -> bool
+	
+	
 	val invoke : 
 		?context_path_builddir : string -> 
 		string ->
 		string ->
 		string ->
-		string list ->
-		string list ->
-		string list ->
+		string ->
 		string list ->
 		string ->
 		bool
+
 
 end
 
