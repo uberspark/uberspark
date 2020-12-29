@@ -85,11 +85,6 @@ module Bridge : sig
     type json_node_uberspark_bridge_cc_t = 
     {
       mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable params_prefix_obj: string;
-      mutable params_prefix_asm: string;
-      mutable params_prefix_output: string;
-      mutable params_prefix_include: string;
-      mutable params_cclib: string;
       mutable bridge_cmd: string list;
 
     }
@@ -103,11 +98,6 @@ module Bridge : sig
     type json_node_uberspark_bridge_ld_t = 
     {
       mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable params_prefix_lscript: string;
-      mutable params_prefix_libdir: string;
-      mutable params_prefix_lib: string;
-      mutable params_prefix_output: string;
-      mutable cmd_generate_flat_binary: string;
       mutable bridge_cmd : string list;
     }
 
@@ -120,9 +110,6 @@ module Bridge : sig
     type json_node_uberspark_bridge_as_t = 
     {
       mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable params_prefix_obj : string;
-      mutable params_prefix_output : string;
-      mutable params_prefix_include : string;
       mutable bridge_cmd: string list;
     }
 

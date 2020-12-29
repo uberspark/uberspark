@@ -26,11 +26,7 @@
 			],
 			"container_filename": "uberspark_bridges.Dockerfile"
 		},
-		"params_prefix_obj": "-c",
-		"params_prefix_asm": "-S",
-		"params_prefix_output": "-o",
-		"params_prefix_include": "-I",
-		"params_cclib": "/usr/local/lib/compcert/libcompcert.a",
+
 		"bridge_cmd" : [
 			"export var_bridge_include_dirs_with_prefix",
 			"export var_bridge_input_files",

@@ -36,9 +36,6 @@ let json_node_uberspark_bridge_as_var: Uberspark_manifest.Bridge.As.json_node_ub
 				container_filename = "";
 				namespace = "";
 	};
-	params_prefix_obj = "";
-	params_prefix_output = "";
-	params_prefix_include = "";
 	bridge_cmd = [];
 };;
 
