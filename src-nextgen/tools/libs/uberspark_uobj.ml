@@ -1203,9 +1203,15 @@ class uobject
 		
 		let retval = ref false in
 
-		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
+		(*retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+		*)
+
+		retval := Uberspark_bridge.Cc.invoke 
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+		
 
 		(!retval)	
 	;

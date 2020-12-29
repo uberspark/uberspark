@@ -41,6 +41,7 @@ let json_node_uberspark_bridge_cc_var: Uberspark_manifest.Bridge.Cc.json_node_ub
 	params_prefix_output = "";
 	params_prefix_include = "";
 	params_cclib = "";
+	bridge_cmd = [];
 };;
 
 
@@ -194,7 +195,7 @@ let build
 	(!retval)
 ;;
 
-
+(*
 let invoke 
 	?(gen_obj = true)
 	?(gen_asm = false)
@@ -288,6 +289,101 @@ let invoke
 		end;
 	end else begin
 		if ( (Native.run_shell_command  "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
+	end;
+
+	(!retval)
+;;
+*)
+
+
+let invoke 
+	?(gen_obj = true)
+	?(context_path_builddir = ".")
+	(c_file_list : string list)
+	(include_dir_list : string list)
+	(context_path : string)
+	: bool =
+
+	let retval = ref false in
+	let d_cmd = ref "" in
+	
+	let bridge_input_files = ref "" in
+	let bridge_include_dirs = ref "" in
+	let bridge_include_dirs_with_prefix = ref "" in
+	let bridge_defs = "" in
+	let bridge_defs_with_prefix = "" in
+	let bridge_container_mount_point = Uberspark_namespace.namespace_bridge_container_mountpoint in
+	let bridge_uberspark_plugin_dir = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin in
+
+	(* iterate over input file list and build a string *)
+	List.iter (fun input_filename -> 
+		bridge_input_files := !bridge_input_files ^ " " ^ input_filename;
+	) c_file_list;
+
+
+	(* iterate over include dir list and build include command line options *)
+	List.iter (fun include_dir_name -> 
+		bridge_include_dirs := !bridge_include_dirs ^ " " ^ include_dir_name;
+		(*TBD: get include directory prefix from bridge manifest *)
+		bridge_include_dirs_with_prefix := !bridge_include_dirs_with_prefix ^ " -I" ^ include_dir_name;
+	) include_dir_list;
+
+	
+	(* construct command line using bridge_cmd variable from bridge definition *)
+	for li = 0 to (List.length json_node_uberspark_bridge_cc_var.bridge_cmd) - 1 do begin
+		let b_cmd = (List.nth json_node_uberspark_bridge_cc_var.bridge_cmd li) in
+
+        let b_cmd_substituted_0 = Str.global_replace (Str.regexp "@@BRIDGE_INPUT_FILES@@") 
+                !bridge_input_files b_cmd in
+        let b_cmd_substituted_1 = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS@@") 
+                !bridge_include_dirs b_cmd_substituted_0 in
+        let b_cmd_substituted_2 = Str.global_replace (Str.regexp "@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@") 
+                !bridge_include_dirs_with_prefix b_cmd_substituted_1 in
+        let b_cmd_substituted_3 = Str.global_replace (Str.regexp "@@BRIDGE_DEFS@@") 
+                bridge_defs b_cmd_substituted_2 in
+        let b_cmd_substituted_4 = Str.global_replace (Str.regexp "@@BRIDGE_DEFS_WITH_PREFIX@@") 
+                bridge_defs_with_prefix b_cmd_substituted_3 in
+        let b_cmd_substituted_5 = Str.global_replace (Str.regexp "@@BRIDGE_PLUGIN_DIR@@") 
+                bridge_uberspark_plugin_dir b_cmd_substituted_4 in
+        let b_cmd_substituted_6 = Str.global_replace (Str.regexp "@@BRIDGE_CONTAINER_MOUNT_POINT@@") 
+                bridge_container_mount_point b_cmd_substituted_5 in
+
+		let b_cmd_substituted = b_cmd_substituted_6 in
+
+		if li == 0 then begin
+			d_cmd := b_cmd_substituted;
+		end else begin
+			d_cmd := !d_cmd ^ " && " ^ b_cmd_substituted;
+		end;
+
+	end done;
+
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
+
+	(* construct bridge namespace *)
+	let bridge_ns = Uberspark_namespace.namespace_cc_bridge_namespace ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.category ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.arch ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.cpu ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.name ^ "/" ^
+		json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.version in
+
+	(* invoke the compiler *)
+	if json_node_uberspark_bridge_cc_var.json_node_bridge_hdr_var.category = "container" then begin
+		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
+	end else begin
+		if ( (Native.run_shell_command  ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin
 			retval := false;

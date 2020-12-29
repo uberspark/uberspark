@@ -20,6 +20,7 @@ type json_node_uberspark_bridge_cc_t =
 	mutable params_prefix_output: string;
 	mutable params_prefix_include: string;
 	mutable params_cclib : string;
+	mutable bridge_cmd : string list;
 }
 ;;
 
@@ -58,6 +59,8 @@ let json_node_uberspark_bridge_cc_to_var
 						json_node_uberspark_bridge_cc_var.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_node_uberspark_bridge_cc);
 						json_node_uberspark_bridge_cc_var.params_prefix_include <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_include" json_node_uberspark_bridge_cc);
 						json_node_uberspark_bridge_cc_var.params_cclib <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_cclib" json_node_uberspark_bridge_cc);
+						json_node_uberspark_bridge_cc_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "bridge_cmd" json_node_uberspark_bridge_cc));
+
 
 						retval := true;
 					end;
@@ -89,7 +92,7 @@ let json_node_uberspark_bridge_cc_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_obj\" : \"%s\"," json_node_uberspark_bridge_cc_var.params_prefix_obj;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_asm\" : \"%s\"," json_node_uberspark_bridge_cc_var.params_prefix_asm;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_output\" : \"%s\"," json_node_uberspark_bridge_cc_var.params_prefix_output;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_include\" : \"%s\"" json_node_uberspark_bridge_cc_var.params_prefix_include;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_include\" : \"%s\"," json_node_uberspark_bridge_cc_var.params_prefix_include;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_cclib\" : \"%s\"" json_node_uberspark_bridge_cc_var.params_cclib;
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t}";

@@ -90,6 +90,8 @@ module Bridge : sig
       mutable params_prefix_output: string;
       mutable params_prefix_include: string;
       mutable params_cclib: string;
+      mutable bridge_cmd: string list;
+
     }
 
     val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_cc_t -> bool
