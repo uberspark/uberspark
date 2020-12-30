@@ -59,18 +59,11 @@ module Bridge : sig
   (****************************************************************************)
 
   (* bridge-hdr json node type *)
-  type json_node_bridge_hdr_t = {
+  type json_node_uberspark_bridge_t = {
+    mutable namespace : string;
     mutable category : string;
-    mutable name : string;
-    mutable executable_name: string;
-    mutable dev_environment: string;
-    mutable arch: string;
-    mutable cpu: string;
-    mutable version: string;
-    mutable path: string;
-    mutable parameters: string list;
-    mutable container_filename: string;
-    mutable namespace: string;
+    mutable container_build_filename: string;
+    mutable bridge_cmd : string list;
   }
 
   val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_bridge_hdr_t -> bool
@@ -82,65 +75,38 @@ module Bridge : sig
   (* submodules *)
   (****************************************************************************)
   module Cc : sig
-    type json_node_uberspark_bridge_cc_t = 
-    {
-      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable bridge_cmd: string list;
 
-    }
-
-    val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_cc_t -> bool
-    val json_node_uberspark_bridge_cc_var_to_jsonstr : json_node_uberspark_bridge_cc_t -> string
+    val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+    val json_node_uberspark_bridge_cc_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
   end
 
   module Ld : sig
-    type json_node_uberspark_bridge_ld_t = 
-    {
-      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable bridge_cmd : string list;
-    }
 
-    val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_ld_t -> bool
-    val json_node_uberspark_bridge_ld_var_to_jsonstr : json_node_uberspark_bridge_ld_t -> string
+    val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+    val json_node_uberspark_bridge_ld_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
   end
 
   module As : sig
-    type json_node_uberspark_bridge_as_t = 
-    {
-      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable bridge_cmd: string list;
-    }
 
-    val json_node_uberspark_bridge_as_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_as_t -> bool
-    val json_node_uberspark_bridge_as_var_to_jsonstr : json_node_uberspark_bridge_as_t -> string
+    val json_node_uberspark_bridge_as_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+    val json_node_uberspark_bridge_as_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
 
   end
 
   module Vf : sig
-    type json_node_uberspark_bridge_vf_t = 
-    {
-      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable bridge_cmd: string list;
-    }
 
-    val json_node_uberspark_bridge_vf_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_vf_t -> bool
-    val json_node_uberspark_bridge_vf_var_to_jsonstr : json_node_uberspark_bridge_vf_t -> string
+    val json_node_uberspark_bridge_vf_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+    val json_node_uberspark_bridge_vf_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
   end
 
   module Loader : sig
-    type json_node_uberspark_bridge_loader_t = 
-    {
-      mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-      mutable bridge_prefix : string;
-      mutable bridge_cmd: string list;
-    }
 
-    val json_node_uberspark_bridge_loader_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_loader_t -> bool
-    val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_loader_t -> string
+    val json_node_uberspark_bridge_loader_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+    val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
   end
 

@@ -24,18 +24,9 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 
 (* uberspark-bridge-cc json node variable *)	
 let json_node_uberspark_bridge_cc_var: Uberspark_manifest.Bridge.Cc.json_node_uberspark_bridge_cc_t = {
-	json_node_bridge_hdr_var = { category = "";
-				name = "";
-				executable_name = "";
-				path = "";
-				dev_environment = "";
-				arch = "";
-				cpu = "";
-				version = "";
-				parameters = [];
-				container_filename = "";
-				namespace = "";
-	};
+	namespace = "";
+	category = "";
+	container_build_filename = "";
 	bridge_cmd = [];
 };;
 
