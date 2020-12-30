@@ -23,7 +23,7 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 };;
 
 (* uberspark-bridge-as json node variable *)	
-let json_node_uberspark_bridge_casm_var: Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_t = {
+let json_node_uberspark_bridge_casm_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t = {
 	namespace = "";
 	category = "";
 	container_build_filename = "";
@@ -62,7 +62,7 @@ let load_from_file
 	(json_file : string)
 	: bool =
 	let retval = ref false in
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loading casm as-bridge settings from file: %s" json_file;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loading casm-bridge settings from file: %s" json_file;
 
 	let (rval, mf_json) = Uberspark_manifest.get_json_for_manifest json_file in
 
@@ -88,8 +88,8 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^ bridge_ns ^ "/" ^
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		bridge_ns ^ "/" ^
 		Uberspark_namespace.namespace_root_mf_filename in
 		(load_from_file bridge_ns_json_path)
 ;;
@@ -98,7 +98,7 @@ let load
 let store_to_file 
 	(json_file : string)
 	: bool =
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "storing casm as-bridge settings to file: %s" json_file;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "storing casm-bridge settings to file: %s" json_file;
 
 	Uberspark_manifest.write_to_file json_file 
 		[
@@ -114,16 +114,9 @@ let store
 	()
 	: bool =
 	let retval = ref false in 
-    let bridge_ns = json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.name ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.version in
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^ bridge_ns in
-	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
-		Uberspark_namespace.namespace_root_mf_filename in
+    let bridge_ns = json_node_uberspark_bridge_casm_var.namespace in
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
+	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
 
 	(* make the namespace directory *)
 	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
@@ -131,9 +124,9 @@ let store
 	retval := store_to_file bridge_ns_json_filename;
 
 	(* check if bridge type is container, if so store dockerfile *)
-	if !retval && json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category = "container" then
+	if !retval && json_node_uberspark_bridge_casm_var.category = "container" then
 		begin
-			let input_bridge_dockerfile = json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.container_filename in 
+			let input_bridge_dockerfile = json_node_uberspark_bridge_casm_var.container_build_filename in 
 			let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
 				Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 		end
@@ -149,23 +142,17 @@ let build
 
 	let retval = ref false in
 
-	if json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category = "container" then
+	if json_node_uberspark_bridge_casm_var.category = "container" then
 		begin
-			let bridge_ns = Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.arch ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.name ^ "/" ^
-				json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.version in
-			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+			let bridge_ns = json_node_uberspark_bridge_casm_var.namespace in
+			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
 
-			Uberspark_logger.log "building casm as-bridge: %s" bridge_ns;
+			Uberspark_logger.log "building casm-bridge: %s" bridge_ns;
 
 			if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
 				retval := true;
 			end else begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build casm as-bridge!"; 
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build casm-bridge!"; 
 				retval := false;
 			end
 			;
@@ -180,7 +167,6 @@ let build
 
 	(!retval)
 ;;
-
 
 
 
@@ -250,16 +236,10 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_namespace.namespace_as_bridge_namespace ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.dev_environment ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.name ^ "/" ^
-		json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.version in
+	let bridge_ns = json_node_uberspark_bridge_casm_var.namespace in
 
 	(* invoke the compiler *)
-	if json_node_uberspark_bridge_casm_var.json_node_bridge_hdr_var.category = "container" then begin
+	if json_node_uberspark_bridge_casm_var.category = "container" then begin
 		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin

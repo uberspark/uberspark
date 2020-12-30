@@ -12,12 +12,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-type json_node_uberspark_bridge_loader_t = 
-{
-	mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-	mutable bridge_cmd : string list;
-}
-;;
 
 
 (*---------------------------------------------------------------------------*)
@@ -36,13 +30,13 @@ type json_node_uberspark_bridge_loader_t =
 
 let json_node_uberspark_bridge_loader_to_var
 	(mf_json : Yojson.Basic.t)
-	(json_node_uberspark_bridge_loader_var : json_node_uberspark_bridge_loader_t) 
+	(json_node_uberspark_bridge_loader_var : json_node_uberspark_bridge_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
-			let rval = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var in
+			let rval = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_loader_var in
 
 			if rval then begin
 				json_node_uberspark_bridge_loader_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
@@ -65,12 +59,12 @@ let json_node_uberspark_bridge_loader_to_var
 (* convert json_node_uberspark_bridge_loader_var to json string *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_bridge_loader_var_to_jsonstr  
-	(json_node_uberspark_bridge_loader_var : json_node_uberspark_bridge_loader_t) 
+	(json_node_uberspark_bridge_loader_var : json_node_uberspark_bridge_t) 
 	: string =
 	let retstr = ref "" in
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
-	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_loader_var.json_node_bridge_hdr_var) ^ ",";
+	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_loader_var) ^ ",";
 
 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"bridge_cmd\" : [ ";
 	for i = 0 to ((List.length json_node_uberspark_bridge_loader_var.bridge_cmd)-1) do

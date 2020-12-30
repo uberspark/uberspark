@@ -23,7 +23,7 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 };;
 
 (* uberspark-bridge-cc json node variable *)	
-let json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.Vf.json_node_uberspark_bridge_t = {
+let json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t = {
 	namespace = "";
 	category = "";
 	container_build_filename = "";
@@ -230,7 +230,7 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.namespace in
+	let bridge_ns = json_node_uberspark_bridge_vf_var.namespace in
 
 	(* invoke the verification bridge *)
 	if json_node_uberspark_bridge_vf_var.category = "container" then begin

@@ -25,6 +25,7 @@ type json_node_uberspark_bridge_t = {
 	mutable namespace: string;
 	mutable category : string;
 	mutable container_build_filename: string;
+	mutable bridge_cmd : string list;
 }
 ;;
 
