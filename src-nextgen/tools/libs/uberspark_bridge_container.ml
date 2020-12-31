@@ -15,7 +15,7 @@ let build_image
     let bridge_container_filepath = bridge_container_path ^ "/" ^
         Uberspark_namespace.namespace_bridge_container_filename in
     (*let bridge_ns_docker = ((Str.string_after Uberspark_namespace.namespace_root 1) ^ "/" ^ bridge_ns) in *)
-    let bridge_ns_docker = Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+    let bridge_ns_docker = bridge_ns in
     let cmdline = ref [] in
     
         cmdline := !cmdline @ [ "build" ];
@@ -58,7 +58,7 @@ let run_image
         Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path=%s" context_path_abs;
         let r_d_cmd = ("cd " ^ Uberspark_namespace.namespace_bridge_container_mountpoint ^ " && " ^ !revised_d_cmd) in 
         (*let bridge_ns_docker = ((Str.string_after Uberspark_namespace.namespace_root 1) ^ "/" ^ bridge_ns) in *)
-        let bridge_ns_docker = Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+        let bridge_ns_docker = bridge_ns in
         let cmdline = ref [] in
         
             cmdline := !cmdline @ [ "run" ];

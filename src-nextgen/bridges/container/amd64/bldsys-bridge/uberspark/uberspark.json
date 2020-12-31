@@ -1,0 +1,16 @@
+/*
+    uberSpark bridges json definition
+*/
+
+{
+		"uberspark.manifest.namespace" : [ "uberspark-bridge-bldsys" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+
+		"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/bldsys-bridge/uberspark",
+		"uberspark.bridge.category" : "container",
+		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+        "uberspark.bridge.bridge_cmd" : []
+
+}

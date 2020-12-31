@@ -26,13 +26,13 @@ export USPARK_SRCDIR_MOUNT = /home/uberspark/uberspark
 export USPARK_BUILDTRUSSESDIR_MOUNT := $(USPARK_SRCDIR_MOUNT)/build-trusses
 
 
-export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/vf-bridge/container/amd64/generic/generic/uberspark/v6.0.0
+export USPARK_VBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0
 export USPARK_VBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
-export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__vf-bridge__container__amd64__generic__generic__uberspark
+export USPARK_VBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__container__amd64__vf-bridge__generic__generic__uberspark
 
-export USPARK_BLDBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/bldsys-bridge/uberspark/container/amd64/
+export USPARK_BLDBRIDGE_DIR := $(USPARK_SRCROOTDIR)/src-nextgen/bridges/container/amd64/bldsys-bridge/uberspark/
 export USPARK_BLDBRIDGE_DIR_DOCKERFILE := uberspark-bridge.Dockerfile
-export USPARK_BLDBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__bldsys-bridge__uberspark__container__amd64
+export USPARK_BLDBRIDGE_NS_AMD64 := uberspark/uberspark:bridges__container__amd64__bldsys-bridge__uberspark__
 
 export SYS_PROC_VERSION := $(shell cat /proc/version)
 
@@ -125,7 +125,7 @@ dbgrun_sdefpp: build_sdefpp
 .PHONY: provision-bridge-common-infrastructure
 provision-bridge-common-infrastructure: 
 	@echo Provisioning bridge common infrastructure for container bridges...
-	$(call install_bridges_common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges/common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges )
+	$(call install_bridges_common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges/container/amd64/common, $(USPARK_SRCROOTDIR)/src-nextgen/bridges )
 	@echo Successfully populated bridge common infrastructure
 
 

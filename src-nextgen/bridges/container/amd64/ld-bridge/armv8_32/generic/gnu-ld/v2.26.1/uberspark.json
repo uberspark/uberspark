@@ -1,0 +1,24 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+		"uberspark.manifest.namespace" : [ "uberspark-bridge-ld" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+	
+		"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/ld-bridge/armv8_32/generic/gnu-ld/v2.26.1",
+		"uberspark.bridge.category" : "container",
+		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+
+		"uberspark.bridge.bridge_cmd" : [
+			"export var_bridge_input_files",
+			"var_bridge_input_files=\" @@BRIDGE_INPUT_FILES@@ \"",
+			"echo \"Linking @@BRIDGE_BINARY_FILENAME@@ ...\"",
+			"arm-linux-gnueabihf-ld ${var_bridge_input_files} -T @@BRIDGE_LSCRIPT_FILENAME@@ -o @@BRIDGE_BINARY_FILENAME@@ @@BRIDGE_CCLIB_FILENAME@@",
+			"echo \"Linking @@BRIDGE_BINARY_FLAT_FILENAME@@ ...\"",
+			"arm-linux-gnueabihf-objcopy -O binary @@BRIDGE_BINARY_FILENAME@@ @@BRIDGE_BINARY_FLAT_FILENAME@@"
+		] 
+
+}

@@ -1,0 +1,26 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+		"uberspark.manifest.namespace" : [ "uberspark-bridge-cc" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+
+		"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/cc-bridge/armv8_32/generic/gcc/v4.9.3",
+		"uberspark.bridge.category" : "container",
+		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+
+		"uberspark.bridge.bridge_cmd" : [
+			"export var_bridge_include_dirs_with_prefix",
+			"export var_bridge_input_files",
+			"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+			"var_bridge_input_files=\" @@BRIDGE_INPUT_FILES@@ \"",
+			"vararray_bridge_input_files=$(echo $var_bridge_input_files | tr \" \" \"\\n\")",
+			"for input_file_name in $vararray_bridge_input_files; do echo \"Compiling ${input_file_name} ...\" && arm-linux-gnueabihf-gcc-4.9 @@BRIDGE_DEFS_WITH_PREFIX@@ -nostdinc -nostdlib -nostartfiles -ffreestanding -marm -march=armv8-a -mno-thumb-interwork -c ${var_bridge_include_dirs_with_prefix} ${input_file_name} -o ${input_file_name}.o ; done",
+			"cp -f /usr/lib/gcc-cross/arm-linux-gnueabihf/4.9/libgcc.a @@BRIDGE_CONTAINER_MOUNT_POINT@@/cclib.a"
+		] 
+
+
+}

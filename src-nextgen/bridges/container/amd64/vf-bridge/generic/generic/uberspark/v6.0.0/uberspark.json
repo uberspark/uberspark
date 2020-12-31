@@ -1,0 +1,34 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+		"uberspark.manifest.namespace" : [ "uberspark-bridge-vf" ],
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+
+		"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0",
+		"uberspark.bridge.category" : "container",
+		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+
+		"uberspark.bridge.bridge_cmd" : [
+			"	
+				echo source C files: @@BRIDGE_SOURCE_C_FILES@@ &&
+				echo include dirs: @@BRIDGE_INCLUDE_DIRS@@ &&
+				echo include dirs with prefix: @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ &&
+				echo bridge plugin dir: @@BRIDGE_PLUGIN_DIR@@ &&
+				export var_bridge_include_dirs &&
+				export vararray_bridge_include_dirs &&
+				export include_prefix=\"-I\" &&
+				export include_string &&
+				var_bridge_include_dirs=\" @@BRIDGE_INCLUDE_DIRS@@ \" &&
+				vararray_bridge_include_dirs=$(echo $var_bridge_include_dirs | tr \" \" \"\\n\") &&
+				for include_dir_name in $vararray_bridge_include_dirs; do include_string=\"${include_string} ${include_prefix}${include_dir_name}\"; done &&
+				echo \"include_string=$include_string\" &&
+				frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -cpp-extra-args=\"$include_string\" @@BRIDGE_SOURCE_C_FILES@@ -hstart -then -val -then -hfinish
+			"
+		] 
+
+
+}
