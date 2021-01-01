@@ -56,6 +56,7 @@ val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
 val namespace_uobjcoll_binary_image_filename : string
 val namespace_uobjcoll_binary_flat_image_filename : string
+val namespace_uobjcoll_top_level_include_header_src_filename : string
 
 (* legacy *)
 val namespace_legacy : string

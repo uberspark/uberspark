@@ -1144,6 +1144,35 @@ let prepare_namespace_for_build
 
 
 (*--------------------------------------------------------------------------*)
+(* install uobjcoll headers to namespace *)
+(*--------------------------------------------------------------------------*)
+let install_h_files_ns 
+	?(context_path_builddir = ".")
+	: unit =
+	
+	let uobjcoll_path_to_mf_filename = !d_path_to_mf_filename in
+	let uobjcoll_path_ns = !d_path_ns in
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobjcoll_path_to_mf_filename;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobjcoll_path_ns;
+	
+
+
+	(* TBD: copy h files to namespace by using uobjcoll manifest if specified *)
+	(*List.iter ( fun h_filename -> 
+		Uberspark_osservices.mkdir ~parent:true (uobj_path_ns ^ "/" ^ (Filename.dirname h_filename)) (`Octal 0o0777);
+		Uberspark_osservices.cp (uobj_path_to_mf_filename ^ "/" ^ h_filename) (uobj_path_ns ^ "/" ^ h_filename);
+	) json_node_uberspark_uobj_var.sources.source_h_files;
+	*)
+
+	(* copy top-level header to namespace *)
+	Uberspark_osservices.file_copy (uobjcoll_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_top_level_include_header_src_filename)
+		(uobjcoll_path_ns ^ "/include/" ^ Uberspark_namespace.namespace_uobjcoll_top_level_include_header_src_filename);
+
+;;
+
+
+(*--------------------------------------------------------------------------*)
 (* compile asm files *)
 (*--------------------------------------------------------------------------*)
 let compile_asm_files	

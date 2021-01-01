@@ -58,6 +58,8 @@ let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.S
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
 let namespace_uobjcoll_binary_image_filename = "uobjcoll.exe";;
 let namespace_uobjcoll_binary_flat_image_filename = "uobjcoll.exe.flat";;
+let namespace_uobjcoll_top_level_include_header_src_filename = "uobjcoll.h";;
+
 
 (* legacy *)
 let namespace_legacy = "legacy";;
