@@ -20,9 +20,9 @@ su uberspark
 
 echo "PATH before mod: $PATH"
 
-echo "PATH=/home/uberspark/.opam/4.05.0/bin:$PATH" >> /home/uberspark/.bashrc
+echo "PATH=/home/uberspark/.opam/4.09.0+flambda/bin:$PATH" >> /home/uberspark/.bashrc
 
-PATH=/home/uberspark/.opam/4.05.0/bin:$PATH
+PATH=/home/uberspark/.opam/4.09.0+flambda/bin:$PATH
 echo "PATH after mod: $PATH"
 
 ./configure x86_32-linux

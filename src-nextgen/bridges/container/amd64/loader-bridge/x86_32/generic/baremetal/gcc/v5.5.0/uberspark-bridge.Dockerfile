@@ -105,7 +105,8 @@ WORKDIR "/home/uberspark"
 
 
 # install ocaml compiler and related packages
-RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
+RUN sudo apt-get update -y &&\
+    opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
     eval $(opam env) && \
     opam install -y depext &&\
     opam depext -y coq=8.8.0 &&\
@@ -120,6 +121,7 @@ RUN opam init -a --comp=4.09.0+flambda --disable-sandboxing && \
 
 # install packages required by uberspark lib
 RUN eval $(opam env) && \
+    sudo apt-get update -y &&\
     opam depext -y fileutils.0.6.1 &&\
     opam install -y fileutils.0.6.1 
 
