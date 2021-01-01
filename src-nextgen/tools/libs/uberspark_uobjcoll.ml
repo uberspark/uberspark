@@ -44,6 +44,9 @@ let d_mf_filename = ref "";;
 (* uobjcoll manifest filename path *)
 let d_path_to_mf_filename = ref "";;
 
+(* uobjcoll build directory absolute path *)
+let d_builddir = ref "";;
+
 
 (* manifest json node uberspark-uobjcoll var *)
 let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_t = 
@@ -1156,6 +1159,8 @@ let install_h_files_ns
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_to_mf_filename=%s" uobjcoll_path_to_mf_filename;
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_path_ns=%s" uobjcoll_path_ns;
 	
+	(* create namespace include folder if not already present *)
+	Uberspark_osservices.mkdir ~parent:true (uobjcoll_path_ns ^ "/include") (`Octal 0o0777);
 
 
 	(* TBD: copy h files to namespace by using uobjcoll manifest if specified *)
@@ -1265,9 +1270,10 @@ let initialize_common_operation_context
 		(!retval, !r_prevpath_result)
 	end else
 
-	(* create _build folder *)
+	(* create _build folder and store the absolute path of build folder*)
 	let dummy = 0 in begin
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_build_dir (`Octal 0o0777);
+	d_builddir := (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_build_dir);
 	end;
 
 	(* switch working directory to uobjcoll _build folder *)
@@ -1277,6 +1283,9 @@ let initialize_common_operation_context
 			(abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_build_dir);
 		(!retval, !r_prevpath_result)
 	end else
+
+
+
 
     (* parse uobjcoll manifest *)
 	let uobjcoll_mf_filename = (abs_uobjcoll_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
@@ -1395,6 +1404,15 @@ let initialize_common_operation_context
 	create_uobjs_publicmethods_hashtbl d_uobjs_publicmethods_hashtbl_with_address;
 	Uberspark_logger.log "created uobj collection uobjs public methods hashtable and association list with address";
 	end;
+
+	(* generate and install uobjcoll headers *)
+	Uberspark_logger.log ~crlf:false "Generating uobjcoll top-level include header source...";
+	Uberspark_codegen.Uobjcoll.generate_top_level_include_header 
+			(!d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_top_level_include_header_src_filename)
+			json_node_uberspark_uobjcoll_var.configdefs;
+	Uberspark_logger.log ~tag:"" "[OK]";
+	install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir;
+
 
 	(* create sentinel address hashtbls for uobjcoll, intrauobjcoll, interuobjcoll and legacy public_methods *)
 	(* TBD: interuobjcoll and legacy *)
