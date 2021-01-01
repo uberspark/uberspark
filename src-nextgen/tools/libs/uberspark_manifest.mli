@@ -290,6 +290,14 @@ module Uobjcoll : sig
     mutable sentinel_type_list : string list;
   }
 
+  type json_node_uberspark_uobjcoll_configdefs_t =
+  {
+    mutable name    : string;
+    mutable value	 : string;
+  }
+
+
+
   type json_node_uberspark_uobjcoll_t =
   {
     mutable namespace    : string;			
@@ -302,12 +310,17 @@ module Uobjcoll : sig
     mutable init_method : json_node_uberspark_uobjcoll_initmethod_t;
     mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
     mutable loaders : string list;
+    mutable configdefs : (string * json_node_uberspark_uobjcoll_configdefs_t) list;
   }
+
+
 
   val json_node_uberspark_uobjcoll_uobjs_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_uobjs_t -> bool
   val json_node_uberspark_uobjcoll_initmethod_to_var : Yojson.Basic.t -> bool * json_node_uberspark_uobjcoll_initmethod_t
   val json_node_uberspark_uobjcoll_publicmethods_to_var : Yojson.Basic.t -> bool * ((string * json_node_uberspark_uobjcoll_publicmethods_t) list)
   val json_node_uberspark_uobjcoll_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_t -> bool
+  val json_node_uberspark_uobjcoll_configdefs_to_var : Yojson.Basic.t -> bool * ((string * json_node_uberspark_uobjcoll_configdefs_t) list)
+
 
  
 end

@@ -54,6 +54,7 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
 		public_methods = [];
 		loaders = [];
+		configdefs = [];
 	};;
 
 

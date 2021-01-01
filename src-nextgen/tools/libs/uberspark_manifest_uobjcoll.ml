@@ -41,6 +41,11 @@ type json_node_uberspark_uobjcoll_initmethod_t =
 	mutable sentinels : json_node_uberspark_uobjcoll_initmethod_sentinels_t list;
 };;
 
+type json_node_uberspark_uobjcoll_configdefs_t =
+{
+	mutable name    : string;
+	mutable value	 : string;
+};;
 
 
 type json_node_uberspark_uobjcoll_t =
@@ -55,6 +60,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable init_method	: json_node_uberspark_uobjcoll_initmethod_t;
 	mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
 	mutable loaders : string list;
+	mutable configdefs: (string * json_node_uberspark_uobjcoll_configdefs_t) list;
 };;
 
 
@@ -97,6 +103,56 @@ let json_node_uberspark_uobjcoll_uobjs_to_var
 
 	(!retval)
 ;;
+
+
+(*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "uberspark.uobjcoll.configdefs" into var *)
+(* return: *)
+(* on success: true; var is modified with configdefs *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_uobjcoll_configdefs_to_var 
+	(mf_json : Yojson.Basic.t)
+	: bool * ((string * json_node_uberspark_uobjcoll_configdefs_t) list) =
+
+	let retval = ref true in
+	let configdefs_assoc_list : (string * json_node_uberspark_uobjcoll_configdefs_t) list ref = ref [] in 
+
+	try
+		let open Yojson.Basic.Util in
+
+			if (mf_json |> member "uberspark.uobjcoll.configdefs") <> `Null then begin
+
+				let uobjcoll_configdefs_json_list = mf_json |> member "uberspark.uobjcoll.configdefs" |> to_list in
+
+				List.iter (fun (configdef_entry_json:Yojson.Basic.t) ->
+					let configdef_entry : json_node_uberspark_uobjcoll_configdefs_t = {
+							name = "";
+							value = "";
+					} in
+
+					configdef_entry.name <- configdef_entry_json |> member "name" |> to_string;
+					configdef_entry.value <- configdef_entry_json |> member "value" |> to_string;
+
+					configdefs_assoc_list := !configdefs_assoc_list @ [ (configdef_entry.name, configdef_entry)];
+		
+				) uobjcoll_configdefs_json_list;
+
+				retval := true;
+			end;
+
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval, !configdefs_assoc_list)
+;;
+
+
+
+
+
 
 
 (*--------------------------------------------------------------------------*)
@@ -239,10 +295,17 @@ let json_node_uberspark_uobjcoll_to_var
 						(json_node_uberspark_uobjcoll_initmethod_to_var mf_json) in
 					let (rval3, json_node_uberspark_uobjcoll_publicmethods_var) = 
 						(json_node_uberspark_uobjcoll_publicmethods_to_var mf_json) in
+					let (rval4, json_node_uberspark_uobjcoll_configdefs_var) = 
+						(json_node_uberspark_uobjcoll_configdefs_to_var mf_json) in
 
 					if (rval1 && rval2 && rval3) then begin
 						json_node_uberspark_uobjcoll_var.init_method <- json_node_uberspark_uobjcoll_initmethod_var;
 						json_node_uberspark_uobjcoll_var.public_methods <- json_node_uberspark_uobjcoll_publicmethods_var;
+						
+						if (rval4) then begin
+							json_node_uberspark_uobjcoll_var.configdefs <- json_node_uberspark_uobjcoll_configdefs_var;
+						end;
+						
 						retval := true;
 					end;
 
