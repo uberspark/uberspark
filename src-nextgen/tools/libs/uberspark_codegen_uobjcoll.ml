@@ -266,11 +266,11 @@ let generate_top_level_include_header
     	List.iter ( fun ( (name : string) , (entry : Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) ) -> 
 
             if entry.value = "@@TRUE@@" then begin
-                Printf.fprintf oc "\n#define __%s__" (String.uppercase name);
+                Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
             end else if entry.value = "@@FALSE@@" then begin
-                Printf.fprintf oc "\n//#define __%s__" (String.uppercase name);
+                Printf.fprintf oc "\n//#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
             end else begin
-                Printf.fprintf oc "\n#define __%s__ %s" (String.uppercase name) entry.value;
+                Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__ %s" (String.uppercase name) entry.value;
             end;
            
 		) configdefs_assoc_list;
