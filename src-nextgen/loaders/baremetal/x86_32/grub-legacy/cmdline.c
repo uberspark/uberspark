@@ -286,7 +286,7 @@ void tboot_parse_cmdline(void)
 }
 
 
-#if defined (__DEBUG_SERIAL__)
+#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_SERIAL__)
 
 extern uart_config_t g_uart_config;
 

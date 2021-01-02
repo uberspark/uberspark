@@ -71,7 +71,7 @@
 //uint32_t libxmhfdebug_lock = 1;
 
 
-#if defined (__DEBUG_SERIAL__)
+#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_SERIAL__)
     extern uart_config_t g_uart_config;
 #endif
 
@@ -718,7 +718,7 @@ static bool svm_prepare_cpu(void)
 //cpu_vendor = intel or amd
 //slbase= physical memory address of start of sl
 void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_size __attribute__((unused))){
-#if !defined (__DRT__)
+#if !defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DRT__)
 		uint32_t sl_entry_point;
 		uint16_t *sl_entry_point_offset = (uint16_t *)slbase;
 		//typedef void(*FCALL)(void);
@@ -733,7 +733,7 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
     _XDPRINTF_("\nINIT(early): sent INIT IPI to APs");
 //#endif
 
-#if defined (__DRT__)
+#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DRT__)
 
     if(vcpu->cpu_vendor == CPU_VENDOR_AMD){
         if(!svm_verify_platform()) {
@@ -767,7 +767,7 @@ void do_drtm(BOOTVCPU __attribute__((unused))*vcpu, uint32_t slbase, size_t mle_
         HALT();
     }
 
-#else  //!__DRT__
+#else  //!__UBERSPARK_UOBJCOLL_CONFIGDEF_DRT__
 	//don't use SKINIT or SENTER
 	_XDPRINTF_("\n****** NO DRTM startup ******\n");
 	_XDPRINTF_("\nslbase=0x%08x, sl_entry_point_offset=0x%08x", (uint32_t)slbase, *sl_entry_point_offset);
@@ -907,7 +907,7 @@ void cstartup(multiboot_info_t *mbi){
     g_cmdline[sizeof(g_cmdline)-1] = '\0'; /* in case uberspark_uobjrtl_crt__strncpy truncated */
     tboot_parse_cmdline();
 
-#if defined (__DEBUG_SERIAL__)
+#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_SERIAL__)
     /* parse serial port params */
     {
       uart_config_t uart_config_backup = g_uart_config;
@@ -925,8 +925,8 @@ void cstartup(multiboot_info_t *mbi){
     mods_count = mbi->mods_count;
 
 	//welcome banner
-	_XDPRINTF_("\neXtensible Modular Hypervisor Framework (XMHF) %s", ___XMHF_BUILD_VERSION___);
-	_XDPRINTF_("\nBuild revision: %s\n", ___XMHF_BUILD_REVISION___);
+	_XDPRINTF_("\neXtensible Modular Hypervisor Framework (XMHF) %s", __UBERSPARK_UOBJCOLL_CONFIGDEF_UXMHF_BUILD_VERSION__);
+	_XDPRINTF_("\nBuild revision: %s\n", __UBERSPARK_UOBJCOLL_CONFIGDEF_UXMHF_BUILD_REVISION__);
 
     _XDPRINTF_("XMHF boot-loader: initializing, total modules=%u\n", mods_count);
 
@@ -1063,7 +1063,7 @@ void cstartup(multiboot_info_t *mbi){
 			}
 		}*/
 
-#if defined (__DEBUG_SERIAL__)
+#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_SERIAL__)
         //xslbootinfo->uart_config = g_uart_config;
         uberspark_uobjrtl_crt__memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
 #endif
@@ -1089,7 +1089,7 @@ void cstartup(multiboot_info_t *mbi){
         xslbootinfo->richguest_bootmodule_size = (mod_array[0].mod_end - mod_array[0].mod_start);
 
 
-		#if defined (__DEBUG_SERIAL__)
+		#if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_SERIAL__)
         uberspark_uobjrtl_crt__memcpy(&xslbootinfo->debugcontrol_buffer, &g_uart_config, sizeof(uart_config_t));
 		#endif
         uberspark_uobjrtl_crt__strncpy(xslbootinfo->cmdline_buffer, (const char *)mbi->cmdline, sizeof(xslbootinfo->cmdline_buffer));
