@@ -2,7 +2,7 @@
 
 
 {
-   		"uberspark.manifest.namespace" : [ "uberspark-config" ],
+   		"uberspark.manifest.namespace" : "uberspark/config",
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 	

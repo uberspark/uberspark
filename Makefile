@@ -39,7 +39,7 @@ export SYS_PROC_VERSION := $(shell cat /proc/version)
 
 define USPARK_CONFIG_CONTENTS 
 {
-		"uberspark.manifest.namespace" : [ "uberspark-installation" ],
+		"uberspark.manifest.namespace" : "uberspark/installation",
 		"uberspark.manifest.version_min" : "$(USPARK_VERSION)",
 		"uberspark.manifest.version_max" : "$(USPARK_VERSION)",
 

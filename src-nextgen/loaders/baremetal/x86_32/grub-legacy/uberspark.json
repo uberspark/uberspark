@@ -3,7 +3,7 @@
 */
 
 {
-    "uberspark.manifest.namespace" : [ "uberspark-loader" ],
+    "uberspark.manifest.namespace" : "uberspark/loaders",
     "uberspark.manifest.version_min" : "any",
     "uberspark.manifest.version_max" : "any",
 

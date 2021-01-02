@@ -3,7 +3,7 @@
 */
 
 {
-		"uberspark.manifest.namespace" : [ "uberspark-bridge-ld" ],
+		"uberspark.manifest.namespace" : "uberspark/bridges",
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 	

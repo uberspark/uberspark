@@ -17,7 +17,7 @@ open Yojson
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
-	mutable namespace : string list;
+	mutable namespace : string;
 	mutable version_min   : string;
 	mutable version_max   : string;
 };;
@@ -108,7 +108,7 @@ let json_node_uberspark_manifest_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			json_node_uberspark_manifest_var.namespace <- (json_list_to_string_list (mf_json |> member "uberspark.manifest.namespace" |> to_list));
+			json_node_uberspark_manifest_var.namespace <- mf_json |> member "uberspark.manifest.namespace" |> to_string;
 			json_node_uberspark_manifest_var.version_min <- mf_json |> member "uberspark.manifest.version_min" |> to_string;
 			json_node_uberspark_manifest_var.version_max <- mf_json |> member "uberspark.manifest.version_max" |> to_string;
 			retval := true;
@@ -133,16 +133,8 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.namespace\" : [ ";
-	for i = 0 to ((List.length json_node_uberspark_manifest_var.namespace)-1) do
-		if i == ((List.length json_node_uberspark_manifest_var.namespace)-1) then begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.namespace i);
-		end else begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.namespace i);
-		end;
-	done;
-	retstr := !retstr ^ Printf.sprintf  "],";
 
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.namespace\" : \"%s\"," json_node_uberspark_manifest_var.namespace;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.version_min\" : \"%s\"," json_node_uberspark_manifest_var.version_min;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.version_max\" : \"%s\"" json_node_uberspark_manifest_var.version_max;
 

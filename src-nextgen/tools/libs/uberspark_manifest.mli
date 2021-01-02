@@ -15,7 +15,7 @@
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
-	mutable namespace : string list;
+	mutable namespace : string;
 	mutable version_min   : string;
 	mutable version_max   : string;
 }
