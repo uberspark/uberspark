@@ -36,7 +36,6 @@ val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojs
 val get_json_for_manifest : string -> bool * Yojson.Basic.json
 val json_node_uberspark_manifest_to_var :  Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
 val json_node_uberspark_manifest_var_to_jsonstr : json_node_uberspark_manifest_t -> string
-val get_json_for_manifest_node_type :  string -> string -> bool * Yojson.Basic.json * Yojson.Basic.json
 
 
 val write_prologue : ?prologue_str:string -> out_channel -> bool

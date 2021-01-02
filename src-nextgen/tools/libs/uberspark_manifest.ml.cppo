@@ -154,62 +154,6 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 
 
-(*--------------------------------------------------------------------------*)
-(* read manifest file and return json object of specified manifest node type *)
-(* return null if the node type is not found in the manifest *)
-(*--------------------------------------------------------------------------*)
-let get_json_for_manifest_node_type 
-	(manifest_filename : string)
-	(manifest_node_type : string)
-	: bool * Yojson.Basic.json * Yojson.Basic.json = 
-
-	let retval = ref false in
-	let retjson_uberspark_manifest = ref `Null in
-	let retjson = ref `Null in
-
-	try
-
-		let manifest_json = Yojson.Basic.from_file manifest_filename in
-		let json_node_uberspark_manifest_var : json_node_uberspark_manifest_t = 
-			{ 	namespace = []; 
-				version_max = "";
-				version_min = "";} in
-		let json_node_uberspark_manifest = (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag
-			manifest_json) in 
-		let rval_json_node_uberspark_manifest_var = json_node_uberspark_manifest_to_var json_node_uberspark_manifest
-			json_node_uberspark_manifest_var in
-
-		if 	rval_json_node_uberspark_manifest_var = true then begin
-
-			if (List.mem manifest_node_type json_node_uberspark_manifest_var.namespace) then begin
-				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
-				retjson_uberspark_manifest := json_node_uberspark_manifest;
-				retval := true;
-			end else begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "manifest node type '%s' is not listed within uberspark-manifest node within manifest!";
-				retjson := `Null;
-				retjson_uberspark_manifest := `Null;
-				retval := false;
-			end;
-
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
-			retjson := `Null;
-			retjson_uberspark_manifest := `Null;
-			retval := false;
-
-		end;	
-		
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retjson_uberspark_manifest := `Null;
-		retjson := `Null;
-		retval := false;
-	;
-
-	(!retval, !retjson_uberspark_manifest, !retjson)
-;;
-
 
 
 
