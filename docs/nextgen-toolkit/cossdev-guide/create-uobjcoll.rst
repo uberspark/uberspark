@@ -19,20 +19,20 @@ following contents:
    :language: bash
    :linenos:
 
-As seen from the aforementioned listing, a |uobjcoll| manifest consists of a manifest header
-(defined using `uberspark-manifest` JSON node), which identifies the JSON as a |ubersparkmf|.
-The manifest header also includes all the relevant manifest node types (`uberspark-uobjcoll` in our case) 
-that are present within the manifest, in addition to specifying the minimum and maximum version of
+As seen from the aforementioned listing, a |uobjcoll| manifest consists of general manifest information
+(defined using `uberspark.manifest.xxx` JSON nodes), which identifies the JSON as a |ubersparkmf|.
+The manifest nodes includes the manifest namespace (`uberspark/uobjcoll` in our case), in addition 
+to specifying the minimum and maximum version of
 |uberspark| that is required. See 
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-manifesthdr` for further details on the manifest header and 
 definitions.
 
-The `uberspark-uobjcoll` manifest node declares a |uobjcoll|. At a high level the `uberspark-uobjcoll` node
-declares the |uobjcoll| namespace, the platform, architecture and CPU requirements, various
+The `uberspark.uobjcoll.xxx` manifest nodes declare a |uobjcoll|. At a high level the `uberspark.uobjcoll.xxx` nodes
+declare the |uobjcoll| namespace, the platform, architecture and CPU requirements, various
 |uobjs| that are part of the |uobjcoll|, |uobj| publicmethods that need to be exposed as |uobjcoll| publicmethods
 for interaction with legacy |coss| code, in addition to other attributes. See 
-|reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the ``uberspark-uobjcoll``
-manifest node and definitions.
+|reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the ``uberspark.uobjcoll.xxx``
+manifest nodes and definitions.
 
 The |uobjcoll| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul`) is composed of
 two parts. 
@@ -42,11 +42,11 @@ since ``hello-mul`` is architecture agnostic.
 
 Accordingly |uobjcoll| *platform*, *arch*, and *cpu* fields are set to ``generic``.
 
-The *hpl* field within ``uberspark-uobjcoll`` JSON node specifies the hardware privilege level of
+The *hpl* field within ``uberspark.uobjcoll.hpl`` JSON node specifies the hardware privilege level of
 the |uobjcoll|. The currently supported values are ``any`` to signify the |uobjcoll| can execute under
 any hardware privilege level.            
 
-The *uobjs* node within the ``uberspark-uobjcoll`` manifest node, describes all the |uobjs| that are part of the
+The *uobjs* node within the ``uberspark.uobjcoll.uobjs`` manifest node, describes all the |uobjs| that are part of the
 |uobjcoll|. The |uobjs| are categorized into *master* and *templars*. 
 
 The *master* |uobj| is optional, and is a special |uobj| that performs execution environment initialization. We
@@ -69,7 +69,7 @@ Every |uobjcoll| *publicmethods* declaration also includes a comma seperated lis
 essentially gateways into the |uobjcoll| from legacy code. In our case, we use the ``call`` sentinel to specify
 this gateway as a regular branch/call instruction.
 
-The same is true for the *sentinels-intrauobjcoll* field within ``uberspark-uobjcoll`` JSON node 
+The same is true for the ``uberspark.sentinels.intra_uobjcoll`` manifest JSON node 
 that describes the gateway type for |uobj| to |uobj| invocations within a |uobjcoll|. We use the ``call`` sentinel
 to specify this gateway as a regular branch/call instruction.
 

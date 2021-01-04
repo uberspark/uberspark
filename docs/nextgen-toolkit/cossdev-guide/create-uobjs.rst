@@ -25,19 +25,19 @@ following contents:
    :language: bash
    :linenos:
 
-As seen from the aforementioned listing, a |uobj| manifest consists of a manifest header
-(defined using `uberspark-manifest` JSON node), which identifies the JSON as a |ubersparkmf|.
-The manifest header also includes all the relevant manifest node types (`uberspark-uobj` in our case) 
-that are present within the manifest, in addition to specifying the minimum and maximum version of
+As seen from the aforementioned listing, a |uobj| manifest consists of general manifest information
+(defined using `uberspark.manifest.xxx` JSON nodes), which identifies the JSON as a |ubersparkmf|.
+The manifest nodes includes the manifest namespace (`uberspark/uobj` in our case), in addition 
+to specifying the minimum and maximum version of
 |uberspark| that is required. See 
-|reference-manifest-ref|:::ref:`reference-manifest-uberspark-manifesthdr` for further details on the manifest header and 
-definitions.
+|reference-manifest-ref|:::ref:`reference-manifest-uberspark-manifesthdr` for further details on the 
+manifest node definitions.
 
-The `uberspark-uobj` manifest node declares a |uobj|. At a high level the `uberspark-uobj` node
-declares the |uobj| namespace, the platform, architecture and CPU requirements as well as sources
+The `uberspark.uobj.xxx` manifest nodes declare a |uobj|. At a high level the `uberspark.uobj.xxx` nodes
+declare the |uobj| namespace, the platform, architecture and CPU requirements as well as sources
 and publicmethods in addition to other attributes. See 
-|reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark-uobj``
-manifest node and definitions.
+|reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark.uobj.xxx``
+manifest nodes and definitions.
 
 The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul/main`) has a 
 |uobjcoll| prefix (`uberspark/ubjcoll/generic/hello-mul`) followed by the name 
@@ -45,8 +45,8 @@ of the |uobj| folder (`main`).  Here the |uobjcoll| prefix is required to start 
 We choose `generic/hello-mul` as our user-defined |uobjcoll| namespace suffix since ``hello-mul`` is 
 architecture agnostic. Accordingly ``platform``, ``arch``, and ``cpu`` fields are set to ``generic``.
 
-|uobj| *sources* can be composed of a mix of C source files (``c-files``), C header files (``h-files``), 
-Assembly source files (``asm-files``), and CASM (``casm-files``).
+|uobj| *sources* can be composed of a mix of C source files (``uberspark.uobj.source_c_files``), C header files (``uberspark.uobj.source_h_files``), 
+Assembly source files (``uberspark.uobj.source_asm_files``), and CASM (``uberspark.uobj.source_casm_files``).
 
 |uobj| *publicmethods* declare the externally visible interfaces of the |uobj| and for our example is set to
 the function ``main`` within the C source file ``main.c`` with return value ``uint32_t``, parameters
@@ -56,14 +56,15 @@ the function ``main`` within the C source file ``main.c`` with return value ``ui
 Specify |uobj| callees
 ----------------------
 
-..  note::  ``uberspark-uobj`` *intrauobjcoll-callees*, *interuobjcoll-callees*,  and *legacy-callees* 
+..  note::  ``uberspark.uobj.intra_uobjcoll_callees``, ``uberspark.uobj.inter_uobjcoll_callees``,  and 
+            ``uberspark.uobj.legacy_callees`` 
             node declarations are still work-in-progress and can be  omitted for discussion for the time being
 
 
 Specify |uobj| Sections
 -----------------------
 
-The `section` sub-node of the `uberspark-uobj` manifest node is used to specify |uobj|
+The `uberspark.uobj.sections` node is used to specify |uobj|
 binary sectioning parameters. Such parameters include the section size, alignment and 
 padding.
 
@@ -88,8 +89,7 @@ output section for the |uobj| binary.
    :linenos:
 
    {
-    	"uberspark-uobj" : {
-         "sections": [
+    	"uberspark.uobj.sections" : [
             {
                "name" : "specialsec",
                "size" : "0x1000",
@@ -98,7 +98,6 @@ output section for the |uobj| binary.
                "pad_to" : "0x1000"
             }
          ]
-      }
    }
 
 A similar approach can be used to place |uobj| function definitions within a desired output section in 
@@ -107,21 +106,19 @@ the |uobj| binary.
 The `section` sub-node can also be used to specify section sizes, alignment and padding of pre-defined
 |uobj| binary sections such as code, data and stack. 
 
-As an example, the following is a snippet of the `uberspark-uobj` manifest node specification for 
+As an example, the following is a snippet of the manifest for 
 the |uobj| that specifies the maximum size of the |uobj| code section (in bytes).
 
 .. code-block:: json
    :linenos:
 
    {
-    	"uberspark-uobj" : {
-         "sections": [
+    	"uberspark.uobj.sections" :  [
             {
                "name" : "uobj_code",
                "size" : "0x1000"
             }
          ]
-      }
    }
 
 ..  warning:: specifying a section size that is smaller than the actual |uobj| generated section
