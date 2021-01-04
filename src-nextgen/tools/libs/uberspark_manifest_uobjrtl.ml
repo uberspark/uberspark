@@ -14,26 +14,26 @@
 
 type json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t =
 {
-	mutable f_funcname : string;
+	mutable fn_name : string;
 };;
 
 
 type json_node_uberspark_uobjrtl_modules_spec_t =
 {
-	mutable f_module_path : string;
-	mutable f_module_funcdecls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
+	mutable path : string;
+	mutable fn_decls : json_node_uberspark_uobjrtl_modules_spec_module_funcdecls_t list;
 };;
 
 
 type json_node_uberspark_uobjrtl_t =
 {
-	mutable f_namespace : string;
-	mutable f_platform : string;
-	mutable f_arch : string;
-    mutable f_cpu : string;
+	mutable namespace : string;
+	mutable platform : string;
+	mutable arch : string;
+    mutable cpu : string;
    
-    mutable f_modules_spec_c: json_node_uberspark_uobjrtl_modules_spec_t list;
-    mutable f_modules_spec_casm: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable source_c_files: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable source_casm_files: json_node_uberspark_uobjrtl_modules_spec_t list;
 };;
 
 
@@ -60,48 +60,42 @@ let json_node_uberspark_uobjrtl_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_uobjrtl = mf_json |> member Uberspark_namespace.namespace_uobjrtl_mf_node_type_tag in
-		
-			if(json_node_uberspark_uobjrtl <> `Null) then
-				begin
 
-					json_node_uberspark_uobjrtl_var.f_namespace <- json_node_uberspark_uobjrtl |> member "namespace" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_platform <- json_node_uberspark_uobjrtl |> member "platform" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_arch <- json_node_uberspark_uobjrtl |> member "arch" |> to_string;
-					json_node_uberspark_uobjrtl_var.f_cpu <- json_node_uberspark_uobjrtl |> member "cpu" |> to_string;
+					json_node_uberspark_uobjrtl_var.namespace <- mf_json |> member "uberspark.uobjrtl.namespace" |> to_string;
+					json_node_uberspark_uobjrtl_var.platform <- mf_json |> member "uberspark.uobjrtl.platform" |> to_string;
+					json_node_uberspark_uobjrtl_var.arch <- mf_json |> member "uberspark.uobjrtl.arch" |> to_string;
+					json_node_uberspark_uobjrtl_var.cpu <- mf_json |> member "uberspark.uobjrtl.cpu" |> to_string;
 
-					let json_node_uberspark_uobjrtl_modules_spec_c_list =  json_node_uberspark_uobjrtl |> member "modules-spec-c" |> to_list in
+					let json_node_uberspark_uobjrtl_modules_spec_c_list =  mf_json |> member "uberspark.uobjrtl.source_c_files" |> to_list in
 					List.iter (fun x -> 
 						let f_modules_spec_c_element : json_node_uberspark_uobjrtl_modules_spec_t = 
-							{ f_module_path = ""; f_module_funcdecls = []; } in
+							{ path = ""; fn_decls = []; } in
 
-						f_modules_spec_c_element.f_module_path <- x |> member "module-path" |> to_string;
+						f_modules_spec_c_element.path <- x |> member "path" |> to_string;
 
 			
 						(* add to f)modules_spec list *)
-						json_node_uberspark_uobjrtl_var.f_modules_spec_c <- json_node_uberspark_uobjrtl_var.f_modules_spec_c @ [ f_modules_spec_c_element ];
+						json_node_uberspark_uobjrtl_var.source_c_files <- json_node_uberspark_uobjrtl_var.source_c_files @ [ f_modules_spec_c_element ];
 					) json_node_uberspark_uobjrtl_modules_spec_c_list;
 
-					if (json_node_uberspark_uobjrtl |> member "modules-spec-casm") <> `Null then
+					if (mf_json |> member "uberspark.uobjrtl.source_casm_files") <> `Null then
 						begin
 
-							let json_node_uberspark_uobjrtl_modules_spec_casm_list =  json_node_uberspark_uobjrtl |> member "modules-spec-casm" |> to_list in
+							let json_node_uberspark_uobjrtl_modules_spec_casm_list =  mf_json |> member "uberspark.uobjrtl.source_casm_files" |> to_list in
 							List.iter (fun x -> 
 								let f_modules_spec_casm_element : json_node_uberspark_uobjrtl_modules_spec_t = 
-									{ f_module_path = ""; f_module_funcdecls = []; } in
+									{ path = ""; fn_decls = []; } in
 
-								f_modules_spec_casm_element.f_module_path <- x |> member "module-path" |> to_string;
+								f_modules_spec_casm_element.path <- x |> member "path" |> to_string;
 
 					
 								(* add to f)modules_spec list *)
-								json_node_uberspark_uobjrtl_var.f_modules_spec_casm <- json_node_uberspark_uobjrtl_var.f_modules_spec_casm @ [ f_modules_spec_casm_element ];
+								json_node_uberspark_uobjrtl_var.source_casm_files <- json_node_uberspark_uobjrtl_var.source_casm_files @ [ f_modules_spec_casm_element ];
 							) json_node_uberspark_uobjrtl_modules_spec_casm_list;
 						end
 					;
 
 					retval := true;
-				end
-			;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;

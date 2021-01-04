@@ -5,6 +5,7 @@
 
 val parse_manifest : string -> bool
 val install_create_ns : unit -> unit
+val install_h_files_ns : ?context_path_builddir:string -> unit
 
 val initialize_common_operation_context :
 	string ->

@@ -5,31 +5,23 @@
 
 {
 
-   	/* manifest header */
-	"uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-uobj" ],
-		"uberspark_min_version" : "6.0.0",
-		"uberspark_max_version" : "any"
-	},
+		"uberspark.manifest.namespace" : "uberspark/uobj",
+		"uberspark.manifest.version_min" : "6.0.0",
+		"uberspark.manifest.version_max" : "any",
 
 
-  	/* uobj declaration */
-	"uberspark-uobj" : {
-		"namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic",
+		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
+		"uberspark.uobj.platform" : "generic",
+		"uberspark.uobj.arch" : "generic",
+		"uberspark.uobj.cpu" : "generic",
 
-		/* sources */
-		"sources" : {
-			"h-files": [ ],
-			"c-files": [ "main.c" ],
-			"casm-files": [ ],
-			"asm-files": [ ]
-		},
+			"uberspark.uobj.source_h_files": [ ],
+			"uberspark.uobj.source_c_files": [ "main.c" ],
+			"uberspark.uobj.source_casm_files": [ ],
+			"uberspark.uobj.source_asm_files": [ ],
 	
 		/* public methods */
-		"publicmethods" : {
+		"uberspark.uobj.public_methods" : {
 			"main" : [
 				"uint32_t",
 				"(uint32_t multiplicand, uint32_t multiplier)", 
@@ -40,19 +32,17 @@
 		/* public methods of other uobjs that this uobj invokes 
 			within the same collection
 		*/
-		"intrauobjcoll-callees" : {
+		"uberspark.uobj.intra_uobjcoll_callees" : {
 		},
 	
 
 		/* public methods of other uobjs that this uobj invokes 
 			across other collection(s)
 		*/
-		"interuobjcoll-callees": {
+		"uberspark.uobj.inter_uobjcoll_callees": {
 		},
 	
 		/* legacy CoSS functions/code that this uobj invokes */
-		"legacy-callees": [
+		"uberspark.uobj.legacy_callees": [
 		]
-
-	}
 }

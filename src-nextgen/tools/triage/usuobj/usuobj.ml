@@ -48,8 +48,8 @@ class uobject = object(self)
 		val o_usmf_hdr_type = ref "";
 		method get_o_usmf_hdr_type = !o_usmf_hdr_type;
 		
-		val o_usmf_hdr_subtype = ref "";
-		method get_o_usmf_hdr_subtype = !o_usmf_hdr_subtype;
+		val o_usmf_hdr_sucategory = ref "";
+		method get_o_usmf_hdr_sucategory = !o_usmf_hdr_sucategory;
 
 		val o_usmf_hdr_id = ref "";
 		method get_o_usmf_hdr_id = !o_usmf_hdr_id;
@@ -78,8 +78,8 @@ class uobject = object(self)
 		val o_uobj_publicmethods_sentinels_hashtbl = ((Hashtbl.create 32) : ((string, sentinel_info_t)  Hashtbl.t)); 
 		method get_o_uobj_publicmethods_sentinels_hashtbl = o_uobj_publicmethods_sentinels_hashtbl;
 
-		val o_uobj_publicmethods_sentinels_libname = ref "";
-		method get_o_uobj_publicmethods_sentinels_libname = !o_uobj_publicmethods_sentinels_libname;
+		val o_uobj_publicmethods_sentinels_liname = ref "";
+		method get_o_uobj_publicmethods_sentinels_liname = !o_uobj_publicmethods_sentinels_liname;
 
 		val o_uobj_publicmethods_sentinels_lib_source_file_list : string list ref = ref [];
 		method get_o_uobj_publicmethods_sentinels_lib_source_file_list = !o_uobj_publicmethods_sentinels_lib_source_file_list;
@@ -183,7 +183,7 @@ class uobject = object(self)
 
 			(* add default uobj sections *)
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_hdr" 
-				{ f_name = "uobj_hdr";	
+				{ fn_name = "uobj_hdr";	
 				 	f_subsection_list = [ ".hdr" ];	
 					usbinformat = { f_type= Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_HDR; f_prot=0; 
 													f_addr_start=0; 
@@ -193,7 +193,7 @@ class uobject = object(self)
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_ustack" 
-				{ f_name = "uobj_ustack";	
+				{ fn_name = "uobj_ustack";	
 				 	f_subsection_list = [ ".ustack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK; f_prot=0; 
 													f_addr_start=0; 
@@ -203,7 +203,7 @@ class uobject = object(self)
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_tstack" 
-				{ f_name = "uobj_tstack";	
+				{ fn_name = "uobj_tstack";	
 				 	f_subsection_list = [ ".tstack"; ".stack" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK; f_prot=0; 
 													f_addr_start=0; 
@@ -213,7 +213,7 @@ class uobject = object(self)
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_code" 
-				{ f_name = "uobj_code";	
+				{ fn_name = "uobj_code";	
 				 	f_subsection_list = [ ".text" ];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE; f_prot=0; 
 													f_addr_start=0; 
@@ -223,7 +223,7 @@ class uobject = object(self)
 												};
 				};
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_data" 
-				{ f_name = "uobj_data";	
+				{ fn_name = "uobj_data";	
 				 	f_subsection_list = [".data"; ".rodata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA; f_prot=0; 
 													f_addr_start=0; 
@@ -234,7 +234,7 @@ class uobject = object(self)
 				};
 				
 			Hashtbl.add o_uobj_sections_hashtbl "uobj_dmadata" 
-				{ f_name = "uobj_dmadata";	
+				{ fn_name = "uobj_dmadata";	
 				 	f_subsection_list = [".dmadata"];	
 					usbinformat = { f_type=Usconfig.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA; f_prot=0; 
 													f_addr_start=0; 
@@ -269,7 +269,7 @@ class uobject = object(self)
 			if (rval == false) then (false)
 			else
 			(* parse usmf-hdr node *)
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
+			let (rval, usmf_hdr_type, usmf_hdr_sucategory, usmf_hdr_id,
 					usmf_hdr_platform, usmf_hdr_cpu, usmf_hdr_arch) =
 								Usmanifest.parse_node_usmf_hdr mf_json in
 
@@ -282,7 +282,7 @@ class uobject = object(self)
 			let dummy = 0 in
 				begin
 					o_usmf_hdr_type := usmf_hdr_type;								
-					o_usmf_hdr_subtype := usmf_hdr_subtype;
+					o_usmf_hdr_sucategory := usmf_hdr_sucategory;
 					o_usmf_hdr_id := usmf_hdr_id;
 					o_usmf_hdr_platform := usmf_hdr_platform;
 					o_usmf_hdr_cpu := usmf_hdr_cpu;
@@ -291,7 +291,7 @@ class uobject = object(self)
 
 			(* parse usmf-sources node *)
 			let(rval, usmf_sources_h_files, usmf_source_c_files, usmf_sources_casm_files) = 
-				Usmanifest.parse_node_usmf_sources	mf_json in
+				Usmanifest.parse_node_usmsources	mf_json in
 	
 			if (rval == false) then (false)
 			else
@@ -303,9 +303,9 @@ class uobject = object(self)
 				end;
 
 
-			(* parse uobj-publicmethods node *)
+			(* parse uobj-public_methods node *)
 			let (rval, uobj_publicmethods_list) = 
-										Usmanifest.parse_node_uobj_publicmethods mf_json in
+										Usmanifest.parse_node_uobj_public_methods mf_json in
 
 			if (rval == false) then (false)
 			else
@@ -384,7 +384,7 @@ class uobject = object(self)
 
 						Hashtbl.remove o_uobj_sections_hashtbl (List.nth x 0); 
 						Hashtbl.add o_uobj_sections_hashtbl (List.nth x 0) 
-							{ f_name = (List.nth x 0);	
+							{ fn_name = (List.nth x 0);	
 							 	f_subsection_list = !subsections_list;	
 								usbinformat = { f_type=0; f_prot=0; 
 																f_addr_start=0; 
@@ -405,7 +405,7 @@ class uobject = object(self)
 			o_pp_definition := "__UOBJ_" ^ self#get_o_usmf_hdr_id ^ "__";
 
 			(* initialize uobj sentinels lib name *)
-			o_uobj_publicmethods_sentinels_libname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
+			o_uobj_publicmethods_sentinels_liname := "lib" ^ (self#get_o_usmf_hdr_id) ^ "-" ^
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch;
 									
 			(true)
@@ -445,7 +445,7 @@ class uobject = object(self)
 				let section_size = (x.s_length + !padding_size) in 
 				
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{ f_name = key;	
+					{ fn_name = key;	
 					 	f_subsection_list = [ ("." ^ key) ];	
 						usbinformat = { f_type = int_of_string(x.s_type_id);
 														f_prot=0; 
@@ -457,7 +457,7 @@ class uobject = object(self)
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{ f_name = key;	
+					{ fn_name = key;	
 					 	f_subsection_list = [ ("." ^ key) ];	
 						usbinformat = { f_type = int_of_string(x.s_type_id); 
 														f_prot=0; 
@@ -492,7 +492,7 @@ class uobject = object(self)
 
 
 				Hashtbl.add uobj_sections_memory_map_hashtbl key 
-					{ f_name = x.f_name;	
+					{ fn_name = x.fn_name;	
 					 	f_subsection_list = x.f_subsection_list;	
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
@@ -504,7 +504,7 @@ class uobject = object(self)
 													};
 					};
 				Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-					{ f_name = x.f_name;	
+					{ fn_name = x.fn_name;	
 					 	f_subsection_list = x.f_subsection_list;	
 						usbinformat = { f_type=x.usbinformat.f_type; 
 														f_prot=0; 
@@ -534,7 +534,7 @@ class uobject = object(self)
 				begin
 					(* add padding section *)
 					Hashtbl.add uobj_sections_memory_map_hashtbl "usuobj_padding" 
-						{ f_name = "usuobj_padding";	
+						{ fn_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
 							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
@@ -545,7 +545,7 @@ class uobject = object(self)
 														};
 						};
 					Hashtbl.add uobj_sections_memory_map_hashtbl_byorigin !uobj_section_load_addr 
-						{ f_name = "usuobj_padding";	
+						{ fn_name = "usuobj_padding";	
 						 	f_subsection_list = [ ];	
 							usbinformat = { f_type = Usconfig.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
@@ -826,7 +826,7 @@ class uobject = object(self)
 				!o_usmf_hdr_platform ^ "-" ^ !o_usmf_hdr_cpu ^ "-" ^ !o_usmf_hdr_arch in*)
 				
 			Uslog.logf log_tag Uslog.Info "Building sentinels lib: %s...\r\n"
-				self#get_o_uobj_publicmethods_sentinels_libname;
+				self#get_o_uobj_publicmethods_sentinels_liname;
 
 			(* compile all the sentinel lib source files *)							
 			self#compile_cfile_list !o_uobj_publicmethods_sentinels_lib_source_file_list
@@ -840,7 +840,7 @@ class uobject = object(self)
 			let (pestatus, pesignal) = 
 					(Usextbinutils.mklib  
 						!o_uobj_publicmethods_sentinels_lib_source_file_list
-						(self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
+						(self#get_o_uobj_publicmethods_sentinels_liname ^ ".a")
 					) in
 					if (pesignal == true) || (pestatus != 0) then
 						begin
@@ -1001,7 +1001,7 @@ class uobject = object(self)
 			(* iterate over regular sections *)
 			Hashtbl.iter (fun key (x:Ustypes.section_info_t)  ->
 				(* new section *)
-				let section_name_var = ("__uobjsection_filler_" ^ x.f_name) in
+				let section_name_var = ("__uobjsection_filler_" ^ x.fn_name) in
 				
 				  if ((compare (List.nth x.f_subsection_list 0) ".text") <> 0) && 
 						((compare (List.nth x.f_subsection_list 0) ".ustack") <> 0) &&
@@ -1041,7 +1041,7 @@ class uobject = object(self)
 
 			(* copy uobj manifest *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ !o_usmf_filename)
-				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmf_name); 
+				(uobj_install_dir ^ "/" ^ Usconfig.std_uobj_usmfn_name); 
 			
 			(* copy uobj header file *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
@@ -1050,8 +1050,8 @@ class uobject = object(self)
 	
 			(* copy sentinels lib *)
 			Usosservices.file_copy (!o_uobj_dir_abspathname ^ "/" ^ 
-															self#get_o_uobj_publicmethods_sentinels_libname ^ ".a")
-				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_libname ^ ".a"); 
+															self#get_o_uobj_publicmethods_sentinels_liname ^ ".a")
+				(uobj_install_dir ^ "/" ^ self#get_o_uobj_publicmethods_sentinels_liname ^ ".a"); 
 			
 							
 		()

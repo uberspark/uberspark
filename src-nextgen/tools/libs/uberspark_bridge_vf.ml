@@ -17,25 +17,16 @@ open Yojson
 
 (* uberspark-manifest json node variable *)	
 let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
-	f_manifest_node_types = [ "uberspark-bridge-vf" ];
-	f_uberspark_min_version = "any";
-	f_uberspark_max_version = "any";
+	namespace = "uberspark/bridges";
+	version_min = "any";
+	version_max = "any";
 };;
 
 (* uberspark-bridge-cc json node variable *)	
-let json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.Vf.json_node_uberspark_bridge_vf_t = {
-	json_node_bridge_hdr_var = { btype = "";
-				bname = "";
-				execname = "";
-				path = "";
-				devenv = "";
-				arch = "";
-				cpu = "";
-				version = "";
-				params = [];
-				container_fname = "";
-				namespace = "";
-	};
+let json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t = {
+	namespace = "";
+	category = "";
+	container_build_filename = "";
 	bridge_cmd = [];
 };;
 
@@ -97,8 +88,8 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_vf_bridge ^ "/" ^ bridge_ns ^ "/" ^
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		bridge_ns ^ "/" ^
 		Uberspark_namespace.namespace_root_mf_filename in
 		(load_from_file bridge_ns_json_path)
 ;;
@@ -123,16 +114,9 @@ let store
 	()
 	: bool =
 	let retval = ref false in 
-    let bridge_ns = json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.bname ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.version in
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_vf_bridge ^ "/" ^ bridge_ns in
-	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
-		Uberspark_namespace.namespace_root_mf_filename in
+    let bridge_ns = json_node_uberspark_bridge_vf_var.namespace in
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
+	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
 
 	(* make the namespace directory *)
 	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
@@ -140,9 +124,9 @@ let store
 	retval := store_to_file bridge_ns_json_filename;
 
 	(* check if bridge type is container, if so store dockerfile *)
-	if !retval && json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype = "container" then
+	if !retval && json_node_uberspark_bridge_vf_var.category = "container" then
 		begin
-			let input_bridge_dockerfile = json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.container_fname in 
+			let input_bridge_dockerfile = json_node_uberspark_bridge_vf_var.container_build_filename in 
 			let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
 				Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 		end
@@ -158,16 +142,10 @@ let build
 
 	let retval = ref false in
 
-	if json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype = "container" then
+	if json_node_uberspark_bridge_vf_var.category = "container" then
 		begin
-			let bridge_ns = Uberspark_namespace.namespace_bridge_vf_bridge ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.arch ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.bname ^ "/" ^
-				json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.version in
-			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+			let bridge_ns = json_node_uberspark_bridge_vf_var.namespace in
+			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
 
 			Uberspark_logger.log "building vf-bridge: %s" bridge_ns;
 
@@ -252,16 +230,10 @@ let invoke
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
 	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_namespace.namespace_bridge_vf_bridge ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.bname ^ "/" ^
-		json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.version in
+	let bridge_ns = json_node_uberspark_bridge_vf_var.namespace in
 
 	(* invoke the verification bridge *)
-	if json_node_uberspark_bridge_vf_var.json_node_bridge_hdr_var.btype = "container" then begin
+	if json_node_uberspark_bridge_vf_var.category = "container" then begin
 		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin

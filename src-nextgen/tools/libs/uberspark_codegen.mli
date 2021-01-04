@@ -30,7 +30,7 @@ module Uobj : sig
   (****************************************************************************)
   type slt_codegen_info_t =
   {
-    mutable f_canonical_pm_name     : string;
+    mutable f_canonical_public_method     : string;
     mutable f_pm_sentinel_addr : int;		
     mutable f_codegen_type : string; (* direct or indirect *)	
     mutable f_pm_sentinel_addr_loc : int;
@@ -81,12 +81,12 @@ module Uobjcoll : sig
 type sentinel_info_t =
 {
 	mutable f_type          : string; 	
-    mutable f_name          : string;
+    mutable fn_name          : string;
     mutable f_secname       : string;
-	mutable f_code		    : string;
-	mutable f_libcode  	    : string;	
-	mutable f_sizeof_code   : int;	
-	mutable f_addr          : int;
+	mutable code_template		    : string;
+	mutable library_code_template  	    : string;	
+	mutable sizeof_code_template   : int;	
+	mutable fn_address          : int;
     mutable f_pm_addr       : int;
 }
 
@@ -104,6 +104,12 @@ type sentinel_info_t =
     Defs.Basedefs.uobjinfo_t list -> bool
 
 val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> bool
+val generate_top_level_include_header : 
+    string ->
+    bool ->
+    ((string * Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) list) ->
+    unit
+    
 
 end
 

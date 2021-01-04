@@ -63,14 +63,14 @@ module Usmanifest =
 	(*--------------------------------------------------------------------------*)
 	(* parse manifest node "usmf-hdr" *)
 	(* return: true if successfully parsed usmf-hdr, false if not *)
-	(* if true also return: manifest type string; manifest subtype string; *)
+	(* if true also return: manifest type string; manifest sucategory string; *)
 	(* id as string *)
 	(*--------------------------------------------------------------------------*)
 
 	let parse_node_usmf_hdr usmf_json =
 		let retval = ref false in
 		let usmf_hdr_type = ref "" in
-		let usmf_hdr_subtype = ref "" in
+		let usmf_hdr_sucategory = ref "" in
 		let usmf_hdr_id = ref "" in
 		let usmf_hdr_platform = ref "" in
 		let usmf_hdr_cpu = ref "" in
@@ -81,7 +81,7 @@ module Usmanifest =
 				if(usmf_json_usmf_hdr <> `Null) then
 					begin
 						usmf_hdr_type := usmf_json_usmf_hdr |> member "type" |> to_string;
-						usmf_hdr_subtype := usmf_json_usmf_hdr |> member "subtype" |> to_string;
+						usmf_hdr_sucategory := usmf_json_usmf_hdr |> member "sucategory" |> to_string;
 						usmf_hdr_id := usmf_json_usmf_hdr |> member "id" |> to_string;
 						usmf_hdr_platform := usmf_json_usmf_hdr |> member "platform" |> to_string;
 						usmf_hdr_cpu := usmf_json_usmf_hdr |> member "cpu" |> to_string;
@@ -94,7 +94,7 @@ module Usmanifest =
 				retval := false;
 		;
 
-		(!retval, !usmf_hdr_type, !usmf_hdr_subtype, !usmf_hdr_id,
+		(!retval, !usmf_hdr_type, !usmf_hdr_sucategory, !usmf_hdr_id,
 			!usmf_hdr_platform, !usmf_hdr_cpu, !usmf_hdr_arch)
 	;;
 
@@ -105,7 +105,7 @@ module Usmanifest =
 	(* return true on successful parse, false if not *)
 	(* return: if true then lists of h-files, c-files and casm files *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_usmf_sources usmf_json =
+	let parse_node_usmsources usmf_json =
 		let retval = ref true in
 		let usmf_hfiles_list = ref [] in
 		let usmf_cfiles_list = ref [] in
@@ -267,17 +267,17 @@ module Usmanifest =
 
 
 	(*--------------------------------------------------------------------------*)
-	(* parse manifest node "uobj-publicmethods" *)
+	(* parse manifest node "uobj-public_methods" *)
 	(* return true on successful parse, false if not *)
 	(* return: if true then list public methods *)
 	(*--------------------------------------------------------------------------*)
-	let parse_node_uobj_publicmethods usmf_json =
+	let parse_node_uobj_public_methods usmf_json =
 		let retval = ref false in
 		let uobj_publicmethods_list = ref [] in
 
 		try
 			let open Yojson.Basic.Util in
-		  	let uobj_publicmethods_json = usmf_json |> member "uobj-publicmethods" in
+		  	let uobj_publicmethods_json = usmf_json |> member "uobj-public_methods" in
 					if uobj_publicmethods_json != `Null then
 						begin
 

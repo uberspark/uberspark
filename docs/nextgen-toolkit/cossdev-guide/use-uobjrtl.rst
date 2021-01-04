@@ -60,12 +60,11 @@ described above, we would need to add the ``crypto`` |uobjrtl| namespace in the 
 .. code-block:: json
 
    {
-         "uberspark-uobj" : {
-            "uobjrtl": [
-               {
-                  "namespace" : "uberspark/uobjrtl/crypto"
-               }
-         ]
+      "uberspark.uobj.uobjrtl" : [
+            {
+               "namespace" : "uberspark/uobjrtl/crypto"
+            }
+      ]
    }
 
 

@@ -17,9 +17,9 @@ open Yojson
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
-	mutable f_manifest_node_types : string list;
-	mutable f_uberspark_min_version   : string;
-	mutable f_uberspark_max_version   : string;
+	mutable namespace : string;
+	mutable version_min   : string;
+	mutable version_max   : string;
 };;
 
 
@@ -94,7 +94,7 @@ let get_json_for_manifest
 
 
 (*--------------------------------------------------------------------------*)
-(* convert json node "uberspark-manifest" into json_node_uberspark_manifest_t variable *)
+(* convert json fields "uberspark.manifest.xxx" into json_node_uberspark_manifest_t variable *)
 (* return: *)
 (* on success: true; json_node_uberspark_manifest_var fields are modified with parsed values *)
 (* on failure: false; json_node_uberspark_manifest_var fields are untouched *)
@@ -108,16 +108,10 @@ let json_node_uberspark_manifest_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_manifest = mf_json |> member Uberspark_namespace.namespace_root_mf_node_type_tag in
-
-			if(json_node_uberspark_manifest <> `Null) then
-				begin
-					json_node_uberspark_manifest_var.f_manifest_node_types <- (json_list_to_string_list (json_node_uberspark_manifest |> member "manifest_node_types" |> to_list));
-					json_node_uberspark_manifest_var.f_uberspark_min_version <- json_node_uberspark_manifest |> member "uberspark_min_version" |> to_string;
-					json_node_uberspark_manifest_var.f_uberspark_max_version <- json_node_uberspark_manifest |> member "uberspark_max_version" |> to_string;
-					retval := true;
-				end
-			;
+			json_node_uberspark_manifest_var.namespace <- mf_json |> member "uberspark.manifest.namespace" |> to_string;
+			json_node_uberspark_manifest_var.version_min <- mf_json |> member "uberspark.manifest.version_min" |> to_string;
+			json_node_uberspark_manifest_var.version_max <- mf_json |> member "uberspark.manifest.version_max" |> to_string;
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
@@ -139,21 +133,10 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-manifest\":{";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"manifest_node_types\" : [ ";
-	for i = 0 to ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) do
-		if i == ((List.length json_node_uberspark_manifest_var.f_manifest_node_types)-1) then begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
-		end else begin
-			retstr := !retstr ^ Printf.sprintf  "\"%s,\"" (List.nth json_node_uberspark_manifest_var.f_manifest_node_types i);
-		end;
-	done;
-	retstr := !retstr ^ Printf.sprintf  "],";
-
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_min_version\" : \"%s\"," json_node_uberspark_manifest_var.f_uberspark_min_version;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"uberspark_max_version\" : \"%s\"" json_node_uberspark_manifest_var.f_uberspark_max_version;
-	retstr := !retstr ^ Printf.sprintf  "\n\t}";
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.namespace\" : \"%s\"," json_node_uberspark_manifest_var.namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.version_min\" : \"%s\"," json_node_uberspark_manifest_var.version_min;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.manifest.version_max\" : \"%s\"" json_node_uberspark_manifest_var.version_max;
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
 
@@ -162,62 +145,6 @@ let json_node_uberspark_manifest_var_to_jsonstr
 
 
 
-
-(*--------------------------------------------------------------------------*)
-(* read manifest file and return json object of specified manifest node type *)
-(* return null if the node type is not found in the manifest *)
-(*--------------------------------------------------------------------------*)
-let get_json_for_manifest_node_type 
-	(manifest_filename : string)
-	(manifest_node_type : string)
-	: bool * Yojson.Basic.json * Yojson.Basic.json = 
-
-	let retval = ref false in
-	let retjson_uberspark_manifest = ref `Null in
-	let retjson = ref `Null in
-
-	try
-
-		let manifest_json = Yojson.Basic.from_file manifest_filename in
-		let json_node_uberspark_manifest_var : json_node_uberspark_manifest_t = 
-			{ 	f_manifest_node_types = []; 
-				f_uberspark_max_version = "";
-				f_uberspark_min_version = "";} in
-		let json_node_uberspark_manifest = (Yojson.Basic.Util.member Uberspark_namespace.namespace_root_mf_node_type_tag
-			manifest_json) in 
-		let rval_json_node_uberspark_manifest_var = json_node_uberspark_manifest_to_var json_node_uberspark_manifest
-			json_node_uberspark_manifest_var in
-
-		if 	rval_json_node_uberspark_manifest_var = true then begin
-
-			if (List.mem manifest_node_type json_node_uberspark_manifest_var.f_manifest_node_types) then begin
-				retjson := (Yojson.Basic.Util.member manifest_node_type manifest_json);
-				retjson_uberspark_manifest := json_node_uberspark_manifest;
-				retval := true;
-			end else begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "manifest node type '%s' is not listed within uberspark-manifest node within manifest!";
-				retjson := `Null;
-				retjson_uberspark_manifest := `Null;
-				retval := false;
-			end;
-
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not find valid header within manifest!";
-			retjson := `Null;
-			retjson_uberspark_manifest := `Null;
-			retval := false;
-
-		end;	
-		
-	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
-		retjson_uberspark_manifest := `Null;
-		retjson := `Null;
-		retval := false;
-	;
-
-	(!retval, !retjson_uberspark_manifest, !retjson)
-;;
 
 
 

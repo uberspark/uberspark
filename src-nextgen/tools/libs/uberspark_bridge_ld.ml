@@ -17,30 +17,17 @@ open Yojson
 
 (* uberspark-manifest json node variable *)	
 let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
-	f_manifest_node_types = [ "uberspark-bridge-cc" ];
-	f_uberspark_min_version = "any";
-	f_uberspark_max_version = "any";
+	namespace = "uberspark/bridges";
+	version_min = "any";
+	version_max = "any";
 };;
 
 (* uberspark-bridge-cc json node variable *)	
-let json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.Ld.json_node_uberspark_bridge_ld_t = {
-	json_node_bridge_hdr_var = { btype = "";
-				bname = "";
-				execname = "";
-				path = "";
-				devenv = "";
-				arch = "";
-				cpu = "";
-				version = "";
-				params = [];
-				container_fname = "";
-				namespace = "";
-	};
-	params_prefix_lscript = "";
-	params_prefix_libdir = "";
-	params_prefix_lib = "";
-	params_prefix_output = "";
-	cmd_generate_flat_binary = "";
+let json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t = {
+	namespace = "";
+	category = "";
+	container_build_filename = "";
+	bridge_cmd = [];
 };;
 
 
@@ -101,8 +88,8 @@ let load_from_file
 let load 
 	(bridge_ns : string)
 	: bool =
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^ bridge_ns ^ "/" ^
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		bridge_ns ^ "/" ^
 		Uberspark_namespace.namespace_root_mf_filename in
 		(load_from_file bridge_ns_json_path)
 ;;
@@ -127,16 +114,9 @@ let store
 	()
 	: bool =
 	let retval = ref false in 
-    let bridge_ns = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
-	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^
-		Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^ bridge_ns in
-	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^
-		Uberspark_namespace.namespace_root_mf_filename in
+    let bridge_ns = json_node_uberspark_bridge_ld_var.namespace in
+	let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
+	let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
 
 	(* make the namespace directory *)
 	Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
@@ -144,9 +124,9 @@ let store
 	retval := store_to_file bridge_ns_json_filename;
 
 	(* check if bridge type is container, if so store dockerfile *)
-	if !retval && json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then
+	if !retval && json_node_uberspark_bridge_ld_var.category = "container" then
 		begin
-			let input_bridge_dockerfile = json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.container_fname in 
+			let input_bridge_dockerfile = json_node_uberspark_bridge_ld_var.container_build_filename in 
 			let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
 				Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 		end
@@ -162,16 +142,10 @@ let build
 
 	let retval = ref false in
 
-	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then
+	if json_node_uberspark_bridge_ld_var.category = "container" then
 		begin
-			let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
-				json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
-			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns in
+			let bridge_ns = json_node_uberspark_bridge_ld_var.namespace in
+			let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
 
 			Uberspark_logger.log "building ld-bridge: %s" bridge_ns;
 
@@ -205,69 +179,65 @@ let invoke
 	(lscript_filename : string)
 	(binary_filename : string)
 	(binary_flat_filename : string)
+	(cclib_filename : string)
 	(o_file_list : string list)
-	(lib_dir_list : string list)
-	(lib_file_list : string list)
-	(lib_abs_list : string list)
 	(context_path : string)
 	: bool =
 
 	let retval = ref false in
 	let d_cmd = ref "" in
-	let cc_includes = ref "" in
+	
+	let bridge_input_files = ref "" in
+	let bridge_lscript_filename = lscript_filename in
+	let bridge_binary_filename = binary_filename in
+	let bridge_binary_flat_filename = binary_flat_filename in
+	let bridge_cclib_filename = cclib_filename in
+	let bridge_container_mount_point = Uberspark_namespace.namespace_bridge_container_mountpoint in
+	let bridge_uberspark_plugin_dir = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin in
 
-	(* add linker executable and base parameters *)
-	d_cmd := json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.execname;
-	List.iter (fun param ->
-		d_cmd := !d_cmd ^ " " ^ param ^ " ";
-	) json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.params;
-
-
-	(* iterate over object file list and include them into linker command line *)
-	List.iter (fun o_filename -> 
-		d_cmd := !d_cmd ^ " " ^ o_filename;
+	(* iterate over input file list and build a string *)
+	List.iter (fun input_filename -> 
+		bridge_input_files := !bridge_input_files ^ " " ^ input_filename;
 	) o_file_list;
 
-	(* add linker script option and filename*)
- 	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lscript ^ " " ^ lscript_filename;
+	(* construct command line using bridge_cmd variable from bridge definition *)
+	for li = 0 to (List.length json_node_uberspark_bridge_ld_var.bridge_cmd) - 1 do begin
+		let b_cmd = (List.nth json_node_uberspark_bridge_ld_var.bridge_cmd li) in
 
-	(* add output filename *)
-	d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_output ^ " " ^ binary_filename;
+        let b_cmd_substituted_0 = Str.global_replace (Str.regexp "@@BRIDGE_INPUT_FILES@@") 
+                !bridge_input_files b_cmd in
+        let b_cmd_substituted_1 = Str.global_replace (Str.regexp "@@BRIDGE_LSCRIPT_FILENAME@@") 
+                bridge_lscript_filename b_cmd_substituted_0 in
+        let b_cmd_substituted_2 = Str.global_replace (Str.regexp "@@BRIDGE_BINARY_FILENAME@@") 
+                bridge_binary_filename b_cmd_substituted_1 in
+        let b_cmd_substituted_3 = Str.global_replace (Str.regexp "@@BRIDGE_BINARY_FLAT_FILENAME@@") 
+                bridge_binary_flat_filename b_cmd_substituted_2 in
+        let b_cmd_substituted_4 = Str.global_replace (Str.regexp "@@BRIDGE_CCLIB_FILENAME@@") 
+                bridge_cclib_filename b_cmd_substituted_3 in
+        let b_cmd_substituted_5 = Str.global_replace (Str.regexp "@@BRIDGE_PLUGIN_DIR@@") 
+                bridge_uberspark_plugin_dir b_cmd_substituted_4 in
+        let b_cmd_substituted_6 = Str.global_replace (Str.regexp "@@BRIDGE_CONTAINER_MOUNT_POINT@@") 
+                bridge_container_mount_point b_cmd_substituted_5 in
 
-	(* iterate over lib dir list and include them into linker command line *)
-	List.iter (fun lib_dir -> 
-		d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_libdir ^ " " ^ lib_dir;
-	) lib_dir_list;
+		let b_cmd_substituted = b_cmd_substituted_6 in
 
-	(* iterate over lib file list and include them into linker command line *)
-	List.iter (fun lib_file -> 
-		d_cmd := !d_cmd ^ " " ^ json_node_uberspark_bridge_ld_var.params_prefix_lib ^ lib_file;
-	) lib_file_list;
+		if li == 0 then begin
+			d_cmd := b_cmd_substituted;
+		end else begin
+			d_cmd := !d_cmd ^ " && " ^ b_cmd_substituted;
+		end;
 
-	(* iterate over libraries provided with absolute pathnames *)
-	List.iter (fun lib_abs_filename -> 
-		d_cmd := !d_cmd ^ " " ^ lib_abs_filename;
-	) lib_abs_list;
+	end done;
 
-	(* add flat binary output generation command *)
- 	d_cmd := !d_cmd ^ " " ^ " && " ^ json_node_uberspark_bridge_ld_var.cmd_generate_flat_binary ^ " "  ^
-	 		binary_filename ^ " " ^ binary_flat_filename;
-
-
-	(* construct bridge namespace *)
-	let bridge_ns = Uberspark_namespace.namespace_bridge_ld_bridge ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.devenv ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.arch ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.cpu ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.bname ^ "/" ^
-		json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.version in
-
-
+	
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
 
-	(* invoke the linker *)
-	if json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var.btype = "container" then begin
+	(* construct bridge namespace *)
+	let bridge_ns = json_node_uberspark_bridge_ld_var.namespace in
+
+	(* invoke the compiler *)
+	if json_node_uberspark_bridge_ld_var.category = "container" then begin
 		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 			retval := true;
 		end else begin

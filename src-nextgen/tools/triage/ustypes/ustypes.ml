@@ -23,7 +23,7 @@ struct
 		(* local type definitions *)
 		type section_info_t = 
 			{
-				f_name: string;
+				fn_name: string;
 				f_subsection_list : string list;
 				usbinformat : usbinformat_section_info_t;
 			};;

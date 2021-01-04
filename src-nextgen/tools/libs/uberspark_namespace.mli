@@ -56,6 +56,7 @@ val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
 val namespace_uobjcoll_binary_image_filename : string
 val namespace_uobjcoll_binary_flat_image_filename : string
+val namespace_uobjcoll_top_level_include_header_src_filename : string
 
 (* legacy *)
 val namespace_legacy : string
@@ -109,9 +110,9 @@ val namespace_bridge_loader_bridge_name : string
 val namespace_bridge_bldsys_bridge_name : string
 
 val namespace_bridge_ar_bridge : string
-val namespace_bridge_as_bridge : string
-val namespace_bridge_cc_bridge : string
-val namespace_bridge_ld_bridge : string
+val namespace_as_bridge_namespace : string
+val namespace_cc_bridge_namespace : string
+val namespace_ld_bridge_namespace : string
 val namespace_bridge_pp_bridge : string
 val namespace_bridge_vf_bridge : string
 val namespace_bridge_loader_bridge : string
@@ -134,7 +135,7 @@ val get_namespace_root_dir_prefix : unit -> string
 val get_namespace_staging_dir_prefix : unit -> string
 
 val get_variable_name_prefix_from_ns : string -> string
-val get_uobj_uobjcoll_name_from_uobj_ns :  string -> (bool * string * string)
+val get_uobj_uobjcoll_name_from_uobj_namespace :  string -> (bool * string * string)
 val is_uobj_uobjcoll_abspath_in_namespace : string -> bool
 val is_uobj_uobjcoll_canonical_namespace : string -> bool
 val is_uobj_ns_in_uobjcoll_ns : string -> string -> bool

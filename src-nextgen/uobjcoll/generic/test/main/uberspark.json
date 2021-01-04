@@ -5,38 +5,25 @@ author: amit vasudevan (amitvasudevan@acm.org)
 
 {
 
-   	/* manifest header */
-	   "uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-uobj" ],
-		"uberspark_min_version" : "5.1",
-		"uberspark_max_version" : "any"
-	},
+		"uberspark.manifest.namespace" : "uberspark/uobj",
+		"uberspark.manifest.version_min" : "5.1",
+		"uberspark.manifest.version_max" : "any",
 
 
-	"uberspark-uobj" : {
-		"namespace" : "uberspark/uobjcoll/generic/test/main",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic",
-
-	/* config settings */	
-	/*"config-settings":{
-		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0",
-		"bridge_as_bridge" : "container/amd64/x86_32/generic/gnu-as/v2.26.1",
-		"bridge_ld_bridge" : "container/amd64/x86_32/generic/gnu-ld/v2.26.1"
-	},*/
+		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/test/main",
+		"uberspark.uobj.platform" : "generic",
+		"uberspark.uobj.arch" : "generic",
+		"uberspark.uobj.cpu" : "generic",
 
 
-	/* sources */
-	"sources" : {
-		"h-files": [ ],
-		"c-files": [ "main.c" ],
-		"casm-files": [ ],
-		"asm-files": [ ]
-	},
+
+		"uberspark.uobj.source_h_files": [ ],
+		"uberspark.uobj.source_c_files": [ "main.c" ],
+		"uberspark.uobj.source_casm_files": [ ],
+		"uberspark.uobj.source_asm_files": [ ],
 	
 	/* public methods */
-	"publicmethods" : {
+	"uberspark.uobj.public_methods" : {
 		"main" : [
 			"uint32_t",
 			"(uint32_t param1, uint32_t param2)", 
@@ -47,7 +34,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		within the same collection
 	*/
-	"intrauobjcoll-callees" : {
+	"uberspark.uobj.intra_uobjcoll_callees" : {
 		"uberspark/uobjs/generic/test/add": ["add"]
 	},
 	
@@ -55,7 +42,7 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	/* public methods of other uobjs that this uobj invokes 
 		across other collection(s)
 	*/
-	"interuobjcoll-callees": {
+	"uberspark.uobj.inter_uobjcoll_callees": {
 		/*"uberspark/uobjcoll/test/testuobj1" : ["b_one", "b_two" ]*/
 	} 
 
@@ -63,22 +50,12 @@ author: amit vasudevan (amitvasudevan@acm.org)
 	,
 	
 	/* legacy CoSS functions/code that this uobj invokes */
-	"legacy-callees": [
+	"uberspark.uobj.legacy_callees": [
 		/*"untrusted_func_1",	
 		"untrusted_func_2"*/
 	] 
 
 
-	,
-
-
-
-	"sections": {
-			"uobj_testsect" 		: [ "0x0", "0x111", "0x1000", "0x100000", "0x100000", ".testsect", ".testsect1" ]
-
-		}
-
-}
 
 }
 

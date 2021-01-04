@@ -88,18 +88,18 @@ class uobject
 
 	(* uobj manifest uberspark-uobj json node var *)
 	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; 
-		f_sources = {f_h_files= []; f_c_files = []; f_casm_files = []; f_asm_files = [];};
-		f_publicmethods = []; f_intrauobjcoll_callees = []; f_interuobjcoll_callees = [];
-		f_legacy_callees = []; f_sections = []; f_uobjrtl = []; 
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
+		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+		legacy_callees = []; sections = []; uobjrtl = []; 
 		};
 
 
 	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t = 
-		{f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = ""; f_addr_size=0;
-		 f_code_directxfer = ""; f_code_indirectxfer = ""; f_code_addrdef = ""; };
+		{namespace = ""; platform = ""; arch = ""; cpu = ""; sizeof_addressing=0;
+		 code_template_directxfer = ""; code_template_indirectxfer = ""; code_template_data_definition = ""; };
 
-	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.f_publicmethods;
+	method get_d_publicmethods_assoc_list = json_node_uberspark_uobj_var.public_methods;
 
 
 
@@ -139,16 +139,16 @@ class uobject
 
 
 	val d_target_def: Defs.Basedefs.target_def_t = {
-		f_platform = ""; 
-		f_arch = ""; 
-		f_cpu = "";
+		platform = ""; 
+		arch = ""; 
+		cpu = "";
 	};
 	method get_d_target_def = d_target_def;
 	method set_d_target_def 
 		(target_def: Defs.Basedefs.target_def_t) = 
-		d_target_def.f_platform <- target_def.f_platform;
-		d_target_def.f_arch <- target_def.f_arch;
-		d_target_def.f_cpu <- target_def.f_cpu;
+		d_target_def.platform <- target_def.platform;
+		d_target_def.arch <- target_def.arch;
+		d_target_def.cpu <- target_def.cpu;
 		()
 	;
 		
@@ -245,46 +245,46 @@ class uobject
 		else
 
 		let dummy = 0 in begin
-		(* generate publicmethods hashtable *)
+		(* generate public_methods hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_publicmethods_hashtbl x y;
-		) json_node_uberspark_uobj_var.f_publicmethods;
+		) json_node_uberspark_uobj_var.public_methods;
 
 		(* generate intrauobjcoll-callees hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_intrauobjcoll_callees_hashtbl x y;
-		) json_node_uberspark_uobj_var.f_intrauobjcoll_callees;
+		) json_node_uberspark_uobj_var.intra_uobjcoll_callees;
 
 		(* generate interuobjcoll-callees hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_interuobjcoll_callees_hashtbl x y;
-		) json_node_uberspark_uobj_var.f_interuobjcoll_callees;
+		) json_node_uberspark_uobj_var.inter_uobjcoll_callees;
 
 		(* generate legacy-callees hashtable *)
 		List.iter ( fun (x,y) -> 
 			Hashtbl.add d_legacy_callees_hashtbl x y;
-		) json_node_uberspark_uobj_var.f_legacy_callees;
+		) json_node_uberspark_uobj_var.legacy_callees;
 		end;
 
 
 		let dummy=0 in begin
-			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobj_var.f_namespace;
+			d_path_ns := (Uberspark_namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ json_node_uberspark_uobj_var.namespace;
 		end;
 
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total sources: h files=%u, c files=%u, casm files=%u, asm files=%u" 
-					(List.length json_node_uberspark_uobj_var.f_sources.f_h_files)
-					(List.length json_node_uberspark_uobj_var.f_sources.f_c_files)
-					(List.length json_node_uberspark_uobj_var.f_sources.f_casm_files)
-					(List.length json_node_uberspark_uobj_var.f_sources.f_asm_files);
+					(List.length json_node_uberspark_uobj_var.sources.source_h_files)
+					(List.length json_node_uberspark_uobj_var.sources.source_c_files)
+					(List.length json_node_uberspark_uobj_var.sources.source_casm_files)
+					(List.length json_node_uberspark_uobj_var.sources.source_asm_files);
 			end;
 
 
 		let dummy = 0 in
 			begin
 				Uberspark_logger.log "total public methods:%u,%u" (Hashtbl.length self#get_d_publicmethods_hashtbl)
-					(List.length json_node_uberspark_uobj_var.f_publicmethods); 
+					(List.length json_node_uberspark_uobj_var.public_methods); 
 			end;
 
 		let dummy = 0 in
@@ -310,7 +310,7 @@ class uobject
 		let dummy = 0 in
 		if (rval == true) then
 			begin
-				Uberspark_logger.log "binary sections override:%u" (List.length json_node_uberspark_uobj_var.f_sections);								
+				Uberspark_logger.log "binary sections override:%u" (List.length json_node_uberspark_uobj_var.sections);								
 			end;
 
 		(true)
@@ -331,7 +331,7 @@ class uobject
 		let retval = ref false in 	
 		let target_def = self#get_d_target_def in	
 		let uobjslt_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_uobjslt ^ "/" ^
-			target_def.f_arch ^ "/" ^ target_def.f_cpu ^ "/" ^
+			target_def.arch ^ "/" ^ target_def.cpu ^ "/" ^
 			Uberspark_namespace.namespace_root_mf_filename) in 
 
 		let (rval, abs_uobjslt_filename) = (Uberspark_osservices.abspath uobjslt_filename) in
@@ -373,9 +373,9 @@ class uobject
 				(* parse each uobjrtl manifest and create a hashtable with entry as namespace *)
 				(* entry will be an entry of type uobjrtl_t *)
 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.f_namespace;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.namespace;
 
-				let uobjrtl_manifest_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.f_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+				let uobjrtl_manifest_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest path=%s" uobjrtl_manifest_path;
 
@@ -386,7 +386,7 @@ class uobject
 					
 					(* convert to var *)
 					let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
-						f_namespace = ""; f_platform = ""; f_arch = ""; f_cpu = "";	f_modules_spec_c = []; f_modules_spec_casm = [];} in
+						namespace = ""; platform = ""; arch = ""; cpu = "";	source_c_files = []; source_casm_files = [];} in
 					let rval =	(Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json l_uobjrtl_entry_var) in
 					if rval then begin
 						Hashtbl.add d_uobjrtl_hashtbl uobjrtl_namespace l_uobjrtl_entry_var;						
@@ -399,7 +399,7 @@ class uobject
 
 			end;
 
-		) json_node_uberspark_uobj_var.f_uobjrtl;
+		) json_node_uberspark_uobj_var.uobjrtl;
 
 
 		(!retval)
@@ -460,7 +460,7 @@ class uobject
 
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
-				{ f_name = x.f_name;	
+				{ fn_name = x.fn_name;	
 					f_subsection_list = x.f_subsection_list;	
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
@@ -476,15 +476,15 @@ class uobject
 
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 
-			(* if this section is for a public method, then update publicmethods hashtable with address *)
+			(* if this section is for a public method, then update public_methods hashtable with address *)
 			if x.usbinformat.f_type == Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO then begin
-				let pm_name = (Str.string_after x.f_name 8) in  (* grab public method name after uobj_pm_ *)
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" pm_name;
-			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl pm_name) then begin
-					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl pm_name) in
-						pm_info.f_addr <- !uobj_section_load_addr;
-					Hashtbl.replace self#get_d_publicmethods_hashtbl pm_name pm_info;
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updated publicmethod address as 0x%08x" pm_info.f_addr;
+				let public_method = (Str.string_after x.fn_name 8) in  (* grab public method name after uobj_pm_ *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section is for publicmethod: name=%s" public_method;
+			    if (Hashtbl.mem self#get_d_publicmethods_hashtbl public_method) then begin
+					let pm_info = (Hashtbl.find self#get_d_publicmethods_hashtbl public_method) in
+						pm_info.fn_address <- !uobj_section_load_addr;
+					Hashtbl.replace self#get_d_publicmethods_hashtbl public_method pm_info;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "updated publicmethod address as 0x%08x" pm_info.fn_address;
 		    	end else begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Warn "unable to match public method name to section definition!";
 		    	end
@@ -515,7 +515,7 @@ class uobject
 
 
 			d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ (key, 
-				{ f_name = x.f_name;	
+				{ fn_name = x.fn_name;	
 					f_subsection_list = x.f_subsection_list;	
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
@@ -531,7 +531,7 @@ class uobject
 			Uberspark_logger.log "section at address 0x%08x, size=0x%08x padding=0x%08x" !uobj_section_load_addr section_size !padding_size;
 			uobj_section_load_addr := !uobj_section_load_addr + section_size;
 
-		)json_node_uberspark_uobj_var.f_sections;
+		)json_node_uberspark_uobj_var.sections;
 
 		
 		if (self#get_d_uniform_size) then begin
@@ -550,7 +550,7 @@ class uobject
 				begin
 					(* add padding section *)
 					d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ("usuobj_padding", 
-						{ f_name = "usuobj_padding";	
+						{ fn_name = "usuobj_padding";	
 							f_subsection_list = [ ];	
 							usbinformat = { f_type = Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
@@ -572,7 +572,7 @@ class uobject
 				(* uobj_section_load_addr is __not__ aligned at uobj_binary_image_alignment *)
 				(* add padding section *)
 				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ("usuobj_padding", 
-					{ f_name = "uobj_padding";	
+					{ fn_name = "uobj_padding";	
 						f_subsection_list = [ ];	
 						usbinformat = { f_type = Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_PADDING;
 										f_prot=0; 
@@ -606,7 +606,7 @@ class uobject
 		()
 		: unit =
 		
-		let l_add_section (section_f_name: string)
+		let l_add_section (section_fn_name: string)
 						(section_f_subsection_list : string list)
 						(section_usbinformat_f_type : int)
 						(section_usbinformat_f_prot : int)
@@ -616,7 +616,7 @@ class uobject
 						: unit =
 
 			let l_var_sinfo : Defs.Basedefs.section_info_t = {
-				f_name = section_f_name;	
+				fn_name = section_fn_name;	
 				f_subsection_list = section_f_subsection_list;	
 				usbinformat = { f_type= section_usbinformat_f_type; 
 								f_prot= section_usbinformat_f_prot; 
@@ -631,16 +631,16 @@ class uobject
 
 			(* override size, alignment and padding info if specified in the manifest *)
 			(* also append any extra subsections if specified in the manifest *)
-			if (List.mem_assoc section_f_name json_node_uberspark_uobj_var.f_sections) then begin
-				let l_var_sinfo_mf : Defs.Basedefs.section_info_t = (List.assoc section_f_name json_node_uberspark_uobj_var.f_sections) in
+			if (List.mem_assoc section_fn_name json_node_uberspark_uobj_var.sections) then begin
+				let l_var_sinfo_mf : Defs.Basedefs.section_info_t = (List.assoc section_fn_name json_node_uberspark_uobj_var.sections) in
 				l_var_sinfo.usbinformat.f_size <- l_var_sinfo_mf.usbinformat.f_size;
 				l_var_sinfo.usbinformat.f_aligned_at <- l_var_sinfo_mf.usbinformat.f_aligned_at;
 				l_var_sinfo.usbinformat.f_pad_to <- l_var_sinfo_mf.usbinformat.f_pad_to;
 				l_var_sinfo.f_subsection_list <- l_var_sinfo.f_subsection_list @ l_var_sinfo_mf.f_subsection_list;
-				json_node_uberspark_uobj_var.f_sections <- List.remove_assoc section_f_name json_node_uberspark_uobj_var.f_sections;
+				json_node_uberspark_uobj_var.sections <- List.remove_assoc section_fn_name json_node_uberspark_uobj_var.sections;
 			end;
 
-			d_default_sections_list := !d_default_sections_list @ [ (section_f_name, l_var_sinfo) ];
+			d_default_sections_list := !d_default_sections_list @ [ (section_fn_name, l_var_sinfo) ];
 
 			()
 		in
@@ -654,8 +654,8 @@ class uobject
 					Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* create sections for each public method *)
-		Hashtbl.iter (fun (pm_name:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
-			let section_name = ("uobj_pm_" ^ pm_name) in 
+		Hashtbl.iter (fun (public_method:string) (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
+			let section_name = ("uobj_pm_" ^ public_method) in 
 
 			l_add_section section_name [ "." ^ section_name ]
 						Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
@@ -780,12 +780,12 @@ class uobject
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "length of callees_sentinel_type_hashtbl=%u" (Hashtbl.length callees_sentinel_type_hashtbl);
 
   		Hashtbl.iter (fun (ns: string) (pm_name_list: string list)  ->
-	        List.iter (fun (pm_name:string) -> 
+	        List.iter (fun (public_method:string) -> 
 				let ns_var = (Uberspark_namespace.get_variable_name_prefix_from_ns ns) in 
-				let canonical_pm_name = (ns_var ^ "__" ^ pm_name) in
-				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_pm_name in
+				let canonical_public_method = (ns_var ^ "__" ^ public_method) in
+				let callees_sentinel_type_list = Hashtbl.find callees_sentinel_type_hashtbl canonical_public_method in
 				List.iter ( fun (sentinel_type: string) ->
-					let canonical_pm_name_with_sentinel_suffix = (canonical_pm_name ^ "__" ^ sentinel_type) in  
+					let canonical_pm_name_with_sentinel_suffix = (canonical_public_method ^ "__" ^ sentinel_type) in  
 					let pm_sentinel_addr = ref 0 in 
 					let codegen_type = ref "" in 
 
@@ -808,7 +808,7 @@ class uobject
 					end;
 
 					let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
-						f_canonical_pm_name = canonical_pm_name_with_sentinel_suffix;
+						f_canonical_public_method = canonical_pm_name_with_sentinel_suffix;
 						f_pm_sentinel_addr = !pm_sentinel_addr;
 						f_codegen_type = !codegen_type;
 						f_pm_sentinel_addr_loc = 0;
@@ -817,10 +817,10 @@ class uobject
 
 					if !codegen_type = "indirect" then begin
 						let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
-							f_canonical_pm_name = canonical_pm_name;
-							f_sentinel_type = sentinel_type;
+							f_canonical_public_method = canonical_public_method;
+							sentinel_type = sentinel_type;
 							f_table_offset = !slt_indirect_xfer_table_offset;
-							f_addr = !pm_sentinel_addr;
+							fn_address = !pm_sentinel_addr;
 						} in
 
 						callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
@@ -828,18 +828,18 @@ class uobject
 
 						slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
+						slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.sizeof_addressing;
 					end;
 
 					callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
-						slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+						slt_codegen_info.f_canonical_public_method slt_codegen_info.f_pm_sentinel_addr;
 
-					(* if sentinel type is call, then add entry with just canonical_pm_name in addition *)
+					(* if sentinel type is call, then add entry with just canonical_public_method in addition *)
 					if sentinel_type = "call" then begin
 						let slt_codegen_info : Uberspark_codegen.Uobj.slt_codegen_info_t = {
-							f_canonical_pm_name = canonical_pm_name;
+							f_canonical_public_method = canonical_public_method;
 							f_pm_sentinel_addr = !pm_sentinel_addr;
 							f_codegen_type = !codegen_type;
 							f_pm_sentinel_addr_loc = 0;
@@ -848,10 +848,10 @@ class uobject
 
 						if !codegen_type = "indirect" then begin
 							let slt_indirect_xfer_table_entry : Defs.Basedefs.slt_indirect_xfer_table_info_t = {
-								f_canonical_pm_name = canonical_pm_name;
-								f_sentinel_type = sentinel_type;
+								f_canonical_public_method = canonical_public_method;
+								sentinel_type = sentinel_type;
 								f_table_offset = !slt_indirect_xfer_table_offset;
-								f_addr = !pm_sentinel_addr;
+								fn_address = !pm_sentinel_addr;
 							} in
 
 							callees_slt_indirect_xfer_table_assoc_list := !callees_slt_indirect_xfer_table_assoc_list @
@@ -859,13 +859,13 @@ class uobject
 
 							slt_codegen_info.f_pm_sentinel_addr_loc <- !slt_indirect_xfer_table_offset;
 
-							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.f_addr_size;
+							slt_indirect_xfer_table_offset := !slt_indirect_xfer_table_offset + d_mf_json_node_uberspark_uobjslt_var.sizeof_addressing;
 						end;
 
 						callees_slt_codegen_info_list := !callees_slt_codegen_info_list @ [ slt_codegen_info ];
 
 						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added entry: name=%s, addr=0x%08x" 
-							slt_codegen_info.f_canonical_pm_name slt_codegen_info.f_pm_sentinel_addr;
+							slt_codegen_info.f_canonical_public_method slt_codegen_info.f_pm_sentinel_addr;
 					end;
 
 				) callees_sentinel_type_list;
@@ -893,41 +893,41 @@ class uobject
 		(* prepare uobjrtl c sources *)
 		let l_uobjrtl_sources_c_files = ref [] in 
 		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.namespace;
 				let uobjrtl_info = (Hashtbl.find self#get_d_uobjrtl_hashtbl uobjrtl_namespace) in
 				List.iter ( fun ( (uobjrtl_modules_spec : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ) -> 
 
-					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.f_module_path) in
+					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.path) in
 					let l_src_module_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_namespace_module_path) in
 					let l_dst_module_path =  (self#get_d_builddir ^ "/" ^ l_namespace_module_path) in 
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.f_module_path;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.path;
 					Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname l_namespace_module_path)) (`Octal 0o0777);
 					Uberspark_osservices.cp l_src_module_path l_dst_module_path;
 
 					l_uobjrtl_sources_c_files :=  !l_uobjrtl_sources_c_files @ [ l_namespace_module_path ];
 
-				) uobjrtl_info.f_modules_spec_c;
-		) json_node_uberspark_uobj_var.f_uobjrtl;
+				) uobjrtl_info.source_c_files;
+		) json_node_uberspark_uobj_var.uobjrtl;
 
 
 		(* prepare uobjrtl casm sources *)
 		let l_uobjrtl_sources_casm_files = ref [] in 
 		List.iter ( fun ( (uobjrtl_namespace : string), (json_node_uberspark_uobj_uobjrtl_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.f_namespace;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" json_node_uberspark_uobj_uobjrtl_var.namespace;
 				let uobjrtl_info = (Hashtbl.find self#get_d_uobjrtl_hashtbl uobjrtl_namespace) in
 				List.iter ( fun ( (uobjrtl_modules_spec : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ) -> 
 
-					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.f_module_path) in
+					let l_namespace_module_path = (uobjrtl_namespace ^ "/" ^ uobjrtl_modules_spec.path) in
 					let l_src_module_path = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_namespace_module_path) in
 					let l_dst_module_path =  (self#get_d_builddir ^ "/" ^ l_namespace_module_path) in 
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.f_module_path;
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "  module path=%s" uobjrtl_modules_spec.path;
 					Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname l_namespace_module_path)) (`Octal 0o0777);
 					Uberspark_osservices.cp l_src_module_path l_dst_module_path;
 
 					l_uobjrtl_sources_casm_files :=  !l_uobjrtl_sources_casm_files @ [ l_namespace_module_path ];
 
-				) uobjrtl_info.f_modules_spec_casm;
-		) json_node_uberspark_uobj_var.f_uobjrtl;
+				) uobjrtl_info.source_casm_files;
+		) json_node_uberspark_uobj_var.uobjrtl;
 
 
 
@@ -936,21 +936,21 @@ class uobject
 		List.iter ( fun c_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname c_filename)) (`Octal 0o0777);
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/" ^ c_filename) (self#get_d_builddir ^ "/" ^ c_filename);
-		) json_node_uberspark_uobj_var.f_sources.f_c_files;
+		) json_node_uberspark_uobj_var.sources.source_c_files;
 
 
 		(* copy uobj casm files to namespace *)
 		List.iter ( fun casm_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname casm_filename)) (`Octal 0o0777);
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/" ^ casm_filename) (self#get_d_builddir ^ "/" ^ casm_filename);
-		) json_node_uberspark_uobj_var.f_sources.f_casm_files;
+		) json_node_uberspark_uobj_var.sources.source_casm_files;
 
 
 		(* copy uobj asm files to namespace *)
 		List.iter ( fun asm_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (self#get_d_builddir ^ "/" ^ (Filename.dirname asm_filename)) (`Octal 0o0777);
 			Uberspark_osservices.cp (self#get_d_path_to_mf_filename ^ "/" ^ asm_filename) (self#get_d_builddir ^ "/" ^ asm_filename);
-		) json_node_uberspark_uobj_var.f_sources.f_asm_files;
+		) json_node_uberspark_uobj_var.sources.source_asm_files;
 
 
 		(* generate uobj top-level include header file source *)
@@ -972,9 +972,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename)
 			~output_banner:"uobj sentinel linkage table for intra-uobjcoll callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_intrauobjcoll_callees_slt_codegen_info_list
 			".uobj_intrauobjcoll_csltcode"
 			!d_intrauobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -990,9 +990,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for inter-uobjcoll callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_interuobjcoll_callees_slt_codegen_info_list
 			".uobj_interuobjcoll_csltcode"
 			!d_interuobjcoll_callees_slt_indirect_xfer_table_assoc_list
@@ -1009,9 +1009,9 @@ class uobject
 		let rval = (Uberspark_codegen.Uobj.generate_slt 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename) 
 			~output_banner:"uobj sentinel linkage table for legacy callees" 
-			d_mf_json_node_uberspark_uobjslt_var.f_code_directxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_indirectxfer
-			d_mf_json_node_uberspark_uobjslt_var.f_code_addrdef
+			d_mf_json_node_uberspark_uobjslt_var.code_template_directxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_indirectxfer
+			d_mf_json_node_uberspark_uobjslt_var.code_template_data_definition
 			!d_legacy_callees_slt_codegen_info_list
 			".uobj_legacy_csltcode"
 			!d_legacy_callees_slt_indirect_xfer_table_assoc_list
@@ -1027,7 +1027,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary public methods info source...";
 		Uberspark_codegen.Uobj.generate_src_publicmethods_info 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename)
-			(json_node_uberspark_uobj_var).f_namespace d_publicmethods_hashtbl;
+			(json_node_uberspark_uobj_var).namespace d_publicmethods_hashtbl;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
 
@@ -1059,7 +1059,7 @@ class uobject
 		Uberspark_logger.log ~crlf:false "Generating uobj binary header source...";
 		Uberspark_codegen.Uobj.generate_src_binhdr 
 			(self#get_d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_binhdr_src_filename)
-			(json_node_uberspark_uobj_var).f_namespace self#get_d_load_addr self#get_d_size 
+			(json_node_uberspark_uobj_var).namespace self#get_d_load_addr self#get_d_size 
 			self#get_d_memorymapped_sections_list_val;
 		Uberspark_logger.log ~tag:"" "[OK]";
 
@@ -1073,39 +1073,39 @@ class uobject
 
 
 		(* add uobjrtl c source files to the list of c sources *)
-		json_node_uberspark_uobj_var.f_sources.f_c_files <- !l_uobjrtl_sources_c_files @ 
-			json_node_uberspark_uobj_var.f_sources.f_c_files;
+		json_node_uberspark_uobj_var.sources.source_c_files <- !l_uobjrtl_sources_c_files @ 
+			json_node_uberspark_uobj_var.sources.source_c_files;
 
 		(* add uobjrtl casm source files to the list of casm sources *)
-		json_node_uberspark_uobj_var.f_sources.f_casm_files <- !l_uobjrtl_sources_casm_files @ 
-			json_node_uberspark_uobj_var.f_sources.f_casm_files;
+		json_node_uberspark_uobj_var.sources.source_casm_files <- !l_uobjrtl_sources_casm_files @ 
+			json_node_uberspark_uobj_var.sources.source_casm_files;
 
 		(* add all the autogenerated C source files to the list of c sources *)
 		(* TBD: this might not be needed *)
-		(*json_node_uberspark_uobj_var.f_sources.f_c_files <-  [ 
+		(*json_node_uberspark_uobj_var.sources.source_c_files <-  [ 
 			Uberspark_namespace.namespace_uobj_publicmethods_info_src_filename;		
 			Uberspark_namespace.namespace_uobj_intrauobjcoll_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_interuobjcoll_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_legacy_callees_info_src_filename;
 			Uberspark_namespace.namespace_uobj_binhdr_src_filename;
-		] @ json_node_uberspark_uobj_var.f_sources.f_c_files;*)
+		] @ json_node_uberspark_uobj_var.sources.source_c_files;*)
 
 
 		(* add all the casm, generated asm source files to the list of asm sources *)
 		List.iter ( fun casm_filename -> 
-			json_node_uberspark_uobj_var.f_sources.f_asm_files <- [ 
+			json_node_uberspark_uobj_var.sources.source_asm_files <- [ 
 			(casm_filename ^ ".s")
-			] @ json_node_uberspark_uobj_var.f_sources.f_asm_files;
-		) json_node_uberspark_uobj_var.f_sources.f_casm_files;
+			] @ json_node_uberspark_uobj_var.sources.source_asm_files;
+		) json_node_uberspark_uobj_var.sources.source_casm_files;
 
 
 		(* add all the autogenerated asm source files to the list of asm sources *)
 		(* TBD: eventually this will just be casm sources *)
-		json_node_uberspark_uobj_var.f_sources.f_asm_files <- [ 
+		json_node_uberspark_uobj_var.sources.source_asm_files <- [ 
 			Uberspark_namespace.namespace_uobjslt_intrauobjcoll_callees_src_filename;
 			Uberspark_namespace.namespace_uobjslt_interuobjcoll_callees_src_filename;
 			Uberspark_namespace.namespace_uobjslt_legacy_callees_src_filename;
-		] @ json_node_uberspark_uobj_var.f_sources.f_asm_files;
+		] @ json_node_uberspark_uobj_var.sources.source_asm_files;
 
 		()
 	;
@@ -1145,9 +1145,9 @@ class uobject
 
 		(* debug dump the target spec and definition *)		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target spec => %s:%s:%s" 
-				(json_node_uberspark_uobj_var).f_platform (json_node_uberspark_uobj_var).f_arch (json_node_uberspark_uobj_var).f_cpu;
+				(json_node_uberspark_uobj_var).platform (json_node_uberspark_uobj_var).arch (json_node_uberspark_uobj_var).cpu;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj target definition => %s:%s:%s" 
-				(self#get_d_target_def).f_platform (self#get_d_target_def).f_arch (self#get_d_target_def).f_cpu;
+				(self#get_d_target_def).platform (self#get_d_target_def).arch (self#get_d_target_def).cpu;
 		end;
 
 
@@ -1203,9 +1203,15 @@ class uobject
 		
 		let retval = ref false in
 
-		retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
+		(*retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (json_node_uberspark_uobj_var.f_sources.f_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+		*)
+
+		retval := Uberspark_bridge.Cc.invoke 
+			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+		
 
 		(!retval)	
 	;
@@ -1222,7 +1228,7 @@ class uobject
 
 		retval := Uberspark_bridge.Casm.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (json_node_uberspark_uobj_var.f_sources.f_casm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+			 (json_node_uberspark_uobj_var.sources.source_casm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1240,7 +1246,7 @@ class uobject
 
 		retval := Uberspark_bridge.As.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (json_node_uberspark_uobj_var.f_sources.f_asm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+			 (json_node_uberspark_uobj_var.sources.source_asm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 
 		(!retval)	
 	;
@@ -1260,12 +1266,12 @@ class uobject
 		(* add object files generated from c sources *)
 		List.iter (fun fname ->
 			o_file_list := !o_file_list @ [ fname ^ ".o"];
-		) json_node_uberspark_uobj_var.f_sources.f_c_files;
+		) json_node_uberspark_uobj_var.sources.source_c_files;
 
 		(* add object files generated from asm sources *)
 		List.iter (fun fname ->
 			o_file_list := !o_file_list @ [ fname ^ ".o"];
-		) json_node_uberspark_uobj_var.f_sources.f_asm_files;
+		) json_node_uberspark_uobj_var.sources.source_asm_files;
 
 
 		retval := Uberspark_bridge.Ld.invoke 
@@ -1273,8 +1279,9 @@ class uobject
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
 			Uberspark_namespace.namespace_uobj_binary_flat_image_filename
+			("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename)
 			!o_file_list
-			[ ] [ ]	[ ("." ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename) ] ".";
+			".";
 
 		(!retval)	
 	;
@@ -1314,7 +1321,7 @@ class uobject
 		List.iter ( fun h_filename -> 
 			Uberspark_osservices.mkdir ~parent:true (uobj_path_ns ^ "/" ^ (Filename.dirname h_filename)) (`Octal 0o0777);
 			Uberspark_osservices.cp (uobj_path_to_mf_filename ^ "/" ^ h_filename) (uobj_path_ns ^ "/" ^ h_filename);
-		) json_node_uberspark_uobj_var.f_sources.f_h_files;
+		) json_node_uberspark_uobj_var.sources.source_h_files;
 
 		(* copy top-level header to namespace *)
 		Uberspark_osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
@@ -1467,7 +1474,7 @@ class uobject
 
 		let rval = Uberspark_bridge.Vf.invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-			 (json_node_uberspark_uobj_var.f_sources.f_c_files)  
+			 (json_node_uberspark_uobj_var.sources.source_c_files)  
 			 [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]
 			 "." in
 
@@ -1661,7 +1668,7 @@ let create_initialize_and_verify
 		f_uberspark_hdr = `Null;
 		f_uobj_hdr = `Null;
 		f_uobj_sources = `Null;
-		f_uobj_publicmethods = `Null;
+		f_uobj_public_methods = `Null;
 		f_uobj_intrauobjcoll_callees = `Null;
 		f_uobj_interuobjcoll_callees = `Null;
 		f_uobj_legacy_callees = `Null;

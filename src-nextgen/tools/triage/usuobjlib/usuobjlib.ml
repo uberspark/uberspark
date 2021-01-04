@@ -35,8 +35,8 @@ module Usuobjlib =
 
 			Uslog.logf log_tag Uslog.Info "Done.\n";
 
-			let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
-					usmf_platform, usmf_cpu, usmf_arch) =
+			let (rval, usmf_hdr_type, usmf_hdr_sucategory, usmf_hdr_id,
+					usmplatform, usmcpu, usmarch) =
 					Usmanifest.parse_node_usmf_hdr mf_json in
 				
 			if (rval == false) then
@@ -55,7 +55,7 @@ module Usuobjlib =
 			
 						
 			let(rval, uobjlib_hfiles, uobjlib_cfiles, uobjlib_casmfiles) = 
-				Usmanifest.parse_node_usmf_sources	mf_json in
+				Usmanifest.parse_node_usmsources	mf_json in
 
 			if (rval == false) then
 				begin

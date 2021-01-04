@@ -3,24 +3,19 @@
 */
 
 {
-    /* manifest header */
-    "uberspark-manifest":{
-        "manifest_node_types" : [ "uberspark-loader" ],
-        "uberspark_min_version" : "any",
-        "uberspark_max_version" : "any"
-    },
+    "uberspark.manifest.namespace" : "uberspark/loaders",
+    "uberspark.manifest.version_min" : "any",
+    "uberspark.manifest.version_max" : "any",
 
-    "uberspark-loader" : {
-		"namespace" : "uberspark/loaders/baremetal/x86_32/grub-legacy",
-		"platform" : "any",
-		"arch" : "x86_32",
-        "cpu" : "generic",
+    "uberspark.loader.namespace" : "uberspark/loaders/baremetal/x86_32/grub-legacy",
+    "uberspark.loader.platform" : "any",
+    "uberspark.loader.arch" : "x86_32",
+    "uberspark.loader.cpu" : "generic",
 
-        "bridge_ns" : "container/baremetal/amd64/x86_32/generic/gcc/v5.5.0",
-        "bridge_cmd" : [
-            "make all"
-        ]
-        
-    }
+    "uberspark.loader.bridge_namespace" : "uberspark/bridges/container/amd64/loader-bridge/x86_32/generic/baremetal/gcc/v5.5.0",
+    "uberspark.loader.bridge_cmd" : [
+        "make all"
+    ]
+       
 
 }

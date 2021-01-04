@@ -15,7 +15,7 @@
 
 type json_node_uberspark_installation_t =
 {
-	mutable f_rootDirectory : string;
+	mutable root_directory : string;
 };;
 
 
@@ -46,7 +46,7 @@ let json_node_uberspark_installation_to_var
 			if(json_node_uberspark_installation <> `Null) then
 				begin
 
-					json_node_uberspark_installation_var.f_rootDirectory <- json_node_uberspark_installation |> member "rootDirectory" |> to_string;
+					json_node_uberspark_installation_var.root_directory <- json_node_uberspark_installation |> member "root_directory" |> to_string;
 					retval := true;
 				end
 			;

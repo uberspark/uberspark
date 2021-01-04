@@ -99,8 +99,8 @@ let ubp_process_cmdline () =
 	()
 
 
-let ubp_outputsentinelstubforslab sentinelstubsdir slabname slabid =
-	let sstubfilename = (sentinelstubsdir ^  slabname ^ "_sstub.ag.v.c") in 
+let ubp_outputsentinelstubforslab sentinelstubsdir slaname slabid =
+	let sstubfilename = (sentinelstubsdir ^  slaname ^ "_sstub.ag.v.c") in 
 	let assertstring = ref "" in
 	let oc = open_out sstubfilename in
 	
@@ -119,7 +119,7 @@ let ubp_outputsentinelstubforslab sentinelstubsdir slabname slabid =
 	Printf.fprintf oc  "#include <xmhfgeec.h>\r\n";
 	Printf.fprintf oc  "\n\n";
 	Printf.fprintf oc  "#include <xc.h>\r\n";
-    Printf.fprintf oc  "#include <%s.h>\r\n" slabname;
+    Printf.fprintf oc  "#include <%s.h>\r\n" slaname;
 	Printf.fprintf oc  "\n\n";
 
 	Printf.fprintf oc  "void __slab_callsentinel(slab_params_t *sp){\r\n";

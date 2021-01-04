@@ -30,15 +30,16 @@ A |uspark| manifest (``uberspark.json``) has the following general high-level st
         ...
         // user-defined single line comments can appear anywhere
         ...
+        "manifest_node" : "",
+        ...
+        "manifest_node" : [
+            ...
+        ],
+        ...
         "manifest_node" : {
             ...
-        },
-
-        ...
-
-        "manifest_node" : {
-
         }
+        ...
     }
 
   
@@ -46,7 +47,7 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 
 .. note:: The type and combination of specific node definitions will vary based on the functionality the
           manifest is describing. For example, the manifest describing a |uobj| will have a 
-          ``uberspark-uobj`` node, whereas a manifest describing a |uobjcoll| will not.
+          different set of nodes when compared to a manifest describing a |uobjcoll|.
 
 .. seealso:: |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjs` and |cossdev-guide-ref|:::ref:`cossdev-guide-create-uobjcoll`
 
@@ -54,138 +55,131 @@ Here ``manifest_node`` can be one or more of the following specific node definit
 .. _reference-manifest-uberspark-manifesthdr:
 
 
-``uberspark-manifesthdr`` Manifest Node
----------------------------------------
+``uberspark.manifest.xxx`` Nodes
+--------------------------------
 
-Every |uberspark| manifest needs to define a ``uberspark-manifesthdr`` node at the bare minimum, 
-which describes the 
-types of manifest nodes contained in the manifest along with the |uberspark| framework version 
+Every |uberspark| manifest needs to define a set of ``uberspark.manifest.xxx`` nodes at the bare minimum, 
+which describes the type of manifest (e.g., |uobj|, |uobjcoll|, etc.) along with the |uberspark| framework version 
 requirements. 
 
-The JSON declaration of the ``uberspark-manifesthdr`` node is as below:
+The following are the currently supported ``uberspark.manifest.xxx`` node definitions:
 
-.. json:object:: uberspark-manifesthdr
+.. json:object:: uberspark.manifest.xxx
     
-   :property manifest_node_type: comma seperated list of zero or more manifest node types (as strings) that are part of the manifest
-   :proptype manifest_node_type: string list  
-   :options manifest_node_type: "uberspark-uobj", "uberspark-uobjcoll", "uberspark-config", "uberspark-sentinel"
-   :property uberspark_min_version: minimum <version> of |uberspark| required
-   :proptype uberspark_min_version: string  
-   :options uberspark_min_version: "<version>", "any"
-   :property uberspark_max_version: maximum <version> of |uberspark| supported
-   :proptype uberspark_max_version: string  
-   :options uberspark_max_version: "<version>", "any"
+   :property uberspark.manifest.namespace: describes the type of manifest
+   :proptype uberspark.manifest.namespace: string  
+   :options uberspark.manifest.namespace: "uberspark/uobj", "uberspark/uobjcoll", "uberspark/sentinels", "uberspark/bridges", "uberspark/uobjrtl", "uberspark/uobjslt", "uberspark/loaders"
+   :property uberspark.manifest.version_min: minimum <version> of |uberspark| required
+   :proptype uberspark.manifest.version_min: string  
+   :options uberspark.manifest.version_min: "<version>", "any"
+   :property uberspark.manifest.version_max: maximum <version> of |uberspark| supported
+   :proptype uberspark.manifest.version_max: string  
+   :options uberspark.manifest.version_max: "<version>", "any"
 
     
-An example definition of the ``uberspark-manifesthdr`` node within |ubersparkmff| follows:
+An example definition for a |uobjcoll| manifest follows:
 
 .. code-block:: JSON
     
     {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobjcoll", "uberspark-config" ],
-            "uberspark_min_version" : "6.0.0",
-            "uberspark_max_version" : "any"
-        }
+        "uberspark.manifest.namespace" : "uberspark/uobjcoll",
+        "uberspark.manifest.version_min" : "6.0.0",
+        "uberspark.manifest.version_max" : "any"
     }
 
 
 
-``uberspark-config`` Manifest Node
----------------------------------------
+``uberspark.config.xxx`` Nodes
+------------------------------
 
-The ``uberspark-config`` node within the |ubersparkmf| can be (optionally) used to 
+The ``uberspark.config.xxx`` nodes within the |ubersparkmf| can be (optionally) used to 
 selectively override configuration settings within the current staging environment.
 
 .. note::   You can define only the required node properties that you want to override within
-            the ``uberspark-config`` node definition. See example that follows below.
+            the ``uberspark.config.xxx`` node definition. See example that follows below.
 
-The JSON declaration of the ``uberspark-config`` node is as below:
+The JSON declaration of the ``uberspark.config.xxx`` node is as below:
 
-.. json:object:: uberspark-config
+.. json:object:: uberspark.config.xxx
 
-   :property binary_page_size: size in bytes of a memory page within the |uobj|/|uobjcoll| binary
-   :proptype binary_page_size: string
-   :options binary_page_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.binary_page_size: size in bytes of a memory page within the |uobj|/|uobjcoll| binary
+   :proptype uberspark.config.binary_page_size: string
+   :options uberspark.config.binary_page_size: "<hexadecimal integer>", default="0x200000"
 
-   :property binary_uobj_default_section_size: size in bytes of a |uobj| binary section (e.g., code, data)
-   :proptype binary_uobj_default_section_size: string
-   :options binary_uobj_default_section_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.binary_uobj_default_section_size: size in bytes of a |uobj| binary section (e.g., code, data)
+   :proptype uberspark.config.binary_uobj_default_section_size: string
+   :options uberspark.config.binary_uobj_default_section_size: "<hexadecimal integer>", default="0x200000"
 
-   :property binary_uobj_section_alignment: memory alignment in bytes, of |uobj| binary section
-   :proptype binary_uobj_section_alignment: string
-   :options binary_uobj_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.binary_uobj_section_alignment: memory alignment in bytes, of |uobj| binary section
+   :proptype uberspark.config.binary_uobj_section_alignment: string
+   :options uberspark.config.binary_uobj_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uobj_binary_image_load_address: memory load address of |uobj| binary
-   :proptype uobj_binary_image_load_address: string
-   :options uobj_binary_image_load_address: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.uobj_binary_image_load_address: memory load address of |uobj| binary
+   :proptype uberspark.config.uobj_binary_image_load_address: string
+   :options uberspark.config.uobj_binary_image_load_address: "<hexadecimal integer>", default="0x200000"
 
-   :property uobj_binary_image_uniform_size: indicates if all |uobjs| within a |uobjcoll| binary have the same size
-   :proptype uobj_binary_image_uniform_size: boolean
-   :options uobj_binary_image_uniform_size: true, false
+   :property uberspark.config.uobj_binary_image_uniform_size: indicates if all |uobjs| within a |uobjcoll| binary have the same size
+   :proptype uberspark.config.uobj_binary_image_uniform_size: boolean
+   :options uberspark.config.uobj_binary_image_uniform_size: true, false
 
-   :property uobj_binary_image_size: size in bytes of a |uobj| binary
-   :proptype uobj_binary_image_size: string
-   :options uobj_binary_image_size: "<hexadecimal integer>", default="0x2400000"
+   :property uberspark.config.uobj_binary_image_size: size in bytes of a |uobj| binary
+   :proptype uberspark.config.uobj_binary_image_size: string
+   :options uberspark.config.uobj_binary_image_size: "<hexadecimal integer>", default="0x2400000"
 
-   :property uobj_binary_image_alignment: memory alignment in bytes of a |uobj| binary image
-   :proptype uobj_binary_image_alignment: string
-   :options uobj_binary_image_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.uobj_binary_image_alignment: memory alignment in bytes of a |uobj| binary image
+   :proptype uberspark.config.uobj_binary_image_alignment: string
+   :options uberspark.config.uobj_binary_image_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uobjcoll_binary_image_load_address: memory load address of |uobjcoll| binary
-   :proptype uobjcoll_binary_image_load_address: string
-   :options uobjcoll_binary_image_load_address: "<hexadecimal integer>", default="0x60000000"
+   :property uberspark.config.uobjcoll_binary_image_load_address: memory load address of |uobjcoll| binary
+   :proptype uberspark.config.uobjcoll_binary_image_load_address: string
+   :options uberspark.config.uobjcoll_binary_image_load_address: "<hexadecimal integer>", default="0x60000000"
 
-   :property uobjcoll_binary_image_hdr_section_alignment: memory alignment in bytes, of |uobjcoll| binary header section
-   :proptype uobjcoll_binary_image_hdr_section_alignment: string
-   :options uobjcoll_binary_image_hdr_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.uobjcoll_binary_image_hdr_section_alignment: memory alignment in bytes, of |uobjcoll| binary header section
+   :proptype uberspark.config.uobjcoll_binary_image_hdr_section_alignment: string
+   :options uberspark.config.uobjcoll_binary_image_hdr_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uobjcoll_binary_image_hdr_section_size: size in bytes of a |uobjcoll| binary header section
-   :proptype uobjcoll_binary_image_hdr_section_size: string
-   :options uobjcoll_binary_image_hdr_section_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.uobjcoll_binary_image_hdr_section_size: size in bytes of a |uobjcoll| binary header section
+   :proptype uberspark.config.uobjcoll_binary_image_hdr_section_size: string
+   :options uberspark.config.uobjcoll_binary_image_hdr_section_size: "<hexadecimal integer>", default="0x200000"
 
-   :property uobjcoll_binary_image_section_alignment: memory alignment in bytes, of |uobjcoll| binary section
-   :proptype uobjcoll_binary_image_section_alignment: string
-   :options uobjcoll_binary_image_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.config.uobjcoll_binary_image_section_alignment: memory alignment in bytes, of |uobjcoll| binary section
+   :proptype uberspark.config.uobjcoll_binary_image_section_alignment: string
+   :options uberspark.config.uobjcoll_binary_image_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property bridge_cc_bridge: C compiler <bridge namespace path>
-   :proptype bridge_cc_bridge: string
-   :options bridge_cc_bridge: "<bridge namespace path>"
+   :property uberspark.config.cc_bridge_namespace: C compiler <bridge namespace path>
+   :proptype uberspark.config.cc_bridge_namespace: string
+   :options uberspark.config.cc_bridge_namespace: "<bridge namespace path>"
 
-   :property bridge_as_bridge: Assembler <bridge namespace path>
-   :proptype bridge_as_bridge: string
-   :options bridge_as_bridge: "<bridge namespace path>"
+   :property uberspark.config.as_bridge_namespace: Assembler <bridge namespace path>
+   :proptype uberspark.config.as_bridge_namespace: string
+   :options uberspark.config.as_bridge_namespace: "<bridge namespace path>"
 
-   :property bridge_ld_bridge: Linker <bridge namespace path>
-   :proptype bridge_ld_bridge: string
-   :options bridge_ld_bridge: "<bridge namespace path>"
+   :property uberspark.config.ld_bridge_namespace: Linker <bridge namespace path>
+   :proptype uberspark.config.ld_bridge_namespace: string
+   :options uberspark.config.ld_bridge_namespace: "<bridge namespace path>"
 
 
-An example definition of the ``uberspark-config`` node within |ubersparkmff| follows:
+An example definition of the ``uberspark.config.xxx`` nodes within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
     {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-config" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
-        },
+        "uberspark.manifest.namespace" : "uberspark/uobjcoll",
+        "uberspark.manifest.version_min" : "any",
+        "uberspark.manifest.version_max" : "any",
 
-        "uberspark-config":{
-    		"binary_uobj_section_alignment" : "0x200000",
-    		"bridge_cc_bridge" : "container/amd64/x86_32/generic/gcc/v5.4.0"
-        }
+        "uberspark.config.binary_uobj_section_alignment" : "0x200000",
+        "uberspark.config.cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0"
     }
 
-The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *bridge_cc_bridge* 
+The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *cc_bridge_namespace* 
 configuration settings within the current staging environment.
 
 
 .. _reference-manifest-uberspark-bridge:
 
-Manifest Nodes for Bridges
---------------------------
+``uberspark.bridges.xxx`` Nodes
+-------------------------------
 
 |uberspark| supports a variety of bridges such as compilers, assemblers, linkers, verification tools, build system etc.
 A supported bridge is described by a bridge manifest node which follows the general layout given below:
@@ -193,316 +187,69 @@ A supported bridge is described by a bridge manifest node which follows the gene
 .. code-block:: console
 
     {
-        "uberspark-bridge-<bridgename>" : {
-            
-            //common bridge header definition
-            "bridge-hdr":{
-                ...
-            },
+        "uberspark.bridge.namespace" : "<namespace>"
+   		"uberspark.bridge.category" : "<category>",
+		"uberspark.bridge.container_build_filename" : "<build_filename>",
 
-            //bridge specific properties
+		"uberspark.bridge.bridge_cmd" : [
+            "command1",
+            "command2",
             ...
         }
     }
 
+The JSON declaration of the ``uberspark.bridges.xxx`` nodes are as below:
 
-The JSON declaration of the common ``bridge-hdr`` sub-node is as below:
+.. json:object:: uberspark.bridges.xxx
 
-.. json:object:: bridge-hdr
+   :property uberspark.bridges.namespace: namespace for the bridge of the format - "uberspark/bridges/<category>/<devenv>/<bridge-type>/<name>/<arch>/<cpu>/<name>/<version>"
+   :proptype uberspark.bridges.namespace: string
+   :options uberspark.bridges.namespace: <category>=container or native; <devenv>=amd64; <bridge-type>=as-bridge,cc-bridge,ld-bridge,vf-bridge,loader-bridge; <arch>=x86_32,armv8_32; <cpu>=generic; <name>=name of the bridge; <version>=vx.y.z
+   
+   :property uberspark.bridges.category: category of the bridge
+   :proptype uberspark.bridges.category: string
+   :options uberspark.bridges.category: "container", "native"
 
-   :property btype: bridge type
-   :proptype btype: string
-   :options btype: "container", "native"
+   :property uberspark.bridge.container_build_filename: if uberspark.bridges.category is container, then specifies the container build filename
+   :proptype uberspark.bridge.container_build_filename: string
+   :options uberspark.bridge.container_build_filename: "<filename>"
 
-   :property bname: <bridge-name> as identified by |uberspark| 
-   :proptype bname: string
-   :options bname: "<brige-name>"
+   :property uberspark.bridge.bridge_cmd: comma seperated string list of commands to be executed within the bridge
+   :proptype uberspark.bridge.bridge_cmd: string list
+   :options uberspark.bridge.bridge_cmd: 
 
-   :property execname: <executable-name> that carries out the functionality of the bridge 
-   :proptype execname: string
-   :options execname: "<executable-name>"
-
-   :property devenv: development environment where the bridge executable runs 
-   :proptype devenv: string
-   :options devenv: "amd64"
-
-   :property devenv: development environment where the bridge executable runs 
-   :proptype devenv: string
-   :options devenv: "amd64"
-
-   :property arch: CPU architecture supported by the bridge 
-   :proptype arch: string
-   :options arch: "x86_32"
-
-   :property cpu: CPU model supported by the bridge 
-   :proptype cpu: string
-   :options cpu: "generic"
-
-   :property version: <version> of the bridge (executable) 
-   :proptype version: string
-   :options version: "<version>"
-
-   :property path: filesystem <path> to the bridge executable (ignored if btype is "container")
-   :proptype path: string
-   :options path: "<path>"
-
-   :property params: comma delimited (optional) string options for the bridge executable
-   :proptype params: string list
-
-   :property container_fname: <filename> of the container dockerfile (ignored if btype is "native")
-   :proptype container_fname: string
-   :options container_fname: "<filename>"
-
-
-The follow sections describe the bridge specific manifest node declarations for supported bridges. 
-
-
-``uberspark-bridge-as`` Manifest Node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``uberspark-bridge-as`` node within the |ubersparkmf| is used to describe an Assembler 
-bridge. The JSON declaration of the ``uberspark-bridge-as`` node is as below:
-
-.. json:object:: uberspark-bridge-as
-
-   :property bridge-hdr: the common bridge header declaration
-   :proptype bridge-hdr: :json:object:`bridge-hdr`
-
-   :property params_prefix_obj: command line option prefix to generate object file from Assembly source
-   :proptype params_prefix_obj: string
-
-   :property params_prefix_output: command line option prefix to specify output file name
-   :proptype params_prefix_output: string
-
-   :property params_prefix_include: command line option prefix to include a header file
-   :proptype params_prefix_include: string
-
-An example definition of the ``uberspark-bridge-as`` node for the GNU-as Assembler, within |ubersparkmff| follows:
-
+An example definition of the ``uberspark.bridged.xxx`` nodes for the GNU-as Assembler, within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
     {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-as" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
-        },
+        "uberspark.manifest.namespace" : "uberspark/bridges",
+        "uberspark.manifest.version_min" : "any",
+        "uberspark.manifest.version_max" : "any",
 
-        "uberspark-bridge-as":{
-            "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gnu-as",
-                "execname" : "gcc",
-                "devenv" : "amd64",
-                "arch" : "x86_32",
-                "cpu" : "generic",
-                "version" : "v2.26.1",
-                "path" : ".",
-                "params" : [ "-m32" ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
-            },
+        "uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/gnu-as/v2.26.1",
+        "uberspark.bridge.category" : "container",
+        "uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
 
-            "params_prefix_obj" : "-c",
-            "params_prefix_output" : "-o",
-            "params_prefix_include" : "-I"
-        }
+        "uberspark.bridge.bridge_cmd" : [
+            "export var_bridge_include_dirs_with_prefix",
+            "export var_bridge_source_files",
+            "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+            "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+            "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+            "for source_file_name in $vararray_bridge_source_files; do echo \"Compiling ${source_file_name} ...\" && gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -m32 -c ${var_bridge_include_dirs_with_prefix} ${source_file_name} -o ${source_file_name}.o ; done"
+        ] 
+
     }
-
 
 .. note::   Here the Assembler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
             is the container dockerfile that includes the build for running GNU-as within an ``amd64`` 
             environment (e.g., ubuntu or alpine)
 
 
-
-``uberspark-bridge-cc`` Manifest Node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``uberspark-bridge-cc`` node within the |ubersparkmf| is used to describe a C compiler 
-bridge. The JSON declaration of the ``uberspark-bridge-cc`` node is as below:
-
-.. json:object:: uberspark-bridge-cc
-
-   :property bridge-hdr: the common bridge header declaration
-   :proptype bridge-hdr: :json:object:`bridge-hdr`
-
-   :property params_prefix_obj: command line option prefix to generate object file from C source
-   :proptype params_prefix_obj: string
-
-   :property params_prefix_asm: command line option prefix to generate Assembly source from C source
-   :proptype params_prefix_asm: string
-  
-   :property params_prefix_output: command line option prefix to specify output file name
-   :proptype params_prefix_output: string
-
-   :property params_prefix_include: command line option prefix to include a header file
-   :proptype params_prefix_include: string
-
-   :property params_cclib: full pathname to compiler runtime library (e.g., libgcc.a)
-   :proptype params_cclib: string
-
-An example definition of the ``uberspark-bridge-cc`` node for the GNU gcc C compiler, within |ubersparkmff| follows:
-
-
-.. code-block:: JSON
-    
-    {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-cc" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
-        },
-
-        "uberspark-bridge-cc":{
-            "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gcc",
-                "execname" : "gcc",
-                "devenv" : "amd64",
-                "arch" : "x86_32",
-                "cpu" : "generic",
-                "version" : "v5.4.0",
-                "path" : ".",
-                "params" : [ "-m32" ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
-            },
-
-            "params_prefix_obj" : "-c",
-            "params_prefix_asm" : "-S",
-            "params_prefix_output" : "-o",
-            "params_prefix_include" : "-I",
-            "params_cclib" : "/usr/lib/gcc/x86_64-linux-gnu/5/libgcc.a"
-       }
-    }
-
-
-.. note::   Here the C compiler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
-            is the container dockerfile that includes the build for running GNU gcc within an ``amd64`` 
-            environment (e.g., ubuntu or alpine)
-
-
-
-
-``uberspark-bridge-ld`` Manifest Node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``uberspark-bridge-ld`` node within the |ubersparkmf| is used to describe a Linker 
-bridge. The JSON declaration of the ``uberspark-bridge-ld`` node is as below:
-
-.. json:object:: uberspark-bridge-ld
-
-   :property bridge-hdr: the common bridge header declaration
-   :proptype bridge-hdr: :json:object:`bridge-hdr`
-
-   :property params_prefix_lscript: command line option prefix to specify input linker script file
-   :proptype params_prefix_lscript: string
-
-   :property params_prefix_libdir: command line option prefix to specify library directory
-   :proptype params_prefix_libdir: string
-
-   :property params_prefix_lib: command line option prefix to include a library
-   :proptype params_prefix_lib: string
-
-   :property params_prefix_output: command line option prefix to specify output file name
-   :proptype params_prefix_output: string
-
-   :property cmd_generate_flat_binary: command prefix to generate a flat-form binary. note that the input and output file will be added to this automatically
-   :proptype cmd_generate_flat_binary: string
-
-An example definition of the ``uberspark-bridge-ld`` node for the GNU ld linker, within |ubersparkmff| follows:
-
-
-.. code-block:: JSON
-    
-    {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-ld" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
-        },
-
-        "uberspark-bridge-ld":{
-            "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "gnu-ld",
-                "execname" : "ld",
-                "devenv" : "amd64",
-                "arch" : "x86_32",
-                "cpu" : "generic",
-                "version" : "v2.26.1",
-                "path" : ".",
-                "params" : [ "-m elf_i386", "--oformat=elf32-i386"  ],
-                "container_fname" : "uberspark_bridges.Dockerfile"
-            },
-
-            "params_prefix_lscript" : "-T",
-            "params_prefix_libdir" : "-L",
-            "params_prefix_lib" : "-l",
-            "params_prefix_output" : "-o",
-
-    		"cmd_generate_flat_binary" : "arm-linux-gnueabihf-objcopy -O binary"
-
-        }
-    }
-
-
-.. note::   Here the Linker bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
-            is the container dockerfile that includes the build for running GNU ld within an ``amd64`` 
-            environment (e.g., ubuntu or alpine) and producing a 32-bit ELF binary. It also uses the 
-            `objcopy` tool to generate flat-form binary image.
-
-
-``uberspark-bridge-vf`` Manifest Node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``uberspark-bridge-vf`` node within the |ubersparkmf| is used to describe a
-verification bridge. The JSON declaration of the ``uberspark-bridge-vf`` node is 
-as below:
-
-.. json:object:: uberspark-bridge-vf
-
-   :property bridge-hdr: the common bridge header declaration
-   :proptype bridge-hdr: :json:object:`bridge-hdr`
-
-   :property bridge_cmd: list of command line strings that will be executed towards verification. Note: environment variable ``$(SOURCE_C_FILES)`` contains space seperated list of C source files.
-   :proptype bridge_cmd: string list
-
-An example definition of the ``uberspark-bridge-vf`` node for the 
-Frama-C verification framework, within |ubersparkmff| follows:
-
-
-.. code-block:: JSON
-    
-    {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-bridge-vf" ],
-            "uberspark_min_version" : "any",
-            "uberspark_max_version" : "any"
-        },
-
-        "uberspark-bridge-vf":{
-            "bridge-hdr":{
-                "btype" : "container",
-                "bname" : "frama-c",
-                "execname" : "frama-c",
-                "devenv" : "amd64",
-                "arch" : "generic",
-                "cpu" : "generic",
-                "version" : "v20.0",
-                "path" : ".",
-                "params" : [ ],
-                "container_fname" : "uberspark-bridge.Dockerfile"
-            },
-
-            "bridge_cmd" : []
-        }
-    }
-
-
-.. note::   Here the Frama-C verification bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
-            is the container dockerfile that includes the build for running Frama-C within an ``amd64`` 
-            environment (e.g., ubuntu or alpine)
+.. note::   Variables within ``@@`` are special bridge environment variables that are pre-populated by 
+            the framework and can be used by the bridge commands as shown in the above example with source
+            files and include directories
 
 
 
@@ -511,68 +258,60 @@ Frama-C verification framework, within |ubersparkmff| follows:
 .. _reference-manifest-uberspark-uobj:
 
 
-``uberspark-uobj`` Manifest Node
----------------------------------
+``uberspark.uobj.xxx`` Nodes
+----------------------------
 
-The ``uberspark-uobj`` node within the |ubersparkmf| is used to describe a |uobj|.
-The JSON declaration of the ``uberspark-uobj`` node is as below:
+The ``uberspark.uobj.xxx`` nodes within the |ubersparkmf| is used to describe a |uobj|.
+The JSON declaration of the ``uberspark.uobj.xxx`` nodes are as below:
 
-.. json:object:: uberspark-uobj
+.. json:object:: uberspark.uobj.xxx
 
-    :property namespace: |uobj| namespace path as identified by |uberspark| 
-    :proptype namespace: string
+    :property uberspark.uobj.namespace: |uobj| namespace path as identified by |uberspark| 
+    :proptype uberspark.uobj.namespace: string
 
-    :property arch: |uobj| target hardware platform 
-    :proptype arch: string
-    :options arch: "generic"
+    :property uberspark.uobj.platform: |uobj| target hardware platform 
+    :proptype uberspark.uobj.platform: string
+    :options uberspark.uobj.platform: "generic"
 
-    :property arch: |uobj| target CPU architecture 
-    :proptype arch: string
-    :options arch: "x86_32"
+    :property uberspark.uobj.arch: |uobj| target CPU architecture 
+    :proptype uberspark.uobj.arch: string
+    :options uberspark.uobj.arch: "x86_32"
 
-    :property cpu: |uobj| target CPU model 
-    :proptype cpu: string
-    :options cpu: "generic"
+    :property uberspark.uobj.cpu: |uobj| target CPU model 
+    :proptype uberspark.uobj.cpu: string
+    :options uberspark.uobj.cpu: "generic"
 
-    :property sources: |uobj| sources definition sub-node 
-    :proptype sources: :json:object:`sources`
+    :property uberspark.uobj.source_h_files: comma separated list of |uobj| header source filenames  
+    :proptype uberspark.uobj.source_h_files: string list
 
-    :property publicmethods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-params-decl>", "<publicmethods-numberof-params">]*
-    :proptype publicmethods: {}
+    :property uberspark.uobj.source_c_files: comma separated list of |uobj| C source filenames  
+    :proptype uberspark.uobj.source_c_files: string list
 
-    :property intrauobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
-    :proptype intrauobjcoll-callees: {}
+    :property uberspark.uobj.source_casm_files: comma separated list of |uobj| CASM source filenames  
+    :proptype uberspark.uobj.source_casm_files: string list
 
-    :property interuobjcoll-callees: comma delimited declarations of public methods of other |uobjs| that this 
+    :property uberspark.uobj.source_asm_files: comma separated list of |uobj| Assembly source filenames  
+    :proptype uberspark.uobj.source_asm_files: string list
+
+    :property uberspark.uobj.public_methods: comma delimited |uobj| public methods declarations of the format: *"<publicmethod-name>" : [ "<publicmethod-return-type>", "<publicmethod-parameters-decl>", "<public_methods-numberof-parameters">]*
+    :proptype uberspark.uobj.public_methods: {}
+
+    :property uberspark.uobj.intra_uobjcoll_callees: comma delimited declarations of public methods of other |uobjs| that this |uobj| invokes within the same |uobjcoll|. The declarations are of the format: *"<uobj-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
+    :proptype uberspark.uobj.intra_uobjcoll_callees: {}
+
+    :property uberspark.uobj.inter_uobjcoll_callees: comma delimited declarations of public methods of other |uobjs| that this 
                                      |uobj| invokes across |uobjcoll|. The declarations are of the format:
                                      *"<uobjcoll-namespace-path>" : [ "<publicmethod-1-name>", ..., "<publicmethod-n-name>"]*
-    :proptype interuobjcoll-callees: {}
+    :proptype uberspark.uobj.inter_uobjcoll_callees: {}
 
-    :property legacy-callees: comma delimited legacy |coss| function names that this |uobj| invokes 
-    :proptype legacy-callees: string list
+    :property uberspark.uobj.legacy_callees: comma delimited legacy |coss| function names that this |uobj| invokes 
+    :proptype uberspark.uobj.legacy_callees: string list
 
+    :property uberspark.uobj.uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
+    :proptype uberspark.uobj.uobjrtl: :json:object:`uobjrtl` list
 
-    :property uobjrtl: comma delimited list of |uobj| runtime library definition sub-nodes
-    :proptype uobjrtl: :json:object:`uobjrtl` list
-
-    :property sections: (optional) comma delimited list of |uobj| additional sections definition sub-nodes
-    :proptype sections: :json:object:`sections` list
-
-
-.. json:object:: sources
-
-    :property h-files: comma delimited list of |uobj| header files 
-    :proptype h-files: string list
-    
-    :property c-files: comma delimited list of |uobj| C source files 
-    :proptype c-files: string list
- 
-    :property casm-files: comma delimited list of |uobj| CASM source files 
-    :proptype casm-files: string list
-
-    :property asm-files: comma delimited list of |uobj| Assembly source files 
-    :proptype asm-files: string list
-
+    :property uberspark.uobj.sections: (optional) comma delimited list of |uobj| additional sections definition sub-nodes
+    :proptype uberspark.uobj.sections: :json:object:`sections` list
 
 .. json:object:: uobjrtl
 
@@ -598,9 +337,9 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :proptype type: string 
     :options type: "0x0"
 
-    :property prot: (optional) hexadecimal protection of the section 
-    :proptype prot: string 
-    :options prot: "0x0"
+    :property attribute: (optional) hexadecimal protection of the section 
+    :proptype attribute: string 
+    :options attribute: "0x0"
 
     :property aligned_at: (optional) hexadecimal alignment (in bytes) of the section 
     :proptype aligned_at: string 
@@ -608,96 +347,92 @@ The JSON declaration of the ``uberspark-uobj`` node is as below:
     :property pad_to: (optional) hexadecimal padding boundary (in bytes) of the section 
     :proptype pad_to: string 
 
-An example definition of the ``uberspark-uobj`` node for a sample |uobj| called ``add``, within |ubersparkmff| follows:
+An example definition of ``uberspark.uobj.xxx`` nodes for a sample |uobj| called ``add``, within |ubersparkmff| follows:
 
 .. code-block:: JSON
 
     {
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobj" ],
-            "uberspark_min_version" : "5.1",
-            "uberspark_max_version" : "any"
-        },
+        "uberspark.manifest.namespace" : "uberspark/uobj",
+        "uberspark.manifest.version_min" : "5.1",
+        "uberspark.manifest.version_max" : "any",
 
-        "uberspark-uobj" : {
-            "namespace" : "uberspark/uobjs/generic/test/add",
-            "platform" : "generic",
-            "arch" : "generic",
-            "cpu" : "generic",
+        "uberspark.uobj.namespace" : "uberspark/uobjs/generic/test/add",
+        "uberspark.uobj.platform" : "generic",
+        "uberspark.uobj.arch" : "generic",
+        "uberspark.uobj.cpu" : "generic",
 
-            "sources" : {
-                "h-files": [ ],
-                "c-files": [ "add.c" ],
-                "casm-files": [ ],
-                "asm-files": [ ]
-            },
-        
-            "publicmethods" : {
-                "add" : [
-                    "uint32_t",
-                    "(uint32_t param1, uint32_t param2)", 
-                    "2" 
-                ],
-
-                "inc" : [
-                    "uint32_t",
-                    "(uint32_t param1)", 
-                    "1" 
-                ],
-
-            },
-
-            "intrauobjcoll-callees" : {
-            "uberspark/uobjs/generic/test/uobj1": ["pm_one", "pm_two", "pm_three"],
-            "uberspark/uobjs/generic/test/uobj2": ["pm_one"]
-            },
-        
-            "interuobjcoll-callees": {
-                "uberspark/uobjcoll/test" : ["pm_one" ]
-            },
-        
-            "legacy-callees": [
-                "untrusted_func_1",	
-                "untrusted_func_2"
+        "uberspark.uobj.source_h_files": [ ],
+        "uberspark.uobj.source_c_files": [ "add.c" ],
+        "uberspark.uobj.source_casm_files": [ ],
+        "uberspark.uobj.source_asm_files": [ ],
+    
+        "uberspark.uobj.public_methods" : {
+            "add" : [
+                "uint32_t",
+                "(uint32_t param1, uint32_t param2)", 
+                "2" 
             ],
 
-       		"uobjrtl": [
-    			{
-	    			"namespace" : "uberspark/uobjrtl/crt"
-		    	},
-
-			    {
-				    "namespace" : "uberspark/uobjrtl/crypto"
-			    }
-    		],
-
-    		"sections": [
-                {
-                    "name" : "example_additional_section",
-                    "output_names" : [ ".exaddsec" ],
-                    "type" : "0x0",
-                    "prot" : "0x0",
-                    "size" : "0x200000",
-                    "aligned_at" : "0x1000",
-                    "pad_to" : "0x1000"
-                }
+            "inc" : [
+                "uint32_t",
+                "(uint32_t param1)", 
+                "1" 
             ]
-        }
+        },
+
+        "uberspark.uobj.intra_uobjcoll_callees" : {
+            "uberspark/uobjs/generic/test/uobj1": ["pm_one", "pm_two", "pm_three"],
+            "uberspark/uobjs/generic/test/uobj2": ["pm_one"]
+         },
+        
+        "uberspark.uobj.inter_uobjcoll_callees": {
+            "uberspark/uobjcoll/test" : ["pm_one" ]
+        },
+        
+        "uberspark.uobj.legacy_callees": [
+            "untrusted_func_1",	
+            "untrusted_func_2"
+        ],
+
+        "uobjrtl": [
+            {
+                "namespace" : "uberspark/uobjrtl/crt"
+            },
+
+            {
+                "namespace" : "uberspark/uobjrtl/crypto"
+            }
+        ],
+
+        "sections": [
+            {
+                "name" : "example_additional_section",
+                "output_names" : [ ".exaddsec" ],
+                "type" : "0x0",
+                "prot" : "0x0",
+                "size" : "0x200000",
+                "aligned_at" : "0x1000",
+                "pad_to" : "0x1000"
+            }
+        ]
+
     }
+
+
 
 
 
 .. _reference-manifest-uberspark-uobjcoll:
 
 
-``uberspark-uobjcoll`` Manifest Node
-------------------------------------
+``uberspark.uobjcoll.xxx`` Nodes
+--------------------------------
 
 
-The ``uberspark-uobjcoll`` node within the |ubersparkmf| is used to describe a |uobjcoll|.
-The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
+The ``uberspark.uobjcoll.xxx`` nodes within the |ubersparkmf| is used to describe a |uobjcoll|.
+The JSON declaration of the ``uberspark.uobjcoll.xxx`` nodes are as below:
 
-.. json:object:: uberspark-uobjcoll
+.. json:object:: uberspark.uobjcoll.xxx
 
     :property namespace: <uobjcoll-namespace-path> as identified by |uberspark| 
     :proptype namespace: string
@@ -719,18 +454,36 @@ The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
     :proptype hpl: string
     :options hpl: "generic"
 
-    :property sentinels-intrauobjcoll: type of intra-|uobjcoll| sentinel 
-    :proptype sentinels-intrauobjcoll: string list
-    :options sentinels-intrauobjcoll: "call"
+    :property sentinels_intra_uobjcoll: type of intra-|uobjcoll| sentinel 
+    :proptype sentinels_intra_uobjcoll: string list
+    :options sentinels_intra_uobjcoll: "call"
+
+    :property configdefs: configuration definition variables for the |uobjcoll|, available to source and header files for conditional builds
+    :proptype configdefs: :json:object:`configdefs`
 
     :property uobjs: list of |uobjs| within the |uobjcoll| 
     :proptype uobjs: :json:object:`uobjs`
 
-    :property publicmethods: comma delimited |uobjcoll| public methods declarations of the 
-                             format: *"<uobj-namespace-path>" : { "<uobj-publicmethod-1-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"], ... , "<uobj-publicmethod-n-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"]}*
-    :proptype publicmethods: {}
-    :options publicmethods: <sentinel-type>="call"
+    :property init_method: initialization method for the |uobjcoll| 
+    :proptype init_method: :json:object:`init_method`
 
+    :property public_methods: comma delimited |uobjcoll| public methods declarations of the 
+                             format: *"<uobj-namespace-path>" : { "<uobj-publicmethod-1-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"], ... , "<uobj-publicmethod-n-name>" : [ "<sentinel-type>", ..., "<sentinel-type>"]}*
+    :proptype public_methods: {}
+    :options public_methods: <sentinel-type>="call"
+
+    :property loaders: comma separated list of |uobjcoll| loader namespaces; these loaders will be built as part of building the |uobjcoll| 
+    :proptype loaders: string list
+
+
+.. json:object:: configdefs
+
+    :property name: name of the configuration definition, this will be available as ``UBERSPARK_UOBJCOLL_CONFIGDEF_name`` to the sources and headers
+    :proptype name: string 
+ 
+    :property value: value of the configuration definition that can be a number, string or special boolean string below for definitions that just need to be set or unset
+    :proptype value: string 
+    :options value: "<number>", "<string>", "@@TRUE@@" for definition that is set, "@@FALSE@@" for definition that is unset
  
 .. json:object:: uobjs
 
@@ -741,46 +494,87 @@ The JSON declaration of the ``uberspark-uobjcoll`` node is as below:
     :property templars: comma delimited list of <uobj-namespace-path> for all the templar |uobjs| within the |uobjcoll| 
     :proptype templars: string list
     :options templars: "", "<uobj-namespace-path>"
- 
-An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll| called ``test``, within |ubersparkmff| follows:
+
+.. json:object:: init_method
+
+    :property namespace: <uobj> namespace as identified by |uberspark| 
+    :proptype namespace: string
+
+    :property public_method: name of the public method definied within ``uberspark.uobjcoll.public_methods`` 
+    :proptype public_method: string
+
+    :property sentinels: list of sentinels for the init_method 
+    :proptype sentinels: :json:object:`sentinels`
+
+.. json:object:: sentinels
+
+    :property sentinel_type: sentinel namespace as identified by |uberspark| 
+    :proptype sentinel_type: string
+
+
+
+An example definition of the ``uberspark.uobjcoll.xxx`` nodes within |ubersparkmff|, for a |uobjcoll|, follows:
 
 .. code-block:: JSON
 
     {
 
-        "uberspark-manifest":{
-            "manifest_node_types" : [ "uberspark-uobjcoll" ],
-            "uberspark_min_version" : "5.1",
-            "uberspark_max_version" : "any"
+        "uberspark.manifest.namespace" : [ "uberspark-uobjcoll" ],
+        "uberspark.manifest.version_min" : "5.1",
+        "uberspark.manifest.version_max" : "any",
+
+        "uberspark.uobjcoll.namespace" : "uberspark/uobjcoll/platform/pc/uxmhf",
+        "uberspark.uobjcoll.platform" : "pc",
+        "uberspark.uobjcoll.arch" : "x86_32",
+        "uberspark.uobjcoll.cpu" : "generic",
+        "uberspark.uobjcoll.hpl" : "any", 
+        "uberspark.uobjcoll.sentinels_intra_uobjcoll" : [ "generic/generic/any/call" ],
+
+        "uberspark.uobjcoll.configdefs" : [
+
+            { "name": "uxmhf_build_version", "value": "\"6.0.0\""},
+            { "name": "uxmhf_build_revision", "value": "\"you-gotta-have-faith-not-in-who-you-are-but-who-you-can-be\""},
+            { "name": "debug_serial", "value": "@@TRUE@@"},
+            { "name": "debug_port", "value": "0x3f8"},
+            { "name": "debug_serial_maxcpus", "value": "8"},
+            { "name": "drt", "value": "@@TRUE@@"},
+            { "name": "dmap", "value": "@@TRUE@@"},
+            { "name": "uapp_aprvexec", "value": "@@FALSE@@"},
+            { "name": "uapp_hyperdep", "value": "@@FALSE@@"},
+            { "name": "uapp_ssteptrace", "value": "@@FALSE@@"},
+            { "name": "uapp_syscalllog", "value": "@@FALSE@@"},
+            { "name": "uapp_uhcalltest", "value": "@@TRUE@@"},
+            { "name": "uapp_nwlog", "value": "@@FALSE@@"}
+
+        ],
+
+        "uberspark.uobjcoll.uobjs" : {
+            "master" : "",
+            "templars" : [
+                "uberspark/uobjcoll/platform/pc/uxmhf/main"
+            ]
         },
 
-        "uberspark-uobjcoll":{
-            "namespace" : "uberspark/uobjcoll/generic/test",
-            "platform" : "generic",
-            "arch" : "generic",
-            "cpu" : "generic",
-            "hpl" : "any",
-            "sentinels-intrauobjcoll" : [ "call" ],
+        "uberspark.uobjcoll.init_method" : {
+            "uobj_namespace" : "uberspark/uobjcoll/platform/pc/uxmhf/main",
+            "public_method" : "entry",
+            "sentinels" : [
+                {
+                    "sentinel_type" : "drot/intel/pc/pmr0/call"
+                }	
+            ]
+        },	
 
-            "uobjs" : {
-                "master" : "",
-                "templars" : [
-                    "uberspark/uobjcoll/generic/test/main",
-                    "uberspark/uobjs/generic/test/add"
-                ]
-            },
+        "uberspark.uobjcoll.public_methods" : {
+            "uberspark/uobjcoll/platform/pc/uxmhf/main" : {
+                "entry" : [ "generic/generic/any/call" ]
+            }
+        },
 
-            "publicmethods" : {
-                "uberspark/uobjcoll/generic/test/main" : {
-                    "main" : [ "call" ]
-                },
-                
-                "uberspark/uobjs/generic/test/add" : {
-                    "add" : [ "call" ]
-                }
-            }	
+        "uberspark.uobjcoll.loaders" : [
+            "uberspark/loaders/baremetal/x86_32/grub-legacy"    
+        ]
 
-        }
     }
 
 
@@ -788,50 +582,53 @@ An example definition of the ``uberspark-uobjcoll`` node for a sample |uobjcoll|
 .. _reference-manifest-uberspark-uobjrtl:
 
 
-``uberspark-uobjrtl`` Manifest Node
------------------------------------
+``uberspark.uobjrtl.xxx`` Nodes
+-------------------------------
 
-The ``uberspark-uobjrtl`` node within the |ubersparkmf| is used to describe a |uobjrtl|.
-The JSON declaration of the ``uberspark-uobjrtl`` node is as below:
+The ``uberspark.uobjrtl.xxx`` nodes within the |ubersparkmf| is used to describe a |uobjrtl|.
+The JSON declaration of the ``uberspark.uobjrtl.xxx`` nodes are as below:
 
-.. json:object:: uberspark-uobjrtl
+.. json:object:: uberspark.uobjrtl.xxx
 
-    :property namespace: <uobjrtl-namespace-path> as identified by |uberspark| 
-    :proptype namespace: string
-    :options namespace: "<uobjrtl-namespace-path>"
+    :property uberspark.uobjrtl.namespace: <uobjrtl-namespace-path> as identified by |uberspark| 
+    :proptype uberspark.uobjrtl.namespace: string
+    :options uberspark.uobjrtl.namespace: "<uobjrtl-namespace-path>"
 
-    :property arch: |uobjrtl| target hardware platform 
-    :proptype arch: string
-    :options arch: "generic"
+    :property uberspark.uobjrtl.platform: |uobjrtl| target hardware platform 
+    :proptype uberspark.uobjrtl.platform: string
+    :options uberspark.uobjrtl.platform: "generic"
 
-    :property arch: |uobjrtl| target CPU architecture 
-    :proptype arch: string
-    :options arch: "x86_32"
+    :property uberspark.uobjrtl.arch: |uobjrtl| target CPU architecture 
+    :proptype uberspark.uobjrtl.arch: string
+    :options uberspark.uobjrtl.arch: "x86_32"
 
-    :property cpu: |uobjrtl| target CPU model 
-    :proptype cpu: string
-    :options cpu: "generic"
+    :property uberspark.uobjrtl.cpu: |uobjrtl| target CPU model 
+    :proptype uberspark.uobjrtl.cpu: string
+    :options uberspark.uobjrtl.cpu: "generic"
 
-    :property modules-spec: |uobjrtl| modules definition sub-node 
-    :proptype modules-spec: :json:object:`modules-spec` list
+    :property uberspark.uobjrtl.source_c_files: |uobjrtl| definitions for source C files 
+    :proptype uberspark.uobjrtl.source_c_files: :json:object:`uobjrtl_sources` list
 
-.. json:object:: modules-spec
+    :property uberspark.uobjrtl.source_casm_files: |uobjrtl| definitions for source CASM files
+    :proptype uberspark.uobjrtl.source_casm_files: :json:object:`uobjrtl_sources` list
 
-    :property module-path: <module-path> relative to the |uobjrtl| top-level source directory 
-    :proptype module-path: string
-    :options module-path: "src/<module-filename-with-path>"
+.. json:object:: uobjrtl_sources
 
-    :property modules-funcdecls: |uobjrtl| modules function declarations 
-    :proptype modules-funcdecls: :json:object:`modules-funcdecls` list
+    :property path: <path> relative to the |uobjrtl| top-level source directory 
+    :proptype path: string
+    :options path: "src/<source-filename-with-path>"
 
-
-.. json:object:: modules-funcdecls
-
-    :property funcname: canonical function name (See |contrib-guide-ref|:::ref:`contrib-guide-uobjrtl-srccontents`) 
-    :proptype funcname: string
+    :property fn_decls: |uobjrtl| modules function declarations 
+    :proptype fn_decls: :json:object:`fn_decls` list
 
 
-An example definition of the ``uberspark-uobjrtl`` node for the ``crt`` |uobjrtl|, within |ubersparkmff| follows:
+.. json:object:: fn_decls
+
+    :property fn_name: canonical function name (See |contrib-guide-ref|:::ref:`contrib-guide-uobjrtl-srccontents`) 
+    :proptype fn_name: string
+
+
+An example definition of the ``uberspark.uobjrtl.xxx`` nodes  within |ubersparkmff|, for the ``crt`` |uobjrtl| follows:
 
 .. literalinclude:: /../src-nextgen/uobjrtl/crt/uberspark.json
     :language: bash

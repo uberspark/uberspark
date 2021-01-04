@@ -42,13 +42,13 @@ module Usconfig =
 	(*------------------------------------------------------------------------*)
 
 	(* uobj manifest default filename *)
-	let std_uobj_usmf_name = "UOBJ.USMF";;
+	let std_uobj_usmfn_name = "UOBJ.USMF";;
 	
 	(* uobj collection manifest default filename *)
-	let default_uobjcoll_usmf_name = "UOBJCOLL.USMF";;
+	let default_uobjcoll_usmfn_name = "UOBJCOLL.USMF";;
 
 	(* uobj library manifest default filename *)
-	let std_uobj_lib_usmf_name = "UOBJLIB.USMF";;
+	let std_uobj_lib_usmfn_name = "UOBJLIB.USMF";;
 
 	(* uobj consolidated header filename *)
 	let uobj_hfilename = "uobj";;

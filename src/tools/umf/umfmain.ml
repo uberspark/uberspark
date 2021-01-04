@@ -180,7 +180,7 @@ let umf_compute_memory_map () =
 	Self.result "Proceeding to compute memory map...\n";
 	
 	while (!i < !g_totalslabs) do
-	    if ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) then
+	    if ((compare (Hashtbl.find slab_idtosucategory !i) "XRICHGUEST") <> 0) then
 	    	begin
 			    Hashtbl.add slab_idtocode_addrstart !i  (Printf.sprintf "0x%08x" !g_memmapaddr);
 		    	g_memmapaddr := !g_memmapaddr + (Hashtbl.find slab_idtocodesize !i);
@@ -222,7 +222,7 @@ let umf_compute_memory_map () =
 
 	i := 0;
 	while (!i < !g_totalslabs) do
-	    Self.result "slabname: %s \n" (Hashtbl.find slab_idtoname !i);
+	    Self.result "slaname: %s \n" (Hashtbl.find slab_idtoname !i);
 	    Self.result "code    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtocode_addrstart !i) (Hashtbl.find slab_idtocode_addrend !i);
 	    Self.result "data    - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtodata_addrstart !i) (Hashtbl.find slab_idtodata_addrend !i);
 	    Self.result "stack   - addrstart= %s, addrend=%s \n" (Hashtbl.find slab_idtostack_addrstart !i) (Hashtbl.find slab_idtostack_addrend !i);
@@ -248,10 +248,10 @@ let umf_configure_slabs () =
 		begin
 		    i := 0;
 		    while (!i < !g_totalslabs) do
-		        Self.result "Configuring slab: %s with type: %s:%s ...\n" (Hashtbl.find slab_idtodir !i) (Hashtbl.find slab_idtotype !i) (Hashtbl.find slab_idtosubtype !i);
+		        Self.result "Configuring slab: %s with type: %s:%s ...\n" (Hashtbl.find slab_idtodir !i) (Hashtbl.find slab_idtotype !i) (Hashtbl.find slab_idtosucategory !i);
 		        l_cmdline := 	(Printf.sprintf "cd %s%s && %s " !g_rootdir (Hashtbl.find slab_idtodir !i) !g_uobjconfigurescript) ^
-		                	 	(Printf.sprintf " --with-slabtype=%s" (Hashtbl.find slab_idtotype !i)) ^
-		                		(Printf.sprintf " --with-slabsubtype=%s" (Hashtbl.find slab_idtosubtype !i)) ^
+		                	 	(Printf.sprintf " --with-slacategory=%s" (Hashtbl.find slab_idtotype !i)) ^
+		                		(Printf.sprintf " --with-slabsucategory=%s" (Hashtbl.find slab_idtosucategory !i)) ^
 		                		(Printf.sprintf " --with-slabcodestart=%s" (Hashtbl.find slab_idtocode_addrstart !i)) ^
 		                		(Printf.sprintf " --with-slabcodeend=%s" (Hashtbl.find slab_idtocode_addrend !i)) ^
 		                		(Printf.sprintf " --with-slabdatastart=%s" (Hashtbl.find slab_idtodata_addrstart !i)) ^
@@ -300,52 +300,52 @@ let umf_output_infotable () =
 
 		(* slab type *)
 	    if ( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	 (compare (Hashtbl.find slab_idtosubtype !i) "PRIME") = 0 ) then 
+	    	 (compare (Hashtbl.find slab_idtosucategory !i) "PRIME") = 0 ) then 
         	Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "SENTINEL") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "SENTINEL") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_SENTINEL,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "INIT") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "INIT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "UAPI") = 0) then
+	    		 (compare (Hashtbl.find slab_idtosucategory !i) "UAPI") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0  && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "EXCEPTION") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "EXCEPTION") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "INTERCEPT") = 0) then
+	    		 (compare (Hashtbl.find slab_idtosucategory !i) "INTERCEPT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_VfT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "INIT") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "INIT") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	             (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	             (compare (Hashtbl.find slab_idtosucategory !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    		 (compare (Hashtbl.find slab_idtosubtype !i) "XCORE") = 0 ) then
+	    		 (compare (Hashtbl.find slab_idtosucategory !i) "XCORE") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XHYPAPP") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XHYPAPP") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XGUEST") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG_GUEST,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XGUEST") = 0) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVT_PROG_GUEST,"
 	    else if( (compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && 
-	    	     (compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") = 0 ) then
+	    	     (compare (Hashtbl.find slab_idtosucategory !i) "XRICHGUEST") = 0 ) then
 	        Printf.fprintf oc "\n	        XMHFGEEC_SLABTYPE_uVU_PROG_RICHGUEST,"
 	    else
 	    	begin
@@ -364,9 +364,9 @@ let umf_output_infotable () =
 	    	    Printf.fprintf oc "\n        0x00000000UL,";
 			end
 		
-	    else if ( ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) ||
-				  ((compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XGUEST") = 0) ||
-				  ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") = 0) ) then
+	    else if ( ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosucategory !i) "XGUEST") = 0) ||
+				  ((compare (Hashtbl.find slab_idtotype !i) "uVT_SLAB") = 0 && (compare (Hashtbl.find slab_idtosucategory !i) "XGUEST") = 0) ||
+				  ((compare (Hashtbl.find slab_idtotype !i) "uVU_SLAB") = 0 && (compare (Hashtbl.find slab_idtosucategory !i) "XRICHGUEST") = 0) ) then
 			begin
 				(* mempgtbl_cr3 for unverified guest slabs point to their corresponding page table base within uapi_slabmempgtbl *)
 				(* iotbl_base for unverified guest slabs point to their corresponding io table base within uapi_slabiotbl *)
@@ -431,7 +431,7 @@ let umf_output_infotable () =
 	
 	    (* slab_uapisupported *)
 	    if( (compare (Hashtbl.find slab_idtotype !i) "VfT_SLAB") = 0 && 
-	        (compare (Hashtbl.find slab_idtosubtype !i) "UAPI") = 0) then
+	        (compare (Hashtbl.find slab_idtosucategory !i) "UAPI") = 0) then
 	        Printf.fprintf oc "\n       true,"
 	    else
 	        Printf.fprintf oc "\n       false,"
@@ -478,7 +478,7 @@ let umf_output_infotable () =
 
 	    (* slab memoffset entries *)
 	    Printf.fprintf oc "\n	    {";
-	    if (!g_memoffsets && ((compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0) ) then
+	    if (!g_memoffsets && ((compare (Hashtbl.find slab_idtosucategory !i) "XRICHGUEST") <> 0) ) then
 	        Printf.fprintf oc "%s" (Hashtbl.find slab_idtomemoffsetstring !i)
 	    else
 	        Printf.fprintf oc "0"
@@ -528,7 +528,7 @@ let umf_output_linkerscript () =
 	i := 0;
 	while (!i < !g_totalslabs) do
 
-	    if ( (compare (Hashtbl.find slab_idtosubtype !i) "XRICHGUEST") <> 0 ) then
+	    if ( (compare (Hashtbl.find slab_idtosucategory !i) "XRICHGUEST") <> 0 ) then
 	    	begin
 			    Printf.fprintf oc "\n	.slab_%s : {" (Hashtbl.find slab_idtoname !i);
 			    Printf.fprintf oc "\n		. = ALIGN(1);";

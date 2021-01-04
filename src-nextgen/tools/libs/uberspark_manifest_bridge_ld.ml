@@ -12,16 +12,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-type json_node_uberspark_bridge_ld_t = 
-{
-	mutable json_node_bridge_hdr_var : json_node_bridge_hdr_t;
-	mutable params_prefix_lscript: string;
-	mutable params_prefix_libdir: string;
-	mutable params_prefix_lib: string;
-	mutable params_prefix_output: string;
-	mutable cmd_generate_flat_binary: string;
-}
-;;
 
 
 (*---------------------------------------------------------------------------*)
@@ -40,27 +30,18 @@ type json_node_uberspark_bridge_ld_t =
 
 let json_node_uberspark_bridge_ld_to_var
 	(mf_json : Yojson.Basic.t)
-	(json_node_uberspark_bridge_ld_var : json_node_uberspark_bridge_ld_t) 
+	(json_node_uberspark_bridge_ld_var : json_node_uberspark_bridge_t) 
 	: bool =
 	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_bridge_ld = mf_json |> member Uberspark_namespace.namespace_bridge_ld_mf_node_type_tag  in
+			let rval = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_ld_var in
 
-			if(json_node_uberspark_bridge_ld <> `Null) then	begin
-					let json_node_bridge_hdr = (Yojson.Basic.Util.member "bridge-hdr" json_node_uberspark_bridge_ld) in
-					let rval = json_node_bridge_hdr_to_var json_node_bridge_hdr json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var in
+			if rval then begin
+				json_node_uberspark_bridge_ld_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
 
-					if rval then begin
-						json_node_uberspark_bridge_ld_var.params_prefix_lscript <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_lscript" json_node_uberspark_bridge_ld);
-						json_node_uberspark_bridge_ld_var.params_prefix_libdir <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_libdir" json_node_uberspark_bridge_ld);
-						json_node_uberspark_bridge_ld_var.params_prefix_lib <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_lib" json_node_uberspark_bridge_ld);
-						json_node_uberspark_bridge_ld_var.params_prefix_output <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "params_prefix_output" json_node_uberspark_bridge_ld);
-						json_node_uberspark_bridge_ld_var.cmd_generate_flat_binary <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "cmd_generate_flat_binary" json_node_uberspark_bridge_ld);
-
-						retval := true;
-					end;
+				retval := true;
 			end;
 
 	with Yojson.Basic.Util.Type_error _ -> 
@@ -78,21 +59,12 @@ let json_node_uberspark_bridge_ld_to_var
 (* convert json_node_uberspark_bridge_ld_var to json string *)
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_bridge_ld_var_to_jsonstr  
-	(json_node_uberspark_bridge_ld_var : json_node_uberspark_bridge_ld_t) 
+	(json_node_uberspark_bridge_ld_var : json_node_uberspark_bridge_t) 
 	: string =
 	let retstr = ref "" in
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark-bridge-ld\":{";
-
-	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_ld_var.json_node_bridge_hdr_var) ^ ",";
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_lscript\" : \"%s\"," json_node_uberspark_bridge_ld_var.params_prefix_lscript;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_libdir\" : \"%s\"," json_node_uberspark_bridge_ld_var.params_prefix_libdir;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_lib\" : \"%s\"," json_node_uberspark_bridge_ld_var.params_prefix_lib;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"params_prefix_output\" : \"%s\"" json_node_uberspark_bridge_ld_var.params_prefix_output;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\t\"cmd_generate_flat_binary\" : \"%s\"" json_node_uberspark_bridge_ld_var.cmd_generate_flat_binary;
-
-	retstr := !retstr ^ Printf.sprintf  "\n\t}";
+	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_ld_var);
 	retstr := !retstr ^ Printf.sprintf  "\n";
 
 	(!retstr)

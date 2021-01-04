@@ -1,0 +1,19 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+		"uberspark.manifest.namespace" : "uberspark/bridges",
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+
+		"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/loader-bridge/x86_32/generic/baremetal/gcc/v5.5.0",
+		"uberspark.bridge.category" : "container",
+		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+		"uberspark.bridge.bridge_cmd" : [
+			"echo Default loader bridge command. Nothing to do!"
+		] 
+
+
+}

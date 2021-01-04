@@ -108,7 +108,7 @@ typedef struct {
 //////
 
 typedef struct {
-	uint32_t total_publicmethods;	// total number of public methods
+	uint32_t total_public_methods;	// total number of public methods
 } __attribute__((packed)) usbinformat_uobj_publicmethod_info_hdr_t;
 
 
@@ -168,23 +168,23 @@ typedef struct {
 	
 	uint32_t total_sections;	//number of sections
 	uint32_t sizeof_sections_record; //size (in bytes) of a section record
-	uint32_t offsetof_sections;	//offset (in bytes) of section definitions
+	uint32_t offsetosections;	//offset (in bytes) of section definitions
 	
-	uint32_t total_publicmethods;	//number of public methods
+	uint32_t total_public_methods;	//number of public methods
 	uint32_t sizeof_publicmethod_record; //size (in bytes) of a publicmethod record
-	uint32_t offsetof_publicmethods;	//offset (in bytes) of publicmethod definitions from start of header
+	uint32_t offsetopublic_methods;	//offset (in bytes) of publicmethod definitions from start of header
 
 	uint32_t total_intrauobjcoll_callees;	//number of intra-uobjcoll callees
 	uint32_t sizeof_intrauobjcoll_callee_record; //size (in bytes) of a intra-uobjcoll callee record
-	uint32_t offsetof_intrauobjcoll_callees;	//offset (in bytes) of intra-uobjcoll callee definitions from start of header
+	uint32_t offsetointra_uobjcoll_callees;	//offset (in bytes) of intra-uobjcoll callee definitions from start of header
 
 	uint32_t total_interuobjcoll_callees;	//number of inter-uobjcoll callees
 	uint32_t sizeof_interuobjcoll_callee_record; //size (in bytes) of a inter-uobjcoll callee record
-	uint32_t offsetof_interuobjcoll_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
+	uint32_t offsetointer_uobjcoll_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
 
 	uint32_t total_legacy_callees;	//number of inter-uobjcoll callees
 	uint32_t sizeof_legacy_callee_record; //size (in bytes) of a inter-uobjcoll callee record
-	uint32_t offsetof_legacy_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
+	uint32_t offsetolegacy_callees;	//offset (in bytes) of inter-uobjcoll callee definitions from start of header
 
 } __attribute__((packed)) usbinformat_uobj_hdr_t;
 

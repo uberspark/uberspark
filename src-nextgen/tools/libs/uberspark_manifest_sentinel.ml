@@ -15,13 +15,13 @@
 
 type json_node_uberspark_sentinel_t =
 {
-	mutable f_namespace    : string;			
-	mutable f_platform	   : string;
-	mutable f_arch	       : string;
-	mutable f_cpu		   : string;
-	mutable f_sizeof_code  : int;
-	mutable f_code		   : string;
-	mutable f_libcode	   : string;
+	mutable namespace    : string;			
+	mutable platform	   : string;
+	mutable arch	       : string;
+	mutable cpu		   : string;
+	mutable sizeof_code_template  : int;
+	mutable code_template		   : string;
+	mutable library_code_template	   : string;
 };;
 
 
@@ -47,19 +47,14 @@ let json_node_uberspark_sentinel_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_sentinel = mf_json |> member Uberspark_namespace.namespace_sentinel_mf_node_type_tag in
-			if(json_node_uberspark_sentinel <> `Null) then
-				begin
-					json_node_uberspark_sentinel_var.f_namespace <- json_node_uberspark_sentinel |> member "namespace" |> to_string;
-					json_node_uberspark_sentinel_var.f_platform <- json_node_uberspark_sentinel |> member "platform" |> to_string;
-					json_node_uberspark_sentinel_var.f_arch <- json_node_uberspark_sentinel |> member "arch" |> to_string;
-					json_node_uberspark_sentinel_var.f_cpu <- json_node_uberspark_sentinel |> member "cpu" |> to_string;
-					json_node_uberspark_sentinel_var.f_sizeof_code <- int_of_string (json_node_uberspark_sentinel |> member "sizeof-code" |> to_string);
-					json_node_uberspark_sentinel_var.f_code <- json_node_uberspark_sentinel |> member "code" |> to_string;
-					json_node_uberspark_sentinel_var.f_libcode <- json_node_uberspark_sentinel |> member "libcode" |> to_string;
+					json_node_uberspark_sentinel_var.namespace <-  mf_json |> member "uberspark.sentinel.namespace" |> to_string;
+					json_node_uberspark_sentinel_var.platform <-  mf_json |> member "uberspark.sentinel.platform" |> to_string;
+					json_node_uberspark_sentinel_var.arch <- mf_json  |> member "uberspark.sentinel.arch" |> to_string;
+					json_node_uberspark_sentinel_var.cpu <- mf_json  |> member "uberspark.sentinel.cpu" |> to_string;
+					json_node_uberspark_sentinel_var.sizeof_code_template <- int_of_string (mf_json  |> member "uberspark.sentinel.sizeof_code_template" |> to_string);
+					json_node_uberspark_sentinel_var.code_template <- mf_json  |> member "uberspark.sentinel.code_template" |> to_string;
+					json_node_uberspark_sentinel_var.library_code_template <- mf_json  |> member "uberspark.sentinel.library_code_template" |> to_string;
 					retval := true;
-				end
-			;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;

@@ -5,27 +5,23 @@
 
 {
 
-	/* manifest header */
-	"uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-sentinel" ],
-		"uberspark_min_version" : "any",
-		"uberspark_max_version" : "any"
-	},
+		"uberspark.manifest.namespace" : "uberspark/sentinels",
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
 
-    "uberspark-sentinel" : {
 
-		"namespace" : "uberspark/sentinels/init-uobjcoll/baremetal/grub-legacy/srot/generic/pc/pmr0/call/uberspark.json",
-		"platform" : "pc",
-		"arch" : "x86_32",
-        "cpu" : "generic",
-        "sizeof-code" : "0x1000", 
+		"uberspark.sentinel.namespace" : "uberspark/sentinels/init-uobjcoll/baremetal/grub-legacy/srot/generic/pc/pmr0/call/uberspark.json",
+		"uberspark.sentinel.platform" : "pc",
+		"uberspark.sentinel.arch" : "x86_32",
+        "uberspark.sentinel.cpu" : "generic",
+        "uberspark.sentinel.sizeof_code_template" : "0x1000", 
 
         /*  sentinel code template 
 
             parameters: 
             PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
         */ 
-        "code": "
+        "uberspark.sentinel.code_template": "
             /* sentinel size = SENTINEL_SIZE */
             .align 4
             .global multiboot_header
@@ -66,11 +62,10 @@
             parameters: 
             PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
         */ 
-        "libcode": "
+        "uberspark.sentinel.library_code_template": "
             movl (PUBLICMETHOD_SENTINEL_ADDR), %eax
             jmpl *%eax
         "
-    }
 
 
 }

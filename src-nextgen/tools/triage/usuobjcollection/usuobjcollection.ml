@@ -96,8 +96,8 @@ module Usuobjcollection =
 
 
 		(* read uobj collection manifest header *)
-		let (rval, usmf_hdr_type, usmf_hdr_subtype, usmf_hdr_id,
-			usmf_platform, usmf_cpu, usmf_arch) =
+		let (rval, usmf_hdr_type, usmf_hdr_sucategory, usmf_hdr_id,
+			usmplatform, usmcpu, usmarch) =
 				Usmanifest.parse_node_usmf_hdr mf_json in
 			
 		if (rval == false) then
@@ -217,10 +217,10 @@ module Usuobjcollection =
 
 		(* instantiate uobjs *)
 		List.iter (fun x ->  
-			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmf_name); *) 
+			(* Uslog.logf log_tag Uslog.Info "uobj dir: %s" (x ^ "/" ^ Usconfig.std_uobj_usmfn_name); *) 
 			let uobj = new Usuobj.uobject in
 
-				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmf_name) true in	
+				let retval = uobj#parse_manifest (x ^ "/" ^ Usconfig.std_uobj_usmfn_name) true in	
 				if (retval == false) then
 					begin
 						Uslog.logf log_tag Uslog.Error "unable to parse manifest for uobj: '%s'" x;
@@ -381,7 +381,7 @@ module Usuobjcollection =
 
 		let uobjcoll_info_table_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_info_table_lscript_sections 0 
-							{f_name = "data";	
+							{fn_name = "data";	
 								f_subsection_list = [ ".data" ];	
 								usbinformat = { f_type=0; f_prot=0; f_va_offset=0; f_file_offset=0;
 								f_size = (Usconfig.get_sizeof_uobjcoll_info_t());
@@ -515,7 +515,7 @@ module Usuobjcollection =
 		
 		(* copy uobj collection manifest *)
 		Usosservices.file_copy !usmf_filename_canonical 
-			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmf_name);
+			(uobjcoll_install_dir ^ "/" ^ Usconfig.default_uobjcoll_usmfn_name);
 		
 		(* copy uobj collection binary image *)
 		Usosservices.file_copy (!usmf_filename_canonical ^ ".bin") 

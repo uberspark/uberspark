@@ -11,7 +11,7 @@
 (****************************************************************************)
 type slt_codegen_info_t =
 {
-	mutable f_canonical_pm_name     : string;
+	mutable f_canonical_public_method     : string;
 	mutable f_pm_sentinel_addr : int;			
     mutable f_codegen_type : string; (* direct or indirect *)	
     mutable f_pm_sentinel_addr_loc : int;
@@ -29,7 +29,7 @@ type slt_codegen_info_t =
 (*--------------------------------------------------------------------------*)
 let generate_src_binhdr
     (output_filename : string)
-    (uobj_ns : string)
+    (uobj_namespace : string)
     (load_addr : int)
     (image_size : int)
     (sections_list : (string * Defs.Basedefs.section_info_t) list)
@@ -77,7 +77,7 @@ let generate_src_binhdr
         Printf.fprintf oc "\n\t\t0x%08xUL," (List.length sections_list); 
 
         (*namespace*)
-        Printf.fprintf oc "\n\t\"%s\"" uobj_ns; 
+        Printf.fprintf oc "\n\t\"%s\"" uobj_namespace; 
 
     Printf.fprintf oc "\n};"; 
 
@@ -119,7 +119,7 @@ let generate_src_binhdr
 
 
 (*--------------------------------------------------------------------------*)
-(* generate uobj publicmethods info  *)
+(* generate uobj public_methods info  *)
 (*--------------------------------------------------------------------------*)
 let generate_src_publicmethods_info 
     (output_filename : string)
@@ -144,7 +144,7 @@ let generate_src_publicmethods_info
     (* generate public methods info header *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo_hdr\") )) usbinformat_uobj_publicmethod_info_hdr_t uobj_pminfo_hdr = {";
 
-        (*total_publicmethods*)
+        (*total_public_methods*)
         Printf.fprintf oc "\n\t0x%08xUL" (Hashtbl.length publicmethods_hashtbl);
 
     Printf.fprintf oc "\n};";
@@ -156,10 +156,10 @@ let generate_src_publicmethods_info
             Printf.fprintf oc "\n\t{"; 
 
             (* callee name *)
-            Printf.fprintf oc "\n\t\t\"%s\"," (pm_info.f_name); 
+            Printf.fprintf oc "\n\t\t\"%s\"," (pm_info.fn_name); 
 
             (* vaddr *)
-            Printf.fprintf oc "\n\t\t(uint32_t)&%s," (pm_info.f_name); 
+            Printf.fprintf oc "\n\t\t(uint32_t)&%s," (pm_info.fn_name); 
 
             (* vaddr_hi *)
             Printf.fprintf oc "\n\t\t(uint32_t)0UL"; 
@@ -216,14 +216,14 @@ let generate_src_intrauobjcoll_callees_info
 
         let slt_ordinal = ref 0 in
         Hashtbl.iter (fun key value ->  
-            List.iter (fun pm_name -> 
+            List.iter (fun public_method -> 
                 Printf.fprintf oc "\n\t{"; 
                 
                 (* namespace *)
                 Printf.fprintf oc "\n\t\t\"%s\"," key; 
                 
                 (* cname *)
-                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                Printf.fprintf oc "\n\t\t\"%s\"," public_method; 
                 
                 (* slt_ordinal *)
                 Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
@@ -298,14 +298,14 @@ let generate_src_interuobjcoll_callees_info
         
       
         Hashtbl.iter (fun key value ->  
-            List.iter (fun pm_name -> 
+            List.iter (fun public_method -> 
                 Printf.fprintf oc "\n\t{"; 
                 
                 (* namespace *)
                 Printf.fprintf oc "\n\t\t\"%s\"," key; 
                 
                 (* cname *)
-                Printf.fprintf oc "\n\t\t\"%s\"," pm_name; 
+                Printf.fprintf oc "\n\t\t\"%s\"," public_method; 
                 
                 (* slt_ordinal *)
                 Printf.fprintf oc "\n\t0x%08xUL" !slt_ordinal;
@@ -374,7 +374,7 @@ let generate_src_legacy_callees_info
         (*total_legacy_callees*)
         let num_legacy_callees = ref 0 in
         Hashtbl.iter (fun key value  ->
-            List.iter (fun f_name -> 
+            List.iter (fun fn_name -> 
                 num_legacy_callees := !num_legacy_callees + 1;
             ) value;
         ) legacy_callees_hashtbl;
@@ -463,7 +463,7 @@ let generate_slt
         (* iterate over callees_slt_xfer_table_assoc_list and plug in the xfer table data *)
         List.iter ( fun ( (throwaway: string), (xfer_table_info : Defs.Basedefs.slt_indirect_xfer_table_info_t)) ->
             let tdata_0 = Str.global_replace (Str.regexp "UOBJSLT_CONST_ADDRESS") 
-                (Printf.sprintf "0x%08x" xfer_table_info.f_addr) slt_addr_def_template in
+                (Printf.sprintf "0x%08x" xfer_table_info.fn_address) slt_addr_def_template in
             Printf.fprintf oc "\n%s" (tdata_0);
         ) callees_slt_xfer_table_assoc_list;
 
@@ -478,8 +478,8 @@ let generate_slt
         and corresponding direct or indirect xfer template *)
         List.iter ( fun (slt_codegen_info: slt_codegen_info_t) ->
             Printf.fprintf oc "\n";
-            Printf.fprintf oc "\n.global %s" slt_codegen_info.f_canonical_pm_name;
-            Printf.fprintf oc "\n%s:" slt_codegen_info.f_canonical_pm_name;
+            Printf.fprintf oc "\n.global %s" slt_codegen_info.f_canonical_public_method;
+            Printf.fprintf oc "\n%s:" slt_codegen_info.f_canonical_public_method;
 
             if slt_codegen_info.f_codegen_type = "direct" then begin
 
@@ -535,7 +535,7 @@ let generate_linker_script
 		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
                 (* new section memory *)
                 Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
-                    ("mem_" ^ x.f_name)
+                    ("mem_" ^ x.fn_name)
                     ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
         ) sections_list;
 
@@ -554,28 +554,28 @@ let generate_linker_script
                 (* new section *)
                 if(!i == (List.length sections_list) - 1 ) then 
                     begin
-                        Printf.fprintf oc "\n %s : {" x.f_name;
-                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
+                        Printf.fprintf oc "\n %s : {" x.fn_name;
+                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.fn_name;
                         List.iter (fun subsection ->
                                     Printf.fprintf oc "\n *(%s)" subsection;
                         ) x.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.fn_name) ("mem_" ^ x.fn_name);
                         Printf.fprintf oc "\n BYTE(0xAA)";
-                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
-                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.fn_name;
+                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.fn_name);
                         Printf.fprintf oc "\n";
                     end
                 else
                     begin
-                        Printf.fprintf oc "\n %s : {" x.f_name;
-                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.f_name;
+                        Printf.fprintf oc "\n %s : {" x.fn_name;
+                        Printf.fprintf oc "\n	%s_START_ADDR = .;" x.fn_name;
                         List.iter (fun subsection ->
                                     Printf.fprintf oc "\n *(%s)" subsection;
                         ) x.f_subsection_list;
-                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.f_name) ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n . = ORIGIN(%s) + LENGTH(%s) - 1;" ("mem_" ^ x.fn_name) ("mem_" ^ x.fn_name);
                         Printf.fprintf oc "\n BYTE(0xAA)";
-                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.f_name;
-                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.f_name);
+                        Printf.fprintf oc "\n	%s_END_ADDR = .;" x.fn_name;
+                        Printf.fprintf oc "\n	} >%s =0x9090" ("mem_" ^ x.fn_name);
                         Printf.fprintf oc "\n";
                     end
                 ;
@@ -626,7 +626,7 @@ let generate_top_level_include_header
         (* define externs *)
         Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n"; 
-            Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.f_retvaldecl) (pm_info.f_name) (pm_info.f_paramdecl); 
+            Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.fn_decl_return_value) (pm_info.fn_name) (pm_info.fn_decl_parameters); 
             Printf.fprintf oc "\n"; 
         ) publicmethods_hashtbl;
 

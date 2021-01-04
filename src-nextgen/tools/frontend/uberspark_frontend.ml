@@ -641,7 +641,7 @@ let main () =
 		(* setup defaults *)
 		if (String.compare !cmdopt_uobjcollmf "") == 0 then
 			begin
-				cmdopt_uobjcollmf := Usconfig.default_uobjcoll_usmf_name;
+				cmdopt_uobjcollmf := Usconfig.default_uobjcoll_usmfn_name;
 			end
 		;
 

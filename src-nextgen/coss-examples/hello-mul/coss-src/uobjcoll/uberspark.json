@@ -5,25 +5,20 @@
 
 {
 
-  	/* manifest header */
-	"uberspark-manifest":{
-		"manifest_node_types" : [ "uberspark-uobjcoll" ],
-		"uberspark_min_version" : "5.1",
-		"uberspark_max_version" : "any"
-	},
+		"uberspark.manifest.namespace" : "uberspark/uobjcoll",
+		"uberspark.manifest.version_min" : "5.1",
+		"uberspark.manifest.version_max" : "any",
 
 
-	/* üobjcoll declarations */
-	"uberspark-uobjcoll":{
-		"namespace" : "uberspark/uobjcoll/generic/hello-mul",
-		"platform" : "generic",
-		"arch" : "generic",
-		"cpu" : "generic",
-		"hpl" : "any",
-		"sentinels-intrauobjcoll" : [ "call" ],
+		"uberspark.uobjcoll.namespace" : "uberspark/uobjcoll/generic/hello-mul",
+		"uberspark.uobjcoll.platform" : "generic",
+		"uberspark.uobjcoll.arch" : "generic",
+		"uberspark.uobjcoll.cpu" : "generic",
+		"uberspark.uobjcoll.hpl" : "any",
+		"uberspark.uobjcoll.sentinels_intra_uobjcoll" : [ "call" ],
 
 		/* uobjs */
-		"uobjs" : {
+		"uberspark.uobjcoll.uobjs" : {
 			"master" : "",
 			"templars" : [
 				"uberspark/uobjcoll/generic/hello-mul/main"
@@ -31,12 +26,11 @@
 		},
 
 		/* uobjcoll public methods */
-		"publicmethods" : {
+		"uberspark.uobjcoll.public_methods" : {
 			"uberspark/uobjcoll/generic/hello-mul/main" : {
 				"main" : [ "call" ]
 			}
 		}	
 
-	}
 
 }
