@@ -253,6 +253,7 @@ let generate_linker_script
 (*--------------------------------------------------------------------------*)
 let generate_top_level_include_header 
     (output_filename : string)
+    (configdefs_verbatim : bool)
     (configdefs_assoc_list : ((string * Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) list) ) 
     : unit   =
 
@@ -266,11 +267,23 @@ let generate_top_level_include_header
     	List.iter ( fun ( (name : string) , (entry : Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) ) -> 
 
             if entry.value = "@@TRUE@@" then begin
-                Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
+                if configdefs_verbatim = true then begin
+                    Printf.fprintf oc "\n#define %s" name;
+                end else begin
+                    Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
+                end;
             end else if entry.value = "@@FALSE@@" then begin
-                Printf.fprintf oc "\n//#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
+                if configdefs_verbatim = true then begin
+                    Printf.fprintf oc "\n//#define %s" name;
+                end else begin
+                    Printf.fprintf oc "\n//#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__" (String.uppercase name);
+                end;
             end else begin
-                Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__ %s" (String.uppercase name) entry.value;
+                if configdefs_verbatim = true then begin
+                    Printf.fprintf oc "\n#define %s %s" name entry.value;
+                end else begin
+                    Printf.fprintf oc "\n#define __UBERSPARK_UOBJCOLL_CONFIGDEF_%s__ %s" (String.uppercase name) entry.value;
+                end;
             end;
            
 		) configdefs_assoc_list;

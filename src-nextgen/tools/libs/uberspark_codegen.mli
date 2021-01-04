@@ -106,6 +106,7 @@ type sentinel_info_t =
 val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> bool
 val generate_top_level_include_header : 
     string ->
+    bool ->
     ((string * Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) list) ->
     unit
     

@@ -57,6 +57,7 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
 		public_methods = [];
 		loaders = [];
+		configdefs_verbatim = false;
 		configdefs = [];
 	};;
 
@@ -1409,6 +1410,7 @@ let initialize_common_operation_context
 	Uberspark_logger.log ~crlf:false "Generating uobjcoll top-level include header source...";
 	Uberspark_codegen.Uobjcoll.generate_top_level_include_header 
 			(!d_builddir ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_top_level_include_header_src_filename)
+			json_node_uberspark_uobjcoll_var.configdefs_verbatim
 			json_node_uberspark_uobjcoll_var.configdefs;
 	Uberspark_logger.log ~tag:"" "[OK]";
 	install_h_files_ns ~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir;

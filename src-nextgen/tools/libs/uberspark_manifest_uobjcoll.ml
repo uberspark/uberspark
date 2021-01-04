@@ -60,6 +60,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable init_method	: json_node_uberspark_uobjcoll_initmethod_t;
 	mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
 	mutable loaders : string list;
+	mutable configdefs_verbatim : bool;
 	mutable configdefs: (string * json_node_uberspark_uobjcoll_configdefs_t) list;
 };;
 
@@ -290,6 +291,14 @@ let json_node_uberspark_uobjcoll_to_var
 						json_node_uberspark_uobjcoll_var.loaders <- (json_list_to_string_list (mf_json |> member "uberspark.uobjcoll.loaders" |> to_list));
 					end;
 					
+					(* check if configdefs_verbatim is specified *)
+					if (mf_json |> member "uberspark.uobjcoll.configdefs_verbatim") != `Null then begin
+						json_node_uberspark_uobjcoll_var.configdefs_verbatim <- mf_json |> member "uberspark.uobjcoll.configdefs_verbatim" |> to_bool;
+					end else begin
+						json_node_uberspark_uobjcoll_var.configdefs_verbatim <- false;
+					end;
+
+
 					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var mf_json json_node_uberspark_uobjcoll_var.uobjs) in
 					let (rval2, json_node_uberspark_uobjcoll_initmethod_var) = 
 						(json_node_uberspark_uobjcoll_initmethod_to_var mf_json) in

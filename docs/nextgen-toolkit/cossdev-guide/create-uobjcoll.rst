@@ -77,6 +77,64 @@ to specify this gateway as a regular branch/call instruction.
             *sentinels-intrauobjcoll* can be different from that of the *publicmethods*.
             Presently only the ``call`` sentinel is supported.
 
+
+|uobjcollcaps| Configuration Definitions
+----------------------------------------
+
+The ``uberspark.uobjcoll.configdefs`` manifest node allows specifying various configuration definitions which are
+then made available to the sources via ``#include <uberspark/ubjcoll/generic/hello-mul/uobjcoll.h>``.
+See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the manifest
+node declaration.
+
+Configuration definitions are specified as a *name* and *value* pair where the *name* refers to the definition
+name and the *value* is a string. 
+
+The configuration definition *name* is then available to the sources in upper-case with the default
+``__UBERSPARK_UOBJCOLL_CONFIGDEF_`` prefix and ``__`` suffix. For example, with ``hello-mul``, the configuration 
+definition ``example_hexnumber`` will be available as ``__UBERSPARK_UOBJCOLL_CONFIGDEF_EXAMPLE_HEXNUMBER__``, which
+in turn can be used within the sources as follows:
+
+.. code-block:: C
+
+   uint32_t hexnumber = __UBERSPARK_UOBJCOLL_CONFIGDEF_EXAMPLE_HEXNUMBER__;
+
+
+.. note::
+   
+   The default behavior of converting to upper case, and adding configuration prefix and suffix, can be turned off 
+   by setting 
+   ``uberspark.uobjcoll.configdefs_verbatim`` to ``true``. i.e., have the following additional node 
+   declaration within the
+   manifest:
+
+   .. code-block:: JSON
+
+      {
+        "uberspark.uobjcoll.configdefs_verbatim" : true 
+      }
+
+   In this case every configuration definition *name* will be available to reference within the sources as-is.
+
+A configuration definition *value* is always specified as a string in the manifest, but can represent numbers and
+string within the sources. For example, in the ``hello-mul`` |uobjcoll|, ``example_hexnumber`` and ``example_decnumber`` 
+are available as numbers within the sources, while ``example_string`` is available as a doubly-quoted string within the
+sources.
+
+A special category of *value* is that of ``@@TRUE@@` and ``@@FALSE@@``. These are used to define configuration definitions
+that are available as boolean (set or unset) within the sources. For example, the ``example_booldef`` configuration
+definition can be checked within the sources as below:
+
+.. code-block:: C
+
+   #if defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_EXAMPLE_BOOLDEF__)
+      /* example_booldef is set to @@TRUE@@ within the manifest */
+   #else
+      /* example_booldef is set to @@FALSE@@ within the manifest */
+   #endif
+
+
+
+
 .. 
     - describe collection
     - describe uobjcollection manifest example; take it from test uobj

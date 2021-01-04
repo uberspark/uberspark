@@ -9,7 +9,6 @@
 		"uberspark.manifest.version_min" : "5.1",
 		"uberspark.manifest.version_max" : "any",
 
-
 		"uberspark.uobjcoll.namespace" : "uberspark/uobjcoll/generic/hello-mul",
 		"uberspark.uobjcoll.platform" : "generic",
 		"uberspark.uobjcoll.arch" : "generic",
@@ -17,6 +16,16 @@
 		"uberspark.uobjcoll.hpl" : "any",
 		"uberspark.uobjcoll.sentinels_intra_uobjcoll" : [ "generic/generic/any/call" ],
 
+		/* uobjcoll configuration definitions */
+		"uberspark.uobjcoll.configdefs" : [
+
+			{ "name": "example_hexnumber", "value": "0x01000000"},
+			{ "name": "example_decnumber", "value": "4096"},
+			{ "name": "example_string", "value": "\"this is a string definition\""},
+			{ "name": "example_booldef", "value": "@@TRUE@@"}
+
+		],
+	
 		/* uobjs */
 		"uberspark.uobjcoll.uobjs" : {
 			"master" : "",

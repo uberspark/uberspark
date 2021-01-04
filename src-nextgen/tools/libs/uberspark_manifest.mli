@@ -309,6 +309,7 @@ module Uobjcoll : sig
     mutable init_method : json_node_uberspark_uobjcoll_initmethod_t;
     mutable public_methods : (string * json_node_uberspark_uobjcoll_publicmethods_t) list;
     mutable loaders : string list;
+    mutable configdefs_verbatim : bool;
     mutable configdefs : (string * json_node_uberspark_uobjcoll_configdefs_t) list;
   }
 
