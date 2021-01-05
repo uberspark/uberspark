@@ -242,12 +242,18 @@ module Vf : sig
 	val store_to_file : string -> bool
 	val store : unit -> bool
 	val build : unit -> bool
-	val invoke : 
+	(*val invoke : 
 		?context_path_builddir : string -> 
 		string list ->
 		string list ->
 		string ->
-		bool
+		bool*)
+
+	val invoke :
+	?context_path_builddir:string -> 
+	(string * string) list ->
+	bool
+
 
 end
 

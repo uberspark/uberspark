@@ -1545,11 +1545,35 @@ class uobject
 	   	Uberspark_logger.log "proceeding to verify...";
 		end;
 
-		let rval = Uberspark_bridge.Vf.invoke 
+(*		let rval = Uberspark_bridge.Vf.invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_c_files)  
 			 [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]
 			 "." in
+*)
+
+		let rval = Uberspark_bridge.Vf.invoke 
+				 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+				[
+					("@@BRIDGE_INPUT_FILES@@", "");
+					("@@BRIDGE_SOURCE_FILES@@", "");
+					("@@BRIDGE_SOURCE_C_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
+					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+					("@@BRIDGE_COMPILEDEFS@@", "");
+					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_DEFS@@", "");
+					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+					("@@BRIDGE_LSCRIPT_FILENAME@@", "");
+					("@@BRIDGE_BINARY_FILENAME@@", "");
+					("@@BRIDGE_BINARY_FLAT_FILENAME@@", "");
+					("@@BRIDGE_CCLIB_FILENAME@@", "");
+					("@@BRIDGE_CMD@@", "");
+
+				] in
 
 		if (rval == false ) then begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not verify one or more uobj sources!";

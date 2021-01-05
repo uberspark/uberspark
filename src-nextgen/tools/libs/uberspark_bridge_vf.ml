@@ -176,6 +176,7 @@ let build
 	input is a set of c files as string list
 *)
 
+(*
 let invoke 
 	?(context_path_builddir = ".")
 	(c_file_list : string list)
@@ -249,3 +250,57 @@ let invoke
 
 	(!retval)
 ;;
+*)
+
+let invoke 
+	?(context_path_builddir = ".")
+	(bridge_parameters_assoc_list : (string * string) list)
+	: bool =
+
+	let retval = ref false in
+	let d_cmd = ref "" in
+	
+	(* construct command line using bridge_cmd variable from bridge definition *)
+	for li = 0 to (List.length json_node_uberspark_bridge_vf_var.bridge_cmd) - 1 do begin
+		let b_cmd = ref "" in
+		
+		b_cmd := List.nth json_node_uberspark_bridge_vf_var.bridge_cmd li;
+
+		(* iterate through bridge parameter list and substitute values *)
+		List.iter (fun ( (bridge_parameter_name:string), (bridge_parameter_value:string) )  ->
+			b_cmd :=  Str.global_replace (Str.regexp bridge_parameter_name) 
+                bridge_parameter_value !b_cmd;
+		)bridge_parameters_assoc_list;
+
+		if li == 0 then begin
+			d_cmd := !b_cmd;
+		end else begin
+			d_cmd := !d_cmd ^ " && " ^ !b_cmd;
+		end;
+
+	end done;
+
+	
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
+
+	(* construct bridge namespace *)
+	let bridge_ns = json_node_uberspark_bridge_vf_var.namespace in
+
+	(* invoke the compiler *)
+	if json_node_uberspark_bridge_vf_var.category = "container" then begin
+		if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
+	end else begin
+		if ( (Native.run_shell_command  ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
+			retval := true;
+		end else begin
+			retval := false;
+		end;
+	end;
+
+	(!retval)
+;;
+
