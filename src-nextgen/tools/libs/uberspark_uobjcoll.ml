@@ -1231,7 +1231,7 @@ let link_binary_image
 	) !d_sources_asm_file_list;
 
 
-	retval := Uberspark_bridge.Ld.invoke 
+(*	retval := Uberspark_bridge.Ld.invoke 
 		~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
@@ -1239,6 +1239,30 @@ let link_binary_image
 		""
 		!o_file_list
 		".";
+*)
+
+	retval := Uberspark_bridge.Ld.invoke 
+				~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
+				[
+					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string !o_file_list));
+					("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string !o_file_list));
+					("@@BRIDGE_INCLUDE_DIRS@@", "");
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", "");
+					("@@BRIDGE_COMPILEDEFS@@", "");
+					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_DEFS@@", "");
+					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+					("@@BRIDGE_LSCRIPT_FILENAME@@", Uberspark_namespace.namespace_uobjcoll_linkerscript_filename);
+					("@@BRIDGE_BINARY_FILENAME@@", Uberspark_namespace.namespace_uobjcoll_binary_image_filename);
+					("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark_namespace.namespace_uobjcoll_binary_flat_image_filename);
+					("@@BRIDGE_CCLIB_FILENAME@@", "");
+
+				];
+
+
 
 	(!retval)	
 ;;
