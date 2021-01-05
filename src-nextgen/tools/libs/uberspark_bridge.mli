@@ -5,6 +5,15 @@
 (*===========================================================================*)
 (*===========================================================================*)
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* general submodules *)
@@ -22,6 +31,31 @@ end
 module Native : sig
 
 	val run_shell_command : ?context_path_builddir:string -> string -> string -> string -> int
+
+end
+
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* class definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+class bridge_object :
+object
+
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t 
+	val json_node_uberspark_bridge_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
+	
+	method load_from_json : Yojson.Basic.json ->  bool
+	method load_from_file : string -> bool
+	method load : string -> bool
+	method store_to_file : string -> bool
+	method store : unit -> bool
+	method build : unit -> bool
+	method invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
 
 end
 
