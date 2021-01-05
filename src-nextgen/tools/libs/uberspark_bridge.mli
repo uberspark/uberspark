@@ -35,6 +35,21 @@ module Native : sig
 end
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+val dump : string -> ?bridge_exectype:string -> string -> unit
+val remove : string -> unit
+val bridge_parameter_to_string :
+	?separator:string -> 
+	?prefix:string -> 
+	string list ->
+	string
+
+
 
 
 (*---------------------------------------------------------------------------*)
@@ -55,21 +70,18 @@ object
 	method store_to_file : string -> bool
 	method store : unit -> bool
 	method build : unit -> bool
-	method invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+	method invoke :  ?gen_obj:bool -> 
+	?context_path_builddir:string -> 
+	string list -> 
+	string list -> 
+	string -> 
+	bool
 
 end
 
 
 
 
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-(* interface definitions *)
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-
-val dump : string -> ?bridge_exectype:string -> string -> unit
-val remove : string -> unit
 
 
 (*---------------------------------------------------------------------------*)
@@ -97,7 +109,12 @@ module Cc : sig
 	val store : unit -> bool
 	val build : unit -> bool
 	(*val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool*)
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+	val invoke :  ?gen_obj:bool -> 
+	?context_path_builddir:string -> 
+	string list -> 
+	string list -> 
+	string -> 
+	bool
 
 
 end
@@ -121,7 +138,11 @@ module As : sig
 	val store_to_file : string -> bool
 	val store : unit -> bool
 	val build : unit -> bool
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+	
+	val invoke :
+	?context_path_builddir:string -> 
+	(string * string) list ->
+	bool
 
 end
 
@@ -145,7 +166,12 @@ module Casm : sig
 	val store_to_file : string -> bool
 	val store : unit -> bool
 	val build : unit -> bool
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
+	val invoke :  ?gen_obj:bool -> 
+	?context_path_builddir:string -> 
+	string list -> 
+	string list -> 
+	string -> 
+	bool
 
 end
 
@@ -229,10 +255,12 @@ module Loader : sig
 	val store_to_file : string -> bool
 	val store : unit -> bool
 	val build : unit -> bool
-	val invoke : 
-		?context_path_builddir : string -> 
-		string ->
-		bool
+	val invoke :  ?gen_obj:bool -> 
+	?context_path_builddir:string -> 
+	string list -> 
+	string list -> 
+	string -> 
+	bool
 
 end
 

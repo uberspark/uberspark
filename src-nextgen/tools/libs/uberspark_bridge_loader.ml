@@ -177,7 +177,10 @@ let build
 *)
 
 let invoke 
+	?(gen_obj = true)
 	?(context_path_builddir = ".")
+	(dummy_arg_0 : string list)
+	(dummy_arg_1 : string list)
 	(b_cmd : string)
 	: bool =
 

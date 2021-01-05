@@ -1244,9 +1244,26 @@ class uobject
 		
 		let retval = ref false in
 
-		retval := Uberspark_bridge.As.invoke ~gen_obj:true
+(*		retval := Uberspark_bridge.As.invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_asm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
+
+*)
+
+		retval := Uberspark_bridge.As.invoke 
+					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+					[
+						("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_asm_files));
+						("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+						Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+						("@@BRIDGE_COMPILEDEFS@@", (Uberspark_bridge.bridge_parameter_to_string [ "__ASSEMBLY__" ]));
+						("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-D " [ "__ASSEMBLY__" ]));
+						("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+
+					];
+
+
 
 		(!retval)	
 	;

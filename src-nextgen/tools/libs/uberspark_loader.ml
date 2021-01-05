@@ -143,7 +143,7 @@ class uobjcoll_loader
             Uberspark_logger.log ~lvl:Uberspark_logger.Debug "revised command:%s" !r_bcmd;
 
             if !retval == true then begin
-       	        if not (Uberspark_bridge.Loader.invoke !r_bcmd) then begin
+       	        if not (Uberspark_bridge.Loader.invoke [] [] !r_bcmd) then begin
 		            Uberspark_logger.log ~lvl:Uberspark_logger.Error "command exited with non-zero value!";
 		            retval := false;
                 end else begin

@@ -35,6 +35,65 @@ struct
 #include "uberspark_bridge_native.ml"
 end
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+let dump
+	(bridge_ns_path : string)
+	?(bridge_exectype = "container")
+	(output_directory : string)
+	=
+	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
+			Uberspark_namespace.namespace_root_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
+	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
+			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	
+	(* copy json file *)
+	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
+
+	(* if container, then dump container file as well *)
+	if(bridge_exectype = "container") then
+		Uberspark_osservices.file_copy src_bridge_container_filename dst_container_filename;
+	;
+
+	()
+;;
+
+
+let remove
+	(bridge_ns_path : string)
+	=
+	let full_bridge_ns_path = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path in
+	
+	(* remove the path and files within *)
+	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
+	()
+;;
+
+let bridge_parameter_to_string
+	?(separator = " ")
+	?(prefix = "")
+	(input_list : string list)
+	: string =
+	let bridge_parameter_string = ref "" in
+
+	List.iter (fun input_element -> 
+		bridge_parameter_string := !bridge_parameter_string ^ separator ^ prefix ^ input_element;
+	) input_list;
+
+	(!bridge_parameter_string)
+;;
+
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* class definitions *)
@@ -287,46 +346,6 @@ end;;
 
 
 
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-(* interface definitions *)
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-
-
-let dump
-	(bridge_ns_path : string)
-	?(bridge_exectype = "container")
-	(output_directory : string)
-	=
-	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
-			Uberspark_namespace.namespace_root_mf_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
-	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
-			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
-	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
-	
-	(* copy json file *)
-	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
-
-	(* if container, then dump container file as well *)
-	if(bridge_exectype = "container") then
-		Uberspark_osservices.file_copy src_bridge_container_filename dst_container_filename;
-	;
-
-	()
-;;
-
-
-let remove
-	(bridge_ns_path : string)
-	=
-	let full_bridge_ns_path = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path in
-	
-	(* remove the path and files within *)
-	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
-	()
-;;
 
 
 
