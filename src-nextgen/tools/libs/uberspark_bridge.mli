@@ -109,12 +109,17 @@ module Cc : sig
 	val store : unit -> bool
 	val build : unit -> bool
 	(*val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool*)
-	val invoke :  ?gen_obj:bool -> 
+	(*val invoke :  ?gen_obj:bool -> 
 	?context_path_builddir:string -> 
 	string list -> 
 	string list -> 
 	string -> 
+	bool*)
+	val invoke :
+	?context_path_builddir:string -> 
+	(string * string) list ->
 	bool
+
 
 
 end
