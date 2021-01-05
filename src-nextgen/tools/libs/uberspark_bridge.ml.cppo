@@ -312,6 +312,17 @@ end;;
 
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* bridge_object variables *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+let cc_bridge : bridge_object = new bridge_object;;
+let as_bridge : bridge_object = new bridge_object;;
+let ld_bridge : bridge_object = new bridge_object;;
+let casm_bridge : bridge_object = new bridge_object;;
+let vf_bridge : bridge_object = new bridge_object;;
+let loader_bridge : bridge_object = new bridge_object;;
 
 
 
