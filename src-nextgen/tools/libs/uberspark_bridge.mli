@@ -70,11 +70,9 @@ object
 	method store_to_file : string -> bool
 	method store : unit -> bool
 	method build : unit -> bool
-	method invoke :  ?gen_obj:bool -> 
+	method invoke :
 	?context_path_builddir:string -> 
-	string list -> 
-	string list -> 
-	string -> 
+	(string * string) list ->
 	bool
 
 end
