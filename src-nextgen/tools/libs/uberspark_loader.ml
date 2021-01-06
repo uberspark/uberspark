@@ -144,7 +144,7 @@ class uobjcoll_loader
 
             if !retval == true then begin
 
-				retval := Uberspark_bridge.Loader.invoke 
+				retval := Uberspark_bridge.loader_bridge#invoke 
 				[
 					("@@BRIDGE_INPUT_FILES@@", "");
 					("@@BRIDGE_SOURCE_FILES@@", "");
@@ -209,12 +209,12 @@ let create_initialize
 	let l_rval = ref true in 
 	let dummy = 0 in begin
 
-       	if not (Uberspark_bridge.Loader.load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
+       	if not (Uberspark_bridge.loader_bridge#load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
 		    Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load loader bridge!";
 		    l_rval := false;
     	end else begin
     		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loaded loader bridge";
-           	if not (Uberspark_bridge.Loader.build ()) then begin
+           	if not (Uberspark_bridge.loader_bridge#build ()) then begin
 		        Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build loader bridge!";
     		    l_rval := false;
             end else begin

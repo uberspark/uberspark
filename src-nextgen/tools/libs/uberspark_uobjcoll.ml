@@ -1187,7 +1187,7 @@ let compile_asm_files
 	
 	let retval = ref false in
 
-	retval := Uberspark_bridge.As.invoke 
+	retval := Uberspark_bridge.as_bridge#invoke 
 				~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 				[
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string !d_sources_asm_file_list));
@@ -1231,7 +1231,7 @@ let link_binary_image
 	) !d_sources_asm_file_list;
 
 
-(*	retval := Uberspark_bridge.Ld.invoke 
+(*	retval := Uberspark_bridge.ld_bridge#invoke 
 		~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 		Uberspark_namespace.namespace_uobjcoll_linkerscript_filename
 		Uberspark_namespace.namespace_uobjcoll_binary_image_filename
@@ -1241,7 +1241,7 @@ let link_binary_image
 		".";
 *)
 
-	retval := Uberspark_bridge.Ld.invoke 
+	retval := Uberspark_bridge.ld_bridge#invoke 
 				~context_path_builddir:Uberspark_namespace.namespace_uobjcoll_build_dir 
 				[
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string !o_file_list));

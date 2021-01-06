@@ -1203,16 +1203,16 @@ class uobject
 		
 		let retval = ref false in
 
-		(*retval := Uberspark_bridge.Cc.invoke ~gen_obj:true
+		(*retval := Uberspark_bridge.cc_bridge#invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 		*)
 
-(*		retval := Uberspark_bridge.Cc.invoke 
+(*		retval := Uberspark_bridge.cc_bridge#invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_c_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 *)
-		retval := Uberspark_bridge.Cc.invoke 
+		retval := Uberspark_bridge.cc_bridge#invoke 
 					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 					[
 						("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
@@ -1242,11 +1242,11 @@ class uobject
 		
 		let retval = ref false in
 
-(*		retval := Uberspark_bridge.Casm.invoke ~gen_obj:true
+(*		retval := Uberspark_bridge.casm_bridge#invoke ~gen_obj:true
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_casm_files) [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ] ".";
 *)
-		retval := Uberspark_bridge.Casm.invoke 
+		retval := Uberspark_bridge.casm_bridge#invoke 
 					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 					[
 						("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_casm_files));
@@ -1278,7 +1278,7 @@ class uobject
 		let retval = ref false in
 
 
-		retval := Uberspark_bridge.As.invoke 
+		retval := Uberspark_bridge.as_bridge#invoke 
 					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 					[
 						("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_asm_files));
@@ -1322,7 +1322,7 @@ class uobject
 		) json_node_uberspark_uobj_var.sources.source_asm_files;
 
 
-(*		retval := Uberspark_bridge.Ld.invoke 
+(*		retval := Uberspark_bridge.ld_bridge#invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			Uberspark_namespace.namespace_uobj_linkerscript_filename
 			Uberspark_namespace.namespace_uobj_binary_image_filename
@@ -1332,7 +1332,7 @@ class uobject
 			".";
 *)
 
-	retval := Uberspark_bridge.Ld.invoke 
+	retval := Uberspark_bridge.ld_bridge#invoke 
 				 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 				[
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string !o_file_list));
@@ -1545,14 +1545,14 @@ class uobject
 	   	Uberspark_logger.log "proceeding to verify...";
 		end;
 
-(*		let rval = Uberspark_bridge.Vf.invoke 
+(*		let rval = Uberspark_bridge.vf_bridge#invoke 
 			 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 			 (json_node_uberspark_uobj_var.sources.source_c_files)  
 			 [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]
 			 "." in
 *)
 
-		let rval = Uberspark_bridge.Vf.invoke 
+		let rval = Uberspark_bridge.vf_bridge#invoke 
 				 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
 				[
 					("@@BRIDGE_INPUT_FILES@@", "");

@@ -375,7 +375,7 @@ end
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-
+(*
 let initialize_from_config () 
 	: bool =
 	
@@ -520,3 +520,151 @@ let initialize_from_config ()
 
 	(!retval)
 ;;
+*)
+
+
+let initialize_from_config () 
+	: bool =
+	
+	let retval = ref false in
+
+	(* handle cc-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (cc_bridge#load Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded cc_bridge settings";
+		retval := true;
+	end;
+
+	if not (cc_bridge#build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build cc_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "cc_bridge build success";
+		retval := true;
+	end;
+
+	(* handle as-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (as_bridge#load Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded as_bridge settings";
+		retval := true;
+	end;
+
+	if not (as_bridge#build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build as_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "as_bridge build success";
+		retval := true;
+	end;
+
+
+	(* handle casm as-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "casm as_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (casm_bridge#load Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load casm as_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded casm as_bridge settings";
+		retval := true;
+	end;
+
+	if not (casm_bridge#build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build casm as_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "casm as_bridge build success";
+		retval := true;
+	end;
+
+
+
+	(* handle ld-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (ld_bridge#load Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded ld_bridge settings";
+		retval := true;
+	end;
+
+	if not (ld_bridge#build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build ld_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "ld_bridge build success";
+		retval := true;
+	end;
+
+
+	(* handle uberspark vf-bridge *)	
+	if Uberspark_config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace = "" then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "uberspark vf_bridge is unspecified";
+		(!retval)
+	end else
+
+	if not (vf_bridge#load Uberspark_config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load uberspark vf_bridge settings!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "loaded uberspark vf_bridge settings";
+		retval := true;
+	end;
+
+	if not (vf_bridge#build ()) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uberspark vf_bridge!";
+		(!retval)
+	end else 
+
+	let dummy = 0 in begin
+		Uberspark_logger.log "uberspark vf_bridge build success";
+		retval := true;
+	end;
+
+
+
+
+	(!retval)
+;;
+
