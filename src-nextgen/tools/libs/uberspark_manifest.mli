@@ -71,49 +71,6 @@ module Bridge : sig
   val json_node_uberspark_bridge_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
 
-
-  (****************************************************************************)
-  (* submodules *)
-  (****************************************************************************)
-  (*
-  module Cc : sig
-
-    val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_cc_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module Ld : sig
-
-    val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_ld_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module As : sig
-
-    val json_node_uberspark_bridge_as_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_as_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-
-  end
-
-  module Vf : sig
-
-    val json_node_uberspark_bridge_vf_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_vf_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module Loader : sig
-
-    val json_node_uberspark_bridge_loader_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-*)
-
-
 end
 
 

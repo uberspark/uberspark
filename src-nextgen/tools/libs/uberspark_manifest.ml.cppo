@@ -234,29 +234,6 @@ let write_to_file
 
 module Bridge = struct
 	#include "uberspark_manifest_bridge.ml"
-
-(*
-	module Cc = struct
-	#include "uberspark_manifest_bridge_cc.ml"
-	end
-
-	module Ld = struct
-	#include "uberspark_manifest_bridge_ld.ml"
-	end
-
-	module As = struct
-	#include "uberspark_manifest_bridge_as.ml"
-	end
-
-	module Vf = struct
-	#include "uberspark_manifest_bridge_vf.ml"
-	end
-
-	module Loader = struct
-	#include "uberspark_manifest_bridge_loader.ml"
-	end
-*)
-
 end
 
 
