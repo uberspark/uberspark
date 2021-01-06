@@ -132,12 +132,12 @@ let handler_bridges_action_create
 
         (* process cc-bridge *)
         if cmd_bridges_opts.cc_bridge then begin
-          if (Uberspark.Bridge.Cc.load_from_file !l_path_ns) then begin
+          if (Uberspark.Bridge.cc_bridge#load_from_file !l_path_ns) then begin
               
-            Uberspark.Bridge.Cc.store ();
+            Uberspark.Bridge.cc_bridge#store ();
         
             if (cmd_bridges_opts.build) then begin
-              ignore (Uberspark.Bridge.Cc.build ());
+              ignore (Uberspark.Bridge.cc_bridge#build ());
             end;
             
             retval := `Ok();
@@ -278,9 +278,9 @@ let helper_bridges_action_config_do
       match bridge_type with 
         | "cc-bridge" -> 
 
-          if (Uberspark.Bridge.Cc.load bridge_ns) then begin
+          if (Uberspark.Bridge.cc_bridge#load bridge_ns) then begin
             Uberspark.Logger.log "loaded cc-bridge settings";
-            if ( Uberspark.Bridge.Cc.build () ) then begin
+            if ( Uberspark.Bridge.cc_bridge#build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build cc-bridge!");
@@ -292,9 +292,9 @@ let helper_bridges_action_config_do
 
         | "as-bridge" -> 
 
-          if (Uberspark.Bridge.As.load bridge_ns) then begin
+          if (Uberspark.Bridge.as_bridge#load bridge_ns) then begin
             Uberspark.Logger.log "loaded as-bridge settings";
-            if ( Uberspark.Bridge.As.build () ) then begin
+            if ( Uberspark.Bridge.as_bridge#build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build as-bridge!");
@@ -306,9 +306,9 @@ let helper_bridges_action_config_do
 
         | "ld-bridge" -> 
 
-          if (Uberspark.Bridge.Ld.load bridge_ns) then begin
+          if (Uberspark.Bridge.ld_bridge#load bridge_ns) then begin
             Uberspark.Logger.log "loaded ld-bridge settings";
-            if ( Uberspark.Bridge.Ld.build () ) then begin
+            if ( Uberspark.Bridge.ld_bridge#build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build ld-bridge!");
@@ -320,9 +320,9 @@ let helper_bridges_action_config_do
 
         | "vf-bridge" -> 
 
-          if (Uberspark.Bridge.Vf.load bridge_ns) then begin
+          if (Uberspark.Bridge.vf_bridge#load bridge_ns) then begin
             Uberspark.Logger.log "loaded vf-bridge settings";
-            if ( Uberspark.Bridge.Vf.build () ) then begin
+            if ( Uberspark.Bridge.vf_bridge#build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build vf-bridge!");
@@ -334,9 +334,9 @@ let helper_bridges_action_config_do
 
         | "loader-bridge" -> 
 
-          if (Uberspark.Bridge.Loader.load bridge_ns) then begin
+          if (Uberspark.Bridge.loader_bridge#load bridge_ns) then begin
             Uberspark.Logger.log "loaded loader-bridge settings";
-            if ( Uberspark.Bridge.Loader.build () ) then begin
+            if ( Uberspark.Bridge.loader_bridge#build () ) then begin
               retval := `Ok();
             end else begin
               retval := `Error (false, "could not build loader-bridge!");

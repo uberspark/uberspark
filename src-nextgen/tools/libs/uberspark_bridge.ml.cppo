@@ -126,7 +126,7 @@ class bridge_object
 
 		let retval = ref false in
 
-		let rval_json_node_uberspark_bridge_var = Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_to_var  
+		let rval_json_node_uberspark_bridge_var = Uberspark_manifest.Bridge.json_node_uberspark_bridge_to_var  
 			mf_json json_node_uberspark_bridge_var in
 
 		if rval_json_node_uberspark_bridge_var then begin
@@ -183,7 +183,7 @@ class bridge_object
 		Uberspark_manifest.write_to_file json_file 
 			[
 				(Uberspark_manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
-				(Uberspark_manifest.Bridge.As.json_node_uberspark_bridge_as_var_to_jsonstr json_node_uberspark_bridge_var);
+				(Uberspark_manifest.Bridge.json_node_uberspark_bridge_var_to_jsonstr json_node_uberspark_bridge_var);
 			];
 
 		(true)
@@ -335,7 +335,7 @@ let loader_bridge : bridge_object = new bridge_object;;
 (* bridge submodules *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
-
+(*
 module Cc =
 struct
 #include "uberspark_bridge_cc.ml"
@@ -367,7 +367,7 @@ struct
 #include "uberspark_bridge_loader.ml"
 end
 
-
+*)
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
