@@ -75,6 +75,7 @@ module Bridge : sig
   (****************************************************************************)
   (* submodules *)
   (****************************************************************************)
+  (*
   module Cc : sig
 
     val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
@@ -110,7 +111,7 @@ module Bridge : sig
     val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
   end
-
+*)
 
 
 end
