@@ -1845,6 +1845,18 @@ let process_manifest
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "processing uobjcoll manifest...";
 
+	(* read manifest file into json object *)
+	let (rval, l_mf_json) = Uberspark_manifest.get_json_for_manifest abspath_mf_filename in
+
+	(* bail out on error *)
+  	if (rval == false) then
+    	(false)
+  	else
+
+	let l_dummy=0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "read manifest file into JSON object";
+	end;
+
 	(true)
 ;;
 
