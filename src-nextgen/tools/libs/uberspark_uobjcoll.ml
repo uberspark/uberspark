@@ -1835,3 +1835,17 @@ let build
 
 	(!retval)
 ;;
+
+
+
+
+let process_manifest
+	(abspath_mf_filename : string)
+	: bool =
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "processing uobjcoll manifest...";
+
+	(true)
+;;
+
+

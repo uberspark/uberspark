@@ -15,3 +15,6 @@ val initialize_common_operation_context :
 
 val build : string -> Defs.Basedefs.target_def_t -> int -> bool
 val verify : string -> Defs.Basedefs.target_def_t -> int -> bool
+
+
+val process_manifest : string -> bool

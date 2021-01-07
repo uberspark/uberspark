@@ -22,6 +22,7 @@ UBERSPARK_FRONTEND_SOURCES += cmd_uobj.ml
 UBERSPARK_FRONTEND_SOURCES += cmd_uobjcoll.ml
 UBERSPARK_FRONTEND_SOURCES += cmd_staging.ml
 UBERSPARK_FRONTEND_SOURCES += cmd_bridge.ml
+UBERSPARK_FRONTEND_SOURCES += cmd_default.ml
 UBERSPARK_FRONTEND_SOURCES += uberspark_frontend.ml
 
 

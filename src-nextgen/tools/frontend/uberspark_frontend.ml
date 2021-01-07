@@ -273,7 +273,8 @@ let cmd_default =
 	`Blocks manpage_sec_issues;
 	`S Manpage.s_exit_status;
   ] in
-  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.opts_t)),
+(*  Term.(ret (const (fun _ -> `Help (`Pager, None)) $ Commonopts.opts_t)),*)
+  Term.(ret (const Cmd_default.handler_default $ Commonopts.opts_t)),
   Term.info "uberspark" ~version:"6.0.0" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
