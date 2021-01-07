@@ -338,3 +338,28 @@ type json_node_uberspark_uobjrtl_t =
 
 end
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+type uberspark_manifest_var_t =
+{
+	mutable manifest : json_node_uberspark_manifest_t;
+	mutable uobjcoll : Uobjcoll.json_node_uberspark_uobjcoll_t;
+}
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+val manifest_json_to_uberspark_manifest_var : Yojson.Basic.t -> uberspark_manifest_var_t -> bool
+val manifest_file_to_uberspark_manifest_var : string -> uberspark_manifest_var_t -> bool
+

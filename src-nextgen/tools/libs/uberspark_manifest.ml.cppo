@@ -272,3 +272,78 @@ end
 module Uobjrtl = struct
 	#include "uberspark_manifest_uobjrtl.ml"
 end
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+(* uberspark manifest variable type *)
+(* represents a mapping between a manifest JSON and corresponding ocaml variables *)
+(* manifest JSON node uberspark.manifest.xxx is accessible as mf_var.manifest.xxx *)
+(* where mf_var is of type uberspark_manifest_var_t *)
+
+type uberspark_manifest_var_t =
+{
+	mutable manifest : json_node_uberspark_manifest_t;
+	mutable uobjcoll : Uobjcoll.json_node_uberspark_uobjcoll_t;
+};;
+
+(*--------------------------------------------------------------------------*)
+(* convert manifest json fields into uberspark_manifest_var_t variable *)
+(* return: *)
+(* on success: true; uberspark_manifest_var_t fields are modified with parsed values *)
+(* on failure: false; uberspark_manifest_var_t fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let manifest_json_to_uberspark_manifest_var 
+	(mf_json : Yojson.Basic.t)
+	(uberspark_manifest_var : uberspark_manifest_var_t) 
+	: bool =
+
+	let retval = ref false in
+
+	try
+		let open Yojson.Basic.Util in
+			
+			let rval_1 = (json_node_uberspark_manifest_to_var mf_json uberspark_manifest_var.manifest) in
+			let rval_2 = (Uobjcoll.json_node_uberspark_uobjcoll_to_var mf_json uberspark_manifest_var.uobjcoll) in
+
+			if (rval_1 && rval_2) then begin
+				retval:=true
+			end;
+			
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* read manifest file, convert manifest json fields into uberspark_manifest_var_t variable *)
+(* return: *)
+(* on success: true; uberspark_manifest_var_t fields are modified with parsed values *)
+(* on failure: false; uberspark_manifest_var_t fields are untouched *)
+(*--------------------------------------------------------------------------*)
+let manifest_file_to_uberspark_manifest_var 
+	(abspath_mf_filename : string)
+	(uberspark_manifest_var : uberspark_manifest_var_t) 
+	: bool =
+
+	let retval = ref false in
+
+	try
+		let mf_json = Yojson.Basic.from_file abspath_mf_filename in
+		retval := manifest_json_to_uberspark_manifest_var mf_json uberspark_manifest_var;
+
+	with Yojson.Json_error s -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		retval := false;
+	;
+
+	(!retval)
+;;
+
