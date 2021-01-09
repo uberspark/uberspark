@@ -93,7 +93,6 @@ let json_node_uberspark_uobjcoll_uobjs_to_var
 				begin
 					json_node_uberspark_uobjcoll_uobjs_var.master <- json_uobjcoll_uobjs |> member "master" |> to_string;
 					json_node_uberspark_uobjcoll_uobjs_var.templars <- (json_list_to_string_list  (json_uobjcoll_uobjs |> member "templars" |> to_list));
-					retval := true;
 				end
 			;
 
@@ -139,7 +138,6 @@ let json_node_uberspark_uobjcoll_configdefs_to_var
 		
 				) uobjcoll_configdefs_json_list;
 
-				retval := true;
 			end;
 
 
@@ -202,7 +200,6 @@ let json_node_uberspark_uobjcoll_initmethod_to_var
 
 				entry.sentinels <- !f_sentinels_list;
 
-				retval := true;
 			end;
 
 
@@ -252,7 +249,6 @@ let json_node_uberspark_uobjcoll_publicmethods_to_var
 
 				) uobj_ns_assoc_list;
 
-				retval := true;
 			end;
 
 
@@ -275,16 +271,27 @@ let json_node_uberspark_uobjcoll_to_var
 	(json_node_uberspark_uobjcoll_var : json_node_uberspark_uobjcoll_t)
 	: bool =
 
-	let retval = ref true in
+	let retval = ref false in
 
 	try
 		let open Yojson.Basic.Util in
-					json_node_uberspark_uobjcoll_var.namespace <- mf_json |> member "uberspark.uobjcoll.namespace" |> to_string;
-					json_node_uberspark_uobjcoll_var.platform <- mf_json |> member "uberspark.uobjcoll.platform" |> to_string;
-					json_node_uberspark_uobjcoll_var.arch <- mf_json |> member "uberspark.uobjcoll.arch" |> to_string;
-					json_node_uberspark_uobjcoll_var.cpu <- mf_json |> member "uberspark.uobjcoll.cpu" |> to_string;
-					json_node_uberspark_uobjcoll_var.hpl <- mf_json |> member "uberspark.uobjcoll.hpl" |> to_string;
-					json_node_uberspark_uobjcoll_var.sentinels_intra_uobjcoll <- (json_list_to_string_list (mf_json |> member "uberspark.uobjcoll.sentinels_intra_uobjcoll" |> to_list));
+					if (mf_json |> member "uberspark.uobjcoll.namespace") != `Null then
+						json_node_uberspark_uobjcoll_var.namespace <- mf_json |> member "uberspark.uobjcoll.namespace" |> to_string;
+	
+					if (mf_json |> member "uberspark.uobjcoll.platform") != `Null then
+						json_node_uberspark_uobjcoll_var.platform <- mf_json |> member "uberspark.uobjcoll.platform" |> to_string;
+
+					if (mf_json |> member "uberspark.uobjcoll.arch") != `Null then
+						json_node_uberspark_uobjcoll_var.arch <- mf_json |> member "uberspark.uobjcoll.arch" |> to_string;
+					
+					if (mf_json |> member "uberspark.uobjcoll.cpu") != `Null then
+						json_node_uberspark_uobjcoll_var.cpu <- mf_json |> member "uberspark.uobjcoll.cpu" |> to_string;
+					
+					if (mf_json |> member "uberspark.uobjcoll.hpl") != `Null then
+						json_node_uberspark_uobjcoll_var.hpl <- mf_json |> member "uberspark.uobjcoll.hpl" |> to_string;
+					
+					if (mf_json |> member "uberspark.uobjcoll.sentinels_intra_uobjcoll") != `Null then
+						json_node_uberspark_uobjcoll_var.sentinels_intra_uobjcoll <- (json_list_to_string_list (mf_json |> member "uberspark.uobjcoll.sentinels_intra_uobjcoll" |> to_list));
 
 					(* check for loaders if any *)
 					if (mf_json |> member "uberspark.uobjcoll.loaders") != `Null then begin
@@ -299,7 +306,8 @@ let json_node_uberspark_uobjcoll_to_var
 					end;
 
 
-					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var mf_json json_node_uberspark_uobjcoll_var.uobjs) in
+					let rval1 = (json_node_uberspark_uobjcoll_uobjs_to_var 
+						mf_json json_node_uberspark_uobjcoll_var.uobjs) in
 					let (rval2, json_node_uberspark_uobjcoll_initmethod_var) = 
 						(json_node_uberspark_uobjcoll_initmethod_to_var mf_json) in
 					let (rval3, json_node_uberspark_uobjcoll_publicmethods_var) = 
@@ -307,14 +315,10 @@ let json_node_uberspark_uobjcoll_to_var
 					let (rval4, json_node_uberspark_uobjcoll_configdefs_var) = 
 						(json_node_uberspark_uobjcoll_configdefs_to_var mf_json) in
 
-					if (rval1 && rval2 && rval3) then begin
+					if (rval1 && rval2 && rval3 && rval4) then begin
 						json_node_uberspark_uobjcoll_var.init_method <- json_node_uberspark_uobjcoll_initmethod_var;
 						json_node_uberspark_uobjcoll_var.public_methods <- json_node_uberspark_uobjcoll_publicmethods_var;
-						
-						if (rval4) then begin
-							json_node_uberspark_uobjcoll_var.configdefs <- json_node_uberspark_uobjcoll_configdefs_var;
-						end;
-						
+						json_node_uberspark_uobjcoll_var.configdefs <- json_node_uberspark_uobjcoll_configdefs_var;
 						retval := true;
 					end;
 

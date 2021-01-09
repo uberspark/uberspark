@@ -62,6 +62,27 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 	};;
 
 
+(* manifest variable *)
+let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = 
+	{
+	manifest = {
+		namespace = ""; 
+		version_min = "any"; 
+		version_max = "any";
+	};
+	uobjcoll = {
+		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
+		sentinels_intra_uobjcoll = [];
+		uobjs = { master = ""; templars = [];};
+		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
+		public_methods = [];
+		loaders = [];
+		configdefs_verbatim = false;
+		configdefs = [];
+	};
+	};;
+
+
 
 
 
@@ -1845,8 +1866,8 @@ let process_manifest
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "processing uobjcoll manifest...";
 
-	(* read manifest file into json object *)
-	let (rval, l_mf_json) = Uberspark_manifest.get_json_for_manifest abspath_mf_filename in
+	(* read manifest file into manifest variable *)
+	let rval = Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
 
 	(* bail out on error *)
   	if (rval == false) then

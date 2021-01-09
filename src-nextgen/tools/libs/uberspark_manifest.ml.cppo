@@ -109,8 +109,12 @@ let json_node_uberspark_manifest_to_var
 	try
 		let open Yojson.Basic.Util in
 			json_node_uberspark_manifest_var.namespace <- mf_json |> member "uberspark.manifest.namespace" |> to_string;
-			json_node_uberspark_manifest_var.version_min <- mf_json |> member "uberspark.manifest.version_min" |> to_string;
-			json_node_uberspark_manifest_var.version_max <- mf_json |> member "uberspark.manifest.version_max" |> to_string;
+	
+			if (mf_json |> member "uberspark.manifest.version_min") <> `Null then 
+				json_node_uberspark_manifest_var.version_min <- mf_json |> member "uberspark.manifest.version_min" |> to_string;
+	
+			if (mf_json |> member "uberspark.manifest.version_max") <> `Null then 
+				json_node_uberspark_manifest_var.version_max <- mf_json |> member "uberspark.manifest.version_max" |> to_string;
 			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
@@ -309,7 +313,7 @@ let manifest_json_to_uberspark_manifest_var
 			
 			let rval_1 = (json_node_uberspark_manifest_to_var mf_json uberspark_manifest_var.manifest) in
 			let rval_2 = (Uobjcoll.json_node_uberspark_uobjcoll_to_var mf_json uberspark_manifest_var.uobjcoll) in
-
+	
 			if (rval_1 && rval_2) then begin
 				retval:=true
 			end;
