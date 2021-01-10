@@ -41,6 +41,8 @@
 			"sentinels" : [
 				{
 					"sentinel_type" : "baremetal/vccore/srot/generic/rpi3/hyp/call",
+					/*"sentinel_type" : "baremetal/grub-legacy/srot/generic/pc/pmr0/call",*/
+
 					"sentinel_size" : "0x10000"	
 				}	
 			]
