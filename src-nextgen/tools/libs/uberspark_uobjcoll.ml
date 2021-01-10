@@ -1861,6 +1861,7 @@ let build
 
 
 let process_manifest
+	(abspath_cwd : string)
 	(abspath_mf_filename : string)
 	: bool =
 
@@ -1877,6 +1878,30 @@ let process_manifest
 	let l_dummy=0 in begin
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "read manifest file into JSON object";
 	end;
+
+	(* sanity check we are an uobjcoll manifest and bail out on error*)
+	if (d_uberspark_manifest_var.manifest.namespace <> Uberspark_namespace.namespace_uobjcoll_mf_node_type_tag) then
+		(false)
+	else
+
+	(* create triage folder *)
+	let dummy = 0 in begin
+	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_triage_dir (`Octal 0o0777);
+	end;
+
+	(* copy over uobjcoll sources into uobjcoll triage dir with uobjcoll namespace prefix *)
+	(* TBD: sanity check uobjcoll namespace prefix *)
+	let l_abspath_uobjcoll_triage_dir = (abspath_cwd ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_triage_dir) in 
+	let l_abspath_uobjcoll_triage_dir_uobjcoll_ns = (l_abspath_uobjcoll_triage_dir ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace) in
+	begin
+	Uberspark_osservices.mkdir ~parent:true l_abspath_uobjcoll_triage_dir_uobjcoll_ns (`Octal 0o0777);
+	end;
+
+	let dummy = 0 in begin
+	if ( Uberspark_osservices.is_dir (abspath_cwd ^ "/install")) then 
+		Uberspark_osservices.cp ~recurse:true (abspath_cwd ^ "/install") (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
+	end;
+
 
 	(true)
 ;;

@@ -17,4 +17,4 @@ val build : string -> Defs.Basedefs.target_def_t -> int -> bool
 val verify : string -> Defs.Basedefs.target_def_t -> int -> bool
 
 
-val process_manifest : string -> bool
+val process_manifest : string -> string -> bool
