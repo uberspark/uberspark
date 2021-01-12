@@ -6,14 +6,14 @@
 #    author: amit vasudevan <amitvasudevan@acm.org>
 #
 
-COMPILER := container/amd64/armv8_32/generic/gcc/v4.9.3
-ASSEMBLER := container/amd64/armv8_32/generic/gnu-as/v2.26.1
-LINKER := container/amd64/armv8_32/generic/gnu-ld/v2.26.1
+COMPILER := uberspark/bridges/container/amd64/cc-bridge/armv8_32/generic/gcc/v4.9.3
+ASSEMBLER := uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/gnu-as/v2.26.1
+LINKER := uberspark/bridges/container/amd64/ld-bridge/armv8_32/generic/gnu-ld/v2.26.1
 
 UBERSPARK_NAMESPACE := $(shell uberspark staging list | grep generic-platform)
-UBERSPARK_CC := $(shell uberspark staging --setting-name=bridge_cc_bridge config-get)
-UBERSPARK_AS := $(shell uberspark staging --setting-name=bridge_as_bridge config-get)
-UBERSPARK_LD := $(shell uberspark staging --setting-name=bridge_ld_bridge config-get)
+UBERSPARK_CC := $(shell uberspark staging --setting-name=cc_bridge_namespace config-get)
+UBERSPARK_AS := $(shell uberspark staging --setting-name=as_bridge_namespace config-get)
+UBERSPARK_LD := $(shell uberspark staging --setting-name=ld_bridge_namespace config-get)
 
 
 ###### targets
@@ -42,9 +42,9 @@ prep:
 ifeq ("$(UBERSPARK_NAMESPACE)", "")
 	uberspark staging create generic-platform
 endif
-	uberspark staging config-set --setting-name=bridge_cc_bridge --setting-value=$(COMPILER)
-	uberspark staging config-set --setting-name=bridge_as_bridge --setting-value=$(ASSEMBLER)
-	uberspark staging config-set --setting-name=bridge_ld_bridge --setting-value=$(LINKER)
+	uberspark staging config-set --setting-name=cc_bridge_namespace --setting-value=$(COMPILER)
+	uberspark staging config-set --setting-name=as_bridge_namespace --setting-value=$(ASSEMBLER)
+	uberspark staging config-set --setting-name=ld_bridge_namespace --setting-value=$(LINKER)
 
 
 .PHONY: clean

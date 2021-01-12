@@ -10,6 +10,7 @@
 #include <uberspark/hwm/include/arch/x86_32/generic/hwm.h>
 
 //CASM_FUNCDECL(void main_nullfunc(void *noparam));
+//extern void whois(int);
 
 uint32_t init (void){
     return 0;   
@@ -21,7 +22,7 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     char l_mybuf[5];
 
     //CASM_FUNCCALL(main_nullfunc, CASM_NOPARAM);
-    
+    //whois(0);
     result = multiplicand * multiplier;
 
     return result;
