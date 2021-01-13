@@ -1889,7 +1889,7 @@ let process_manifest
 	Uberspark_osservices.mkdir ~parent:true Uberspark_namespace.namespace_uobjcoll_triage_dir (`Octal 0o0777);
 	end;
 
-	(* copy over uobjcoll sources into uobjcoll triage dir with uobjcoll namespace prefix *)
+	(* create uobjcoll namespace folder within triage *)
 	(* TBD: sanity check uobjcoll namespace prefix *)
 	let l_abspath_uobjcoll_triage_dir = (abspath_cwd ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_triage_dir) in 
 	let l_abspath_uobjcoll_triage_dir_uobjcoll_ns = (l_abspath_uobjcoll_triage_dir ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace) in
@@ -1897,11 +1897,34 @@ let process_manifest
 	Uberspark_osservices.mkdir ~parent:true l_abspath_uobjcoll_triage_dir_uobjcoll_ns (`Octal 0o0777);
 	end;
 
+	(* sanity check we have canonical uobjcoll sources folder organization *)
+	if ( not (Uberspark_osservices.is_dir (abspath_cwd ^ "/install")) ||
+		 not (Uberspark_osservices.is_dir (abspath_cwd ^ "/uobjs")) ||
+		not (Uberspark_osservices.is_dir (abspath_cwd ^ "/include")) ||
+		not (Uberspark_osservices.is_dir (abspath_cwd ^ "/docs")) ) then
+		(false)
+	else
+
+	(* copy over uobjcoll sources folder structure  into uobjcoll triage dir with uobjcoll namespace prefix *)
 	let dummy = 0 in begin
-	if ( Uberspark_osservices.is_dir (abspath_cwd ^ "/install")) then 
 		Uberspark_osservices.cp ~recurse:true (abspath_cwd ^ "/install") (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
+		Uberspark_osservices.cp ~recurse:true (abspath_cwd ^ "/uobjs") (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
+		Uberspark_osservices.cp ~recurse:true (abspath_cwd ^ "/include") (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
+		Uberspark_osservices.cp ~recurse:true (abspath_cwd ^ "/docs") (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
+		Uberspark_osservices.cp ~recurse:false abspath_mf_filename (l_abspath_uobjcoll_triage_dir_uobjcoll_ns ^ "/.");
 	end;
 
+	(* change working directory to triage *)
+	let (rval, _, _) = (Uberspark_osservices.dir_change l_abspath_uobjcoll_triage_dir) in
+	if(rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not switch to uobjcoll triage folder";
+		(false)
+	end else
+
+	(* copy over uobjcoll sources folder structure  into uobjcoll triage dir with uobjcoll namespace prefix *)
+	let dummy = 0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "switched operating context to: %s" l_abspath_uobjcoll_triage_dir;
+	end;
 
 	(true)
 ;;

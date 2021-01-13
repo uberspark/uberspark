@@ -10,7 +10,7 @@
 		"uberspark.manifest.version_max" : "any",
 
 
-		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
+		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/hello-mul/uobjs/main",
 		"uberspark.uobj.platform" : "generic",
 		"uberspark.uobj.arch" : "generic",
 		"uberspark.uobj.cpu" : "generic",

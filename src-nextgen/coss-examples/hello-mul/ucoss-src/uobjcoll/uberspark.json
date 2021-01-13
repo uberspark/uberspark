@@ -30,13 +30,13 @@
 		"uberspark.uobjcoll.uobjs" : {
 			"master" : "",
 			"templars" : [
-				"uberspark/uobjcoll/generic/hello-mul/main"
+				"uberspark/uobjcoll/generic/hello-mul/uobjs/main"
 			]
 		},
 
 		/* uobjcoll init method */
 		"uberspark.uobjcoll.init_method" : {
-			"uobj_namespace" : "uberspark/uobjcoll/generic/hello-mul/main",
+			"uobj_namespace" : "uberspark/uobjcoll/generic/hello-mul/uobjs/main",
 			"public_method" : "init",
 			"sentinels" : [
 				{
