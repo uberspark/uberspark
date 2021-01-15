@@ -83,6 +83,8 @@ let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
 	};;
 
 
+(* uobjcoll triage directory prefix *)
+let d_triage_dir_prefix = ref "";;
 
 
 
@@ -1858,6 +1860,39 @@ let build
 ;;
 
 
+let process_manifest_common
+	()
+	: bool =
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "process_manifest_common...";
+
+	(* get current working directory *)
+	let l_cwd = Uberspark_osservices.getcurdir() in
+
+	(* get the absolute path of the current working directory *)
+	let (rval, l_cwd_abs) = (Uberspark_osservices.abspath l_cwd) in
+
+	(* bail out on error *)
+	if (rval == false) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not get absolute path of current working directory!";
+		(false) 
+	end else
+
+	(* announce working directory and store in triage dir prefix*)
+	let l_dummy=0 in begin
+	d_triage_dir_prefix := l_cwd_abs;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "current working directory: %s" !d_triage_dir_prefix;
+	end;
+
+
+
+	(true)
+;;
+
+
+
+
+
 
 
 let process_manifest
@@ -1926,7 +1961,8 @@ let process_manifest
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "switched operating context to: %s" l_abspath_uobjcoll_triage_dir;
 	end;
 
-	(true)
+	(* invoke common manifest processing logic *)
+	(process_manifest_common ())
 ;;
 
 
