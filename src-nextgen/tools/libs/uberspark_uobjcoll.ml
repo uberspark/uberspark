@@ -86,6 +86,8 @@ let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
 (* uobjcoll triage directory prefix *)
 let d_triage_dir_prefix = ref "";;
 
+(* staging directory prefix *)
+let d_staging_dir_prefix = ref "";;
 
 
 
@@ -1861,10 +1863,10 @@ let build
 
 
 let process_manifest_common
-	()
+	(p_uobjcoll_ns : string)
 	: bool =
 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "process_manifest_common...";
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "process_manifest_common (p_uobjcoll_ns=%s)..." p_uobjcoll_ns;
 
 	(* get current working directory *)
 	let l_cwd = Uberspark_osservices.getcurdir() in
@@ -1884,7 +1886,33 @@ let process_manifest_common
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "current working directory: %s" !d_triage_dir_prefix;
 	end;
 
+	(* announce staging directory and store in staging dir prefix*)
+	let l_dummy=0 in begin
+	d_staging_dir_prefix := Uberspark_namespace.get_namespace_staging_dir_prefix ();
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "staging directory: %s" !d_staging_dir_prefix;
+	end;
 
+	(* read manifest file into manifest variable *)
+	let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
+	let rval = Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
+
+	(* bail out on error *)
+  	if (rval == false) then
+    	(false)
+  	else
+
+	let l_dummy=0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "read manifest file into JSON object";
+	end;
+
+	(* sanity check we are an uobjcoll manifest and bail out on error*)
+	if (d_uberspark_manifest_var.manifest.namespace <> Uberspark_namespace.namespace_uobjcoll_mf_node_type_tag) then
+		(false)
+	else
+
+	let l_dummy=0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to create uobjcoll ns list...";
+	end;
 
 	(true)
 ;;
@@ -1962,7 +1990,7 @@ let process_manifest
 	end;
 
 	(* invoke common manifest processing logic *)
-	(process_manifest_common ())
+	(process_manifest_common (d_uberspark_manifest_var.uobjcoll.namespace))
 ;;
 
 
