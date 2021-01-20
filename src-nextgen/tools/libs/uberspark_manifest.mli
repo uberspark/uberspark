@@ -349,6 +349,7 @@ type uberspark_manifest_var_t =
 {
 	mutable manifest : json_node_uberspark_manifest_t;
 	mutable uobjcoll : Uobjcoll.json_node_uberspark_uobjcoll_t;
+  mutable uobj : Uobj.json_node_uberspark_uobj_t;
 }
 
 

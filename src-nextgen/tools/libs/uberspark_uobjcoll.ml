@@ -80,6 +80,12 @@ let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
 		configdefs_verbatim = false;
 		configdefs = [];
 	};
+	uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
+		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+		legacy_callees = []; sections = []; uobjrtl = []; 
+		};
+
 	};;
 
 
@@ -89,7 +95,12 @@ let d_triage_dir_prefix = ref "";;
 (* staging directory prefix *)
 let d_staging_dir_prefix = ref "";;
 
+(* assoc list of uobjcoll manifest variables; maps uobjcoll namespace to uobjcoll manifest variable *)
+(* TBD: revisions needed for multi-platform uobjcoll *) 
+let d_uobjcoll_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list ref = ref [];; 
 
+(* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
+let d_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list ref = ref [];; 
 
 
 
@@ -1862,6 +1873,60 @@ let build
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
+(*--------------------------------------------------------------------------*)
+let create_uobj_manifest_var_assoc_list
+	()
+	: bool =
+	let rval = ref true in 
+
+	List.iter (fun l_uobj_namespace ->
+		if !rval then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug ~crlf:false "scanning uobj: %s..." l_uobj_namespace;
+
+			(* read manifest file into manifest variable *)
+			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
+			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = 
+				{
+					manifest = {
+						namespace = ""; 
+						version_min = "any"; 
+						version_max = "any";
+					};
+					uobjcoll = {
+						namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
+						sentinels_intra_uobjcoll = [];
+						uobjs = { master = ""; templars = [];};
+						init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
+						public_methods = [];
+						loaders = [];
+						configdefs_verbatim = false;
+						configdefs = [];
+					};
+					uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
+					sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
+					public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+					legacy_callees = []; sections = []; uobjrtl = []; 
+					};
+				} in
+
+			rval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
+
+			if !rval then begin
+				d_uobj_manifest_var_assoc_list := !d_uobj_manifest_var_assoc_list @ [ (l_uobj_namespace, l_uberspark_manifest_var) ];
+				Uberspark_logger.log ~tag:"" "[OK]";
+			end;
+		end;
+
+	) d_uberspark_manifest_var.uobjcoll.uobjs.templars;
+
+
+
+	(true)
+;;
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
@@ -1910,11 +1975,36 @@ let process_manifest_common
 		(false)
 	else
 
+	(* create uobjcoll manifest variables assoc list *)
+	(* TBD: revisions needed for multi-platform uobjcoll *) 
 	let l_dummy=0 in begin
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to create uobjcoll ns list...";
+	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, d_uberspark_manifest_var) ];
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "created uobjcoll manifest variable assoc list...";
 	end;
 
-	(true)
+	(* iterate through all uobjcolls *)
+	let retval = ref true in 
+	List.iter ( fun ( (l_uobjcoll_ns:string), (l_uberspark_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+		
+		if (!retval) then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Info "processing uobjcoll: %s..." l_uobjcoll_ns;
+
+			(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
+			retval := create_uobj_manifest_var_assoc_list ();
+			
+			if (!retval) == false then
+				()
+			else
+			
+			let l_dummy=0 in begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll processed successfully!";
+			end;
+		end;
+
+		()
+	)!d_uobjcoll_manifest_var_assoc_list;
+
+	(!retval)
 ;;
 
 
