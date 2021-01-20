@@ -62,8 +62,10 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 	};;
 
 
-(* manifest variable *)
-let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = 
+
+(* default manifest variable definition *)
+(* we use this to initialize manifest variables *)
+let d_uberspark_manifest_var_default_value : Uberspark_manifest.uberspark_manifest_var_t = 
 	{
 	manifest = {
 		namespace = ""; 
@@ -89,6 +91,10 @@ let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
 	};;
 
 
+
+(* manifest variable *)
+let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value;;
+
 (* uobjcoll triage directory prefix *)
 let d_triage_dir_prefix = ref "";;
 
@@ -101,6 +107,10 @@ let d_uobjcoll_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_
 
 (* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
 let d_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list ref = ref [];; 
+
+(* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
+let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+	
 
 
 
@@ -1887,29 +1897,7 @@ let create_uobj_manifest_var_assoc_list
 
 			(* read manifest file into manifest variable *)
 			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
-			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = 
-				{
-					manifest = {
-						namespace = ""; 
-						version_min = "any"; 
-						version_max = "any";
-					};
-					uobjcoll = {
-						namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
-						sentinels_intra_uobjcoll = [];
-						uobjs = { master = ""; templars = [];};
-						init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
-						public_methods = [];
-						loaders = [];
-						configdefs_verbatim = false;
-						configdefs = [];
-					};
-					uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-					sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
-					public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
-					legacy_callees = []; sections = []; uobjrtl = []; 
-					};
-				} in
+			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value in
 
 			rval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
 
@@ -1925,6 +1913,53 @@ let create_uobj_manifest_var_assoc_list
 
 	(true)
 ;;
+
+(*--------------------------------------------------------------------------*)
+(* create uobjrtl to manifest variable hashtbl *)
+(*--------------------------------------------------------------------------*)
+let create_uobjrtl_manifest_var_hashtbl
+	()
+	: bool =
+	let retval = ref true in 
+
+	(* go over all the uobjs and collect uobjrtls *)
+	List.iter ( fun ( (l_uobj_ns:string), (l_uberspark_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collecting uobjrtl for uobj: %s..." l_uobj_ns;
+
+		(* iterate over uobj uobjrtls *)
+		List.iter ( fun ( (uobjrtl_namespace : string), (uobjrtl_entry : Uberspark_manifest.Uobj.json_node_uberspark_uobj_uobjrtl_t) ) -> 
+			if !retval == true then begin
+				
+				(* parse each uobjrtl manifest and create a hashtable with entry as namespace *)
+				(* entry will be an entry of type uobjrtl_t *)
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.namespace;
+
+				let abspath_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest path=%s" abspath_mf_filename;
+
+				let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value in
+
+				retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var;
+
+				if !retval then begin
+					Hashtbl.add d_uobjrtl_manifest_var_hashtbl uobjrtl_namespace l_uobjrtl_manifest_var;						
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collected uobjrtl successfully!";
+				end;
+
+			end;
+
+		) l_uberspark_manifest_var.uobj.uobjrtl;
+
+	) !d_uobj_manifest_var_assoc_list;
+
+	(!retval)
+;;
+
+
+
 
 
 let process_manifest_common
@@ -1996,6 +2031,13 @@ let process_manifest_common
 				()
 			else
 			
+			(* create uobjrtl to manifest variable hashtbl *)
+			retval := create_uobjrtl_manifest_var_hashtbl ();
+			
+			if (!retval) == false then
+				()
+			else
+
 			let l_dummy=0 in begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll processed successfully!";
 			end;
