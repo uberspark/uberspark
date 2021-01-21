@@ -87,6 +87,9 @@ let d_uberspark_manifest_var_default_value : Uberspark_manifest.uberspark_manife
 		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
 		legacy_callees = []; sections = []; uobjrtl = []; 
 		};
+	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		source_c_files = []; source_casm_files = [];
+		};
 
 	};;
 

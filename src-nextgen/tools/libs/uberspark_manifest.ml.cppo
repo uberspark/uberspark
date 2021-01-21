@@ -294,6 +294,7 @@ type uberspark_manifest_var_t =
 	mutable manifest : json_node_uberspark_manifest_t;
 	mutable uobjcoll : Uobjcoll.json_node_uberspark_uobjcoll_t;
 	mutable uobj : Uobj.json_node_uberspark_uobj_t;
+	mutable uobjrtl: Uobjrtl.json_node_uberspark_uobjrtl_t;
 
 };;
 
@@ -316,8 +317,9 @@ let manifest_json_to_uberspark_manifest_var
 			let rval_1 = (json_node_uberspark_manifest_to_var mf_json uberspark_manifest_var.manifest) in
 			let rval_2 = (Uobjcoll.json_node_uberspark_uobjcoll_to_var mf_json uberspark_manifest_var.uobjcoll) in
 			let rval_3 = (Uobj.json_node_uberspark_uobj_to_var mf_json uberspark_manifest_var.uobj) in
+			let rval_4 = (Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json uberspark_manifest_var.uobjrtl) in
 	
-			if (rval_1 && rval_2 && rval_3) then begin
+			if (rval_1 && rval_2 && rval_3 && rval_4 ) then begin
 				retval:=true
 			end;
 			
