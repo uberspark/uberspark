@@ -2033,6 +2033,34 @@ let create_sentinel_manifest_var_hashtbl
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* iterate through uobjrtl list and copy uobjrtl sources to triage area *)
+(*--------------------------------------------------------------------------*)
+let copy_uobjrtl_to_triage
+	()
+	: bool =
+	let retval = ref true in 
+
+	(* iterate through all the uobjrtls *)
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying uobjrtl: %s" l_uobjrtl_ns;
+
+		(* create uobjcoll namespace folder within triage *)
+		(* TBD: sanity check uobjrtl namespace *)
+		let l_abspath_uobjrtl_triage_dir = (!d_triage_dir_prefix ^ "/" ^ l_uobjrtl_ns) in
+		Uberspark_osservices.mkdir ~parent:true l_abspath_uobjrtl_triage_dir (`Octal 0o0777);
+
+		(* copy over uobjrtl sources folder structure into uobjrtl triage dir *)
+		let l_uobjrtl_src_dir = (!d_staging_dir_prefix ^ "/" ^ l_uobjrtl_ns ^ "/.") in
+		let l_uobjrtl_dst_dir = (l_abspath_uobjrtl_triage_dir ^ "/.") in
+		Uberspark_osservices.cp ~recurse:true l_uobjrtl_src_dir l_uobjrtl_dst_dir;
+
+	) d_uobjrtl_manifest_var_hashtbl;
+
+
+	(!retval)
+;;
+
 
 let process_manifest_common
 	(p_uobjcoll_ns : string)
@@ -2122,6 +2150,17 @@ let process_manifest_common
 			if (!retval) == false then
 				()
 			else
+
+
+			(* iterate through uobjrtl list and copy uobjrtl sources to triage area *)
+			let l_dummy=0 in begin
+			retval := copy_uobjrtl_to_triage ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
 
 			let l_dummy=0 in begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll processed successfully!";
