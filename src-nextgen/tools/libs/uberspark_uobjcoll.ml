@@ -65,7 +65,8 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 
 (* default manifest variable definition *)
 (* we use this to initialize manifest variables *)
-let d_uberspark_manifest_var_default_value : Uberspark_manifest.uberspark_manifest_var_t = 
+let uberspark_manifest_var_default_value () 
+	: Uberspark_manifest.uberspark_manifest_var_t = 
 	{
 	manifest = {
 		namespace = ""; 
@@ -91,12 +92,16 @@ let d_uberspark_manifest_var_default_value : Uberspark_manifest.uberspark_manife
 		source_c_files = []; source_casm_files = [];
 		};
 
+	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sizeof_code_template = 0; code_template = ""; library_code_template = "";
+		}; 
+
 	};;
 
 
 
 (* manifest variable *)
-let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value;;
+let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value ();;
 
 (* uobjcoll triage directory prefix *)
 let d_triage_dir_prefix = ref "";;
@@ -114,6 +119,8 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_mani
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 	
+(* hash table of sentinel manifest variables: maps sentinel namespace to sentinel manifest variable *)
+let d_sentinel_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
 
 
@@ -1900,7 +1907,7 @@ let create_uobj_manifest_var_assoc_list
 
 			(* read manifest file into manifest variable *)
 			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
-			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value in
+			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
 
 			rval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
 
@@ -1911,7 +1918,6 @@ let create_uobj_manifest_var_assoc_list
 		end;
 
 	) d_uberspark_manifest_var.uobjcoll.uobjs.templars;
-
 
 
 	(true)
@@ -1943,7 +1949,7 @@ let create_uobjrtl_manifest_var_hashtbl
 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest path=%s" abspath_mf_filename;
 
-				let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = d_uberspark_manifest_var_default_value in
+				let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
 
 				retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var;
 
@@ -1962,6 +1968,69 @@ let create_uobjrtl_manifest_var_hashtbl
 ;;
 
 
+
+(*--------------------------------------------------------------------------*)
+(* create sentinel namespace to manifest variable hashtbl *)
+(*--------------------------------------------------------------------------*)
+let create_sentinel_manifest_var_hashtbl
+	()
+	: bool =
+	let retval = ref true in 
+
+
+	(* iterate over uobjcoll init_method sentinel list *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collecting init_method sentinels...";
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) -> 
+		
+		if !retval then begin
+			let l_sentinel_namespace = "uberspark/sentinels/init-uobjcoll/" ^ 
+				d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_entry.sentinel_type in
+			let l_abspath_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
+
+			let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+
+			retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
+
+			if !retval then begin
+				Hashtbl.add d_sentinel_manifest_var_hashtbl l_sentinel_namespace l_sentinel_manifest_var;						
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collected sentinel info successfully!";
+			end;
+		end;
+	) d_uberspark_manifest_var.uobjcoll.init_method.sentinels;
+
+	if !retval then begin
+	
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collecting public_method sentinels...";
+		(* iterate over uobjcoll_public_methods sentinel list *)
+		List.iter ( fun ( (canonical_public_method:string), (pm_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
+			List.iter ( fun (sentinel_type: string) -> 
+
+				if !retval then begin
+					let l_sentinel_namespace = "uberspark/sentinels/inter-uobjcoll/" ^ 
+						d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_type in
+					let l_abspath_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
+
+					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
+
+					let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+
+					retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
+
+					if !retval then begin
+						Hashtbl.add d_sentinel_manifest_var_hashtbl l_sentinel_namespace l_sentinel_manifest_var;						
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collected sentinel info successfully!";
+					end;
+				end;
+
+		
+			) pm_info.sentinel_type_list;
+		) d_uberspark_manifest_var.uobjcoll.public_methods;
+	end;
+
+	(!retval)
+;;
 
 
 
@@ -2028,15 +2097,28 @@ let process_manifest_common
 			Uberspark_logger.log ~lvl:Uberspark_logger.Info "processing uobjcoll: %s..." l_uobjcoll_ns;
 
 			(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
+			let l_dummy=0 in begin
 			retval := create_uobj_manifest_var_assoc_list ();
-			
+			end;
+
 			if (!retval) == false then
 				()
 			else
 			
 			(* create uobjrtl to manifest variable hashtbl *)
+			let l_dummy=0 in begin
 			retval := create_uobjrtl_manifest_var_hashtbl ();
-			
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+			(* create sentinel namespace to manifest variable hashtbl *)
+			let l_dummy=0 in begin
+			retval := create_sentinel_manifest_var_hashtbl ();
+			end;
+
 			if (!retval) == false then
 				()
 			else

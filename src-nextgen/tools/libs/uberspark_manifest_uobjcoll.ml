@@ -194,7 +194,6 @@ let json_node_uberspark_uobjcoll_initmethod_to_var
 						sentinel_entry.sentinel_size <- int_of_string ( sentinel_entry_json |> member "sentinel_size" |> to_string);
 					end;
 					
-					
 					f_sentinels_list := !f_sentinels_list @ [ sentinel_entry ];
 				) uobjcoll_initmethod_sentinels_json_list;
 
@@ -314,6 +313,7 @@ let json_node_uberspark_uobjcoll_to_var
 						(json_node_uberspark_uobjcoll_publicmethods_to_var mf_json) in
 					let (rval4, json_node_uberspark_uobjcoll_configdefs_var) = 
 						(json_node_uberspark_uobjcoll_configdefs_to_var mf_json) in
+
 
 					if (rval1 && rval2 && rval3 && rval4) then begin
 						json_node_uberspark_uobjcoll_var.init_method <- json_node_uberspark_uobjcoll_initmethod_var;

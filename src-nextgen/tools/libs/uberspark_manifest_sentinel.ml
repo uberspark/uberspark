@@ -43,18 +43,30 @@ let json_node_uberspark_sentinel_to_var
 	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_sentinel_var : json_node_uberspark_sentinel_t) 
 	: bool =
-	let retval = ref false in
+	let retval = ref true in
 
 	try
 		let open Yojson.Basic.Util in
-					json_node_uberspark_sentinel_var.namespace <-  mf_json |> member "uberspark.sentinel.namespace" |> to_string;
-					json_node_uberspark_sentinel_var.platform <-  mf_json |> member "uberspark.sentinel.platform" |> to_string;
-					json_node_uberspark_sentinel_var.arch <- mf_json  |> member "uberspark.sentinel.arch" |> to_string;
-					json_node_uberspark_sentinel_var.cpu <- mf_json  |> member "uberspark.sentinel.cpu" |> to_string;
-					json_node_uberspark_sentinel_var.sizeof_code_template <- int_of_string (mf_json  |> member "uberspark.sentinel.sizeof_code_template" |> to_string);
-					json_node_uberspark_sentinel_var.code_template <- mf_json  |> member "uberspark.sentinel.code_template" |> to_string;
-					json_node_uberspark_sentinel_var.library_code_template <- mf_json  |> member "uberspark.sentinel.library_code_template" |> to_string;
-					retval := true;
+					if (mf_json |> member "uberspark.sentinel.namespace") != `Null then
+						json_node_uberspark_sentinel_var.namespace <-  mf_json |> member "uberspark.sentinel.namespace" |> to_string;
+
+					if (mf_json |> member "uberspark.sentinel.platform") != `Null then
+						json_node_uberspark_sentinel_var.platform <-  mf_json |> member "uberspark.sentinel.platform" |> to_string;
+	
+					if (mf_json |> member "uberspark.sentinel.arch") != `Null then
+						json_node_uberspark_sentinel_var.arch <- mf_json  |> member "uberspark.sentinel.arch" |> to_string;
+					
+					if (mf_json |> member "uberspark.sentinel.cpu") != `Null then
+						json_node_uberspark_sentinel_var.cpu <- mf_json  |> member "uberspark.sentinel.cpu" |> to_string;
+	
+					if (mf_json |> member "uberspark.sentinel.sizeof_code_template") != `Null then
+						json_node_uberspark_sentinel_var.sizeof_code_template <- int_of_string (mf_json  |> member "uberspark.sentinel.sizeof_code_template" |> to_string);
+	
+					if (mf_json |> member "uberspark.sentinel.code_template") != `Null then
+						json_node_uberspark_sentinel_var.code_template <- mf_json  |> member "uberspark.sentinel.code_template" |> to_string;
+					
+					if (mf_json |> member "uberspark.sentinel.library_code_template") != `Null then
+						json_node_uberspark_sentinel_var.library_code_template <- mf_json  |> member "uberspark.sentinel.library_code_template" |> to_string;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
