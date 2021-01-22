@@ -2101,6 +2101,109 @@ let sanity_check_uobjcoll_method_entries
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* generate sentinels for uobjcoll methods *)
+(*--------------------------------------------------------------------------*)
+let generate_sentinels_for_uobjcoll_methods
+	()
+	: bool =
+	let retval = ref true in 
+
+	(* generate sentinels for init_method *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "generating sentinels for init_method...";
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) -> 
+		
+		if !retval then begin
+			let l_sentinel_namespace = "uberspark/sentinels/init-uobjcoll/" ^ 
+				d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_entry.sentinel_type in
+
+			if (Hashtbl.mem d_sentinel_manifest_var_hashtbl l_sentinel_namespace) then begin
+
+				let sentinel_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns l_sentinel_namespace) in 
+				let canonical_public_method = (Uberspark_namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.init_method.uobj_namespace) ^ "__" ^ d_uberspark_manifest_var.uobjcoll.init_method.public_method in
+				let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Hashtbl.find d_sentinel_manifest_var_hashtbl l_sentinel_namespace in
+				let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
+					f_type= l_sentinel_namespace;
+					fn_name = canonical_public_method ^ "__" ^ sentinel_namespace_varname; 
+					f_secname = (canonical_public_method ^ "__" ^ sentinel_namespace_varname);
+					code_template = l_sentinel_manifest_var.sentinel.code_template ; 
+					library_code_template= l_sentinel_manifest_var.sentinel.library_code_template ; 
+					sizeof_code_template= l_sentinel_manifest_var.sentinel.sizeof_code_template ; 
+					fn_address= 0; 
+					f_pm_addr = 0; (* TBD: pm_name *)
+				} in 
+
+				d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll_init_method; added sentinel %s for public-method %s" l_sentinel_namespace canonical_public_method;
+
+			end else begin
+				(* could not find sentinel entry *)
+				retval := false;
+			end;
+
+		end;
+	) d_uberspark_manifest_var.uobjcoll.init_method.sentinels;
+
+
+	if !retval then begin
+		(* generate sentinels for uobjcoll public_methods *)
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "generating sentinels for uobjcoll public_methods...";
+
+		List.iter ( fun ( (canonical_public_method:string), (pm_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
+			List.iter ( fun (sentinel_type: string) -> 
+
+				if !retval then begin
+					let l_sentinel_namespace = "uberspark/sentinels/inter-uobjcoll/" ^ 
+						d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_type in
+
+					if (Hashtbl.mem d_sentinel_manifest_var_hashtbl l_sentinel_namespace) then begin
+
+						let sentinel_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns l_sentinel_namespace) in 
+						let canonical_public_method = (Uberspark_namespace.get_variable_name_prefix_from_ns pm_info.uobj_namespace) ^ "__" ^ pm_info.public_method in
+						let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Hashtbl.find d_sentinel_manifest_var_hashtbl l_sentinel_namespace in
+						let codegen_sinfo_entry : Uberspark_codegen.Uobjcoll.sentinel_info_t = { 
+							f_type= l_sentinel_namespace;
+							fn_name = canonical_public_method ^ "__" ^ sentinel_namespace_varname; 
+							f_secname = (canonical_public_method ^ "__" ^ sentinel_namespace_varname);
+							code_template = l_sentinel_manifest_var.sentinel.code_template ; 
+							library_code_template= l_sentinel_manifest_var.sentinel.library_code_template ; 
+							sizeof_code_template= l_sentinel_manifest_var.sentinel.sizeof_code_template ; 
+							fn_address= 0; 
+							f_pm_addr = 0; (* TBD: pm_name *)
+						} in 
+
+						d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll public method; added sentinel %s for public-method %s" l_sentinel_namespace canonical_public_method;
+
+					end else begin
+						(* could not find sentinel entry *)
+						retval := false;
+					end;
+
+				end;
+		
+			) pm_info.sentinel_type_list;
+		) d_uberspark_manifest_var.uobjcoll.public_methods;
+
+	end;
+
+	if !retval then begin
+		(* generate the sentinels filename within the main uobjcoll triage folder *)
+		retval := Uberspark_codegen.Uobjcoll.generate_sentinel_code 
+			(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_sentinel_definitions_src_filename)
+			!d_sentinel_info_for_codegen_list;
+
+		if !retval then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "generated uobjcoll sentinels source";
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate source for uobj collection sentinel definitions!";
+		end;
+	end;
+
+	(!retval)
+;;
+
+
 
 let process_manifest_common
 	(p_uobjcoll_ns : string)
@@ -2205,6 +2308,15 @@ let process_manifest_common
 			(* iterate through uobjrtl list and copy uobjrtl sources to triage area *)
 			let l_dummy=0 in begin
 			retval := copy_uobjrtl_to_triage ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+			(* generate sentinels for uobjcoll methods *)
+			let l_dummy=0 in begin
+			retval := generate_sentinels_for_uobjcoll_methods ();
 			end;
 
 			if (!retval) == false then
