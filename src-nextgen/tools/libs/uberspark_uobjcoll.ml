@@ -2062,6 +2062,46 @@ let copy_uobjrtl_to_triage
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* sanity check init_method and public_method entries *)
+(*--------------------------------------------------------------------------*)
+let sanity_check_uobjcoll_method_entries
+	()
+	: bool =
+	let retval = ref false in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sanity checking init_method public method reference...";
+	(* sanity check init_method to ensure public method is specified within a uobj *)
+	if (List.mem_assoc d_uberspark_manifest_var.uobjcoll.init_method.uobj_namespace !d_uobj_manifest_var_assoc_list) then begin
+		let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = (List.assoc d_uberspark_manifest_var.uobjcoll.init_method.uobj_namespace !d_uobj_manifest_var_assoc_list) in
+		if (List.mem_assoc d_uberspark_manifest_var.uobjcoll.init_method.public_method l_uberspark_manifest_var.uobj.public_methods) then begin
+			retval := true;
+		end;
+	end;
+
+	if !retval then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "init_method public method reference check passed";
+		retval := false;
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sanity checking public_method names...";
+		(* sanity check public_method to ensure public method is specified within a uobj *)
+		List.iter ( fun ( (canonical_public_method:string), (pm_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
+			if (List.mem_assoc pm_info.uobj_namespace !d_uobj_manifest_var_assoc_list) then begin
+				let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = (List.assoc pm_info.uobj_namespace !d_uobj_manifest_var_assoc_list) in
+				if (List.mem_assoc pm_info.public_method l_uberspark_manifest_var.uobj.public_methods) then begin
+					retval := true;
+				end;
+			end;
+
+		) d_uberspark_manifest_var.uobjcoll.public_methods;
+
+	end;
+
+	(!retval)
+;;
+
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
@@ -2141,6 +2181,16 @@ let process_manifest_common
 			if (!retval) == false then
 				()
 			else
+
+			(* sanity check init_method and public_method entries *)
+			let l_dummy=0 in begin
+			retval := sanity_check_uobjcoll_method_entries ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
 
 			(* create sentinel namespace to manifest variable hashtbl *)
 			let l_dummy=0 in begin
