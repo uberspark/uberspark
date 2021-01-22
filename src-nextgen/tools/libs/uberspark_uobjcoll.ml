@@ -2205,6 +2205,25 @@ let generate_sentinels_for_uobjcoll_methods
 
 
 
+(*--------------------------------------------------------------------------*)
+(* generate uobjcoll header file *)
+(*--------------------------------------------------------------------------*)
+let generate_uobjcoll_header_file
+	()
+	: bool =
+	let retval = ref true in 
+
+	Uberspark_logger.log ~crlf:false "Generating uobjcoll top-level include header source...";
+	Uberspark_codegen.Uobjcoll.generate_top_level_include_header 
+			(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/include/" ^ Uberspark_namespace.namespace_uobjcoll_top_level_include_header_src_filename)
+			d_uberspark_manifest_var.uobjcoll.configdefs_verbatim
+			d_uberspark_manifest_var.uobjcoll.configdefs;
+	Uberspark_logger.log ~tag:"" "[OK]";
+
+	(!retval)
+;;
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
@@ -2317,6 +2336,16 @@ let process_manifest_common
 			(* generate sentinels for uobjcoll methods *)
 			let l_dummy=0 in begin
 			retval := generate_sentinels_for_uobjcoll_methods ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+
+			(* generate uobjcoll header file *)
+			let l_dummy=0 in begin
+			retval := generate_uobjcoll_header_file ();
 			end;
 
 			if (!retval) == false then
