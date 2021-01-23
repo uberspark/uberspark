@@ -97,6 +97,7 @@ module Config : sig
     mutable uobjcoll_binary_image_hdr_section_alignment : int;
     mutable uobjcoll_binary_image_hdr_section_size : int;
     mutable uobjcoll_binary_image_section_alignment : int;
+    mutable uobjcoll_binary_image_size : int;
 
     (* bridge related configuration settings *)	
     mutable cc_bridge_namespace : string;

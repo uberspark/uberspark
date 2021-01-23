@@ -128,10 +128,10 @@ let d_sentinel_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark
 let d_path_ns = ref "";;
 
 (* uobjcoll load address *)
-let d_load_address : int ref = ref 0;;
+let d_load_address : int ref = ref Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_load_address;;
 
 (* uobjcoll size *)
-let d_size : int ref = ref 0;;
+let d_size : int ref = ref Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_size;;
 
 (* uobjcoll target definition *)
 let d_target_def: Defs.Basedefs.target_def_t = {
@@ -2490,6 +2490,24 @@ let generate_uobjcoll_section_info
 
 
 
+(*--------------------------------------------------------------------------*)
+(* generate uobjcoll linker script *)
+(*--------------------------------------------------------------------------*)
+let generate_uobjcoll_linker_script
+	()
+	: bool =
+	let retval = ref true in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Generating uobjcoll linker script: load_address=0x%08x, size=0x%08x..." !d_load_address !d_size;
+
+	retval := Uberspark_codegen.Uobjcoll.generate_linker_script	
+		(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark_namespace.namespace_uobjcoll_linkerscript_filename) 
+		!d_load_address !d_size !d_memorymapped_sections_list;
+
+	(!retval)
+;;
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
@@ -2636,6 +2654,14 @@ let process_manifest_common
 				()
 			else
 
+			(* generate uobjcoll linker script *)
+			let l_dummy=0 in begin
+			retval := generate_uobjcoll_linker_script ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
 
 
 			let l_dummy=0 in begin
