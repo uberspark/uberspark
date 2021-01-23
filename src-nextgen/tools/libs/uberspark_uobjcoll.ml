@@ -2249,6 +2249,246 @@ let generate_header_files_for_uobjs
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* generate uobjcoll section info *)
+(*--------------------------------------------------------------------------*)
+let generate_uobjcoll_section_info
+	()
+	: bool =
+	let retval = ref true in 
+	let uobjcoll_section_load_addr = ref 0 in
+
+	(* clear out memory mapped sections list and set initial section load address *)
+	uobjcoll_section_load_addr := !d_load_address;
+	d_memorymapped_sections_list := []; 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Generating uobjcoll section information...";
+
+	(*
+		init_method sentinel sections
+		public_method sentinel sections
+		forall uobjs include general uobj sections; .text, .data, .bss, .rodata
+		stack section
+		forall uobjs other uobj sections 
+	*)
+
+	List.iter ( fun (sentinel_entry: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_initmethod_sentinels_t) -> 
+		
+		if !retval then begin
+			let l_sentinel_namespace = "uberspark/sentinels/init-uobjcoll/" ^ 
+				d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_entry.sentinel_type in
+
+			if (Hashtbl.mem d_sentinel_manifest_var_hashtbl l_sentinel_namespace) then begin
+
+				let sentinel_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns l_sentinel_namespace) in 
+				let canonical_public_method = (Uberspark_namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.init_method.uobj_namespace) ^ "__" ^ d_uberspark_manifest_var.uobjcoll.init_method.public_method in
+				let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Hashtbl.find d_sentinel_manifest_var_hashtbl l_sentinel_namespace in
+				
+				let section_top_addr = 	ref 0 in
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_entry.sentinel_size=%u sizeof_code_template=%u" sentinel_entry.sentinel_size l_sentinel_manifest_var.sentinel.sizeof_code_template;
+				if sentinel_entry.sentinel_size > 0 then begin
+					section_top_addr := sentinel_entry.sentinel_size;
+				end else begin
+					section_top_addr := l_sentinel_manifest_var.sentinel.sizeof_code_template;
+				end;
+				section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
+				if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+					section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+					(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+				end;
+
+				let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_entry.sentinel_type l_sentinel_manifest_var.sentinel.sizeof_code_template section_size;
+
+				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((canonical_public_method ^ "__" ^ sentinel_namespace_varname), 
+					{ fn_name = (canonical_public_method ^ "__" ^ sentinel_namespace_varname);	
+						f_subsection_list = [ (canonical_public_method ^ "__" ^ sentinel_namespace_varname); ];	
+						usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_INITMETHOD_SENTINEL; 
+										f_prot=0; 
+										f_size = section_size;
+										f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+										f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+										f_addr_start = !uobjcoll_section_load_addr; 
+										f_addr_file = 0;
+										f_reserved = 0;
+									};
+					}) ];
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobjcoll_init_method sentinel '%s' at 0x%08x, size=%08x..." 
+					(canonical_public_method ^ "__" ^ sentinel_namespace_varname) !uobjcoll_section_load_addr section_size;
+
+				(* update next section address *)
+				uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+
+			end else begin
+				(* could not find sentinel entry *)
+				retval := false;
+			end;
+
+		end;
+	) d_uberspark_manifest_var.uobjcoll.init_method.sentinels;
+
+
+	if !retval then begin
+
+		List.iter ( fun ( (canonical_public_method:string), (pm_info: Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_publicmethods_t)) -> 
+			List.iter ( fun (sentinel_type: string) -> 
+
+				if !retval then begin
+					let l_sentinel_namespace = "uberspark/sentinels/inter-uobjcoll/" ^ 
+						d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_type in
+
+					if (Hashtbl.mem d_sentinel_manifest_var_hashtbl l_sentinel_namespace) then begin
+
+						let sentinel_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns l_sentinel_namespace) in 
+						let canonical_public_method = (Uberspark_namespace.get_variable_name_prefix_from_ns pm_info.uobj_namespace) ^ "__" ^ pm_info.public_method in
+						let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Hashtbl.find d_sentinel_manifest_var_hashtbl l_sentinel_namespace in
+
+						let section_top_addr = 	ref 0 in
+						(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel_entry.sentinel_size=%u sizeof_code_template=%u" sentinel_entry.sentinel_size l_sentinel_manifest_var.sentinel.sizeof_code_template;
+						if sentinel_entry.sentinel_size > 0 then begin
+							section_top_addr := sentinel_entry.sentinel_size;
+						end else begin
+							section_top_addr := l_sentinel_manifest_var.sentinel.sizeof_code_template;
+						end;*)
+						section_top_addr := l_sentinel_manifest_var.sentinel.sizeof_code_template;
+
+						section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
+						if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+							section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+							(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+						end;
+
+						let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "sentinel type=%s, original size=0x%08x, adjusted size=0x%08x" sentinel_type l_sentinel_manifest_var.sentinel.sizeof_code_template section_size;
+
+						d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((canonical_public_method ^ "__" ^ sentinel_namespace_varname), 
+							{ fn_name = (canonical_public_method ^ "__" ^ sentinel_namespace_varname);	
+								f_subsection_list = [ (canonical_public_method ^ "__" ^ sentinel_namespace_varname); ];	
+								usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_PUBLICMETHODS_SENTINEL; 
+												f_prot=0; 
+												f_size = section_size;
+												f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+												f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+												f_addr_start = !uobjcoll_section_load_addr; 
+												f_addr_file = 0;
+												f_reserved = 0;
+											};
+							}) ];
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobjcoll public_method sentinel '%s' at 0x%08x, size=%08x..." 
+							(canonical_public_method ^ "__" ^ sentinel_namespace_varname) !uobjcoll_section_load_addr section_size;
+
+						(* update next section address *)
+						uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+
+					end else begin
+						(* could not find sentinel entry *)
+						retval := false;
+					end;
+
+				end;
+		
+			) pm_info.sentinel_type_list;
+		) d_uberspark_manifest_var.uobjcoll.public_methods;
+
+	end;
+
+
+	if !retval then begin
+		let section_top_addr = 	ref 0 in
+		section_top_addr := Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_size;
+
+		section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
+		if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+			section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+			(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+		end;
+
+		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjs, original size=0x%08x, adjusted size=0x%08x" Uberspark_config.json_node_uberspark_config_var.uobj_binary_image_size section_size;
+
+		let uobjcoll_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.namespace) in 
+		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((uobjcoll_namespace_varname ^ "__uobjs"), 
+			{ fn_name = (uobjcoll_namespace_varname ^ "__uobjs");	
+				f_subsection_list = [ ".text";  ".data"; ".rodata"; ".bss"; ".stack"];	
+				usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
+								f_prot=0; 
+								f_size = section_size;
+								f_aligned_at = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_pad_to = Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_addr_start = !uobjcoll_section_load_addr; 
+								f_addr_file = 0;
+								f_reserved = 0;
+							};
+			}) ];
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobjs at 0x%08x, size=%08x..." 
+			!uobjcoll_section_load_addr section_size;
+
+		(* update next section address *)
+		uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+
+	end;
+
+
+	if !retval then begin
+	(* go over all the uobjs and collect uobjrtls *)
+		List.iter ( fun ( (l_uobj_ns:string), (l_uberspark_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Gathering section info for uobj: %s..." l_uobj_ns;
+
+			List.iter ( fun ( (l_section_name:string), (l_section_info:Defs.Basedefs.section_info_t) ) -> 
+
+				let section_top_addr = 	ref 0 in
+				section_top_addr := l_section_info.usbinformat.f_size;
+
+				section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
+				if (!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
+					section_top_addr := !section_top_addr +  (Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
+					(!section_top_addr mod Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+				end;
+
+				let section_size = !section_top_addr - !uobjcoll_section_load_addr in
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "section: original size=0x%08x, adjusted size=0x%08x" l_section_info.usbinformat.f_size section_size;
+
+				d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((l_section_info.fn_name), 
+					{ fn_name = l_section_info.fn_name;	
+						f_subsection_list = l_section_info.f_subsection_list;	
+						usbinformat = { f_type=l_section_info.usbinformat.f_type; 
+										f_prot=l_section_info.usbinformat.f_prot; 
+										f_size = section_size;
+										f_aligned_at = l_section_info.usbinformat.f_aligned_at; 
+										f_pad_to = l_section_info.usbinformat.f_pad_to; 
+										f_addr_start = !uobjcoll_section_load_addr; 
+										f_addr_file = 0;
+										f_reserved = 0;
+									};
+					}) ];
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "added section for uobj at 0x%08x, size=%08x..." 
+					!uobjcoll_section_load_addr section_size;
+
+				(* update next section address *)
+				uobjcoll_section_load_addr := !uobjcoll_section_load_addr + section_size; 
+
+
+			) l_uberspark_manifest_var.uobj.sections;
+
+		) !d_uobj_manifest_var_assoc_list;
+
+
+	end;
+
+
+	(!retval)
+;;
+
+
 
 let process_manifest_common
 	(p_uobjcoll_ns : string)
@@ -2386,6 +2626,16 @@ let process_manifest_common
 			if (!retval) == false then
 				()
 			else
+
+			(* generate uobjcoll section info *)
+			let l_dummy=0 in begin
+			retval := generate_uobjcoll_section_info ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
 
 
 			let l_dummy=0 in begin
