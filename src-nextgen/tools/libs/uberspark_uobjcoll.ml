@@ -2224,6 +2224,32 @@ let generate_uobjcoll_header_file
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* generate header files for uobjs *)
+(*--------------------------------------------------------------------------*)
+let generate_header_files_for_uobjs
+	()
+	: bool =
+	let retval = ref true in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Generating header file for uobjs...";
+	(* go over all the uobjs and collect uobjrtls *)
+	List.iter ( fun ( (l_uobj_ns:string), (l_uberspark_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+		Uberspark_logger.log ~crlf:false "Generating header file for uobj: %s..." l_uobj_ns;
+		Uberspark_codegen.Uobj.generate_header_file 
+			(!d_triage_dir_prefix ^ "/" ^ l_uobj_ns ^ "/include/" ^ Uberspark_namespace.namespace_uobj_top_level_include_header_src_filename)
+			l_uberspark_manifest_var.uobj.public_methods;
+		Uberspark_logger.log ~tag:"" "[OK]";
+
+	) !d_uobj_manifest_var_assoc_list;
+
+
+	(!retval)
+;;
+
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
@@ -2346,6 +2372,15 @@ let process_manifest_common
 			(* generate uobjcoll header file *)
 			let l_dummy=0 in begin
 			retval := generate_uobjcoll_header_file ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+			(* generate header files for uobjs *)
+			let l_dummy=0 in begin
+			retval := generate_header_files_for_uobjs ();
 			end;
 
 			if (!retval) == false then

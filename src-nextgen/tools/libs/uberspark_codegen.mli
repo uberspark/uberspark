@@ -67,6 +67,11 @@ module Uobj : sig
   val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> unit
   val generate_top_level_include_header : string -> ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ->  unit
   
+  val generate_header_file :
+    string ->
+    ((string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list) ->
+    unit
+
 
 end
 
