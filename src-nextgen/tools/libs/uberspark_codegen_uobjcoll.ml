@@ -197,23 +197,25 @@ let generate_linker_script
             ("mem_uobjcoll")
             ( "rw" ^ "ail") (binary_origin) (binary_size);
 
-		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
+		(*List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
                 (* new section memory *)
                 Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
                     ("mem_" ^ x.fn_name)
                     ( "rw" ^ "ail") (x.usbinformat.f_addr_start) (x.usbinformat.f_size);
         ) sections_list;
+        *)
 
         Printf.fprintf oc "\n}";
         Printf.fprintf oc "\n";
 
+        (* . = . + LEN - 1 *)
 
         (* generate SECTIONS information *)            
         Printf.fprintf oc "\nSECTIONS";
         Printf.fprintf oc "\n{";
         Printf.fprintf oc "\n";
 
-        List.iter ( fun ( (key:string), (section_info:Defs.Basedefs.section_info_t)) ->
+   (*     List.iter ( fun ( (key:string), (section_info:Defs.Basedefs.section_info_t)) ->
 
                         Printf.fprintf oc "\n %s : {" section_info.fn_name;
                         List.iter (fun subsection ->
@@ -225,7 +227,21 @@ let generate_linker_script
                         Printf.fprintf oc "\n";
 
         ) sections_list;
+    *)
 
+         List.iter ( fun ( (key:string), (section_info:Defs.Basedefs.section_info_t)) ->
+
+                        Printf.fprintf oc "\n %s : {" section_info.fn_name;
+                        List.iter (fun subsection ->
+                                    Printf.fprintf oc "\n *(%s)" subsection;
+                        ) section_info.f_subsection_list;
+                        Printf.fprintf oc "\n . = . + 0x%08x - 1;" section_info.usbinformat.f_size;
+                        Printf.fprintf oc "\n BYTE(0xAA)";
+                        Printf.fprintf oc "\n	} >mem_uobjcoll =0x9090";
+                        Printf.fprintf oc "\n";
+
+        ) sections_list;
+    
 
         
 
