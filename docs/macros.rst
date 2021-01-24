@@ -1,8 +1,10 @@
 .. |uspark| replace:: überSpark
 .. |uberspark| replace:: überSpark
 
-.. |coss| replace:: CoSS 
+.. |coss| replace:: CHIC 
 .. |cosslong| replace:: Commodity System Software 
+.. |chic| replace:: CHIC 
+.. |chiclong| replace:: Commodity Heterogenous Interconnected Computing  
 
 .. |uobj| replace:: üobject 
 
