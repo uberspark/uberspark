@@ -22,6 +22,7 @@ UBERSPARK_LIB_SOURCES += uberspark_config.ml
 UBERSPARK_LIB_SOURCES += uberspark_staging.ml
 UBERSPARK_LIB_SOURCES += uberspark_bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark_codegen.ml
+UBERSPARK_LIB_SOURCES += uberspark_actions.ml
 UBERSPARK_LIB_SOURCES += uberspark_loader.ml
 UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
 UBERSPARK_LIB_SOURCES += uberspark_uobjcoll.ml
