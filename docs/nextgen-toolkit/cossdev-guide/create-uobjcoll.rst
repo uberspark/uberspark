@@ -8,14 +8,14 @@ Create a |uobjcoll|
 Creating a |uobjcoll| with desired |uobjs| is facilitated by creating 
 a |uberspark| manifest file, |ubersparkmff|, within the top-level |uobjcoll| folder.
 
-In our running example, the ``hello-mul`` |uobjcoll| top-level folder is:
+In our running example, the ``hello_mul`` |uobjcoll| top-level folder is:
 
-``src-nextgen/coss-examples/hello-mul/coss-src/uobjcoll``
+``src-nextgen/coss-examples/hello_mul/coss_src/uobjcoll``
 
 Within the aforementioned folder create the |ubersparkmf| file |ubersparkmff| with the
 following contents:
 
-.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/uobjcoll/uberspark.json
+.. literalinclude:: /../src-nextgen/coss-examples/hello_mul/ucoss_src/uobjcoll/uberspark.json
    :language: bash
    :linenos:
 
@@ -34,11 +34,11 @@ for interaction with legacy |coss| code, in addition to other attributes. See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the ``uberspark.uobjcoll.xxx``
 manifest nodes and definitions.
 
-The |uobjcoll| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul`) is composed of
+The |uobjcoll| *namespace* in our example (`uberspark/ubjcoll/generic/hello_mul`) is composed of
 two parts. 
 A |uobjcoll| prefix that is always is required to start with `uberspark/uobjcoll`, followed by
-a user-defined |uobjcoll| namespace suffix. We choose `generic/hello-mul` as our user-defined |uobjcoll| namespace suffix 
-since ``hello-mul`` is architecture agnostic. 
+a user-defined |uobjcoll| namespace suffix. We choose `generic/hello_mul` as our user-defined |uobjcoll| namespace suffix 
+since ``hello_mul`` is architecture agnostic. 
 
 Accordingly |uobjcoll| *platform*, *arch*, and *cpu* fields are set to ``generic``.
 
@@ -58,7 +58,7 @@ See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details.
 
 In our running example, we specify the ``main`` |uobj| of
-``hello-mul`` in terms of its canonical namespace (e.g., ``uberspark/uobjcoll/generic/hello-mul/main``) within
+``hello_mul`` in terms of its canonical namespace (e.g., ``uberspark/uobjcoll/generic/hello_mul/main``) within
 the *uobjs* node.
 
 Finally, |uobjcoll| *publicmethods* declare the externally visible interfaces of the |uobjcoll| from the
@@ -82,7 +82,7 @@ to specify this gateway as a regular branch/call instruction.
 ----------------------------------------
 
 The ``uberspark.uobjcoll.configdefs`` manifest node allows specifying various configuration definitions which are
-then made available to the sources via ``#include <uberspark/ubjcoll/generic/hello-mul/uobjcoll.h>``.
+then made available to the sources via ``#include <uberspark/ubjcoll/generic/hello_mul/uobjcoll.h>``.
 See |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the manifest
 node declaration.
 
@@ -90,7 +90,7 @@ Configuration definitions are specified as a *name* and *value* pair where the *
 name and the *value* is a string. 
 
 The configuration definition *name* is then available to the sources in upper-case with the default
-``__UBERSPARK_UOBJCOLL_CONFIGDEF_`` prefix and ``__`` suffix. For example, with ``hello-mul``, the configuration 
+``__UBERSPARK_UOBJCOLL_CONFIGDEF_`` prefix and ``__`` suffix. For example, with ``hello_mul``, the configuration 
 definition ``example_hexnumber`` will be available as ``__UBERSPARK_UOBJCOLL_CONFIGDEF_EXAMPLE_HEXNUMBER__``, which
 in turn can be used within the sources as follows:
 
@@ -116,7 +116,7 @@ in turn can be used within the sources as follows:
    In this case every configuration definition *name* will be available to reference within the sources as-is.
 
 A configuration definition *value* is always specified as a string in the manifest, but can represent numbers and
-string within the sources. For example, in the ``hello-mul`` |uobjcoll|, ``example_hexnumber`` and ``example_decnumber`` 
+string within the sources. For example, in the ``hello_mul`` |uobjcoll|, ``example_hexnumber`` and ``example_decnumber`` 
 are available as numbers within the sources, while ``example_string`` is available as a doubly-quoted string within the
 sources.
 

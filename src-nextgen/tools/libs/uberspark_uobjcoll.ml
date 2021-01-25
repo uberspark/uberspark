@@ -72,6 +72,7 @@ let uberspark_manifest_var_default_value ()
 		namespace = ""; 
 		version_min = "any"; 
 		version_max = "any";
+		actions = [];
 	};
 	uobjcoll = {
 		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";

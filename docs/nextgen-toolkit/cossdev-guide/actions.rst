@@ -53,8 +53,8 @@ within a |uobj| manifest:
                 "targets" : [ "build" ],
                 "name" : "user specified action name",
                 "category" : "translation",
-                "input" : ".c",
-                "output" : ".o",
+                "input" : [".c"],
+                "output" : [".o"],
                 "bridge" : "compiler bridge namespace",
             }
         ]
@@ -72,8 +72,8 @@ within a |uobj| manifest:
                 "targets" : [ "verify" ],
                 "name" : "user specified action name",
                 "category" : "translation",
-                "input" : "sample.c",
-                "output" : "sample.c",
+                "input" : ["sample.c"],
+                "output" : ["sample.c"],
                 "bridge" : "verification bridge namespace",
                 "bridge_cmd" : "verification bridge command"
             }
@@ -92,8 +92,8 @@ sources within a |uobj| manifest:
                 "targets" : [ "verify" ],
                 "name" : "source to source translation",
                 "category" : "translation",
-                "input" : ".cS",
-                "output" : ".c",
+                "input" : [".cS"],
+                "output" : [".c"],
                 "bridge" : "native",
                 "bridge_cmd" : [
                     "cp *.cS *.c"
@@ -116,8 +116,8 @@ on the |uobj| sources within a |uobj| manifest:
                 "targets" : [ "verify" ],
                 "name" : "uberSpark invariant checks",
                 "category" : "translation",
-                "input" : ".c",
-                "output" : ".c",
+                "input" : [".c"],
+                "output" : [".c"],
                 "bridge" : "uberSpark verification bridge namespace"
             }
         ]
@@ -142,6 +142,26 @@ action node:
 
 The above means that for any of the targets, bring in the uobj actions of the specified target in place of this action in the sequence specified 
 within the |uobj| manifest. 
+
+The action node spefication for including default actions into a |ubersparkmf| is
+as below:
+
+.. code-block:: json
+   :linenos:
+
+   {
+    	"uberspark.uobjcoll.actions" : [
+            {
+                "targets" : [ "build", "verify", "docs", "install" ],
+                "name" : "default actions",
+                "category" : "default"
+            }
+        ]
+   }
+
+The above will replace this action node with a list of default actions for a given
+|uspark| manifest type (e.g., |uobj|, |uobjcoll|, |uobjrtl| etc.)
+
 
 The above action pipeline allows us to do the following things:
 

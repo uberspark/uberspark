@@ -110,6 +110,7 @@ class bridge_object
 		namespace = "uberspark/bridges";
 		version_min = "any";
 		version_max = "any";
+		actions = [];
 	};
 
 	(* uberspark-bridge-as json node variable *)	

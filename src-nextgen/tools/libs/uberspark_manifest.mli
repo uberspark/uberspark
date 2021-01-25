@@ -12,13 +12,31 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_manifest_actions_t = 
+{
+	mutable targets : string list;
+	mutable name : string;
+	mutable category : string;
+
+	(* if category == translation *)
+	mutable input : string list;
+	mutable output : string list;
+	mutable bridge_namespace: string; 
+	mutable bridge_cmd : string list; 
+	
+	(* if category == uobjaction *)
+	mutable uobj_namespace : string; 
+};;
+
+
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
 	mutable namespace : string;
 	mutable version_min   : string;
 	mutable version_max   : string;
-}
+	mutable actions : json_node_uberspark_manifest_actions_t list;
+};;
 
 
 

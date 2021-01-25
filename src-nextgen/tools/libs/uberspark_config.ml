@@ -28,6 +28,7 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 	namespace = "uberspark/config";
 	version_min = "any";
 	version_max = "any";
+	actions = [];
 };;
 
 
