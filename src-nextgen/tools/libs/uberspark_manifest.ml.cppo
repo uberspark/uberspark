@@ -113,6 +113,78 @@ let get_json_for_manifest
 
 
 (*--------------------------------------------------------------------------*)
+(* parse manifest json sub-node "uberspark.manifest.actions" into var *)
+(* return: *)
+(* on success: true; var is modified with actions declarations *)
+(* on failure: false; var is unmodified *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_manifest_actions_to_var
+	(mf_json : Yojson.Basic.t)
+	: bool *  (json_node_uberspark_manifest_actions_t list)
+=
+		
+	let retval = ref true in
+	let actions_list : json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+	try
+		let open Yojson.Basic.Util in
+			let uberspark_manifest_actions_json = mf_json |> member "uberspark.manifest.actions" in
+				if uberspark_manifest_actions_json != `Null then
+					begin
+
+						let actions_json_list = Yojson.Basic.Util.to_list uberspark_manifest_actions_json in
+							
+							List.iter (fun (l_actions_json : Yojson.Basic.t) ->
+								let actions_entry : json_node_uberspark_manifest_actions_t = {
+									targets = []; name = ""; category = "";
+									input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
+									uobj_namespace = "";
+								} in
+
+								if (l_actions_json |> member "targets") <> `Null then 
+									actions_entry.targets <- json_list_to_string_list (l_actions_json |> member "targets" |> to_list);
+
+								if (l_actions_json |> member "name") <> `Null then 
+									actions_entry.name <- (l_actions_json |> member "name" |> to_string);
+
+								if (l_actions_json |> member "category") <> `Null then 
+									actions_entry.category <- (l_actions_json |> member "category" |> to_string);
+
+								if (l_actions_json |> member "input") <> `Null then 
+									actions_entry.input <- json_list_to_string_list (l_actions_json |> member "input" |> to_list);
+
+								if (l_actions_json |> member "output") <> `Null then 
+									actions_entry.output <- json_list_to_string_list (l_actions_json |> member "output" |> to_list);
+
+								if (l_actions_json |> member "bridge_namespace") <> `Null then 
+									actions_entry.bridge_namespace <- (l_actions_json |> member "bridge_namespace" |> to_string);
+
+								if (l_actions_json |> member "bridge_cmd") <> `Null then 
+									actions_entry.bridge_cmd <- json_list_to_string_list (l_actions_json |> member "bridge_cmd" |> to_list);
+
+								if (l_actions_json |> member "uobj_namespace") <> `Null then 
+									actions_entry.uobj_namespace <- (l_actions_json |> member "uobj_namespace" |> to_string);
+
+								actions_list := !actions_list @ [ actions_entry ];
+					
+								()
+							) actions_json_list;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !actions_list)
+;;
+
+
+
+
+(*--------------------------------------------------------------------------*)
 (* convert json fields "uberspark.manifest.xxx" into json_node_uberspark_manifest_t variable *)
 (* return: *)
 (* on success: true; json_node_uberspark_manifest_var fields are modified with parsed values *)
@@ -134,6 +206,14 @@ let json_node_uberspark_manifest_to_var
 	
 			if (mf_json |> member "uberspark.manifest.version_max") <> `Null then 
 				json_node_uberspark_manifest_var.version_max <- mf_json |> member "uberspark.manifest.version_max" |> to_string;
+
+			let (rval1, json_node_uberspark_manifest_actions_var) = (json_node_uberspark_manifest_actions_to_var mf_json) in
+
+			if rval1 then begin
+				json_node_uberspark_manifest_var.actions <- json_node_uberspark_manifest_actions_var;
+			end;
+
+
 			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
