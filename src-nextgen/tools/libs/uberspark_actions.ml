@@ -19,13 +19,36 @@ type uberspark_action_t =
 };;
 
 
-
-
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* variable definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+(* manifest variable *)
+let g_uobjcoll_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value ();;
+
+(* uobjcoll triage directory prefix *)
+let g_triage_dir_prefix = ref "";;
+
+(* staging directory prefix *)
+let g_staging_dir_prefix = ref "";;
+
+(* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
+let g_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list ref = ref [];; 
+
+(* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
+let g_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+
+
+(* actions element definition for default_action *)
+let g_default_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t = {
+	targets = [ "build"; "verify"; "docs"; "install"; ];
+	name = "default action";
+	category = "default_action";
+	input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
+	uobj_namespace = "";
+};;
 
 
 
@@ -46,6 +69,13 @@ let initialize
 	(p_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list)
 	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	: bool =
+
+	g_uobjcoll_manifest_var = p_uobjcoll_manifest_var;
+
+	(*if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
+
+	end;
+	*)
 
 	(* TBD store to corresponding action variables after processing every thing one by one and
 	making sure if they are empty to add default action*)
@@ -157,7 +187,7 @@ let build_input_output
  	*)
 
 
-	(!retval, input list, output list)
+	(!retval, [], [])
 ;;
 
 

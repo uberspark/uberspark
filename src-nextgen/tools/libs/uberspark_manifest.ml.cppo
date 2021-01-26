@@ -457,3 +457,39 @@ let manifest_file_to_uberspark_manifest_var
 	(!retval)
 ;;
 
+
+(* default manifest variable definition *)
+(* we use this to initialize manifest variables *)
+let uberspark_manifest_var_default_value () 
+	: uberspark_manifest_var_t = 
+	{
+	manifest = {
+		namespace = ""; 
+		version_min = "any"; 
+		version_max = "any";
+		actions = [];
+	};
+	uobjcoll = {
+		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
+		sentinels_intra_uobjcoll = [];
+		uobjs = { master = ""; templars = [];};
+		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
+		public_methods = [];
+		loaders = [];
+		configdefs_verbatim = false;
+		configdefs = [];
+	};
+	uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
+		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+		legacy_callees = []; sections = []; uobjrtl = []; 
+		};
+	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		source_c_files = []; source_casm_files = [];
+		};
+
+	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sizeof_code_template = 0; code_template = ""; library_code_template = "";
+		}; 
+
+	};;

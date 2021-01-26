@@ -63,46 +63,11 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 
 
 
-(* default manifest variable definition *)
-(* we use this to initialize manifest variables *)
-let uberspark_manifest_var_default_value () 
-	: Uberspark_manifest.uberspark_manifest_var_t = 
-	{
-	manifest = {
-		namespace = ""; 
-		version_min = "any"; 
-		version_max = "any";
-		actions = [];
-	};
-	uobjcoll = {
-		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
-		sentinels_intra_uobjcoll = [];
-		uobjs = { master = ""; templars = [];};
-		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
-		public_methods = [];
-		loaders = [];
-		configdefs_verbatim = false;
-		configdefs = [];
-	};
-	uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sources = {source_h_files= []; source_c_files = []; source_casm_files = []; source_asm_files = [];};
-		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
-		legacy_callees = []; sections = []; uobjrtl = []; 
-		};
-	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		source_c_files = []; source_casm_files = [];
-		};
-
-	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sizeof_code_template = 0; code_template = ""; library_code_template = "";
-		}; 
-
-	};;
 
 
 
 (* manifest variable *)
-let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value ();;
+let d_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value ();;
 
 (* uobjcoll triage directory prefix *)
 let d_triage_dir_prefix = ref "";;
@@ -1908,7 +1873,7 @@ let create_uobj_manifest_var_assoc_list
 
 			(* read manifest file into manifest variable *)
 			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
-			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
 
 			rval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
 
@@ -1950,7 +1915,7 @@ let create_uobjrtl_manifest_var_hashtbl
 
 				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest path=%s" abspath_mf_filename;
 
-				let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+				let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
 
 				retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var;
 
@@ -1990,7 +1955,7 @@ let create_sentinel_manifest_var_hashtbl
 
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
 
-			let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+			let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
 
 			retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
 
@@ -2015,7 +1980,7 @@ let create_sentinel_manifest_var_hashtbl
 
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
 
-					let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = uberspark_manifest_var_default_value () in
+					let l_sentinel_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
 
 					retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
 
@@ -2512,7 +2477,7 @@ let generate_uobjcoll_linker_script
 (*--------------------------------------------------------------------------*)
 (* consolidate and execute actions *)
 (*--------------------------------------------------------------------------*)
-let consolidate_and_execute_actions
+(*let consolidate_and_execute_actions
 	()
 	: bool =
 	let retval = ref true in 
@@ -2542,7 +2507,7 @@ let consolidate_and_execute_actions
 
 	(!retval)
 ;;
-
+*)
 
 
 
