@@ -30,10 +30,13 @@ Actions fall into one of the following broad categories:
         Translations can be compilation, linking, code generation or verification. Note that for certain translation
         actions, the set of output files can be the same as the set of input files (e.g., for verification)
 
-    *   `uobjaction` - this category is to bring in actions from a set of |uobjs|. This action will be replaced by the
+    *   `uobj_action` - this category is to bring in actions from a set of |uobjs|. This action will be replaced by the
         target set of actions that this action selects. 
 
-   *   `default` - this category is to bring in the default set of actions for a |uobj| or a |uobjcoll|. This action will be replaced by the
+    *   `uobjrtl_action` - this category is to bring in actions from a set of |uobjrtl|. This action will be replaced by the
+        target set of actions that this action selects. 
+
+    *   `default_action` - this category is to bring in the default set of actions for a |uobj| or a |uobjcoll|. This action will be replaced by the
         target set of default actions. 
 
 

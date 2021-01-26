@@ -2509,6 +2509,43 @@ let generate_uobjcoll_linker_script
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* consolidate and execute actions *)
+(*--------------------------------------------------------------------------*)
+let consolidate_and_execute_actions
+	()
+	: bool =
+	let retval = ref true in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Consolidating actions...";
+
+	let replacement_d_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) 
+		list ref = ref [] in 
+
+	(* iterate through all uobjs, and if actions is empty, populate with default uobj actions *)
+	List.iter ( fun ( (l_uobj_ns:string), (l_uberspark_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Checking actions for uobj: %s, num_actions=%u..." 
+			l_uobj_ns (List.length l_uberspark_manifest_var.manifest.actions);
+
+		if (List.length l_uberspark_manifest_var.manifest.actions) == 0 then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "No actions specified, adding default...";
+			(* TBD replace with default value *)
+			l_uberspark_manifest_var.manifest.actions <- [];	
+		end;
+
+		replacement_d_uobj_manifest_var_assoc_list := !replacement_d_uobj_manifest_var_assoc_list @ [ (l_uobjns, l_uberspark_manifest_var)];
+	) !d_uobj_manifest_var_assoc_list;
+
+	(* store new assoc list with modified manifest variables *)
+
+
+	(!retval)
+;;
+
+
+
+
 let process_manifest_common
 	(p_uobjcoll_ns : string)
 	: bool =
