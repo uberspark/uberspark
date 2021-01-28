@@ -2666,6 +2666,20 @@ let process_manifest_common
 				()
 			else
 
+			(* initialize actions *)
+			let l_dummy=0 in begin
+			retval := (Uberspark_actions.initialize 
+				d_uberspark_manifest_var
+				!d_uobj_manifest_var_assoc_list
+				d_uobjrtl_manifest_var_hashtbl
+				!d_triage_dir_prefix
+				!d_staging_dir_prefix);
+				
+			end;
+
+			if (!retval) == false then
+				()
+			else
 
 			let l_dummy=0 in begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll processed successfully!";

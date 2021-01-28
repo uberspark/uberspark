@@ -68,9 +68,23 @@ let initialize
 	(p_uobjcoll_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
 	(p_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_manifest_var_t) list)
 	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_triage_dir_prefix : string )
+	(p_staging_dir_prefix : string )
 	: bool =
 
 	g_uobjcoll_manifest_var = p_uobjcoll_manifest_var;
+	g_uobj_manifest_var_assoc_list := p_uobj_manifest_var_assoc_list;
+	Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;
+	g_uobjrtl_manifest_var_hashtbl = Hashtbl.copy p_uobjrtl_manifest_var_hashtbl;
+	g_triage_dir_prefix := p_triage_dir_prefix;
+	g_staging_dir_prefix := p_staging_dir_prefix;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll namespace: %s" g_uobjcoll_manifest_var.manifest.namespace; 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "actions initialize: %u %u %u" 
+		(List.length !g_uobj_manifest_var_assoc_list)
+		(Hashtbl.length g_uobjrtl_manifest_var_hashtbl) 
+		(Hashtbl.length p_uobjrtl_manifest_var_hashtbl) 
+		;
 
 	(*if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
 
