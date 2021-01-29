@@ -72,27 +72,60 @@ let initialize
 	(p_staging_dir_prefix : string )
 	: bool =
 
-	Uberspark_manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
-	g_uobj_manifest_var_assoc_list := p_uobj_manifest_var_assoc_list;
-	Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;
+	(* store triage and staging dir prefix *)
 	g_triage_dir_prefix := p_triage_dir_prefix;
 	g_staging_dir_prefix := p_staging_dir_prefix;
 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll namespace: %s" p_uobjcoll_manifest_var.manifest.namespace; 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll namespace: %s" g_uobjcoll_manifest_var.manifest.namespace; 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "actions initialize: %u %u %u" 
-		(List.length !g_uobj_manifest_var_assoc_list)
-		(Hashtbl.length g_uobjrtl_manifest_var_hashtbl) 
-		(Hashtbl.length p_uobjrtl_manifest_var_hashtbl) 
-		;
+	Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;
 
-	(*if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
-
+	(* add default actions for uobjcoll manifest actions if needed *)
+	Uberspark_manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
+	if List.length g_uobjcoll_manifest_var.manifest.actions == 0 then begin
+		g_uobjcoll_manifest_var.manifest.actions <- [ g_default_action; ];
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjcoll: %s" 
+			g_uobjcoll_manifest_var.uobjcoll.namespace; 
 	end;
-	*)
+	
+	(* add default actions for uobj manifest actions if needed *)
+	List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+		if List.length l_uobj_manifest_var.manifest.actions == 0 then begin
+			l_uobj_manifest_var.manifest.actions <- [ g_default_action; ];
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobj: %s" 
+				l_uobj_manifest_var.uobj.namespace; 
+		end;
 
-	(* TBD store to corresponding action variables after processing every thing one by one and
-	making sure if they are empty to add default action*)
+		g_uobj_manifest_var_assoc_list := !g_uobj_manifest_var_assoc_list @ [ (l_uobj_ns, l_uobj_manifest_var); ];
+
+	) p_uobj_manifest_var_assoc_list;
+
+
+	(* add default actions for uobjrtl manifest actions if needed *)
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		if List.length l_uobjrtl_manifest_var.manifest.actions == 0 then begin
+			l_uobjrtl_manifest_var.manifest.actions <- [ g_default_action; ];
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjrtl: %s" 
+				l_uobjrtl_manifest_var.uobjrtl.namespace; 
+		end;
+
+		Hashtbl.add p_uobjrtl_manifest_var_hashtbl l_uobjrtl_ns l_uobjrtl_manifest_var;
+
+	) p_uobjrtl_manifest_var_hashtbl;
+
+
+	(* debug dump *)
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll (%s) total actions: %u" 
+		g_uobjcoll_manifest_var.uobjcoll.namespace (List.length g_uobjcoll_manifest_var.manifest.actions);
+	List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj (%s) total actions: %u" 
+			l_uobj_manifest_var.uobj.namespace (List.length l_uobj_manifest_var.manifest.actions);
+	) !g_uobj_manifest_var_assoc_list;
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl (%s) total actions: %u" 
+			l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.manifest.actions);
+	) g_uobjrtl_manifest_var_hashtbl;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "triage dir prefix=%s" !g_triage_dir_prefix;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "staging dir prefix=%s" !g_staging_dir_prefix;
+	 
 
 	(true)
 ;;
