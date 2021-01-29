@@ -461,71 +461,65 @@ let manifest_file_to_uberspark_manifest_var
 (* copy constructor for  manifest variable definition *)
 (* we use this to copy one manifest variable into another *)
 let uberspark_manifest_var_copy 
-	(t : uberspark_manifest_var_t)
-	: uberspark_manifest_var_t = 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copy constructor: %s" t.manifest.namespace;
+	(output : uberspark_manifest_var_t)
+	(input : uberspark_manifest_var_t)
+	: unit = 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copy constructor: %s" input.manifest.namespace;
 
-	({
-	manifest = {
-		namespace = t.manifest.namespace; 
-		version_min = t.manifest.version_min; 
-		version_max = t.manifest.version_max;
-		actions = t.manifest.actions;
-	};
-	uobjcoll = {
-		namespace = t.uobjcoll.namespace; platform = t.uobjcoll.platform; 
-		arch = t.uobjcoll.arch; cpu = t.uobjcoll.cpu ; hpl = t.uobjcoll.hpl;
-		sentinels_intra_uobjcoll = t.uobjcoll.sentinels_intra_uobjcoll;
-		uobjs = { master = t.uobjcoll.uobjs.master; templars = t.uobjcoll.uobjs.templars;};
-		init_method = {uobj_namespace = t.uobjcoll.init_method.uobj_namespace; 
-			public_method = t.uobjcoll.init_method.public_method; 
-			sentinels = t.uobjcoll.init_method.sentinels;};
-		public_methods = t.uobjcoll.public_methods;
-		loaders = t.uobjcoll.loaders;
-		configdefs_verbatim = t.uobjcoll.configdefs_verbatim;
-		configdefs = t.uobjcoll.configdefs;
-	};
-	uobj = {namespace = t.uobj.namespace; platform = t.uobj.platform; 
-		arch = t.uobj.arch; cpu = t.uobj.cpu; 
-		sources = {source_h_files= t.uobj.sources.source_h_files; 
-			source_c_files = t.uobj.sources.source_c_files; 
-			source_casm_files = t.uobj.sources.source_casm_files; 
-			source_asm_files = t.uobj.sources.source_asm_files;};
-		public_methods = t.uobj.public_methods; 
-		intra_uobjcoll_callees = t.uobj.intra_uobjcoll_callees; 
-		inter_uobjcoll_callees = t.uobj.inter_uobjcoll_callees;
-		legacy_callees = t.uobj.legacy_callees; 
-		sections = t.uobj.sections; 
-		uobjrtl = t.uobj.uobjrtl; 
-		};
-	uobjrtl = {namespace = t.uobjrtl.namespace; platform = t.uobjrtl.platform; 
-		arch = t.uobjrtl.arch; cpu = t.uobjrtl.cpu; 
-		source_c_files = t.uobjrtl.source_c_files; 
-		source_casm_files = t.uobjrtl.source_casm_files;
-		};
-
-	sentinel ={namespace = t.sentinel.namespace; 
-		platform = t.sentinel.platform; 
-		arch = t.sentinel.arch; 
-		cpu = t.sentinel.cpu; 
-		sizeof_code_template = t.sentinel.sizeof_code_template; 
-		code_template = t.sentinel.code_template; 
-		library_code_template = t.sentinel.library_code_template;
-		}; 
-
-	})
+	output.manifest.namespace <- input.manifest.namespace; 
+	output.manifest.version_min <- input.manifest.version_min; 
+	output.manifest.version_max <- input.manifest.version_max;
+	output.manifest.actions <- input.manifest.actions;
 
 
+	output.uobjcoll.namespace <- input.uobjcoll.namespace; 
+	output.uobjcoll.platform <- input.uobjcoll.platform; 
+	output.uobjcoll.arch <- input.uobjcoll.arch; 
+	output.uobjcoll.cpu <- input.uobjcoll.cpu ; 
+	output.uobjcoll.hpl <- input.uobjcoll.hpl;
+	output.uobjcoll.sentinels_intra_uobjcoll <- input.uobjcoll.sentinels_intra_uobjcoll;
+	output.uobjcoll.uobjs.master <- input.uobjcoll.uobjs.master; 
+	output.uobjcoll.uobjs.templars <- input.uobjcoll.uobjs.templars;
+	output.uobjcoll.init_method.uobj_namespace <- input.uobjcoll.init_method.uobj_namespace; 
+	output.uobjcoll.init_method.public_method <- input.uobjcoll.init_method.public_method; 
+	output.uobjcoll.init_method.sentinels <- input.uobjcoll.init_method.sentinels;
+	output.uobjcoll.public_methods <- input.uobjcoll.public_methods;
+	output.uobjcoll.loaders <- input.uobjcoll.loaders;
+	output.uobjcoll.configdefs_verbatim <- input.uobjcoll.configdefs_verbatim;
+	output.uobjcoll.configdefs <- input.uobjcoll.configdefs;
 
-(*	{ t with 
-		manifest = { 
-			namespace = t.manifest.namespace; 
-			version_min = t.manifest.version_min; 
-			version_max = t.manifest.version_max; 
-			actions= t.manifest.actions; 
-		};
-	}
-*)
+
+	output.uobj.namespace <- input.uobj.namespace; 
+	output.uobj.platform <- input.uobj.platform; 
+	output.uobj.arch <- input.uobj.arch; 
+	output.uobj.cpu <- input.uobj.cpu; 
+	output.uobj.sources.source_h_files<- input.uobj.sources.source_h_files; 
+	output.uobj.sources.source_c_files <- input.uobj.sources.source_c_files; 
+	output.uobj.sources.source_casm_files <- input.uobj.sources.source_casm_files; 
+	output.uobj.sources.source_asm_files <- input.uobj.sources.source_asm_files;
+	output.uobj.public_methods <- input.uobj.public_methods; 
+	output.uobj.intra_uobjcoll_callees <- input.uobj.intra_uobjcoll_callees; 
+	output.uobj.inter_uobjcoll_callees <- input.uobj.inter_uobjcoll_callees;
+	output.uobj.legacy_callees <- input.uobj.legacy_callees; 
+	output.uobj.sections <- input.uobj.sections; 
+	output.uobj.uobjrtl <- input.uobj.uobjrtl; 
+
+	output.uobjrtl.namespace <- input.uobjrtl.namespace; 
+	output.uobjrtl.platform <- input.uobjrtl.platform; 
+	output.uobjrtl.arch <- input.uobjrtl.arch; 
+	output.uobjrtl.cpu <- input.uobjrtl.cpu; 
+	output.uobjrtl.source_c_files <- input.uobjrtl.source_c_files; 
+	output.uobjrtl.source_casm_files <- input.uobjrtl.source_casm_files;
+	
+	output.sentinel.namespace <- input.sentinel.namespace; 
+	output.sentinel.platform <- input.sentinel.platform; 
+	output.sentinel.arch <- input.sentinel.arch; 
+	output.sentinel.cpu <- input.sentinel.cpu; 
+	output.sentinel.sizeof_code_template <- input.sentinel.sizeof_code_template; 
+	output.sentinel.code_template <- input.sentinel.code_template; 
+	output.sentinel.library_code_template <- input.sentinel.library_code_template;
+
+	()
 ;;
 
 

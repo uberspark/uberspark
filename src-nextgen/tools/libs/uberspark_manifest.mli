@@ -388,5 +388,7 @@ type uberspark_manifest_var_t =
 val manifest_json_to_uberspark_manifest_var : Yojson.Basic.t -> uberspark_manifest_var_t -> bool
 val manifest_file_to_uberspark_manifest_var : string -> uberspark_manifest_var_t -> bool
 val uberspark_manifest_var_default_value : unit -> uberspark_manifest_var_t 
-val uberspark_manifest_var_copy :  uberspark_manifest_var_t -> uberspark_manifest_var_t
+val uberspark_manifest_var_copy :  uberspark_manifest_var_t -> 
+  uberspark_manifest_var_t ->
+  unit
 

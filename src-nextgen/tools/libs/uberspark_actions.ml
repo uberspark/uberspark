@@ -72,7 +72,7 @@ let initialize
 	(p_staging_dir_prefix : string )
 	: bool =
 
-	g_uobjcoll_manifest_var = Uberspark_manifest.uberspark_manifest_var_copy p_uobjcoll_manifest_var;
+	Uberspark_manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
 	g_uobj_manifest_var_assoc_list := p_uobj_manifest_var_assoc_list;
 	Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;
 	g_triage_dir_prefix := p_triage_dir_prefix;
