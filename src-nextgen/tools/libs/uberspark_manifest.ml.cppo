@@ -458,6 +458,77 @@ let manifest_file_to_uberspark_manifest_var
 ;;
 
 
+(* copy constructor for  manifest variable definition *)
+(* we use this to copy one manifest variable into another *)
+let uberspark_manifest_var_copy 
+	(t : uberspark_manifest_var_t)
+	: uberspark_manifest_var_t = 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copy constructor: %s" t.manifest.namespace;
+
+	({
+	manifest = {
+		namespace = t.manifest.namespace; 
+		version_min = t.manifest.version_min; 
+		version_max = t.manifest.version_max;
+		actions = t.manifest.actions;
+	};
+	uobjcoll = {
+		namespace = t.uobjcoll.namespace; platform = t.uobjcoll.platform; 
+		arch = t.uobjcoll.arch; cpu = t.uobjcoll.cpu ; hpl = t.uobjcoll.hpl;
+		sentinels_intra_uobjcoll = t.uobjcoll.sentinels_intra_uobjcoll;
+		uobjs = { master = t.uobjcoll.uobjs.master; templars = t.uobjcoll.uobjs.templars;};
+		init_method = {uobj_namespace = t.uobjcoll.init_method.uobj_namespace; 
+			public_method = t.uobjcoll.init_method.public_method; 
+			sentinels = t.uobjcoll.init_method.sentinels;};
+		public_methods = t.uobjcoll.public_methods;
+		loaders = t.uobjcoll.loaders;
+		configdefs_verbatim = t.uobjcoll.configdefs_verbatim;
+		configdefs = t.uobjcoll.configdefs;
+	};
+	uobj = {namespace = t.uobj.namespace; platform = t.uobj.platform; 
+		arch = t.uobj.arch; cpu = t.uobj.cpu; 
+		sources = {source_h_files= t.uobj.sources.source_h_files; 
+			source_c_files = t.uobj.sources.source_c_files; 
+			source_casm_files = t.uobj.sources.source_casm_files; 
+			source_asm_files = t.uobj.sources.source_asm_files;};
+		public_methods = t.uobj.public_methods; 
+		intra_uobjcoll_callees = t.uobj.intra_uobjcoll_callees; 
+		inter_uobjcoll_callees = t.uobj.inter_uobjcoll_callees;
+		legacy_callees = t.uobj.legacy_callees; 
+		sections = t.uobj.sections; 
+		uobjrtl = t.uobj.uobjrtl; 
+		};
+	uobjrtl = {namespace = t.uobjrtl.namespace; platform = t.uobjrtl.platform; 
+		arch = t.uobjrtl.arch; cpu = t.uobjrtl.cpu; 
+		source_c_files = t.uobjrtl.source_c_files; 
+		source_casm_files = t.uobjrtl.source_casm_files;
+		};
+
+	sentinel ={namespace = t.sentinel.namespace; 
+		platform = t.sentinel.platform; 
+		arch = t.sentinel.arch; 
+		cpu = t.sentinel.cpu; 
+		sizeof_code_template = t.sentinel.sizeof_code_template; 
+		code_template = t.sentinel.code_template; 
+		library_code_template = t.sentinel.library_code_template;
+		}; 
+
+	})
+
+
+
+(*	{ t with 
+		manifest = { 
+			namespace = t.manifest.namespace; 
+			version_min = t.manifest.version_min; 
+			version_max = t.manifest.version_max; 
+			actions= t.manifest.actions; 
+		};
+	}
+*)
+;;
+
+
 (* default manifest variable definition *)
 (* we use this to initialize manifest variables *)
 let uberspark_manifest_var_default_value () 
