@@ -26,6 +26,10 @@ type json_node_uberspark_manifest_actions_t =
 	
 	(* if category == uobjaction *)
 	mutable uobj_namespace : string; 
+
+	(* if category == uobjrtl_action *)
+	mutable uobjrtl_namespace : string; 
+
 };;
 
 

@@ -29,6 +29,10 @@ type json_node_uberspark_manifest_actions_t =
 	
 	(* if category == uobjaction *)
 	mutable uobj_namespace : string; 
+
+	(* if category == uobjrtl_action *)
+	mutable uobjrtl_namespace : string; 
+
 };;
 
 
@@ -139,6 +143,7 @@ let json_node_uberspark_manifest_actions_to_var
 									targets = []; name = ""; category = "";
 									input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
 									uobj_namespace = "";
+									uobjrtl_namespace = "";
 								} in
 
 								if (l_actions_json |> member "targets") <> `Null then 
@@ -164,6 +169,9 @@ let json_node_uberspark_manifest_actions_to_var
 
 								if (l_actions_json |> member "uobj_namespace") <> `Null then 
 									actions_entry.uobj_namespace <- (l_actions_json |> member "uobj_namespace" |> to_string);
+
+								if (l_actions_json |> member "uobjrtl_namespace") <> `Null then 
+									actions_entry.uobj_namespace <- (l_actions_json |> member "uobjrtl_namespace" |> to_string);
 
 								actions_list := !actions_list @ [ actions_entry ];
 					
