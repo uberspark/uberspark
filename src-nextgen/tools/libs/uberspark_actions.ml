@@ -232,19 +232,37 @@ let consolidate_actions_for_category_uobj_action
 
 
 (*--------------------------------------------------------------------------*)
-(* consolidate actions for uobjrtl_action category *)
+(* expand uobjrtl_action category within manifest actions *)
 (*--------------------------------------------------------------------------*)
-let consolidate_actions_for_category_uobjrtl_action
-	(p_uobj_action_node : Uberspark_manifest.json_node_uberspark_manifest_actions_t)
-	: bool * Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
-	let retval = ref true in 
-	let retval_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+let expand_category_uobjrtl_action
+	()
+	: bool = 
+	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
-	(* TBD:
-		use p_uobj_action_node and return the list of actions 
-	*)
+	(* expand uobjcoll manifest actions *)
+	List.iter ( fun (l_uobjcoll_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
 
-	(!retval, !retval_list)
+		if l_uobjcoll_action.category == "uobjrtl_action" then begin
+
+			(* locate the actions for the uobjrtl specified *)
+			let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
+				Hashtbl.find g_uobjrtl_manifest_var_hashtbl l_uobjcoll_action.uobjrtl_namespace in
+			
+			l_actions_list := !l_actions_list @ l_uobjrtl_manifest_var.manifest.actions;
+			
+		end else begin
+
+			(* not a default action, so copy as is *)
+			l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
+
+		end;
+
+	
+	) g_uobjcoll_manifest_var.manifest.actions;
+	
+	g_uobjcoll_manifest_var.manifest.actions <- !l_actions_list;
+
+	(true);
 ;;
 
 
