@@ -98,6 +98,39 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 ;;
 
 
+(* default actions list for uobjs *)
+let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
+	{
+		targets = [ "build"; ];
+		name = "translating .c to .o";
+		category = "translation";
+		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = "cc-bridge"; bridge_cmd = [];
+		uobj_namespace = "";
+		uobjrtl_namespace = "";
+	};
+
+	{
+		targets = [ "build"; ];
+		name = "translating .cS to .s";
+		category = "translation";
+		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = "casm-bridge"; bridge_cmd = [];
+		uobj_namespace = "";
+		uobjrtl_namespace = "";
+	};
+
+	{
+		targets = [ "build"; ];
+		name = "translating .s to .o";
+		category = "translation";
+		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = "as-bridge"; bridge_cmd = [];
+		uobj_namespace = "";
+		uobjrtl_namespace = "";
+	};
+
+]	
+;;
+
+
 
 (* assoc list of all actions to be processed; indexed by namespace of the uobjcoll, uobj or uobjrtl involved *)
 let g_actions_assoc_list : (string * uberspark_action_t) list ref = ref [];; 
@@ -294,7 +327,7 @@ let expand_category_default_action
 		List.iter ( fun (l_uobj_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
 
 			if l_uobj_action.category == "default_action" then begin
-				l_actions_list := !l_actions_list @ [ l_uobj_action; ];
+				l_actions_list := !l_actions_list @ g_uobj_default_action_list;
 
 			end else begin
 
@@ -324,7 +357,7 @@ let expand_category_default_action
 		List.iter ( fun (l_uobjrtl_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
 
 			if l_uobjrtl_action.category == "default_action" then begin
-				l_actions_list := !l_actions_list @ [ l_uobjrtl_action; ];
+				l_actions_list := !l_actions_list @ g_uobjrtl_default_action_list;
 
 			end else begin
 
