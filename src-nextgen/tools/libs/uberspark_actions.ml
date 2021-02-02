@@ -74,7 +74,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .c to .o";
 		category = "translation";
-		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+		input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -83,7 +83,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .cS to .s";
 		category = "translation";
-		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+		input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -92,7 +92,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .s to .o";
 		category = "translation";
-		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+		input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -107,7 +107,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .c to .o";
 		category = "translation";
-		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+		input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -116,7 +116,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .cS to .s";
 		category = "translation";
-		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+		input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -125,7 +125,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .s to .o";
 		category = "translation";
-		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+		input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -330,8 +330,8 @@ let initialize
 		l_uobjcoll_action.targets <- ["build";];
 		l_uobjcoll_action.name <- "uobjcoll binary build action";
 		l_uobjcoll_action.category <- "translation";
-		l_uobjcoll_action.input <- [".o";];
-		l_uobjcoll_action.output <- [".flat";];
+		l_uobjcoll_action.input <- ["*.o";];
+		l_uobjcoll_action.output <- [ "uobjcoll.flat";];
 		l_uobjcoll_action.bridge_namespace <- Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace;
 					
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
@@ -456,6 +456,32 @@ let build_input_output
 	(p_uberspark_action : uberspark_action_t )
 	: (bool * string list * string list) =
 	let retval = ref true in 
+	let l_wildcard_ext = ref "" in 
+	let l_input_list : string list ref = ref [] in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> ext (*.c) = %s" (Filename.extension "*.c"); 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> basename (*.c) = %s" (Filename.remove_extension "*.c");
+	
+	(* check if the string begins with wildcard characters and stores the extension in l_wildcard_ext if so *)
+	let l_wildcard (p_str : string ) : bool =
+		if (Filename.remove_extension p_str) = "*" then begin
+			l_wildcard_ext := Filename.extension p_str;
+			(true)
+		end else begin
+			(false)
+		end
+	in
+
+	if (List.exists l_wildcard p_uberspark_action.uberspark_manifest_action.input) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> wildcard detected, extension=%s" !l_wildcard_ext; 
+
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> regular list with no wildcards"; 
+		l_input_list := p_uberspark_action.uberspark_manifest_action.input;
+	end;
+	
+
+
 
 	(* TBD
 		1. use p_uberspark_action.uberspark_manifest.action.input
@@ -473,7 +499,7 @@ let build_input_output
  	*)
 
 
-	(!retval, [], [])
+	(!retval, !l_input_list, [])
 ;;
 
 
@@ -508,7 +534,18 @@ let process_actions ()
 			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> manifest.namespace=%s" l_action.uberspark_manifest_var.manifest.namespace;
 
-			l_current_action_index := !l_current_action_index + 1;
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building input and output file list for action...";
+			let (l_rval, l_input_file_list, l_output_file_list) = (build_input_output l_action) in 
+			if l_rval then begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> input and output file list generation success";
+
+
+
+				l_current_action_index := !l_current_action_index + 1;
+
+			end else begin
+				retval := false;
+			end;
 
 		end;
 	) !g_actions_list;
