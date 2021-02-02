@@ -25,6 +25,9 @@ type uberspark_action_t =
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+(* global actions list *)
+let g_actions_list : uberspark_action_t list ref = ref [];;
+
 (* manifest variable *)
 let g_uobjcoll_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value ();;
 
@@ -144,6 +147,140 @@ let g_actions_assoc_list : (string * uberspark_action_t) list ref = ref [];;
 (*---------------------------------------------------------------------------*)
 
 
+
+let consolidate_actions_uobj 
+	(p_uobj_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
+	: bool * Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
+	let retval = ref true in
+	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+	List.iter ( fun (l_uobj_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
+		if !retval then begin
+
+			if l_uobj_action.category = "default_action" then begin
+
+				(* thread through the default actions for the uobj *)				
+				l_actions_list := !l_actions_list @ g_uobj_default_action_list;
+
+			end else if l_uobj_action.category = "translation" then begin
+
+				(* plug in the action as is *)
+				l_actions_list := !l_actions_list @ [ l_uobj_action; ];
+
+			end else begin
+				
+				(* unknown category, print error and exit *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unkown uobj action category: %s" l_uobj_action.category;
+				retval := false;
+			
+			end;
+		end;
+	) p_uobj_manifest_var.manifest.actions;
+
+	(!retval, !l_actions_list)
+;;
+
+
+let consolidate_actions_uobjrtl 
+	(p_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
+	: bool * Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
+	let retval = ref true in
+	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+	List.iter ( fun (l_uobjrtl_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
+		if !retval then begin
+
+			if l_uobjrtl_action.category = "default_action" then begin
+
+				(* thread through the default actions for the uobj *)				
+				l_actions_list := !l_actions_list @ g_uobjrtl_default_action_list;
+
+			end else if l_uobjrtl_action.category = "translation" then begin
+
+				(* plug in the action as is *)
+				l_actions_list := !l_actions_list @ [ l_uobjrtl_action; ];
+
+			end else begin
+				
+				(* unknown category, print error and exit *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unkown uobjrtl action category: %s" l_uobjrtl_action.category;
+				retval := false;
+			
+			end;
+		end;
+	) p_uobjrtl_manifest_var.manifest.actions;
+
+	(!retval, !l_actions_list)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* consolidate actions *)
+(*--------------------------------------------------------------------------*)
+let consolidate_actions ()
+	: bool =
+	let retval = ref true in
+
+
+	let l_add_to_global_actions_list 
+		(p_manifest_actions_list: Uberspark_manifest.json_node_uberspark_manifest_actions_t list)
+		(p_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
+		: unit =
+
+		List.iter ( fun (l_manifest_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
+
+			g_actions_list := !g_actions_list @ [ {
+					uberspark_manifest_action = l_manifest_action;
+					uberspark_manifest_var = p_uberspark_manifest_var;
+					}
+			];
+
+		) p_manifest_actions_list;
+	
+		()
+	in
+
+	(* expand uobjcoll manifest actions *)
+	List.iter ( fun (l_uobjcoll_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
+		if !retval then begin
+
+			if l_uobjcoll_action.category = "uobj_action" then begin
+				
+				let l_uobj_manifest_var = List.assoc l_uobjcoll_action.uobj_namespace !g_uobj_manifest_var_assoc_list  in
+				let (rval, ll_actions_list) = (consolidate_actions_uobj l_uobj_manifest_var) in
+				if rval then begin
+					l_add_to_global_actions_list ll_actions_list l_uobj_manifest_var;
+				end else begin
+					retval := rval;
+				end;
+
+			end else if l_uobjcoll_action.category = "uobjrtl_action" then begin
+
+				let l_uobjrtl_manifest_var = Hashtbl.find g_uobjrtl_manifest_var_hashtbl l_uobjcoll_action.uobjrtl_namespace in
+				let (rval, ll_actions_list) = (consolidate_actions_uobjrtl l_uobjrtl_manifest_var) in
+				if rval then begin
+					l_add_to_global_actions_list ll_actions_list l_uobjrtl_manifest_var;
+				end else begin
+					retval := rval;
+				end;
+
+			end else if l_uobjcoll_action.category = "translation" then begin
+
+				(* store action in global actions list, as is *)
+				l_add_to_global_actions_list [ l_uobjcoll_action;] g_uobjcoll_manifest_var;
+
+			end else begin
+				(* unknown category, print error and exit *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: unknown category=%s" __LOC__ l_uobjcoll_action.category;
+				retval := false;
+			end;
+		end;
+	) g_uobjcoll_manifest_var.manifest.actions;
+
+	(!retval)
+;;
+
+
 (*--------------------------------------------------------------------------*)
 (* initiatize actions processing *)
 (*--------------------------------------------------------------------------*)
@@ -155,86 +292,184 @@ let initialize
 	(p_staging_dir_prefix : string )
 	: bool =
 
+	let l_uobjcoll_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+	let l_add_default_uobjcoll_actions () : 
+		Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
+		let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+		(* add action element for each uobjrtl of category uobjrtl_action *)
+		Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		
+			let l_uobjrtl_action = new_action_element () in
+			
+			l_uobjrtl_action.name <- "uobjrtl action";
+			l_uobjrtl_action.category <- "uobjrtl_action";
+			l_uobjrtl_action.uobjrtl_namespace <- l_uobjrtl_ns;
+			
+			l_actions_list := !l_actions_list @ [ l_uobjrtl_action; ];
+		
+		) g_uobjrtl_manifest_var_hashtbl;		
+
+		(* add action element for each uobj of category uobj_action *)
+		List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+			let l_uobj_action = new_action_element () in
+			
+			l_uobj_action.name <- "uobj action";
+			l_uobj_action.category <- "uobj_action";
+			l_uobj_action.uobj_namespace <- l_uobj_ns;
+			
+			l_actions_list := !l_actions_list @ [ l_uobj_action; ];
+
+		) !g_uobj_manifest_var_assoc_list;
+
+		(* add action element for final uobjcoll binary build *)
+		let l_uobjcoll_action = new_action_element () in
+		
+		l_uobjcoll_action.targets <- ["build";];
+		l_uobjcoll_action.name <- "uobjcoll binary build action";
+		l_uobjcoll_action.category <- "translation";
+		l_uobjcoll_action.input <- [".o";];
+		l_uobjcoll_action.output <- [".flat";];
+		l_uobjcoll_action.bridge_namespace <- "cc-bridge";
+					
+		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
+
+		(!l_actions_list)
+	in
+
 	(* store triage and staging dir prefix *)
 	g_triage_dir_prefix := p_triage_dir_prefix;
 	g_staging_dir_prefix := p_staging_dir_prefix;
 
-	Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;
+	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
+	(* Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;*)
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		
+		if List.length l_uobjrtl_manifest_var.manifest.actions == 0 then begin
+		
+			l_uobjrtl_manifest_var.manifest.actions <- [ g_default_action; ];
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjrtl: %s" 
+				l_uobjrtl_manifest_var.uobjrtl.namespace; 
+			
+		end;
 
-	(* add default actions for uobjcoll manifest actions if needed *)
-	Uberspark_manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
-	if List.length g_uobjcoll_manifest_var.manifest.actions == 0 then begin
-		g_uobjcoll_manifest_var.manifest.actions <- [ g_default_action; ];
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjcoll: %s" 
-			g_uobjcoll_manifest_var.uobjcoll.namespace; 
-	end;
-	
-	(* add default actions for uobj manifest actions if needed *)
+		Hashtbl.add g_uobjrtl_manifest_var_hashtbl l_uobjrtl_ns l_uobjrtl_manifest_var;
+
+	) p_uobjrtl_manifest_var_hashtbl;
+
+	(* if uobj manifest actions is empty for any given uobj, then add default actions *)
 	List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+		
 		if List.length l_uobj_manifest_var.manifest.actions == 0 then begin
+			
 			l_uobj_manifest_var.manifest.actions <- [ g_default_action; ];
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobj: %s" 
 				l_uobj_manifest_var.uobj.namespace; 
+		
 		end;
 
 		g_uobj_manifest_var_assoc_list := !g_uobj_manifest_var_assoc_list @ [ (l_uobj_ns, l_uobj_manifest_var); ];
 
 	) p_uobj_manifest_var_assoc_list;
 
+	(* iterate through uobjcoll manifest actions, if empty, then add default actions *)
+	(* expand any default_action category is non_empty *)
+	Uberspark_manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
 
-	(* add default actions for uobjrtl manifest actions if needed *)
-	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
-		if List.length l_uobjrtl_manifest_var.manifest.actions == 0 then begin
-			l_uobjrtl_manifest_var.manifest.actions <- [ g_default_action; ];
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjrtl: %s" 
-				l_uobjrtl_manifest_var.uobjrtl.namespace; 
-		end;
+	if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
+		g_uobjcoll_manifest_var.manifest.actions <- l_add_default_uobjcoll_actions ();
 
-		Hashtbl.add p_uobjrtl_manifest_var_hashtbl l_uobjrtl_ns l_uobjrtl_manifest_var;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default actions to uobjcoll: %s" 
+			g_uobjcoll_manifest_var.uobjcoll.namespace; 
 
-	) p_uobjrtl_manifest_var_hashtbl;
+	end else begin
 
+		List.iter ( fun (l_uobjcoll_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
 
-	(* debug dump *)
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll (%s) total actions: %u" 
-		g_uobjcoll_manifest_var.uobjcoll.namespace (List.length g_uobjcoll_manifest_var.manifest.actions);
-	List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj (%s) total actions: %u" 
-			l_uobj_manifest_var.uobj.namespace (List.length l_uobj_manifest_var.manifest.actions);
-	) !g_uobj_manifest_var_assoc_list;
-	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl (%s) total actions: %u" 
-			l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.manifest.actions);
-	) g_uobjrtl_manifest_var_hashtbl;
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "triage dir prefix=%s" !g_triage_dir_prefix;
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "staging dir prefix=%s" !g_staging_dir_prefix;
-	 
+			if l_uobjcoll_action.category == "default_action" then begin
+				l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ (l_add_default_uobjcoll_actions ());
+			end else begin
+				l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ [ l_uobjcoll_action; ];
+			end;
+
+		)p_uobjcoll_manifest_var.manifest.actions;
+
+		g_uobjcoll_manifest_var.manifest.actions <- !l_uobjcoll_actions_list;
+
+	end;
+
+	(* consolidate all actions *)
+	let rval = consolidate_actions () in
+
+	if not rval then
+		(false)
+	else
+
+	let dummy=0 in begin
+		
+		(* debug dump *)
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll (%s) total actions: %u" 
+			g_uobjcoll_manifest_var.uobjcoll.namespace (List.length g_uobjcoll_manifest_var.manifest.actions);
+		List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobj (%s) total actions: %u" 
+				l_uobj_manifest_var.uobj.namespace (List.length l_uobj_manifest_var.manifest.actions);
+		) !g_uobj_manifest_var_assoc_list;
+		Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl (%s) total actions: %u" 
+				l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.manifest.actions);
+		) g_uobjrtl_manifest_var_hashtbl;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "triage dir prefix=%s" !g_triage_dir_prefix;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "staging dir prefix=%s" !g_staging_dir_prefix;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "consolidated actions: %u" (List.length !g_actions_list);
+
+	end;
 
 	(true)
 ;;
 
 
 (*--------------------------------------------------------------------------*)
-(* consolidate actions for uobj_action category *)
+(* expand uobj_action category within manifest actions *)
 (*--------------------------------------------------------------------------*)
-let consolidate_actions_for_category_uobj_action
-	(p_uobj_action_node : Uberspark_manifest.json_node_uberspark_manifest_actions_t)
-	: bool * Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
-	let retval = ref true in 
-	let retval_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+(*let expand_category_uobj_action
+	()
+	: bool = 
+	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
-	(* TBD:
-		use p_uobj_action_node and return the list of actions 
-	*)
+	(* expand uobjcoll manifest actions *)
+	List.iter ( fun (l_uobjcoll_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
 
-	(!retval, !retval_list)
+		if l_uobjcoll_action.category == "uobjrtl_action" then begin
+
+			(* locate the actions for the uobjrtl specified *)
+			let l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t =
+				Hashtbl.find g_uobjrtl_manifest_var_hashtbl l_uobjcoll_action.uobjrtl_namespace in
+			
+			l_actions_list := !l_actions_list @ l_uobjrtl_manifest_var.manifest.actions;
+			
+		end else begin
+
+			(* not a default action, so copy as is *)
+			l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
+
+		end;
+
+	
+	) g_uobjcoll_manifest_var.manifest.actions;
+	
+	g_uobjcoll_manifest_var.manifest.actions <- !l_actions_list;
+
+
+	(true);
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* expand uobjrtl_action category within manifest actions *)
 (*--------------------------------------------------------------------------*)
-let expand_category_uobjrtl_action
+(*let expand_category_uobjrtl_action
 	()
 	: bool = 
 	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
@@ -264,7 +499,7 @@ let expand_category_uobjrtl_action
 
 	(true);
 ;;
-
+*)
 
 (*
 			
@@ -275,7 +510,7 @@ let expand_category_uobjrtl_action
 (*--------------------------------------------------------------------------*)
 (* expand default_action category within manifest actions *)
 (*--------------------------------------------------------------------------*)
-let expand_category_default_action
+(*let expand_category_default_action
 	()
 	: bool = 
 	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
@@ -394,12 +629,12 @@ let expand_category_default_action
 
 	(true)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* consolidate actions *)
 (*--------------------------------------------------------------------------*)
-let consolidate_actions
+(*let consolidate_actions
 	: bool =
 	let retval = ref true in 
 
@@ -418,7 +653,7 @@ let consolidate_actions
 	
 	(!retval)
 ;;
-
+*)
 
 (*
 	let wildcard (p_str : string ) : bool = 
