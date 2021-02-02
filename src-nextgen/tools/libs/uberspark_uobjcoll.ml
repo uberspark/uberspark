@@ -2681,6 +2681,16 @@ let process_manifest_common
 				()
 			else
 
+
+			(* process actions *)
+			let l_dummy=0 in begin
+			retval := Uberspark_actions.process_actions ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
 			let l_dummy=0 in begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjcoll processed successfully!";
 			end;

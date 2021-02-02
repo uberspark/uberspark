@@ -426,18 +426,6 @@ let initialize
 
 	end;
 
-	(* initialize uobjcoll bridges *)
-	(* TBD: initialize bridge from consolidated actions *)
-	(*let rval = (Uberspark_bridge.initialize_from_config ()) in	
-    if (rval == false) then	begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
-		(false)
-	end else
-
-	let dummy=0 in begin
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initialized uobjcoll bridges!";
-	end;
-	*)
 
 	(true)
 ;;
@@ -492,9 +480,39 @@ let build_input_output
 (*--------------------------------------------------------------------------*)
 (* process actions *)
 (*--------------------------------------------------------------------------*)
-let process_actions
+let process_actions ()
 	: bool =
 	let retval = ref true in 
+
+	let l_current_action_index = ref 1 in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions...(total=%u)" (List.length !g_actions_list);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Info "Initializing action bridges...";
+
+	(* initialize uobjcoll bridges *)
+	(* TBD: initialize bridge from consolidated actions *)
+	let rval = (Uberspark_bridge.initialize_from_config ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
+		(false)
+	end else
+
+	let dummy=0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Info "successfully initialized action bridges";
+	end;
+
+	let dummy=0 in begin
+	(* iterate over global action list *)
+	List.iter ( fun (l_action : uberspark_action_t) -> 
+		if !retval then begin
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> manifest.namespace=%s" l_action.uberspark_manifest_var.manifest.namespace;
+
+			l_current_action_index := !l_current_action_index + 1;
+
+		end;
+	) !g_actions_list;
+	end;
 
 	(* TBD:
 		iterate over global action list
