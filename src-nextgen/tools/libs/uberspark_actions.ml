@@ -74,7 +74,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .c to .o";
 		category = "translation";
-		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = "cc-bridge"; bridge_cmd = [];
+		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -83,7 +83,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .cS to .s";
 		category = "translation";
-		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = "casm-bridge"; bridge_cmd = [];
+		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -92,7 +92,7 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 		targets = [ "build"; ];
 		name = "translating .s to .o";
 		category = "translation";
-		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = "as-bridge"; bridge_cmd = [];
+		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -107,7 +107,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .c to .o";
 		category = "translation";
-		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = "cc-bridge"; bridge_cmd = [];
+		input = [ ".c" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -116,7 +116,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .cS to .s";
 		category = "translation";
-		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = "casm-bridge"; bridge_cmd = [];
+		input = [ ".cS" ]; output = [ ".s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -125,7 +125,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 		targets = [ "build"; ];
 		name = "translating .s to .o";
 		category = "translation";
-		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = "as-bridge"; bridge_cmd = [];
+		input = [ ".s" ]; output = [ ".o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 		uobj_namespace = "";
 		uobjrtl_namespace = "";
 	};
@@ -332,7 +332,7 @@ let initialize
 		l_uobjcoll_action.category <- "translation";
 		l_uobjcoll_action.input <- [".o";];
 		l_uobjcoll_action.output <- [".flat";];
-		l_uobjcoll_action.bridge_namespace <- "cc-bridge";
+		l_uobjcoll_action.bridge_namespace <- Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace;
 					
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
 
@@ -425,6 +425,19 @@ let initialize
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "consolidated actions: %u" (List.length !g_actions_list);
 
 	end;
+
+	(* initialize uobjcoll bridges *)
+	(* TBD: initialize bridge from consolidated actions *)
+	(*let rval = (Uberspark_bridge.initialize_from_config ()) in	
+    if (rval == false) then	begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
+		(false)
+	end else
+
+	let dummy=0 in begin
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initialized uobjcoll bridges!";
+	end;
+	*)
 
 	(true)
 ;;
