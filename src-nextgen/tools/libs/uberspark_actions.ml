@@ -450,35 +450,141 @@ let initialize
 
 
 (*--------------------------------------------------------------------------*)
+(* create and return a list of files for either input our output *)
+(* given a manifest var and extension filter *)
+(*--------------------------------------------------------------------------*)
+let filter_source_filename_list 
+	(p_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
+	(p_wildcard_ext : string) 
+	: string list =
+
+	let l_return_list : string list ref = ref [] in 
+
+	if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
+		
+		List.iter ( fun (l_filename : string) ->
+			if (Filename.extension l_filename) = p_wildcard_ext then begin
+				l_return_list := !l_return_list @ [ l_filename; ];
+			end;
+		) p_uberspark_manifest_var.uobj.sources.source_c_files;
+		
+	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
+
+		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
+			if (Filename.extension l_source_file.path) = p_wildcard_ext then begin
+				l_return_list := !l_return_list @ [ l_source_file.path; ];
+			end;
+		) p_uberspark_manifest_var.uobjrtl.source_c_files;
+
+	end else begin
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "%s: unknown manifest namespace=%s" __LOC__ p_uberspark_manifest_var.manifest.namespace; 
+		l_return_list := [];
+
+	end;
+
+	(!l_return_list)
+;;
+
+
+(*--------------------------------------------------------------------------*)
 (* build input and output list *)
 (*--------------------------------------------------------------------------*)
+(*
+	return input list, return output list
+	return input ext, return output ext
+	return true on success, false on failure
+*)
 let build_input_output
 	(p_uberspark_action : uberspark_action_t )
-	: (bool * string list * string list) =
-	let retval = ref true in 
-	let l_wildcard_ext = ref "" in 
-	let l_input_list : string list ref = ref [] in 
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> ext (*.c) = %s" (Filename.extension "*.c"); 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> basename (*.c) = %s" (Filename.remove_extension "*.c");
+	: (bool * string list * string list * string * string) =
 	
-	(* check if the string begins with wildcard characters and stores the extension in l_wildcard_ext if so *)
-	let l_wildcard (p_str : string ) : bool =
+	let l_retval = ref true in 
+	let l_input_list : string list ref = ref [] in 
+	let l_output_list : string list ref = ref [] in 
+	let l_input_wildcard_ext = ref "" in 
+	let l_output_wildcard_ext = ref "" in 
+	
+	(* check if the string begins with wildcard characters and stores the extension in l_input_wildcard_ext if so *)
+	let l_wildcard_input (p_str : string ) : bool =
 		if (Filename.remove_extension p_str) = "*" then begin
-			l_wildcard_ext := Filename.extension p_str;
+			l_input_wildcard_ext := Filename.extension p_str;
 			(true)
 		end else begin
 			(false)
 		end
 	in
 
-	if (List.exists l_wildcard p_uberspark_action.uberspark_manifest_action.input) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> wildcard detected, extension=%s" !l_wildcard_ext; 
+	(* check if the string begins with wildcard characters and stores the extension in l_output_wildcard_ext if so *)
+	let l_wildcard_output (p_str : string ) : bool =
+		if (Filename.remove_extension p_str) = "*" then begin
+			l_output_wildcard_ext := Filename.extension p_str;
+			(true)
+		end else begin
+			(false)
+		end
+	in
+
+
+	(* ok input can be a wildcard, output has to be wildcard or a single entry 
+	    if input has no wildcard, output cannot have wildcard
+		output can be a single entry or the same number of entries as input
+
+		all input extensions must be same, all output extensions must be same	
+	
+		return input list, return output list
+		return input ext, return output ext
+		return true on success, false on failure
+	*)
+
+	(* in all the blanks below call the helper function with appropriate wildcard extension *)
+
+	(* if we have wildcard on input we need wildcard on output or a single entry *)
+	if (List.exists l_wildcard_input p_uberspark_action.uberspark_manifest_action.input) then begin
+		if List.exists l_wildcard_output p_uberspark_action.uberspark_manifest_action.output) then begin
+			helper l_input_list l_input_wildcard_ext p_uberspark_action
+			helper l_output_list l_output_wildcard_ext p_uberspark_action
+
+		end else begin
+			if List.length p_uberspark_action.uberspark_manifest_action.output = 1 then begin
+				helper l_input_list l_input_wildcard_ext p_uberspark_action
+				outputlist = output.element
+			end else begin
+				l_retval := false;
+			end;
+		end;
+	
+	end else begin
+	(* if we don't have wildcard on input we need no wildcard on output and equal number of entries *)
+		if List.exists l_wildcard_output p_uberspark_action.uberspark_manifest_action.output) then begin
+				l_retval := false;
+				
+		end else begin
+			if List.length p_uberspark_action.uberspark_manifest_action.output = 1 then begin
+				l_input_list = p_uberspark_action input list; check for extesnsion; store extension
+				outputlist = output.element
+
+			end else if List.length p_uberspark_action.uberspark_manifest_action.output = List.length p_uberspark_action.uberspark_manifest_action.input then begin
+
+				l_input_list = p_uberspark_action input list; check for extesnsion; store extension
+				l_output_list = p_uberspark_action output list; check for extesnsion; store extension
+
+			end else begin
+				l_retval := false;
+			end;
+		end;
+	
+	end;
+
+
+
+	if (List.exists l_wildcard_input p_uberspark_action.uberspark_manifest_action.input) then begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> wildcard detected, extension=%s" !l_input_wildcard_ext; 
 		
 		if p_uberspark_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
 			
 			List.iter ( fun (l_filename : string) ->
-				if (Filename.extension l_filename) = !l_wildcard_ext then begin
+				if (Filename.extension l_filename) = !l_input_wildcard_ext then begin
 					l_input_list := !l_input_list @ [ l_filename; ];
 				end;
 			) p_uberspark_action.uberspark_manifest_var.uobj.sources.source_c_files;
@@ -486,7 +592,7 @@ let build_input_output
 		end else if p_uberspark_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
 			List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
-				if (Filename.extension l_source_file.path) = !l_wildcard_ext then begin
+				if (Filename.extension l_source_file.path) = !l_input_wildcard_ext then begin
 					l_input_list := !l_input_list @ [ l_source_file.path; ];
 				end;
 			) p_uberspark_action.uberspark_manifest_var.uobjrtl.source_c_files;
@@ -519,7 +625,7 @@ let build_input_output
  	*)
 
 
-	(!retval, !l_input_list, [])
+	(!l_retval, !l_input_list, [])
 ;;
 
 
