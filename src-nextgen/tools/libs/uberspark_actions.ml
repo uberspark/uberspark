@@ -474,6 +474,26 @@ let build_input_output
 
 	if (List.exists l_wildcard p_uberspark_action.uberspark_manifest_action.input) then begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> wildcard detected, extension=%s" !l_wildcard_ext; 
+		
+		if p_uberspark_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
+			
+			List.iter ( fun (l_filename : string) ->
+				if (Filename.extension l_filename) = !l_wildcard_ext then begin
+					l_input_list := !l_input_list @ [ l_filename; ];
+				end;
+			) p_uberspark_action.uberspark_manifest_var.uobj.sources.source_c_files;
+			
+		end else if p_uberspark_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
+
+			List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
+				if (Filename.extension l_source_file.path) = !l_wildcard_ext then begin
+					l_input_list := !l_input_list @ [ l_source_file.path; ];
+				end;
+			) p_uberspark_action.uberspark_manifest_var.uobjrtl.source_c_files;
+
+		end else begin
+			l_input_list := [];
+		end;
 
 	end else begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> regular list with no wildcards"; 
