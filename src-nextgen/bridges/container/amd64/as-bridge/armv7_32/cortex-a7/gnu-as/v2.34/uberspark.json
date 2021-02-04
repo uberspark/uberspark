@@ -1,0 +1,25 @@
+/*
+    uberSpark code bridges json definition
+*/
+
+{
+	"uberspark.manifest.namespace" : "uberspark/bridges",
+	"uberspark.manifest.version_min" : "any",
+	"uberspark.manifest.version_max" : "any",
+
+	"uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/as-bridge/armv7_32/cortex-a7/gnu-as/v2.34",
+	"uberspark.bridge.category" : "container",
+	"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+	"uberspark.bridge.bridge_cmd" : [
+		"export var_bridge_include_dirs_with_prefix",
+		"export var_bridge_source_files",
+		"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+		"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+		"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+		"for source_file_name in $vararray_bridge_source_files; do echo \"Compiling ${source_file_name} ...\" && arm-linux-gnueabihf-gcc-10 @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -marm -mcpu=cortex-a7 -mfpu=neon -ffreestanding -mno-thumb-interwork -c ${var_bridge_include_dirs_with_prefix} ${source_file_name} -o ${source_file_name}.o ; done"
+	] 
+
+
+
+}
