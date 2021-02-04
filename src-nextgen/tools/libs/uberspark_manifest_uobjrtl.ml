@@ -73,7 +73,7 @@ let json_node_uberspark_uobjrtl_to_var
 					if (mf_json |> member "uberspark.uobjrtl.cpu") != `Null then
 						json_node_uberspark_uobjrtl_var.cpu <- mf_json |> member "uberspark.uobjrtl.cpu" |> to_string;
 
-					if (mf_json |> member "uberspark.uobjrtl.source_casm_files") <> `Null then
+					if (mf_json |> member "uberspark.uobjrtl.source_c_files") <> `Null then
 					begin
 						let json_node_uberspark_uobjrtl_modules_spec_c_list =  mf_json |> member "uberspark.uobjrtl.source_c_files" |> to_list in
 						List.iter (fun x -> 
