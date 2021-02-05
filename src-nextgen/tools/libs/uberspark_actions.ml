@@ -649,6 +649,51 @@ let build_input_output
 
 
 (*--------------------------------------------------------------------------*)
+(* invoke bridge *)
+(*--------------------------------------------------------------------------*)
+let invoke_bridge
+	(p_input_file_list : string list )
+	(p_output_file_list : string list )
+	(p_input_file_ext : string )
+	(p_output_file_ext : string )
+	(p_action : uberspark_action_t)
+	: bool =
+
+	let l_retval = ref true in
+
+	(*
+	p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj", "uberspark/uobjcoll", "uberspark/uobjrtl"
+	each of the above will help us locate the namespace p_action.uberspark_manifest_var.uobjrtl.namespace
+	which in tun will help us identify the directory to cd into for the bridge to perform the action
+
+			retval := Uberspark_bridge.cc_bridge#invoke 
+					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
+					[
+						("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
+						("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
+						("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+						("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
+						("@@BRIDGE_COMPILEDEFS@@", "");
+						("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+						("@@BRIDGE_DEFS@@", "");
+						("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+						Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+						("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+					];
+
+
+	we need to change uberspark_bridge_container.invoke to do cd to context_path_builddir and if not specified be in .
+	/home/uberspark/uobjcoll/_triage is our mount point where triage dir gets mounted
+	context_path_build_dir if additionally specified will be used to cd into this as the reference
+
+	*)
+	(!l_retval)
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
 (* process actions *)
 (*--------------------------------------------------------------------------*)
 let process_actions ()
