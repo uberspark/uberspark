@@ -185,3 +185,67 @@ In any of the above situtations, we can have a sanity check that the uberspark i
             appropriate source extension. Then there are actions that basically go from translating the
             source extension into the target .c, .h, .o, and .exe extensions.
             
+
+Actions input and output
+------------------------
+
+Sources can only be in .c or .cS. For example, 
+
+.. code-block:: bash
+
+    1.c
+    2.c
+    3.c
+    4.cS
+    5.cS
+    6.c
+
+
+Action input/output list can be a set of different input files resulting in
+one of the outputs or multiple outputs; but outputs must always end
+with either .c or .CS which is in the sources list. For example,
+
+.. code-block:: bash
+
+    input: 6.v, 7.v, 8.v, 9.v
+    output: 6.c
+    
+    input: 45.s,42.s,43.s, 
+    output: 5.cS
+
+Action input/output can be wildcards in which case it selects a 
+set from the sources and outputs files of that set into the extension specified.
+
+.. code-block:: bash
+
+    *.cS --> *.o
+    *.cS --> *.cSs (see note below)
+
+
+..  note::
+    *.cSs is only used if we need to bundle all the assembly into one single
+    file to be used by a certified assembler for example. The assembler bridge
+    will then have the rule *.cSs --> *.o or *.cSs --> *.flat for binary generation
+
+
+The above will select 4.cS and 5.cS as inputs and produce outputs with
+the specified extensions (e.g., 4.o, 5.o)
+
+.. code-block:: bash
+
+    *.c --> *.o
+    *.c --> *.cSs (iff c compiler is certified)
+
+The above will select 1.c, 2.c, 3.c, and 6.c as inputs and produce outputs
+with specified extensions (e.g., 1.s, 2.s, 3.s, 4.s)
+
+Two special wildcard input rules always select all the sources with
+the specified wildcard extension. For example,
+
+.. code-block:: bash
+
+    *.o --> uobjcoll.flat
+    *.cSs --> uobjcoll.flat (iff using certified assembler)
+
+The above will select 1.s, 2.s, 3.s, 4.s, 5.s, 6.s as inputs and produce the
+desired output. 
