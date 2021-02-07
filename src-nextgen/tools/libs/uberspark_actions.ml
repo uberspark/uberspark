@@ -69,7 +69,7 @@ let new_action_element ()
 
 
 (* default actions list for uobjrtl *)
-let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
+(*let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
 	{
 		targets = [ "build"; ];
 		name = "translating .c to .o";
@@ -98,11 +98,11 @@ let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manif
 	};
 
 ]	
-;;
+;;*)
 
 
 (* default actions list for uobjs *)
-let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
+(*let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
 	{
 		targets = [ "build"; ];
 		name = "translating .c to .o";
@@ -132,7 +132,7 @@ let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest
 
 ]	
 ;;
-
+*)
 
 
 (* assoc list of all actions to be processed; indexed by namespace of the uobjcoll, uobj or uobjrtl involved *)
