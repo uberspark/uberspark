@@ -160,7 +160,34 @@ let consolidate_actions_uobj
 			if l_uobj_action.category = "default_action" then begin
 
 				(* thread through the default actions for the uobj *)				
-				l_actions_list := !l_actions_list @ g_uobj_default_action_list;
+				l_actions_list := !l_actions_list @ [
+					{
+						targets = [ "build"; ];
+						name = "translating .c to .o";
+						category = "translation";
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .cS to .s";
+						category = "translation";
+						input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .s to .o";
+						category = "translation";
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+				];
 
 			end else if l_uobj_action.category = "translation" then begin
 
@@ -193,7 +220,34 @@ let consolidate_actions_uobjrtl
 			if l_uobjrtl_action.category = "default_action" then begin
 
 				(* thread through the default actions for the uobj *)				
-				l_actions_list := !l_actions_list @ g_uobjrtl_default_action_list;
+				l_actions_list := !l_actions_list @ [
+					{
+						targets = [ "build"; ];
+						name = "translating .c to .o";
+						category = "translation";
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .cS to .s";
+						category = "translation";
+						input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .s to .o";
+						category = "translation";
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+				];
 
 			end else if l_uobjrtl_action.category = "translation" then begin
 
@@ -867,14 +921,28 @@ let get_action_output_filename_list
 (* invoke bridge *)
 (*--------------------------------------------------------------------------*)
 let invoke_bridge
+	(p_action : uberspark_action_t)
 	(p_input_file_list : string list )
 	(p_output_file_list : string list )
-	(p_input_file_ext : string )
-	(p_output_file_ext : string )
-	(p_action : uberspark_action_t)
+	(p_input_file_ext_list : string list)
+	(p_output_file_ext_list : string list)
 	: bool =
 
 	let l_retval = ref true in
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> invoke_bridge: start...";
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> p_input_fle_list: ";
+	List.iter ( fun x -> Uberspark_logger.log ~lvl:Uberspark_logger.Debug ">  %s" x;) p_input_file_list;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> p_output_fle_list: ";
+	List.iter ( fun x -> Uberspark_logger.log ~lvl:Uberspark_logger.Debug ">  %s" x;) p_output_file_list;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> p_input_file_ext_list: ";
+	List.iter ( fun x -> Uberspark_logger.log ~lvl:Uberspark_logger.Debug ">  %s" x;) p_input_file_ext_list;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> p_output_file_ext_list: ";
+	List.iter ( fun x -> Uberspark_logger.log ~lvl:Uberspark_logger.Debug ">  %s" x;) p_output_file_ext_list;
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> action.bridge_namespace=%s: "
+		p_action.uberspark_manifest_action.bridge_namespace;
+
+
 
 	(*
 	p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj", "uberspark/uobjcoll", "uberspark/uobjrtl"
@@ -903,6 +971,8 @@ let invoke_bridge
 	context_path_build_dir if additionally specified will be used to cd into this as the reference
 
 	*)
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> invoke_bridge: end(l_retval=%b)..." !l_retval;
 	(!l_retval)
 ;;
 
@@ -964,8 +1034,18 @@ let process_actions ()
 				if(l_rval_output) then begin
 
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> successfully built input and output file list for action";
+					let l_rval_bridge = invoke_bridge l_action
+						l_input_file_list l_output_file_list
+						l_input_ext_list l_output_ext_list in
 
-					l_current_action_index := !l_current_action_index + 1;
+					if l_rval_bridge then begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
+						l_current_action_index := !l_current_action_index + 1;
+					end else begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
+						retval := false;
+					end;
+
 
 				end else begin
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build output file list for action!";
