@@ -43,6 +43,9 @@ let g_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_mani
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let g_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
+(* hash table of bridge namespace to bridge object *)
+let g_bridge_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_bridge.bridge_object)  Hashtbl.t));;
+
 
 (* actions element definition for default_action *)
 let g_default_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t = {
@@ -976,6 +979,23 @@ let invoke_bridge
 	(!l_retval)
 ;;
 
+
+(*--------------------------------------------------------------------------*)
+(* initialize action bridges *)
+(*--------------------------------------------------------------------------*)
+let initialize_bridges ()
+	: bool =
+
+	let l_retval = ref true in
+	(* iterate over global action list *)
+	List.iter ( fun (l_action : uberspark_action_t) -> 
+		if !l_retval then begin
+
+		end;
+	) !g_actions_list;
+
+	(!l_retval)
+;;
 
 
 (*--------------------------------------------------------------------------*)

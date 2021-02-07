@@ -169,10 +169,19 @@ class bridge_object
 	method load 
 		(bridge_ns : string)
 		: bool =
+		let l_retval = ref true in
 		let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
 			bridge_ns ^ "/" ^
 			Uberspark_namespace.namespace_root_mf_filename in
-			(self#load_from_file bridge_ns_json_path)
+			
+			if (Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_bridge ^ "/")) bridge_ns 0) then begin
+				l_retval := self#load_from_file bridge_ns_json_path;
+			end else begin
+				json_node_uberspark_bridge_var.namespace <- bridge_ns;
+				json_node_uberspark_bridge_var.category <- "native";
+			end;
+
+		(!l_retval)
 	;
 
 
