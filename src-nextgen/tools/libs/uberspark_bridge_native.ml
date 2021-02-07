@@ -7,7 +7,7 @@ let run_shell_command
    	?(context_path_builddir = ".")
     (context_path : string)
     (d_cmd : string)
-    (bridge_ns: string)
+    (bridge_ns : string)
     : int =
     
     let revised_d_cmd = ref "" in
