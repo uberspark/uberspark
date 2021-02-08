@@ -62,6 +62,7 @@ type json_node_uberspark_uobjcoll_t =
 	mutable loaders : string list;
 	mutable configdefs_verbatim : bool;
 	mutable configdefs: (string * json_node_uberspark_uobjcoll_configdefs_t) list;
+	mutable sources : string list; (* this is not part of the manifest, but populated in the backend *)
 };;
 
 

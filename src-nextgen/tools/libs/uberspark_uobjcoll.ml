@@ -59,6 +59,7 @@ let json_node_uberspark_uobjcoll_var : Uberspark_manifest.Uobjcoll.json_node_ube
 		loaders = [];
 		configdefs_verbatim = false;
 		configdefs = [];
+		sources = [];
 	};;
 
 
@@ -2481,6 +2482,62 @@ let generate_uobjcoll_linker_script
 
 
 (*--------------------------------------------------------------------------*)
+(* initialize uobjcoll sources *)
+(*--------------------------------------------------------------------------*)
+(* TBD: add uobj and uobjrtl sources to uobjcoll sources *)
+(* this will be used to generate the final object file list *)
+(* note: uobj and uobjrtl sources are added with uberspark/uobjcoll/uobjs/xx/ and uberspark/uobjrtl 
+	prefix
+	while uobjcoll generated sources are just added without any prefix
+	this way when we do source parsing in actions for uobjcoll, we will negate anything that 
+	starts from uberspark since we don;t want to compile that
+	however, when we generate output list for .os we will take all the sources, replace with .o
+	and add the mount point prefix
+
+*)
+let initialize_uobjcoll_sources
+	()
+	: bool =
+	let l_retval = ref true in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initialize_uobjcoll_sources: starting...";
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "len(d_uobjrtl_manifest_var_hashtbl)=%u";
+		(Hashtbl.length d_uobjrtl_manifest_var_hashtbl);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "len(d_uobj_manifest_var_assoc_list)=%u";
+		(List.length !d_uobj_manifest_var_assoc_list);
+
+	(* iterate through uobjrtl hashtbl and add all uobjrtl sources with uobjrtl namespace prefix *)
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Adding %u sources from uobjrtl:%s"
+			(List.length l_uobjrtl_manifest_var.uobjrtl.sources) l_uobjrtl_ns;
+
+		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) ->
+			d_uberspark_manifest_var.uobjcoll.sources <- d_uberspark_manifest_var.uobjcoll.sources @ [ l_uobjrtl_ns ^ "/" ^ l_source_file.path; ];
+		) l_uobjrtl_manifest_var.uobjrtl.sources;
+
+	) d_uobjrtl_manifest_var_hashtbl;
+
+	(* iterate through uobj assoc list and add all uobj sources with uobj namespace prefix *)
+	List.iter ( fun ( (l_uobj_ns:string), (l_uobj_manifest_var:Uberspark_manifest.uberspark_manifest_var_t) ) -> 
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Adding %u sources from uob:%s"
+			(List.length l_uobj_manifest_var.uobj.sources) l_uobj_ns;
+
+		List.iter ( fun (l_source_file : string) ->
+			d_uberspark_manifest_var.uobjcoll.sources <- d_uberspark_manifest_var.uobjcoll.sources @ [ l_uobj_ns ^ "/" ^ l_source_file; ];
+		) l_uobj_manifest_var.uobj.sources;
+
+	) !d_uobj_manifest_var_assoc_list;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "initialize_uobjcoll_sources: end (l_retval=%b)" !l_retval;
+
+	(!l_retval)
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
 (* consolidate and execute actions *)
 (*--------------------------------------------------------------------------*)
 (*let consolidate_and_execute_actions
@@ -2591,6 +2648,16 @@ let process_manifest_common
 			(* create uobjrtl to manifest variable hashtbl *)
 			let l_dummy=0 in begin
 			retval := create_uobjrtl_manifest_var_hashtbl ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+
+			(* initialize uobjcoll sources *)
+			let l_dummy=0 in begin
+			retval := initialize_uobjcoll_sources ();
 			end;
 
 			if (!retval) == false then
