@@ -381,6 +381,37 @@ let initialize
 
 		) !g_uobj_manifest_var_assoc_list;
 
+		(* add action elements for uobjcoll specific sources *)
+		l_actions_list := !l_actions_list @ [
+
+					{
+						targets = [ "build"; ];
+						name = "translating .c to .o";
+						category = "translation";
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .cS to .o";
+						category = "translation";
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .s to .o";
+						category = "translation";
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+		];
+
 		(* add action element for final uobjcoll binary build *)
 		let l_uobjcoll_action = new_action_element () in
 		
