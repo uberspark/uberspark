@@ -198,13 +198,14 @@ module Uobj : sig
     mutable namespace: string;
   }
 
-  type json_node_uberspark_uobj_sources_t = 
+(*  type json_node_uberspark_uobj_sources_t = 
   {
     mutable source_h_files: string list;
     mutable source_c_files: string list;
     mutable source_casm_files: string list;
     mutable source_asm_files : string list;
   }
+*)
 
   type json_node_uberspark_uobj_publicmethods_t = 
   {
@@ -215,6 +216,7 @@ module Uobj : sig
     mutable fn_address : int;
   }
 
+(*
   type json_node_uberspark_uobj_t = 
   {
     mutable namespace: string;
@@ -229,9 +231,28 @@ module Uobj : sig
     mutable sections : (string * Defs.Basedefs.section_info_t) list;
   	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
+*)
 
 
+  type json_node_uberspark_uobj_t = 
+  {
+    mutable namespace: string;
+    mutable platform : string;
+    mutable arch: string;
+    mutable cpu : string;
+    mutable sources : string list;
+    mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
+    mutable intra_uobjcoll_callees : (string * string list) list;
+    mutable inter_uobjcoll_callees : (string * string list) list;
+    mutable legacy_callees : (string * string list) list;
+    mutable sections : (string * Defs.Basedefs.section_info_t) list;
+  	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
+  }
+
+
+(*
   val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
+*)
   val json_node_uberspark_uobj_publicmethods_to_var :  Yojson.Basic.t ->  bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
   val json_node_uberspark_uobj_intrauobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_interuobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)

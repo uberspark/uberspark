@@ -546,7 +546,7 @@ one below*)
 	if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
 		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobj (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources.source_c_files);
+			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources);
 
 		List.iter ( fun (l_filename : string) ->
 			if p_operation = "filter" then begin
@@ -556,7 +556,7 @@ one below*)
 			end else begin
 				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_filename) ^ p_filename_ext) ; ];
 			end;
-		) p_uberspark_manifest_var.uobj.sources.source_c_files;
+		) p_uberspark_manifest_var.uobj.sources;
 		
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
@@ -603,7 +603,7 @@ let get_sources_filename_list
 	if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
 		
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobj (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources.source_c_files);
+			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources);
 
 		List.iter ( fun (l_filename : string) ->
 			if p_filename_ext_replace then begin			
@@ -613,7 +613,7 @@ let get_sources_filename_list
 					l_return_list := !l_return_list @ [ l_filename; ];
 				end;
 			end;
-		) p_uberspark_manifest_var.uobj.sources.source_c_files;
+		) p_uberspark_manifest_var.uobj.sources;
 		
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
