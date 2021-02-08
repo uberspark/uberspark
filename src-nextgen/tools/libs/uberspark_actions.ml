@@ -728,8 +728,27 @@ let get_action_input_filename_list
 		if List.length p_uberspark_action.uberspark_manifest_action.input = 1 then begin
 			let l_input_wildcard_ext = (Filename.extension (List.nth p_uberspark_action.uberspark_manifest_action.input 0)) in   			
 
+			(* special handling for input *.o *)
 			if l_input_wildcard_ext = ".o" then begin
-				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var l_input_wildcard_ext true;
+				let l_l_input_list = get_sources_filename_list p_uberspark_action.uberspark_manifest_var l_input_wildcard_ext true in
+			
+				List.iter ( fun (l_filename : string) ->
+					(* if bridge namespace is not null *)
+					if p_uberspark_action.uberspark_manifest_action.bridge_namespace <> "" then begin
+
+						(* and bridge namespace points to a container bridge then we add container mount point prefix *)
+						if (Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" ^ 
+							Uberspark_namespace.namespace_bridge ^ "/")) p_uberspark_action.uberspark_manifest_action.bridge_namespace 0) then begin
+							l_input_list := !l_input_list @ [ Uberspark_namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_filename];
+						
+						end else begin
+						(* else we add triage dir prefix *)
+							l_input_list := !l_input_list @ [ !g_triage_dir_prefix ^ "/" ^ l_filename];
+						end;
+					end;
+			
+				) l_l_input_list;
+
 			end else begin
 				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var l_input_wildcard_ext false;
 			end;
