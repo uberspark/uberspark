@@ -6,9 +6,9 @@
 #    author: amit vasudevan <amitvasudevan@acm.org>
 #
 
-COMPILER := uberspark/bridges/container/amd64/cc-bridge/armv8_32/generic/gcc/v4.9.3
-ASSEMBLER := uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/gnu-as/v2.26.1
-LINKER := uberspark/bridges/container/amd64/ld-bridge/armv8_32/generic/gnu-ld/v2.26.1
+COMPILER := uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/gcc/v5.4.0
+ASSEMBLER := uberspark/bridges/container/amd64/as-bridge/x86_32/generic/gnu-as/v2.26.1
+LINKER := uberspark/bridges/container/amd64/ld-bridge/x86_32/generic/gnu-ld/v2.26.1
 
 UBERSPARK_NAMESPACE := $(shell uberspark staging list | grep generic-platform)
 UBERSPARK_CC := $(shell uberspark staging --setting-name=cc_bridge_namespace config-get)
@@ -26,7 +26,7 @@ all: prep build
 build: prep
 	@echo building hello_mul...
 	uberspark staging switch generic-platform
-	cd uobjcoll && uberspark uobjcoll build -v --platform=generic --arch=armv8_32 --cpu=generic .
+	uberspark -v
 	@echo built hello_mul successfully!
 
 .PHONY: verify
@@ -45,7 +45,6 @@ endif
 	uberspark staging config-set --setting-name=cc_bridge_namespace --setting-value=$(COMPILER)
 	uberspark staging config-set --setting-name=as_bridge_namespace --setting-value=$(ASSEMBLER)
 	uberspark staging config-set --setting-name=ld_bridge_namespace --setting-value=$(LINKER)
-	uberspark staging config-set --setting-name=uobjcoll_binary_image_size --setting-value=0x02500000
 
 .PHONY: clean
 clean: 
