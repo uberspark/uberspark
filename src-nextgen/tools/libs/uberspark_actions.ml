@@ -987,11 +987,63 @@ let initialize_bridges ()
 	: bool =
 
 	let l_retval = ref true in
-	(* iterate over global action list *)
-	List.iter ( fun (l_action : uberspark_action_t) -> 
-		if !l_retval then begin
 
-		end;
+	(* iterate over global action list and build hashtbl of unique bridge namespace to bridge object
+	mapping
+	*)
+	List.iter ( fun (l_action : uberspark_action_t) -> 
+	
+		if !l_retval then begin
+	
+			(* process bridge only if its non-empty and not previously in the hashtbl *)
+			if (l_action.uberspark_manifest_action.bridge_namespace <> "" && 
+				Hashtbl.mem g_bridge_hashtbl l_action.uberspark_manifest_action.bridge_namespace = false) then begin
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Info "initializing bridge: %s ..." 
+					l_action.uberspark_manifest_action.bridge_namespace;
+
+				let l_bridge_object : Uberspark_bridge.bridge_object = new Uberspark_bridge.bridge_object in
+				let l_rval = (l_bridge_object#load l_action.uberspark_manifest_action.bridge_namespace) in
+				
+				if l_rval then begin
+
+					(* if bridge cateogory is container, then build the bridge *)
+					if (l_bridge_object#get_json_node_uberspark_bridge_var).category = "container" then begin
+						if not (l_bridge_object#build ()) then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build bridge container!";
+							l_retval := false;
+						end else begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Debug "successfully built bridge container!";
+						end;
+					end;
+
+					if !l_retval then begin
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Bridge initialized successfully";
+						Hashtbl.add g_bridge_hashtbl l_action.uberspark_manifest_action.bridge_namespace l_bridge_object;
+
+					end else begin
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: could not initialize bridge!" __LOC__ ;
+
+					end;
+
+
+				end else begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: could not initialize bridge!" __LOC__;
+					l_retval := false; 
+				end;
+
+			
+			end else begin
+				(* bridge namespace is empty ot already in hashtbl, so just print a debug message and skip *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "bridge_namespace=%s empty or already processed, skipping" 
+					l_action.uberspark_manifest_action.bridge_namespace;
+			end;
+
+
+		end; (* !l_retval *)
+
 	) !g_actions_list;
 
 	(!l_retval)
@@ -1011,7 +1063,7 @@ let process_actions ()
 
 	(* initialize uobjcoll bridges *)
 	(* TBD: initialize bridge from consolidated actions *)
-	let rval = (Uberspark_bridge.initialize_from_config ()) in	
+	let rval = initialize_bridges () in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
 		(false)
