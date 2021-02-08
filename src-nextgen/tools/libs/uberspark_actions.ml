@@ -630,6 +630,24 @@ let get_sources_filename_list
 			end;
 		) p_uberspark_manifest_var.uobjrtl.sources;
 
+	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobjcoll (total files=%u)..." 
+			__LOC__ (List.length p_uberspark_manifest_var.uobjcoll.sources);
+
+		List.iter ( fun (l_source_file : string) -> 
+			if p_filename_ext_replace then begin			
+				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
+			end else begin
+				(* return only uobjcoll sources, not uobjrtl or uobj *)
+				if ((Filename.extension l_source_file) = p_filename_ext) && 
+				   ((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
+					l_return_list := !l_return_list @ [ l_source_file; ];
+				end;
+			end;
+		) p_uberspark_manifest_var.uobjcoll.sources;
+
+
 	end else begin
 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "%s: unknown manifest namespace=%s" __LOC__ p_uberspark_manifest_var.manifest.namespace; 
