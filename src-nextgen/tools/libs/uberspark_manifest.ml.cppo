@@ -520,8 +520,7 @@ let uberspark_manifest_var_copy
 	output.uobjrtl.platform <- input.uobjrtl.platform; 
 	output.uobjrtl.arch <- input.uobjrtl.arch; 
 	output.uobjrtl.cpu <- input.uobjrtl.cpu; 
-	output.uobjrtl.source_c_files <- input.uobjrtl.source_c_files; 
-	output.uobjrtl.source_casm_files <- input.uobjrtl.source_casm_files;
+	output.uobjrtl.sources <- input.uobjrtl.sources; 
 	
 	output.sentinel.namespace <- input.sentinel.namespace; 
 	output.sentinel.platform <- input.sentinel.platform; 
@@ -562,7 +561,7 @@ let uberspark_manifest_var_default_value ()
 		legacy_callees = []; sections = []; uobjrtl = []; 
 		};
 	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		source_c_files = []; source_casm_files = [];
+		sources = [];
 		};
 
 	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 

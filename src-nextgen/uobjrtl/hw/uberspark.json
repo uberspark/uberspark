@@ -14,7 +14,7 @@
 		"uberspark.uobjrtl.arch" : "x86_32",
         "uberspark.uobjrtl.cpu" : "generic",
 
-        "uberspark.uobjrtl.source_c_files" : [
+        "uberspark.uobjrtl.sources" : [
         /*************** C modules ***************/
 
         /* cpu */
@@ -344,10 +344,7 @@
                 "fn_decls" :  [
                         { "fn_name" : "uberspark_uobjrtl_hw__generic_x86_32_intel__vtd_reg_write" }
                     ]
-            }
-        ],
-        
-        "uberspark.uobjrtl.source_casm_files" : [
+            },
 
             /****************************** CASM Modules ****************************/
 

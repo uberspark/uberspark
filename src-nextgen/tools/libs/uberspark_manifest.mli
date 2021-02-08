@@ -375,8 +375,7 @@ type json_node_uberspark_uobjrtl_t =
 	mutable arch : string;
     mutable cpu : string;
    
-    mutable source_c_files: json_node_uberspark_uobjrtl_modules_spec_t list;
-    mutable source_casm_files: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable sources: json_node_uberspark_uobjrtl_modules_spec_t list;
 
 }
 

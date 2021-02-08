@@ -408,7 +408,7 @@ let initialize
 		
 			l_uobjrtl_manifest_var.manifest.actions <- [ g_default_action; ];
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "Added default action to uobjrtl: %s (%u)" 
-				l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.uobjrtl.source_c_files); 
+				l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.uobjrtl.sources); 
 			
 		end;
 
@@ -561,13 +561,13 @@ one below*)
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobjrtl (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.source_c_files);
+			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.sources);
 
 		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
 			if (Filename.extension l_source_file.path) = p_wildcard_ext then begin
 				l_return_list := !l_return_list @ [ l_source_file.path; ];
 			end;
-		) p_uberspark_manifest_var.uobjrtl.source_c_files;
+		) p_uberspark_manifest_var.uobjrtl.sources;
 
 	end else begin
 
@@ -618,7 +618,7 @@ let get_sources_filename_list
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobjrtl (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.source_c_files);
+			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.sources);
 
 		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
 			if p_filename_ext_replace then begin			
@@ -628,7 +628,7 @@ let get_sources_filename_list
 					l_return_list := !l_return_list @ [ l_source_file.path; ];
 				end;
 			end;
-		) p_uberspark_manifest_var.uobjrtl.source_c_files;
+		) p_uberspark_manifest_var.uobjrtl.sources;
 
 	end else begin
 

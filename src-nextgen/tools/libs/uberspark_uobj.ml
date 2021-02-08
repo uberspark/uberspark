@@ -386,7 +386,7 @@ class uobject
 					
 					(* convert to var *)
 					let l_uobjrtl_entry_var : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t = {
-						namespace = ""; platform = ""; arch = ""; cpu = "";	source_c_files = []; source_casm_files = [];} in
+						namespace = ""; platform = ""; arch = ""; cpu = "";	sources = [];} in
 					let rval =	(Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json l_uobjrtl_entry_var) in
 					if rval then begin
 						Hashtbl.add d_uobjrtl_hashtbl uobjrtl_namespace l_uobjrtl_entry_var;						
@@ -906,7 +906,7 @@ class uobject
 
 					l_uobjrtl_sources_c_files :=  !l_uobjrtl_sources_c_files @ [ l_namespace_module_path ];
 
-				) uobjrtl_info.source_c_files;
+				) uobjrtl_info.sources;
 		) json_node_uberspark_uobj_var.uobjrtl;
 
 
@@ -926,7 +926,7 @@ class uobject
 
 					l_uobjrtl_sources_casm_files :=  !l_uobjrtl_sources_casm_files @ [ l_namespace_module_path ];
 
-				) uobjrtl_info.source_casm_files;
+				) uobjrtl_info.sources;
 		) json_node_uberspark_uobj_var.uobjrtl;
 
 

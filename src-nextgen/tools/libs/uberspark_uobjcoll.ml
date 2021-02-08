@@ -1919,7 +1919,7 @@ let create_uobjrtl_manifest_var_hashtbl
 
 				retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var;
 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest sources=%u" (List.length l_uobjrtl_manifest_var.uobjrtl.source_c_files);
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "uobjrtl manifest sources=%u" (List.length l_uobjrtl_manifest_var.uobjrtl.sources);
 				if !retval then begin
 					Hashtbl.add d_uobjrtl_manifest_var_hashtbl uobjrtl_namespace l_uobjrtl_manifest_var;						
 					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "collected uobjrtl successfully!";
