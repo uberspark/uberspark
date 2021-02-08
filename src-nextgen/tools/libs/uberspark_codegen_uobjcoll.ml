@@ -235,8 +235,8 @@ let generate_linker_script
                         List.iter (fun subsection ->
                                     Printf.fprintf oc "\n *(%s)" subsection;
                         ) section_info.f_subsection_list;
-                        Printf.fprintf oc "\n . = . + 0x%08x - 1;" section_info.usbinformat.f_size;
-                        Printf.fprintf oc "\n BYTE(0xAA)";
+                        Printf.fprintf oc "\n . = 0x%08x - 1;" section_info.usbinformat.f_size;
+                        Printf.fprintf oc "\n BYTE(0xAA);";
                         Printf.fprintf oc "\n	} >mem_uobjcoll =0x9090";
                         Printf.fprintf oc "\n";
 
@@ -245,16 +245,16 @@ let generate_linker_script
 
         
 
-        (* Printf.fprintf oc "\n"; *)
-        (* Printf.fprintf oc "\n	/* this is to cause the link to fail if there is"; *)
-        (* Printf.fprintf oc "\n	* anything we didn't explicitly place."; *)
-        (* Printf.fprintf oc "\n	* when this does cause link to fail, temporarily comment"; *)
-        (* Printf.fprintf oc "\n	* this part out to see what sections end up in the output"; *)
-        (* Printf.fprintf oc "\n	* which are not handled above, and handle them."; *)
-        (* Printf.fprintf oc "\n	*/"; *)
-        (* Printf.fprintf oc "\n	/DISCARD/ : {"; *)
-        (* Printf.fprintf oc "\n	* ( * ) "; *)
-        (* Printf.fprintf oc "\n	}"; *)
+        Printf.fprintf oc "\n";
+        Printf.fprintf oc "\n	/* this is to cause the link to fail if there is"; 
+        Printf.fprintf oc "\n	* anything we didn't explicitly place."; 
+        Printf.fprintf oc "\n	* when this does cause link to fail, temporarily comment"; 
+        Printf.fprintf oc "\n	* this part out to see what sections end up in the output"; 
+        Printf.fprintf oc "\n	* which are not handled above, and handle them."; 
+        Printf.fprintf oc "\n	*/"; 
+        Printf.fprintf oc "\n	/DISCARD/ : {"; 
+        Printf.fprintf oc "\n	* ( * ) "; 
+        Printf.fprintf oc "\n	}"; 
 
         Printf.fprintf oc "\n}";
         Printf.fprintf oc "\n";
