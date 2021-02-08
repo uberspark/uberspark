@@ -980,6 +980,10 @@ let invoke_bridge
 					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
 					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
 					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+					("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark_namespace.namespace_uobjcoll_linkerscript_filename);
+					("@@BRIDGE_BINARY_FILENAME@@", Uberspark_namespace.namespace_uobjcoll_binary_image_filename);
+					("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark_namespace.namespace_uobjcoll_binary_flat_image_filename);
+					("@@BRIDGE_CCLIB_FILENAME@@", (Uberspark_namespace.namespace_bridge_container_mountpoint ^ "/" ^ Uberspark_namespace.namespace_uobj_cclib_filename));
 				];
 
 

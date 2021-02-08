@@ -2452,6 +2452,11 @@ let generate_uobjcoll_section_info
 	end;
 
 
+	(* update uobjcoll size *)
+	d_size := !uobjcoll_section_load_addr -  !d_load_address;
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: d_load_address=0x%08x, d_size=0x%08x" __LOC__ !d_load_address !d_size;
+
 	(!retval)
 ;;
 

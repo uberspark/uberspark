@@ -45,7 +45,7 @@ endif
 	uberspark staging config-set --setting-name=cc_bridge_namespace --setting-value=$(COMPILER)
 	uberspark staging config-set --setting-name=as_bridge_namespace --setting-value=$(ASSEMBLER)
 	uberspark staging config-set --setting-name=ld_bridge_namespace --setting-value=$(LINKER)
-
+	uberspark staging config-set --setting-name=uobjcoll_binary_image_size --setting-value=0x02500000
 
 .PHONY: clean
 clean: 
