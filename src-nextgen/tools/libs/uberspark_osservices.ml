@@ -146,6 +146,10 @@ open Sys
 		let path_filename = (Filename.basename path) in
 		let path_dirname = (Filename.dirname path) in
 		let retval_abspath = ref "" in
+		(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_dirname=%s" path_dirname;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_filename=%s" path_filename;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "curdir=%s" curdir;
+		*)
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();

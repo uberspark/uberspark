@@ -307,6 +307,7 @@ class bridge_object
 
 		(* invoke the compiler *)
 		if json_node_uberspark_bridge_var.category = "container" then begin
+			
 			if ( (Container.run_image ~context_path_builddir:context_path_builddir "." !d_cmd bridge_ns) == 0 ) then begin
 				retval := true;
 			end else begin

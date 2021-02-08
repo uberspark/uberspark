@@ -945,35 +945,51 @@ let invoke_bridge
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> action.bridge_namespace=%s: "
 		p_action.uberspark_manifest_action.bridge_namespace;
 
+	if p_action.uberspark_manifest_action.bridge_namespace <> "" &&
+		 Hashtbl.mem g_bridge_hashtbl  p_action.uberspark_manifest_action.bridge_namespace = true then begin
+
+		let l_bridge_object = Hashtbl.find g_bridge_hashtbl  p_action.uberspark_manifest_action.bridge_namespace in
+		let l_build_dir = ref "" in
+
+		if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
+			l_build_dir := p_action.uberspark_manifest_var.uobjcoll.namespace;
+		end else if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
+			l_build_dir := p_action.uberspark_manifest_var.uobj.namespace;
+		end else if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
+			l_build_dir := p_action.uberspark_manifest_var.uobjrtl.namespace;
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "> unknown manifest namespace=%s"
+				p_action.uberspark_manifest_var.manifest.namespace;
+		end;
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> l_build_dir=%s" !l_build_dir;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> l_bridge_object category=%s" (l_bridge_object#get_json_node_uberspark_bridge_var).category ;
+		
+		(* TBD: match bridge extension with input and output ext lists *)
+		l_retval := l_bridge_object#invoke 
+					~context_path_builddir:!l_build_dir 
+				[
+					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
+					("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
+					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; !g_staging_dir_prefix; ]));
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; !g_staging_dir_prefix; ]));
+					("@@BRIDGE_COMPILEDEFS@@", "");
+					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_DEFS@@", "");
+					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+				];
 
 
-	(*
-	p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobj", "uberspark/uobjcoll", "uberspark/uobjrtl"
-	each of the above will help us locate the namespace p_action.uberspark_manifest_var.uobjrtl.namespace
-	which in tun will help us identify the directory to cd into for the bridge to perform the action
-
-			retval := Uberspark_bridge.cc_bridge#invoke 
-					 ~context_path_builddir:Uberspark_namespace.namespace_uobj_build_dir 
-					[
-						("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
-						("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string json_node_uberspark_uobj_var.sources.source_c_files));
-						("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
-						("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ]));
-						("@@BRIDGE_COMPILEDEFS@@", "");
-						("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
-						("@@BRIDGE_DEFS@@", "");
-						("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
-						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
-						Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
-						("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
-					];
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to find entry in bridge hashtbl for bridge_namespace=%s!"
+			p_action.uberspark_manifest_action.bridge_namespace;
+		l_retval := false;
+	end;
 
 
-	we need to change uberspark_bridge_container.invoke to do cd to context_path_builddir and if not specified be in .
-	/home/uberspark/uobjcoll/_triage is our mount point where triage dir gets mounted
-	context_path_build_dir if additionally specified will be used to cd into this as the reference
-
-	*)
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> invoke_bridge: end(l_retval=%b)..." !l_retval;
 	(!l_retval)
