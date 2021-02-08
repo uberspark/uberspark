@@ -667,8 +667,13 @@ let get_sources_filename_list
 			__LOC__ (List.length p_uberspark_manifest_var.uobjcoll.sources);
 
 		List.iter ( fun (l_source_file : string) -> 
-			if p_filename_ext_replace then begin			
-				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
+			if p_filename_ext_replace then begin	
+				if p_filename_ext = ".o" && 
+					((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
+					l_return_list := !l_return_list @ [ p_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
+				end else begin
+					l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
+				end;		
 			end else begin
 				(* return only uobjcoll sources, not uobjrtl or uobj *)
 				if ((Filename.extension l_source_file) = p_filename_ext) && 
