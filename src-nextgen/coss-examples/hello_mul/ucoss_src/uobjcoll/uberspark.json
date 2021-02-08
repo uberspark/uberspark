@@ -11,7 +11,7 @@
 
 		"uberspark.uobjcoll.namespace" : "uberspark/uobjcoll/generic/hello_mul",
 		"uberspark.uobjcoll.platform" : "generic",
-		"uberspark.uobjcoll.arch" : "armv8_32",
+		"uberspark.uobjcoll.arch" : "x86_32",
 		"uberspark.uobjcoll.cpu" : "generic",
 		"uberspark.uobjcoll.hpl" : "any",
 		"uberspark.uobjcoll.sentinels_intra_uobjcoll" : [ "generic/generic/any/call" ],
@@ -40,8 +40,8 @@
 			"public_method" : "init",
 			"sentinels" : [
 				{
-					"sentinel_type" : "baremetal/vccore/srot/generic/rpi3/hyp/call",
-					/*"sentinel_type" : "baremetal/grub-legacy/srot/generic/pc/pmr0/call",*/
+					/*"sentinel_type" : "baremetal/vccore/srot/generic/rpi3/hyp/call",*/
+					"sentinel_type" : "baremetal/grub-legacy/srot/generic/pc/pmr0/call",
 
 					"sentinel_size" : "0x10000"	
 				}	
