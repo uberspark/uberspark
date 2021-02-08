@@ -2162,6 +2162,7 @@ let generate_sentinels_for_uobjcoll_methods
 			!d_sentinel_info_for_codegen_list;
 
 		if !retval then begin
+			d_uberspark_manifest_var.uobjcoll.sources <- d_uberspark_manifest_var.uobjcoll.sources @ [ Uberspark_namespace.namespace_uobjcoll_sentinel_definitions_src_filename; ];
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "generated uobjcoll sentinels source";
 		end else begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not generate source for uobj collection sentinel definitions!";
