@@ -15,8 +15,8 @@
 		"uberspark.uobj.arch" : "generic",
 		"uberspark.uobj.cpu" : "generic",
 
-		"uberspark.uobj.sources": [ "main.c"
-			/* "nullfunc.cS"*/
+		"uberspark.uobj.sources": [ "main.c",
+			"nullfunc.cS"
 		
 		],
 		
