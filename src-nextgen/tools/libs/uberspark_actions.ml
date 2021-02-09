@@ -175,9 +175,9 @@ let consolidate_actions_uobj
 
 					{
 						targets = [ "build"; ];
-						name = "translating .cS to .s";
+						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 					};
@@ -235,7 +235,7 @@ let consolidate_actions_uobjrtl
 
 					{
 						targets = [ "build"; ];
-						name = "translating .cS to .s";
+						name = "translating .cS to .o";
 						category = "translation";
 						input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
