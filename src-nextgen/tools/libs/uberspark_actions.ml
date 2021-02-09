@@ -190,6 +190,16 @@ let consolidate_actions_uobj
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 					};
+
+					{
+						targets = [ "build"; ];
+						name = "translating .S to .o";
+						category = "translation";
+						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+					};
+
 				];
 
 			end else if l_uobj_action.category = "translation" then begin
@@ -1038,16 +1048,30 @@ let invoke_bridge
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> l_build_dir=%s" !l_build_dir;
 		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> l_bridge_object category=%s" (l_bridge_object#get_json_node_uberspark_bridge_var).category ;
 		
+		let l_bridge_defs_list : string list ref = ref [] in
+		let l_is_assembly_ext (p_ext : string ) : bool =
+			if (p_ext = ".s") || (p_ext = ".S") then begin
+				(true)
+			end else begin
+				(false)
+			end
+		in
+
+		if (List.exists l_is_assembly_ext p_input_file_ext_list) then begin
+			l_bridge_defs_list := [ "__ASSEMBLY__"; ];
+		end;
+
+
 		(* TBD: match bridge extension with input and output ext lists *)
 		l_retval := l_bridge_object#invoke 
 					~context_path_builddir:!l_build_dir 
 				[
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; !g_staging_dir_prefix; ]));
-					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; !g_staging_dir_prefix; ]));
-					("@@BRIDGE_COMPILEDEFS@@", "");
-					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
+					("@@BRIDGE_COMPILEDEFS@@", (Uberspark_bridge.bridge_parameter_to_string !l_bridge_defs_list));
+					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
 					("@@BRIDGE_DEFS@@", "");
 					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
 					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
