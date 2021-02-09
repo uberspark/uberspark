@@ -1072,8 +1072,8 @@ let invoke_bridge
 					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
 					("@@BRIDGE_COMPILEDEFS@@", (Uberspark_bridge.bridge_parameter_to_string !l_bridge_defs_list));
 					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
-					("@@BRIDGE_DEFS@@", "");
-					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_DEFS@@", (Uberspark_bridge.bridge_parameter_to_string !l_bridge_defs_list));
+					("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
 					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
 					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
 					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
