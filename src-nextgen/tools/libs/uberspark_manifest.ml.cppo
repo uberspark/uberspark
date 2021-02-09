@@ -509,6 +509,7 @@ let uberspark_manifest_var_copy
 	output.uobj.sources.source_asm_files <- input.uobj.sources.source_asm_files;
 	*)
 	output.uobj.sources <- input.uobj.sources;
+	output.uobj.headers <- input.uobj.headers;
 
 	output.uobj.public_methods <- input.uobj.public_methods; 
 	output.uobj.intra_uobjcoll_callees <- input.uobj.intra_uobjcoll_callees; 
@@ -558,7 +559,7 @@ let uberspark_manifest_var_default_value ()
 		sources = [];
 	};
 	uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sources = [];
+		sources = []; headers = [];
 		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
 		legacy_callees = []; sections = []; uobjrtl = []; 
 		};

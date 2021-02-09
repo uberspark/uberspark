@@ -241,6 +241,7 @@ module Uobj : sig
     mutable arch: string;
     mutable cpu : string;
     mutable sources : string list;
+    mutable headers : string list;
     mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
     mutable intra_uobjcoll_callees : (string * string list) list;
     mutable inter_uobjcoll_callees : (string * string list) list;

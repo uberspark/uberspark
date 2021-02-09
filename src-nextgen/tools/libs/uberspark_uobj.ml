@@ -89,7 +89,7 @@ class uobject
 	(* uobj manifest uberspark-uobj json node var *)
 	val json_node_uberspark_uobj_var : Uberspark_manifest.Uobj.json_node_uberspark_uobj_t =
 		{namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sources = [];
+		sources = []; headers = [];
 		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
 		legacy_callees = []; sections = []; uobjrtl = []; 
 		};

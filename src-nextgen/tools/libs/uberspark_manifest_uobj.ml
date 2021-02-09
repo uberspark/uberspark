@@ -60,6 +60,7 @@ type json_node_uberspark_uobj_t =
 	mutable arch: string;
 	mutable cpu : string;
 	mutable sources : string list;
+	mutable headers : string list;
 	mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
 	mutable intra_uobjcoll_callees : (string * string list) list;
 	mutable inter_uobjcoll_callees : (string * string list) list;
@@ -507,6 +508,9 @@ let json_node_uberspark_uobj_to_var
 					
 					if (mf_json |> member "uberspark.uobj.sources") != `Null then
 						json_node_uberspark_uobj_var.sources <- (json_list_to_string_list (mf_json |> member "uberspark.uobj.sources" |> to_list));
+
+					if (mf_json |> member "uberspark.uobj.headers") != `Null then
+						json_node_uberspark_uobj_var.headers <- (json_list_to_string_list (mf_json |> member "uberspark.uobj.headers" |> to_list));
 
 
 					(* let rval1 = (json_node_uberspark_uobj_sources_to_var mf_json json_node_uberspark_uobj_var.sources) in*)
