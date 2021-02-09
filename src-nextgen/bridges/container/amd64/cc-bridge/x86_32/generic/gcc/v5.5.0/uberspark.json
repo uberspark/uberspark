@@ -18,7 +18,7 @@
 			"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
 			"var_bridge_input_files=\" @@BRIDGE_INPUT_FILES@@ \"",
 			"vararray_bridge_input_files=$(echo $var_bridge_input_files | tr \" \" \"\\n\")",
-			"for input_file_name in $vararray_bridge_input_files; do echo \"Compiling ${input_file_name} ...\" && gcc @@BRIDGE_DEFS_WITH_PREFIX@@ -nostdinc -nostdlib -nostartfiles -ffreestanding -m32 -c ${var_bridge_include_dirs_with_prefix} ${input_file_name} -o ${input_file_name}.o ; done",
+			"for input_file_name in $vararray_bridge_input_files; do echo \"Compiling ${input_file_name} ...\" && gcc @@BRIDGE_DEFS_WITH_PREFIX@@ -nostdinc -nostdlib -nostartfiles -ffreestanding -m32 -c ${var_bridge_include_dirs_with_prefix} ${input_file_name} -o ${input_file_name%.*}.o ; done",
 			"cp -f /usr/lib/gcc/x86_64-linux-gnu/5/32/libgcc.a @@BRIDGE_CONTAINER_MOUNT_POINT@@/cclib.a"
 		] 
 
