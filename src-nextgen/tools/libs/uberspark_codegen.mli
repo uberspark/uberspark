@@ -93,6 +93,7 @@ type sentinel_info_t =
 	mutable sizeof_code_template   : int;	
 	mutable fn_address          : int;
     mutable f_pm_addr       : int;
+    mutable f_method_name : string;
 }
 
 

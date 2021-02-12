@@ -23,6 +23,7 @@ type sentinel_info_t =
 	mutable sizeof_code_template   : int;	
 	mutable fn_address          : int;
     mutable f_pm_addr       : int;
+    mutable f_method_name : string;
 };;
 
 
@@ -68,7 +69,8 @@ let generate_sentinel_code
             (*Printf.fprintf oc "\n.global %s" sinfo_entry.fn_name;
             Printf.fprintf oc "\n%s:" sinfo_entry.fn_name;
             *)
-            let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_ADDR") (Printf.sprintf "0x%08x" sinfo_entry.f_pm_addr) sinfo_entry.code_template in
+            (* let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_ADDR") (Printf.sprintf "0x%08x" sinfo_entry.f_pm_addr) sinfo_entry.code_template in*)
+            let tcode = Str.global_replace (Str.regexp "PUBLICMETHOD_ADDR") (Printf.sprintf "%s" sinfo_entry.f_method_name) sinfo_entry.code_template in
             let tcode_1 = Str.global_replace (Str.regexp "SENTINEL_SIZE") (Printf.sprintf "0x%08x" sinfo_entry.sizeof_code_template) tcode in
             Printf.fprintf oc "\n%s" tcode_1;
             Printf.fprintf oc "\n";

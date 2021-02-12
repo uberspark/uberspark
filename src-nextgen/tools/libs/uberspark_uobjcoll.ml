@@ -921,6 +921,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 			sizeof_code_template= sentinel_info.sizeof_code_template ; 
 			fn_address= (Hashtbl.find d_uobjcoll_initmethod_sentinel_address_hashtbl (canonical_public_method ^ "___" ^ sentinel_type)).f_sentinel_addr; 
 			f_pm_addr = pm_info.f_uobjpminfo.fn_address;
+			f_method_name = "";
 		} in 
 
 		d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
@@ -944,6 +945,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 				sizeof_code_template= sentinel_info.sizeof_code_template ; 
 				fn_address= (Hashtbl.find d_uobjcoll_publicmethods_sentinel_address_hashtbl (canonical_public_method ^ "___" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.fn_address;
+				f_method_name = "";
 			} in 
 
 			d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
@@ -968,6 +970,7 @@ let prepare_for_uobjcoll_sentinel_codegen
 				sizeof_code_template= sentinel_info.sizeof_code_template ; 
 				fn_address= (Hashtbl.find d_intrauobjcoll_publicmethods_sentinel_address_hashtbl (canonical_public_method ^ "___" ^ sentinel_type)).f_sentinel_addr; 
 				f_pm_addr = pm_info.f_uobjpminfo.fn_address;
+				f_method_name = "";
 			} in 
 
 			d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
@@ -2098,7 +2101,8 @@ let generate_sentinels_for_uobjcoll_methods
 					library_code_template= l_sentinel_manifest_var.sentinel.library_code_template ; 
 					sizeof_code_template= l_sentinel_manifest_var.sentinel.sizeof_code_template ; 
 					fn_address= 0; 
-					f_pm_addr = 0; (* TBD: pm_name *)
+					f_pm_addr = 0; 
+					f_method_name = d_uberspark_manifest_var.uobjcoll.init_method.public_method;
 				} in 
 
 				d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
@@ -2137,7 +2141,8 @@ let generate_sentinels_for_uobjcoll_methods
 							library_code_template= l_sentinel_manifest_var.sentinel.library_code_template ; 
 							sizeof_code_template= l_sentinel_manifest_var.sentinel.sizeof_code_template ; 
 							fn_address= 0; 
-							f_pm_addr = 0; (* TBD: pm_name *)
+							f_pm_addr = 0; 
+							f_method_name = d_uberspark_manifest_var.uobjcoll.init_method.public_method;
 						} in 
 
 						d_sentinel_info_for_codegen_list := !d_sentinel_info_for_codegen_list @ [ codegen_sinfo_entry ] ;
@@ -2629,6 +2634,10 @@ let process_manifest_common
 	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, d_uberspark_manifest_var) ];
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "created uobjcoll manifest variable assoc list...";
 	end;
+
+	(* set default uobjcoll size and load address *)
+	d_load_address := Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_load_address;
+	d_size := Uberspark_config.json_node_uberspark_config_var.uobjcoll_binary_image_size;
 
 	(* iterate through all uobjcolls *)
 	let retval = ref true in 
