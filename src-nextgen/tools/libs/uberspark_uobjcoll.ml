@@ -85,7 +85,11 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark_manifest.uberspark_mani
 
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
-	
+
+(* hash table of loader manifest variables: maps loader namespace to loader manifest variable *)
+let d_loader_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+
+
 (* hash table of sentinel manifest variables: maps sentinel namespace to sentinel manifest variable *)
 let d_sentinel_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark_manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 

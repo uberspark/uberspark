@@ -47,12 +47,23 @@ let json_node_uberspark_loader_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			json_node_uberspark_loader_var.namespace <- mf_json |> member "uberspark.loader.namespace" |> to_string;
-			json_node_uberspark_loader_var.platform <- mf_json |> member "uberspark.loader.platform" |> to_string;
-			json_node_uberspark_loader_var.arch <- mf_json |> member "uberspark.loader.arch" |> to_string;
-			json_node_uberspark_loader_var.cpu <- mf_json |> member "uberspark.loader.cpu" |> to_string;
-			json_node_uberspark_loader_var.bridge_namespace <- mf_json |> member "uberspark.loader.bridge_namespace" |> to_string;
-			json_node_uberspark_loader_var.bridge_cmd <- (json_list_to_string_list (mf_json |> member "uberspark.loader.bridge_cmd" |> to_list));
+			if (mf_json |> member "uberspark.loader.namespace") != `Null then
+				json_node_uberspark_loader_var.namespace <- mf_json |> member "uberspark.loader.namespace" |> to_string;
+	
+			if (mf_json |> member "uberspark.loader.platform") != `Null then
+				json_node_uberspark_loader_var.platform <- mf_json |> member "uberspark.loader.platform" |> to_string;
+	
+			if (mf_json |> member "uberspark.loader.arch") != `Null then
+				json_node_uberspark_loader_var.arch <- mf_json |> member "uberspark.loader.arch" |> to_string;
+	
+			if (mf_json |> member "uberspark.loader.cpu") != `Null then
+				json_node_uberspark_loader_var.cpu <- mf_json |> member "uberspark.loader.cpu" |> to_string;
+	
+			if (mf_json |> member "uberspark.loader.bridge_namespace") != `Null then
+				json_node_uberspark_loader_var.bridge_namespace <- mf_json |> member "uberspark.loader.bridge_namespace" |> to_string;
+	
+			if (mf_json |> member "uberspark.loader.bridge_cmd") != `Null then
+				json_node_uberspark_loader_var.bridge_cmd <- (json_list_to_string_list (mf_json |> member "uberspark.loader.bridge_cmd" |> to_list));
 
 			retval := true;
 

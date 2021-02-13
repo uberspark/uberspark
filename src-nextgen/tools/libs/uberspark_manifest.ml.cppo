@@ -33,6 +33,9 @@ type json_node_uberspark_manifest_actions_t =
 	(* if category == uobjrtl_action *)
 	mutable uobjrtl_namespace : string; 
 
+	(* if category == loader_action *)
+	mutable loader_namespace : string; 
+
 };;
 
 
@@ -144,6 +147,7 @@ let json_node_uberspark_manifest_actions_to_var
 									input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
 									uobj_namespace = "";
 									uobjrtl_namespace = "";
+									loader_namespace = "";
 								} in
 
 								if (l_actions_json |> member "targets") <> `Null then 
@@ -403,6 +407,7 @@ type uberspark_manifest_var_t =
 	mutable uobj : Uobj.json_node_uberspark_uobj_t;
 	mutable uobjrtl : Uobjrtl.json_node_uberspark_uobjrtl_t;
 	mutable sentinel : Sentinel.json_node_uberspark_sentinel_t; 
+	mutable loader : Loader.json_node_uberspark_loader_t; 
 
 };;
 
@@ -427,8 +432,9 @@ let manifest_json_to_uberspark_manifest_var
 			let rval_3 = (Uobj.json_node_uberspark_uobj_to_var mf_json uberspark_manifest_var.uobj) in
 			let rval_4 = (Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json uberspark_manifest_var.uobjrtl) in
 			let rval_5 = (Sentinel.json_node_uberspark_sentinel_to_var mf_json uberspark_manifest_var.sentinel) in
+			let rval_6 = (Loader.json_node_uberspark_loader_to_var mf_json uberspark_manifest_var.loader) in
 	
-			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5) then begin
+			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6) then begin
 				retval:=true
 			end;
 			
@@ -532,6 +538,13 @@ let uberspark_manifest_var_copy
 	output.sentinel.code_template <- input.sentinel.code_template; 
 	output.sentinel.library_code_template <- input.sentinel.library_code_template;
 
+	output.loader.namespace <- input.loader.namespace; 
+	output.loader.platform <- input.loader.platform; 
+	output.loader.arch <- input.loader.arch; 
+	output.loader.cpu <- input.loader.cpu; 
+	output.loader.bridge_namespace <- input.loader.bridge_namespace; 
+	output.loader.bridge_cmd <- input.loader.bridge_cmd; 
+
 	()
 ;;
 
@@ -569,6 +582,10 @@ let uberspark_manifest_var_default_value ()
 
 	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
 		sizeof_code_template = 0; code_template = ""; library_code_template = "";
+		}; 
+
+	loader ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		bridge_namespace = ""; bridge_cmd = [];
 		}; 
 
 	};;

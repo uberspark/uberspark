@@ -55,6 +55,7 @@ let g_default_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t
 	input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
 	uobj_namespace = "";
 	uobjrtl_namespace = "";
+	loader_namespace = "";
 };;
 
 (* return a new action element *)
@@ -66,6 +67,7 @@ let new_action_element ()
 	input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
 	uobj_namespace = "";
 	uobjrtl_namespace = "";
+	loader_namespace = "";
 };;
 
 
@@ -171,6 +173,7 @@ let consolidate_actions_uobj
 						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -180,6 +183,7 @@ let consolidate_actions_uobj
 						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -189,6 +193,7 @@ let consolidate_actions_uobj
 						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -198,6 +203,7 @@ let consolidate_actions_uobj
 						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 				];
@@ -241,6 +247,7 @@ let consolidate_actions_uobjrtl
 						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -250,6 +257,7 @@ let consolidate_actions_uobjrtl
 						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -259,6 +267,7 @@ let consolidate_actions_uobjrtl
 						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 				];
 
@@ -401,6 +410,7 @@ let initialize
 						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -410,6 +420,7 @@ let initialize
 						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 
 					{
@@ -419,6 +430,7 @@ let initialize
 						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
+						loader_namespace = "";
 					};
 		];
 

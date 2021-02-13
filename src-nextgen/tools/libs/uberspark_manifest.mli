@@ -30,6 +30,9 @@ type json_node_uberspark_manifest_actions_t =
 	(* if category == uobjrtl_action *)
 	mutable uobjrtl_namespace : string; 
 
+	(* if category == loader_action *)
+	mutable loader_namespace : string; 
+
 };;
 
 
@@ -400,6 +403,7 @@ type uberspark_manifest_var_t =
   mutable uobj : Uobj.json_node_uberspark_uobj_t;
   mutable uobjrtl : Uobjrtl.json_node_uberspark_uobjrtl_t;
   mutable sentinel : Sentinel.json_node_uberspark_sentinel_t;
+  mutable loader : Loader.json_node_uberspark_loader_t;
 }
 
 
