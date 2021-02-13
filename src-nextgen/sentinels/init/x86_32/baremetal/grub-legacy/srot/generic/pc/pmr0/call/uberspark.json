@@ -10,7 +10,7 @@
 		"uberspark.manifest.version_max" : "any",
 
 
-		"uberspark.sentinel.namespace" : "uberspark/sentinels/init-uobjcoll/baremetal/grub-legacy/srot/generic/pc/pmr0/call/uberspark.json",
+		"uberspark.sentinel.namespace" : "uberspark/sentinels/init/baremetal/grub-legacy/srot/generic/pc/pmr0/call",
 		"uberspark.sentinel.platform" : "pc",
 		"uberspark.sentinel.arch" : "x86_32",
         "uberspark.sentinel.cpu" : "generic",

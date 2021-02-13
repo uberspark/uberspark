@@ -2388,7 +2388,7 @@ let generate_uobjcoll_section_info
 		let uobjcoll_namespace_varname = (Uberspark_namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.namespace) in 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((uobjcoll_namespace_varname ^ "__uobjs"), 
 			{ fn_name = (uobjcoll_namespace_varname ^ "__uobjs");	
-				f_subsection_list = [ ".text";  ".data"; ".rodata"; ".bss"; ".stack"];	
+				f_subsection_list = [ ".hdrdata"; ".text";  ".data"; ".rodata"; ".bss"; ".stack"; ".dmadata"; ];	
 				usbinformat = { f_type=Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 								f_prot=0; 
 								f_size = section_size;

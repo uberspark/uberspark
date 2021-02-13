@@ -9,7 +9,7 @@
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 
-		"uberspark.sentinel.namespace" : "uberspark/sentinels/init-uobjcoll/baremetal/vccore/srot/armv8_32/generic/rpi3/hyp/call",
+		"uberspark.sentinel.namespace" : "uberspark/sentinels/init/baremetal/vccore/srot/armv8_32/generic/rpi3/hyp/call",
 		"uberspark.sentinel.platform" : "rpi3",
 		"uberspark.sentinel.arch" : "armv8_32",
         "uberspark.sentinel.cpu" : "generic",
