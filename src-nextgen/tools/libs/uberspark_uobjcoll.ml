@@ -1957,8 +1957,10 @@ let create_loader_manifest_var_hashtbl
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug ~crlf:false "scanning loader: %s..." l_loader_namespace;
 
 			(* read manifest file into manifest variable *)
-			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_loader_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
+			let abspath_mf_filename = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_loader_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in
 			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loader manifest path=%s" abspath_mf_filename;
 
 			l_retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
 
@@ -2839,6 +2841,7 @@ let process_manifest_common
 				d_uberspark_manifest_var
 				!d_uobj_manifest_var_assoc_list
 				d_uobjrtl_manifest_var_hashtbl
+				d_loader_manifest_var_hashtbl
 				!d_triage_dir_prefix
 				!d_staging_dir_prefix);
 				
