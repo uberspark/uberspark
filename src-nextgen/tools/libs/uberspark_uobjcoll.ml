@@ -1943,6 +1943,38 @@ let create_uobjrtl_manifest_var_hashtbl
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* create loader to manifest variable hashtbl *)
+(*--------------------------------------------------------------------------*)
+let create_loader_manifest_var_hashtbl
+	()
+	: bool =
+	let l_retval = ref true in 
+
+	(* go over uobjcoll loaders *)
+	List.iter (fun l_loader_namespace ->
+		if !l_retval then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug ~crlf:false "scanning loader: %s..." l_loader_namespace;
+
+			(* read manifest file into manifest variable *)
+			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_loader_namespace ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename) in 
+			let l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t = Uberspark_manifest.uberspark_manifest_var_default_value () in
+
+			l_retval := Uberspark_manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
+
+			if !l_retval then begin
+				Hashtbl.remove d_loader_manifest_var_hashtbl l_loader_namespace;						
+				Hashtbl.add d_loader_manifest_var_hashtbl l_loader_namespace l_uberspark_manifest_var;						
+				Uberspark_logger.log ~tag:"" "[OK]";
+			end;
+		end;
+
+	) d_uberspark_manifest_var.uobjcoll.loaders;
+
+	(!l_retval)
+;;
+
+
 
 (*--------------------------------------------------------------------------*)
 (* create sentinel namespace to manifest variable hashtbl *)
@@ -2662,6 +2694,16 @@ let process_manifest_common
 			(* create uobjrtl to manifest variable hashtbl *)
 			let l_dummy=0 in begin
 			retval := create_uobjrtl_manifest_var_hashtbl ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
+
+			(* create loader to manifest variable hashtbl *)
+			let l_dummy=0 in begin
+			retval := create_loader_manifest_var_hashtbl ();
 			end;
 
 			if (!retval) == false then
