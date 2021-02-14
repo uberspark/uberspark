@@ -2070,6 +2070,34 @@ let copy_uobjrtl_to_triage
 
 
 (*--------------------------------------------------------------------------*)
+(* iterate through loader list and copy loader sources to triage area *)
+(*--------------------------------------------------------------------------*)
+let copy_loaders_to_triage
+	()
+	: bool =
+	let l_retval = ref true in 
+
+	(* iterate through all the loaders *)
+	Hashtbl.iter (fun (l_loader_ns : string) (l_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copying loader: %s" l_loader_ns;
+
+		(* create loader namespace folder within triage *)
+		(* TBD: sanity check loader namespace *)
+		let l_abspath_loader_triage_dir = (!d_triage_dir_prefix ^ "/" ^ l_loader_ns) in
+		Uberspark_osservices.mkdir ~parent:true l_abspath_loader_triage_dir (`Octal 0o0777);
+
+		(* copy over loader sources folder structure into uobjrtl triage dir *)
+		let l_loader_src_dir = (!d_staging_dir_prefix ^ "/" ^ l_loader_ns ^ "/.") in
+		let l_loader_dst_dir = (l_abspath_loader_triage_dir ^ "/.") in
+		Uberspark_osservices.cp ~recurse:true l_loader_src_dir l_loader_dst_dir;
+
+	) d_loader_manifest_var_hashtbl;
+
+	(!l_retval)
+;;
+
+
+(*--------------------------------------------------------------------------*)
 (* sanity check init_method and public_method entries *)
 (*--------------------------------------------------------------------------*)
 let sanity_check_uobjcoll_method_entries
@@ -2748,6 +2776,16 @@ let process_manifest_common
 			if (!retval) == false then
 				()
 			else
+
+			(* iterate through loader list and copy loader sources to triage area *)
+			let l_dummy=0 in begin
+			retval := copy_loaders_to_triage ();
+			end;
+
+			if (!retval) == false then
+				()
+			else
+
 
 			(* generate sentinels for uobjcoll methods *)
 			let l_dummy=0 in begin
