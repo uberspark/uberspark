@@ -293,6 +293,37 @@ let consolidate_actions_uobjrtl
 ;;
 
 
+
+let consolidate_actions_loader 
+	(p_loader_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
+	: bool * Uberspark_manifest.json_node_uberspark_manifest_actions_t list =
+	let retval = ref true in
+	let l_actions_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
+
+	List.iter ( fun (l_loader_action : Uberspark_manifest.json_node_uberspark_manifest_actions_t) -> 
+		if !retval then begin
+
+			if l_loader_action.category = "bridge_exec" then begin
+
+				(* plug in the action as is *)
+				l_actions_list := !l_actions_list @ [ l_loader_action; ];
+
+			end else begin
+				
+				(* unknown category, print error and exit *)
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unkown loader action category: %s" l_loader_action.category;
+				retval := false;
+			
+			end;
+		end;
+	) p_loader_manifest_var.manifest.actions;
+
+	(!retval, !l_actions_list)
+;;
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* consolidate actions *)
 (*--------------------------------------------------------------------------*)
@@ -339,6 +370,16 @@ let consolidate_actions ()
 				let (rval, ll_actions_list) = (consolidate_actions_uobjrtl l_uobjrtl_manifest_var) in
 				if rval then begin
 					l_add_to_global_actions_list ll_actions_list l_uobjrtl_manifest_var;
+				end else begin
+					retval := rval;
+				end;
+
+			end else if l_uobjcoll_action.category = "loader_action" then begin
+
+				let l_loader_manifest_var = Hashtbl.find g_loader_manifest_var_hashtbl l_uobjcoll_action.loader_namespace in
+				let (rval, ll_actions_list) = (consolidate_actions_loader l_loader_manifest_var) in
+				if rval then begin
+					l_add_to_global_actions_list ll_actions_list l_loader_manifest_var;
 				end else begin
 					retval := rval;
 				end;
@@ -505,7 +546,7 @@ let initialize
 			end;
 		
 		end;
-	) p_uobjrtl_manifest_var_hashtbl;
+	) p_loader_manifest_var_hashtbl;
 
 	if !l_rval = false then
 		(false)
@@ -1226,6 +1267,61 @@ let initialize_bridges ()
 
 
 (*--------------------------------------------------------------------------*)
+(* build input and output lists for actions processing *)
+(*--------------------------------------------------------------------------*)
+(*
+	return value is:
+	bool (true or false)
+	l_input_file_list, l_output_file_list, 
+	l_input_has_wildcard, l_output_has_wildcard,
+	l_input_ext_list, l_output_ext_list
+*)
+let get_action_input_output_filename_lists
+	(p_action : uberspark_action_t)
+	: bool * string list * string list * bool * bool * string list * string list =
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building input file list for action...";
+	let (l_rval_input, l_input_file_list, 
+		l_input_has_wildcard, l_input_ext_list) = 
+		get_action_input_filename_list p_action in
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
+		"> l_rval_input=%b, len(l_input_file_list)=%u, l_input_has_wildcard=%b len(l_input_ext_list)=%u"
+		l_rval_input (List.length l_input_file_list) l_input_has_wildcard
+		(List.length l_input_ext_list);
+
+	if l_rval_input then begin
+		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building ouput file list for action...";
+		let (l_rval_output, l_output_file_list, 
+			l_output_has_wildcard, l_output_ext_list) = 
+			get_action_output_filename_list p_action l_input_file_list in
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
+			"> l_rval_output=%b, len(l_output_file_list)=%u, l_output_has_wildcard=%b len(l_output_ext_list)=%u"
+			l_rval_output (List.length l_output_file_list) l_output_has_wildcard
+			(List.length l_output_ext_list);
+
+		if(l_rval_output) then begin
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> successfully built input and output file list for action";
+			(true, l_input_file_list, l_output_file_list, l_input_has_wildcard, l_output_has_wildcard, l_input_ext_list, l_output_ext_list)
+
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build output file list for action!";
+			(false, [], [], false, false, [], [])
+		end;
+
+
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input file list for action!";
+		(false, [], [], false, false, [], [])
+	end;
+
+;;
+
+
+(*--------------------------------------------------------------------------*)
 (* process actions *)
 (*--------------------------------------------------------------------------*)
 let process_actions ()
@@ -1256,31 +1352,15 @@ let process_actions ()
 			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
 			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> manifest.namespace=%s" l_action.uberspark_manifest_var.manifest.namespace;
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building input file list for action...";
-			let (l_rval_input, l_input_file_list, 
-				l_input_has_wildcard, l_input_ext_list) = 
-				get_action_input_filename_list l_action in
+			if l_action.uberspark_manifest_action.category = "translation" then begin
+			
+				let (l_rval, l_input_file_list,	l_output_file_list, 
+					l_input_has_wildcard, l_output_has_wildcard,
+					l_input_ext_list, l_output_ext_list) = 
+					get_action_input_output_filename_lists l_action in
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
-				"> l_rval_input=%b, len(l_input_file_list)=%u, l_input_has_wildcard=%b len(l_input_ext_list)=%u"
-				l_rval_input (List.length l_input_file_list) l_input_has_wildcard
-				(List.length l_input_ext_list);
-
-			if l_rval_input then begin
-				
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building ouput file list for action...";
-				let (l_rval_output, l_output_file_list, 
-					l_output_has_wildcard, l_output_ext_list) = 
-					get_action_output_filename_list l_action l_input_file_list in
-
-				Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
-					"> l_rval_output=%b, len(l_output_file_list)=%u, l_output_has_wildcard=%b len(l_output_ext_list)=%u"
-					l_rval_output (List.length l_output_file_list) l_output_has_wildcard
-					(List.length l_output_ext_list);
-
-				if(l_rval_output) then begin
-
-					Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> successfully built input and output file list for action";
+				if l_rval then begin
+					
 					let l_rval_bridge = invoke_bridge l_action
 						l_input_file_list l_output_file_list
 						l_input_ext_list l_output_ext_list in
@@ -1293,15 +1373,13 @@ let process_actions ()
 						retval := false;
 					end;
 
-
 				end else begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build output file list for action!";
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input and/or output file list for action!";
 					retval := false;
 				end;
 
-
 			end else begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input file list for action!";
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: unknown action category=%s!" __LOC__ l_action.uberspark_manifest_action.category ;
 				retval := false;
 			end;
 
@@ -1309,13 +1387,6 @@ let process_actions ()
 	) !g_actions_list;
 	end;
 
-	(* TBD:
-		iterate over global action list
-		1. get manifest var
-		2. get action info
-		3. build input file list and output file list by invoking helper
-		4. call bridge with bridge variables 
-	*)
 
 	(!retval)
 ;;

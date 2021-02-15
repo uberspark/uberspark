@@ -12,10 +12,16 @@
     "uberspark.loader.arch" : "x86_32",
     "uberspark.loader.cpu" : "generic",
 
-    "uberspark.loader.bridge_namespace" : "uberspark/bridges/container/amd64/loader-bridge/x86_32/generic/baremetal/gcc/v5.5.0",
-    "uberspark.loader.bridge_cmd" : [
-        "make all"
+    "uberspark.manifest.actions" : [
+        {
+           "targets" : [ "build" ],
+           "name" : "grub-legacy loader build",
+           "category" : "bridge_exec",
+           "bridge_namespace" : "uberspark/bridges/container/amd64/loader-bridge/x86_32/generic/baremetal/gcc/v5.5.0",
+           "bridge_cmd" : [
+            "make all"
+            ]
+        }
     ]
-       
 
 }

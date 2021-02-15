@@ -36,6 +36,9 @@ Actions fall into one of the following broad categories:
     *   `uobjrtl_action` - this category is to bring in actions from a set of |uobjrtl|. This action will be replaced by the
         target set of actions that this action selects. 
 
+    *   `loader_action` - this category is to bring in actions from a set of loaders. This action will be replaced by the
+        target set of actions that this action selects. 
+
     *   `default_action` - this category is to bring in the default set of actions for a |uobj| or a |uobjcoll|. This action will be replaced by the
         target set of default actions. 
 

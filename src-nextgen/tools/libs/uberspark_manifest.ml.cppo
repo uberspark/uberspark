@@ -177,6 +177,9 @@ let json_node_uberspark_manifest_actions_to_var
 								if (l_actions_json |> member "uobjrtl_namespace") <> `Null then 
 									actions_entry.uobj_namespace <- (l_actions_json |> member "uobjrtl_namespace" |> to_string);
 
+								if (l_actions_json |> member "loader_namespace") <> `Null then 
+									actions_entry.loader_namespace <- (l_actions_json |> member "loader_namespace" |> to_string);
+
 								actions_list := !actions_list @ [ actions_entry ];
 					
 								()
