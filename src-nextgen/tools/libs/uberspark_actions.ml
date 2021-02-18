@@ -1132,6 +1132,7 @@ let invoke_bridge
 
 		let l_bridge_object = Hashtbl.find g_bridge_hashtbl  p_action.uberspark_manifest_action.bridge_namespace in
 		let l_build_dir = ref "" in
+		let l_bridge_cmd : string list ref = ref [] in
 
 		if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
 			l_build_dir := p_action.uberspark_manifest_var.uobjcoll.namespace;
@@ -1139,6 +1140,9 @@ let invoke_bridge
 			l_build_dir := p_action.uberspark_manifest_var.uobj.namespace;
 		end else if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 			l_build_dir := p_action.uberspark_manifest_var.uobjrtl.namespace;
+		end else if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/loaders" then begin
+			l_build_dir := p_action.uberspark_manifest_var.loader.namespace;
+			l_bridge_cmd := p_action.uberspark_manifest_action.bridge_cmd;
 		end else begin
 			Uberspark_logger.log ~lvl:Uberspark_logger.Warn "> unknown manifest namespace=%s"
 				p_action.uberspark_manifest_var.manifest.namespace;
@@ -1165,6 +1169,7 @@ let invoke_bridge
 		l_retval := l_bridge_object#invoke 
 					~context_path_builddir:!l_build_dir 
 				[
+					("@@BRIDGE_CMD@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
@@ -1377,6 +1382,20 @@ let process_actions ()
 					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input and/or output file list for action!";
 					retval := false;
 				end;
+
+			end else if l_action.uberspark_manifest_action.category = "bridge_exec" then begin
+			
+					let l_rval_bridge = invoke_bridge l_action
+						[] []
+						[] [] in
+
+					if l_rval_bridge then begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
+						l_current_action_index := !l_current_action_index + 1;
+					end else begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
+						retval := false;
+					end;
 
 			end else begin
 				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: unknown action category=%s!" __LOC__ l_action.uberspark_manifest_action.category ;
