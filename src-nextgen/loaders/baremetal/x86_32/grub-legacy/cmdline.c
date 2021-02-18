@@ -83,7 +83,7 @@
  * Modified for XMHF by Amit Vasudevan (amitvasudevan@acm.org)
  */
 
-#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/uobjs/main/include/xmhf.h>
 
 /*#include <xmhf.h>
 #include <xmhf-hwm.h>

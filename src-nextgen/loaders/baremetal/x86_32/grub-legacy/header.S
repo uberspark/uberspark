@@ -45,7 +45,7 @@
  */
 
 //#include <xmhf.h> 
-#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/uobjs/main/include/xmhf.h>
 
 	.section .multiboot_header
 

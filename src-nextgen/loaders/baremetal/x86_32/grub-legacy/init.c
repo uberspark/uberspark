@@ -48,7 +48,7 @@
 //author: amit vasudevan (amitvasudevan@acm.org)
 
 //---includes-------------------------------------------------------------------
-#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/uobjs/main/include/xmhf.h>
 
 /*#include <xmhf.h>
 #include <xmhf-hwm.h>

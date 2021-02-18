@@ -27,14 +27,15 @@ A_SOURCES_FILENAMEONLY := $(notdir $(A_SOURCES))
 
 OBJECTS_ARCHIVE := $(patsubst %.c, %.o, $(C_SOURCES_FILENAMEONLY))
 OBJECTS_ARCHIVE += $(patsubst %.S, %.o, $(A_SOURCES_FILENAMEONLY))
-OBJECTS_ARCHIVE += $(UOBJRTL_CRT_OBJECTS_ARCHIVE)
-OBJECTS_ARCHIVE += $(UOBJRTL_HW_OBJECTS_ARCHIVE)
+
+OBJECTS_ARCHIVE += $(UOBJRTL_CRT_OBJECTS)
+OBJECTS_ARCHIVE += $(UOBJRTL_HW_OBJECTS)
 
 # list of object dependencies
 OBJECTS := $(patsubst %.c, %.o, $(C_SOURCES))
 OBJECTS += $(patsubst %.S, %.o, $(A_SOURCES))
-OBJECTS += $(UOBJRTL_CRT_OBJECTS)
-OBJECTS += $(UOBJRTL_HW_OBJECTS)
+#OBJECTS += $(UOBJRTL_CRT_OBJECTS)
+#OBJECTS += $(UOBJRTL_HW_OBJECTS)
 
 
 # folder where objects go
@@ -47,6 +48,15 @@ THE_ARCHIVE = loader
 .PHONY: all
 all: $(THE_ARCHIVE)
 #all:
+#	echo $(BRIDGE_UBERSPARK_ROOT_DIR_PREFIX)
+#	echo $(BRIDGE_UBERSPARK_STAGING_DIR_PREFIX)
+#	echo $(BRIDGE_CONTAINER_MOUNT_POINT)
+#	echo $(UOBJRTL_CRT_OBJECTS)
+#	echo $(UOBJRTL_HW_OBJECTS)
+#	cat /sample.nonexistent
+#	echo $(UOBJRTL_CRYPTO_OBJECTS)
+#	echo $(UOBJRTL_HW_OBJECTS)
+#	echo $(BRIDGE_UBERSPARK_ROOT_DIR_PREFIX)
 #	echo $(DIR_UOBJRTL_CRT_SRC)
 #	echo $(UOBJRTL_CRT_C_SOURCES)
 #	echo $(UOBJRTL_CRT_A_SOURCES)
@@ -76,13 +86,13 @@ $(THE_ARCHIVE): $(OBJECTS)
 	@echo Building "$(@F)" from "$<"
 	$(CC) -c $(CFLAGS) -o $(XMHF_BOOTLOADER_OBJECTS_DIR)/$(@F) $<
 
-%.o: %.cS
-	$(MKDIR) -p $(XMHF_BOOTLOADER_OBJECTS_DIR)
-	@echo Building "$(@F)" from "$<" 
-	$(CP) -f $< $(XMHF_BOOTLOADER_OBJECTS_DIR)/$(notdir $<).c
-	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CCOMP) $(CCOMPFLAGS) $(notdir $<).c 
-	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(FRAMAC) -load-module $(DIR_UBERSPARK_VBRIDGE_PLUGIN)/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile $(notdir $<).mach -casm-outfile $(notdir $<).s 
-	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CC) -c $(ASMFLAGS) -o $(@F) $(notdir $<).s
+#%.o: %.cS
+#	$(MKDIR) -p $(XMHF_BOOTLOADER_OBJECTS_DIR)
+#	@echo Building "$(@F)" from "$<" 
+#	$(CP) -f $< $(XMHF_BOOTLOADER_OBJECTS_DIR)/$(notdir $<).c
+#	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CCOMP) $(CCOMPFLAGS) $(notdir $<).c 
+#	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(FRAMAC) -load-module $(DIR_UBERSPARK_VBRIDGE_PLUGIN)/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile $(notdir $<).mach -casm-outfile $(notdir $<).s 
+#	cd $(XMHF_BOOTLOADER_OBJECTS_DIR) && $(CC) -c $(ASMFLAGS) -o $(@F) $(notdir $<).s
 
 
 .PHONY: clean
