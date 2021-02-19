@@ -74,75 +74,6 @@ let new_action_element ()
 };;
 
 
-
-
-(* default actions list for uobjrtl *)
-(*let g_uobjrtl_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
-	{
-		targets = [ "build"; ];
-		name = "translating .c to .o";
-		category = "translation";
-		input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-	{
-		targets = [ "build"; ];
-		name = "translating .cS to .s";
-		category = "translation";
-		input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-	{
-		targets = [ "build"; ];
-		name = "translating .s to .o";
-		category = "translation";
-		input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-]	
-;;*)
-
-
-(* default actions list for uobjs *)
-(*let g_uobj_default_action_list : Uberspark_manifest.json_node_uberspark_manifest_actions_t list = [
-	{
-		targets = [ "build"; ];
-		name = "translating .c to .o";
-		category = "translation";
-		input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-	{
-		targets = [ "build"; ];
-		name = "translating .cS to .s";
-		category = "translation";
-		input = [ "*.cS" ]; output = [ "*.s" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-	{
-		targets = [ "build"; ];
-		name = "translating .s to .o";
-		category = "translation";
-		input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
-		uobj_namespace = "";
-		uobjrtl_namespace = "";
-	};
-
-]	
-;;
-*)
-
-
 (* assoc list of all actions to be processed; indexed by namespace of the uobjcoll, uobj or uobjrtl involved *)
 let g_actions_assoc_list : (string * uberspark_action_t) list ref = ref [];; 
 
@@ -628,102 +559,6 @@ let initialize
 ;;
 
 
-
-
-(*
-			
-	g_actions_assoc_list := g_actions_assoc_list @ [ (g_uobjcoll_manifest_var.uobjcoll.namespace, l_json_node_uberspark_manifest_action); ];
-
-*)
-
-(*
-	let wildcard (p_str : string ) : bool = 
-		if p_str starts with . then return true
-		else return false
-		
-	List.exists wildcard list_name
-
-*)
-
-
-(* TBD we need another function to replace in filename list the wildcard like the
-one below*)
-
-
-
-
-(*--------------------------------------------------------------------------*)
-(* given a list of file names and extension filters, return a list of same filename by *)
-(* substituting the extension filter *)
-(*--------------------------------------------------------------------------*)
-(*let replace_extension_in_source_filename_list 
-	(p_source_list : string list)
-	(p_wildcard_ext : string) 
-	: string list =
-
-	let l_return_list : string list ref = ref [] in 
-	List.iter ( fun (l_filename : string) ->
-		l_return_list := !l_return_list @ [ ((Filename.remove_extension l_filename) ^ p_wildcard_ext) ; ];
-	) p_source_list;
-
-	(!l_return_list)
-;;
-*)
-
-(*--------------------------------------------------------------------------*)
-(* create and return a list of source files *)
-(* given a manifest var and extension filter *)
-(* note: special case of extension filter is .o which is *)
-(*--------------------------------------------------------------------------*)
-(*let filter_source_filename_list 
-	(p_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
-	(p_wildcard_ext : string) 
-	: string list =
-
-	let l_return_list : string list ref = ref [] in 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: p_wildcard_ext=%s" __LOC__ p_wildcard_ext;
-
-	if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
-		
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobj (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources);
-
-		List.iter ( fun (l_filename : string) ->
-			if p_operation = "filter" then begin
-				if (Filename.extension l_filename) = p_wildcard_ext then begin
-					l_return_list := !l_return_list @ [ l_filename; ];
-				end;
-			end else begin
-				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_filename) ^ p_filename_ext) ; ];
-			end;
-		) p_uberspark_manifest_var.uobj.sources;
-		
-	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
-
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: processing for uberspark/uobjrtl (total files=%u)..." 
-			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.sources);
-
-		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
-			if (Filename.extension l_source_file.path) = p_wildcard_ext then begin
-				l_return_list := !l_return_list @ [ l_source_file.path; ];
-			end;
-		) p_uberspark_manifest_var.uobjrtl.sources;
-
-	end else begin
-
-		Uberspark_logger.log ~lvl:Uberspark_logger.Warn "%s: unknown manifest namespace=%s" __LOC__ p_uberspark_manifest_var.manifest.namespace; 
-		l_return_list := [];
-
-	end;
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(l_return_list)=%u" 
-		__LOC__ (List.length !l_return_list);
-
-	(!l_return_list)
-;;
-*)
-
-
 (*--------------------------------------------------------------------------*)
 (* create and return a list of source files *)
 (* given a manifest var and filename extension *)
@@ -971,136 +806,62 @@ let get_action_output_filename_list
 ;;
 
 
+
 (*--------------------------------------------------------------------------*)
-(* build input and output list *)
+(* build input and output lists for actions processing *)
 (*--------------------------------------------------------------------------*)
 (*
-	return input list, return output list
-	return input ext, return output ext
-	return true on success, false on failure
+	return value is:
+	bool (true or false)
+	l_input_file_list, l_output_file_list, 
+	l_input_has_wildcard, l_output_has_wildcard,
+	l_input_ext_list, l_output_ext_list
 *)
-(*let build_input_output
-	(p_uberspark_action : uberspark_action_t )
-	: (bool * string list * string list * string * string) =
-	
-	let l_retval = ref true in 
-	let l_input_list : string list ref = ref [] in 
-	let l_output_list : string list ref = ref [] in 
-	let l_input_wildcard_ext = ref "" in 
-	let l_output_wildcard_ext = ref "" in 
-	
-	(* check if the string begins with wildcard characters and stores the extension in l_input_wildcard_ext if so *)
-	let l_wildcard_input (p_str : string ) : bool =
-		if (Filename.remove_extension p_str) = "*" then begin
-			l_input_wildcard_ext := Filename.extension p_str;
-			(true)
-		end else begin
-			(false)
-		end
-	in
+let get_action_input_output_filename_lists
+	(p_action : uberspark_action_t)
+	: bool * string list * string list * bool * bool * string list * string list =
 
-	(* check if the string begins with wildcard characters and stores the extension in l_output_wildcard_ext if so *)
-	let l_wildcard_output (p_str : string ) : bool =
-		if (Filename.remove_extension p_str) = "*" then begin
-			l_output_wildcard_ext := Filename.extension p_str;
-			(true)
-		end else begin
-			(false)
-		end
-	in
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building input file list for action...";
+	let (l_rval_input, l_input_file_list, 
+		l_input_has_wildcard, l_input_ext_list) = 
+		get_action_input_filename_list p_action in
 
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
+		"> l_rval_input=%b, len(l_input_file_list)=%u, l_input_has_wildcard=%b len(l_input_ext_list)=%u"
+		l_rval_input (List.length l_input_file_list) l_input_has_wildcard
+		(List.length l_input_ext_list);
 
-
-	(*  
-		input and output list must have at least one element
-		input can be a wildcard, output has to be wildcard or a single entry 
-	    if input has no wildcard, output cannot have wildcard
-		output can be a single entry or the same number of entries as input
-		all input extensions must be same, all output extensions must be same	
-	*)
-	let l_exists_wildcard_input = List.exists l_wildcard_input p_uberspark_action.uberspark_manifest_action.input in
-	let l_exists_wildcard_output = List.exists l_wildcard_output p_uberspark_action.uberspark_manifest_action.output in
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: l_exists_wildcard_input=%b l_exists_wildcard_output=%b" 
-		__LOC__ l_exists_wildcard_input l_exists_wildcard_output; 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: l_input_wildcard_ext=%s l_output_wildcard_ext=%s" 
-		__LOC__ !l_input_wildcard_ext !l_output_wildcard_ext; 
-
-	if (List.length p_uberspark_action.uberspark_manifest_action.input >= 1 && 
-		List.length p_uberspark_action.uberspark_manifest_action.output >= 1) then begin
-	
-		if (l_exists_wildcard_input) then begin
-
-			if (l_exists_wildcard_output) then begin
-				
-				l_input_list := filter_source_filename_list p_uberspark_action.uberspark_manifest_var !l_input_wildcard_ext; 
-				l_output_list := replace_extension_in_source_filename_list !l_input_list !l_output_wildcard_ext;
-
-			end else begin
-				if List.length p_uberspark_action.uberspark_manifest_action.output = 1 then begin
-					l_input_list := filter_source_filename_list p_uberspark_action.uberspark_manifest_var !l_input_wildcard_ext; 
-					l_output_list := [ (List.nth p_uberspark_action.uberspark_manifest_action.output 0); ];
-				end else begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: action input is a wildcard, output has to be wildcard!" __LOC__; 
-					l_retval := false;
-				end;
-			end;
+	if l_rval_input then begin
 		
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building ouput file list for action...";
+		let (l_rval_output, l_output_file_list, 
+			l_output_has_wildcard, l_output_ext_list) = 
+			get_action_output_filename_list p_action l_input_file_list in
+
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
+			"> l_rval_output=%b, len(l_output_file_list)=%u, l_output_has_wildcard=%b len(l_output_ext_list)=%u"
+			l_rval_output (List.length l_output_file_list) l_output_has_wildcard
+			(List.length l_output_ext_list);
+
+		if(l_rval_output) then begin
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> successfully built input and output file list for action";
+			(true, l_input_file_list, l_output_file_list, l_input_has_wildcard, l_output_has_wildcard, l_input_ext_list, l_output_ext_list)
+
 		end else begin
-
-			if (l_exists_wildcard_output) then begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: action input is not a wildcard, output cannot be wildcard!" __LOC__; 
-					l_retval := false;
-			end else begin
-				if List.length p_uberspark_action.uberspark_manifest_action.output = 1 then begin
-
-					l_input_wildcard_ext := Filename.extension ((List.nth p_uberspark_action.uberspark_manifest_action.input 1));
-					List.iter ( fun (l_filename : string) ->
-						if (Filename.extension l_filename) = !l_input_wildcard_ext then begin
-							l_input_list := !l_input_list @ [ l_filename; ];
-						end else begin
-							Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: action input list has files of different extensions!" __LOC__; 
-							l_retval := false;
-						end;
-					)p_uberspark_action.uberspark_manifest_action.input;
-
-					l_output_list := [ (List.nth p_uberspark_action.uberspark_manifest_action.output 0); ];
-
-				end else if List.length p_uberspark_action.uberspark_manifest_action.output = List.length p_uberspark_action.uberspark_manifest_action.input then begin
-
-					l_input_wildcard_ext := Filename.extension ((List.nth p_uberspark_action.uberspark_manifest_action.input 0));
-					List.iter ( fun (l_filename : string) ->
-						if (Filename.extension l_filename) = !l_input_wildcard_ext then begin
-							l_input_list := !l_input_list @ [ l_filename; ];
-						end else begin
-							Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: action input list has files of different extensions! " __LOC__; 
-							l_retval := false;
-						end;
-					)p_uberspark_action.uberspark_manifest_action.input;
-
-					if !l_retval then begin
-
-						l_output_wildcard_ext := Filename.extension ((List.nth p_uberspark_action.uberspark_manifest_action.output 0));
-						l_output_list := replace_extension_in_source_filename_list !l_input_list !l_output_wildcard_ext;
-
-					end;
-
-				end else begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: output can be a single entry or the same number of entries as input" __LOC__; 
-					l_retval := false;
-				end;
-			end;
-		
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build output file list for action!";
+			(false, [], [], false, false, [], [])
 		end;
-	
-	end else begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: action input and output list must have at least one element!" __LOC__; 
-		l_retval := false;
-	end;	
 
-	(!l_retval, !l_input_list, !l_output_list, !l_input_wildcard_ext, !l_output_wildcard_ext)
+
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input file list for action!";
+		(false, [], [], false, false, [], [])
+	end;
+
 ;;
-*)
+
+
 
 (*--------------------------------------------------------------------------*)
 (* invoke bridge *)
@@ -1272,60 +1033,6 @@ let initialize_bridges ()
 	(!l_retval)
 ;;
 
-
-(*--------------------------------------------------------------------------*)
-(* build input and output lists for actions processing *)
-(*--------------------------------------------------------------------------*)
-(*
-	return value is:
-	bool (true or false)
-	l_input_file_list, l_output_file_list, 
-	l_input_has_wildcard, l_output_has_wildcard,
-	l_input_ext_list, l_output_ext_list
-*)
-let get_action_input_output_filename_lists
-	(p_action : uberspark_action_t)
-	: bool * string list * string list * bool * bool * string list * string list =
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building input file list for action...";
-	let (l_rval_input, l_input_file_list, 
-		l_input_has_wildcard, l_input_ext_list) = 
-		get_action_input_filename_list p_action in
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
-		"> l_rval_input=%b, len(l_input_file_list)=%u, l_input_has_wildcard=%b len(l_input_ext_list)=%u"
-		l_rval_input (List.length l_input_file_list) l_input_has_wildcard
-		(List.length l_input_ext_list);
-
-	if l_rval_input then begin
-		
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> building ouput file list for action...";
-		let (l_rval_output, l_output_file_list, 
-			l_output_has_wildcard, l_output_ext_list) = 
-			get_action_output_filename_list p_action l_input_file_list in
-
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug 
-			"> l_rval_output=%b, len(l_output_file_list)=%u, l_output_has_wildcard=%b len(l_output_ext_list)=%u"
-			l_rval_output (List.length l_output_file_list) l_output_has_wildcard
-			(List.length l_output_ext_list);
-
-		if(l_rval_output) then begin
-
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> successfully built input and output file list for action";
-			(true, l_input_file_list, l_output_file_list, l_input_has_wildcard, l_output_has_wildcard, l_input_ext_list, l_output_ext_list)
-
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build output file list for action!";
-			(false, [], [], false, false, [], [])
-		end;
-
-
-	end else begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input file list for action!";
-		(false, [], [], false, false, [], [])
-	end;
-
-;;
 
 
 (*--------------------------------------------------------------------------*)
