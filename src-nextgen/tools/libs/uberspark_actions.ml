@@ -568,12 +568,15 @@ let initialize
 (*--------------------------------------------------------------------------*)
 let get_sources_filename_list 
 	(p_uberspark_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)
-	(p_filename_ext : string) 
+	(p_only_local_sources : bool)
+(*)	(p_filename_ext : string) 
 	(p_filename_ext_replace : bool)
+*)
 	: string list =
 
 	let l_return_list : string list ref = ref [] in 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: p_filename_ext=%s" __LOC__ p_filename_ext;
+	(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: p_filename_ext=%s" __LOC__ p_filename_ext;
+	*)
 
 	if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobj" then begin
 		
@@ -581,13 +584,7 @@ let get_sources_filename_list
 			__LOC__ (List.length p_uberspark_manifest_var.uobj.sources);
 
 		List.iter ( fun (l_filename : string) ->
-			if p_filename_ext_replace then begin			
-				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_filename) ^ p_filename_ext) ; ];
-			end else begin
-				if (Filename.extension l_filename) = p_filename_ext then begin
-					l_return_list := !l_return_list @ [ l_filename; ];
-				end;
-			end;
+			l_return_list := !l_return_list @ [ l_filename; ];
 		) p_uberspark_manifest_var.uobj.sources;
 		
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
@@ -596,13 +593,7 @@ let get_sources_filename_list
 			__LOC__ (List.length p_uberspark_manifest_var.uobjrtl.sources);
 
 		List.iter ( fun (l_source_file : Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_modules_spec_t) -> 
-			if p_filename_ext_replace then begin			
-				l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file.path) ^ p_filename_ext) ; ];
-			end else begin
-				if (Filename.extension l_source_file.path) = p_filename_ext then begin
-					l_return_list := !l_return_list @ [ l_source_file.path; ];
-				end;
-			end;
+			l_return_list := !l_return_list @ [ l_source_file.path; ];
 		) p_uberspark_manifest_var.uobjrtl.sources;
 
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
@@ -611,7 +602,19 @@ let get_sources_filename_list
 			__LOC__ (List.length p_uberspark_manifest_var.uobjcoll.sources);
 
 		List.iter ( fun (l_source_file : string) -> 
-			if p_filename_ext_replace then begin	
+			if p_only_local_sources then begin
+				if ((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
+					l_return_list := !l_return_list @ [ l_source_file; ];
+				end;
+			end else begin
+				if ((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
+					l_return_list := !l_return_list @ [ p_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ l_source_file ];
+				end else begin
+					l_return_list := !l_return_list @ [ l_source_file ];
+				end;		
+			end;
+			
+			(*if p_filename_ext_replace then begin	
 				if p_filename_ext = ".o" && 
 					((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
 					l_return_list := !l_return_list @ [ p_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
@@ -624,7 +627,7 @@ let get_sources_filename_list
 				   ((Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
 					l_return_list := !l_return_list @ [ l_source_file; ];
 				end;
-			end;
+			end;*)
 		) p_uberspark_manifest_var.uobjcoll.sources;
 
 
@@ -679,7 +682,9 @@ let get_action_input_filename_list
 
 			(* special handling for input *.o *)
 			if l_input_wildcard_ext = ".o" then begin
-				let l_l_input_list = get_sources_filename_list p_uberspark_action.uberspark_manifest_var l_input_wildcard_ext true in
+				let l_l_input_list : string list ref = ref [] in
+				l_l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var false;
+				l_l_input_list := Uberspark_utils.filename_list_substitute_extension !l_l_input_list l_input_wildcard_ext;
 			
 				List.iter ( fun (l_filename : string) ->
 					(* if bridge namespace is not null *)
@@ -696,10 +701,11 @@ let get_action_input_filename_list
 						end;
 					end;
 			
-				) l_l_input_list;
+				) !l_l_input_list;
 
 			end else begin
-				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var l_input_wildcard_ext false;
+				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var true;
+				l_input_list := Uberspark_utils.filename_list_filter_by_extension !l_input_list l_input_wildcard_ext;
 			end;
 
 			l_input_ext_list := !l_input_ext_list @ [ l_input_wildcard_ext; ];

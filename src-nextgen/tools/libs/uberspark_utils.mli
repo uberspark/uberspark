@@ -18,3 +18,7 @@
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+val filename_list_append_path_prefix : string list -> string -> string list
+val filename_list_filter_by_extension : string list -> string -> string list
+val filename_list_substitute_extension : string list -> string -> string list
