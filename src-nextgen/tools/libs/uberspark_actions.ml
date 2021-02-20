@@ -868,6 +868,42 @@ let get_action_input_output_filename_lists
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* return a list of auxillary source files for uobj verification *)
+(* includes all uobjrtl sources and basic uobjcoll sources *)
+(*--------------------------------------------------------------------------*)
+let get_uobj_verification_aux_sources
+	() : string list =
+
+	let l_uobjcoll_list : string list ref = ref [] in 
+	let l_uobjrtl_list : string list ref = ref [] in 
+	let l_return_list : string list ref = ref [] in 
+
+	(* grab the uobjcoll sources first *)
+	l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
+	l_uobjcoll_list := Uberspark_utils.filename_list_append_path_prefix
+						!l_uobjcoll_list (g_uberspark_manifest_var.uobjcoll.namespace ^ "/");
+
+	l_return_list := !l_return_list @ l_uobjcoll_list;
+
+	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark_manifest.uberspark_manifest_var_t)  ->
+		l_uobjrtl_list := [];
+		l_uobjrtl_list := (get_sources_filename_list l_uobjrtl_manifest_var true);
+		l_uobjrtl_list := Uberspark_utils.filename_list_append_path_prefix
+						!l_uobjrtl_list (l_uobjrtl_ns ^ "/");
+	
+		l_return_list := !l_return_list @ l_uobjrtl_list;
+
+	)g_uobjrtl_manifest_var_hashtbl;
+
+	Uberspark_utils.filename_list_append_path_prefix
+						!l_return_list (!g_triage_dir_prefix ^ "/");
+	
+	(!l_return_list)		
+;;
+
+
+
 
 (*--------------------------------------------------------------------------*)
 (* invoke bridge *)
@@ -941,6 +977,11 @@ let invoke_bridge
 					("@@BRIDGE_CMD@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_SOURCE_FILES@@", (Uberspark_bridge.bridge_parameter_to_string p_input_file_list));
+					("@@BRIDGE_UOBJCOLL_SOURCE_FILES@@", );
+
+
+	
+
 					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark_bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
 					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; Uberspark_namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
 					("@@BRIDGE_COMPILEDEFS@@", (Uberspark_bridge.bridge_parameter_to_string !l_bridge_defs_list));
