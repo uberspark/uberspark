@@ -896,9 +896,13 @@ let get_uobj_verification_aux_sources
 
 	)g_uobjrtl_manifest_var_hashtbl;
 
+
 	Uberspark_utils.filename_list_append_path_prefix
 						!l_return_list (!g_triage_dir_prefix ^ "/");
-	
+
+	Uberspark_utils.filename_list_substitute_extension
+						!l_return_list ".c";
+
 	(!l_return_list)		
 ;;
 
