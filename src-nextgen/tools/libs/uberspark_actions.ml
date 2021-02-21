@@ -101,6 +101,16 @@ let consolidate_actions_uobj
 				(* thread through the default actions for the uobj *)				
 				l_actions_list := !l_actions_list @ [
 					{
+						targets = [ "verify"; ];
+						category = "translation";
+						name = "verifying überSpark invariants";
+						input = [ "*.c" ]; output = [ ]; bridge_namespace = Uberspark_config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace; bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+						loader_namespace = "";
+					};
+
+					{
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
