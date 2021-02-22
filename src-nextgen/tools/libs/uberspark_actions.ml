@@ -1182,16 +1182,17 @@ let process_actions_category
 *)
 
 let process_actions 
+	?(p_in_order = true) 
 	(p_targets: string list)
 	: bool =
 	let retval = ref true in 
 
 	let l_current_action_index = ref 1 in
-	Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions...(total=%u)" (List.length !g_actions_list);
+	Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions...(total=%u; p_in_order=%b)" 
+		(List.length !g_actions_list) p_in_order;
 	Uberspark_logger.log ~lvl:Uberspark_logger.Info "Initializing action bridges...";
 
 	(* initialize uobjcoll bridges *)
-	(* TBD: initialize bridge from consolidated actions *)
 	let rval = initialize_bridges () in	
     if (rval == false) then	begin
 		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to initialize uobj collection bridges!";
@@ -1203,25 +1204,66 @@ let process_actions
 	end;
 
 	let dummy=0 in begin
-	(* iterate over global action list *)
-	List.iter ( fun (l_action : uberspark_action_t) -> 
-		if !retval then begin
+	if p_in_order then begin
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+		(* we process all actions in order of where they are defined in the manifests *)
+		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing all actions in manifest order...";
 
-		retval := process_actions_category l_action;
+		(* iterate over global action list *)
+		List.iter ( fun (l_action : uberspark_action_t) -> 
+			if !retval then begin
 
-		if !retval then begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
-			l_current_action_index := !l_current_action_index + 1;
-		end else begin
-			Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not process action!";
-		end;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
 
-		end;
-	) !g_actions_list;
+				retval := process_actions_category l_action;
+
+				if !retval then begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
+					l_current_action_index := !l_current_action_index + 1;
+				end else begin
+					Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not process action!";
+				end;
+
+			end;
+		) !g_actions_list;
+
+	end else begin
+
+		(* we process all actions by target as listed in p_targets *)
+		List.iter ( fun (l_target : string) -> 
+
+			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions for target: %s..." l_target;
+
+			(* iterate over global action list *)
+			List.iter ( fun (l_action : uberspark_action_t) -> 
+				if !retval then begin
+
+					if (Uberspark_utils.string_list_exists_string l_action.uberspark_manifest_action.targets l_target) then begin
+
+						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+
+						retval := process_actions_category l_action;
+
+						if !retval then begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
+							l_current_action_index := !l_current_action_index + 1;
+						end else begin
+							Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not process action!";
+						end;
+
+					end else begin
+						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Skipping action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+						l_current_action_index := !l_current_action_index + 1;
+					end;
+				end;
+
+			) !g_actions_list;
+
+
+		) p_targets;
+
 	end;
-
+	end;
 
 	(!retval)
 ;;

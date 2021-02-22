@@ -2647,6 +2647,7 @@ let initialize_uobjcoll_sources
 
 
 let process_manifest_common
+	?(p_in_order = true) 
 	(p_uobjcoll_ns : string)
 	(p_targets : string list)
 	: bool =
@@ -2880,6 +2881,7 @@ let process_manifest_common
 
 
 let process_manifest
+	?(p_in_order = true) 
 	(abspath_cwd : string)
 	(abspath_mf_filename : string)
 	(p_targets : string list)

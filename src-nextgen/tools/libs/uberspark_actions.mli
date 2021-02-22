@@ -36,7 +36,7 @@ val initialize :
     bool
 
 val process_actions :
+    ?p_in_order:bool ->
     string list ->
     bool
-
 
