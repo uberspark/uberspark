@@ -19,6 +19,9 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+val string_list_exists_string : string list -> string -> bool
+val string_list_exists_common_string : string list -> string list -> string -> bool
 val filename_list_append_path_prefix : string list -> string -> string list
 val filename_list_filter_by_extension : string list -> string -> string list
 val filename_list_substitute_extension : string list -> string -> string list
+

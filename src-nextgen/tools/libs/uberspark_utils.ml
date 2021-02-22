@@ -20,6 +20,55 @@
 (*---------------------------------------------------------------------------*)
 
 (* 
+    given a list of strings and a candidate string, 
+    return true if candidate string is found in the list
+    or false if not
+*)
+
+let string_list_exists_string
+	(p_string_list : string list)
+	(p_candidate_string : string) 
+	: bool =
+
+	(* check if the string begins with wildcard characters *)
+	let l_string_check (p_str : string ) : bool =
+		if (p_str = p_candidate_string) then begin
+			(true)
+		end else begin
+			(false)
+		end
+	
+    in
+
+	(List.exists l_string_check p_string_list)
+;;
+
+
+(* 
+    given tww lists of strings and a candidate string, 
+    return true if candidate string is found in both the lists
+    or false if not
+*)
+
+let string_list_exists_common_string
+	(p_list_a : string list)
+	(p_list_b : string list)
+	(p_candidate_string : string) 
+	: bool =
+
+    let l_rval1 = string_list_exists_string p_list_a p_candidate_string in
+    let l_rval2 = string_list_exists_string p_list_b p_candidate_string in
+
+    if l_rval1 = true && l_rval2 = true then
+        (true)
+    else
+        (false)
+;;
+
+
+
+
+(* 
     given a list of filenames and a path prefix, append path prefix to each 
     filename in the list and return the new list
 *)

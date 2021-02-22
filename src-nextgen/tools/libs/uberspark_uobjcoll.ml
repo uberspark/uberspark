@@ -2648,6 +2648,7 @@ let initialize_uobjcoll_sources
 
 let process_manifest_common
 	(p_uobjcoll_ns : string)
+	(p_targets : string list)
 	: bool =
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "process_manifest_common (p_uobjcoll_ns=%s)..." p_uobjcoll_ns;
@@ -2854,7 +2855,7 @@ let process_manifest_common
 
 			(* process actions *)
 			let l_dummy=0 in begin
-			retval := Uberspark_actions.process_actions ();
+			retval := Uberspark_actions.process_actions p_targets;
 			end;
 
 			if (!retval) == false then
@@ -2881,6 +2882,7 @@ let process_manifest_common
 let process_manifest
 	(abspath_cwd : string)
 	(abspath_mf_filename : string)
+	(p_targets : string list)
 	: bool =
 
 	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "processing uobjcoll manifest...";
@@ -2945,7 +2947,7 @@ let process_manifest
 	end;
 
 	(* invoke common manifest processing logic *)
-	(process_manifest_common (d_uberspark_manifest_var.uobjcoll.namespace))
+	(process_manifest_common (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
 ;;
 
 

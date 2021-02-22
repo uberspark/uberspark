@@ -51,7 +51,9 @@ let handler_default
   end;
 
   (* process uobjcoll manifest *)
-  let rval = (Uberspark.Uobjcoll.process_manifest l_cwd_abs l_manifest_file_path_abs) in
+  let rval = (Uberspark.Uobjcoll.process_manifest 
+    l_cwd_abs l_manifest_file_path_abs 
+      [ "verify"; "build"; "docs"; "install";]) in
 
   (* bail out on error, else return success *)
   if (rval == false) then begin

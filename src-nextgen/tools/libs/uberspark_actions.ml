@@ -1090,11 +1090,99 @@ let initialize_bridges ()
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* process actions per the action category *)
+(*--------------------------------------------------------------------------*)
+let process_actions_category 
+	(p_action : uberspark_action_t)	
+	: bool =
+	let l_retval = ref true in 
+
+	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> manifest.namespace=%s" p_action.uberspark_manifest_var.manifest.namespace;
+
+	if p_action.uberspark_manifest_action.category = "translation" then begin
+	
+		let (l_rval, l_input_file_list,	l_output_file_list, 
+			l_input_has_wildcard, l_output_has_wildcard,
+			l_input_ext_list, l_output_ext_list) = 
+			get_action_input_output_filename_lists p_action in
+
+		if l_rval then begin
+			
+			let l_rval_bridge = invoke_bridge p_action
+				l_input_file_list l_output_file_list
+				l_input_ext_list l_output_ext_list in
+
+			if l_rval_bridge then begin
+				l_retval := true;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
+				l_retval := false;
+			end;
+
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input and/or output file list for action!";
+			l_retval := false;
+		end;
+
+	end else if p_action.uberspark_manifest_action.category = "bridge_exec" then begin
+	
+			let l_rval_bridge = invoke_bridge p_action
+				[] []
+				[] [] in
+
+			if l_rval_bridge then begin
+				l_retval := true;
+			end else begin
+				Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
+				l_retval := false;
+			end;
+
+	end else begin
+		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: unknown action category=%s!" __LOC__ p_action.uberspark_manifest_action.category ;
+		l_retval := false;
+	end;
+
+	(!l_retval)
+;;
+
 
 (*--------------------------------------------------------------------------*)
 (* process actions *)
 (*--------------------------------------------------------------------------*)
-let process_actions ()
+(*
+	each action has a target spec; i.e., the target for which this
+	action will be executed
+
+	single input target: build, verify, docs, install
+	we see if input target is present in the list of targets for
+	the action; then execute
+
+	now if uberspark is executed as is then we have two options:
+		1. execute in the order specified of actions
+		2. execute in preferred pipeline order 
+			(verify, build, docs, install); in this case we execute
+			common target only once
+
+	logic:
+	if in_order then
+		List.iter actions
+			execute action based on the category
+	else	
+	List.iter p_targets
+		List.iter actions
+		if element in action target or action target
+			or category is common && exec_common = false
+			
+			execute action based on the category
+		
+		if exec_commmon = false
+			exec_common = true
+	
+*)
+
+let process_actions 
+	(p_targets: string list)
 	: bool =
 	let retval = ref true in 
 
@@ -1119,53 +1207,16 @@ let process_actions ()
 	List.iter ( fun (l_action : uberspark_action_t) -> 
 		if !retval then begin
 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
-			Uberspark_logger.log ~lvl:Uberspark_logger.Debug "> manifest.namespace=%s" l_action.uberspark_manifest_var.manifest.namespace;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Processing actions [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
 
-			if l_action.uberspark_manifest_action.category = "translation" then begin
-			
-				let (l_rval, l_input_file_list,	l_output_file_list, 
-					l_input_has_wildcard, l_output_has_wildcard,
-					l_input_ext_list, l_output_ext_list) = 
-					get_action_input_output_filename_lists l_action in
+		retval := process_actions_category l_action;
 
-				if l_rval then begin
-					
-					let l_rval_bridge = invoke_bridge l_action
-						l_input_file_list l_output_file_list
-						l_input_ext_list l_output_ext_list in
-
-					if l_rval_bridge then begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
-						l_current_action_index := !l_current_action_index + 1;
-					end else begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
-						retval := false;
-					end;
-
-				end else begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build input and/or output file list for action!";
-					retval := false;
-				end;
-
-			end else if l_action.uberspark_manifest_action.category = "bridge_exec" then begin
-			
-					let l_rval_bridge = invoke_bridge l_action
-						[] []
-						[] [] in
-
-					if l_rval_bridge then begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
-						l_current_action_index := !l_current_action_index + 1;
-					end else begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Error "error in invoking action bridge!";
-						retval := false;
-					end;
-
-			end else begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s: unknown action category=%s!" __LOC__ l_action.uberspark_manifest_action.category ;
-				retval := false;
-			end;
+		if !retval then begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Action processed successfully";
+			l_current_action_index := !l_current_action_index + 1;
+		end else begin
+			Uberspark_logger.log ~lvl:Uberspark_logger.Error "Could not process action!";
+		end;
 
 		end;
 	) !g_actions_list;

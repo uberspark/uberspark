@@ -36,7 +36,7 @@ val initialize :
     bool
 
 val process_actions :
-    unit ->
-     bool
+    string list ->
+    bool
 
 
