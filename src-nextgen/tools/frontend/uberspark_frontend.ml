@@ -261,12 +261,12 @@ let cmd_staging =
 (* kicks in when uberspark build ... is issued *)
 let cmd_build =
 
-	let loaders =
+	(*let loaders =
     let doc = "Build only üobjcoll loaders." in
     Arg.(value & flag & info ["l"; "loaders"] ~doc)
 
 	in
-  
+	*)
   	let doc = "Manage überSpark üobjcoll binary build" in
 	let man =
 		[
@@ -275,14 +275,17 @@ let cmd_build =
 			`S Manpage.s_description;
 			`P "The $(tname) command allows managing binary builds of üobjcoll and associated
 			loaders.";
-			`S Manpage.s_arguments;
+		
+		 	`S "BUILD OPTIONS";
+	  		`P "These options qualify the build command.";
+
 			`Blocks manpage_sec_common_options;
 			`Blocks manpage_sec_issues;
 			`S Manpage.s_exit_status;
 		] 
 	in
 
-	Term.(ret (const Cmd_build.handler_build $ Commonopts.opts_t $ loaders )),
+	Term.(ret (const Cmd_build.handler_build $ Commonopts.opts_t $ Cmd_build.cmd_build_opts_t )),
   	Term.info "build" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
