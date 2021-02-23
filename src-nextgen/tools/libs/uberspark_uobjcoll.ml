@@ -2856,7 +2856,7 @@ let process_manifest_common
 
 			(* process actions *)
 			let l_dummy=0 in begin
-			retval := Uberspark_actions.process_actions p_targets;
+			retval := Uberspark_actions.process_actions ~p_in_order:p_in_order p_targets;
 			end;
 
 			if (!retval) == false then
@@ -2949,7 +2949,7 @@ let process_manifest
 	end;
 
 	(* invoke common manifest processing logic *)
-	(process_manifest_common (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
+	(process_manifest_common ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
 ;;
 
 
