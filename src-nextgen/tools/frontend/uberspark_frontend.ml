@@ -258,6 +258,35 @@ let cmd_staging =
 
 
 
+(* kicks in when uberspark build ... is issued *)
+let cmd_build =
+
+	let loaders =
+    let doc = "Build only üobjcoll loaders." in
+    Arg.(value & flag & info ["l"; "loaders"] ~doc)
+
+	in
+  
+  	let doc = "Manage überSpark üobjcoll binary build" in
+	let man =
+		[
+			`S Manpage.s_synopsis;
+			`P "$(mname) $(tname) [$(i,BUILD_OPTIONS)]... [$(i,OPTIONS)]";
+			`S Manpage.s_description;
+			`P "The $(tname) command allows managing binary builds of üobjcoll and associated
+			loaders.";
+			`S Manpage.s_arguments;
+			`Blocks manpage_sec_common_options;
+			`Blocks manpage_sec_issues;
+			`S Manpage.s_exit_status;
+		] 
+	in
+
+	Term.(ret (const Cmd_build.handler_build $ Commonopts.opts_t $ loaders )),
+  	Term.info "build" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
+
+
 
 
 (* kicks in when user just issues uberspark without any parameters *)
@@ -278,7 +307,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"6.0.0" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges]
+let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build;]
 
 
 (*----------------------------------------------------------------------------*)
