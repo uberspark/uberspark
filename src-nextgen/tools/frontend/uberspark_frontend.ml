@@ -261,12 +261,6 @@ let cmd_staging =
 (* kicks in when uberspark build ... is issued *)
 let cmd_build =
 
-	(*let loaders =
-    let doc = "Build only üobjcoll loaders." in
-    Arg.(value & flag & info ["l"; "loaders"] ~doc)
-
-	in
-	*)
   	let doc = "Manage überSpark üobjcoll binary build" in
 	let man =
 		[
@@ -289,6 +283,30 @@ let cmd_build =
   	Term.info "build" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
+(* kicks in when uberspark verify ... is issued *)
+let cmd_verify =
+
+  	let doc = "Manage uberSpark uobjcoll verification" in
+	let man =
+		[
+			`S Manpage.s_synopsis;
+			`P "$(mname) $(tname) [$(i,VERIFY_OPTIONS)]... [$(i,OPTIONS)]";
+			`S Manpage.s_description;
+			`P "The $(tname) command allows managing verification of üobjcoll and associated
+			loaders.";
+		
+		 	`S "VERIFY OPTIONS";
+	  		`P "These options qualify the verify command.";
+
+			`Blocks manpage_sec_common_options;
+			`Blocks manpage_sec_issues;
+			`S Manpage.s_exit_status;
+		] 
+	in
+
+	Term.(ret (const Cmd_verify.handler_verify $ Commonopts.opts_t $ Cmd_verify.cmd_verify_opts_t )),
+  	Term.info "verify" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
 
 
 
@@ -310,7 +328,7 @@ let cmd_default =
   Term.info "uberspark" ~version:"6.0.0" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build;]
+let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
 
 
 (*----------------------------------------------------------------------------*)
