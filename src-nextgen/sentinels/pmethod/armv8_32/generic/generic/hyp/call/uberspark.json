@@ -10,8 +10,8 @@
 		"uberspark.manifest.version_max" : "any",
 
 
-        "uberspark.sentinel.namespace" : "uberspark/sentinels/cpu/armv8_32/generic/hyp/interuobjcoll/call",
-		"uberspark.sentinel.platform" : "rpi3",
+        "uberspark.sentinel.namespace" : "uberspark/sentinels/pmethod/armv8_32/generic/generic/hyp/call",
+		"uberspark.sentinel.platform" : "generic",
 		"uberspark.sentinel.arch" : "armv8_32",
         "uberspark.sentinel.cpu" : "generic",
         "uberspark.sentinel.sizeof_code_template" : "0x1000",

@@ -694,8 +694,13 @@ let get_action_input_filename_list
 			if l_input_wildcard_ext = ".o" then begin
 				let l_l_input_list : string list ref = ref [] in
 				l_l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var false;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(l_l_input_list)=%u" 
+					__LOC__ (List.length !l_l_input_list);
 				l_l_input_list := Uberspark_utils.filename_list_substitute_extension !l_l_input_list l_input_wildcard_ext;
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(l_l_input_list)=%u" 
+					__LOC__ (List.length !l_l_input_list);
 			
+
 				List.iter ( fun (l_filename : string) ->
 					(* if bridge namespace is not null *)
 					if p_uberspark_action.uberspark_manifest_action.bridge_namespace <> "" then begin
@@ -712,6 +717,10 @@ let get_action_input_filename_list
 					end;
 			
 				) !l_l_input_list;
+
+				Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(l_input_list)=%u" 
+					__LOC__ (List.length !l_input_list);
+
 
 			end else begin
 				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var true;

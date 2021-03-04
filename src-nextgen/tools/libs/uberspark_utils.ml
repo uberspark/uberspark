@@ -120,13 +120,19 @@ let filename_list_substitute_extension
 	(p_file_ext : string) 
 	: string list =
 
+    Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(p_filename_list)=%u p_file_ext=%s" 
+        __LOC__ (List.length p_filename_list) p_file_ext;
+
     let l_rval : string list ref = ref [] in
 
     List.iter (fun (l_filename: string) ->
-		if (Filename.extension l_filename) = p_file_ext then begin
-            l_rval := !l_rval @ [ (Filename.remove_extension l_filename) ^ p_file_ext ];
-        end;
+		(*if (Filename.extension l_filename) = p_file_ext then begin*)
+        l_rval := !l_rval @ [ (Filename.remove_extension l_filename) ^ p_file_ext ];
+        (*end;*)
     )p_filename_list;
+
+    Uberspark_logger.log ~lvl:Uberspark_logger.Debug "%s: len(l_rval)=%u" 
+        __LOC__ (List.length !l_rval);
 
     (!l_rval)
 ;;

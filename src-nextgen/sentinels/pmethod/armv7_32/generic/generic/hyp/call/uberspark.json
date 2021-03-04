@@ -9,9 +9,10 @@
 		"uberspark.manifest.version_min" : "any",
 		"uberspark.manifest.version_max" : "any",
 
-        "uberspark.sentinel.namespace" : "uberspark/sentinels/pmethod/armv8_32/generic/generic/any/call",
+
+        "uberspark.sentinel.namespace" : "uberspark/sentinels/pmethod/armv7_32/generic/generic/hyp/call",
 		"uberspark.sentinel.platform" : "generic",
-		"uberspark.sentinel.arch" : "armv8_32",
+		"uberspark.sentinel.arch" : "armv7_32",
         "uberspark.sentinel.cpu" : "generic",
         "uberspark.sentinel.sizeof_code_template" : "0x1000",
         
@@ -21,8 +22,8 @@
         PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
         */ 
         "uberspark.sentinel.code_template": "
-            ldr r0, = PUBLICMETHOD_ADDR
-            mov pc, r0
+            ldr r3, = PUBLICMETHOD_ADDR
+            mov pc, r3
         ",
 
         /*  sentinel library code template 
@@ -35,6 +36,6 @@
             mov pc, r0
         "
 
-    
+
 
 }
