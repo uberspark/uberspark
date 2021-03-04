@@ -28,6 +28,7 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 	namespace = "uberspark/config";
 	version_min = "any";
 	version_max = "any";
+	actions = [];
 };;
 
 
@@ -44,7 +45,7 @@ let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspar
 
 	uobj_binary_image_load_address = 0x60000000;
 	uobj_binary_image_uniform_size = true;
-	uobj_binary_image_size = 0x1000000;
+	uobj_binary_image_size = 0x01000000;
 	uobj_binary_image_alignment = 0x200000;
 
 	(* uobjcoll related configuration settings *)
@@ -52,7 +53,7 @@ let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspar
 	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
 	uobjcoll_binary_image_hdr_section_size = 0x200000;
 	uobjcoll_binary_image_section_alignment= 0x200000;
-
+	uobjcoll_binary_image_size = 0x02000000;
 
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
@@ -81,7 +82,7 @@ let saved_json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_ub
 	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
 	uobjcoll_binary_image_hdr_section_size = 0x200000;
 	uobjcoll_binary_image_section_alignment = 0x200000;
-
+	uobjcoll_binary_image_size = 0x02000000;
 
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
@@ -117,6 +118,7 @@ let settings_save
 	saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
 	saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
 	saved_json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
+	saved_json_node_uberspark_config_var.uobjcoll_binary_image_size <- json_node_uberspark_config_var.uobjcoll_binary_image_size;
 
 	saved_json_node_uberspark_config_var.cc_bridge_namespace <- json_node_uberspark_config_var.cc_bridge_namespace;
 	saved_json_node_uberspark_config_var.as_bridge_namespace <- json_node_uberspark_config_var.as_bridge_namespace;
@@ -145,6 +147,7 @@ let settings_restore
 	json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
 	json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
 	json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
+	json_node_uberspark_config_var.uobjcoll_binary_image_size <- saved_json_node_uberspark_config_var.uobjcoll_binary_image_size;
 
 	json_node_uberspark_config_var.cc_bridge_namespace <- saved_json_node_uberspark_config_var.cc_bridge_namespace;
 	json_node_uberspark_config_var.as_bridge_namespace <- saved_json_node_uberspark_config_var.as_bridge_namespace;
@@ -234,6 +237,7 @@ let settings_get
 		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment);
 		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size);
 		| "uobjcoll_binary_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment);
+		| "uobjcoll_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_config_var.uobjcoll_binary_image_size);
 		| "cc_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.cc_bridge_namespace);
 		| "as_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.as_bridge_namespace);
 		| "casm_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_config_var.casm_bridge_namespace);
@@ -264,6 +268,7 @@ let settings_set
 		| "uobjcoll_binary_image_hdr_section_alignment" -> json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
 		| "uobjcoll_binary_image_hdr_section_size" -> json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
 		| "uobjcoll_binary_image_section_alignment" -> json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_binary_image_size" -> json_node_uberspark_config_var.uobjcoll_binary_image_size <- int_of_string setting_value;
 		| "cc_bridge_namespace" -> json_node_uberspark_config_var.cc_bridge_namespace <- setting_value;
 		| "as_bridge_namespace" -> json_node_uberspark_config_var.as_bridge_namespace <- setting_value;
 		| "casm_bridge_namespace" -> json_node_uberspark_config_var.casm_bridge_namespace <- setting_value;

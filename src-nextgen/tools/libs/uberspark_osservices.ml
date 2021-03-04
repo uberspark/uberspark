@@ -92,6 +92,10 @@ open Sys
 		ignore(Unix.system (!cp_cmd ^ input_filespec ^ " " ^ output_filespec));
 	;;
 
+
+
+
+
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
 	let exec_process_withlog 
@@ -142,6 +146,10 @@ open Sys
 		let path_filename = (Filename.basename path) in
 		let path_dirname = (Filename.dirname path) in
 		let retval_abspath = ref "" in
+		(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_dirname=%s" path_dirname;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_filename=%s" path_filename;
+		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "curdir=%s" curdir;
+		*)
 			try
 				Unix.chdir path_dirname;
 				retval_abspath := Unix.getcwd ();

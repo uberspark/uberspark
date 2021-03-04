@@ -88,7 +88,7 @@
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 #include <xmhf-debug.h>*/
-#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/uobjs/main/include/xmhf.h>
 
 
 #include "_txt_hash.h"

@@ -12,7 +12,7 @@
 		"uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
 
 		"uberspark.bridge.bridge_cmd" : [
-			"echo Default loader bridge command. Nothing to do!"
+			"export BRIDGE_CONTAINER_MOUNT_POINT=@@BRIDGE_CONTAINER_MOUNT_POINT@@ && export BRIDGE_UBERSPARK_ROOT_DIR_PREFIX=@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@ && export BRIDGE_UBERSPARK_STAGING_DIR_PREFIX=@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@ @@BRIDGE_CMD@@"
 		] 
 
 

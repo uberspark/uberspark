@@ -68,6 +68,7 @@ libraries and |coss|
    nextgen-toolkit/cossdev-guide/create-uobjcoll
    nextgen-toolkit/cossdev-guide/reintegrate-uobjcoll
    nextgen-toolkit/cossdev-guide/refactor-build
+   nextgen-toolkit/cossdev-guide/actions
 
 
 

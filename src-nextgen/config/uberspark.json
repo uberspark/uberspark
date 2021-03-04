@@ -18,6 +18,7 @@
 		"uberspark.config.uobjcoll_binary_image_hdr_section_alignment" : "0x200000",
 		"uberspark.config.uobjcoll_binary_image_hdr_section_size" : "0x200000",
 		"uberspark.config.uobjcoll_binary_image_section_alignment" : "0x200000",
+		"uberspark.config.uobjcoll_binary_image_size" : "0x02000000",
 	
 		"uberspark.config.cc_bridge_namespace" : "uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/gcc/v5.4.0",
 		"uberspark.config.as_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/gnu-as/v2.26.1",

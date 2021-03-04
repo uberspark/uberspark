@@ -31,6 +31,7 @@ type json_node_uberspark_config_t =
 	mutable uobjcoll_binary_image_hdr_section_alignment : int;
 	mutable uobjcoll_binary_image_hdr_section_size : int;
 	mutable uobjcoll_binary_image_section_alignment : int;
+	mutable uobjcoll_binary_image_size : int;
 
 	(* bridge related configuration settings *)	
 	mutable cc_bridge_namespace : string;
@@ -97,6 +98,9 @@ let json_node_uberspark_config_to_var
 			if (Yojson.Basic.Util.member "uberspark.config.uobjcoll_binary_image_section_alignment" mf_json) <> `Null then
 				json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.config.uobjcoll_binary_image_section_alignment" mf_json));
 
+			if (Yojson.Basic.Util.member "uberspark.config.uobjcoll_binary_image_size" mf_json) <> `Null then
+				json_node_uberspark_config_var.uobjcoll_binary_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.config.uobjcoll_binary_image_size" mf_json));
+
 			if (Yojson.Basic.Util.member "uberspark.config.cc_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_config_var.cc_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.config.cc_bridge_namespace" mf_json);
 
@@ -145,6 +149,7 @@ let json_node_uberspark_config_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.uobjcoll_binary_image_hdr_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_alignment;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.uobjcoll_binary_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_hdr_section_size;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.uobjcoll_binary_image_section_alignment\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.uobjcoll_binary_image_size\" : \"0x%x\"," json_node_uberspark_config_var.uobjcoll_binary_image_size;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.cc_bridge_namespace\" : \"%s\"," json_node_uberspark_config_var.cc_bridge_namespace;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.as_bridge_namespace\" : \"%s\"," json_node_uberspark_config_var.as_bridge_namespace;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.config.casm_bridge_namespace\" : \"%s\"," json_node_uberspark_config_var.casm_bridge_namespace;

@@ -40,7 +40,7 @@ let list_images
 		()
 ;;
 
-
+(*
 let run_image 
 	?(context_path_builddir = ".")
     (context_path : string)
@@ -86,4 +86,50 @@ let run_image
             (1)
     end;
 ;;
+*)
 
+let run_image 
+	?(context_path_builddir = ".")
+    (context_path : string)
+    (d_cmd : string)
+    (bridge_ns: string)
+    : int =
+
+
+    let (rval, context_path_abs) = (Uberspark_osservices.abspath context_path) in
+    if(rval == true) then begin
+
+        let l_build_dir = Uberspark_namespace.namespace_bridge_container_mountpoint ^ "/" ^ context_path_builddir in
+
+        Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path_builddir=%s" context_path_builddir;
+        Uberspark_logger.log ~lvl:Uberspark_logger.Debug "l_build_dir=%s" l_build_dir;
+        Uberspark_logger.log ~lvl:Uberspark_logger.Debug "context_path_abs=%s" context_path_abs;
+
+        let r_d_cmd = ("cd " ^ l_build_dir ^ " && " ^ d_cmd) in 
+        let bridge_ns_docker = bridge_ns in
+        let cmdline = ref [] in
+
+            cmdline := !cmdline @ [ "run" ];
+            cmdline := !cmdline @ [ "--rm" ];
+            (*cmdline := !cmdline @ [ "-i" ];*)
+            cmdline := !cmdline @ [ "-e" ];
+            cmdline := !cmdline @ [ "D_CMD=\"" ^ r_d_cmd ^ "\"" ];
+            cmdline := !cmdline @ [ "-v" ];
+            cmdline := !cmdline @ [ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ ":" ^ (Uberspark_namespace.get_namespace_root_dir_prefix ()) ];
+            cmdline := !cmdline @ [ "-v" ];
+            cmdline := !cmdline @ [ context_path_abs ^ ":" ^ Uberspark_namespace.namespace_bridge_container_mountpoint ];
+            cmdline := !cmdline @ [ "-t" ];
+            cmdline := !cmdline @ [ bridge_ns_docker ];
+            (*cmdline := !cmdline @ [ "/bin/sh" ];*)
+
+            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "exec=%s" (String.concat " " !cmdline);
+
+            let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
+                    ~stag:"docker" "docker" !cmdline in
+            (r_exitcode)
+
+    end else begin 
+            (1)
+    end;
+
+;;

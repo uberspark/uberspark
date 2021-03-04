@@ -13,15 +13,15 @@ organizing and refactoring relevant sources that comprise the corresponding |uob
 Create |uobj| Manifest
 ----------------------
 
-In our running example, the ``hello-mul`` |uobjcoll| that we want to create consists of
+In our running example, the ``hello_mul`` |uobjcoll| that we want to create consists of
 a single ``main`` |uobj| housed within the folder:
 
-``src-nextgen/coss-examples/hello-mul/coss-src/uobjcoll/main``
+``src-nextgen/coss-examples/hello_mul/coss_src/uobjcoll/uobjs/main``
 
 Within the aforementioned folder create the |ubersparkmf| file |ubersparkmff| with the
 following contents:
 
-.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/uobjcoll/main/uberspark.json
+.. literalinclude:: /../src-nextgen/coss-examples/hello_mul/ucoss_src/uobjcoll/uobjs/main/uberspark.json
    :language: bash
    :linenos:
 
@@ -39,10 +39,10 @@ and publicmethods in addition to other attributes. See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark.uobj.xxx``
 manifest nodes and definitions.
 
-The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello-mul/main`) has a 
-|uobjcoll| prefix (`uberspark/ubjcoll/generic/hello-mul`) followed by the name 
+The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello_mul/main`) has a 
+|uobjcoll| prefix (`uberspark/ubjcoll/generic/hello_mul`) followed by the name 
 of the |uobj| folder (`main`).  Here the |uobjcoll| prefix is required to start with `uberspark/uobjcoll`.
-We choose `generic/hello-mul` as our user-defined |uobjcoll| namespace suffix since ``hello-mul`` is 
+We choose `generic/hello_mul` as our user-defined |uobjcoll| namespace suffix since ``hello_mul`` is 
 architecture agnostic. Accordingly ``platform``, ``arch``, and ``cpu`` fields are set to ``generic``.
 
 |uobj| *sources* can be composed of a mix of C source files (``uberspark.uobj.source_c_files``), C header files (``uberspark.uobj.source_h_files``), 
@@ -146,7 +146,7 @@ After declararing the |uobj| via the manifest, the next step is to move over the
 specified within the manifest and add the ``uberspark`` header definitions. 
 In our case we move ``main.c`` into our |uobj| folder and add the header definition as below:
 
-.. literalinclude:: /../src-nextgen/coss-examples/hello-mul/ucoss-src/uobjcoll/main/main.c
+.. literalinclude:: /../src-nextgen/coss-examples/hello_mul/ucoss_src/uobjcoll/uobjs/main/main.c
    :language: c
    :linenos:
 

@@ -14,7 +14,7 @@
 		"uberspark.uobjrtl.arch" : "generic",
         "uberspark.uobjrtl.cpu" : "generic",
 
-        "uberspark.uobjrtl.source_c_files" : [
+        "uberspark.uobjrtl.sources" : [
             {
                 "path" : "src/memcmp.c",
                 "fn_decls" :  [

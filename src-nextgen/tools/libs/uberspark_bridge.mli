@@ -5,6 +5,15 @@
 (*===========================================================================*)
 (*===========================================================================*)
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* general submodules *)
@@ -26,8 +35,6 @@ module Native : sig
 end
 
 
-
-
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* interface definitions *)
@@ -36,171 +43,55 @@ end
 
 val dump : string -> ?bridge_exectype:string -> string -> unit
 val remove : string -> unit
+val bridge_parameter_to_string :
+	?separator:string -> 
+	?prefix:string -> 
+	string list ->
+	string
+
+
 
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
-(* bridge submodules *)
+(* class definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-module Cc : sig
+class bridge_object :
+object
 
-	(*--------------------------------------------------------------------------*)
-	(* cc-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_cc_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t 
-
-
-	(*--------------------------------------------------------------------------*)
-	(* cc-bridge interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
-	(*val invoke :  ?gen_obj:bool -> ?gen_asm:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool*)
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
-
-
-end
-
-
-module As : sig
-
-	(*--------------------------------------------------------------------------*)
-	(* as-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_as_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
-
-
-	(*--------------------------------------------------------------------------*)
-	(* as-bridge interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
-
-end
-
-
-
-module Casm : sig
-
-	(*--------------------------------------------------------------------------*)
-	(* as-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_casm_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
-
-
-	(*--------------------------------------------------------------------------*)
-	(* as-bridge interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
-	val invoke :  ?gen_obj:bool -> ?context_path_builddir:string -> string list -> string list -> string -> bool
-
-end
-
-
-module Ld : sig
-
-	(*--------------------------------------------------------------------------*)
-	(* ld-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_ld_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
-
-
-	(*--------------------------------------------------------------------------*)
-	(* interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
+	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t 
+	val json_node_uberspark_bridge_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
 	
-	
-	val invoke : 
-		?context_path_builddir : string -> 
-		string ->
-		string ->
-		string ->
-		string ->
-		string list ->
-		string ->
-		bool
-
-
-end
-
-
-module Vf : sig
-
-	(*--------------------------------------------------------------------------*)
-	(* vf-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_vf_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
-
-
-	(*--------------------------------------------------------------------------*)
-	(* interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
-	val invoke : 
-		?context_path_builddir : string -> 
-		string list ->
-		string list ->
-		string ->
-		bool
+	method get_json_node_uberspark_bridge_var : Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
+	method load_from_json : Yojson.Basic.json ->  bool
+	method load_from_file : string -> bool
+	method load : string -> bool
+	method store_to_file : string -> bool
+	method store : unit -> bool
+	method build : unit -> bool
+	method invoke :
+	?context_path_builddir:string -> 
+	(string * string) list ->
+	bool
 
 end
 
-module Loader : sig
-
-	(*--------------------------------------------------------------------------*)
-	(* loader-bridge data variables *)
-	(*--------------------------------------------------------------------------*)
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t
-	val json_node_uberspark_bridge_loader_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
 
 
-	(*--------------------------------------------------------------------------*)
-	(* interfaces *)
-	(*--------------------------------------------------------------------------*)
-	val load_from_json : Yojson.Basic.json ->  bool
-	val load_from_file : string -> bool
-	val load : string -> bool
-	val store_to_file : string -> bool
-	val store : unit -> bool
-	val build : unit -> bool
-	val invoke : 
-		?context_path_builddir : string -> 
-		string ->
-		bool
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* bridge_object variables *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+val cc_bridge : bridge_object
+val as_bridge : bridge_object
+val ld_bridge : bridge_object
+val casm_bridge : bridge_object
+val vf_bridge : bridge_object
+val loader_bridge : bridge_object
 
-end
 
 
 

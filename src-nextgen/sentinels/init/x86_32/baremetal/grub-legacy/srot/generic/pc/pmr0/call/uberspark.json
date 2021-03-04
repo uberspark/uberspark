@@ -1,0 +1,71 @@
+/*
+    uberspark sentinel manifest (armv8_32/generic)
+    author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+		"uberspark.manifest.namespace" : "uberspark/sentinels",
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+
+
+		"uberspark.sentinel.namespace" : "uberspark/sentinels/init/baremetal/grub-legacy/srot/generic/pc/pmr0/call",
+		"uberspark.sentinel.platform" : "pc",
+		"uberspark.sentinel.arch" : "x86_32",
+        "uberspark.sentinel.cpu" : "generic",
+        "uberspark.sentinel.sizeof_code_template" : "0x1000", 
+
+        /*  sentinel code template 
+
+            parameters: 
+            PUBLICMETHOD_ADDR = address of public method within uobj/uobjcoll
+        */ 
+        "uberspark.sentinel.code_template": "
+            /* sentinel size = SENTINEL_SIZE */
+            .align 4
+            .global multiboot_header
+            multiboot_header:
+                .long 0x1BADB002
+                .long 0x10003
+                .long	-(0x1BAEB005) 
+                
+                /* multiboot header_addr = physical memory location at which magic value is supposed to be loaded */
+                .long multiboot_header
+
+                /* multiboot load_addr = physical memory location of beginning of loaded executable image */
+                .long multiboot_header
+
+                /* multiboot load_end_addr = 0 means we load the entire image */
+                .long 0
+
+                /* multiboot bss_end_addr = 0 means no bss segment */
+                .long 0
+
+                /* multiboot entry_addr = the physical memory location that we will start execution from */
+                .long init_start
+                
+                .long 0
+                .long 0
+                .long 0
+                .long 0
+            
+            .global init_start
+            init_start:
+                movl $(PUBLICMETHOD_ADDR), %eax
+                jmpl *%eax
+                hlt
+            ",
+
+        /*  sentinel library code template 
+
+            parameters: 
+            PUBLICMETHOD_SENTINEL_ADDR = address of public method sentinel
+        */ 
+        "uberspark.sentinel.library_code_template": "
+            movl (PUBLICMETHOD_SENTINEL_ADDR), %eax
+            jmpl *%eax
+        "
+
+
+}

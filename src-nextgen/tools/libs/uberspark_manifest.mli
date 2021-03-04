@@ -12,13 +12,38 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_manifest_actions_t = 
+{
+	mutable targets : string list;
+	mutable name : string;
+	mutable category : string;
+
+	(* if category == translation *)
+	mutable input : string list;
+	mutable output : string list;
+	mutable bridge_namespace: string; 
+	mutable bridge_cmd : string list; 
+	
+	(* if category == uobjaction *)
+	mutable uobj_namespace : string; 
+
+	(* if category == uobjrtl_action *)
+	mutable uobjrtl_namespace : string; 
+
+	(* if category == loader_action *)
+	mutable loader_namespace : string; 
+
+};;
+
+
 (* uberspark manifest json node type *)
 type json_node_uberspark_manifest_t =
 {
 	mutable namespace : string;
 	mutable version_min   : string;
 	mutable version_max   : string;
-}
+	mutable actions : json_node_uberspark_manifest_actions_t list;
+};;
 
 
 
@@ -34,6 +59,9 @@ val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojs
 
 
 val get_json_for_manifest : string -> bool * Yojson.Basic.json
+val json_node_uberspark_manifest_actions_to_var : 
+	Yojson.Basic.t ->
+	bool *  (json_node_uberspark_manifest_actions_t list)
 val json_node_uberspark_manifest_to_var :  Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
 val json_node_uberspark_manifest_var_to_jsonstr : json_node_uberspark_manifest_t -> string
 
@@ -67,48 +95,8 @@ module Bridge : sig
 
   val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
   val json_node_bridge_hdr_var_to_jsonstr  : json_node_uberspark_bridge_t -> string
-
-
-
-  (****************************************************************************)
-  (* submodules *)
-  (****************************************************************************)
-  module Cc : sig
-
-    val json_node_uberspark_bridge_cc_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_cc_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module Ld : sig
-
-    val json_node_uberspark_bridge_ld_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_ld_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module As : sig
-
-    val json_node_uberspark_bridge_as_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_as_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-
-  end
-
-  module Vf : sig
-
-    val json_node_uberspark_bridge_vf_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_vf_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
-  module Loader : sig
-
-    val json_node_uberspark_bridge_loader_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-    val json_node_uberspark_bridge_loader_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
-  end
-
+  val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
+  val json_node_uberspark_bridge_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
 
 end
@@ -137,6 +125,7 @@ module Config : sig
     mutable uobjcoll_binary_image_hdr_section_alignment : int;
     mutable uobjcoll_binary_image_hdr_section_size : int;
     mutable uobjcoll_binary_image_section_alignment : int;
+    mutable uobjcoll_binary_image_size : int;
 
     (* bridge related configuration settings *)	
     mutable cc_bridge_namespace : string;
@@ -212,13 +201,14 @@ module Uobj : sig
     mutable namespace: string;
   }
 
-  type json_node_uberspark_uobj_sources_t = 
+(*  type json_node_uberspark_uobj_sources_t = 
   {
     mutable source_h_files: string list;
     mutable source_c_files: string list;
     mutable source_casm_files: string list;
     mutable source_asm_files : string list;
   }
+*)
 
   type json_node_uberspark_uobj_publicmethods_t = 
   {
@@ -229,6 +219,7 @@ module Uobj : sig
     mutable fn_address : int;
   }
 
+(*
   type json_node_uberspark_uobj_t = 
   {
     mutable namespace: string;
@@ -243,9 +234,29 @@ module Uobj : sig
     mutable sections : (string * Defs.Basedefs.section_info_t) list;
   	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
+*)
 
 
+  type json_node_uberspark_uobj_t = 
+  {
+    mutable namespace: string;
+    mutable platform : string;
+    mutable arch: string;
+    mutable cpu : string;
+    mutable sources : string list;
+    mutable headers : string list;
+    mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
+    mutable intra_uobjcoll_callees : (string * string list) list;
+    mutable inter_uobjcoll_callees : (string * string list) list;
+    mutable legacy_callees : (string * string list) list;
+    mutable sections : (string * Defs.Basedefs.section_info_t) list;
+  	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
+  }
+
+
+(*
   val json_node_uberspark_uobj_sources_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_sources_t -> bool
+*)
   val json_node_uberspark_uobj_publicmethods_to_var :  Yojson.Basic.t ->  bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
   val json_node_uberspark_uobj_intrauobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_interuobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
@@ -311,6 +322,7 @@ module Uobjcoll : sig
     mutable loaders : string list;
     mutable configdefs_verbatim : bool;
     mutable configdefs : (string * json_node_uberspark_uobjcoll_configdefs_t) list;
+   	mutable sources : string list; (* this is not part of the manifest, but populated in the backend *)
   }
 
 
@@ -368,8 +380,7 @@ type json_node_uberspark_uobjrtl_t =
 	mutable arch : string;
     mutable cpu : string;
    
-    mutable source_c_files: json_node_uberspark_uobjrtl_modules_spec_t list;
-    mutable source_casm_files: json_node_uberspark_uobjrtl_modules_spec_t list;
+    mutable sources: json_node_uberspark_uobjrtl_modules_spec_t list;
 
 }
 
@@ -377,4 +388,37 @@ type json_node_uberspark_uobjrtl_t =
 
 
 end
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* type definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+type uberspark_manifest_var_t =
+{
+	mutable manifest : json_node_uberspark_manifest_t;
+	mutable uobjcoll : Uobjcoll.json_node_uberspark_uobjcoll_t;
+  mutable uobj : Uobj.json_node_uberspark_uobj_t;
+  mutable uobjrtl : Uobjrtl.json_node_uberspark_uobjrtl_t;
+  mutable sentinel : Sentinel.json_node_uberspark_sentinel_t;
+  mutable loader : Loader.json_node_uberspark_loader_t;
+}
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+val manifest_json_to_uberspark_manifest_var : Yojson.Basic.t -> uberspark_manifest_var_t -> bool
+val manifest_file_to_uberspark_manifest_var : string -> uberspark_manifest_var_t -> bool
+val uberspark_manifest_var_default_value : unit -> uberspark_manifest_var_t 
+val uberspark_manifest_var_copy :  uberspark_manifest_var_t -> 
+  uberspark_manifest_var_t ->
+  unit
 

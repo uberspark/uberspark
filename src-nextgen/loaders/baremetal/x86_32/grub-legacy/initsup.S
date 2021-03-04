@@ -51,7 +51,7 @@
 #include <xmhf-hwm.h>
 #include <xmhfhw.h>
 */
-#include <uberspark/uobjcoll/platform/pc/uxmhf/main/include/xmhf.h>
+#include <uberspark/uobjcoll/platform/pc/uxmhf/uobjs/main/include/xmhf.h>
 
 .extern midtable_numentries
 .extern mp_cstartup

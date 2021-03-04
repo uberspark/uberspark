@@ -18,7 +18,11 @@
 			"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
 			"var_bridge_input_files=\" @@BRIDGE_INPUT_FILES@@ \"",
 			"vararray_bridge_input_files=$(echo $var_bridge_input_files | tr \" \" \"\\n\")",
+<<<<<<< 0efd80bcd21770cd9a8f2a6cc58b2e3ca5a87794
 			"for input_file_name in $vararray_bridge_input_files; do echo \"Compiling ${input_file_name} ...\" && arm-linux-gnueabihf-gcc-5 @@BRIDGE_DEFS_WITH_PREFIX@@ -nostdinc -nostdlib -nostartfiles -ffreestanding -marm -march=armv8-a -mno-thumb-interwork -c ${var_bridge_include_dirs_with_prefix} ${input_file_name} -o ${input_file_name}.o ; done",
+=======
+			"for input_file_name in $vararray_bridge_input_files; do echo \"Compiling ${input_file_name} ...\" && arm-linux-gnueabihf-gcc @@BRIDGE_DEFS_WITH_PREFIX@@ -nostdinc -nostdlib -nostartfiles -ffreestanding -marm -march=armv8-a -mno-thumb-interwork -c ${var_bridge_include_dirs_with_prefix} ${input_file_name} -o ${input_file_name%.*}.o ; done",
+>>>>>>> bridges: revise as, cc and ld bridge manifests to output files with appropriate extensions
 			"cp -f /usr/lib/gcc-cross/arm-linux-gnueabihf/5/libgcc.a @@BRIDGE_CONTAINER_MOUNT_POINT@@/cclib.a"
 		] 
 

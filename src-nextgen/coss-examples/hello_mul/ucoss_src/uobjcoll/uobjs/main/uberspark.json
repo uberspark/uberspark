@@ -1,0 +1,76 @@
+/*
+	hello-mul main uobj json manifest
+	author: amit vasudevan (amitvasudevan@acm.org)
+*/
+
+{
+
+		"uberspark.manifest.namespace" : "uberspark/uobj",
+		"uberspark.manifest.version_min" : "6.0.0",
+		"uberspark.manifest.version_max" : "any",
+
+
+		"uberspark.uobj.namespace" : "uberspark/uobjcoll/generic/hello_mul/uobjs/main",
+		"uberspark.uobj.platform" : "generic",
+		"uberspark.uobj.arch" : "generic",
+		"uberspark.uobj.cpu" : "generic",
+
+		"uberspark.uobj.sources": [ "main.c",
+			"nullfunc.cS"
+		
+		],
+		
+	
+		/* public methods */
+		"uberspark.uobj.public_methods" : {
+			"main" : [
+				"uint32_t",
+				"(uint32_t multiplicand, uint32_t multiplier)", 
+				"2" 
+			],
+
+			"init" : [
+				"uint32_t",
+				"(void)", 
+				"0" 
+			]
+
+
+
+		},
+
+		/* public methods of other uobjs that this uobj invokes 
+			within the same collection
+		*/
+		"uberspark.uobj.intra_uobjcoll_callees" : {
+		},
+	
+
+		/* public methods of other uobjs that this uobj invokes 
+			across other collection(s)
+		*/
+		"uberspark.uobj.inter_uobjcoll_callees": {
+		},
+	
+		/* legacy CoSS functions/code that this uobj invokes */
+		"uberspark.uobj.legacy_callees": [
+		],
+
+		/* uobjrtl */
+		"uberspark.uobj.uobjrtl": [
+			{
+				"namespace" : "uberspark/uobjrtl/crt"
+			}
+
+			/*{
+				"namespace" : "uberspark/uobjrtl/hw"
+			}*/
+
+		]
+
+
+
+}
+
+
+

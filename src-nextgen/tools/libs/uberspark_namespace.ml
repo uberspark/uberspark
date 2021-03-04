@@ -53,12 +53,14 @@ let namespace_uobj_cclib_filename = "cclib.a";;
 (* uobjcoll *)
 let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_build_dir = "_build";;
+let namespace_uobjcoll_triage_dir = "_triage";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
-let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.S";;
+let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.s";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;
 let namespace_uobjcoll_binary_image_filename = "uobjcoll.exe";;
 let namespace_uobjcoll_binary_flat_image_filename = "uobjcoll.exe.flat";;
 let namespace_uobjcoll_top_level_include_header_src_filename = "uobjcoll.h";;
+let namespace_uobjcoll_mf_node_type_tag = "uberspark/uobjcoll";;
 
 
 (* legacy *)
@@ -95,7 +97,7 @@ let namespace_config_mf_node_type_tag = "uberspark-config";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
-let namespace_bridge_container_mountpoint = "/home/uberspark/src";;
+let namespace_bridge_container_mountpoint = "/home/uberspark/uobjcoll/_triage";;
 let namespace_bridge_cc_mf_node_type_tag = "uberspark-bridge-cc";;
 let namespace_bridge_ld_mf_node_type_tag = "uberspark-bridge-ld";;
 let namespace_bridge_as_mf_node_type_tag = "uberspark-bridge-as";;
@@ -179,7 +181,7 @@ let get_variable_name_prefix_from_ns
 	if ns = "legacy" then begin
 		retval := "uberspark_legacy";
 	end else begin
-		retval := (Str.global_replace (Str.regexp "/") "_" ns);
+		retval := (Str.global_replace (Str.regexp "/") "__" ns);
 	end;
 
 	(!retval)

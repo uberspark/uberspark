@@ -17,7 +17,7 @@ type json_node_uberspark_uobj_uobjrtl_t =
 	mutable namespace: string;
 };;
 
-
+(*
 type json_node_uberspark_uobj_sources_t = 
 {
 	mutable source_h_files: string list;
@@ -25,6 +25,7 @@ type json_node_uberspark_uobj_sources_t =
 	mutable source_casm_files: string list;
 	mutable source_asm_files : string list;
 };;
+*)
 
 type json_node_uberspark_uobj_publicmethods_t = 
 {
@@ -35,7 +36,7 @@ type json_node_uberspark_uobj_publicmethods_t =
 	mutable fn_address : int;
 };;
 	
-
+(*
 type json_node_uberspark_uobj_t = 
 {
 	mutable namespace: string;
@@ -43,6 +44,23 @@ type json_node_uberspark_uobj_t =
 	mutable arch: string;
 	mutable cpu : string;
 	mutable sources : json_node_uberspark_uobj_sources_t;
+	mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
+	mutable intra_uobjcoll_callees : (string * string list) list;
+	mutable inter_uobjcoll_callees : (string * string list) list;
+	mutable legacy_callees : (string * string list) list;
+	mutable sections : (string * Defs.Basedefs.section_info_t) list;
+	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
+};;
+*)
+
+type json_node_uberspark_uobj_t = 
+{
+	mutable namespace: string;
+	mutable platform : string;
+	mutable arch: string;
+	mutable cpu : string;
+	mutable sources : string list;
+	mutable headers : string list;
 	mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
 	mutable intra_uobjcoll_callees : (string * string list) list;
 	mutable inter_uobjcoll_callees : (string * string list) list;
@@ -65,6 +83,7 @@ type json_node_uberspark_uobj_t =
 (* on success: true; var is modified with h,c,casm,asm file lists *)
 (* on failure: false; var is unmodified *)
 (*--------------------------------------------------------------------------*)
+(*
 let json_node_uberspark_uobj_sources_to_var 
 	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_uobj_source_var : json_node_uberspark_uobj_sources_t)
@@ -126,7 +145,7 @@ let json_node_uberspark_uobj_sources_to_var
 
 	(!retval)
 ;;
-
+*)
 
 (*--------------------------------------------------------------------------*)
 (* parse manifest json sub-node "public_methods" into var *)
@@ -139,7 +158,7 @@ let json_node_uberspark_uobj_publicmethods_to_var
 	: bool *  ((string * json_node_uberspark_uobj_publicmethods_t) list)
 =
 		
-	let retval = ref false in
+	let retval = ref true in
 	let publicmethods_assoc_list : (string * json_node_uberspark_uobj_publicmethods_t) list ref = ref [] in 
 
 	try
@@ -149,7 +168,6 @@ let json_node_uberspark_uobj_publicmethods_to_var
 					begin
 
 						let uobj_publicmethods_assoc_list = Yojson.Basic.Util.to_assoc uobj_publicmethods_json in
-							retval := true;
 							
 							List.iter (fun (x,y) ->
 								let uobj_publicmethods_inner_list = (Yojson.Basic.Util.to_list y) in 
@@ -171,7 +189,6 @@ let json_node_uberspark_uobj_publicmethods_to_var
 
 										publicmethods_assoc_list := !publicmethods_assoc_list @ [ (x, tbl_entry)];
 		
-										retval := true; 
 									end
 								;
 					
@@ -210,7 +227,6 @@ let json_node_uberspark_uobj_intrauobjcoll_callees_to_var
 					begin
 
 						let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
-							retval := true;
 							List.iter (fun (x,y) ->
 									let uobj_callees_attribute_list = ref [] in
 										List.iter (fun z ->
@@ -255,7 +271,6 @@ let json_node_uberspark_uobj_interuobjcoll_callees_to_var
 					begin
 
 						let uobj_callees_assoc_list = Yojson.Basic.Util.to_assoc uobj_callees_json in
-							retval := true;
 							List.iter (fun (x,y) ->
 									let uobj_callees_attribute_list = ref [] in
 										List.iter (fun z ->
@@ -307,8 +322,6 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 									[ ("uberspark_legacy", (json_list_to_string_list uobj_legacy_callees_list))];
 							end;
 							
-							retval := true;
-
 					end
 				;
 														
@@ -343,7 +356,6 @@ let json_node_uberspark_uobj_sections_to_var
 					begin
 
 						let uobj_sections_list = Yojson.Basic.Util.to_list uobj_sections_json in
-							retval := true;
 							
 							List.iter (fun x ->
 								let section_entry : Defs.Basedefs.section_info_t = 
@@ -431,7 +443,7 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 	: bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
 =
 		
-	let retval = ref false in
+	let retval = ref true in
 	let uobjrtl_assoc_list : (string * json_node_uberspark_uobj_uobjrtl_t) list ref = ref [] in 
 
 	try
@@ -441,7 +453,6 @@ let json_node_uberspark_uobj_uobjrtl_to_var
 					begin
 
 						let uobj_uobjrtl_list = Yojson.Basic.Util.to_list uobj_uobjrtl_json in
-							retval := true;
 							
 							List.iter (fun x ->
 								let f_uobjrtl_element : json_node_uberspark_uobj_uobjrtl_t = 
@@ -479,16 +490,30 @@ let json_node_uberspark_uobj_to_var
 	(json_node_uberspark_uobj_var : json_node_uberspark_uobj_t)
 	: bool =
 
-	let retval = ref false in
+	let retval = ref true in
 
 	try
 		let open Yojson.Basic.Util in
-					json_node_uberspark_uobj_var.namespace <- mf_json |> member "uberspark.uobj.namespace" |> to_string;
-					json_node_uberspark_uobj_var.platform <- mf_json |> member "uberspark.uobj.platform" |> to_string;
-					json_node_uberspark_uobj_var.arch <- mf_json |> member "uberspark.uobj.arch" |> to_string;
-					json_node_uberspark_uobj_var.cpu <- mf_json |> member "uberspark.uobj.cpu" |> to_string;
+					if (mf_json |> member "uberspark.uobj.namespace") != `Null then
+						json_node_uberspark_uobj_var.namespace <- mf_json |> member "uberspark.uobj.namespace" |> to_string;
+	
+					if (mf_json |> member "uberspark.uobj.platform") != `Null then
+						json_node_uberspark_uobj_var.platform <- mf_json |> member "uberspark.uobj.platform" |> to_string;
+
+					if (mf_json |> member "uberspark.uobj.arch") != `Null then
+						json_node_uberspark_uobj_var.arch <- mf_json |> member "uberspark.uobj.arch" |> to_string;
 					
-					let rval1 = (json_node_uberspark_uobj_sources_to_var mf_json json_node_uberspark_uobj_var.sources) in
+					if (mf_json |> member "uberspark.uobj.cpu") != `Null then
+						json_node_uberspark_uobj_var.cpu <- mf_json |> member "uberspark.uobj.cpu" |> to_string;
+					
+					if (mf_json |> member "uberspark.uobj.sources") != `Null then
+						json_node_uberspark_uobj_var.sources <- (json_list_to_string_list (mf_json |> member "uberspark.uobj.sources" |> to_list));
+
+					if (mf_json |> member "uberspark.uobj.headers") != `Null then
+						json_node_uberspark_uobj_var.headers <- (json_list_to_string_list (mf_json |> member "uberspark.uobj.headers" |> to_list));
+
+
+					(* let rval1 = (json_node_uberspark_uobj_sources_to_var mf_json json_node_uberspark_uobj_var.sources) in*)
 					let (rval2, json_node_uberspark_uobj_publicmethods_var) = (json_node_uberspark_uobj_publicmethods_to_var mf_json) in
 					let (rval3, json_node_uberspark_uobj_intrauobjcoll_callees_var) = (json_node_uberspark_uobj_intrauobjcoll_callees_to_var mf_json) in
 					let (rval4, json_node_uberspark_uobj_interuobjcoll_callees_var) = (json_node_uberspark_uobj_interuobjcoll_callees_to_var mf_json) in
@@ -496,41 +521,35 @@ let json_node_uberspark_uobj_to_var
 					let (rval6, json_node_uberspark_uobj_sections_var) = (json_node_uberspark_uobj_sections_to_var mf_json) in
 					let (rval7, json_node_uberspark_uobj_uobjrtl_var) = (json_node_uberspark_uobj_uobjrtl_to_var mf_json) in
 
-					(* we require sources and public_methods sub-nodes at the bare minimum *)
-					if (rval1 && rval2 ) then begin
-
+					if rval2 then begin
 						json_node_uberspark_uobj_var.public_methods <- json_node_uberspark_uobj_publicmethods_var;
-
-						if rval3 then begin
-							json_node_uberspark_uobj_var.intra_uobjcoll_callees <- json_node_uberspark_uobj_intrauobjcoll_callees_var;
-						end;
-
-						if rval4 then begin
-							json_node_uberspark_uobj_var.inter_uobjcoll_callees <- json_node_uberspark_uobj_interuobjcoll_callees_var;
-						end;
-
-						if rval5 then begin
-							json_node_uberspark_uobj_var.legacy_callees <- json_node_uberspark_uobj_legacy_callees_var;
-						end;
-
-						if rval6 then begin
-							json_node_uberspark_uobj_var.sections <- json_node_uberspark_uobj_sections_var;
-						end;
-
-						if rval7 then begin
-							json_node_uberspark_uobj_var.uobjrtl <- json_node_uberspark_uobj_uobjrtl_var;
-						end;
-
-						retval := true;
-						
 					end;
+
+					if rval3 then begin
+						json_node_uberspark_uobj_var.intra_uobjcoll_callees <- json_node_uberspark_uobj_intrauobjcoll_callees_var;
+					end;
+
+					if rval4 then begin
+						json_node_uberspark_uobj_var.inter_uobjcoll_callees <- json_node_uberspark_uobj_interuobjcoll_callees_var;
+					end;
+
+					if rval5 then begin
+						json_node_uberspark_uobj_var.legacy_callees <- json_node_uberspark_uobj_legacy_callees_var;
+					end;
+
+					if rval6 then begin
+						json_node_uberspark_uobj_var.sections <- json_node_uberspark_uobj_sections_var;
+					end;
+
+					if rval7 then begin
+						json_node_uberspark_uobj_var.uobjrtl <- json_node_uberspark_uobj_uobjrtl_var;
+					end;
+
 														
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
 	;
 
-
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "json_node_uberspark_uobj_to_var: retval=%b" !retval;		
 	(!retval)
 ;;
 

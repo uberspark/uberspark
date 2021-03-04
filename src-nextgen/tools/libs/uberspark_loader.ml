@@ -143,12 +143,34 @@ class uobjcoll_loader
             Uberspark_logger.log ~lvl:Uberspark_logger.Debug "revised command:%s" !r_bcmd;
 
             if !retval == true then begin
-       	        if not (Uberspark_bridge.Loader.invoke !r_bcmd) then begin
+
+				retval := Uberspark_bridge.loader_bridge#invoke 
+				[
+					("@@BRIDGE_INPUT_FILES@@", "");
+					("@@BRIDGE_SOURCE_FILES@@", "");
+					("@@BRIDGE_INCLUDE_DIRS@@", "");
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", "");
+					("@@BRIDGE_COMPILEDEFS@@", "");
+					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_DEFS@@", "");
+					("@@BRIDGE_DEFS_WITH_PREFIX@@", "");
+					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+					Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_root_vf_bridge_plugin));
+					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark_namespace.namespace_bridge_container_mountpoint);
+					("@@BRIDGE_LSCRIPT_FILENAME@@", "");
+					("@@BRIDGE_BINARY_FILENAME@@", "");
+					("@@BRIDGE_BINARY_FLAT_FILENAME@@", "");
+					("@@BRIDGE_CCLIB_FILENAME@@", "");
+					("@@BRIDGE_CMD@@", !r_bcmd);
+
+				];
+
+       	        if not !retval  then begin
 		            Uberspark_logger.log ~lvl:Uberspark_logger.Error "command exited with non-zero value!";
-		            retval := false;
                 end else begin
 		            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "executed loader bridge command successfully!";
                 end;
+
             end else begin
 	            Uberspark_logger.log ~lvl:Uberspark_logger.Debug "skipping command: %s" bcmd;
             end;
@@ -187,12 +209,12 @@ let create_initialize
 	let l_rval = ref true in 
 	let dummy = 0 in begin
 
-       	if not (Uberspark_bridge.Loader.load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
+       	if not (Uberspark_bridge.loader_bridge#load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
 		    Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load loader bridge!";
 		    l_rval := false;
     	end else begin
     		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loaded loader bridge";
-           	if not (Uberspark_bridge.Loader.build ()) then begin
+           	if not (Uberspark_bridge.loader_bridge#build ()) then begin
 		        Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build loader bridge!";
     		    l_rval := false;
             end else begin
