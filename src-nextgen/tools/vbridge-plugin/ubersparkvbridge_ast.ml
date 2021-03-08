@@ -19,8 +19,8 @@ let ast_dump
     let file = Ast.get () in
 
     (* pretty print it *)
-    (*Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);*)
-    Printer.pp_file Format.std_formatter file;
+    Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);
+    (*Printer.pp_file Format.std_formatter file;*)
 
 
 		Ubersparkvbridge_print.output "AST dump Done.\n";
