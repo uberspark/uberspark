@@ -11,6 +11,7 @@ let run () =
         g_count := !g_count +1;
         Ubersparkvbridge_options.Start.set(false);
         Ubersparkvbridge_print.output (Printf.sprintf "START functionality : %u" !g_count);
+        Ubersparkvbridge_ast.ast_dump ();
 
     end;
 
