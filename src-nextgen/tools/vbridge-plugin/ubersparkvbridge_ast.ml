@@ -35,6 +35,17 @@ class ast_visitor = object(self)
       Ubersparkvbridge_print.output (Printf.sprintf "no function contract");
     end;
 
+    Printer.pp_funspec Format.std_formatter fdec.sspec;
+
+    let default_bhv = Cil.find_default_behavior fdec.sspec in
+    match default_bhv with
+     | None ->
+        Ubersparkvbridge_print.output (Printf.sprintf "no default behavior");
+     | Some b ->
+        Ubersparkvbridge_print.output (Printf.sprintf "there is a default behavior");
+    ;
+    
+
     (Cil.DoChildren)
   ;
 
