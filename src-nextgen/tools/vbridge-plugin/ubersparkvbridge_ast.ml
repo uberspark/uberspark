@@ -16,7 +16,18 @@ class ast_visitor = object(self)
   inherit Visitor.frama_c_inplace
 
   method! vfunc fdec =
+    (* fdec.svar is varinfo type as in frama-c-api/html/Cil_types.html#TYPElocation *)
     Ubersparkvbridge_print.output (Printf.sprintf "global defined function: %s" fdec.svar.vname);
+    
+    (* location is in fdec.svar.vdecl as in frama-c-api/html/Cil_types.html#TYPElocation *)
+    let (p1, p2) = fdec.svar.vdecl in 
+    Filepath.pp_pos Format.std_formatter p1;
+    Filepath.pp_pos Format.std_formatter p2;
+
+    (* location is a Filepath.position per frama-c-api/html/Filepath.html#TYPEposition *)
+    Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path));
+    Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path));
+
 
     (Cil.DoChildren)
   ;
