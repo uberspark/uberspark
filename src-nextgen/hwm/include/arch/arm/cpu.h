@@ -74,6 +74,7 @@ extern void _impl__casm__bic_imm_r9_r9(uint32_t value);
 extern void _impl__casm__cmp_imm_r7(uint32_t value);
 extern void _impl__casm__eor_imm_r9_r9(uint32_t value);
 extern void _impl__casm__ldr_imm_r0_r0(uint32_t offset);
+extern void _impl__casm__ldr_pseudo_sp(uint32_t value);
 extern void _impl__casm__ldrex_imm_r2_r0(uint32_t offset);
 extern void _impl__casm__lsr_imm_r7_r7(uint32_t value);
 extern void _impl__casm__mcr_p15_0_r7_c14_c3_1();
@@ -317,10 +318,10 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("ldrex r2, [r0, "#x"]"); \
 	_impl__casm__ldrex_imm_r2_r0(x);
 
-// not sure how to implement this!
-#define __casm__ldr_psuedo_sp(x) \
+// only works in gcc?
+#define __casm__ldr_pseudo_sp(x) \
 	__builtin_annot("ldr sp, ="#x); \
-	hwm_cpu_gprs_r13 = &&x; \
+	_impl__casm__ldr_pseudo_sp(&&x);
 
 #define __casm__lsr_imm_r7_r7(x) \
 	__builtin_annot("lsr r7, r7, "#x); \

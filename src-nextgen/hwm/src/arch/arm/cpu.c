@@ -192,9 +192,13 @@ void _impl__casm__eor_imm_r9_r9(uint32_t value) {
 // eret (https://developer.arm.com/documentation/dui0489/h/arm-and-thumb-instructions/eret)
 // MOVS PC, LR 
 
-//ldr //needs work
+//ldr // needs to be double checked
 void _impl__casm__ldr_imm_r0_r0(uint32_t offset) {
 	hwm_cpu_gprs_r0 = *((uint32_t*)hwm_cpu_gprs_r0 + offset);
+}
+
+void _impl__casm__ldr_pseudo_sp(uint32_t value) {
+	hwm_cpu_gprs_r13 = value;
 }
 
 void _impl__casm__ldrex_imm_r2_r0(uint32_t offset) {
