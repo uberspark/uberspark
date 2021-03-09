@@ -37,14 +37,35 @@ class ast_visitor = object(self)
 
     Printer.pp_funspec Format.std_formatter fdec.sspec;
 
-    let default_bhv = Cil.find_default_behavior fdec.sspec in
-    match default_bhv with
-     | None ->
-        Ubersparkvbridge_print.output (Printf.sprintf "no default behavior");
-     | Some b ->
-        Ubersparkvbridge_print.output (Printf.sprintf "there is a default behavior");
-    ;
     
+    try
+      let l_kf = Globals.Functions.get fdec.svar in
+      Ubersparkvbridge_print.output (Printf.sprintf "got global function definition");
+      
+      try 
+        (* if populate is true then default function contract is generated: frama-c-api/html/Annotations.html *)
+        let (l_kf_spec : Cil_types.funspec) = Annotations.funspec ~populate:false l_kf in
+
+        Ubersparkvbridge_print.output (Printf.sprintf "function has specification: len(spec_behavior) = %u"  
+          (List.length l_kf_spec.spec_behavior));
+
+        let default_bhv = Cil.find_default_behavior l_kf_spec in
+        match default_bhv with
+        | None ->
+            Ubersparkvbridge_print.output (Printf.sprintf "no default behavior");
+        | Some (b : Cil_types.behavior) ->
+            Ubersparkvbridge_print.output (Printf.sprintf "there is a default behavior, behavior name=%s" b.b_name);
+
+        ;
+      with Annotations.No_funspec _ ->
+        Ubersparkvbridge_print.output (Printf.sprintf "function has no specifications!");
+      ;  
+
+    with Not_found -> 
+        Ubersparkvbridge_print.output (Printf.sprintf "no such global function!");
+    ;
+
+
 
     (Cil.DoChildren)
   ;
@@ -75,7 +96,7 @@ let ast_dump
 	
     (* enforce AST computation *)
     Ast.compute ();
-    
+
     (* get Cil AST *)
     let file = Ast.get () in
 
