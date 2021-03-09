@@ -50,8 +50,8 @@
 */
 
 
-// #include <uberspark/include/uberspark.h>
-#include <stdint.h>
+#include <uberspark/include/uberspark.h>
+// #include <stdint.h>
 
 uint32_t hwm_cpu_gprs_r0 = 0;  // General purpose
 uint32_t hwm_cpu_gprs_r1 = 0;  // General purpose
@@ -73,22 +73,48 @@ uint32_t hwm_cpu_gprs_r14 = 0;  // LR //Link Register
 uint32_t hwm_cpu_gprs_r15 = 0;  // PC //Program Counter
 uint32_t hwm_cpu_gprs_CPSR = 0; // Current Program Status Register
 
+// coprocessor registers
+uint32_t hwm_cpu_cprs_c0 = 0;
+uint32_t hwm_cpu_cprs_c1 = 0;
+uint32_t hwm_cpu_cprs_c2 = 0;
+uint32_t hwm_cpu_cprs_c3 = 0;
+uint32_t hwm_cpu_cprs_c4 = 0;
+uint32_t hwm_cpu_cprs_c5 = 0;
+uint32_t hwm_cpu_cprs_c6 = 0;
+uint32_t hwm_cpu_cprs_c7 = 0;
+uint32_t hwm_cpu_cprs_c8 = 0;
+uint32_t hwm_cpu_cprs_c9 = 0;
+uint32_t hwm_cpu_cprs_c10 = 0;
+uint32_t hwm_cpu_cprs_c11 = 0;
+uint32_t hwm_cpu_cprs_c12 = 0;
+uint32_t hwm_cpu_cprs_c13 = 0;
+uint32_t hwm_cpu_cprs_c14 = 0;
+
+// system coprocessor special registers
+uint32_t hwm_cpu_ssrs_cpsr = 0;
+uint32_t hwm_cpu_ssrs_elrhyp = 0;
+uint32_t hwm_cpu_ssrs_spsrhyp = 0;
+uint32_t hwm_cpu_ssrs_spsrcxsf = 0;
+
+// bool for operating mode (1 for thumb)
+uint8_t hwm_cpu_isthumb = 0;
+
 enum CPSR_FLAGS {
-	CPSR_FLAGS_M = 1 << 4,
-	CPSR_FLAGS_T = 1 << 5,
-	CPSR_FLAGS_F = 1 << 6,
-	CPSR_FLAGS_I = 1 << 7,
-	CPSR_FLAGS_A = 1 << 8,
-	CPSR_FLAGS_E = 1 << 9,
-	CPSR_FLAGS_IT = 1 << 15,
-	CPSR_FLAGS_GE = 1 << 19,
-	CPSR_FLAGS_J = 1 << 24,
-	CPSR_FLAGS_IT2 = 1 << 26,
-	CPSR_FLAGS_Q = 1 << 27,
-	CPSR_FLAGS_V = 1 << 28,
-	CPSR_FLAGS_C = 1 << 29,
-	CPSR_FLAGS_Z = 1 << 30,
-	CPSR_FLAGS_N = 1 << 31,
+	CPSR_FLAGS_M = 1U << 4,
+	CPSR_FLAGS_T = 1U << 5,
+	CPSR_FLAGS_F = 1U << 6,
+	CPSR_FLAGS_I = 1U << 7,
+	CPSR_FLAGS_A = 1U << 8,
+	CPSR_FLAGS_E = 1U << 9,
+	CPSR_FLAGS_IT = 1U << 15,
+	CPSR_FLAGS_GE = 1U << 19,
+	CPSR_FLAGS_J = 1U << 24,
+	CPSR_FLAGS_IT2 = 1U << 26,
+	CPSR_FLAGS_Q = 1U << 27,
+	CPSR_FLAGS_V = 1U << 28,
+	CPSR_FLAGS_C = 1U << 29,
+	CPSR_FLAGS_Z = 1U << 30,
+	CPSR_FLAGS_N = 1U << 31,
 };
 
 // add
@@ -98,6 +124,10 @@ void _impl__casm__add_imm_r1_r0(uint32_t value) {
 
 void _impl__casm__add_imm_r4_r3(uint32_t value) {
 	hwm_cpu_gprs_r4 = hwm_cpu_gprs_r3 + value;
+}
+
+void _impl__casm__add_imm_lr_lr(uint32_t value) {
+	hwm_cpu_gprs_r14 = hwm_cpu_gprs_r14 + value;
 }
 
 void _impl__casm__add_sp_sp_r3() {
@@ -122,7 +152,6 @@ void _impl__casm__and_imm_r3_r3(uint32_t value) {
 }
 
 // bic
-
 void _impl__casm__bic_imm_r7_r7(uint32_t value) {
 	hwm_cpu_gprs_r7 = hwm_cpu_gprs_r7 & ~value;
 }
@@ -130,6 +159,20 @@ void _impl__casm__bic_imm_r7_r7(uint32_t value) {
 void _impl__casm__bic_imm_r9_r9(uint32_t value) {
 	hwm_cpu_gprs_r9 = hwm_cpu_gprs_r9 & ~value;
 }
+
+// bne
+
+uint32_t _impl__casm__b_eq() {
+	return hwm_cpu_gprs_CPSR & CPSR_FLAGS_N;
+}
+
+
+//
+void _impl__casm__bx_lr() {
+	hwm_cpu_isthumb = hwm_cpu_gprs_r14 & 1U;
+	if(1) goto *hwm_cpu_gprs_r14;
+}
+
 
 // cmp
 void _impl__casm__cmp_imm_r7(uint32_t value) {
@@ -150,20 +193,278 @@ void _impl__casm__eor_imm_r9_r9(uint32_t value) {
 // MOVS PC, LR 
 
 //ldr //needs work
-void _impl__casm__ldr_r0_r0() {
-	hwm_cpu_gprs_r0 = *((uint32_t*)hwm_cpu_gprs_r0);
+void _impl__casm__ldr_imm_r0_r0(uint32_t offset) {
+	hwm_cpu_gprs_r0 = *((uint32_t*)hwm_cpu_gprs_r0 + offset);
+}
+
+void _impl__casm__ldrex_imm_r2_r0(uint32_t offset) {
+	hwm_cpu_gprs_r2 = *((uint32_t*)hwm_cpu_gprs_r0 + offset);
 }
 
 // void _impl__casm__ldr_psuedo_sp(uint32_t addr) {
 // } in cpu.h
 
 // lsr
-void _impl__casm__lsr_imm_r7(uint32_t value) {
+void _impl__casm__lsr_imm_r7_r7(uint32_t value) {
 	hwm_cpu_gprs_r7 = hwm_cpu_gprs_r7 >> value;
 }
 
 // mcr/mcrr (might need to have different versions for the different opcodes)
-// void _impl__casm__mcr
+// i cant find any concrete documentation on what the opcodes do and the second cp register
+void _impl__casm__mcr_p15_0_r7_c14_c3_1() {
+	hwm_cpu_cprs_c14 = hwm_cpu_gprs_r7;
+}
+void _impl__casm__mcr_p15_4_r7_c1_c1_1() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r7;
+}
+void _impl__casm__mcr_p15_4_r7_c1_c1_2() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r7;
+}
+void _impl__casm__mcr_p15_4_r7_c14_c1_0() {
+	hwm_cpu_cprs_c14 = hwm_cpu_gprs_r7;
+}
+void _impl__casm__mcr_p15_0_r0_c1_c0_0() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c1_c0_1() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c12_c0_0() {
+	hwm_cpu_cprs_c12 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c1_c0_0() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c1_c1_0() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c1_c1_1() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c1_c1_2() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c1_c1_3() {
+	hwm_cpu_cprs_c1 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c12_c0_0() {
+	hwm_cpu_cprs_c12 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c2_c1_2() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c10_c2_0() {
+	hwm_cpu_cprs_c10 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c10_c2_1() {
+	hwm_cpu_cprs_c10 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c2_c0_0() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c2_c0_1() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c2_c0_2() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c3_c0_0() {
+	hwm_cpu_cprs_c3 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c7_c5_0() {
+	hwm_cpu_cprs_c7 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c7_c8_0() {
+	hwm_cpu_cprs_c7 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c7_c8_6() {
+	hwm_cpu_cprs_c7 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_0_r0_c8_c3_0() {
+	hwm_cpu_cprs_c8 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c10_c2_0() {
+	hwm_cpu_cprs_c10 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c10_c2_1() {
+	hwm_cpu_cprs_c10 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c14_c2_0() {
+	hwm_cpu_cprs_c14 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c14_c2_1() {
+	hwm_cpu_cprs_c14 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c2_c0_2() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c8_c0_1() {
+	hwm_cpu_cprs_c8 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcr_p15_4_r0_c8_c7_0() {
+	hwm_cpu_cprs_c8 = hwm_cpu_gprs_r0;
+}
+
+// mcrr
+void _impl__casm__mcrr_p15_4_r7_r7_c14() {
+	hwm_cpu_cprs_c14 = hwm_cpu_gprs_r7;
+}
+void _impl__casm__mcrr_p15_4_r0_r1_c2() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+void _impl__casm__mcrr_p15_6_r0_r1_c2() {
+	hwm_cpu_cprs_c2 = hwm_cpu_gprs_r0;
+}
+
+//mrc
+void _impl__casm__mrc_p15_0_r7_c0_c1_1() {
+	hwm_cpu_gprs_r7 = hwm_cpu_cprs_c0;
+}
+void _impl__casm__mrc_p15_0_r7_c14_c3_1() {
+	hwm_cpu_gprs_r7 = hwm_cpu_cprs_c14;
+}
+void _impl__casm__mrc_p15_4_r7_c1_c1_1() {
+	hwm_cpu_gprs_r7 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r7_c14_c1_0() {
+	hwm_cpu_gprs_r7 = hwm_cpu_cprs_c14;
+}
+void _impl__casm__mrc_p15_0_r0_c0_c0_5() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c0;
+}
+void _impl__casm__mrc_p15_0_r3_c0_c0_5() {
+	hwm_cpu_gprs_r3 = hwm_cpu_cprs_c0;
+}
+void _impl__casm__mrc_p15_0_r0_c0_c2_4() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c0;
+}
+void _impl__casm__mrc_p15_0_r0_c1_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_0_r0_c1_c0_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_0_r0_c1_c1_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_0_r0_c12_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c12;
+}
+void _impl__casm__mrc_p15_4_r0_c1_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r0_c1_c1_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r0_c1_c1_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r0_c1_c1_2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r0_c1_c1_3() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c1;
+}
+void _impl__casm__mrc_p15_4_r0_c12_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c12;
+}
+void _impl__casm__mrc_p15_4_r0_c2_c1_2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrc_p15_4_r0_c5_c2_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c5;
+}
+void _impl__casm__mrc_p15_0_r0_c10_c2_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c10;
+}
+void _impl__casm__mrc_p15_0_r0_c10_c2_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c10;
+}
+void _impl__casm__mrc_p15_0_r0_c2_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrc_p15_0_r0_c2_c0_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrc_p15_0_r0_c2_c0_2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrc_p15_0_r0_c3_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c3;
+}
+void _impl__casm__mrc_p15_0_r0_c7_c4_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c7;
+}
+void _impl__casm__mrc_p15_4_r0_c10_c2_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c10;
+}
+void _impl__casm__mrc_p15_4_r0_c10_c2_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c10;
+}
+void _impl__casm__mrc_p15_4_r0_c14_c2_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c14;
+}
+void _impl__casm__mrc_p15_4_r0_c14_c2_1() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c14;
+}
+void _impl__casm__mrc_p15_4_r0_c2_c0_2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrc_p15_4_r0_c6_c0_0() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c6;
+}
+void _impl__casm__mrc_p15_4_r0_c6_c0_4() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c6;
+}
+
+// mrrc
+// mrrc is used to access 64 bit registers?
+// do we need 64 bit variants for the cprs?
+void _impl__casm__mrrc_p15_0_r0_r1_c14() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c14;
+}
+void _impl__casm__mrrc_p15_6_r0_r1_c2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+void _impl__casm__mrrc_p15_4_r0_r1_c2() {
+	hwm_cpu_gprs_r0 = hwm_cpu_cprs_c2;
+}
+
+// mrs
+
+void _impl__casm__mrs_r9_cpsr() {
+	hwm_cpu_gprs_r9 = hwm_cpu_ssrs_cpsr;
+}
+
+void _impl__casm__mrs_r0_elrhyp() {
+	hwm_cpu_gprs_r0 = hwm_cpu_ssrs_elrhyp;
+}
+
+void _impl__casm__mrs_r0_spsrhyp() {
+	hwm_cpu_gprs_r0 = hwm_cpu_ssrs_spsrhyp;
+}
+
+void _impl__casm__mrs_r0_cpsr() {
+	hwm_cpu_gprs_r0 = hwm_cpu_ssrs_cpsr;
+}
+
+// msr
+
+void _impl__casm__msr_spsrcxsf_r9() {
+	hwm_cpu_ssrs_spsrcxsf = hwm_cpu_gprs_r9;
+}
+
+void _impl__casm__msr_elrhyp_r0() {
+	hwm_cpu_ssrs_elrhyp = hwm_cpu_gprs_r0;
+}
+
+void _impl__casm__msr_elrhyp_r3() {
+	hwm_cpu_ssrs_elrhyp = hwm_cpu_gprs_r3;
+}
+
+void _impl__casm__msr_cpsr_r0() {
+	hwm_cpu_ssrs_cpsr = hwm_cpu_gprs_r0;
+}
 
 // mov
 void _impl__casm__mov_imm_r7(uint32_t value) {
@@ -185,10 +486,6 @@ void _impl__casm__mov_imm_r2(uint32_t value) {
 void _impl__casm__mov_imm_r5(uint32_t value) {
 	hwm_cpu_gprs_r5 = value;
 }
-
-//mrc/mrrc
-
-// mrs/msr
 
 //mul
 
@@ -374,16 +671,17 @@ void _impl__casm__push_r12() {
 	*((uint32_t *)hwm_cpu_gprs_r13) = hwm_cpu_gprs_r12;
 }
 
-// sev
-
 // str
 void _impl__casm__str_r1_r0(uint32_t offset) {
 	*((uint32_t *)(hwm_cpu_gprs_r0 + offset)) = hwm_cpu_gprs_r1;
 }
 
-// strex eq
-
-//svc
+void _impl__casm__strex_eq_r3_r1_r0(uint32_t offset) {
+	if (hwm_cpu_gprs_CPSR & CPSR_FLAGS_N) {
+		hwm_cpu_gprs_r3 = 0U; // based off shared tlb, just setting to 0 for now
+		*((uint32_t *)(hwm_cpu_gprs_r0 + offset)) = hwm_cpu_gprs_r1;
+	}
+}
 
 // teq
 void _impl__casm__teq_imm_r2(uint32_t value) {
@@ -397,12 +695,12 @@ void _impl__casm__teq_imm_r2(uint32_t value) {
 }
 
 void _impl__casm__teq_eq_imm_r3(uint32_t value) {
-	// also can modify z c flags, do we need checks for that?
-	// logic might be wrong lol
-	if (hwm_cpu_gprs_r3 == value) {
-		hwm_cpu_gprs_CPSR |= CPSR_FLAGS_N;
-	} else {
-		hwm_cpu_gprs_CPSR &= ~CPSR_FLAGS_N;
+	if (hwm_cpu_gprs_CPSR & CPSR_FLAGS_N) {
+		if (hwm_cpu_gprs_r3 == value) {
+			hwm_cpu_gprs_CPSR |= CPSR_FLAGS_N;
+		} else {
+			hwm_cpu_gprs_CPSR &= ~CPSR_FLAGS_N;
+		}
 	}
 }
 
@@ -411,7 +709,7 @@ void _impl__casm__teq_eq_imm_r3(uint32_t value) {
 void _impl__casm__tst_imm_r9(uint32_t value) {
 	// also can modify z c flags, do we need checks for that?
 	// logic might be wrong lol
-	if (hwm_cpu_gprs_r3 & value) {
+	if (hwm_cpu_gprs_r9 & value) {
 		hwm_cpu_gprs_CPSR |= CPSR_FLAGS_N;
 	} else {
 		hwm_cpu_gprs_CPSR &= ~CPSR_FLAGS_N;
