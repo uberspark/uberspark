@@ -13,6 +13,9 @@ CASM_FUNCDECL(void main_nullfunc(void *noparam));
 
 extern uint32_t init (void);
 
+/*@ 
+    requires 0 <= multiplicand <= 10;
+*/
 uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     uint32_t result;
     char l_mybuf[5];
