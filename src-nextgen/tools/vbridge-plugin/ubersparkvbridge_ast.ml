@@ -15,7 +15,7 @@ but not always same name; e.g., the vfunc method is for type funcdec*)
 class ast_visitor = object(self)
   inherit Visitor.frama_c_inplace
 
-  method! vfunc fdec =
+  method! vfunc (fdec : Cil_types.fundec) =
     (* fdec.svar is varinfo type as in frama-c-api/html/Cil_types.html#TYPElocation *)
     Ubersparkvbridge_print.output (Printf.sprintf "global defined function: %s" fdec.svar.vname);
     
@@ -28,6 +28,12 @@ class ast_visitor = object(self)
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path));
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path));
 
+    if List.length fdec.sspec.spec_behavior > 0 then begin
+      Ubersparkvbridge_print.output (Printf.sprintf "function contract present: %u" 
+        (List.length fdec.sspec.spec_behavior));
+    end else begin
+      Ubersparkvbridge_print.output (Printf.sprintf "no function contract");
+    end;
 
     (Cil.DoChildren)
   ;
