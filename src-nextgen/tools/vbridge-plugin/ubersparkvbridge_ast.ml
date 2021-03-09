@@ -28,16 +28,7 @@ class ast_visitor = object(self)
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path));
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path));
 
-    if List.length fdec.sspec.spec_behavior > 0 then begin
-      Ubersparkvbridge_print.output (Printf.sprintf "function contract present: %u" 
-        (List.length fdec.sspec.spec_behavior));
-    end else begin
-      Ubersparkvbridge_print.output (Printf.sprintf "no function contract");
-    end;
-
-    Printer.pp_funspec Format.std_formatter fdec.sspec;
-
-    
+    (* print out function contract if any *)    
     try
       let l_kf = Globals.Functions.get fdec.svar in
       Ubersparkvbridge_print.output (Printf.sprintf "got global function definition");
