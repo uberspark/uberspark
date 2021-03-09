@@ -10,12 +10,8 @@
 #include <uberspark/hwm/include/arch/x86_32/generic/hwm.h>
 
 CASM_FUNCDECL(void main_nullfunc(void *noparam));
-//extern void whois(int);
 
-uint32_t init (void){
-    return 0;   
-}
-
+extern uint32_t init (void);
 
 uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     uint32_t result;
