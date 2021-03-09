@@ -73,6 +73,9 @@ let ast_dump
 
 	  Ubersparkvbridge_print.output "Starting AST dump...\n";
 	
+    (* enforce AST computation *)
+    Ast.compute ();
+    
     (* get Cil AST *)
     let file = Ast.get () in
 
