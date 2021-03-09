@@ -45,7 +45,7 @@
  */
 
 /*
- * armv8_32 cpu hardware model implementation
+ * arm cpu hardware model implementation
  * author: ethan joseph (ethanj217@gmail.com)
 */
 
