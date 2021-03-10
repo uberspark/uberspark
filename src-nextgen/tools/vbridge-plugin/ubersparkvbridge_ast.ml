@@ -28,6 +28,15 @@ class ast_visitor = object(self)
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path));
     Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path));
 
+    (* print number of statements in this function *)
+    (* using sallstmts we need to make sure Cfg.computeCFGInfo is called; which seems to 
+     be the default case: see frama-c-api/html/Cil_types.html#TYPEspec type fundec *)
+    Ubersparkvbridge_print.output (Printf.sprintf " num statements=%u" 
+      (List.length fdec.sallstmts));
+    Ubersparkvbridge_print.output (Printf.sprintf " num statements from block=%u" 
+      (List.length fdec.sbody.bstmts));
+
+
     (* print out function contract if any *)    
     try
       let l_kf = Globals.Functions.get fdec.svar in
