@@ -32,7 +32,14 @@ class ast_visitor = object(self)
     try
       let l_kf = Globals.Functions.get fdec.svar in
       Ubersparkvbridge_print.output (Printf.sprintf "got global function definition");
-      
+
+      (* find first statement in the function *)
+      let (l_first_stmt : Cil_types.stmt) = Kernel_function.find_first_stmt l_kf in
+      Printer.pp_stmt Format.std_formatter l_first_stmt;
+
+
+
+
       try 
         (* if populate is true then default function contract is generated: frama-c-api/html/Annotations.html *)
         let (l_kf_spec : Cil_types.funspec) = Annotations.funspec ~populate:false l_kf in
