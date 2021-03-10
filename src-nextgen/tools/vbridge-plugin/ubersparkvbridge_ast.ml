@@ -46,6 +46,9 @@ class ast_visitor = object(self)
       let (l_first_stmt : Cil_types.stmt) = Kernel_function.find_first_stmt l_kf in
       Printer.pp_stmt Format.std_formatter l_first_stmt;
 
+      (* find last statement in the function *)
+      let (l_last_stmt : Cil_types.stmt) = List.nth fdec.sbody.bstmts  ((List.length fdec.sbody.bstmts)-1) in
+      Printer.pp_stmt Format.std_formatter l_last_stmt;
 
 
 
