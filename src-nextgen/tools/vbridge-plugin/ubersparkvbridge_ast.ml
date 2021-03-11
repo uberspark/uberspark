@@ -6,7 +6,32 @@
 
 open Cil_datatype
 open Cil_types
-   		
+
+(*
+  capabilities required over the ast
+
+  1. need a way to insert annotations for statements/instructions
+    use-case: assert that a hwm register or status bit is zero when performing certain memory accesses; as in case of
+    interrupt signal/principles
+
+*)
+
+
+(*--------------------------------------------------------------------------*)
+(* given a function comb through it and find memory write statements or lvals 
+and output those instructions or statements *)
+(*--------------------------------------------------------------------------*)
+(* input cilfunction kf
+have visitor.visitframacfunction with class mem_write visitor 
+class mem_write visitor can take in additional argument: one of them is kf, other can be flags or even a function to execute
+whenever the mem_write statement is visited
+experiment with vinst and vstmt and see what we get
+
+use a global.function.iter to drive this analysis for all global functions 
+*)
+
+
+
 (* see section 4.17 in plugin development guide as well as
 frama-c-api/html/Cil.html 
 
@@ -91,7 +116,6 @@ let ast_get_global_function_definitions (p_ast_file :  Cil_types.file) : unit =
   Visitor.visitFramacFileSameGlobals (l_visitor:>Visitor.frama_c_visitor) p_ast_file;
 
 ;;
-
 
 
 
