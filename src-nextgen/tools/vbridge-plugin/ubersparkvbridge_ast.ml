@@ -144,7 +144,12 @@ let ast_dump
     (* iterate through global functions: frama-c-api/html/Globals.Functions.html *)
     (* API on kernel functions here: frama-c-v20.0/frama-c-api/html/Kernel_function.html *)
     Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
-      Ubersparkvbridge_print.output (Printf.sprintf "kernel function: %s" (Kernel_function.get_name l_kf));
+      if (Kernel_function.is_definition l_kf) then begin
+        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
+      end else begin
+        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
+      end;
+
       ()
     );
 
