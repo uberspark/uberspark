@@ -141,6 +141,13 @@ let ast_dump
 
     ast_get_global_function_definitions file;
 
+    (* iterate through global functions: frama-c-api/html/Globals.Functions.html *)
+    (* API on kernel functions here: frama-c-v20.0/frama-c-api/html/Kernel_function.html *)
+    Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
+      Ubersparkvbridge_print.output (Printf.sprintf "kernel function: %s" (Kernel_function.get_name l_kf));
+      ()
+    );
+
 		Ubersparkvbridge_print.output "AST dump Done.\n";
 		()
 ;;
