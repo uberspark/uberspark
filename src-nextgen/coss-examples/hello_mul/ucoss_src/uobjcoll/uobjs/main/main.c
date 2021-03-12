@@ -12,6 +12,16 @@
 CASM_FUNCDECL(void main_nullfunc(void *noparam));
 
 extern uint32_t init (void);
+extern uint32_t test_call (uint32_t value);
+
+//global variable
+unsigned int g_int;
+unsigned int g_total=0;
+unsigned char g_char;
+
+unsigned int g_int_address = &g_int;
+
+
 
 /*@ 
     requires 0 <= multiplicand <= 10;
@@ -23,6 +33,14 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     CASM_FUNCCALL(main_nullfunc, CASM_NOPARAM);
     //whois(0);
     result = multiplicand * multiplier;
+
+    g_int = 0;
+
+    for(g_int = 0; g_int < 20; g_int++){
+        g_total = g_total + g_int; 
+    }   
+
+    test_call(g_int++ + g_total++);
 
     return result;
 }
