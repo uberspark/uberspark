@@ -29,6 +29,51 @@ experiment with vinst and vstmt and see what we get
 
 use a global.function.iter to drive this analysis for all global functions 
 *)
+class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
+
+  inherit Visitor.frama_c_inplace
+
+  method! vexpr exp =
+    Ubersparkvbridge_print.output (Printf.sprintf "considering exp:");
+    Printer.pp_exp Format.std_formatter exp;
+
+    Cil.DoChildren
+  ;
+
+(*
+
+|Call of vinst
+|Local+init Consinit branch of vinst
+
+  
+treat_call
+  lval_assertion
+    check_array_access
+      valid_index
+
+check_uchar_assign
+|Set branch of vinst
+|Local+init Assigninit branch of vinst
+
+|Lval branch of vexpr
+
+*)
+
+
+end
+
+
+let find_memory_writes
+  (p_kf : Cil_types.kernel_function)
+  : unit =
+
+  let l_visitor = new mem_write_visitor p_kf in
+  
+  ignore( Visitor.visitFramacFunction l_visitor (Kernel_function.get_definition p_kf)); 
+
+  ()
+;;
+
 
 
 
@@ -146,6 +191,7 @@ let ast_dump
     Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
       if (Kernel_function.is_definition l_kf) then begin
         Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
+        find_memory_writes l_kf;
       end else begin
         Ubersparkvbridge_print.output (Printf.sprintf "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
       end;
