@@ -16,6 +16,26 @@ open Cil_types
 
 *)
 
+(*
+class occurence
+...
+end
+
+
+within the above replace occurence.add xxx
+wit hashtbl.add xxx and put (kf, ki, lv)
+
+just pretty print for now when we dump into hashtbl
+
+Db.Value.Compute to stat with (remove that from class occurence and put it in main)
+remove db.progess --> only for gui; we dont need it
+
+then do hashtbl iter and print varinfo and then call classify_accesses
+include access_type
+is_sub_lval
+*)
+
+
 
 (*--------------------------------------------------------------------------*)
 (* given a function comb through it and find memory write statements or lvals 
