@@ -52,13 +52,15 @@ use a global.function.iter to drive this analysis for all global functions
 class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
 
   inherit Visitor.frama_c_inplace
+  (* see frama-c-api/html/Cil.cilVisitor-c.html on the list of method we can override *)
 
-  method! vexpr exp =
-    Ubersparkvbridge_print.output (Printf.sprintf "considering exp:");
-    Printer.pp_exp Format.std_formatter exp;
+  method! vinst (inst: Cil_types.instr) =
+    Printer.pp_instr Format.std_formatter inst;
 
     Cil.DoChildren
   ;
+
+
 
 (*
 
@@ -88,8 +90,11 @@ let find_memory_writes
   : unit =
 
   let l_visitor = new mem_write_visitor p_kf in
-  
+  Ubersparkvbridge_print.output (Printf.sprintf "finding instructions within function...");
+
   ignore( Visitor.visitFramacFunction l_visitor (Kernel_function.get_definition p_kf)); 
+
+  Ubersparkvbridge_print.output (Printf.sprintf "\ndone!");
 
   ()
 ;;
