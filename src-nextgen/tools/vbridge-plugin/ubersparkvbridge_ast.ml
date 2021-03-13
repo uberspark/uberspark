@@ -55,6 +55,40 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
   (* see frama-c-api/html/Cil.cilVisitor-c.html on the list of method we can override *)
 
   method! vinst (inst: Cil_types.instr) =
+
+    match inst with
+      | Set (lv, e, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Set()");
+
+      | Call (None, e, e_list, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
+
+      | Call (Some lv, e, e_list, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
+
+      | Local_init (v, linit, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Local_init()");
+
+      | Asm (attr, asminsns, Some e_asm, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Asm()");
+
+      | Asm (attr, asminsns, None, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Asm_noext()");
+
+      | Skip loc ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Skip()");
+
+      | Code_annot (annot, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Code_annot()");
+    ;
+
+    (* Note sometimes the pretty printer can try to be smart and print additional instructions
+      for example:
+      return 0; gets converterd to
+      _result = 0;
+      return result;
+      then when we get the Set() for _result=0; the pp_instr below will print both
+    *)
     Printer.pp_instr Format.std_formatter inst;
 
     Cil.DoChildren

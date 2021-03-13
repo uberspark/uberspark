@@ -29,11 +29,18 @@ unsigned int g_int_address = &g_int;
 uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     uint32_t result;
     char l_mybuf[5];
+    char *p= &l_mybuf;
 
     CASM_FUNCCALL(main_nullfunc, CASM_NOPARAM);
     //whois(0);
     result = multiplicand * multiplier;
 
+    p++;
+    *p='A';
+    *p++ = 'B';
+    p = &g_char;
+    *p++ = 'C';
+    
     g_int = 0;
 
     for(g_int = 0; g_int < 20; g_int++){
