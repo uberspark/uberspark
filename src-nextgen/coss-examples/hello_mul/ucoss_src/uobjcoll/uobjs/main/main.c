@@ -38,8 +38,6 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     p++;
 
     /*@ assert 1;  */
-    /*@ assert 1;  */
-    /*@ assert 1;  */
     *p='A';
     
     
