@@ -46,7 +46,14 @@ is_sub_lval
 let dump_annotation (annot : Cil_types.code_annotation) : unit =
   Ubersparkvbridge_print.output (Printf.sprintf "dumping annotation...");
 
-  Printer.pp_code_annotation Format.std_formatter annot;
+  (*Printer.pp_code_annotation Format.std_formatter annot;*)
+  match annot.annot_content with
+    | AAssert (bhvnamelist, akind, pred) ->
+      Ubersparkvbridge_print.output (Printf.sprintf "assert");
+
+    | _ ->
+      Ubersparkvbridge_print.output (Printf.sprintf "something else");
+  ;
 
   Ubersparkvbridge_print.output (Printf.sprintf "annotation dumped");
   ()
