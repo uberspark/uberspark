@@ -54,12 +54,36 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
   inherit Visitor.frama_c_inplace
   (* see frama-c-api/html/Cil.cilVisitor-c.html on the list of method we can override *)
 
+  (* note plugin development guide page 99 says that we need to use vstmt_aux and vglob_aux
+  instead if vstmt and vglob *)
+  method! vstmt_aux (stmt: Cil_types.stmt) =
+    (*Printer.pp_stmt Format.std_formatter stmt;
+
+    if (Annotations.has_code_annot stmt) then begin
+      Ubersparkvbridge_print.output (Printf.sprintf "<-- STMT WITH ANNOT -->");
+    end else begin
+      Ubersparkvbridge_print.output (Printf.sprintf "<-- STMT WITHOUT ANNOT -->");
+    end;*)
+
+    Cil.DoChildren
+  ;
+
   method! vinst (inst: Cil_types.instr) =
+
+    let l_kstmt = self#current_stmt in
+    match l_kstmt with
+      | Some stmt ->
+          if (Annotations.has_code_annot stmt) then begin
+            Ubersparkvbridge_print.output (Printf.sprintf "[WITH ANNOT]");
+          end;
+      | _ ->
+        Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
+    ;
 
     match inst with
       | Set (lv, e, loc) ->
         Ubersparkvbridge_print.output (Printf.sprintf "Set()");
-
+  
       | Call (None, e, e_list, loc) ->
         Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
 
@@ -230,7 +254,6 @@ let ast_dump
     ()
     : unit =
 
-	  Ubersparkvbridge_print.output "Starting AST dump...\n";
 	
     (* enforce AST computation *)
     Ast.compute ();
@@ -238,10 +261,12 @@ let ast_dump
     (* get Cil AST *)
     let file = Ast.get () in
 
-    (* pretty print it *)
+    (* pretty print AST *)
     (* see frama-c-api/html/Printer_api.S_pp.html for Printer.pp_file documentation *)
     (*Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);*)
+	  Ubersparkvbridge_print.output "Starting AST dump...\n";
     Printer.pp_file Format.std_formatter file;
+		Ubersparkvbridge_print.output "AST dump Done.\n";
 
     ast_get_global_function_definitions file;
 
@@ -258,7 +283,14 @@ let ast_dump
       ()
     );
 
+
+    (* pretty print AST *)
+    (* see frama-c-api/html/Printer_api.S_pp.html for Printer.pp_file documentation *)
+    (*Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);*)
+	  Ubersparkvbridge_print.output "Starting AST dump...\n";
+    Printer.pp_file Format.std_formatter file;
 		Ubersparkvbridge_print.output "AST dump Done.\n";
+
 		()
 ;;
 

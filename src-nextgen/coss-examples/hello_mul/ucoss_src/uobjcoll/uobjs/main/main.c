@@ -36,12 +36,18 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     result = multiplicand * multiplier;
 
     p++;
+
+    /*@ assert 1; */
     *p='A';
+    
+    
     *p++ = 'B';
     p = &g_char;
     *p++ = 'C';
-    
+
     g_int = 0;
+
+ 
 
     for(g_int = 0; g_int < 20; g_int++){
         g_total = g_total + g_int; 
