@@ -8,6 +8,10 @@ open Cil_datatype
 open Cil_types
 
 (*
+  pretty printing here: frama-c-api/html/Printer_api.S_pp.html
+*)
+
+(*
   capabilities required over the ast
 
   1. need a way to insert annotations for statements/instructions
@@ -35,6 +39,18 @@ include access_type
 is_sub_lval
 *)
 
+
+(*--------------------------------------------------------------------------*)
+(* dump an annotation *)
+(*--------------------------------------------------------------------------*)
+let dump_annotation (annot : Cil_types.code_annotation) : unit =
+  Ubersparkvbridge_print.output (Printf.sprintf "dumping annotation...");
+
+  Printer.pp_code_annotation Format.std_formatter annot;
+
+  Ubersparkvbridge_print.output (Printf.sprintf "annotation dumped");
+  ()
+;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -77,10 +93,17 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
             Ubersparkvbridge_print.output (Printf.sprintf "[WITH ANNOT]");
 
             (* remove the annotation *)
-            let l_stmt_annot_list = Annotations.code_annot stmt in
+            (*let l_stmt_annot_list = Annotations.code_annot stmt in
             List.iter ( fun (x : Cil_types.code_annotation) -> 
               Annotations.remove_code_annot (Annotations.emitter_of_code_annot x stmt) stmt x;
+            )l_stmt_annot_list;*)
+
+            (* dump the annotation *)
+            let l_stmt_annot_list = Annotations.code_annot stmt in
+            List.iter ( fun (x : Cil_types.code_annotation) -> 
+              dump_annotation x;
             )l_stmt_annot_list;
+
 
           end;
       | _ ->
