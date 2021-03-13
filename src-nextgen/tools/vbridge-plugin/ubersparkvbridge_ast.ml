@@ -75,6 +75,13 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
       | Some stmt ->
           if (Annotations.has_code_annot stmt) then begin
             Ubersparkvbridge_print.output (Printf.sprintf "[WITH ANNOT]");
+
+            (* remove the annotation *)
+            let l_stmt_annot_list = Annotations.code_annot stmt in
+            List.iter ( fun (x : Cil_types.code_annotation) -> 
+              Annotations.remove_code_annot (Annotations.emitter_of_code_annot x stmt) stmt x;
+            )l_stmt_annot_list;
+
           end;
       | _ ->
         Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
