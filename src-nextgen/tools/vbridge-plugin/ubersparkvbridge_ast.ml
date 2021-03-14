@@ -39,6 +39,9 @@ include access_type
 is_sub_lval
 *)
 
+(*let assertion_one : code_annotation_node = AAssert ( [], Assert, { pred_name = [];}) ;; 
+*)
+
 
 (*--------------------------------------------------------------------------*)
 (* dump an annotation *)
@@ -58,6 +61,14 @@ let dump_annotation (annot : Cil_types.code_annotation) : unit =
   Ubersparkvbridge_print.output (Printf.sprintf "annotation dumped");
   ()
 ;;
+
+(* every annotation needs an emitter and we define ours here
+    see: frama-c-api/html/Emitter.html
+    note: creating an emitter with the same name and same type will result
+    in frama-c kernel reporting and error and bailing out
+*)
+let l_annotation_emitter = Emitter.create
+    "uberSpark Interrupt Check" [ Emitter.Code_annot ] ~correctness:[] ~tuning:[];;
 
 
 (*--------------------------------------------------------------------------*)
@@ -112,6 +123,7 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
             )l_stmt_annot_list;
 
 
+
           end;
       | _ ->
         Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
@@ -120,6 +132,31 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
     match inst with
       | Set (lv, e, loc) ->
         Ubersparkvbridge_print.output (Printf.sprintf "Set()");
+        let l_kstmt = self#current_stmt in
+        match l_kstmt with
+          | Some stmt ->
+
+              (* create an annotation *)
+              let l_assert = Logic_const.prel (Req, Cil.lzero(), Cil.lzero()) in
+                Annotations.add_assert l_annotation_emitter stmt l_assert;
+                Ubersparkvbridge_print.output (Printf.sprintf "Created assertion");
+
+              (* remove the annotation *)
+              (*let l_stmt_annot_list = Annotations.code_annot stmt in
+              List.iter ( fun (x : Cil_types.code_annotation) -> 
+                Annotations.remove_code_annot (Annotations.emitter_of_code_annot x stmt) stmt x;
+              )l_stmt_annot_list;*)
+
+              (* dump the annotation *)
+              (*let l_stmt_annot_list = Annotations.code_annot stmt in
+              List.iter ( fun (x : Cil_types.code_annotation) -> 
+                dump_annotation x;
+              )l_stmt_annot_list;
+              *)
+          | _ ->
+            Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
+        ;
+        
   
       | Call (None, e, e_list, loc) ->
         Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
