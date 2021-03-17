@@ -63,7 +63,6 @@ extern void _impl__casm__add_imm_r4_r3(uint32_t value);
 extern void _impl__casm__add_sp_sp_r3(uint32_t value);
 extern void _impl__casm__add_sp_sp_r6(uint32_t value);
 extern void _impl__casm__and_imm_r7_r7(uint32_t value); 
-extern void _impl__casm__and_imm_r7_r7(uint32_t value);
 extern void _impl__casm__and_imm_r0_r0(uint32_t value);
 extern void _impl__casm__and_imm_r3_r3(uint32_t value);
 extern void _impl__casm__b_eq();
@@ -205,6 +204,15 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 #define __casm__dsb() \
 	__builtin_annot("dsb");
 
+#define __casm__dsb_st() \
+	__builtin_annot("dsb st");
+
+#define __casm__dsb_ish() \
+	__builtin_annot("dsb ish");
+
+#define __casm__dsb_ishst() \
+	__builtin_annot("dsb ishst");
+
 #define __casm__isb() \
 	__builtin_annot("isb");
 
@@ -221,7 +229,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("hvc #0");
 
 #define __casm__svc() \
-	__builtin_annot("svc");
+	__builtin_annot("svc #0");
 
 /// a ///
 #define __casm__add_imm_r1_r0(x) \
@@ -244,9 +252,9 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("and r7, r7, "#x); \
 	_impl__casm__and_imm_r7_r7(x); 
 
-#define __casm__and_imm_r7_r7(x) \
-	__builtin_annot("and r7, r7, "#x); \
-	_impl__casm__and_imm_r7_r7(x);
+// #define __casm__and_imm_r7_r7(x) \
+// 	__builtin_annot("and r7, r7, "#x); \
+// 	_impl__casm__and_imm_r7_r7(x);
 
 #define __casm__and_imm_r0_r0(x) \
 	__builtin_annot("and r0, r0, "#x); \
@@ -318,10 +326,9 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("ldrex r2, [r0, "#x"]"); \
 	_impl__casm__ldrex_imm_r2_r0(x);
 
-// only works in gcc?
 #define __casm__ldr_pseudo_sp(x) \
 	__builtin_annot("ldr sp, ="#x); \
-	_impl__casm__ldr_pseudo_sp(&&x);
+	_impl__casm__ldr_pseudo_sp(&x);
 
 #define __casm__lsr_imm_r7_r7(x) \
 	__builtin_annot("lsr r7, r7, "#x); \
@@ -611,21 +618,21 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	_impl__casm__mrrc_p15_4_r0_r1_c2();
 
 
-#define __casm__mrs_r0_elrhyp(); \
+#define __casm__mrs_r9_cpsr(); \
 	__builtin_annot("mrs r9, cpsr"); \
+	_impl__casm__mrs_r9_cpsr();
+
+#define __casm__mrs_r0_elrhyp(); \
+	__builtin_annot("mrs r0, ELR_hyp"); \
 	_impl__casm__mrs_r0_elrhyp();
 
 #define __casm__mrs_r0_spsrhyp(); \
-	__builtin_annot("mrs r0, ELR_hyp"); \
+	__builtin_annot("mrs r0, SPSR_hyp"); \
 	_impl__casm__mrs_r0_spsrhyp();
 
 #define __casm__mrs_r0_cpsr(); \
-	__builtin_annot("mrs r0, SPSR_hyp"); \
-	_impl__casm__mrs_r0_cpsr();
-
-#define __casm__mrs_r9_cpsr(); \
 	__builtin_annot("mrs r0, cpsr"); \
-	_impl__casm__mrs_r9_cpsr();
+	_impl__casm__mrs_r0_cpsr();
 
 #define __casm__msr_spsrcxsf_r9() \
 	__builtin_annot("msr spsr_cxsf, r9"); \
