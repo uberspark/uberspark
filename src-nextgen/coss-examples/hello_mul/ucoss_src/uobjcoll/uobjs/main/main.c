@@ -40,9 +40,12 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     /*@ assert 1;  */
     *p='A';
     
-    
+    /*@ assert \separated(&g_char, p)  ; */
     *p++ = 'B';
+    
     p = &g_char;
+
+    /*@ assert \separated(&g_char, p)  ; */
     *p++ = 'C';
 
     g_int = 0;
