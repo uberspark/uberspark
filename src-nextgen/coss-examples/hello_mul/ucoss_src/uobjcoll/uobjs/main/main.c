@@ -21,6 +21,8 @@ unsigned char g_char;
 
 unsigned int g_int_address = &g_int;
 
+//global ACSL predicate
+//@ predicate is_separated (char * x) = \separated(&g_char, x);
 
 
 /*@ 
@@ -40,12 +42,12 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     /*@ assert 1;  */
     *p='A';
     
-    /*@ assert \separated(&g_char, p)  ; */
+    /*@ assert is_separated(p)  ; */
     *p++ = 'B';
     
     p = &g_char;
 
-    /*@ assert \separated(&g_char, p)  ; */
+    /*@ assert is_separated(p)  ; */
     *p++ = 'C';
 
     g_int = 0;
