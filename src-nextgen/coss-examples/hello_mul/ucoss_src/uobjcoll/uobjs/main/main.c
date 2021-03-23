@@ -22,7 +22,10 @@ unsigned char g_char;
 unsigned int g_int_address = &g_int;
 
 //global ACSL predicate
-//@ predicate is_separated (char * x) = \separated(&g_char, x);
+/*@ predicate is_separated (char * x) = 
+    \separated(&g_char, x) &&
+    \separated(&g_total, x);
+*/
 
 
 /*@ 
