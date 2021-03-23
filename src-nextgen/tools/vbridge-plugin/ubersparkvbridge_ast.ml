@@ -357,6 +357,21 @@ let ast_dump
       ()
     );
 
+    (* iterate through global annotations:  frama-c-api/html/Annotations.html*)
+    Annotations.iter_global ( fun (l_emitter : Emitter.t)
+            (l_global_annot : Cil_types.global_annotation)
+             : unit ->
+      match l_global_annot with
+        | Dfun_or_pred (p_logic_info, p_location) ->
+            Ubersparkvbridge_print.output (Printf.sprintf "global annotation Dfun_or_pred");
+
+        | _ ->
+          Ubersparkvbridge_print.output (Printf.sprintf "uncategorized global annotation");
+      ;
+      
+      ()
+    );
+
 
     (* pretty print AST *)
     (* see frama-c-api/html/Printer_api.S_pp.html for Printer.pp_file documentation *)
