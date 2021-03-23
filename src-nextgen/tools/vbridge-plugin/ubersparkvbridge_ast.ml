@@ -364,11 +364,16 @@ let ast_dump
       match l_global_annot with
         | Dfun_or_pred (p_logic_info, p_location) ->
             Ubersparkvbridge_print.output (Printf.sprintf "global annotation Dfun_or_pred");
+            (* debug print the logic_info node: frama-c-api/html/Cil_types_debug.html *)
+            (* note: constant ids in the dump can be generated 
+            programmatically via new_raw_id as described in frama-c-api/html/Cil_const.html *)
+            Cil_types_debug.pp_logic_info Format.std_formatter p_logic_info;
+            Cil_types_debug.pp_logic_body Format.std_formatter p_logic_info.l_body;
 
         | _ ->
           Ubersparkvbridge_print.output (Printf.sprintf "uncategorized global annotation");
       ;
-      
+
       ()
     );
 
