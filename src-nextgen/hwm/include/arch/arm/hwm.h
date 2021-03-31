@@ -51,7 +51,7 @@
 #ifndef __HWM_ARCH_ARM__HWM_H__
 #define __HWM_ARCH_ARM__HWM_H__
 
-#include <uberspark/hwm/include/arch/arm/hwm.h>
+#include <uberspark/hwm/include/arch/arm/cpu.h>
 #include <uberspark/hwm/include/arch/x86/generic/casm.h>
 
 #endif //__HWM_ARCH_ARM__HWM_H__
