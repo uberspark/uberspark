@@ -919,6 +919,8 @@ void cstartup(multiboot_info_t *mbi){
 
     //initialize debugging early on
 	uberspark_uobjrtl_debug__init((char *)&g_uart_config);
+#elif defined (__UBERSPARK_UOBJCOLL_CONFIGDEF_DEBUG_MEMORY__)
+    uberspark_uobjrtl_debug__init(NULL);
 #endif
 
     mod_array = (module_t*)mbi->mods_addr;
@@ -1082,7 +1084,7 @@ void cstartup(multiboot_info_t *mbi){
         HALT_ON_ERRORCOND(xslbootinfo->memmapinfo_numentries <= 64);
 		uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->memmapinfo_buffer, (void *)&grube820list, (sizeof(GRUBE820) * grube820list_numentries));
         xslbootinfo->cpuinfo_numentries = pcpus_numentries;
-        HALT_ON_ERRORCOND(xslbootinfo->cpuinfo_numentries <= 8);
+        HALT_ON_ERRORCOND(xslbootinfo->cpuinfo_numentries <= MAX_PLATFORM_CPUS);
         uberspark_uobjrtl_crt__memcpy((void *)&xslbootinfo->cpuinfo_buffer, (void *)&pcpus, (sizeof(PCPU) * pcpus_numentries));
         //xslbootinfo->xmhf_size = sl_rt_size;
         xslbootinfo->richguest_bootmodule_base = mod_array[0].mod_start;
