@@ -60,6 +60,52 @@
 // 	__builtin_annot("add "#RD", "#RN", "#OP2); \
 // 	_impl__casm__add(RD, RN, OP2); 
 
+extern uint32_t hwm_cpu_gprs_r0;  // General purpose
+extern uint32_t hwm_cpu_gprs_r1;  // General purpose
+extern uint32_t hwm_cpu_gprs_r2;  // General purpose
+extern uint32_t hwm_cpu_gprs_r3;  // General purpose
+extern uint32_t hwm_cpu_gprs_r4;  // General purpose
+extern uint32_t hwm_cpu_gprs_r5;  // General purpose
+extern uint32_t hwm_cpu_gprs_r6;  // General purpose
+extern uint32_t hwm_cpu_gprs_r7;  // Holds Syscall Number
+extern uint32_t hwm_cpu_gprs_r8;  // General purpose
+extern uint32_t hwm_cpu_gprs_r9;  // General purpose
+extern uint32_t hwm_cpu_gprs_r10;  // General purpose
+extern uint32_t hwm_cpu_gprs_r11;  // FP // Frame Pointer
+
+// special purpose
+extern uint32_t hwm_cpu_gprs_r12;  // IP // Intra Procedural Call
+extern uint32_t hwm_cpu_gprs_r13;  // SP // Stack Pointer
+extern uint32_t hwm_cpu_gprs_r14;  // LR //Link Register
+extern uint32_t hwm_cpu_gprs_r15;  // PC //Program Counter
+extern uint32_t hwm_cpu_gprs_CPSR; // Current Program Status Register
+
+// coprocessor registers
+extern uint32_t hwm_cpu_cprs_c0;
+extern uint32_t hwm_cpu_cprs_c1;
+extern uint32_t hwm_cpu_cprs_c2;
+extern uint32_t hwm_cpu_cprs_c3;
+extern uint32_t hwm_cpu_cprs_c4;
+extern uint32_t hwm_cpu_cprs_c5;
+extern uint32_t hwm_cpu_cprs_c6;
+extern uint32_t hwm_cpu_cprs_c7;
+extern uint32_t hwm_cpu_cprs_c8;
+extern uint32_t hwm_cpu_cprs_c9;
+extern uint32_t hwm_cpu_cprs_c10;
+extern uint32_t hwm_cpu_cprs_c11;
+extern uint32_t hwm_cpu_cprs_c12;
+extern uint32_t hwm_cpu_cprs_c13;
+extern uint32_t hwm_cpu_cprs_c14;
+
+// system coprocessor special registers
+extern uint32_t hwm_cpu_ssrs_cpsr;
+extern uint32_t hwm_cpu_ssrs_elrhyp;
+extern uint32_t hwm_cpu_ssrs_spsrhyp;
+extern uint32_t hwm_cpu_ssrs_spsrcxsf;
+
+// bool for operating mode (1 for thumb)
+extern uint8_t hwm_cpu_isthumb;
+
 extern void _impl__casm__add_imm_r1_r0(uint32_t value);
 extern void _impl__casm__add_imm_r4_r3(uint32_t value);
 extern void _impl__casm__add_sp_sp_r3(uint32_t value);
@@ -199,6 +245,25 @@ extern void _impl__casm__teq_imm_r2(uint32_t value);
 extern void _impl__casm__teq_eq_imm_r3(uint32_t value);
 extern void _impl__casm__tst_imm_r9(uint32_t value);
 
+#define CASM_FUNCCALL(fn_name, ...) (\
+	fn_name(__VA_ARGS__) \
+)
+
+#define __casm__call_c(fn_name) \
+	__builtin_annot("call "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name(); \
+
+#define __casm__ret() \
+	return; \
+
+#define __casm__retu32() \
+	return hwm_cpu_gprs_r0; \
+
+#define __casm__retu64() \
+	return hwm_cpu_gprs_r0; \
+
+
 // blank implementations:
 #define __casm__dmb_ish() \
 	__builtin_annot("dmb ish");
@@ -272,9 +337,14 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("b "#x); \
 	if(1) goto x; \
 
+// #define __casm__b_ne(x) \
+// 	__builtin_annot("bne "#x); \
+// 	if(!_impl__casm__b_eq()) goto x;
+
+// getting compile errors for above so gonna move logic into macro for now
 #define __casm__b_ne(x) \
 	__builtin_annot("bne "#x); \
-	if(!_impl__casm__b_eq()) goto x;
+	if(!(hwm_cpu_gprs_CPSR & (1U << 31))) goto x;
 
 // might need to double check this
 #define __casm__bl(x) \
