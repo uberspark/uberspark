@@ -162,7 +162,7 @@ void _impl__casm__bic_imm_r9_r9(uint32_t value) {
 
 // bne
 
-uint32_t _impl__casm__b_eq() {
+uint32_t _impl__casm__b_compare() {
 	return hwm_cpu_gprs_CPSR & CPSR_FLAGS_N;
 }
 

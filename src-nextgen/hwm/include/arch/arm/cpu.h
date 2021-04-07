@@ -106,6 +106,8 @@ extern uint32_t hwm_cpu_ssrs_spsrcxsf;
 // bool for operating mode (1 for thumb)
 extern uint8_t hwm_cpu_isthumb;
 
+extern uint32_t _impl__casm__b_compare(void);
+
 extern void _impl__casm__add_imm_r1_r0(uint32_t value);
 extern void _impl__casm__add_imm_r4_r3(uint32_t value);
 extern void _impl__casm__add_imm_lr_lr(uint32_t value);
@@ -114,7 +116,6 @@ extern void _impl__casm__add_sp_sp_r6(void);
 extern void _impl__casm__and_imm_r7_r7(uint32_t value); 
 extern void _impl__casm__and_imm_r0_r0(uint32_t value);
 extern void _impl__casm__and_imm_r3_r3(uint32_t value);
-extern void _impl__casm__b_eq(void);
 extern void _impl__casm__bx_lr(void);
 extern void _impl__casm__bic_imm_r7_r7(uint32_t value);
 extern void _impl__casm__bic_imm_r9_r9(uint32_t value);
@@ -330,11 +331,11 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 
 /// a ///
 #define __casm__add_imm_r1_r0(x) \
-	__builtin_annot("add r1, r0, "#x); \
+	__builtin_annot("add r1, r0, #"#x); \
 	_impl__casm__add_imm_r1_r0(x);
 
 #define __casm__add_imm_r4_r3(x) \
-	__builtin_annot("add r4, r3, "#x); \
+	__builtin_annot("add r4, r3, #"#x); \
 	_impl__casm__add_imm_r4_r3(x);
 
 #define __casm__add_sp_sp_r3() \
@@ -346,7 +347,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	_impl__casm__add_sp_sp_r6();
 
 #define __casm__and_imm_r7_r7(x) \
-	__builtin_annot("and r7, r7, "#x); \
+	__builtin_annot("and r7, r7, #"#x); \
 	_impl__casm__and_imm_r7_r7(x); 
 
 // #define __casm__and_imm_r7_r7(x) \
@@ -354,11 +355,11 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 // 	_impl__casm__and_imm_r7_r7(x);
 
 #define __casm__and_imm_r0_r0(x) \
-	__builtin_annot("and r0, r0, "#x); \
+	__builtin_annot("and r0, r0, #"#x); \
 	_impl__casm__and_imm_r0_r0(x);
 
 #define __casm__and_imm_r3_r3(x) \
-	__builtin_annot("and r3, r3, "#x); \
+	__builtin_annot("and r3, r3, #"#x); \
 	_impl__casm__and_imm_r3_r3(x);
 
 
@@ -367,14 +368,9 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("b "#x); \
 	if(1) goto x; \
 
-// #define __casm__b_ne(x) \
-// 	__builtin_annot("bne "#x); \
-// 	if(!_impl__casm__b_eq()) goto x;
-
-// getting compile errors for above so gonna move logic into macro for now
 #define __casm__b_ne(x) \
 	__builtin_annot("bne "#x); \
-	if(!(hwm_cpu_gprs_CPSR & (1U << 31))) goto x;
+	if(!_impl__casm__b_compare()) goto x;
 
 // might need to double check this
 #define __casm__bl(x) \
@@ -387,17 +383,17 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	_impl__casm__bx_lr();
 
 #define __casm_bic_imm_r7_r7(x) \
-	__builtin_annot("bic r7, r7, "#x); \
+	__builtin_annot("bic r7, r7, #"#x); \
 	_impl__casm__bic_imm_r7_r7(x);
 
 #define __casm_bic_imm_r9_r9(x) \
-	__builtin_annot("bic r9, r9, "#x); \
+	__builtin_annot("bic r9, r9, #"#x); \
 	_impl__casm__bic_imm_r9_r9(x);
 
 
 /// c ///
 #define __casm__cmp_imm_r7_r7(x) \
-	__builtin_annot("cmp r7, r7, "#x); \
+	__builtin_annot("cmp r7, #"#x); \
 	_impl__casm__cmp_imm_r7(x);
 
 
@@ -408,7 +404,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 /// e ///
 // eret
 #define __casm__eor_imm_r9_r9(x) \
-	__builtin_annot("eor r9, r9, "#x); \
+	__builtin_annot("eor r9, r9, #"#x); \
 	_impl__casm__eor_imm_r9_r9(x);
 
 
@@ -421,11 +417,11 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 
 /// l ///
 #define __casm__ldr_imm_r0_r0(x) \
-	__builtin_annot("ldr r0, [r0, "#x"]"); \
+	__builtin_annot("ldr r0, [r0, #"#x"]"); \
 	_impl__casm__ldr_imm_r0_r0(x);
 
 #define __casm__ldrex_imm_r2_r0(x) \
-	__builtin_annot("ldrex r2, [r0, "#x"]"); \
+	__builtin_annot("ldrex r2, [r0, #"#x"]"); \
 	_impl__casm__ldrex_imm_r2_r0(x);
 
 #define __casm__ldr_pseudo_sp(x) \
@@ -433,7 +429,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	_impl__casm__ldr_pseudo_sp((uint32_t) &x);
 
 #define __casm__lsr_imm_r7_r7(x) \
-	__builtin_annot("lsr r7, r7, "#x); \
+	__builtin_annot("lsr r7, r7, #"#x); \
 	_impl__casm__lsr_imm_r7_r7(x);
 
 
@@ -758,19 +754,19 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	_impl__casm__mov_r0_sp();
 
 #define __casm__mov_imm_r1(x) \
-	__builtin_annot("mov r1, "#x); \
+	__builtin_annot("mov r1, #"#x); \
 	_impl__casm__mov_imm_r1(x);
 
 #define __casm__mov_imm_r2(x) \
-	__builtin_annot("mov r2, "#x); \
+	__builtin_annot("mov r2, #"#x); \
 	_impl__casm__mov_imm_r2(x);
 
 #define __casm__mov_imm_r5(x) \
-	__builtin_annot("mov r5, "#x); \
+	__builtin_annot("mov r5, #"#x); \
 	_impl__casm__mov_imm_r5(x);
 
 #define __casm__mov_imm_r7(x) \
-	__builtin_annot("mov r7, "#x); \
+	__builtin_annot("mov r7, #"#x); \
 	_impl__casm__mov_imm_r7(x);
 
 #define __casm__mul_r3_r2_r1() \
@@ -784,11 +780,11 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 
 /// o
 #define __casm__orr_imm_r7_r7(x) \
-	__builtin_annot("orr r7, r7, "#x); \
+	__builtin_annot("orr r7, r7, #"#x); \
 	_impl__casm__orr_imm_r7_r7(x);
 
 #define __casm__orr_imm_r9_r9(x) \
-	__builtin_annot("orr r9, r9, "#x); \
+	__builtin_annot("orr r9, r9, #"#x); \
 	_impl__casm__orr_imm_r9_r9(x);
 
 
@@ -910,24 +906,24 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 // sev
 // svc
 #define __casm__str_r1_r0(x) \
-	__builtin_annot("str r1, [r0, "#x"]"); \
+	__builtin_annot("str r1, [r0, #"#x"]"); \
 	_impl__casm__str_r1_r0(x);
 
 #define __casm__strex_eq_r3_r1_r0(x) \
-	__builtin_annot("strexeq r3, r1, [r0, "#x"]"); \
+	__builtin_annot("strexeq r3, r1, [r0, #"#x"]"); \
 	_impl__casm__strex_eq_r3_r1_r0(x);
 
 /// t ///
 #define __casm__teq_imm_r2(x) \
-	__builtin_annot("teq r2, "#x); \
+	__builtin_annot("teq r2, #"#x); \
 	_impl__casm__teq_imm_r2(x);
 
 #define __casm__teq_eq_imm_r3(x) \
-	__builtin_annot("teqeq r3, "#x); \
+	__builtin_annot("teqeq r3, #"#x); \
 	_impl__casm__teq_eq_imm_r3(x);
 
 #define __casm__tst_imm_r9(x) \
-	__builtin_annot("tst r9, "#x); \
+	__builtin_annot("tst r9, #"#x); \
 	_impl__casm__tst_imm_r9(x);
 
 
