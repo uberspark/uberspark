@@ -108,14 +108,14 @@ extern uint8_t hwm_cpu_isthumb;
 
 extern void _impl__casm__add_imm_r1_r0(uint32_t value);
 extern void _impl__casm__add_imm_r4_r3(uint32_t value);
-extern void _impl__casm__add_sp_sp_r3(uint32_t value);
-extern void _impl__casm__add_sp_sp_r6(uint32_t value);
+extern void _impl__casm__add_imm_lr_lr(uint32_t value);
+extern void _impl__casm__add_sp_sp_r3(void);
+extern void _impl__casm__add_sp_sp_r6(void);
 extern void _impl__casm__and_imm_r7_r7(uint32_t value); 
 extern void _impl__casm__and_imm_r0_r0(uint32_t value);
 extern void _impl__casm__and_imm_r3_r3(uint32_t value);
-extern void _impl__casm__b_eq();
-extern void _impl__casm__add_imm_lr_lr();
-extern void _impl__casm__bx_lr();
+extern void _impl__casm__b_eq(void);
+extern void _impl__casm__bx_lr(void);
 extern void _impl__casm__bic_imm_r7_r7(uint32_t value);
 extern void _impl__casm__bic_imm_r9_r9(uint32_t value);
 extern void _impl__casm__cmp_imm_r7(uint32_t value);
@@ -124,121 +124,121 @@ extern void _impl__casm__ldr_imm_r0_r0(uint32_t offset);
 extern void _impl__casm__ldr_pseudo_sp(uint32_t value);
 extern void _impl__casm__ldrex_imm_r2_r0(uint32_t offset);
 extern void _impl__casm__lsr_imm_r7_r7(uint32_t value);
-extern void _impl__casm__mcr_p15_0_r7_c14_c3_1();
-extern void _impl__casm__mcr_p15_4_r7_c1_c1_1();
-extern void _impl__casm__mcr_p15_4_r7_c1_c1_2();
-extern void _impl__casm__mcr_p15_4_r7_c14_c1_0();
-extern void _impl__casm__mcr_p15_0_r0_c1_c0_0();
-extern void _impl__casm__mcr_p15_0_r0_c1_c0_1();
-extern void _impl__casm__mcr_p15_0_r0_c12_c0_0();
-extern void _impl__casm__mcr_p15_4_r0_c1_c0_0();
-extern void _impl__casm__mcr_p15_4_r0_c1_c1_0();
-extern void _impl__casm__mcr_p15_4_r0_c1_c1_1();
-extern void _impl__casm__mcr_p15_4_r0_c1_c1_2();
-extern void _impl__casm__mcr_p15_4_r0_c1_c1_3();
-extern void _impl__casm__mcr_p15_4_r0_c12_c0_0();
-extern void _impl__casm__mcr_p15_4_r0_c2_c1_2();
-extern void _impl__casm__mcr_p15_0_r0_c10_c2_0();
-extern void _impl__casm__mcr_p15_0_r0_c10_c2_1();
-extern void _impl__casm__mcr_p15_0_r0_c2_c0_0();
-extern void _impl__casm__mcr_p15_0_r0_c2_c0_1();
-extern void _impl__casm__mcr_p15_0_r0_c2_c0_2();
-extern void _impl__casm__mcr_p15_0_r0_c3_c0_0();
-extern void _impl__casm__mcr_p15_0_r0_c7_c5_0();
-extern void _impl__casm__mcr_p15_0_r0_c7_c8_0();
-extern void _impl__casm__mcr_p15_0_r0_c7_c8_6();
-extern void _impl__casm__mcr_p15_0_r0_c8_c3_0();
-extern void _impl__casm__mcr_p15_4_r0_c10_c2_0();
-extern void _impl__casm__mcr_p15_4_r0_c10_c2_1();
-extern void _impl__casm__mcr_p15_4_r0_c14_c2_0();
-extern void _impl__casm__mcr_p15_4_r0_c14_c2_1();
-extern void _impl__casm__mcr_p15_4_r0_c2_c0_2();
-extern void _impl__casm__mcr_p15_4_r0_c8_c0_1();
-extern void _impl__casm__mcr_p15_4_r0_c8_c7_0();
-extern void _impl__casm__mcrr_p15_4_r0_r1_c2();
-extern void _impl__casm__mcrr_p15_6_r0_r1_c2();
-extern void _impl__casm__mcrr_p15_4_r7_r7_c14();
-extern void _impl__casm__mrc_p15_0_r7_c0_c1_1();
-extern void _impl__casm__mrc_p15_0_r7_c14_c3_1();
-extern void _impl__casm__mrc_p15_4_r7_c1_c1_1();
-extern void _impl__casm__mrc_p15_4_r7_c14_c1_0();
-extern void _impl__casm__mrc_p15_0_r0_c0_c0_5();
-extern void _impl__casm__mrc_p15_0_r3_c0_c0_5();
-extern void _impl__casm__mrc_p15_0_r0_c0_c2_4();
-extern void _impl__casm__mrc_p15_0_r0_c1_c0_0();
-extern void _impl__casm__mrc_p15_0_r0_c1_c0_1();
-extern void _impl__casm__mrc_p15_0_r0_c1_c1_0();
-extern void _impl__casm__mrc_p15_0_r0_c12_c0_0();
-extern void _impl__casm__mrc_p15_4_r0_c1_c0_0();
-extern void _impl__casm__mrc_p15_4_r0_c1_c1_0();
-extern void _impl__casm__mrc_p15_4_r0_c1_c1_1();
-extern void _impl__casm__mrc_p15_4_r0_c1_c1_2();
-extern void _impl__casm__mrc_p15_4_r0_c1_c1_3();
-extern void _impl__casm__mrc_p15_4_r0_c12_c0_0();
-extern void _impl__casm__mrc_p15_4_r0_c2_c1_2();
-extern void _impl__casm__mrc_p15_4_r0_c5_c2_0();
-extern void _impl__casm__mrc_p15_0_r0_c10_c2_0();
-extern void _impl__casm__mrc_p15_0_r0_c10_c2_1();
-extern void _impl__casm__mrc_p15_0_r0_c2_c0_0();
-extern void _impl__casm__mrc_p15_0_r0_c2_c0_1();
-extern void _impl__casm__mrc_p15_0_r0_c2_c0_2();
-extern void _impl__casm__mrc_p15_0_r0_c3_c0_0();
-extern void _impl__casm__mrc_p15_0_r0_c7_c4_0();
-extern void _impl__casm__mrc_p15_4_r0_c10_c2_0();
-extern void _impl__casm__mrc_p15_4_r0_c10_c2_1();
-extern void _impl__casm__mrc_p15_4_r0_c14_c2_0();
-extern void _impl__casm__mrc_p15_4_r0_c14_c2_1();
-extern void _impl__casm__mrc_p15_4_r0_c2_c0_2();
-extern void _impl__casm__mrc_p15_4_r0_c6_c0_0();
-extern void _impl__casm__mrc_p15_4_r0_c6_c0_4();
-extern void _impl__casm__mrrc_p15_0_r0_r1_c14();
-extern void _impl__casm__mrrc_p15_6_r0_r1_c2();
-extern void _impl__casm__mrrc_p15_4_r0_r1_c2();
-extern void _impl__casm__mrs_r0_elrhyp();
-extern void _impl__casm__mrs_r0_spsrhyp();
-extern void _impl__casm__mrs_r0_cpsr();
-extern void _impl__casm__mrs_r9_cpsr();
-extern void _impl__casm__msr_spsrcxsf_r9();
-extern void _impl__casm__msr_elrhyp_r0();
-extern void _impl__casm__msr_elrhyp_r3();
-extern void _impl__casm__msr_cpsr_r0();
-extern void _impl__casm__mov_r0_sp();
+extern void _impl__casm__mcr_p15_0_r7_c14_c3_1(void);
+extern void _impl__casm__mcr_p15_4_r7_c1_c1_1(void);
+extern void _impl__casm__mcr_p15_4_r7_c1_c1_2(void);
+extern void _impl__casm__mcr_p15_4_r7_c14_c1_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c1_c0_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c1_c0_1(void);
+extern void _impl__casm__mcr_p15_0_r0_c12_c0_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c1_c0_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c1_c1_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c1_c1_1(void);
+extern void _impl__casm__mcr_p15_4_r0_c1_c1_2(void);
+extern void _impl__casm__mcr_p15_4_r0_c1_c1_3(void);
+extern void _impl__casm__mcr_p15_4_r0_c12_c0_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c2_c1_2(void);
+extern void _impl__casm__mcr_p15_0_r0_c10_c2_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c10_c2_1(void);
+extern void _impl__casm__mcr_p15_0_r0_c2_c0_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c2_c0_1(void);
+extern void _impl__casm__mcr_p15_0_r0_c2_c0_2(void);
+extern void _impl__casm__mcr_p15_0_r0_c3_c0_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c7_c5_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c7_c8_0(void);
+extern void _impl__casm__mcr_p15_0_r0_c7_c8_6(void);
+extern void _impl__casm__mcr_p15_0_r0_c8_c3_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c10_c2_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c10_c2_1(void);
+extern void _impl__casm__mcr_p15_4_r0_c14_c2_0(void);
+extern void _impl__casm__mcr_p15_4_r0_c14_c2_1(void);
+extern void _impl__casm__mcr_p15_4_r0_c2_c0_2(void);
+extern void _impl__casm__mcr_p15_4_r0_c8_c0_1(void);
+extern void _impl__casm__mcr_p15_4_r0_c8_c7_0(void);
+extern void _impl__casm__mcrr_p15_4_r0_r1_c2(void);
+extern void _impl__casm__mcrr_p15_6_r0_r1_c2(void);
+extern void _impl__casm__mcrr_p15_4_r7_r7_c14(void);
+extern void _impl__casm__mrc_p15_0_r7_c0_c1_1(void);
+extern void _impl__casm__mrc_p15_0_r7_c14_c3_1(void);
+extern void _impl__casm__mrc_p15_4_r7_c1_c1_1(void);
+extern void _impl__casm__mrc_p15_4_r7_c14_c1_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c0_c0_5(void);
+extern void _impl__casm__mrc_p15_0_r3_c0_c0_5(void);
+extern void _impl__casm__mrc_p15_0_r0_c0_c2_4(void);
+extern void _impl__casm__mrc_p15_0_r0_c1_c0_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c1_c0_1(void);
+extern void _impl__casm__mrc_p15_0_r0_c1_c1_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c12_c0_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c1_c0_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c1_c1_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c1_c1_1(void);
+extern void _impl__casm__mrc_p15_4_r0_c1_c1_2(void);
+extern void _impl__casm__mrc_p15_4_r0_c1_c1_3(void);
+extern void _impl__casm__mrc_p15_4_r0_c12_c0_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c2_c1_2(void);
+extern void _impl__casm__mrc_p15_4_r0_c5_c2_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c10_c2_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c10_c2_1(void);
+extern void _impl__casm__mrc_p15_0_r0_c2_c0_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c2_c0_1(void);
+extern void _impl__casm__mrc_p15_0_r0_c2_c0_2(void);
+extern void _impl__casm__mrc_p15_0_r0_c3_c0_0(void);
+extern void _impl__casm__mrc_p15_0_r0_c7_c4_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c10_c2_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c10_c2_1(void);
+extern void _impl__casm__mrc_p15_4_r0_c14_c2_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c14_c2_1(void);
+extern void _impl__casm__mrc_p15_4_r0_c2_c0_2(void);
+extern void _impl__casm__mrc_p15_4_r0_c6_c0_0(void);
+extern void _impl__casm__mrc_p15_4_r0_c6_c0_4(void);
+extern void _impl__casm__mrrc_p15_0_r0_r1_c14(void);
+extern void _impl__casm__mrrc_p15_6_r0_r1_c2(void);
+extern void _impl__casm__mrrc_p15_4_r0_r1_c2(void);
+extern void _impl__casm__mrs_r0_elrhyp(void);
+extern void _impl__casm__mrs_r0_spsrhyp(void);
+extern void _impl__casm__mrs_r0_cpsr(void);
+extern void _impl__casm__mrs_r9_cpsr(void);
+extern void _impl__casm__msr_spsrcxsf_r9(void);
+extern void _impl__casm__msr_elrhyp_r0(void);
+extern void _impl__casm__msr_elrhyp_r3(void);
+extern void _impl__casm__msr_cpsr_r0(void);
+extern void _impl__casm__mov_r0_sp(void);
 extern void _impl__casm__mov_imm_r1(uint32_t value);
 extern void _impl__casm__mov_imm_r2(uint32_t value);
 extern void _impl__casm__mov_imm_r5(uint32_t value);
 extern void _impl__casm__mov_imm_r7(uint32_t value);
-extern void _impl__casm__mul_r3_r2_r1();
-extern void _impl__casm__mul_r6_r4_r5();
+extern void _impl__casm__mul_r3_r2_r1(void);
+extern void _impl__casm__mul_r6_r4_r5(void);
 extern void _impl__casm__orr_imm_r7_r7(uint32_t value);
 extern void _impl__casm__orr_imm_r9_r9(uint32_t value);
-extern void _impl__casm__pop_lr();
-extern void _impl__casm__pop_r0();
-extern void _impl__casm__pop_r1();
-extern void _impl__casm__pop_r2();
-extern void _impl__casm__pop_r3();
-extern void _impl__casm__pop_r4();
-extern void _impl__casm__pop_r5();
-extern void _impl__casm__pop_r6();
-extern void _impl__casm__pop_r7();
-extern void _impl__casm__pop_r8();
-extern void _impl__casm__pop_r9();
-extern void _impl__casm__pop_r10();
-extern void _impl__casm__pop_r11();
-extern void _impl__casm__pop_r12();
-extern void _impl__casm__push_lr();
-extern void _impl__casm__push_r0();
-extern void _impl__casm__push_r1();
-extern void _impl__casm__push_r2();
-extern void _impl__casm__push_r3();
-extern void _impl__casm__push_r4();
-extern void _impl__casm__push_r5();
-extern void _impl__casm__push_r6();
-extern void _impl__casm__push_r7();
-extern void _impl__casm__push_r8();
-extern void _impl__casm__push_r9();
-extern void _impl__casm__push_r10();
-extern void _impl__casm__push_r11();
-extern void _impl__casm__push_r12();
+extern void _impl__casm__pop_lr(void);
+extern void _impl__casm__pop_r0(void);
+extern void _impl__casm__pop_r1(void);
+extern void _impl__casm__pop_r2(void);
+extern void _impl__casm__pop_r3(void);
+extern void _impl__casm__pop_r4(void);
+extern void _impl__casm__pop_r5(void);
+extern void _impl__casm__pop_r6(void);
+extern void _impl__casm__pop_r7(void);
+extern void _impl__casm__pop_r8(void);
+extern void _impl__casm__pop_r9(void);
+extern void _impl__casm__pop_r10(void);
+extern void _impl__casm__pop_r11(void);
+extern void _impl__casm__pop_r12(void);
+extern void _impl__casm__push_lr(void);
+extern void _impl__casm__push_r0(void);
+extern void _impl__casm__push_r1(void);
+extern void _impl__casm__push_r2(void);
+extern void _impl__casm__push_r3(void);
+extern void _impl__casm__push_r4(void);
+extern void _impl__casm__push_r5(void);
+extern void _impl__casm__push_r6(void);
+extern void _impl__casm__push_r7(void);
+extern void _impl__casm__push_r8(void);
+extern void _impl__casm__push_r9(void);
+extern void _impl__casm__push_r10(void);
+extern void _impl__casm__push_r11(void);
+extern void _impl__casm__push_r12(void);
 extern void _impl__casm__str_r1_r0(uint32_t offset);
 extern void _impl__casm__strex_eq_r3_r1_r0(uint32_t offset);
 extern void _impl__casm__teq_imm_r2(uint32_t value);
@@ -250,9 +250,38 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 )
 
 #define __casm__call_c(fn_name) \
-	__builtin_annot("call "#fn_name" "); \
+	__builtin_annot("bl "#fn_name" "); \
 	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
 	fn_name(); \
+
+#define __casm__call_c_1p(fn_name, fn_p1_type) \
+	__builtin_annot("bl "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_r0)) ); \
+
+#define __casm__call_c_2p(fn_name, fn_p1_type, fn_p2_type) \
+	__builtin_annot("bl "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_r0)), \
+			 (fn_p2_type) *((uint32_t *)(hwm_cpu_gprs_r1)), \
+			); \
+
+#define __casm__call_c_3p(fn_name, fn_p1_type, fn_p2_type, fn_p3_type) \
+	__builtin_annot("bl "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_r0)), \
+			 (fn_p2_type) *((uint32_t *)(hwm_cpu_gprs_r1)), \
+			 (fn_p3_type) *((uint32_t *)(hwm_cpu_gprs_r2)), \
+			); \
+
+#define __casm__call_c_4p(fn_name, fn_p1_type, fn_p2_type, fn_p3_type, fn_p4_type) \
+	__builtin_annot("bl "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_r0)), \
+			 (fn_p2_type) *((uint32_t *)(hwm_cpu_gprs_r1)), \
+			 (fn_p3_type) *((uint32_t *)(hwm_cpu_gprs_r2)), \
+			 (fn_p4_type) *((uint32_t *)(hwm_cpu_gprs_r3))  \
+			); \
 
 #define __casm__ret() \
 	return; \
@@ -260,6 +289,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 #define __casm__retu32() \
 	return hwm_cpu_gprs_r0; \
 
+// find documentation on which reg has second half of 64 bit return
 #define __casm__retu64() \
 	return hwm_cpu_gprs_r0; \
 
@@ -307,13 +337,13 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("add r4, r3, "#x); \
 	_impl__casm__add_imm_r4_r3(x);
 
-#define __casm__add_sp_sp_r3(x) \
+#define __casm__add_sp_sp_r3() \
 	__builtin_annot("add sp, sp, r3"); \
-	_impl__casm__add_sp_sp_r3(x);
+	_impl__casm__add_sp_sp_r3();
 
-#define __casm__add_sp_sp_r6(x) \
+#define __casm__add_sp_sp_r6() \
 	__builtin_annot("add sp, sp, r6"); \
-	_impl__casm__add_sp_sp_r6(x);
+	_impl__casm__add_sp_sp_r6();
 
 #define __casm__and_imm_r7_r7(x) \
 	__builtin_annot("and r7, r7, "#x); \
@@ -400,7 +430,7 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 
 #define __casm__ldr_pseudo_sp(x) \
 	__builtin_annot("ldr sp, ="#x); \
-	_impl__casm__ldr_pseudo_sp(&x);
+	_impl__casm__ldr_pseudo_sp((uint32_t) &x);
 
 #define __casm__lsr_imm_r7_r7(x) \
 	__builtin_annot("lsr r7, r7, "#x); \
