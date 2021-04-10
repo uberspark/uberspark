@@ -67,8 +67,10 @@ let dump_annotation (annot : Cil_types.code_annotation) : unit =
     note: creating an emitter with the same name and same type will result
     in frama-c kernel reporting and error and bailing out
 *)
+(* this emitter can emit both code annotations as well
+as global annotations *)
 let l_annotation_emitter = Emitter.create
-    "uberSpark Interrupt Check" [ Emitter.Code_annot ] ~correctness:[] ~tuning:[];;
+    "uberSpark Interrupt Check" [ Emitter.Code_annot; Emitter.Global_annot ] ~correctness:[] ~tuning:[];;
 
 
 (*--------------------------------------------------------------------------*)
@@ -356,6 +358,28 @@ let ast_dump
 
       ()
     );
+
+
+    (* create a global annotation *)
+    (* frama-c-api/html/Annotations.html *)
+  
+    (* make a variable of type Cil_types.logic_info *)
+    (* see frama-c-api/html/Cil_const.html *)
+    let l_var_logic_info : Cil_types.logic_info =
+      Cil_const.make_logic_info "test_is_separated" in
+
+    (* the type of global annotation is DFun_or_pred 
+     as in frama-c-api/html/Cil_types.html for type
+     global_annotation *)
+    let l_dfun_or_pred : Cil_types.global_annotation =
+      Dfun_or_pred (l_var_logic_info  , Cil_datatype.Location.unknown) in
+  
+    Annotations.add_global l_annotation_emitter l_dfun_or_pred;
+    Ubersparkvbridge_print.output (Printf.sprintf "Created global annotation");
+
+
+
+
 
     (* iterate through global annotations:  frama-c-api/html/Annotations.html*)
     Annotations.iter_global ( fun (l_emitter : Emitter.t)
