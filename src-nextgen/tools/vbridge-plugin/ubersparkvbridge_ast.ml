@@ -368,6 +368,25 @@ let ast_dump
     let l_var_logic_info : Cil_types.logic_info =
       Cil_const.make_logic_info "test_is_separated" in
 
+    (* the above logic variable is going to be a 
+    predicate with a formal parameter; char * x *)
+    (* note that : 
+     frama-c-api/html/Cil.html#VALcharPtrType contains
+     a list of functions that can be used to define
+     a ton of pre-defined types
+     
+     we then cast the Cil_types.typ to Cil_types.logic_type
+     using the Ctype variant; 
+     *)
+
+    let l_var_logic_info_param_1 : Cil_types.logic_var = 
+      (Cil_const.make_logic_var_formal "x" 
+        (Ctype ( Cil.charPtrType )) ) in
+       
+    (* stick it into the formal parameter field
+     of l_var_logic_info *)
+    l_var_logic_info.l_profile <- [ l_var_logic_info_param_1; ];
+
     (* the type of global annotation is DFun_or_pred 
      as in frama-c-api/html/Cil_types.html for type
      global_annotation *)
