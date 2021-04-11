@@ -359,6 +359,12 @@ let ast_dump
       ()
     );
 
+    (* iterate through global variables: frama-c-api/html/Globals.Vars.html *)
+    Globals.Vars.iter ( fun (l_varinfo: Cil_types.varinfo) (l_initinfo: Cil_types.initinfo) : unit ->
+      Ubersparkvbridge_print.output (Printf.sprintf "global variable: %s" l_varinfo.vname);
+      ()
+    );
+
 
     (* create a global annotation *)
     (* frama-c-api/html/Annotations.html *)
@@ -386,6 +392,16 @@ let ast_dump
     (* stick it into the formal parameter field
      of l_var_logic_info *)
     l_var_logic_info.l_profile <- [ l_var_logic_info_param_1; ];
+
+    (* one constructs body using logic terms and
+    pedicates. Cil_types.term --> logic term
+    Conversion from exp to term is given here:
+    frama-c-api/html/Logic_utils.html
+    so we take C expression and convert to logic
+    term and make up the predicate body *)
+
+
+
 
     (* the type of global annotation is DFun_or_pred 
      as in frama-c-api/html/Cil_types.html for type
