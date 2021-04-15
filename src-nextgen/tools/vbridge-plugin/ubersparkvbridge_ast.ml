@@ -398,8 +398,14 @@ let ast_dump
     Conversion from exp to term is given here:
     frama-c-api/html/Logic_utils.html
     so we take C expression and convert to logic
-    term and make up the predicate body *)
+    term and make up the predicate body. At the last we need to
+    have it as Cil_types.logic_body so we can stick it into
+    l_var_logic_info.l_body *)
 
+
+    (* Cil_type.logic_body which is l_body's type can be LBnone, LBterm of term 
+    and others as in: frama-c-api/html/Cil_types.html#TYPElogic_body *)
+    l_var_logic_info.l_body <- LBnone;
 
 
 
