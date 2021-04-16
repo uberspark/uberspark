@@ -405,7 +405,26 @@ let ast_dump
 
     (* Cil_type.logic_body which is l_body's type can be LBnone, LBterm of term 
     and others as in: frama-c-api/html/Cil_types.html#TYPElogic_body *)
-    l_var_logic_info.l_body <- LBnone;
+
+    (* now we contruct a body which basically takes all global variables 
+     and makes a separated predicate and && them together *)
+    let l_body_predicate : Cil_types.predicate ref = ref (Logic_const.ptrue) in
+    Globals.Vars.iter ( fun (l_varinfo: Cil_types.varinfo) (l_initinfo: Cil_types.initinfo) : unit ->
+      let l_gvar_lval : Cil_types.lval = (Cil.var  l_varinfo) in
+      let l_gvar_addrof_exp : Cil_types.exp = (Cil.mkAddrOf Cil_datatype.Location.unknown l_gvar_lval) in
+      (* Logic_const.tvar converts form logic_var to term: frama-c-api/html/Logic_const.html *)
+      let l_var_logic_info_param_1_term : Cil_types.term = (Logic_const.tvar l_var_logic_info_param_1) in 
+      (* Logic_utils.expr_to_term converts exp to term; cast=true means we want C var cast
+        see frama-c-api/html/Logic_utils.html *)
+      let l_gvar_addrof_exp_term : Cil_types.term = (Logic_utils.expr_to_term ~cast:true l_gvar_addrof_exp) in
+
+      let l_gvar_predicate : Cil_types.predicate = (Logic_const.pseparated [l_gvar_addrof_exp_term; l_var_logic_info_param_1_term]) in 
+      l_body_predicate := (Logic_const.pand (!l_body_predicate,l_gvar_predicate));
+      ()
+    );
+
+
+    l_var_logic_info.l_body <- (LBpred (!l_body_predicate));
 
 
 
