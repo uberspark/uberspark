@@ -73,6 +73,97 @@ let l_annotation_emitter = Emitter.create
     "uberSpark Interrupt Check" [ Emitter.Code_annot; Emitter.Global_annot ] ~correctness:[] ~tuning:[];;
 
 
+
+
+(*--------------------------------------------------------------------------*)
+(* given a function comb through it and find calls *)
+(*--------------------------------------------------------------------------*)
+class function_call_visitor (p_kf : Cil_types.kernel_function) = object (self)
+
+  inherit Visitor.frama_c_inplace
+  (* see frama-c-api/html/Cil.cilVisitor-c.html on the list of method we can override *)
+
+  (* note plugin development guide page 99 says that we need to use vstmt_aux and vglob_aux
+  instead if vstmt and vglob *)
+  
+  (* statements are as in frama-c-api/html/Cil_types.html#TYPEstmtkind *)
+  (* e.g, instruction -- no control flow change, return, goto, break etc. *)
+  method! vstmt_aux (stmt: Cil_types.stmt) =
+    (*Printer.pp_stmt Format.std_formatter stmt;*)
+    Cil.DoChildren
+  ;
+
+  (* instructions are as in frama-c-api/html/Cil_types.html#TYPEinstr *)
+  (* e.g., set, call, local_init, asm, skip etc. *)
+  method! vinst (inst: Cil_types.instr) =
+
+    (* the current statement this instr belongs to *)
+    let l_kstmt = self#current_stmt in
+
+    (* Note sometimes the pretty printer can try to be smart and print additional instructions
+      for example:
+      return 0; gets converterd to
+      _result = 0;
+      return result;
+      then when we get the Set() for _result=0; the pp_instr below will print both
+    *)
+    Printer.pp_instr Format.std_formatter inst;
+
+    match inst with
+      | Set (lv, e, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Set()");
+  
+      | Call (None, e, e_list, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
+
+      | Call (Some lv, e, e_list, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
+
+      | Local_init (v, linit, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Local_init()");
+
+      | Asm (attr, asminsns, Some e_asm, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Asm()");
+
+      | Asm (attr, asminsns, None, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Asm_noext()");
+
+      | Skip loc ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Skip()");
+
+      | Code_annot (annot, loc) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Code_annot()");
+    ;
+
+    Cil.DoChildren
+  ;
+
+end
+
+
+let find_function_calls
+  (p_kf : Cil_types.kernel_function)
+  : unit =
+
+  let l_visitor = new function_call_visitor p_kf in
+  Ubersparkvbridge_print.output (Printf.sprintf "finding calls within function...");
+
+  ignore( Visitor.visitFramacFunction l_visitor (Kernel_function.get_definition p_kf)); 
+
+  Ubersparkvbridge_print.output (Printf.sprintf "\ndone!");
+
+  ()
+;;
+
+
+
+
+
+
+
+
+
+
 (*--------------------------------------------------------------------------*)
 (* given a function comb through it and find memory write statements or lvals 
 and output those instructions or statements *)
@@ -348,7 +439,8 @@ let ast_dump
 
     (* iterate through global functions: frama-c-api/html/Globals.Functions.html *)
     (* API on kernel functions here: frama-c-v20.0/frama-c-api/html/Kernel_function.html *)
-    Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
+    (* for each function find memory writes *)
+    (*Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
       if (Kernel_function.is_definition l_kf) then begin
         Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
         find_memory_writes l_kf;
@@ -357,7 +449,23 @@ let ast_dump
       end;
 
       ()
+    );*)
+
+
+    (* iterate through global functions: frama-c-api/html/Globals.Functions.html *)
+    (* API on kernel functions here: frama-c-v20.0/frama-c-api/html/Kernel_function.html *)
+    (* for each function find function calls *)
+    Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
+      if (Kernel_function.is_definition l_kf) then begin
+        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
+        find_function_calls l_kf;
+      end else begin
+        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
+      end;
+
+      ()
     );
+
 
     (* iterate through global variables: frama-c-api/html/Globals.Vars.html *)
     Globals.Vars.iter ( fun (l_varinfo: Cil_types.varinfo) (l_initinfo: Cil_types.initinfo) : unit ->
