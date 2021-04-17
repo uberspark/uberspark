@@ -90,15 +90,29 @@ class function_call_visitor (p_kf : Cil_types.kernel_function) = object (self)
   (* e.g, instruction -- no control flow change, return, goto, break etc. *)
   method! vstmt_aux (stmt: Cil_types.stmt) =
     (*Printer.pp_stmt Format.std_formatter stmt;*)
-    Cil.DoChildren
+    
+    match stmt.skind with
+      | Instr (Call (lv_opt, e, e_list, loc)) ->
+        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
+        let l_g_int_vi = (Globals.Vars.find_from_astinfo "g_int" VGlobal) in
+        let l_instr = Cil_types.Set(Cil.var l_g_int_vi, Cil.integer ~loc 1, loc) in
+        let l_insert_stmt = Cil.mkStmt ~valid_sid:true (Cil_types.Instr l_instr) in
+        
+        l_insert_stmt.labels <- stmt.labels;
+        stmt.labels <- [];
+        let l_bloc_kind = Cil_types.Block(Cil.mkBlock [l_insert_stmt; stmt]) in
+        let l_new_stmt = Cil.mkStmt ~valid_sid:true l_bloc_kind in
+        Cil.ChangeTo l_new_stmt
+  
+      | _ ->
+        Cil.DoChildren
+    ;
   ;
 
   (* instructions are as in frama-c-api/html/Cil_types.html#TYPEinstr *)
   (* e.g., set, call, local_init, asm, skip etc. *)
   method! vinst (inst: Cil_types.instr) =
 
-    (* the current statement this instr belongs to *)
-    let l_kstmt = self#current_stmt in
 
     (* Note sometimes the pretty printer can try to be smart and print additional instructions
       for example:
@@ -107,34 +121,7 @@ class function_call_visitor (p_kf : Cil_types.kernel_function) = object (self)
       return result;
       then when we get the Set() for _result=0; the pp_instr below will print both
     *)
-    Printer.pp_instr Format.std_formatter inst;
-
-    match inst with
-      | Set (lv, e, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Set()");
-  
-      | Call (None, e, e_list, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
-
-      | Call (Some lv, e, e_list, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
-
-      | Local_init (v, linit, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Local_init()");
-
-      | Asm (attr, asminsns, Some e_asm, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Asm()");
-
-      | Asm (attr, asminsns, None, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Asm_noext()");
-
-      | Skip loc ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Skip()");
-
-      | Code_annot (annot, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Code_annot()");
-    ;
-
+    (*Printer.pp_instr Format.std_formatter inst;*)
     Cil.DoChildren
   ;
 
