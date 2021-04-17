@@ -3,8 +3,7 @@
 
     author: Amit Vasudevan <amitvasudevan@acm.org>
 *)
-
-open Cil_datatype
+open Cil
 open Cil_types
 
 (*
@@ -401,16 +400,10 @@ let ast_get_global_function_definitions (p_ast_file :  Cil_types.file) : unit =
 
 
 
-
-
-(* dump AST of the source files provided *)    		
-let ast_dump 
-    ()
-    : unit =
-
-	
-    (* enforce AST computation *)
-    Ast.compute ();
+(* our main function that works on the project we created *)
+let ast_manipulation_main 
+  ()
+  : unit = 
 
     (* get Cil AST *)
     let file = Ast.get () in
@@ -563,6 +556,31 @@ let ast_dump
 	  Ubersparkvbridge_print.output "Starting AST dump...\n";
     Printer.pp_file Format.std_formatter file;
 		Ubersparkvbridge_print.output "AST dump Done.\n";
+
+  ()
+;;
+
+
+
+
+(* dump AST of the source files provided *)    		
+let ast_dump 
+    ()
+    : unit =
+	
+  (* enforce AST computation *)
+  Ast.compute ();
+
+ let l_project = File.create_project_from_visitor "uberspark_ast"
+        (fun prj -> new Visitor.frama_c_copy prj) in
+    
+    Project.on l_project ast_manipulation_main ();
+
+    (* recompute CFG for value analysis *)
+    Cfg.clearFileCFG ~clear_id:false (Ast.get());
+    Cfg.computeFileCFG (Ast.get());
+
+		Ubersparkvbridge_print.output "Done with AST manipulation on project.\n";
 
 		()
 ;;
