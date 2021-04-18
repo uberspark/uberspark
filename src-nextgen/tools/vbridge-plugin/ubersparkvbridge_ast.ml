@@ -580,6 +580,10 @@ let ast_dump
     Cfg.clearFileCFG ~clear_id:false (Ast.get());
     Cfg.computeFileCFG (Ast.get());
 
+    (* set entry point for value analysis *)
+    Globals.set_entry_point "main" true;
+    !Db.Value.compute();
+
 		Ubersparkvbridge_print.output "Done with AST manipulation on project.\n";
 
 		()
