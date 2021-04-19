@@ -1,17 +1,52 @@
 
 let g_count = ref 0;;
 
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* logging related functionality *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+let log_print_string_backend
+	(p_str : string) :
+	unit =
+    Ubersparkvbridge_options.Self.result "%s" p_str;
+    ()
+;;
+
+let log_print_newline_backend
+	() :
+	unit =
+    ();
+;;
+
+
+(* initialize logging interface *)
+let initialize_logging () : unit =
+    Uberspark.Logger.log_tag := "uberspark-vbridge";
+    Uberspark.Logger.log_print_string_fn := log_print_string_backend;
+    Uberspark.Logger.log_print_newline_fn := log_print_newline_backend;
+;;
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+
+
 (* this segment is called initially and 
     for every -then when frama-c is invokved 
     each parameter processing can turn off the flag if need be so that
     subsequent -then segments do not see it
 *)
 let run () =
+    initialize_logging ();
+
     if Ubersparkvbridge_options.Start.get() then begin
         g_count := !g_count +1;
         Ubersparkvbridge_options.Start.set(false);
-        Ubersparkvbridge_print.output (Printf.sprintf "START functionality : %u" !g_count);
-        Ubersparkvbridge_print.output (Printf.sprintf "START functionality : log_level=%u" (!Uberspark.Logger.current_level));
+        Uberspark.Logger.log "START functionality : %u" !g_count;
+        Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "START functionality : log_level=%u" (!Uberspark.Logger.current_level);
         Ubersparkvbridge_ast.ast_dump ();
 
     end;
