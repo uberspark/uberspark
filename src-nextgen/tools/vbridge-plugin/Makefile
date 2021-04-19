@@ -22,6 +22,4 @@ PLUGIN_LINK_BFLAGS = -linkall
 PLUGIN_EXTRA_OPT = $(shell ocamlfind query fileutils)/fileutils.cmxa
 PLUGIN_EXTRA_OPT += $(shell ocamlfind query uberspark)/uberspark.cmxa
 
-#PLUGIN_EXTRA_OPT = /home/uberspark/.opam/4.09.0+flambda/lib/fileutils/fileutils.cmxa /home/uberspark/.opam/4.09.0+flambda/lib/uberspark/uberspark.cmxa 
-
 include $(FRAMAC_SHARE)/Makefile.dynamic
