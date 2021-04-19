@@ -71,9 +71,9 @@ let casm_extract
     (input_file : string)
     (output_file : string)
     : unit =
-		Ubersparkvbridge_print.output "Starting CASM extraction...\n";
+		Uberspark.Logger.log "Starting CASM extraction...\n";
 		ucasm_process input_file output_file;
-		Ubersparkvbridge_print.output "Done.\n";
+		Uberspark.Logger.log "Done.\n";
 		()
 
 

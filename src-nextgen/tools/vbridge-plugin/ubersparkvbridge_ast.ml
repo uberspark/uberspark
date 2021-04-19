@@ -46,18 +46,18 @@ is_sub_lval
 (* dump an annotation *)
 (*--------------------------------------------------------------------------*)
 let dump_annotation (annot : Cil_types.code_annotation) : unit =
-  Ubersparkvbridge_print.output (Printf.sprintf "dumping annotation...");
+  Uberspark.Logger.log "dumping annotation...";
 
   (*Printer.pp_code_annotation Format.std_formatter annot;*)
   match annot.annot_content with
     | AAssert (bhvnamelist, akind, pred) ->
-      Ubersparkvbridge_print.output (Printf.sprintf "assert");
+      Uberspark.Logger.log "assert";
 
     | _ ->
-      Ubersparkvbridge_print.output (Printf.sprintf "something else");
+      Uberspark.Logger.log "something else";
   ;
 
-  Ubersparkvbridge_print.output (Printf.sprintf "annotation dumped");
+  Uberspark.Logger.log "annotation dumped";
   ()
 ;;
 
@@ -92,7 +92,7 @@ class function_call_visitor (p_kf : Cil_types.kernel_function) = object (self)
     
     match stmt.skind with
       | Instr (Call (lv_opt, e, e_list, loc)) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
+        Uberspark.Logger.log "Call()";
         let l_g_int_vi = (Globals.Vars.find_from_astinfo "g_int" VGlobal) in
         let l_instr = Cil_types.Set(Cil.var l_g_int_vi, Cil.integer ~loc 1, loc) in
         let l_insert_stmt = Cil.mkStmt ~valid_sid:true (Cil_types.Instr l_instr) in
@@ -132,11 +132,11 @@ let find_function_calls
   : unit =
 
   let l_visitor = new function_call_visitor p_kf in
-  Ubersparkvbridge_print.output (Printf.sprintf "finding calls within function...");
+  Uberspark.Logger.log "finding calls within function...";
 
   ignore( Visitor.visitFramacFunction l_visitor (Kernel_function.get_definition p_kf)); 
 
-  Ubersparkvbridge_print.output (Printf.sprintf "\ndone!");
+  Uberspark.Logger.log "done!";
 
   ()
 ;;
@@ -173,9 +173,9 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
     (*Printer.pp_stmt Format.std_formatter stmt;
 
     if (Annotations.has_code_annot stmt) then begin
-      Ubersparkvbridge_print.output (Printf.sprintf "<-- STMT WITH ANNOT -->");
+      Uberspark.Logger.log "<-- STMT WITH ANNOT -->");
     end else begin
-      Ubersparkvbridge_print.output (Printf.sprintf "<-- STMT WITHOUT ANNOT -->");
+      Uberspark.Logger.log "<-- STMT WITHOUT ANNOT -->");
     end;*)
 
     Cil.DoChildren
@@ -187,7 +187,7 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
     match l_kstmt with
       | Some stmt ->
           if (Annotations.has_code_annot stmt) then begin
-            Ubersparkvbridge_print.output (Printf.sprintf "[WITH ANNOT]");
+            Uberspark.Logger.log "[WITH ANNOT]";
 
             (* remove the annotation *)
             (*let l_stmt_annot_list = Annotations.code_annot stmt in
@@ -205,12 +205,12 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
 
           end;
       | _ ->
-        Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
+        Uberspark.Logger.log "no statement for instruction, wierd!";
     ;
 
     match inst with
       | Set (lv, e, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Set()");
+        Uberspark.Logger.log "Set()";
         let l_kstmt = self#current_stmt in
         match l_kstmt with
           | Some stmt ->
@@ -218,7 +218,7 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
               (* create an annotation *)
               let l_assert = Logic_const.prel (Req, Cil.lzero(), Cil.lzero()) in
                 Annotations.add_assert l_annotation_emitter stmt l_assert;
-                Ubersparkvbridge_print.output (Printf.sprintf "Created assertion");
+                Uberspark.Logger.log "Created assertion";
 
               (* remove the annotation *)
               (*let l_stmt_annot_list = Annotations.code_annot stmt in
@@ -233,30 +233,30 @@ class mem_write_visitor (p_kf : Cil_types.kernel_function) = object (self)
               )l_stmt_annot_list;
               *)
           | _ ->
-            Ubersparkvbridge_print.output (Printf.sprintf "no statement for instruction, wierd!");
+            Uberspark.Logger.log "no statement for instruction, wierd!";
         ;
         
   
       | Call (None, e, e_list, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Call_nolv()");
+        Uberspark.Logger.log "Call_nolv()";
 
       | Call (Some lv, e, e_list, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Call()");
+        Uberspark.Logger.log "Call()";
 
       | Local_init (v, linit, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Local_init()");
+        Uberspark.Logger.log "Local_init()";
 
       | Asm (attr, asminsns, Some e_asm, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Asm()");
+        Uberspark.Logger.log "Asm()";
 
       | Asm (attr, asminsns, None, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Asm_noext()");
+        Uberspark.Logger.log "Asm_noext()";
 
       | Skip loc ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Skip()");
+        Uberspark.Logger.log "Skip()";
 
       | Code_annot (annot, loc) ->
-        Ubersparkvbridge_print.output (Printf.sprintf "Code_annot()");
+        Uberspark.Logger.log "Code_annot()";
     ;
 
     (* Note sometimes the pretty printer can try to be smart and print additional instructions
@@ -301,11 +301,11 @@ let find_memory_writes
   : unit =
 
   let l_visitor = new mem_write_visitor p_kf in
-  Ubersparkvbridge_print.output (Printf.sprintf "finding instructions within function...");
+  Uberspark.Logger.log "finding instructions within function...";
 
   ignore( Visitor.visitFramacFunction l_visitor (Kernel_function.get_definition p_kf)); 
 
-  Ubersparkvbridge_print.output (Printf.sprintf "\ndone!");
+  Uberspark.Logger.log "done!";
 
   ()
 ;;
@@ -323,7 +323,7 @@ class ast_visitor = object(self)
 
   method! vfunc (fdec : Cil_types.fundec) =
     (* fdec.svar is varinfo type as in frama-c-api/html/Cil_types.html#TYPElocation *)
-    Ubersparkvbridge_print.output (Printf.sprintf "global defined function: %s" fdec.svar.vname);
+    Uberspark.Logger.log "global defined function: %s" fdec.svar.vname;
     
     (* location is in fdec.svar.vdecl as in frama-c-api/html/Cil_types.html#TYPElocation *)
     let (p1, p2) = fdec.svar.vdecl in 
@@ -331,22 +331,22 @@ class ast_visitor = object(self)
     Filepath.pp_pos Format.std_formatter p2;
 
     (* location is a Filepath.position per frama-c-api/html/Filepath.html#TYPEposition *)
-    Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path));
-    Ubersparkvbridge_print.output (Printf.sprintf " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path));
+    Uberspark.Logger.log " --> %s" (Filepath.Normalized.to_pretty_string p1.pos_path);
+    Uberspark.Logger.log " --> %s" (Filepath.Normalized.to_pretty_string p2.pos_path);
 
     (* print number of statements in this function *)
     (* using sallstmts we need to make sure Cfg.computeCFGInfo is called; which seems to 
      be the default case: see frama-c-api/html/Cil_types.html#TYPEspec type fundec *)
-    Ubersparkvbridge_print.output (Printf.sprintf " num statements=%u" 
-      (List.length fdec.sallstmts));
-    Ubersparkvbridge_print.output (Printf.sprintf " num statements from block=%u" 
-      (List.length fdec.sbody.bstmts));
+    Uberspark.Logger.log " num statements=%u" 
+      (List.length fdec.sallstmts);
+    Uberspark.Logger.log " num statements from block=%u" 
+      (List.length fdec.sbody.bstmts);
 
 
     (* print out function contract if any *)    
     try
       let l_kf = Globals.Functions.get fdec.svar in
-      Ubersparkvbridge_print.output (Printf.sprintf "got global function definition");
+      Uberspark.Logger.log "got global function definition";
 
       (* find first statement in the function *)
       let (l_first_stmt : Cil_types.stmt) = Kernel_function.find_first_stmt l_kf in
@@ -362,23 +362,23 @@ class ast_visitor = object(self)
         (* if populate is true then default function contract is generated: frama-c-api/html/Annotations.html *)
         let (l_kf_spec : Cil_types.funspec) = Annotations.funspec ~populate:false l_kf in
 
-        Ubersparkvbridge_print.output (Printf.sprintf "function has specification: len(spec_behavior) = %u"  
-          (List.length l_kf_spec.spec_behavior));
+        Uberspark.Logger.log "function has specification: len(spec_behavior) = %u"  
+          (List.length l_kf_spec.spec_behavior);
 
         let default_bhv = Cil.find_default_behavior l_kf_spec in
         match default_bhv with
         | None ->
-            Ubersparkvbridge_print.output (Printf.sprintf "no default behavior");
+            Uberspark.Logger.log "no default behavior";
         | Some (b : Cil_types.behavior) ->
-            Ubersparkvbridge_print.output (Printf.sprintf "there is a default behavior, behavior name=%s" b.b_name);
+            Uberspark.Logger.log "there is a default behavior, behavior name=%s" b.b_name;
 
         ;
       with Annotations.No_funspec _ ->
-        Ubersparkvbridge_print.output (Printf.sprintf "function has no specifications!");
+        Uberspark.Logger.log "function has no specifications!";
       ;  
 
     with Not_found -> 
-        Ubersparkvbridge_print.output (Printf.sprintf "no such global function!");
+        Uberspark.Logger.log "no such global function!";
     ;
 
 
@@ -411,9 +411,9 @@ let ast_manipulation_main
     (* pretty print AST *)
     (* see frama-c-api/html/Printer_api.S_pp.html for Printer.pp_file documentation *)
     (*Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);*)
-	  Ubersparkvbridge_print.output "Starting AST dump...\n";
+	  Uberspark.Logger.log "Starting AST dump...";
     Printer.pp_file Format.std_formatter file;
-		Ubersparkvbridge_print.output "AST dump Done.\n";
+		Uberspark.Logger.log "AST dump Done.";
 
     ast_get_global_function_definitions file;
 
@@ -422,10 +422,10 @@ let ast_manipulation_main
     (* for each function find memory writes *)
     (*Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
       if (Kernel_function.is_definition l_kf) then begin
-        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
+        Uberspark.Logger.log "kernel function (definition): %s" (Kernel_function.get_name l_kf));
         find_memory_writes l_kf;
       end else begin
-        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
+        Uberspark.Logger.log "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
       end;
 
       ()
@@ -437,10 +437,10 @@ let ast_manipulation_main
     (* for each function find function calls *)
     Globals.Functions.iter ( fun (l_kf : Cil_types.kernel_function) : unit ->
       if (Kernel_function.is_definition l_kf) then begin
-        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (definition): %s" (Kernel_function.get_name l_kf));
+        Uberspark.Logger.log "kernel function (definition): %s" (Kernel_function.get_name l_kf);
         find_function_calls l_kf;
       end else begin
-        Ubersparkvbridge_print.output (Printf.sprintf "kernel function (only declaration): %s" (Kernel_function.get_name l_kf));
+        Uberspark.Logger.log "kernel function (only declaration): %s" (Kernel_function.get_name l_kf);
       end;
 
       ()
@@ -449,7 +449,7 @@ let ast_manipulation_main
 
     (* iterate through global variables: frama-c-api/html/Globals.Vars.html *)
     Globals.Vars.iter ( fun (l_varinfo: Cil_types.varinfo) (l_initinfo: Cil_types.initinfo) : unit ->
-      Ubersparkvbridge_print.output (Printf.sprintf "global variable: %s" l_varinfo.vname);
+      Uberspark.Logger.log "global variable: %s" l_varinfo.vname;
       ()
     );
 
@@ -523,7 +523,7 @@ let ast_manipulation_main
       Dfun_or_pred (l_var_logic_info  , Cil_datatype.Location.unknown) in
   
     Annotations.add_global l_annotation_emitter l_dfun_or_pred;
-    Ubersparkvbridge_print.output (Printf.sprintf "Created global annotation");
+    Uberspark.Logger.log "Created global annotation";
 
 
 
@@ -535,7 +535,7 @@ let ast_manipulation_main
              : unit ->
       match l_global_annot with
         | Dfun_or_pred (p_logic_info, p_location) ->
-            Ubersparkvbridge_print.output (Printf.sprintf "global annotation Dfun_or_pred");
+            Uberspark.Logger.log "global annotation Dfun_or_pred";
             (* debug print the logic_info node: frama-c-api/html/Cil_types_debug.html *)
             (* note: constant ids in the dump can be generated 
             programmatically via new_raw_id as described in frama-c-api/html/Cil_const.html *)
@@ -543,7 +543,7 @@ let ast_manipulation_main
             Cil_types_debug.pp_logic_body Format.std_formatter p_logic_info.l_body;
 
         | _ ->
-          Ubersparkvbridge_print.output (Printf.sprintf "uncategorized global annotation");
+          Uberspark.Logger.log "uncategorized global annotation";
       ;
 
       ()
@@ -553,9 +553,9 @@ let ast_manipulation_main
     (* pretty print AST *)
     (* see frama-c-api/html/Printer_api.S_pp.html for Printer.pp_file documentation *)
     (*Kernel.CodeOutput.output (fun fmt -> Printer.pp_file fmt file);*)
-	  Ubersparkvbridge_print.output "Starting AST dump...\n";
+	  Uberspark.Logger.log "Starting AST dump...";
     Printer.pp_file Format.std_formatter file;
-		Ubersparkvbridge_print.output "AST dump Done.\n";
+		Uberspark.Logger.log "AST dump Done.";
 
   ()
 ;;
@@ -584,7 +584,7 @@ let ast_dump
     Globals.set_entry_point "main" true;
     !Db.Value.compute();
 
-		Ubersparkvbridge_print.output "Done with AST manipulation on project.\n";
+		Uberspark.Logger.log "Done with AST manipulation on project.";
 
 		()
 ;;

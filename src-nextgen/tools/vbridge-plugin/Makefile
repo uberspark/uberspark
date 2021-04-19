@@ -4,7 +4,6 @@ FRAMAC_LIBDIR := $(shell frama-c-config -print-libpath)
 PLUGIN_NAME = Ubersparkvbridge
 
 PLUGIN_CMO = ubersparkvbridge_options 
-PLUGIN_CMO += ubersparkvbridge_print 
 PLUGIN_CMO += ubersparkvbridge_casm 
 PLUGIN_CMO += ubersparkvbridge_ast 
 PLUGIN_CMO += ubersparkvbridge_main
