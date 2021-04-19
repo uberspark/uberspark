@@ -49,34 +49,11 @@ let error_level = ref (ord Error);;
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-
-let logf name lvl =
-	let do_log str =
-		if (ord lvl) <= !current_level then
-			begin
-				if (ord lvl) == (ord Stdoutput) then
-					begin
-						print_string str;
-						print_newline ();							
-					end
-				else
-					begin
-						print_string "[";
-						print_string name;
-						print_string "] ";
-						if (ord lvl) == !error_level then
-								print_string "[ERROR] ";
-						print_endline str;
-						if (ord lvl) == !error_level then
-								print_endline " ";
-					end
-			end
-	in
-		Printf.ksprintf do_log
-;;
-
-
-let log ?(tag = "uberspark") ?(stag = "") ?(lvl = Info) ?(crlf = true)=
+let log 
+	?(tag = "uberspark") 
+	?(stag = "") 
+	?(lvl = Info) 
+	?(crlf = true) =
 	let do_log str =
 			if (ord lvl) <= !current_level then
 					begin

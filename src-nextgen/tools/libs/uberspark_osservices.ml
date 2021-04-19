@@ -254,8 +254,8 @@ open Sys
 				let info =
     			try Unix.stat uobj_binary_filename
     			with Unix.Unix_error (e, _, _) ->
-						Uberspark_logger.logf log_tag Uberspark_logger.Error "no %s: %s!" uobj_binary_filename
+						Uberspark_logger.log ~lvl:Uberspark_logger.Error "no %s: %s!" uobj_binary_filename
 								(Unix.error_message e);
       			exit 1 in
-		   		Uberspark_logger.logf log_tag Uberspark_logger.Info "filesize=%u" info.Unix.st_size;
+		   		Uberspark_logger.log ~lvl:Uberspark_logger.Info "filesize=%u" info.Unix.st_size;
 *)
