@@ -98,8 +98,12 @@ endef
 ###### default target
 
 .PHONY: all
-all: build_bootstrap docs_html frontend vbridge-plugin
+all: all_but_docs docs_html
 	@echo uberspark toolkit build success!
+
+.PHONY: all_but_docs
+all_but_docs: build_bootstrap frontend vbridge-plugin
+	@echo uberspark libs, front-end and vbridge-plugin build success!
 
 
 ###### build bootstrap target
@@ -149,10 +153,12 @@ generate_buildtruss: provision-bridge-common-infrastructure buildcontainer-amd64
 .PHONY: docs_html
 docs_html: build_bootstrap
 	$(call docker_run,  $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-docs.mk -w docs_html, $(shell id -u), $(shell id -g))
+	@echo successfully built HTML docs!
 
 .PHONY: docs_pdf
 docs_pdf: build_bootstrap
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-docs.mk -w docs_pdf, $(shell id -u), $(shell id -g))
+	@echo successfully built PDF docs!
 
 
 ###### libraries targets
