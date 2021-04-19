@@ -7,5 +7,5 @@ PLUGIN_OFLAGS = -linkall
 PLUGIN_BFLAGS = -linkall
 PLUGIN_LINK_OFLAGS = -linkall 
 PLUGIN_LINK_BFLAGS = -linkall 
-PLUGIN_EXTRA_OPT = /home/uberspark/.opam/4.09.0+flambda/lib/uberspark/uberspark.cmxa
+PLUGIN_EXTRA_OPT = /home/uberspark/.opam/4.09.0+flambda/lib/fileutils/fileutils.cmxa /home/uberspark/.opam/4.09.0+flambda/lib/uberspark/uberspark.cmxa 
 include $(FRAMAC_SHARE)/Makefile.dynamic
