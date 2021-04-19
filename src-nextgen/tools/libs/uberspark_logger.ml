@@ -42,6 +42,7 @@ let current_level = ref (ord Info);;
 
 let error_level = ref (ord Error);;
 
+let log_tag = ref "uberspark";;
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -64,7 +65,7 @@ let log_print_newline_default_backend
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
-(* variable definitions *)
+(* variable definitions for the above backend functions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 let log_print_string_fn = ref log_print_string_default_backend;;
@@ -80,7 +81,7 @@ let log_print_newline_fn = ref log_print_newline_default_backend;;
 (*---------------------------------------------------------------------------*)
 
 let log 
-	?(tag = "uberspark") 
+	?(tag = !log_tag) 
 	?(stag = "") 
 	?(lvl = Info) 
 	?(crlf = true) =
