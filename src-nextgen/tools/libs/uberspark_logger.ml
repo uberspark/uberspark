@@ -56,11 +56,6 @@ let log_print_string_default_backend
 		print_string p_str;
 ;;
 
-let log_print_newline_default_backend
-	() :
-	unit =
-		print_newline ();
-;;
 
 
 (*---------------------------------------------------------------------------*)
@@ -69,7 +64,6 @@ let log_print_newline_default_backend
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 let log_print_string_fn = ref log_print_string_default_backend;;
-let log_print_newline_fn = ref log_print_newline_default_backend;;
 
 
 
@@ -85,48 +79,45 @@ let log
 	?(stag = "") 
 	?(lvl = Info) 
 	?(crlf = true) =
-	let do_log str =
-			if (ord lvl) <= !current_level then
-					begin
-						if (ord lvl) == (ord Stdoutput) then
-							begin
-								!log_print_string_fn str;
-								if crlf then
-									!log_print_newline_fn ();							
-							end
-						else
-							begin
-								if (tag <> "") then
-									begin
-										!log_print_string_fn tag;
-										!log_print_string_fn " >> ";
-									end
-								;
-								
-								if (stag <> "") then
-									begin
-										!log_print_string_fn "[";
-										!log_print_string_fn stag;
-										!log_print_string_fn "] ";
-									end
-								;
-								
-								if (ord lvl) == !error_level then
-										!log_print_string_fn "ERROR: ";
-								
-								!log_print_string_fn str;
-								if crlf then
-									!log_print_newline_fn ();
 
-								if (ord lvl) == !error_level then
-									begin
-										!log_print_string_fn " ";
-										if crlf then
-											!log_print_newline_fn ();
-									end
-								;
-							end
-					end
-	in
+	let do_log (p_str: string) =
+		(* only print if the given log lvl is less than or equal to current_level *)
+		if (ord lvl) <= !current_level then	begin
+			let l_prefix = ref "" in
+			let l_suffix = ref "" in 
+			
+			(* add primary tag if one is present *)
+			if tag <> "" then begin
+				l_prefix := !l_prefix ^ tag ^ " >> ";
+			end;
+
+			(* add secondary tag if one is present *)
+			if stag <> "" then begin
+				l_prefix := !l_prefix ^ "[" ^ stag ^ "] ";
+			end;
+
+			(* add line-feed if specified *)
+			if crlf then begin
+				l_suffix := "\n";
+			end;
+
+			(* we have special handling for stdoutput and error *)
+			match lvl with
+				| Stdoutput -> (* no prefix, but append suffix *)
+					!log_print_string_fn (p_str ^ !l_suffix);
+
+				| Error -> (* append an error before the string *)
+					!log_print_string_fn (!l_prefix ^ "ERROR: " ^ p_str ^ !l_suffix);
+
+				| _ -> (* any other is just prefix, string, following by suffix *)
+					!log_print_string_fn (!l_prefix ^ p_str ^ !l_suffix);
+
+			;
+			
+		end;
+		()
+	in 
+
+
 	Printf.ksprintf do_log
 ;;	

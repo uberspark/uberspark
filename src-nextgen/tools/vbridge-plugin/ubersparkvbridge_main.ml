@@ -15,18 +15,10 @@ let log_print_string_backend
     ()
 ;;
 
-let log_print_newline_backend
-	() :
-	unit =
-    ();
-;;
-
-
 (* initialize logging interface *)
 let initialize_logging () : unit =
-    Uberspark.Logger.log_tag := "uberspark-vbridge";
+    Uberspark.Logger.log_tag := ""; (* no tag, since frama-c will print out plugin short name *)
     Uberspark.Logger.log_print_string_fn := log_print_string_backend;
-    Uberspark.Logger.log_print_newline_fn := log_print_newline_backend;
 ;;
 
 (*---------------------------------------------------------------------------*)
