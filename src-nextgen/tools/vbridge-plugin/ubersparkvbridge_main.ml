@@ -19,6 +19,7 @@ let log_print_string_backend
 let initialize_logging () : unit =
     Uberspark.Logger.log_tag := ""; (* no tag, since frama-c will print out plugin short name *)
     Uberspark.Logger.log_print_string_fn := log_print_string_backend;
+    Uberspark.Logger.current_level := Ubersparkvbridge_options.LogLevel.get();
 ;;
 
 (*---------------------------------------------------------------------------*)
@@ -48,17 +49,17 @@ let run () =
         g_count := !g_count +1;
 
         Ubersparkvbridge_options.Finish.set(false);
-        Ubersparkvbridge_print.output (Printf.sprintf "FINISH functionality : %u" !g_count);
+        Uberspark.Logger.log "FINISH functionality : %u" !g_count;
 
     end;
 
 
     if Ubersparkvbridge_options.Casm.get() then begin
         Ubersparkvbridge_options.Casm.set(false);
-        Ubersparkvbridge_print.output (Printf.sprintf "Calling CASM extractor...");
+        Uberspark.Logger.log "Calling CASM extractor...";
         let input_file = Ubersparkvbridge_options.CasmInputFile.get() in
         let output_file = Ubersparkvbridge_options.CasmOutputFile.get() in
-            Ubersparkvbridge_print.output (Printf.sprintf "CASM inputfile=%s, outputfile=%s" input_file output_file);
+            Uberspark.Logger.log "CASM inputfile=%s, outputfile=%s" input_file output_file;
             Ubersparkvbridge_casm.casm_extract input_file output_file;
     end;
 

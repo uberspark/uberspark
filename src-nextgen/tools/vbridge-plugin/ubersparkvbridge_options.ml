@@ -66,3 +66,13 @@ module CasmOutputFile = Self.String
 		let arg_name = "output-file"
 		let help = "CASM Assembly output file"
 	end)
+
+
+module LogLevel = Self.Int
+    (struct
+		let option_name = "-log-level"
+		let default = 4 (* Uberspark.Logger.Info *)
+		let arg_name = "logging-level"
+		let help = "Output logging level"
+    end)
+
