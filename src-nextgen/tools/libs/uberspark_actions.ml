@@ -995,6 +995,7 @@ let invoke_bridge
 		l_retval := l_bridge_object#invoke 
 					~context_path_builddir:!l_build_dir 
 				[
+					("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark_logger.current_level));
 					("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark_namespace.get_namespace_root_dir_prefix ()));
 					("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_staging_dir_prefix);
 					("@@BRIDGE_CMD@@", (Uberspark_bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
