@@ -45,6 +45,36 @@ let error_level = ref (ord Error);;
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+(* default log printing backend functions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+let log_print_string_default_backend
+	(p_str : string) :
+	unit =
+		print_string p_str;
+;;
+
+let log_print_newline_default_backend
+	() :
+	unit =
+		print_newline ();
+;;
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* variable definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+let log_print_string_fn = ref log_print_string_default_backend;;
+let log_print_newline_fn = ref log_print_newline_default_backend;;
+
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -59,39 +89,39 @@ let log
 					begin
 						if (ord lvl) == (ord Stdoutput) then
 							begin
-								print_string str;
+								!log_print_string_fn str;
 								if crlf then
-									print_newline ();							
+									!log_print_newline_fn ();							
 							end
 						else
 							begin
 								if (tag <> "") then
 									begin
-										print_string tag;
-										print_string " >> ";
+										!log_print_string_fn tag;
+										!log_print_string_fn " >> ";
 									end
 								;
 								
 								if (stag <> "") then
 									begin
-										print_string "[";
-										print_string stag;
-										print_string "] ";
+										!log_print_string_fn "[";
+										!log_print_string_fn stag;
+										!log_print_string_fn "] ";
 									end
 								;
 								
 								if (ord lvl) == !error_level then
-										print_string "ERROR: ";
+										!log_print_string_fn "ERROR: ";
 								
-								print_string str;
+								!log_print_string_fn str;
 								if crlf then
-									print_newline ();
+									!log_print_newline_fn ();
 
 								if (ord lvl) == !error_level then
 									begin
-										print_string " ";
+										!log_print_string_fn " ";
 										if crlf then
-											print_newline ();
+											!log_print_newline_fn ();
 									end
 								;
 							end
