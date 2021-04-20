@@ -89,6 +89,26 @@ all: prep_sources
 	cd $(BUILDDIR) && $(OCAMLFIND) install $(UBERSPARK_LIB_NAME) META $(UBERSPARK_LIB_INSTALL) $(UBERSPARK_LIB_INSTALL_CMX) $(UBERSPARK_LIB_INSTALL_CMI) $(UBERSPARK_LIB_INSTALL_CMT) $(UBERSPARK_LIB_INSTALL_CMTI)  
 
 
+#.PHONY: all
+#all: unit_test
+
+
+.PHONY: unit_test
+unit_test: prep_base
+	$(CP) -f unit_test/*.ml $(BUILDDIR)/.
+	$(CP) -f unit_test/*.mli $(BUILDDIR)/.
+	$(CP) -f unit_test/META $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(OCAMLC) -no-alias-deps -c mylib.ml
+	cd $(BUILDDIR) && $(OCAMLC) -c -no-alias-deps mylib__*.mli mylib__*.ml
+	cd $(BUILDDIR) && $(OCAMLC) -a -bin-annot mylib*.cmo -o mylib.cma
+	cd $(BUILDDIR) && $(OCAMLOPT) -no-alias-deps -c mylib.ml
+	cd $(BUILDDIR) && $(OCAMLOPT) -c -no-alias-deps mylib__*.mli mylib__*.ml
+	cd $(BUILDDIR) && $(OCAMLOPT) -a -bin-annot mylib*.cmx -o mylib.cmxa
+	cd $(BUILDDIR) && $(OCAMLFIND) remove mylib 
+	cd $(BUILDDIR) && $(OCAMLFIND) install mylib META mylib.a mylib.cma mylib.cmxa mylib*.cmo mylib*.cmx mylib*.cmi   
+	cd $(BUILDDIR) && $(OCAMLOPT) -ccopt -static -package mylib -linkpkg -o test test.ml
+
+
 .PHONY: clean
 clean:
 	$(RM) -rf $(BUILDDIR)
