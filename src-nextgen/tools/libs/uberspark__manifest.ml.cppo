@@ -110,7 +110,7 @@ let get_json_for_manifest
 		retval := true;
 
 	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;
 		retval := false;
 	;
 
@@ -351,44 +351,44 @@ let write_to_file
 (*---------------------------------------------------------------------------*)
 
 module Bridge = struct
-	#include "uberspark_manifest_bridge.ml"
+	#include "uberspark__manifest_bridge.ml"
 end
 
 
 module Config = struct
-	#include "uberspark_manifest_config.ml"
+	#include "uberspark__manifest_config.ml"
 end
 
 
 module Installation = struct
-	#include "uberspark_manifest_installation.ml"
+	#include "uberspark__manifest_installation.ml"
 end
 
 
 module Sentinel = struct
-	#include "uberspark_manifest_sentinel.ml"
+	#include "uberspark__manifest_sentinel.ml"
 end
 
 module Loader = struct
-	#include "uberspark_manifest_loader.ml"
+	#include "uberspark__manifest_loader.ml"
 end
 
 module Uobj = struct
-	#include "uberspark_manifest_uobj.ml"
+	#include "uberspark__manifest_uobj.ml"
 end
 
 
 module Uobjcoll = struct
-	#include "uberspark_manifest_uobjcoll.ml"
+	#include "uberspark__manifest_uobjcoll.ml"
 end
 
 
 module Uobjslt = struct
-	#include "uberspark_manifest_uobjslt.ml"
+	#include "uberspark__manifest_uobjslt.ml"
 end
 
 module Uobjrtl = struct
-	#include "uberspark_manifest_uobjrtl.ml"
+	#include "uberspark__manifest_uobjrtl.ml"
 end
 
 
@@ -467,7 +467,7 @@ let manifest_file_to_uberspark_manifest_var
 		retval := manifest_json_to_uberspark_manifest_var mf_json uberspark_manifest_var;
 
 	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;
 		retval := false;
 	;
 
@@ -481,7 +481,7 @@ let uberspark_manifest_var_copy
 	(output : uberspark_manifest_var_t)
 	(input : uberspark_manifest_var_t)
 	: unit = 
-	Uberspark_logger.log ~lvl:Uberspark_logger.Debug "copy constructor: %s" input.manifest.namespace;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "copy constructor: %s" input.manifest.namespace;
 
 	output.manifest.namespace <- input.manifest.namespace; 
 	output.manifest.version_min <- input.manifest.version_min; 

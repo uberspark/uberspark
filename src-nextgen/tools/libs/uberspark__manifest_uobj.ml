@@ -48,7 +48,7 @@ type json_node_uberspark_uobj_t =
 	mutable intra_uobjcoll_callees : (string * string list) list;
 	mutable inter_uobjcoll_callees : (string * string list) list;
 	mutable legacy_callees : (string * string list) list;
-	mutable sections : (string * Defs.Basedefs.section_info_t) list;
+	mutable sections : (string * Uberspark.Defs.Basedefs.section_info_t) list;
 	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
 };;
 *)
@@ -65,7 +65,7 @@ type json_node_uberspark_uobj_t =
 	mutable intra_uobjcoll_callees : (string * string list) list;
 	mutable inter_uobjcoll_callees : (string * string list) list;
 	mutable legacy_callees : (string * string list) list;
-	mutable sections : (string * Defs.Basedefs.section_info_t) list;
+	mutable sections : (string * Uberspark.Defs.Basedefs.section_info_t) list;
 	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
 };;
 
@@ -343,10 +343,10 @@ let json_node_uberspark_uobj_legacy_callees_to_var
 (*--------------------------------------------------------------------------*)
 let json_node_uberspark_uobj_sections_to_var
 	(mf_json : Yojson.Basic.t)
-	: bool *  ((string * Defs.Basedefs.section_info_t) list) =
+	: bool *  ((string * Uberspark.Defs.Basedefs.section_info_t) list) =
 
 	let retval = ref true in
-	let sections_assoc_list : (string * Defs.Basedefs.section_info_t) list ref = ref [] in
+	let sections_assoc_list : (string * Uberspark.Defs.Basedefs.section_info_t) list ref = ref [] in
 
 
 	try
@@ -358,7 +358,7 @@ let json_node_uberspark_uobj_sections_to_var
 						let uobj_sections_list = Yojson.Basic.Util.to_list uobj_sections_json in
 							
 							List.iter (fun x ->
-								let section_entry : Defs.Basedefs.section_info_t = 
+								let section_entry : Uberspark.Defs.Basedefs.section_info_t = 
 								{ 
 									fn_name = "";	
 									f_subsection_list = [];	

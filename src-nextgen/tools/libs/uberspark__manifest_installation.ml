@@ -41,7 +41,7 @@ let json_node_uberspark_installation_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_installation = mf_json |> member Uberspark_namespace.namespace_installation_mf_node_type_tag in
+			let json_node_uberspark_installation = mf_json |> member Uberspark.Namespace.namespace_installation_mf_node_type_tag in
 		
 			if(json_node_uberspark_installation <> `Null) then
 				begin

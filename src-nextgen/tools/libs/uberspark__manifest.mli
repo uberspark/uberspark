@@ -231,7 +231,7 @@ module Uobj : sig
     mutable intra_uobjcoll_callees : (string * string list) list;
     mutable inter_uobjcoll_callees : (string * string list) list;
     mutable legacy_callees : (string * string list) list;
-    mutable sections : (string * Defs.Basedefs.section_info_t) list;
+    mutable sections : (string * Uberspark.Defs.Basedefs.section_info_t) list;
   	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
 *)
@@ -249,7 +249,7 @@ module Uobj : sig
     mutable intra_uobjcoll_callees : (string * string list) list;
     mutable inter_uobjcoll_callees : (string * string list) list;
     mutable legacy_callees : (string * string list) list;
-    mutable sections : (string * Defs.Basedefs.section_info_t) list;
+    mutable sections : (string * Uberspark.Defs.Basedefs.section_info_t) list;
   	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
   }
 
@@ -261,7 +261,7 @@ module Uobj : sig
   val json_node_uberspark_uobj_intrauobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_interuobjcoll_callees_to_var :  Yojson.Basic.t -> bool *  ((string * string list) list)
   val json_node_uberspark_uobj_legacy_callees_to_var : Yojson.Basic.t -> bool *  ((string * string list) list)
-  val json_node_uberspark_uobj_sections_to_var :  Yojson.Basic.t -> bool *  ((string * Defs.Basedefs.section_info_t) list)
+  val json_node_uberspark_uobj_sections_to_var :  Yojson.Basic.t -> bool *  ((string * Uberspark.Defs.Basedefs.section_info_t) list)
   val json_node_uberspark_uobj_uobjrtl_to_var : Yojson.Basic.t -> bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
   val json_node_uberspark_uobj_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_t -> bool
 

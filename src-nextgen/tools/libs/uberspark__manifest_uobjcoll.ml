@@ -242,7 +242,7 @@ let json_node_uberspark_uobjcoll_publicmethods_to_var
 							public_method = public_method;
 							sentinel_type_list = sentinel_type_list;
 						} in
-						let canonical_pm_name_key = (Uberspark_namespace.get_variable_name_prefix_from_ns uobj_namespace) ^ "__" ^ public_method in
+						let canonical_pm_name_key = (Uberspark.Namespace.get_variable_name_prefix_from_ns uobj_namespace) ^ "__" ^ public_method in
 						uobjcoll_publicmethods_assoc_list := !uobjcoll_publicmethods_assoc_list @ [ (canonical_pm_name_key, entry) ];
 
 					) pm_name_assoc_list;

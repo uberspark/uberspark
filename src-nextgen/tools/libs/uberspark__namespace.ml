@@ -154,7 +154,7 @@ let get_namespace_root_dir_prefix
 	end;
 
 	(* always try and return the absolute path, fall back to namespace_root_dir in case of error *)
-	let (rval, rabspath) = Uberspark_osservices.abspath !namespace_root_dir_prefix in
+	let (rval, rabspath) = Uberspark.Osservices.abspath !namespace_root_dir_prefix in
 	if (rval) then begin
 		(rabspath)
 	end else begin
@@ -168,7 +168,7 @@ let get_namespace_staging_dir_prefix
 
 	let symlink_path = 	((get_namespace_root_dir_prefix ()) ^ "/" ^ namespace_root ^ "/" ^ namespace_staging ^ 
 		"/" ^ namespace_staging_current) in
-	(Uberspark_osservices.readlink symlink_path)
+	(Uberspark.Osservices.readlink symlink_path)
 ;;
 
 

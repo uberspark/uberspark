@@ -4,11 +4,12 @@
 module Defs = Uberspark__defs
 module Logger = Uberspark__logger
 module Osservices = Uberspark__osservices
+module Utils = Uberspark__utils
+module Namespace = Uberspark__namespace
 
-(*module Namespace = Uberspark_namespace
+(*
 module Config = Uberspark_config
 module Staging = Uberspark_staging
-module Utils = Uberspark_utils
 module Bridge = Uberspark_bridge
 module Manifest = Uberspark_manifest
 module Binary = Uberspark_binary
