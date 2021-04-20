@@ -99,7 +99,7 @@ open Sys
 	(* execute a process and print its output if verbose is set to true *)
 	(* return the error code of the process and the output as a list of lines *)
 	let exec_process_withlog 
-		?(log_lvl = Uberspark_logger.Info)
+		?(log_lvl = Uberspark.Logger.Info)
 		?(stag = "")
 		(p_name : string)
 		(cmdline : string list)
@@ -119,7 +119,7 @@ open Sys
 	    try
 	      while true do
 					p_singleoutputline := input_line in_channel;
-					Uberspark_logger.log ~lvl:log_lvl ~stag:stag "%s" !p_singleoutputline;
+					Uberspark.Logger.log ~lvl:log_lvl ~stag:stag "%s" !p_singleoutputline;
 					p_output :=  !p_output @ [ p_singleoutputline ]; 
 		    done
 	    with End_of_file -> 
@@ -146,9 +146,9 @@ open Sys
 		let path_filename = (Filename.basename path) in
 		let path_dirname = (Filename.dirname path) in
 		let retval_abspath = ref "" in
-		(*Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_dirname=%s" path_dirname;
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "path_filename=%s" path_filename;
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "curdir=%s" curdir;
+		(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "path_dirname=%s" path_dirname;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "path_filename=%s" path_filename;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "curdir=%s" curdir;
 		*)
 			try
 				Unix.chdir path_dirname;
@@ -164,7 +164,7 @@ open Sys
 				Unix.chdir curdir;
 				
 			with Unix.Unix_error (ecode, fname, fparam) -> 
-				Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" (Unix.error_message ecode);
+				Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" (Unix.error_message ecode);
 				retval := false;
 			;
 	
@@ -254,8 +254,8 @@ open Sys
 				let info =
     			try Unix.stat uobj_binary_filename
     			with Unix.Unix_error (e, _, _) ->
-						Uberspark_logger.log ~lvl:Uberspark_logger.Error "no %s: %s!" uobj_binary_filename
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "no %s: %s!" uobj_binary_filename
 								(Unix.error_message e);
       			exit 1 in
-		   		Uberspark_logger.log ~lvl:Uberspark_logger.Info "filesize=%u" info.Unix.st_size;
+		   		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "filesize=%u" info.Unix.st_size;
 *)
