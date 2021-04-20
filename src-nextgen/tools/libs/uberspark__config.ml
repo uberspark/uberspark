@@ -24,7 +24,7 @@ open Yojson
 (*---------------------------------------------------------------------------*)
 
 (* uberspark-manifest json node variable *)
-let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
+let json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_manifest_t = {
 	namespace = "uberspark/config";
 	version_min = "any";
 	version_max = "any";
@@ -36,7 +36,7 @@ let json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_man
 (*------------------------------------------------------------------------*)
 (* configuration settings variable *)	
 (*------------------------------------------------------------------------*)
-let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t = {
+let json_node_uberspark_config_var: Uberspark.Manifest.Config.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -65,7 +65,7 @@ let json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspar
 };;
 
 
-let saved_json_node_uberspark_config_var: Uberspark_manifest.Config.json_node_uberspark_config_t = {
+let saved_json_node_uberspark_config_var: Uberspark.Manifest.Config.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -168,7 +168,7 @@ let load_from_json
 	let retval = ref false in
 
 	let rval_json_node_uberspark_config_var = 
-		Uberspark_manifest.Config.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
+		Uberspark.Manifest.Config.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
 	if rval_json_node_uberspark_config_var then begin
 		retval := true;
 	end else begin
@@ -184,21 +184,21 @@ let load
 	: bool =
 
 	let retval = ref false in
-	let config_ns_json_path = (Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
-		Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ 
-		Uberspark_namespace.namespace_root_mf_filename in
-	Uberspark_logger.log "config_ns_json_path=%s" config_ns_json_path;
+	let config_ns_json_path = (Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
+		Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config ^ "/" ^ 
+		Uberspark.Namespace.namespace_root_mf_filename in
+	Uberspark.Logger.log "config_ns_json_path=%s" config_ns_json_path;
 
 	(* grab uberspark-config json node into var *)
 	(*let (rval, l_json_node_uberspark_manifest, json_node_uberspark_config) = 
-		Uberspark_manifest.get_json_for_manifest_node_type config_ns_json_path 
-		Uberspark_namespace.namespace_config_mf_node_type_tag in*)
+		Uberspark.Manifest.get_json_for_manifest_node_type config_ns_json_path 
+		Uberspark.Namespace.namespace_config_mf_node_type_tag in*)
 
-	let (rval, mf_json) = 	Uberspark_manifest.get_json_for_manifest config_ns_json_path in
+	let (rval, mf_json) = 	Uberspark.Manifest.get_json_for_manifest config_ns_json_path in
 
 		if rval then begin
 
-			let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
+			let rval = Uberspark.Manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
 
 			if rval then begin
 					retval := load_from_json mf_json; 
@@ -287,10 +287,10 @@ let dump_to_file
 	(output_config_filename : string)
 	=
 
-	Uberspark_manifest.write_to_file output_config_filename 
+	Uberspark.Manifest.write_to_file output_config_filename 
 		[
-			(Uberspark_manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
-			(Uberspark_manifest.Config.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
+			(Uberspark.Manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
+			(Uberspark.Manifest.Config.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
 		];
 ;;
 
@@ -314,8 +314,8 @@ let create_from_file
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = ((Uberspark_namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config) in
-	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
+	let output_config_dir = ((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config) in
+	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark.Namespace.namespace_config_mf_filename in
 
 
 	try
@@ -324,7 +324,7 @@ let create_from_file
 		retval := load_from_json config_json;
 
 	with Yojson.Json_error s -> 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "%s" s;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;
 		retval := false;
 	;
 					
@@ -346,8 +346,8 @@ let create_from_existing_ns
 	let retval = ref false in
 	let reterrmsg = ref "" in
 
-	let output_config_dir = (!Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ output_config_name) in
-	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
+	let output_config_dir = (!Uberspark.Namespace.namespace_root_dir ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config ^ "/" ^ output_config_name) in
+	let output_config_json_pathname = output_config_dir ^ "/" ^ Uberspark.Namespace.namespace_config_mf_filename in
 
 	(* load the input config *)
 	load input_config_name;
@@ -374,14 +374,14 @@ let switch
 	: bool =
 	
 	let retval = ref true in
-	let config_ns_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name in 
-	let config_ns_current_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ Uberspark_namespace.namespace_config_current in
-	let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
+	let config_ns_path = !Uberspark.Namespace.namespace_root_dir ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config ^ "/" ^ config_name in 
+	let config_ns_current_path = !Uberspark.Namespace.namespace_root_dir ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config ^ "/" ^ Uberspark.Namespace.namespace_config_current in
+	let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark.Namespace.namespace_config_mf_filename in
 
 	Uberspark_osservices.file_remove config_ns_current_path;
 	Uberspark_osservices.symlink true config_ns_path config_ns_current_path;
 	
-	load Uberspark_namespace.namespace_config_current;
+	load Uberspark.Namespace.namespace_config_current;
 
 	(!retval)
 ;;
@@ -393,17 +393,17 @@ let remove
 	: bool =
 	let retval = ref false in
 	
-	if (config_name <> Uberspark_namespace.namespace_config_default) then 
+	if (config_name <> Uberspark.Namespace.namespace_config_default) then 
 		begin
-			let config_ns_path = !Uberspark_namespace.namespace_root_dir ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_config ^ "/" ^ config_name in 
-			let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark_namespace.namespace_config_mf_filename in
+			let config_ns_path = !Uberspark.Namespace.namespace_root_dir ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_config ^ "/" ^ config_name in 
+			let config_ns_json_path = config_ns_path ^ "/" ^ Uberspark.Namespace.namespace_config_mf_filename in
 			
 			Uberspark_osservices.file_remove config_ns_json_path;
 			Uberspark_osservices.rmdir config_ns_path;
 
 			(* check if we removed the current config, if so reload the default *)
 			if config_hdr.name = config_name then
-				ignore(switch Uberspark_namespace.namespace_config_default);
+				ignore(switch Uberspark.Namespace.namespace_config_default);
 			;
 
 			retval := true;
