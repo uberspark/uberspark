@@ -15,7 +15,7 @@
 (****************************************************************************)
 (* interfaces *)
 (****************************************************************************)
-val hashtbl_keys : (int, Defs.Basedefs.section_info_t) Hashtbl.t ->  int list
+val hashtbl_keys : (int, Uberspark.Defs.Basedefs.section_info_t) Hashtbl.t ->  int list
 
 
 (****************************************************************************)
@@ -45,10 +45,10 @@ module Uobj : sig
     string ->
     int ->
     int ->
-    (string * Defs.Basedefs.section_info_t) list ->
+    (string * Uberspark.Defs.Basedefs.section_info_t) list ->
     unit
 
-  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) -> unit 
+  val generate_src_publicmethods_info : string -> string -> ((string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) -> unit 
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit
   val generate_src_interuobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit 
   val generate_src_legacy_callees_info : string -> (string, string list) Hashtbl.t -> unit 
@@ -60,16 +60,16 @@ module Uobj : sig
 	  string ->
     slt_codegen_info_t list ->
     string ->
-    (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ->
+    (string * Uberspark.Defs.Basedefs.slt_indirect_xfer_table_info_t) list ->
     string ->
    bool
 
-  val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> unit
-  val generate_top_level_include_header : string -> ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ->  unit
+  val generate_linker_script : string -> int -> int -> (string * Uberspark.Defs.Basedefs.section_info_t) list -> unit
+  val generate_top_level_include_header : string -> ((string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ->  unit
   
   val generate_header_file :
     string ->
-    ((string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list) ->
+    ((string * Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list) ->
     unit
 
 
@@ -107,13 +107,13 @@ type sentinel_info_t =
   
   val generate_uobj_binary_image_section_mapping : string ->
     ?output_banner : string ->
-    Defs.Basedefs.uobjinfo_t list -> bool
+    Uberspark.Defs.Basedefs.uobjinfo_t list -> bool
 
-val generate_linker_script : string -> int -> int -> (string * Defs.Basedefs.section_info_t) list -> bool
+val generate_linker_script : string -> int -> int -> (string * Uberspark.Defs.Basedefs.section_info_t) list -> bool
 val generate_top_level_include_header : 
     string ->
     bool ->
-    ((string * Uberspark_manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) list) ->
+    ((string * Uberspark.Manifest.Uobjcoll.json_node_uberspark_uobjcoll_configdefs_t) list) ->
     unit
     
 

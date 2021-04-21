@@ -10,6 +10,7 @@ module Manifest = Uberspark__manifest
 module Config = Uberspark__config
 module Staging = Uberspark__staging
 module Bridge = Uberspark__bridge
+module Codegen = Uberspark__codegen
 
 (*
 module Binary = Uberspark_binary

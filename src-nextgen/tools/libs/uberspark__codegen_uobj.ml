@@ -32,7 +32,7 @@ let generate_src_binhdr
     (uobj_namespace : string)
     (load_addr : int)
     (image_size : int)
-    (sections_list : (string * Defs.Basedefs.section_info_t) list)
+    (sections_list : (string * Uberspark.Defs.Basedefs.section_info_t) list)
     : unit = 
 
     (* open binary header source file *)
@@ -57,11 +57,11 @@ let generate_src_binhdr
             (*prot*)
             Printf.fprintf oc "\n\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
             (*size*)
-            Printf.fprintf oc "\n\t\t0x%08xULL," Uberspark_config.json_node_uberspark_config_var.binary_uobj_default_section_size; 
+            Printf.fprintf oc "\n\t\t0x%08xULL," Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size; 
             (*aligned_at*)
-            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
             (*pad_to*)
-            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark_config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
             (*addr_start*)
             Printf.fprintf oc "\n\t\t0x%08xUL," load_addr; 
             (*addr_file*)
@@ -84,7 +84,7 @@ let generate_src_binhdr
     (* generate uobj section definitions *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_binhdr_section_info\") )) usbinformat_section_info_t uobj_binsections [] = {";
 
-    List.iter (fun (key, (section_info:Defs.Basedefs.section_info_t)) ->  
+    List.iter (fun (key, (section_info:Uberspark.Defs.Basedefs.section_info_t)) ->  
         Printf.fprintf oc "\n\t{"; 
         (* type *)
         Printf.fprintf oc "\n\t\t0x%08xUL," (section_info.usbinformat.f_type); 
@@ -124,7 +124,7 @@ let generate_src_binhdr
 let generate_src_publicmethods_info 
     (output_filename : string)
     (namespace : string)
-    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t))
+    (publicmethods_hashtbl : ((string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t))
     : unit = 
 
     (* open public methods info source file *)
@@ -152,7 +152,7 @@ let generate_src_publicmethods_info
     (* generate public methods info *)
     Printf.fprintf oc "\n__attribute__(( section(\".uobj_pminfo\") )) usbinformat_uobj_publicmethod_info_t uobj_pminfo [] = {";
 
-        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
+        Hashtbl.iter (fun key (pm_info:Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n\t{"; 
 
             (* callee name *)
@@ -395,7 +395,7 @@ let generate_src_legacy_callees_info
             Printf.fprintf oc "\n\t{"; 
             
             (* namespace *)
-            Printf.fprintf oc "\n\t\t\"%s\"," (Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_legacy); 
+            Printf.fprintf oc "\n\t\t\"%s\"," (Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_legacy); 
             (* cname *)
             Printf.fprintf oc "\n\t\t\"%s\"," callee_name; 
             (* slt_ordinal *)
@@ -445,7 +445,7 @@ let generate_slt
 	(slt_addr_def_template : string)
     (callees_slt_codegen_info_list : slt_codegen_info_t list)
     (code_section_name : string)
-    (callees_slt_xfer_table_assoc_list : (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list)
+    (callees_slt_xfer_table_assoc_list : (string * Uberspark.Defs.Basedefs.slt_indirect_xfer_table_info_t) list)
     (data_section_name : string)
    : bool	= 
         let oc = open_out output_filename in
@@ -461,7 +461,7 @@ let generate_slt
         Printf.fprintf oc "\n.section %s" data_section_name;
 
         (* iterate over callees_slt_xfer_table_assoc_list and plug in the xfer table data *)
-        List.iter ( fun ( (throwaway: string), (xfer_table_info : Defs.Basedefs.slt_indirect_xfer_table_info_t)) ->
+        List.iter ( fun ( (throwaway: string), (xfer_table_info : Uberspark.Defs.Basedefs.slt_indirect_xfer_table_info_t)) ->
             let tdata_0 = Str.global_replace (Str.regexp "UOBJSLT_CONST_ADDRESS") 
                 (Printf.sprintf "0x%08x" xfer_table_info.fn_address) slt_addr_def_template in
             Printf.fprintf oc "\n%s" (tdata_0);
@@ -518,7 +518,7 @@ let generate_linker_script
     (output_filename : string)
     (binary_origin : int)
     (binary_size : int)
-    (sections_list : (string * Defs.Basedefs.section_info_t) list ) 
+    (sections_list : (string * Uberspark.Defs.Basedefs.section_info_t) list ) 
     : unit   =
 
     let oc = open_out output_filename in
@@ -532,7 +532,7 @@ let generate_linker_script
         Printf.fprintf oc "\nMEMORY";
         Printf.fprintf oc "\n{";
 
-		List.iter (fun (key, (x:Defs.Basedefs.section_info_t))  ->
+		List.iter (fun (key, (x:Uberspark.Defs.Basedefs.section_info_t))  ->
                 (* new section memory *)
                 Printf.fprintf oc "\n %s (%s) : ORIGIN = 0x%08x, LENGTH = 0x%08x"
                     ("mem_" ^ x.fn_name)
@@ -610,7 +610,7 @@ let generate_linker_script
 (*--------------------------------------------------------------------------*)
 let generate_top_level_include_header 
     (output_filename : string)
-    (publicmethods_hashtbl : ((string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ) 
+    (publicmethods_hashtbl : ((string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) ) 
     : unit   =
 
     let oc = open_out output_filename in
@@ -624,7 +624,7 @@ let generate_top_level_include_header
         Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 
         (* define externs *)
-        Hashtbl.iter (fun key (pm_info:Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
+        Hashtbl.iter (fun key (pm_info:Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ->  
             Printf.fprintf oc "\n"; 
             Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.fn_decl_return_value) (pm_info.fn_name) (pm_info.fn_decl_parameters); 
             Printf.fprintf oc "\n"; 
@@ -646,7 +646,7 @@ let generate_top_level_include_header
 (*--------------------------------------------------------------------------*)
 let generate_header_file 
     (output_filename : string)
-    (publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list ) 
+    (publicmethods_assoc_list : (string * Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list ) 
     : unit   =
 
     let oc = open_out output_filename in
@@ -660,7 +660,7 @@ let generate_header_file
         Printf.fprintf oc "\n#ifndef __ASSEMBLY__";
 
         (* define externs *)
-       	List.iter ( fun ( (pm_name:string), (pm_info: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ) -> 
+       	List.iter ( fun ( (pm_name:string), (pm_info: Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) ) -> 
             Printf.fprintf oc "\n"; 
             Printf.fprintf oc "\nextern %s UBERSPARK_UOBJ_PUBLICMETHOD(%s) %s;" (pm_info.fn_decl_return_value) (pm_info.fn_name) (pm_info.fn_decl_parameters); 
             Printf.fprintf oc "\n"; 

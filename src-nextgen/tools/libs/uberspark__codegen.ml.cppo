@@ -15,7 +15,7 @@
 (****************************************************************************)
 (* interfaces *)
 (****************************************************************************)
-let hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t ) 
+let hashtbl_keys (h : (int, Uberspark.Defs.Basedefs.section_info_t) Hashtbl.t ) 
 	: int list = 
 	Hashtbl.fold (fun key _ l -> key :: l) h []
 ;;
@@ -28,11 +28,11 @@ let hashtbl_keys (h : (int, Defs.Basedefs.section_info_t) Hashtbl.t )
 
 module Uobj =
 struct
-#include "uberspark_codegen_uobj.ml"
+#include "uberspark__codegen_uobj.ml"
 end
 
 module Uobjcoll =
 struct
-#include "uberspark_codegen_uobjcoll.ml"
+#include "uberspark__codegen_uobjcoll.ml"
 end
 
