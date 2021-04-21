@@ -27,10 +27,7 @@ UBERSPARK_LIB_SOURCES += uberspark__actions.ml
 UBERSPARK_LIB_SOURCES += uberspark__loader.ml
 UBERSPARK_LIB_SOURCES += uberspark__uobj.ml
 UBERSPARK_LIB_SOURCES += uberspark__uobjcoll.ml
-#UBERSPARK_LIB_SOURCES += uberspark__binary.ml
-
-#UBERSPARK_LIB_SOURCES += uberspark.ml
-
+UBERSPARK_LIB_SOURCES += uberspark__binary.ml
 
 UBERSPARK_LIB_SOURCES_MLI := $(patsubst %.ml, %.mli, $(UBERSPARK_LIB_SOURCES))
 
@@ -43,7 +40,6 @@ UBERSPARK_LIB_INSTALL_CMTI := $(patsubst %.ml, %.cmti, $(UBERSPARK_LIB_SOURCES))
 UBERSPARK_LIB_INSTALL := $(UBERSPARK_LIB_NAME).a 
 UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).cma 
 UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).cmxa
-#UBERSPARK_LIB_INSTALL += $(UBERSPARK_LIB_NAME).mli
 
 ###### targets
 
@@ -76,8 +72,6 @@ prep_sources: prep_base prep_defs
 	$(CP) uberspark__codegen.ml.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark__codegen.ml.cppo -o uberspark__codegen.ml
 	$(CP) -f *.mli $(BUILDDIR)/.
-	#$(CP) uberspark.mli.cppo $(BUILDDIR)/.
-	#cd $(BUILDDIR) && $(CPPO) -n uberspark.mli.cppo -o uberspark.mli
 	$(CP) -f ./META $(BUILDDIR)/.
 
 
