@@ -27,12 +27,12 @@ open Yojson
 
 module Container =
 struct
-#include "uberspark_bridge_container.ml"
+#include "uberspark__bridge_container.ml"
 end
 
 module Native =
 struct
-#include "uberspark_bridge_native.ml"
+#include "uberspark__bridge_native.ml"
 end
 
 
@@ -48,19 +48,19 @@ let dump
 	?(bridge_exectype = "container")
 	(output_directory : string)
 	=
-	let src_bridge_json_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
-			Uberspark_namespace.namespace_root_mf_filename in
-	let dst_json_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
-	let src_bridge_container_filename = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
-			"/" ^ Uberspark_namespace.namespace_bridge_container_filename in
-	let dst_container_filename = output_directory ^ "/" ^ Uberspark_namespace.namespace_bridge_container_filename in
+	let src_bridge_json_filename = (Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ bridge_ns_path ^ "/" ^
+			Uberspark.Namespace.namespace_root_mf_filename in
+	let dst_json_filename = output_directory ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename in
+	let src_bridge_container_filename = (Uberspark.Namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ bridge_ns_path ^ 
+			"/" ^ Uberspark.Namespace.namespace_bridge_container_filename in
+	let dst_container_filename = output_directory ^ "/" ^ Uberspark.Namespace.namespace_bridge_container_filename in
 	
 	(* copy json file *)
-	Uberspark_osservices.file_copy src_bridge_json_filename dst_json_filename;
+	Uberspark.Osservices.file_copy src_bridge_json_filename dst_json_filename;
 
 	(* if container, then dump container file as well *)
 	if(bridge_exectype = "container") then
-		Uberspark_osservices.file_copy src_bridge_container_filename dst_container_filename;
+		Uberspark.Osservices.file_copy src_bridge_container_filename dst_container_filename;
 	;
 
 	()
@@ -70,10 +70,10 @@ let dump
 let remove
 	(bridge_ns_path : string)
 	=
-	let full_bridge_ns_path = (Uberspark_namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark_namespace.namespace_root ^ "/" ^ bridge_ns_path in
+	let full_bridge_ns_path = (Uberspark.Namespace.get_namespace_root_dir_prefix ())  ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^ bridge_ns_path in
 	
 	(* remove the path and files within *)
-	Uberspark_osservices.rmdir_recurse [ full_bridge_ns_path ];
+	Uberspark.Osservices.rmdir_recurse [ full_bridge_ns_path ];
 	()
 ;;
 
@@ -106,7 +106,7 @@ class bridge_object
 
 
 	(* uberspark-manifest json node variable *)	
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t = {
+	val json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_manifest_t = {
 		namespace = "uberspark/bridges";
 		version_min = "any";
 		version_max = "any";
@@ -114,7 +114,7 @@ class bridge_object
 	};
 
 	(* uberspark-bridge-as json node variable *)	
-	val json_node_uberspark_bridge_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t = {
+	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t = {
 		namespace = "";
 		category = "";
 		container_build_filename = "";
@@ -123,7 +123,7 @@ class bridge_object
 
 
 	method get_json_node_uberspark_bridge_var 
-		: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t =
+		: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t =
 		(json_node_uberspark_bridge_var)
 	;
 
@@ -134,7 +134,7 @@ class bridge_object
 
 		let retval = ref false in
 
-		let rval_json_node_uberspark_bridge_var = Uberspark_manifest.Bridge.json_node_uberspark_bridge_to_var  
+		let rval_json_node_uberspark_bridge_var = Uberspark.Manifest.Bridge.json_node_uberspark_bridge_to_var  
 			mf_json json_node_uberspark_bridge_var in
 
 		if rval_json_node_uberspark_bridge_var then begin
@@ -150,13 +150,13 @@ class bridge_object
 		(json_file : string)
 		: bool =
 		let retval = ref false in
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "loading bridge settings from file: %s" json_file;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "loading bridge settings from file: %s" json_file;
 
-		let (rval, mf_json) = Uberspark_manifest.get_json_for_manifest json_file in
+		let (rval, mf_json) = Uberspark.Manifest.get_json_for_manifest json_file in
 
 			if rval then begin
 
-				let rval = Uberspark_manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
+				let rval = Uberspark.Manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
 
 				if rval then begin
 						retval := self#load_from_json mf_json; 
@@ -177,11 +177,11 @@ class bridge_object
 		(bridge_ns : string)
 		: bool =
 		let l_retval = ref true in
-		let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		let bridge_ns_json_path = (Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
 			bridge_ns ^ "/" ^
-			Uberspark_namespace.namespace_root_mf_filename in
+			Uberspark.Namespace.namespace_root_mf_filename in
 			
-			if (Str.string_match (Str.regexp_string (Uberspark_namespace.namespace_root ^ "/" ^ Uberspark_namespace.namespace_bridge ^ "/")) bridge_ns 0) then begin
+			if (Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_bridge ^ "/")) bridge_ns 0) then begin
 				l_retval := self#load_from_file bridge_ns_json_path;
 			end else begin
 				json_node_uberspark_bridge_var.namespace <- bridge_ns;
@@ -195,12 +195,12 @@ class bridge_object
 	method store_to_file 
 		(json_file : string)
 		: bool =
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "storing bridge settings to file: %s" json_file;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "storing bridge settings to file: %s" json_file;
 
-		Uberspark_manifest.write_to_file json_file 
+		Uberspark.Manifest.write_to_file json_file 
 			[
-				(Uberspark_manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
-				(Uberspark_manifest.Bridge.json_node_uberspark_bridge_var_to_jsonstr json_node_uberspark_bridge_var);
+				(Uberspark.Manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
+				(Uberspark.Manifest.Bridge.json_node_uberspark_bridge_var_to_jsonstr json_node_uberspark_bridge_var);
 			];
 
 		(true)
@@ -212,11 +212,11 @@ class bridge_object
 		: bool =
 		let retval = ref false in 
 		let bridge_ns = json_node_uberspark_bridge_var.namespace in
-		let bridge_ns_json_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
-		let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^ Uberspark_namespace.namespace_root_mf_filename in
+		let bridge_ns_json_path = (Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
+		let bridge_ns_json_filename = bridge_ns_json_path ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename in
 
 		(* make the namespace directory *)
-		Uberspark_osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
+		Uberspark.Osservices.mkdir ~parent:true bridge_ns_json_path (`Octal 0o0777);
 
 		retval := self#store_to_file bridge_ns_json_filename;
 
@@ -225,7 +225,7 @@ class bridge_object
 			begin
 				let input_bridge_dockerfile = json_node_uberspark_bridge_var.container_build_filename in 
 				let output_bridge_dockerfile = bridge_ns_json_path ^ "/uberspark-bridge.Dockerfile" in 
-					Uberspark_osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
+					Uberspark.Osservices.file_copy input_bridge_dockerfile output_bridge_dockerfile;
 			end
 		;
 
@@ -242,14 +242,14 @@ class bridge_object
 		if json_node_uberspark_bridge_var.category = "container" then
 			begin
 				let bridge_ns = json_node_uberspark_bridge_var.namespace in
-				let bridge_container_path = (Uberspark_namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
+				let bridge_container_path = (Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ bridge_ns in
 
-				Uberspark_logger.log "building bridge: %s" bridge_ns;
+				Uberspark.Logger.log "building bridge: %s" bridge_ns;
 
 				if (Container.build_image bridge_container_path bridge_ns) == 0 then begin	
 					retval := true;
 				end else begin
-					Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not build bridge!"; 
+					Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not build bridge!"; 
 					retval := false;
 				end
 				;
@@ -257,7 +257,7 @@ class bridge_object
 			end
 		else
 			begin
-				Uberspark_logger.log ~lvl:Uberspark_logger.Warn "ignoring build command for 'native' bridge";
+				Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "ignoring build command for 'native' bridge";
 				retval := true;
 			end
 		;
@@ -300,7 +300,7 @@ class bridge_object
 		end done;
 
 		
-		Uberspark_logger.log ~lvl:Uberspark_logger.Debug "d_cmd=%s" !d_cmd;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "d_cmd=%s" !d_cmd;
 
 		(* construct bridge namespace *)
 		let bridge_ns = json_node_uberspark_bridge_var.namespace in
@@ -362,136 +362,136 @@ let initialize_from_config ()
 	let retval = ref false in
 
 	(* handle cc-bridge *)	
-	if Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace = "" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "cc_bridge is unspecified";
+	if Uberspark.Config.json_node_uberspark_config_var.cc_bridge_namespace = "" then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (cc_bridge#load Uberspark_config.json_node_uberspark_config_var.cc_bridge_namespace) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load cc_bridge settings!";
+	if not (cc_bridge#load Uberspark.Config.json_node_uberspark_config_var.cc_bridge_namespace) then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load cc_bridge settings!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "loaded cc_bridge settings";
+		Uberspark.Logger.log "loaded cc_bridge settings";
 		retval := true;
 	end;
 
 	if not (cc_bridge#build ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build cc_bridge!";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build cc_bridge!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "cc_bridge build success";
+		Uberspark.Logger.log "cc_bridge build success";
 		retval := true;
 	end;
 
 	(* handle as-bridge *)	
-	if Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace = "" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "as_bridge is unspecified";
+	if Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace = "" then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (as_bridge#load Uberspark_config.json_node_uberspark_config_var.as_bridge_namespace) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load as_bridge settings!";
+	if not (as_bridge#load Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace) then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load as_bridge settings!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "loaded as_bridge settings";
+		Uberspark.Logger.log "loaded as_bridge settings";
 		retval := true;
 	end;
 
 	if not (as_bridge#build ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build as_bridge!";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build as_bridge!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "as_bridge build success";
+		Uberspark.Logger.log "as_bridge build success";
 		retval := true;
 	end;
 
 
 	(* handle casm as-bridge *)	
-	if Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace = "" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "casm as_bridge is unspecified";
+	if Uberspark.Config.json_node_uberspark_config_var.casm_bridge_namespace = "" then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "casm as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (casm_bridge#load Uberspark_config.json_node_uberspark_config_var.casm_bridge_namespace) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load casm as_bridge settings!";
+	if not (casm_bridge#load Uberspark.Config.json_node_uberspark_config_var.casm_bridge_namespace) then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load casm as_bridge settings!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "loaded casm as_bridge settings";
+		Uberspark.Logger.log "loaded casm as_bridge settings";
 		retval := true;
 	end;
 
 	if not (casm_bridge#build ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build casm as_bridge!";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build casm as_bridge!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "casm as_bridge build success";
+		Uberspark.Logger.log "casm as_bridge build success";
 		retval := true;
 	end;
 
 
 
 	(* handle ld-bridge *)	
-	if Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace = "" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "ld_bridge is unspecified";
+	if Uberspark.Config.json_node_uberspark_config_var.ld_bridge_namespace = "" then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "ld_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (ld_bridge#load Uberspark_config.json_node_uberspark_config_var.ld_bridge_namespace) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load ld_bridge settings!";
+	if not (ld_bridge#load Uberspark.Config.json_node_uberspark_config_var.ld_bridge_namespace) then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load ld_bridge settings!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "loaded ld_bridge settings";
+		Uberspark.Logger.log "loaded ld_bridge settings";
 		retval := true;
 	end;
 
 	if not (ld_bridge#build ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build ld_bridge!";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build ld_bridge!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "ld_bridge build success";
+		Uberspark.Logger.log "ld_bridge build success";
 		retval := true;
 	end;
 
 
 	(* handle uberspark vf-bridge *)	
-	if Uberspark_config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace = "" then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "uberspark vf_bridge is unspecified";
+	if Uberspark.Config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace = "" then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "uberspark vf_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (vf_bridge#load Uberspark_config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to load uberspark vf_bridge settings!";
+	if not (vf_bridge#load Uberspark.Config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace) then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load uberspark vf_bridge settings!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "loaded uberspark vf_bridge settings";
+		Uberspark.Logger.log "loaded uberspark vf_bridge settings";
 		retval := true;
 	end;
 
 	if not (vf_bridge#build ()) then begin
-		Uberspark_logger.log ~lvl:Uberspark_logger.Error "unable to build uberspark vf_bridge!";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build uberspark vf_bridge!";
 		(!retval)
 	end else 
 
 	let dummy = 0 in begin
-		Uberspark_logger.log "uberspark vf_bridge build success";
+		Uberspark.Logger.log "uberspark vf_bridge build success";
 		retval := true;
 	end;
 

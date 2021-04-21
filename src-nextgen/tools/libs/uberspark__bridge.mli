@@ -61,10 +61,10 @@ val bridge_parameter_to_string :
 class bridge_object :
 object
 
-	val json_node_uberspark_manifest_var: Uberspark_manifest.json_node_uberspark_manifest_t 
-	val json_node_uberspark_bridge_var: Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
+	val json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_manifest_t 
+	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t
 	
-	method get_json_node_uberspark_bridge_var : Uberspark_manifest.Bridge.json_node_uberspark_bridge_t
+	method get_json_node_uberspark_bridge_var : Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t
 	method load_from_json : Yojson.Basic.json ->  bool
 	method load_from_file : string -> bool
 	method load : string -> bool

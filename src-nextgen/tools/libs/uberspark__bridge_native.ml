@@ -20,7 +20,7 @@ let run_shell_command
         cmdline := !cmdline @ [ !revised_d_cmd ];
 
  
-        let (r_exitcode, r_signal, _) = Uberspark_osservices.exec_process_withlog 
+        let (r_exitcode, r_signal, _) = Uberspark.Osservices.exec_process_withlog 
                 ~stag:"sh" "sh" !cmdline in
 		(r_exitcode)
 ;;

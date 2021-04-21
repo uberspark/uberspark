@@ -20,8 +20,8 @@ UBERSPARK_LIB_SOURCES += uberspark__utils.ml
 UBERSPARK_LIB_SOURCES += uberspark__namespace.ml
 UBERSPARK_LIB_SOURCES += uberspark__manifest.ml
 UBERSPARK_LIB_SOURCES += uberspark__config.ml
-#UBERSPARK_LIB_SOURCES += uberspark_staging.ml
-#UBERSPARK_LIB_SOURCES += uberspark_bridge.ml
+UBERSPARK_LIB_SOURCES += uberspark__staging.ml
+UBERSPARK_LIB_SOURCES += uberspark__bridge.ml
 #UBERSPARK_LIB_SOURCES += uberspark_codegen.ml
 #UBERSPARK_LIB_SOURCES += uberspark_actions.ml
 #UBERSPARK_LIB_SOURCES += uberspark_loader.ml
@@ -71,8 +71,8 @@ prep_sources: prep_base prep_defs
 	$(CP) -f *.ml $(BUILDDIR)/.
 	$(CP) uberspark__manifest.ml.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark__manifest.ml.cppo -o uberspark__manifest.ml
-	$(CP) uberspark_bridge.ml.cppo $(BUILDDIR)/.
-	cd $(BUILDDIR) && $(CPPO) -n uberspark_bridge.ml.cppo -o uberspark_bridge.ml
+	$(CP) uberspark__bridge.ml.cppo $(BUILDDIR)/.
+	cd $(BUILDDIR) && $(CPPO) -n uberspark__bridge.ml.cppo -o uberspark__bridge.ml
 	$(CP) uberspark_codegen.ml.cppo $(BUILDDIR)/.
 	cd $(BUILDDIR) && $(CPPO) -n uberspark_codegen.ml.cppo -o uberspark_codegen.ml
 	$(CP) -f *.mli $(BUILDDIR)/.
