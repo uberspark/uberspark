@@ -15,8 +15,8 @@ let help_msg = "output a warm welcome message to the user"
 
 module Self = Plugin.Register
     (struct
-        let name = "hello world"
-        let shortname = "hello"
+        let name = "uberSpark verification bridge plugin"
+        let shortname = "uberspark-vbridge"
         let help = help_msg
     end)
 
@@ -66,3 +66,13 @@ module CasmOutputFile = Self.String
 		let arg_name = "output-file"
 		let help = "CASM Assembly output file"
 	end)
+
+
+module LogLevel = Self.Int
+    (struct
+		let option_name = "-log-level"
+		let default = 4 (* Uberspark.Logger.Info *)
+		let arg_name = "logging-level"
+		let help = "Output logging level"
+    end)
+

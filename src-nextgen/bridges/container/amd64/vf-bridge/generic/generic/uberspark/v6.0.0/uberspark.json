@@ -26,7 +26,7 @@
 				vararray_bridge_include_dirs=$(echo $var_bridge_include_dirs | tr \" \" \"\\n\") &&
 				for include_dir_name in $vararray_bridge_include_dirs; do include_string=\"${include_string} ${include_prefix}${include_dir_name}\"; done &&
 				echo \"include_string=$include_string\" &&
-				frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -cpp-extra-args=\"$include_string\" @@BRIDGE_INPUT_FILES@@ -hstart -then -val -then -hfinish
+				frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -cpp-extra-args=\"$include_string\" @@BRIDGE_INPUT_FILES@@ -log-level @@BRIDGE_LOG_LEVEL@@ -then -hstart -then-last -hfinish
 			"
 		] 
 

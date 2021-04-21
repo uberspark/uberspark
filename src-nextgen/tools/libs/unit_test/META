@@ -1,0 +1,5 @@
+version="1.0"
+description="uberspark base library unit-test"
+archive(byte)="mylib.cma"
+archive(native)="mylib.cmxa"
+plugin(byte)="mylib.cma"
