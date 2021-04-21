@@ -246,6 +246,18 @@ extern void _impl__casm__teq_imm_r2(uint32_t value);
 extern void _impl__casm__teq_eq_imm_r3(uint32_t value);
 extern void _impl__casm__tst_imm_r9(uint32_t value);
 
+////// macros to call a casm function from within another casm function
+#define __casm__jmp_casm(x) \
+	__builtin_annot("b "#x); \
+	x(); \
+
+#define __casm__call_casm(fn_name) \
+	__builtin_annot("bl "#fn_name" "); \
+	_impl__casm__add_imm_lr_lr(sizeof(uint32_t)); \
+	fn_name(); \
+
+//////
+
 #define CASM_FUNCCALL(fn_name, ...) (\
 	fn_name(__VA_ARGS__) \
 )
