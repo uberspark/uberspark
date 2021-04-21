@@ -11,10 +11,8 @@ module Config = Uberspark__config
 module Staging = Uberspark__staging
 module Bridge = Uberspark__bridge
 module Codegen = Uberspark__codegen
-
-(*
-module Binary = Uberspark_binary
-module Loader = Uberspark_loader
-module Uobj = Uberspark_uobj
-module Uobjcoll = Uberspark_uobjcoll
-*)
+module Actions = Uberspark__actions
+module Loader = Uberspark__loader
+module Uobj = Uberspark__uobj
+module Uobjcoll = Uberspark__uobjcoll
+module Binary = Uberspark__binary

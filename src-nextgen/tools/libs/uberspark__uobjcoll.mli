@@ -9,12 +9,12 @@ val install_h_files_ns : ?context_path_builddir:string -> unit
 
 val initialize_common_operation_context :
 	string ->
-	Defs.Basedefs.target_def_t ->
+	Uberspark.Defs.Basedefs.target_def_t ->
 	int ->
 	bool * string
 
-val build : string -> Defs.Basedefs.target_def_t -> int -> bool
-val verify : string -> Defs.Basedefs.target_def_t -> int -> bool
+val build : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool
+val verify : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool
 
 
 val process_manifest_common : ?p_in_order:bool -> string -> string list -> bool

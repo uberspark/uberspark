@@ -11,7 +11,7 @@
 	(* generate uobj header source file *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobj_hdr_src p_uobj = 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Generating uobj hdr source...";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Generating uobj hdr source...";
 
 		(* create uobjcoll source file *)
 		let uobj_hdr_src_filename = 
@@ -102,7 +102,7 @@
 	(* generate uobj collection header source file *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_hdr_src () = 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Generating uobjcoll hdr source...";
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Generating uobjcoll hdr source...";
 
 			(* create uobjcoll source file *)
 			let uobj_hfilename = 
@@ -181,7 +181,7 @@
 	(* generate uobj collection header binary *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_hdr_bin p_uobjcoll_hdr_filename = 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Generating uobjcoll hdr binary...";
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Generating uobjcoll hdr binary...";
 
 		let uobjcoll_hdr_lscript_sections = ((Hashtbl.create 32) : ((int, Ustypes.section_info_t)  Hashtbl.t)) in
 						Hashtbl.add uobjcoll_hdr_lscript_sections 0 
@@ -205,12 +205,12 @@
 			(int_of_string(Usconfig.get_default_uobjcoll_hdr_size ())) in 
 			if (status == false) then
 				begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Error "in generating uobjcoll hdr binary: %s!" p_uobjcoll_hdr_filename;
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "in generating uobjcoll hdr binary: %s!" p_uobjcoll_hdr_filename;
 						ignore(exit 1);
 				end
 			else
 				begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Info "generated uobjcoll hdr binary (%s) successfully" p_uobjcoll_hdr_filename;
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "generated uobjcoll hdr binary (%s) successfully" p_uobjcoll_hdr_filename;
 				end
 			;
 
@@ -227,14 +227,14 @@
 	(* generate binary images for a given uobj within the collection *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobj_bin_image p_uobj_id p_uobj = 
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Proceeding to generate binary for uobj '%s'..." p_uobj_id; 
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Proceeding to generate binary for uobj '%s'..." p_uobj_id; 
 			
 			(* TODO: this will be invoked as a stand-alone function from a uobj 
 			(* generate uobj header *)
 			(* use usmf_hdr_id as the uobj_name *)
 			let uobj_hdr_filename = 
 				generate_uobj_hdr_src p_uobj in
-				Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj header source file generated ('%s')" uobj_hdr_filename;
+				Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj header source file generated ('%s')" uobj_hdr_filename;
 			*)	
 
 			(* TODO: bring this in as a seperate function within usbin 
@@ -245,7 +245,7 @@
 					p_uobj#get_o_uobj_load_addr
 					p_uobj#get_o_uobj_size 
 					p_uobj#get_uobj_sections_memory_map_hashtbl_byorigin in
-				Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
+				Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj_lscript=%s\n" uobj_linker_script_filename;
 			*)	
 
 			(*	TODO: this will be done by the uobj when compiling all the source files 
@@ -257,7 +257,7 @@
 
 			(* TODO: bring this in via a bridge
 			(* link the uobj binary *)
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Proceeding to link uobj binary '%s'..."
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Proceeding to link uobj binary '%s'..."
 					p_uobj#get_o_usmf_hdr_id;
 				let uobj_libdirs_list = ref [] in
 				let uobj_libs_list = ref [] in
@@ -272,12 +272,12 @@
 						) in
 						if (pesignal == true) || (pestatus != 0) then
 							begin
-									Uberspark_logger.log ~lvl:Uberspark_logger.Error "in linking uobj binary '%s'!" p_uobj#get_o_usmf_hdr_id;
+									Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "in linking uobj binary '%s'!" p_uobj#get_o_usmf_hdr_id;
 									ignore(exit 1);
 							end
 						else
 							begin
-									Uberspark_logger.log ~lvl:Uberspark_logger.Info "Linked uobj binary '%s' successfully" p_uobj#get_o_usmf_hdr_id;
+									Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Linked uobj binary '%s' successfully" p_uobj#get_o_usmf_hdr_id;
 							end
 						;
 			*)					
@@ -291,7 +291,7 @@
 				) in
 				if (pesignal == true) || (pestatus != 0) then
 					begin
-							Uberspark_logger.log ~lvl:Uberspark_logger.Error "in generating flat-form binary for uobj!";
+							Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "in generating flat-form binary for uobj!";
 							ignore(exit 1);
 					end
 				;
@@ -306,16 +306,16 @@
 				) in
 				if (pesignal == true) || (pestatus != 0) then
 					begin
-							Uberspark_logger.log ~lvl:Uberspark_logger.Error "in building sentinel lib!";
+							Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "in building sentinel lib!";
 							ignore(exit 1);
 					end
 				else
 					begin
-							Uberspark_logger.log ~lvl:Uberspark_logger.Info "Built sentinels lib.";
+							Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Built sentinels lib.";
 					end
 				;
 			*)
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "Successfully generated binary for uobj '%s'" p_uobj_id; 
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Successfully generated binary for uobj '%s'" p_uobj_id; 
 		()
 	;;
 
@@ -325,7 +325,7 @@
 	(* generate uobj collection binary image *)
 	(*--------------------------------------------------------------------------*)
 	let generate_uobjcoll_bin_image uobjcoll_bin_image_filename = 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Proceeding to generate uobjcoll binary ('%s')..." uobjcoll_bin_image_filename;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Proceeding to generate uobjcoll binary ('%s')..." uobjcoll_bin_image_filename;
 
 
 		(* TBD: generate uobj collection info table? *)
@@ -343,7 +343,7 @@
 					end
 				else
 					begin
-						Uberspark_logger.log ~lvl:Uberspark_logger.Error "could not change to uobj directory: %s" (uobj#get_o_uobj_dir_abspathname);
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not change to uobj directory: %s" (uobj#get_o_uobj_dir_abspathname);
 						ignore (exit 1);
 					end
 				;
@@ -352,14 +352,14 @@
 
 	
 		(* debug *)
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj collection load_addr: 0x%08x" !Usuobjcollection.o_load_addr;
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj collection size: 0x%08x" !Usuobjcollection.o_size;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj collection load_addr: 0x%08x" !Usuobjcollection.o_load_addr;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj collection size: 0x%08x" !Usuobjcollection.o_size;
 
 		Hashtbl.iter (fun key uobj ->  
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj id: %s" uobj#get_o_usmf_hdr_id;
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj path: %s" uobj#get_o_uobj_dir_abspathname;
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj load_addr: 0x%08x" uobj#get_o_uobj_load_addr;
-			Uberspark_logger.log ~lvl:Uberspark_logger.Info "uobj size: 0x%08x" uobj#get_o_uobj_size;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj id: %s" uobj#get_o_usmf_hdr_id;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj path: %s" uobj#get_o_uobj_dir_abspathname;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj load_addr: 0x%08x" uobj#get_o_uobj_load_addr;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "uobj size: 0x%08x" uobj#get_o_uobj_size;
 		) Usuobjcollection.uobj_hashtbl;
 	
 	
@@ -377,7 +377,7 @@
 
 	  Usosservices.file_concat uobjcoll_bin_image_filename !input_filename_list;
 
-		Uberspark_logger.log ~lvl:Uberspark_logger.Info "Generated uobjcoll binary ('%s') successfully!" uobjcoll_bin_image_filename;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Generated uobjcoll binary ('%s') successfully!" uobjcoll_bin_image_filename;
 
 		()
 	;;

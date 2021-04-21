@@ -24,10 +24,10 @@ UBERSPARK_LIB_SOURCES += uberspark__staging.ml
 UBERSPARK_LIB_SOURCES += uberspark__bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark__codegen.ml
 UBERSPARK_LIB_SOURCES += uberspark__actions.ml
-#UBERSPARK_LIB_SOURCES += uberspark_loader.ml
-#UBERSPARK_LIB_SOURCES += uberspark_uobj.ml
-#UBERSPARK_LIB_SOURCES += uberspark_uobjcoll.ml
-#UBERSPARK_LIB_SOURCES += uberspark_binary.ml
+UBERSPARK_LIB_SOURCES += uberspark__loader.ml
+UBERSPARK_LIB_SOURCES += uberspark__uobj.ml
+UBERSPARK_LIB_SOURCES += uberspark__uobjcoll.ml
+#UBERSPARK_LIB_SOURCES += uberspark__binary.ml
 
 #UBERSPARK_LIB_SOURCES += uberspark.ml
 

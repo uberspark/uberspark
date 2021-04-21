@@ -1,7 +1,7 @@
 type publicmethod_info_t =
 {
-	mutable f_uobjpminfo			: Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
-	mutable f_uobjinfo    			: Defs.Basedefs.uobjinfo_t;			
+	mutable f_uobjpminfo			: Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
+	mutable f_uobjinfo    			: Uberspark.Defs.Basedefs.uobjinfo_t;			
 }
 
 
@@ -11,19 +11,19 @@ type slt_info_t =
 	mutable f_intrauobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* intrauobjcoll canonical publicmethod sentinel name to sentinel address mapping *)
-	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+	mutable f_intrauobjcoll_callees_sentinel_address_hashtbl : (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 
 	(* indexed by canonical publicmethod name *)
 	mutable f_interuobjcoll_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical publicmethod sentinel name *)
-	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+	mutable f_interuobjcoll_callees_sentinel_address_hashtbl : (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 
 	(* indexed by canonical legacy callee name *)
 	mutable f_legacy_callees_sentinel_type_hashtbl : (string, string list) Hashtbl.t;
 
 	(* indexed by canonical legacy callee sentinel name *)
-	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
+	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 }
 
 
@@ -54,23 +54,23 @@ type slt_info_t =
 
 
     val d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
+      (string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
 
 
-  	val d_default_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
-  	val d_publicmethods_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
-  	val d_memorymapped_sections_list : (string * Defs.Basedefs.section_info_t) list ref 
+  	val d_default_sections_list : (string * Uberspark.Defs.Basedefs.section_info_t) list ref 
+  	val d_publicmethods_sections_list : (string * Uberspark.Defs.Basedefs.section_info_t) list ref 
+  	val d_memorymapped_sections_list : (string * Uberspark.Defs.Basedefs.section_info_t) list ref 
 
     val d_size : int ref
 
 
  	
-  	val d_mf_json_node_uberspark_uobjslt_var : Uberspark_manifest.Uobjslt.json_node_uberspark_uobjslt_t 
+  	val d_mf_json_node_uberspark_uobjslt_var : Uberspark.Manifest.Uobjslt.json_node_uberspark_uobjslt_t 
 
     
     
 
-    val d_target_def : Defs.Basedefs.target_def_t
+    val d_target_def : Uberspark.Defs.Basedefs.target_def_t
 
   	val d_slt_info : slt_info_t
     method get_d_slt_info : slt_info_t
@@ -78,13 +78,13 @@ type slt_info_t =
 
 
     (* uobj slt codegen info list for interuobjcoll callees *)
-    val d_interuobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+    val d_interuobjcoll_callees_slt_codegen_info_list : Uberspark.Codegen.Uobj.slt_codegen_info_t list ref
 
     (* uobj slt codegen info list for intrauobjcoll callees *)
-    val d_intrauobjcoll_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+    val d_intrauobjcoll_callees_slt_codegen_info_list : Uberspark.Codegen.Uobj.slt_codegen_info_t list ref
 
     (* uobj slt codegen info list for legacy callees *)
-    val d_legacy_callees_slt_codegen_info_list : Uberspark_codegen.Uobj.slt_codegen_info_t list ref
+    val d_legacy_callees_slt_codegen_info_list : Uberspark.Codegen.Uobj.slt_codegen_info_t list ref
     
 
     method get_d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
@@ -105,23 +105,23 @@ type slt_info_t =
     method get_d_path_to_mf_filename : string
     method get_d_path_ns : string
  
-    method get_d_target_def : Defs.Basedefs.target_def_t
+    method get_d_target_def : Uberspark.Defs.Basedefs.target_def_t
 
  
     method get_d_publicmethods_hashtbl :
-      (string, Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
-    method get_d_publicmethods_assoc_list : (string * Uberspark_manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list
+      (string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) Hashtbl.t
+    method get_d_publicmethods_assoc_list : (string * Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t) list
 
-  	method get_d_default_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
-	  method get_d_default_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
-  	method get_d_publicmethods_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
-	  method get_d_publicmethods_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
-  	method get_d_memorymapped_sections_list_ref : (string * Defs.Basedefs.section_info_t) list ref  
-	  method get_d_memorymapped_sections_list_val : (string * Defs.Basedefs.section_info_t) list 
+  	method get_d_default_sections_list_ref : (string * Uberspark.Defs.Basedefs.section_info_t) list ref  
+	  method get_d_default_sections_list_val : (string * Uberspark.Defs.Basedefs.section_info_t) list 
+  	method get_d_publicmethods_sections_list_ref : (string * Uberspark.Defs.Basedefs.section_info_t) list ref  
+	  method get_d_publicmethods_sections_list_val : (string * Uberspark.Defs.Basedefs.section_info_t) list 
+  	method get_d_memorymapped_sections_list_ref : (string * Uberspark.Defs.Basedefs.section_info_t) list ref  
+	  method get_d_memorymapped_sections_list_val : (string * Uberspark.Defs.Basedefs.section_info_t) list 
 
 
-  	val d_uobjrtl_hashtbl  : (string, Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t 
-	  method get_d_uobjrtl_hashtbl : (string, Uberspark_manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t
+  	val d_uobjrtl_hashtbl  : (string, Uberspark.Manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t 
+	  method get_d_uobjrtl_hashtbl : (string, Uberspark.Manifest.Uobjrtl.json_node_uberspark_uobjrtl_t)  Hashtbl.t
     
  
     method set_d_size : int -> unit
@@ -129,13 +129,13 @@ type slt_info_t =
     method set_d_alignment : int -> unit
     method set_d_uniform_size : bool -> unit
  
-    method set_d_target_def : Defs.Basedefs.target_def_t -> unit
+    method set_d_target_def : Uberspark.Defs.Basedefs.target_def_t -> unit
   
   	method prepare_sources : unit -> unit 
-  	method prepare_slt_codegen : Uberspark_codegen.Uobj.slt_codegen_info_t list ref -> 
-    (string * Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->
+  	method prepare_slt_codegen : Uberspark.Codegen.Uobj.slt_codegen_info_t list ref -> 
+    (string * Uberspark.Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref ->
     (string, string list)  Hashtbl.t ->
-		  (string, Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
+		  (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t ->
       (string, string list)  Hashtbl.t -> unit
 
 
@@ -147,7 +147,7 @@ type slt_info_t =
 
   	method overlay_config_settings : unit -> bool
 
-    method initialize : ?builddir:string -> string -> Defs.Basedefs.target_def_t -> int -> bool
+    method initialize : ?builddir:string -> string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool
  	
 
     method compile_c_files : unit -> bool
@@ -164,12 +164,12 @@ type slt_info_t =
   	method verify : unit -> bool
 
 
-  	(*val d_uobj_mf_json_nodes : Uberspark_manifest.Uobj.uobj_mf_json_nodes_t *)
+  	(*val d_uobj_mf_json_nodes : Uberspark.Manifest.Uobj.uobj_mf_json_nodes_t *)
   	(*method write_manifest : string -> bool*)
 
 
 end
 
-val create_initialize : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
-val create_initialize_and_build : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
-val create_initialize_and_verify : string -> Defs.Basedefs.target_def_t -> int -> bool * uobject option
+val create_initialize : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
+val create_initialize_and_build : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
+val create_initialize_and_verify : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
