@@ -25,9 +25,8 @@ install_createnamespace:
 	mkdir -p $(UBERSPARK_INSTALLDIR)/tools/vbridge-plugin
 	mkdir -p $(UBERSPARK_INSTALLDIR)/bridges
 	mkdir -p $(UBERSPARK_INSTALLDIR)/docs
-	mkdir -p $(UBERSPARK_INSTALLDIR)/platforms
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging
-	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/config
+	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/platforms
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/hwm
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/include
 	mkdir -p $(UBERSPARK_INSTALLDIR)/staging/loaders
@@ -56,8 +55,7 @@ install_populateamespace: install_populateamespace_include
 	cp -rf $(UBERSPARK_SRCDIR)/bridges/* $(UBERSPARK_INSTALLDIR)/bridges/
 	cp -f $(UBERSPARK_SRCDIR)/tools/vbridge-plugin/top/* $(UBERSPARK_INSTALLDIR)/tools/vbridge-plugin/.
 	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/
-	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/platforms/
-	cp -rf $(UBERSPARK_SRCDIR)/config/* $(UBERSPARK_INSTALLDIR)/staging/config/
+	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/staging/platforms/
 	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/staging/hwm/
 	cp -rf $(UBERSPARK_SRCDIR)/loaders/* $(UBERSPARK_INSTALLDIR)/staging/loaders/
 	cp -rf $(UBERSPARK_SRCDIR)/sentinels/* $(UBERSPARK_INSTALLDIR)/staging/sentinels/

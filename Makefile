@@ -214,14 +214,12 @@ install: check_wslrootdir build_bootstrap
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/docs
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/bridges
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/tools
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/platforms
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging_golden/uberspark
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark
 	cp -Rf $(USPARK_INSTALLPREPDIR)/docs/* $(USPARK_NAMESPACEROOTDIR)/docs/ 
 	cp -Rf $(USPARK_INSTALLPREPDIR)/bridges/* $(USPARK_NAMESPACEROOTDIR)/bridges/ 
 	cp -Rf $(USPARK_INSTALLPREPDIR)/tools/* $(USPARK_NAMESPACEROOTDIR)/tools/ 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/platforms/* $(USPARK_NAMESPACEROOTDIR)/platforms/ 
 	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging_golden/uberspark 
 	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark 
 	ln -sf $(USPARK_NAMESPACEROOTDIR)/staging/default $(USPARK_NAMESPACEROOTDIR)/staging/current

@@ -54,7 +54,7 @@ let initialize
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_staging_dir_prefix ());
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
-  (*if not (Uberspark.Platform.load Uberspark.Namespace.namespace_config_current) then *)
+  (*if not (Uberspark.Platform.load Uberspark.Namespace.namespace_platform_current) then *)
   if not (Uberspark.Platform.load ()) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";

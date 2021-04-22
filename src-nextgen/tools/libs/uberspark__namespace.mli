@@ -88,9 +88,9 @@ val namespace_staging_current : string
 val namespace_staging_golden : string
 val namespace_staging_default : string
 
-(* config *)
-val namespace_config : string
-val namespace_config_mf_node_type_tag : string
+(* platform *)
+val namespace_platform : string
+val namespace_platform_mf_node_type_tag : string
 
 (* bridges *)
 val namespace_bridge : string

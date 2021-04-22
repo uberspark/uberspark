@@ -89,9 +89,9 @@ let namespace_staging_current = "current";;
 let namespace_staging_golden = "staging_golden";;
 let namespace_staging_default = "default";;
 
-(* config *)
-let namespace_config = "config";;
-let namespace_config_mf_node_type_tag = "uberspark-config";;
+(* platform *)
+let namespace_platform = "platforms";;
+let namespace_platform_mf_node_type_tag = "uberspark-config";;
 
 
 (* bridges *)
