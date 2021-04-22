@@ -43,9 +43,7 @@ define USPARK_CONFIG_CONTENTS
 		"uberspark.manifest.version_min" : "$(USPARK_VERSION)",
 		"uberspark.manifest.version_max" : "$(USPARK_VERSION)",
 
-    "uberspark-installation" : {
-		"root_directory" : "$(ROOT_DIR)"
-	}
+    	"uberspark.installation.root_directory" : "$(ROOT_DIR)"
 }
 endef
 

@@ -37,19 +37,14 @@ let json_node_uberspark_installation_to_var
 	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_installation_var : json_node_uberspark_installation_t) 
 	: bool =
-	let retval = ref false in
+	let retval = ref true in
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_installation = mf_json |> member Uberspark.Namespace.namespace_installation_mf_node_type_tag in
-		
-			if(json_node_uberspark_installation <> `Null) then
-				begin
+			if (mf_json |> member "uberspark.installation.root_directory") != `Null then
+				json_node_uberspark_installation_var.root_directory <- mf_json |> member "uberspark.installation.root_directory" |> to_string;
 
-					json_node_uberspark_installation_var.root_directory <- json_node_uberspark_installation |> member "root_directory" |> to_string;
-					retval := true;
-				end
-			;
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
