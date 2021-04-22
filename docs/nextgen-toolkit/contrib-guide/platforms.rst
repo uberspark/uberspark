@@ -35,20 +35,24 @@ linker, assembler, and associated configuration options.
                 their description.
 
 
+The following shows the currently supported platforms:
+
 ..  code-block:: bash    
 
-    .
-    ├── baremetal
-    │   └── x86_32
-    │       └── grub-legacy
-    │           └── debug
-    └── os
-        └── linux
-            ├── backends
-            ├── common
-            ├── kmode
-            └── umode
+    ├── pcintel-generic
+    │   └── x86
+    │       └── 32-bit
+    │           ├── core-gen1
+    │           │   └── uberspark.json
+    │           └── core-gen4
+    │               └── uberspark.json
+    └── rpi3
+        └── armv8a
+            └── 32-bit
+                └── cortex-a53
+                    └── uberspark.json
 
+                    
 
 Uncategorized Notes
 -------------------
