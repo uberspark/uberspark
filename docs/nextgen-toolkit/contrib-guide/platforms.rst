@@ -22,7 +22,7 @@ falls within the `x86/32-bit` architecture specification.
 
 
 |uspark| Platform Definition
-============================
+----------------------------
 
 Platforms are defined via a ``uberspark.json`` manifest file which include appropriate
 platform definition nodes that allow specifying the platform CPU architecture
@@ -48,3 +48,18 @@ linker, assembler, and associated configuration options.
             ├── common
             ├── kmode
             └── umode
+
+
+Uncategorized Notes
+-------------------
+
+platform configuration rules:
+
+- devices and cpus are independent and can be part of multiple platforms
+
+connection to hardware model:
+
+``uberspark.json`` - CPU and devices we specify here should have a hardware model
+equivalent within ``hwm/`` folder and library interface in ``uobjrtl/hw``.
+
+
