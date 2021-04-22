@@ -39,11 +39,21 @@ and publicmethods in addition to other attributes. See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobj` for further details on the ``uberspark.uobj.xxx``
 manifest nodes and definitions.
 
+
+.. _cossdev-guide-create-uobjs-nsplatformdef:
+
+Specify |uobj| Namespace and Platform
+-------------------------------------
+
 The |uobj| *namespace* in our example (`uberspark/ubjcoll/generic/hello_mul/main`) has a 
 |uobjcoll| prefix (`uberspark/ubjcoll/generic/hello_mul`) followed by the name 
 of the |uobj| folder (`main`).  Here the |uobjcoll| prefix is required to start with `uberspark/uobjcoll`.
 We choose `generic/hello_mul` as our user-defined |uobjcoll| namespace suffix since ``hello_mul`` is 
 architecture agnostic. Accordingly ``platform``, ``arch``, and ``cpu`` fields are set to ``generic``.
+
+
+Specify |uobj| Sources and Public-methods
+-----------------------------------------
 
 |uobj| *sources* can be composed of a mix of C source files (``uberspark.uobj.source_c_files``), C header files (``uberspark.uobj.source_h_files``), 
 Assembly source files (``uberspark.uobj.source_asm_files``), and CASM (``uberspark.uobj.source_casm_files``).

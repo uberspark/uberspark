@@ -34,6 +34,11 @@ for interaction with legacy |coss| code, in addition to other attributes. See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the ``uberspark.uobjcoll.xxx``
 manifest nodes and definitions.
 
+.. _cossdev-guide-create-uobjcoll-nsplatformdef:
+
+|uobjcollcaps| Namespace and Platform Definition
+------------------------------------------------
+
 The |uobjcoll| *namespace* in our example (`uberspark/ubjcoll/generic/hello_mul`) is composed of
 two parts. 
 A |uobjcoll| prefix that is always is required to start with `uberspark/uobjcoll`, followed by
@@ -45,6 +50,11 @@ Accordingly |uobjcoll| *platform*, *arch*, and *cpu* fields are set to ``generic
 The *hpl* field within ``uberspark.uobjcoll.hpl`` JSON node specifies the hardware privilege level of
 the |uobjcoll|. The currently supported values are ``any`` to signify the |uobjcoll| can execute under
 any hardware privilege level.            
+
+
+
+|uobjcollcaps| |uobjs| and Public-method Definitions
+----------------------------------------------------
 
 The *uobjs* node within the ``uberspark.uobjcoll.uobjs`` manifest node, describes all the |uobjs| that are part of the
 |uobjcoll|. The |uobjs| are categorized into *master* and *templars*. 
@@ -76,6 +86,7 @@ to specify this gateway as a regular branch/call instruction.
 ..  note::  There can be multiple types of sentinel implementations in principle and the sentinel types for
             *sentinels-intrauobjcoll* can be different from that of the *publicmethods*.
             Presently only the ``call`` sentinel is supported.
+
 
 
 |uobjcollcaps| Configuration Definitions
