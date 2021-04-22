@@ -206,7 +206,7 @@ let handler_staging_remove
 
 
 (* uberspark staging config-set sub-handler *)
-(* TBD process option --from-file and integrate Uberspark.Config.load_from_file *)
+(* TBD process option --from-file and integrate Uberspark.Platform.load_from_file *)
 let handler_staging_config_set
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
@@ -232,12 +232,12 @@ let handler_staging_config_set
 
   end else begin
 
-    let rval = (Uberspark.Config.settings_set !l_setting_name !l_setting_value) in 
+    let rval = (Uberspark.Platform.settings_set !l_setting_name !l_setting_value) in 
     if rval == true then begin
       let config_ns_json_filename = (Uberspark.Namespace.get_namespace_staging_dir_prefix ())  ^ "/" ^ Uberspark.Namespace.namespace_root ^ "/" ^
         Uberspark.Namespace.namespace_config ^ "/" ^
         Uberspark.Namespace.namespace_root_mf_filename in
-      Uberspark.Config.dump_to_file config_ns_json_filename;  
+      Uberspark.Platform.dump_to_file config_ns_json_filename;  
       Uberspark.Logger.log "configuration setting '%s' set to '%s' within current configuration" !l_setting_name !l_setting_value;
       `Ok()  
     end else begin
@@ -250,7 +250,7 @@ let handler_staging_config_set
 
 
 (* uberspark staging config-get sub-handler *)
-(* TBD process option --to-file and integrate Uberspark.Config.load_from_file *)
+(* TBD process option --to-file and integrate Uberspark.Platform.load_from_file *)
 let handler_staging_config_get
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
@@ -272,7 +272,7 @@ let handler_staging_config_get
 
   end else begin
 
-    let(rval, setting_value) = Uberspark.Config.settings_get !l_setting_name in
+    let(rval, setting_value) = Uberspark.Platform.settings_get !l_setting_name in
     if rval == true then begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Stdoutput "%s" setting_value;
       `Ok()

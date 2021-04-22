@@ -155,22 +155,22 @@ class uobject
 
 
 	(* uobj binary image load address *)
-	val d_load_addr = ref Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_load_address;
+	val d_load_addr = ref Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_load_address;
 	method get_d_load_addr = !d_load_addr;
 	method set_d_load_addr load_addr = (d_load_addr := load_addr);
 	
 	(* uobj binary image size; will be overwritten with actual size using alignment if uniform_size=false  *)
-	val d_size = ref Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_size; 
+	val d_size = ref Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_size; 
 	method get_d_size = !d_size;
 	method set_d_size size = (d_size := size);
 
 	(* uobj binary image uniform size flag *)
-	val d_uniform_size = ref Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_uniform_size; 
+	val d_uniform_size = ref Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_uniform_size; 
 	method get_d_uniform_size = !d_uniform_size;
 	method set_d_uniform_size uniform_size = (d_uniform_size := uniform_size);
 
 	(* uobj binary image alignment *)
-	val d_alignment = ref Uberspark.Config.json_node_uberspark_config_var.uobj_binary_image_alignment; 
+	val d_alignment = ref Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_alignment; 
 	method get_d_alignment = !d_alignment;
 	method set_d_alignment alignment = (d_alignment := alignment);
 
@@ -414,7 +414,7 @@ class uobject
 		: bool =
 
 		(* parse, load and overlay config-settings node, if one is present *)
-		if (Uberspark.Config.load_from_json !d_mf_json) then begin
+		if (Uberspark.Platform.load_from_json !d_mf_json) then begin
 			(true) (* loaded and overlaid config-settings from uobj manifest *)
 		end else begin
 			(false) (* uobj manifest did not have config-settings specified *)
@@ -445,11 +445,11 @@ class uobject
 		(* iterate over default sections *)
 		List.iter (fun (key, (x:Uberspark.Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
-			let remainder_size = (x.usbinformat.f_size mod Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment) in
+			let remainder_size = (x.usbinformat.f_size mod Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment) in
 			let padding_size = ref 0 in
 				if remainder_size > 0 then
 					begin
-						padding_size := Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
+						padding_size := Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
 					end
 				else
 					begin
@@ -465,8 +465,8 @@ class uobject
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
 													f_size = section_size;
-													f_aligned_at = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-													f_pad_to = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 													f_addr_start = !uobj_section_load_addr; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -500,11 +500,11 @@ class uobject
 		(* iterate over manifest sections *)
 		List.iter (fun (key, (x:Uberspark.Defs.Basedefs.section_info_t))  ->
 			(* compute and round up section size to section alignment *)
-			let remainder_size = (x.usbinformat.f_size mod Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment) in
+			let remainder_size = (x.usbinformat.f_size mod Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment) in
 			let padding_size = ref 0 in
 				if remainder_size > 0 then
 					begin
-						padding_size := Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
+						padding_size := Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment - remainder_size;
 					end
 				else
 					begin
@@ -520,8 +520,8 @@ class uobject
 					usbinformat = { f_type=x.usbinformat.f_type; 
 													f_prot=0; 
 													f_size = section_size;
-													f_aligned_at = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-													f_pad_to = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+													f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 													f_addr_start = !uobj_section_load_addr; 
 													f_addr_file = 0;
 													f_reserved = 0;
@@ -555,8 +555,8 @@ class uobject
 							usbinformat = { f_type = Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_PADDING;
 															f_prot=0; 
 															f_size = (uobjsize - (!uobj_section_load_addr - uobj_load_addr));
-															f_aligned_at = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-															f_pad_to = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+															f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+															f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 															f_addr_start = !uobj_section_load_addr; 
 															f_addr_file = 0;
 															f_reserved = 0;
@@ -577,8 +577,8 @@ class uobject
 						usbinformat = { f_type = Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_PADDING;
 										f_prot=0; 
 										f_size = (self#get_d_alignment - (!uobj_section_load_addr mod self#get_d_alignment));
-										f_aligned_at = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-										f_pad_to = Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+										f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
 										f_addr_start = !uobj_section_load_addr; 
 										f_addr_file = 0;
 										f_reserved = 0;
@@ -649,9 +649,9 @@ class uobject
 		l_add_section "uobj_ssa" [ ".uobj_ssa" ] 
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_SSA
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* create sections for each public method *)
 		Hashtbl.iter (fun (public_method:string) (pm_info:Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  ->
@@ -660,9 +660,9 @@ class uobject
 			l_add_section section_name [ "." ^ section_name ]
 						Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_PMINFO
 						0 
-						Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-						Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-						Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+						Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+						Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+						Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		) self#get_d_publicmethods_hashtbl;
 		
@@ -671,92 +671,92 @@ class uobject
 		l_add_section "uobj_intrauobjcoll_csltcode" [ ".uobj_intrauobjcoll_csltcode" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTCODE
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* intrauobjcoll callees slt data section *)
 		l_add_section "uobj_intrauobjcoll_csltdata" [ ".uobj_intrauobjcoll_csltdata" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTRAUOBJCOLL_CSLTDATA
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* interuobjcoll callees slt code section *)
 		l_add_section "uobj_interuobjcoll_csltcode" [ ".uobj_interuobjcoll_csltcode" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTCODE
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* interuobjcoll callees slt data section *)
 		l_add_section "uobj_interuobjcoll_csltdata" [ ".uobj_interuobjcoll_csltdata" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_INTERUOBJCOLL_CSLTDATA
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* legacy callees slt code section *)
 		l_add_section "uobj_legacy_csltcode" [ ".uobj_legacy_csltcode" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTCODE
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* legacy callees slt data section *)
 		l_add_section "uobj_legacy_csltdata" [ ".uobj_legacy_csltdata" ]
 					Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ_LEGACY_CSLTDATA 
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		(* uobj code, data, dmadata and stack sections follow *)
 		l_add_section "uobj_code" [ ".text" ]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_CODE 
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		l_add_section "uobj_rodata" [".rodata"]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RODATA
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		l_add_section "uobj_rwdata" [".data"; ".bss"]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_RWDATA 
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		l_add_section "uobj_dmadata" [".dmadata"]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_DMADATA
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		l_add_section "uobj_ustack" [ ".ustack" ]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_USTACK 
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		l_add_section "uobj_tstack" [ ".tstack"; ".stack" ]
 					Uberspark.Defs.Basedefs.def_USBINFORMAT_SECTION_TYPE_UOBJ_TSTACK 
 					0 
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_default_section_size
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment
-					Uberspark.Config.json_node_uberspark_config_var.binary_uobj_section_alignment;
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment
+					Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment;
 
 		()
 	;
