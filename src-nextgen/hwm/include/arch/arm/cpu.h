@@ -358,6 +358,11 @@ extern void _impl__casm__tst_imm_r9(uint32_t value);
 	__builtin_annot("add sp, sp, r6"); \
 	_impl__casm__add_sp_sp_r6();
 
+#define __casm__add_sp_sp_imm(x) \
+	__builtin_annot("add sp, sp, #"#x); \
+	_impl__casm__add_sp_sp_imm(x); 
+
+
 #define __casm__and_imm_r7_r7(x) \
 	__builtin_annot("and r7, r7, #"#x); \
 	_impl__casm__and_imm_r7_r7(x); 

@@ -138,6 +138,13 @@ void _impl__casm__add_sp_sp_r6() {
 	hwm_cpu_gprs_r13 = hwm_cpu_gprs_r13 + hwm_cpu_gprs_r6;
 }
 
+void _impl__casm__add_sp_sp_imm(uint32_t value) {
+	hwm_cpu_gprs_r13 = hwm_cpu_gprs_r13 + value;
+}
+
+
+
+
 // and
 void _impl__casm__and_imm_r7_r7(uint32_t value) {
 	hwm_cpu_gprs_r7 = hwm_cpu_gprs_r7 & value;
