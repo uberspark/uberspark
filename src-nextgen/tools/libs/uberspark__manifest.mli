@@ -152,6 +152,7 @@ module Installation : sig
   type json_node_uberspark_installation_t =
   {
     mutable root_directory : string;
+    mutable default_platform : string;
   }
 
   val json_node_uberspark_installation_to_var : Yojson.Basic.t -> json_node_uberspark_installation_t -> bool

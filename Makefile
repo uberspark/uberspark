@@ -11,6 +11,7 @@ export USPARK_INSTALL_BINDIR := /usr/bin
 export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
 export USPARK_INSTALL_CONFIGFILENAME := uberspark.json
 export USPARK_VERSION := 6.0.0
+export USPARK_DEFAULT_PLATFORM := uberspark/platforms/pcintel-generic/x86/32-bit/core-gen1
 
 
 
@@ -43,7 +44,8 @@ define USPARK_CONFIG_CONTENTS
 		"uberspark.manifest.version_min" : "$(USPARK_VERSION)",
 		"uberspark.manifest.version_max" : "$(USPARK_VERSION)",
 
-    	"uberspark.installation.root_directory" : "$(ROOT_DIR)"
+    	"uberspark.installation.root_directory" : "$(ROOT_DIR)",
+		"uberspark.installation.default_platform" : "$(USPARK_DEFAULT_PLATFORM)"
 }
 endef
 

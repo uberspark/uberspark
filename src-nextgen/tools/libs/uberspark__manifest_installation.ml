@@ -16,6 +16,7 @@
 type json_node_uberspark_installation_t =
 {
 	mutable root_directory : string;
+	mutable default_platform : string;
 };;
 
 
@@ -43,6 +44,9 @@ let json_node_uberspark_installation_to_var
 		let open Yojson.Basic.Util in
 			if (mf_json |> member "uberspark.installation.root_directory") != `Null then
 				json_node_uberspark_installation_var.root_directory <- mf_json |> member "uberspark.installation.root_directory" |> to_string;
+
+			if (mf_json |> member "uberspark.installation.default_platform") != `Null then
+				json_node_uberspark_installation_var.default_platform <- mf_json |> member "uberspark.installation.default_platform" |> to_string;
 
 			retval := true;
 

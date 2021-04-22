@@ -180,12 +180,12 @@ let load_from_json
 
 
 let load 
-	()
+	(p_platform_namespace: string)
 	: bool =
 
 	let retval = ref false in
 	let config_ns_json_path = (Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
-		Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_platform ^ "/" ^ 
+		p_platform_namespace ^ "/" ^ 
 		Uberspark.Namespace.namespace_root_mf_filename in
 	Uberspark.Logger.log "config_ns_json_path=%s" config_ns_json_path;
 

@@ -33,7 +33,7 @@ val settings_save : unit -> unit
 
 val settings_restore : unit -> unit
 
-val load : unit -> bool
+val load : string -> bool
 
 val settings_get : string ->  (bool * string)
 
