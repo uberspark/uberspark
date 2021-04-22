@@ -36,7 +36,7 @@ let json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_man
 (*------------------------------------------------------------------------*)
 (* configuration settings variable *)	
 (*------------------------------------------------------------------------*)
-let json_node_uberspark_config_var: Uberspark.Manifest.Config.json_node_uberspark_config_t = {
+let json_node_uberspark_config_var: Uberspark.Manifest.Platform.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -65,7 +65,7 @@ let json_node_uberspark_config_var: Uberspark.Manifest.Config.json_node_uberspar
 };;
 
 
-let saved_json_node_uberspark_config_var: Uberspark.Manifest.Config.json_node_uberspark_config_t = {
+let saved_json_node_uberspark_config_var: Uberspark.Manifest.Platform.json_node_uberspark_config_t = {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
 	binary_page_size = 0x0020000;
@@ -168,7 +168,7 @@ let load_from_json
 	let retval = ref false in
 
 	let rval_json_node_uberspark_config_var = 
-		Uberspark.Manifest.Config.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
+		Uberspark.Manifest.Platform.json_node_uberspark_config_to_var mf_json json_node_uberspark_config_var in
 	if rval_json_node_uberspark_config_var then begin
 		retval := true;
 	end else begin
@@ -290,7 +290,7 @@ let dump_to_file
 	Uberspark.Manifest.write_to_file output_config_filename 
 		[
 			(Uberspark.Manifest.json_node_uberspark_manifest_var_to_jsonstr json_node_uberspark_manifest_var);
-			(Uberspark.Manifest.Config.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
+			(Uberspark.Manifest.Platform.json_node_uberspark_config_var_to_jsonstr json_node_uberspark_config_var);
 		];
 ;;
 

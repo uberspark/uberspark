@@ -102,7 +102,7 @@ module Bridge : sig
 end
 
 
-module Config : sig
+module Platform : sig
 
   (****************************************************************************)
   (* manifest node types *)

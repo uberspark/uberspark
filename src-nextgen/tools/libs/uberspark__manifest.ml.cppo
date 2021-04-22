@@ -355,8 +355,8 @@ module Bridge = struct
 end
 
 
-module Config = struct
-	#include "uberspark__manifest_config.ml"
+module Platform = struct
+	#include "uberspark__manifest_platform.ml"
 end
 
 
