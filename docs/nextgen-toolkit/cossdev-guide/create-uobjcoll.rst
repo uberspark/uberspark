@@ -45,7 +45,19 @@ A |uobjcoll| prefix that is always is required to start with `uberspark/uobjcoll
 a user-defined |uobjcoll| namespace suffix. We choose `generic/hello_mul` as our user-defined |uobjcoll| namespace suffix 
 since ``hello_mul`` is architecture agnostic. 
 
-Accordingly |uobjcoll| *platform*, *arch*, and *cpu* fields are set to ``generic``.
+The |uobjcoll| *platform* is specified using the ``uberspark.uobjcoll.platform`` JSON node
+and refers to a valid platform namespace.
+A platform namespace is composed of: a ``uberspark/platforms/`` prefix,
+followed by a board name, CPU architecture, and CPU triad.
+For example, ``uberspark/platforms/rpi3/armv8a/32-bit/cortex-a53`` refers to 
+a platform comprising the Raspberry Pi 3 (``rpi3``) board, with a ``armv8a/32-bit``
+architecture, running the ``cortex-a53`` CPU. 
+
+A |uobjcoll| must specify a valid *platform* to produce a successful binary.
+
+.. seealso::   |contrib-guide-ref|:::ref:`contrib-guide-platform-intro` 
+               for more information on |uspark| platforms.
+
 
 The *hpl* field within ``uberspark.uobjcoll.hpl`` JSON node specifies the hardware privilege level of
 the |uobjcoll|. The currently supported values are ``any`` to signify the |uobjcoll| can execute under

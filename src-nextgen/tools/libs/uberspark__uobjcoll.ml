@@ -2689,6 +2689,16 @@ let process_manifest_common
 
 	let l_dummy=0 in begin
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read manifest file into JSON object";
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
+	end;
+
+	(* load the uobjcoll platform definitions from the platform manifest *)
+	if not (Uberspark.Platform.load (d_uberspark_manifest_var.uobjcoll.platform)) then 
+		(false)
+	else
+
+	let l_dummy=0 in begin
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
 	end;
 
 	(* sanity check we are an uobjcoll manifest and bail out on error*)
@@ -2900,6 +2910,7 @@ let process_manifest
 	let l_dummy=0 in begin
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read manifest file into JSON object";
 	end;
+
 
 	(* sanity check we are an uobjcoll manifest and bail out on error*)
 	if (d_uberspark_manifest_var.manifest.namespace <> Uberspark.Namespace.namespace_uobjcoll_mf_node_type_tag) then
