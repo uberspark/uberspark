@@ -59,6 +59,7 @@ let exits = [
 (* Commands *)
 
 (* kicks in when uberspark uobj ... is issued *)
+(*
 let cmd_uobj =
  	let action = 
 	let action = [ 	"build", `Build; 
@@ -97,7 +98,7 @@ let cmd_uobj =
  	] in
   Term.(ret (const Cmd_uobj.handler_uobj $ Commonopts.opts_t $ Cmd_uobj.cmd_uobj_opts_t $ action $ path_ns)),
   Term.info "uobj" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
-
+*)
 
 
 (* kicks in when uberspark uobjcoll ... is issued *)
@@ -328,7 +329,8 @@ let cmd_default =
   Term.info "uberspark" ~version:"6.0.0" ~doc ~sdocs ~exits ~man
 
 (* additional commands *)	
-let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
+(*let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]*)
+let cmd_additions = [cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
 
 
 (*----------------------------------------------------------------------------*)

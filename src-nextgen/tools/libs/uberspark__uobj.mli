@@ -170,6 +170,8 @@ type slt_info_t =
 
 end
 
+(*
 val create_initialize : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
 val create_initialize_and_build : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
 val create_initialize_and_verify : string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool * uobject option
+*)

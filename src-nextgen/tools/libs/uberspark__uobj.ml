@@ -1,8 +1,20 @@
 (*===========================================================================*)
 (*===========================================================================*)
-(*	uberSpark uberobject verification and build interface 	             	 *)
-(*	implementation															 *)
-(*	author: amit vasudevan (amitvasudevan@acm.org)							 *)
+(*
+	uberSpark uberobject module implementation 	             	 
+	
+	implements the following: 
+	1.	uobject class which allows instantiation of objects
+	that allow access to uobject manifest variables, 
+	methods, source files, and actions
+
+	2. public interface to add and query uobj objects, this
+	allows us to use Uberspark.Uobj.find_uobj_for_ns and
+	Uberspark.Uobj.add_uobj and maintain global hashtable of
+	various uobjs for a given collection
+
+	author: amit vasudevan (amitvasudevan@acm.org)							 
+*)
 (*===========================================================================*)
 (*===========================================================================*)
 
@@ -1595,6 +1607,11 @@ class uobject
 end;;
 
 
+
+(*===========================================================================*)
+(*===========================================================================*)
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* stand-alone interfaces that are invoked for one-short create, initialize *)
@@ -1604,6 +1621,7 @@ end;;
 
 
 (* create and initialize a uobj and return uobj object if successful *)
+(*
 let create_initialize
 	(uobj_mf_filename : string)
 	(uobj_target_def : Uberspark.Defs.Basedefs.target_def_t)
@@ -1664,8 +1682,9 @@ let create_initialize
 
 	(true, Some uobj)
 ;;
+*)
 
-
+(*
 let create_initialize_and_build
 	(uobj_mf_filename : string)
 	(uobj_target_def : Uberspark.Defs.Basedefs.target_def_t)
@@ -1699,8 +1718,9 @@ let create_initialize_and_build
 
 	(true, Some uobj)
 ;;
+*)
 
-
+(*
 let create_initialize_and_verify
 	(uobj_mf_filename : string)
 	(uobj_target_def : Uberspark.Defs.Basedefs.target_def_t)
@@ -1734,7 +1754,7 @@ let create_initialize_and_verify
 
 	(true, Some uobj)
 ;;
-
+*)
 
 
 
