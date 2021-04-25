@@ -108,7 +108,7 @@ module Platform : sig
   (* manifest node types *)
   (****************************************************************************)
 
-  type json_node_uberspark_config_t = 
+  type json_node_uberspark_platform_binary_t = 
   {
     (* uobj/uobjcoll binary related configuration settings *)	
     mutable binary_page_size : int;
@@ -136,8 +136,14 @@ module Platform : sig
 
   }
 
-  val json_node_uberspark_config_to_var : Yojson.Basic.t -> json_node_uberspark_config_t -> bool
-  val json_node_uberspark_config_var_to_jsonstr : json_node_uberspark_config_t -> string
+  type json_node_uberspark_platform_t = 
+  {
+    mutable binary : json_node_uberspark_platform_binary_t;
+
+  }
+
+  val json_node_uberspark_platform_to_var : Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
+  val json_node_uberspark_platform_var_to_jsonstr : json_node_uberspark_platform_t -> string
 
 end
 

@@ -91,7 +91,7 @@ let namespace_staging_default = "default";;
 
 (* platform *)
 let namespace_platform = "platforms";;
-let namespace_platform_mf_node_type_tag = "uberspark-config";;
+let namespace_platform_mf_node_type_tag = "uberspark/platform";;
 
 
 (* bridges *)

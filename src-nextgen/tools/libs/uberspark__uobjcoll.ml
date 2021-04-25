@@ -99,10 +99,10 @@ let d_sentinel_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark
 let d_path_ns = ref "";;
 
 (* uobjcoll load address *)
-let d_load_address : int ref = ref Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_load_address;;
+let d_load_address : int ref = ref Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address;;
 
 (* uobjcoll size *)
-let d_size : int ref = ref Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_size;;
+let d_size : int ref = ref Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size;;
 
 (* uobjcoll target definition *)
 let d_target_def: Uberspark.Defs.Basedefs.target_def_t = {
@@ -628,15 +628,15 @@ let consolidate_sections_with_memory_map
 		let sentinel_name = (canonical_public_method ^ "___" ^ sentinel_type) in 
 		let key = (".section_uobjcoll_initmethod_sentinel__" ^ sentinel_name) in 
 		let sentinel_info = Hashtbl.find d_uobjcoll_initmethod_sentinels_hashtbl sentinel_type in
-		(*let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-			(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+		(*let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+			(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment)) in
 		*)
 
 		let section_top_addr = 	ref 0 in
 		section_top_addr := sentinel_info.sizeof_code_template + !uobjcoll_section_load_addr;
-		if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
-			section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-			(!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+		if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment) > 0 then begin
+			section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+			(!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment));
 		end;
 
 		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
@@ -649,8 +649,8 @@ let consolidate_sections_with_memory_map
 				usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_INITMETHOD_SENTINEL; 
 								f_prot=0; 
 								f_size = section_size;
-								f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-								f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+								f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 								f_addr_start = !uobjcoll_section_load_addr; 
 								f_addr_file = 0;
 								f_reserved = 0;
@@ -679,8 +679,8 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = public_method ^ "___" ^ sentinel_type in 
 			let key = (".section_uobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_publicmethods_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment)) in
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeof_code_template;
 
@@ -690,8 +690,8 @@ let consolidate_sections_with_memory_map
 					usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_PUBLICMETHODS_SENTINEL; 
 									f_prot=0; 
 									f_size = section_size;
-									f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-									f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+									f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+									f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 									f_addr_start = !uobjcoll_section_load_addr; 
 									f_addr_file = 0;
 									f_reserved = 0;
@@ -722,8 +722,8 @@ let consolidate_sections_with_memory_map
 			let sentinel_name = public_method ^ "___" ^ sentinel_type in 
 			let key = (".section_intrauobjcoll_publicmethod_sentinel__" ^ sentinel_name) in 
 			let sentinel_info = Hashtbl.find d_uobjcoll_intrauobjcoll_sentinels_hashtbl sentinel_type in
-			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-				(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment)) in
+			let section_size = 	sentinel_info.sizeof_code_template + (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+				(sentinel_info.sizeof_code_template mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment)) in
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "sentinel type=%s, size=0x%08x" sentinel_info.f_type sentinel_info.sizeof_code_template;
 
@@ -733,8 +733,8 @@ let consolidate_sections_with_memory_map
 					usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_INTRAUOBJCOLL_SENTINEL; 
 									f_prot=0; 
 									f_size = section_size;
-									f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-									f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+									f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+									f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 									f_addr_start = !uobjcoll_section_load_addr; 
 									f_addr_file = 0;
 									f_reserved = 0;
@@ -772,8 +772,8 @@ let consolidate_sections_with_memory_map
 						usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 										f_prot=0; 
 										f_size = uobj#get_d_size;
-										f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
-										f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+										f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.binary_uobj_section_alignment; 
+										f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.binary_uobj_section_alignment; 
 										f_addr_start = !uobjcoll_section_load_addr; 
 										f_addr_file = 0;
 										f_reserved = 0;
@@ -2332,9 +2332,9 @@ let generate_uobjcoll_section_info
 					section_top_addr := l_sentinel_manifest_var.sentinel.sizeof_code_template;
 				end;
 				section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
-				if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
-					section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-					(!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+				if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment) > 0 then begin
+					section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+					(!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment));
 				end;
 
 				let section_size = !section_top_addr - !uobjcoll_section_load_addr in
@@ -2347,8 +2347,8 @@ let generate_uobjcoll_section_info
 						usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_INITMETHOD_SENTINEL; 
 										f_prot=0; 
 										f_size = section_size;
-										f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-										f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+										f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+										f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 										f_addr_start = !uobjcoll_section_load_addr; 
 										f_addr_file = 0;
 										f_reserved = 0;
@@ -2395,9 +2395,9 @@ let generate_uobjcoll_section_info
 						section_top_addr := l_sentinel_manifest_var.sentinel.sizeof_code_template;
 
 						section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
-						if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
-							section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-							(!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+						if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment) > 0 then begin
+							section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+							(!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment));
 						end;
 
 						let section_size = !section_top_addr - !uobjcoll_section_load_addr in
@@ -2410,8 +2410,8 @@ let generate_uobjcoll_section_info
 								usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJCOLL_PUBLICMETHODS_SENTINEL; 
 												f_prot=0; 
 												f_size = section_size;
-												f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-												f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+												f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+												f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 												f_addr_start = !uobjcoll_section_load_addr; 
 												f_addr_file = 0;
 												f_reserved = 0;
@@ -2439,17 +2439,17 @@ let generate_uobjcoll_section_info
 
 	if !retval then begin
 		let section_top_addr = 	ref 0 in
-		section_top_addr := Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_size;
+		section_top_addr := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobj_binary_image_size;
 
 		section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
-		if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
-			section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-			(!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+		if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment) > 0 then begin
+			section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+			(!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment));
 		end;
 
 		let section_size = !section_top_addr - !uobjcoll_section_load_addr in
 
-		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjs, original size=0x%08x, adjusted size=0x%08x" Uberspark.Platform.json_node_uberspark_config_var.uobj_binary_image_size section_size;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjs, original size=0x%08x, adjusted size=0x%08x" Uberspark.Platform.json_node_uberspark_platform_var.binary.uobj_binary_image_size section_size;
 
 		let uobjcoll_namespace_varname = (Uberspark.Namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.namespace) in 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((uobjcoll_namespace_varname ^ "__uobjs"), 
@@ -2458,8 +2458,8 @@ let generate_uobjcoll_section_info
 				usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 								f_prot=0; 
 								f_size = section_size;
-								f_aligned_at = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
-								f_pad_to = Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment; 
+								f_aligned_at = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
+								f_pad_to = Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment; 
 								f_addr_start = !uobjcoll_section_load_addr; 
 								f_addr_file = 0;
 								f_reserved = 0;
@@ -2487,9 +2487,9 @@ let generate_uobjcoll_section_info
 				section_top_addr := l_section_info.usbinformat.f_size;
 
 				section_top_addr := !section_top_addr + !uobjcoll_section_load_addr;
-				if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment) > 0 then begin
-					section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment - 
-					(!section_top_addr mod Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_section_alignment));
+				if (!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment) > 0 then begin
+					section_top_addr := !section_top_addr +  (Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment - 
+					(!section_top_addr mod Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment));
 				end;
 
 				let section_size = !section_top_addr - !uobjcoll_section_load_addr in
@@ -2714,8 +2714,8 @@ let process_manifest_common
 	end;
 
 	(* set default uobjcoll size and load address *)
-	d_load_address := Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_load_address;
-	d_size := Uberspark.Platform.json_node_uberspark_config_var.uobjcoll_binary_image_size;
+	d_load_address := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address;
+	d_size := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size;
 
 	(* iterate through all uobjcolls *)
 	let retval = ref true in 

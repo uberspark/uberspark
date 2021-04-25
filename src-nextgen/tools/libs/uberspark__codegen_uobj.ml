@@ -57,11 +57,11 @@ let generate_src_binhdr
             (*prot*)
             Printf.fprintf oc "\n\t\tUSBINFORMAT_SECTION_PROT_RESERVED,"; 
             (*size*)
-            Printf.fprintf oc "\n\t\t0x%08xULL," Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_default_section_size; 
+            Printf.fprintf oc "\n\t\t0x%08xULL," Uberspark.Platform.json_node_uberspark_platform_var.binary.binary_uobj_default_section_size; 
             (*aligned_at*)
-            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Platform.json_node_uberspark_platform_var.binary.binary_uobj_section_alignment; 
             (*pad_to*)
-            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Platform.json_node_uberspark_config_var.binary_uobj_section_alignment; 
+            Printf.fprintf oc "\n\t\t0x%08xUL," Uberspark.Platform.json_node_uberspark_platform_var.binary.binary_uobj_section_alignment; 
             (*addr_start*)
             Printf.fprintf oc "\n\t\t0x%08xUL," load_addr; 
             (*addr_file*)

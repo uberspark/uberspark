@@ -35,7 +35,7 @@ end
 
 module Config : sig
 
-#include "uberspark_config.mli"  
+#include "uberspark.platform.binary.mli"  
 
 end
 
