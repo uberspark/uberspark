@@ -111,21 +111,21 @@ module Platform : sig
   type json_node_uberspark_platform_binary_t = 
   {
     (* uobj/uobjcoll binary related configuration settings *)	
-    mutable binary_page_size : int;
-    mutable binary_uobj_section_alignment : int;
-    mutable binary_uobj_default_section_size : int;
+    mutable page_size : int;
+    mutable uobj_section_alignment : int;
+    mutable uobj_default_section_size : int;
 
-    mutable uobj_binary_image_load_address : int;
-    mutable uobj_binary_image_uniform_size : bool;
-    mutable uobj_binary_image_size : int;
-    mutable uobj_binary_image_alignment : int;
+    mutable uobj_image_load_address : int;
+    mutable uobj_image_uniform_size : bool;
+    mutable uobj_image_size : int;
+    mutable uobj_image_alignment : int;
 
     (* uobjcoll related configuration settings *)
-    mutable uobjcoll_binary_image_load_address : int;
-    mutable uobjcoll_binary_image_hdr_section_alignment : int;
-    mutable uobjcoll_binary_image_hdr_section_size : int;
-    mutable uobjcoll_binary_image_section_alignment : int;
-    mutable uobjcoll_binary_image_size : int;
+    mutable uobjcoll_image_load_address : int;
+    mutable uobjcoll_image_hdr_section_alignment : int;
+    mutable uobjcoll_image_hdr_section_size : int;
+    mutable uobjcoll_image_section_alignment : int;
+    mutable uobjcoll_image_size : int;
 
     (* bridge related configuration settings *)	
     mutable cc_bridge_namespace : string;

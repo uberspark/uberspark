@@ -17,21 +17,21 @@ type json_node_uberspark_platform_binary_t =
 {
 
 	(* uobj/uobjcoll binary related configuration settings *)	
-	mutable binary_page_size : int;
-	mutable binary_uobj_section_alignment : int;
-	mutable binary_uobj_default_section_size : int;
+	mutable page_size : int;
+	mutable uobj_section_alignment : int;
+	mutable uobj_default_section_size : int;
 
-	mutable uobj_binary_image_load_address : int;
-	mutable uobj_binary_image_uniform_size : bool;
-	mutable uobj_binary_image_size : int;
-	mutable uobj_binary_image_alignment : int;
+	mutable uobj_image_load_address : int;
+	mutable uobj_image_uniform_size : bool;
+	mutable uobj_image_size : int;
+	mutable uobj_image_alignment : int;
 
 	(* uobjcoll related configuration settings *)
-	mutable uobjcoll_binary_image_load_address : int;
-	mutable uobjcoll_binary_image_hdr_section_alignment : int;
-	mutable uobjcoll_binary_image_hdr_section_size : int;
-	mutable uobjcoll_binary_image_section_alignment : int;
-	mutable uobjcoll_binary_image_size : int;
+	mutable uobjcoll_image_load_address : int;
+	mutable uobjcoll_image_hdr_section_alignment : int;
+	mutable uobjcoll_image_hdr_section_size : int;
+	mutable uobjcoll_image_section_alignment : int;
+	mutable uobjcoll_image_size : int;
 
 	(* bridge related configuration settings *)	
 	mutable cc_bridge_namespace : string;
@@ -68,41 +68,41 @@ let json_node_uberspark_platform_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.binary_page_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.binary_page_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.binary_page_size" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.page_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.page_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.page_size" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.binary_uobj_section_alignment" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.binary_uobj_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.binary_uobj_section_alignment" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_section_alignment" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_section_alignment" mf_json));
 			
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.binary_uobj_default_section_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.binary_uobj_default_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.binary_uobj_default_section_size" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_default_section_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_default_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_default_section_size" mf_json));
 	
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_load_address" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobj_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_load_address" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_load_address" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_load_address" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_uniform_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size <- Yojson.Basic.Util.to_bool (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_uniform_size" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_uniform_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_image_uniform_size <- Yojson.Basic.Util.to_bool (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_uniform_size" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobj_binary_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_size" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_size" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_alignment" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobj_binary_image_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_binary_image_alignment" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_alignment" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobj_image_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobj_image_alignment" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_load_address" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_load_address" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_load_address" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobjcoll_image_load_address <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_load_address" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_hdr_section_alignment" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_hdr_section_alignment" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_hdr_section_alignment" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_hdr_section_alignment" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_hdr_section_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_hdr_section_size" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_hdr_section_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_hdr_section_size" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_section_alignment" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_section_alignment" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_section_alignment" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_section_alignment" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_size" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_binary_image_size" mf_json));
+			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json) <> `Null then
+				json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json));
 
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.cc_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.cc_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.cc_bridge_namespace" mf_json);
@@ -141,18 +141,18 @@ let json_node_uberspark_platform_var_to_jsonstr
 
 	retstr := !retstr ^ Printf.sprintf  "\n";
 
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.binary_page_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.binary_page_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.binary_uobj_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.binary_uobj_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.binary_uobj_default_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.binary_uobj_default_section_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_binary_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_binary_image_load_address;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_binary_image_uniform_size\" : %B," json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_binary_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_binary_image_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_binary_image_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_binary_image_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_binary_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_binary_image_hdr_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_binary_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_binary_image_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_binary_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.page_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.page_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_default_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_default_section_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_load_address;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_uniform_size\" : %B," json_node_uberspark_platform_var.binary.uobj_image_uniform_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_hdr_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_size;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.cc_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.cc_bridge_namespace;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.as_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.as_bridge_namespace;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.casm_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.casm_bridge_namespace;

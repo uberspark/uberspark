@@ -39,21 +39,21 @@ let json_node_uberspark_manifest_var : Uberspark.Manifest.json_node_uberspark_ma
 let json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_uberspark_platform_t = {
 	binary = {
 	(* uobj/uobjcoll binary related configuration settings *)	
-	binary_page_size = 0x0020000;
-	binary_uobj_section_alignment = 0x00200000;
-	binary_uobj_default_section_size =  0x00200000;
+	page_size = 0x0020000;
+	uobj_section_alignment = 0x00200000;
+	uobj_default_section_size =  0x00200000;
 
-	uobj_binary_image_load_address = 0x60000000;
-	uobj_binary_image_uniform_size = true;
-	uobj_binary_image_size = 0x01000000;
-	uobj_binary_image_alignment = 0x200000;
+	uobj_image_load_address = 0x60000000;
+	uobj_image_uniform_size = true;
+	uobj_image_size = 0x01000000;
+	uobj_image_alignment = 0x200000;
 
 	(* uobjcoll related configuration settings *)
-	uobjcoll_binary_image_load_address = 0x60000000;
-	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
-	uobjcoll_binary_image_hdr_section_size = 0x200000;
-	uobjcoll_binary_image_section_alignment= 0x200000;
-	uobjcoll_binary_image_size = 0x02000000;
+	uobjcoll_image_load_address = 0x60000000;
+	uobjcoll_image_hdr_section_alignment = 0x200000;
+	uobjcoll_image_hdr_section_size = 0x200000;
+	uobjcoll_image_section_alignment= 0x200000;
+	uobjcoll_image_size = 0x02000000;
 
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
@@ -68,21 +68,21 @@ let json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_ube
 let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_uberspark_platform_t = {
 	binary = {
 	(* uobj/uobjcoll binary related configuration settings *)	
-	binary_page_size = 0x0020000;
-	binary_uobj_section_alignment = 0x00200000;
-	binary_uobj_default_section_size =  0x00200000;
+	page_size = 0x0020000;
+	uobj_section_alignment = 0x00200000;
+	uobj_default_section_size =  0x00200000;
 
-	uobj_binary_image_load_address = 0x60000000;
-	uobj_binary_image_uniform_size = true;
-	uobj_binary_image_size = 0x1000000;
-	uobj_binary_image_alignment = 0x200000;
+	uobj_image_load_address = 0x60000000;
+	uobj_image_uniform_size = true;
+	uobj_image_size = 0x1000000;
+	uobj_image_alignment = 0x200000;
 
 	(* uobjcoll related configuration settings *)
-	uobjcoll_binary_image_load_address = 0x60000000;
-	uobjcoll_binary_image_hdr_section_alignment = 0x200000;
-	uobjcoll_binary_image_hdr_section_size = 0x200000;
-	uobjcoll_binary_image_section_alignment = 0x200000;
-	uobjcoll_binary_image_size = 0x02000000;
+	uobjcoll_image_load_address = 0x60000000;
+	uobjcoll_image_hdr_section_alignment = 0x200000;
+	uobjcoll_image_hdr_section_size = 0x200000;
+	uobjcoll_image_section_alignment = 0x200000;
+	uobjcoll_image_size = 0x02000000;
 
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
@@ -105,20 +105,20 @@ let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_no
 let settings_save 
 	() 
 	: unit =
-	saved_json_node_uberspark_platform_var.binary.binary_page_size <- json_node_uberspark_platform_var.binary.binary_page_size;
-	saved_json_node_uberspark_platform_var.binary.binary_uobj_section_alignment <- json_node_uberspark_platform_var.binary.binary_uobj_section_alignment;
-	saved_json_node_uberspark_platform_var.binary.binary_uobj_default_section_size <- json_node_uberspark_platform_var.binary.binary_uobj_default_section_size;
+	saved_json_node_uberspark_platform_var.binary.page_size <- json_node_uberspark_platform_var.binary.page_size;
+	saved_json_node_uberspark_platform_var.binary.uobj_section_alignment <- json_node_uberspark_platform_var.binary.uobj_section_alignment;
+	saved_json_node_uberspark_platform_var.binary.uobj_default_section_size <- json_node_uberspark_platform_var.binary.uobj_default_section_size;
 
-	saved_json_node_uberspark_platform_var.binary.uobj_binary_image_load_address <- json_node_uberspark_platform_var.binary.uobj_binary_image_load_address;
-	saved_json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size <- json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size;
-	saved_json_node_uberspark_platform_var.binary.uobj_binary_image_size <- json_node_uberspark_platform_var.binary.uobj_binary_image_size;
-	saved_json_node_uberspark_platform_var.binary.uobj_binary_image_alignment <- json_node_uberspark_platform_var.binary.uobj_binary_image_alignment;
+	saved_json_node_uberspark_platform_var.binary.uobj_image_load_address <- json_node_uberspark_platform_var.binary.uobj_image_load_address;
+	saved_json_node_uberspark_platform_var.binary.uobj_image_uniform_size <- json_node_uberspark_platform_var.binary.uobj_image_uniform_size;
+	saved_json_node_uberspark_platform_var.binary.uobj_image_size <- json_node_uberspark_platform_var.binary.uobj_image_size;
+	saved_json_node_uberspark_platform_var.binary.uobj_image_alignment <- json_node_uberspark_platform_var.binary.uobj_image_alignment;
 
-	saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address <- json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address;
-	saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment <- json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment;
-	saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size <- json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size;
-	saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment <- json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment;
-	saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size <- json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size;
+	saved_json_node_uberspark_platform_var.binary.uobjcoll_image_load_address <- json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
+	saved_json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment <- json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment;
+	saved_json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size <- json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size;
+	saved_json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment <- json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment;
+	saved_json_node_uberspark_platform_var.binary.uobjcoll_image_size <- json_node_uberspark_platform_var.binary.uobjcoll_image_size;
 
 	saved_json_node_uberspark_platform_var.binary.cc_bridge_namespace <- json_node_uberspark_platform_var.binary.cc_bridge_namespace;
 	saved_json_node_uberspark_platform_var.binary.as_bridge_namespace <- json_node_uberspark_platform_var.binary.as_bridge_namespace;
@@ -134,20 +134,20 @@ let settings_save
 let settings_restore 
 	() 
 	: unit =
-	json_node_uberspark_platform_var.binary.binary_page_size <- saved_json_node_uberspark_platform_var.binary.binary_page_size;
-	json_node_uberspark_platform_var.binary.binary_uobj_section_alignment <- saved_json_node_uberspark_platform_var.binary.binary_uobj_section_alignment;
-	json_node_uberspark_platform_var.binary.binary_uobj_default_section_size <- saved_json_node_uberspark_platform_var.binary.binary_uobj_default_section_size;
+	json_node_uberspark_platform_var.binary.page_size <- saved_json_node_uberspark_platform_var.binary.page_size;
+	json_node_uberspark_platform_var.binary.uobj_section_alignment <- saved_json_node_uberspark_platform_var.binary.uobj_section_alignment;
+	json_node_uberspark_platform_var.binary.uobj_default_section_size <- saved_json_node_uberspark_platform_var.binary.uobj_default_section_size;
 
-	json_node_uberspark_platform_var.binary.uobj_binary_image_load_address <- saved_json_node_uberspark_platform_var.binary.uobj_binary_image_load_address;
-	json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size <- saved_json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size;
-	json_node_uberspark_platform_var.binary.uobj_binary_image_size <- saved_json_node_uberspark_platform_var.binary.uobj_binary_image_size;
-	json_node_uberspark_platform_var.binary.uobj_binary_image_alignment <- saved_json_node_uberspark_platform_var.binary.uobj_binary_image_alignment;
+	json_node_uberspark_platform_var.binary.uobj_image_load_address <- saved_json_node_uberspark_platform_var.binary.uobj_image_load_address;
+	json_node_uberspark_platform_var.binary.uobj_image_uniform_size <- saved_json_node_uberspark_platform_var.binary.uobj_image_uniform_size;
+	json_node_uberspark_platform_var.binary.uobj_image_size <- saved_json_node_uberspark_platform_var.binary.uobj_image_size;
+	json_node_uberspark_platform_var.binary.uobj_image_alignment <- saved_json_node_uberspark_platform_var.binary.uobj_image_alignment;
 
-	json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address <- saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address;
-	json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment <- saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment;
-	json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size <- saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size;
-	json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment <- saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment;
-	json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size <- saved_json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size;
+	json_node_uberspark_platform_var.binary.uobjcoll_image_load_address <- saved_json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
+	json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment <- saved_json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment;
+	json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size <- saved_json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size;
+	json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment <- saved_json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment;
+	json_node_uberspark_platform_var.binary.uobjcoll_image_size <- saved_json_node_uberspark_platform_var.binary.uobjcoll_image_size;
 
 	json_node_uberspark_platform_var.binary.cc_bridge_namespace <- saved_json_node_uberspark_platform_var.binary.cc_bridge_namespace;
 	json_node_uberspark_platform_var.binary.as_bridge_namespace <- saved_json_node_uberspark_platform_var.binary.as_bridge_namespace;
@@ -226,18 +226,18 @@ let settings_get
 	let retstatus = ref true in
 	let settings_value = ref "" in
 	match setting_name with
-		| "binary_page_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.binary_page_size);
-		| "binary_uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.binary_uobj_section_alignment);
-		| "binary_uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.binary_uobj_default_section_size);
-		| "uobj_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_binary_image_load_address);
-		| "uobj_binary_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size);
-		| "uobj_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_binary_image_size);
-		| "uobj_binary_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_binary_image_alignment);
-		| "uobjcoll_binary_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address);
-		| "uobjcoll_binary_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment);
-		| "uobjcoll_binary_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size);
-		| "uobjcoll_binary_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment);
-		| "uobjcoll_binary_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size);
+		| "page_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.page_size);
+		| "uobj_section_alignment" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.uobj_section_alignment);
+		| "uobj_default_section_size" -> settings_value := (Printf.sprintf "0x%x" json_node_uberspark_platform_var.binary.uobj_default_section_size);
+		| "uobj_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_image_load_address);
+		| "uobj_image_uniform_size" -> settings_value := (Printf.sprintf "%B"  json_node_uberspark_platform_var.binary.uobj_image_uniform_size);
+		| "uobj_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_image_size);
+		| "uobj_image_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobj_image_alignment);
+		| "uobjcoll_image_load_address" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_image_load_address);
+		| "uobjcoll_image_hdr_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment);
+		| "uobjcoll_image_hdr_section_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size);
+		| "uobjcoll_image_section_alignment" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment);
+		| "uobjcoll_image_size" -> settings_value := (Printf.sprintf "0x%x"  json_node_uberspark_platform_var.binary.uobjcoll_image_size);
 		| "cc_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_platform_var.binary.cc_bridge_namespace);
 		| "as_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_platform_var.binary.as_bridge_namespace);
 		| "casm_bridge_namespace" -> settings_value := (Printf.sprintf "%s" json_node_uberspark_platform_var.binary.casm_bridge_namespace);
@@ -257,18 +257,18 @@ let settings_set
 
 	let retval = ref true in
 	match setting_name with
-		| "binary_page_size" -> json_node_uberspark_platform_var.binary.binary_page_size <- int_of_string setting_value;
-		| "binary_uobj_section_alignment" -> json_node_uberspark_platform_var.binary.binary_uobj_section_alignment <- int_of_string setting_value;
-		| "binary_uobj_default_section_size" -> json_node_uberspark_platform_var.binary.binary_uobj_default_section_size <- int_of_string setting_value;
-		| "uobj_binary_image_load_address" -> json_node_uberspark_platform_var.binary.uobj_binary_image_load_address <- int_of_string setting_value;
-		| "uobj_binary_image_uniform_size" -> json_node_uberspark_platform_var.binary.uobj_binary_image_uniform_size <- bool_of_string setting_value;
-		| "uobj_binary_image_size" -> json_node_uberspark_platform_var.binary.uobj_binary_image_size <- int_of_string setting_value;
-		| "uobj_binary_image_alignment" -> json_node_uberspark_platform_var.binary.uobj_binary_image_alignment <- int_of_string setting_value;
-		| "uobjcoll_binary_image_load_address" -> json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address <- int_of_string setting_value;
-		| "uobjcoll_binary_image_hdr_section_alignment" -> json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_alignment <- int_of_string setting_value;
-		| "uobjcoll_binary_image_hdr_section_size" -> json_node_uberspark_platform_var.binary.uobjcoll_binary_image_hdr_section_size <- int_of_string setting_value;
-		| "uobjcoll_binary_image_section_alignment" -> json_node_uberspark_platform_var.binary.uobjcoll_binary_image_section_alignment <- int_of_string setting_value;
-		| "uobjcoll_binary_image_size" -> json_node_uberspark_platform_var.binary.uobjcoll_binary_image_size <- int_of_string setting_value;
+		| "page_size" -> json_node_uberspark_platform_var.binary.page_size <- int_of_string setting_value;
+		| "uobj_section_alignment" -> json_node_uberspark_platform_var.binary.uobj_section_alignment <- int_of_string setting_value;
+		| "uobj_default_section_size" -> json_node_uberspark_platform_var.binary.uobj_default_section_size <- int_of_string setting_value;
+		| "uobj_image_load_address" -> json_node_uberspark_platform_var.binary.uobj_image_load_address <- int_of_string setting_value;
+		| "uobj_image_uniform_size" -> json_node_uberspark_platform_var.binary.uobj_image_uniform_size <- bool_of_string setting_value;
+		| "uobj_image_size" -> json_node_uberspark_platform_var.binary.uobj_image_size <- int_of_string setting_value;
+		| "uobj_image_alignment" -> json_node_uberspark_platform_var.binary.uobj_image_alignment <- int_of_string setting_value;
+		| "uobjcoll_image_load_address" -> json_node_uberspark_platform_var.binary.uobjcoll_image_load_address <- int_of_string setting_value;
+		| "uobjcoll_image_hdr_section_alignment" -> json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_image_hdr_section_size" -> json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size <- int_of_string setting_value;
+		| "uobjcoll_image_section_alignment" -> json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment <- int_of_string setting_value;
+		| "uobjcoll_image_size" -> json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string setting_value;
 		| "cc_bridge_namespace" -> json_node_uberspark_platform_var.binary.cc_bridge_namespace <- setting_value;
 		| "as_bridge_namespace" -> json_node_uberspark_platform_var.binary.as_bridge_namespace <- setting_value;
 		| "casm_bridge_namespace" -> json_node_uberspark_platform_var.binary.casm_bridge_namespace <- setting_value;

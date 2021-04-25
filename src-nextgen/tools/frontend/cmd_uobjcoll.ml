@@ -81,7 +81,7 @@ let handler_uobjcoll_build
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{platform = cmd_uobjcoll_opts.platform; arch = cmd_uobjcoll_opts.arch; cpu = cmd_uobjcoll_opts.cpu} in
 
-      if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address) then begin
+      if (Uberspark.Uobjcoll.build uobjcoll_path_ns target_def Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_load_address) then begin
         Uberspark.Logger.log "uobj collection build success!";
         `Ok ()
       end else begin
@@ -111,7 +111,7 @@ let handler_uobjcoll_verify
      	let target_def: Uberspark.Defs.Basedefs.target_def_t = 
     		{platform = cmd_uobjcoll_opts.platform; arch = cmd_uobjcoll_opts.arch; cpu = cmd_uobjcoll_opts.cpu} in
 
-      if (Uberspark.Uobjcoll.verify uobjcoll_path_ns target_def Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_binary_image_load_address) then begin
+      if (Uberspark.Uobjcoll.verify uobjcoll_path_ns target_def Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_load_address) then begin
         Uberspark.Logger.log "uobj collection verification [SUCCESS]!";
         `Ok ()
       end else begin
