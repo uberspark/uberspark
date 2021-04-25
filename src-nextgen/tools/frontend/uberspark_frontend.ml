@@ -102,7 +102,7 @@ let cmd_uobj =
 
 
 (* kicks in when uberspark uobjcoll ... is issued *)
-let cmd_uobjcoll =
+(*let cmd_uobjcoll =
  	let action = 
 	let action = [ 	"build", `Build; 
 					"verify", `Verify;
@@ -140,7 +140,7 @@ let cmd_uobjcoll =
  	] in
   Term.(ret (const Cmd_uobjcoll.handler_uobjcoll $ Commonopts.opts_t $ Cmd_uobjcoll.cmd_uobjcoll_opts_t $ action $ path_ns)),
   Term.info "uobjcoll" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
-
+*)
 
 
 (* kicks in when uberspark config ... is issued *)
@@ -330,7 +330,7 @@ let cmd_default =
 
 (* additional commands *)	
 (*let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]*)
-let cmd_additions = [cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
+let cmd_additions = [cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
 
 
 (*----------------------------------------------------------------------------*)
