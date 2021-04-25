@@ -43,12 +43,6 @@ type json_node_uberspark_platform_binary_t =
 	mutable uobjcoll_image_section_alignment : int;
 	mutable uobjcoll_image_size : int;
 
-	(* bridge related configuration settings *)	
-	mutable cc_bridge_namespace : string;
-	mutable as_bridge_namespace : string;
-	mutable casm_bridge_namespace : string;
-	mutable ld_bridge_namespace : string;
-	mutable uberspark_vf_bridge_namespace : string;
 };;
 
 type json_node_uberspark_platform_t = 
@@ -115,20 +109,20 @@ let json_node_uberspark_platform_to_var
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.cc_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.cc_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.cc_bridge_namespace" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.bridges.cc_bridge_namespace" mf_json) <> `Null then
+				json_node_uberspark_platform_var.bridges.cc_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.cc_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.as_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.as_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.as_bridge_namespace" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json) <> `Null then
+				json_node_uberspark_platform_var.bridges.as_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.casm_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.casm_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.casm_bridge_namespace" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json) <> `Null then
+				json_node_uberspark_platform_var.bridges.casm_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.ld_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.ld_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.ld_bridge_namespace" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json) <> `Null then
+				json_node_uberspark_platform_var.bridges.ld_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.binary.uberspark_vf_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.binary.uberspark_vf_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uberspark_vf_bridge_namespace" mf_json);
+			if (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json) <> `Null then
+				json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json);
 
 			retval := true;
 
@@ -164,11 +158,11 @@ let json_node_uberspark_platform_var_to_jsonstr
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment;
 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.cc_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.cc_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.as_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.as_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.casm_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.casm_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.ld_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.binary.ld_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uberspark_vf_bridge_namespace\" : \"%s\"" json_node_uberspark_platform_var.binary.uberspark_vf_bridge_namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.cc_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.cc_bridge_namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.as_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.as_bridge_namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.casm_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.casm_bridge_namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.ld_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.ld_bridge_namespace;
+	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.uberspark_vf_bridge_namespace\" : \"%s\"" json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace;
 
 
 	retstr := !retstr ^ Printf.sprintf  "\n";

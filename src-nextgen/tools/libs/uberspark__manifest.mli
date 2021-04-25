@@ -139,13 +139,6 @@ type json_node_uberspark_platform_bridges_t =
     mutable uobjcoll_image_section_alignment : int;
     mutable uobjcoll_image_size : int;
 
-    (* bridge related configuration settings *)	
-    mutable cc_bridge_namespace : string;
-    mutable as_bridge_namespace : string;
-    mutable casm_bridge_namespace : string;
-    mutable ld_bridge_namespace : string;
-  	mutable uberspark_vf_bridge_namespace : string;
-
   }
 
   type json_node_uberspark_platform_t = 

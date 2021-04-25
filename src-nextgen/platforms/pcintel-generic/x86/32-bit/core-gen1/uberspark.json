@@ -20,11 +20,11 @@
 		"uberspark.platform.binary.uobjcoll_image_section_alignment" : "0x200000",
 		"uberspark.platform.binary.uobjcoll_image_size" : "0x02000000",
 	
-		"uberspark.platform.binary.cc_bridge_namespace" : "uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/compcert/v3.1",
-		"uberspark.platform.binary.as_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/gnu-as/v2.26.1",
-		"uberspark.platform.binary.casm_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/casm/vlatest",
-		"uberspark.platform.binary.ld_bridge_namespace" : "uberspark/bridges/container/amd64/ld-bridge/x86_32/generic/gnu-ld/v2.26.1",
-		"uberspark.platform.binary.uberspark_vf_bridge_namespace" : "uberspark/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0"
+		"uberspark.platform.bridges.cc_bridge_namespace" : "uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/compcert/v3.1",
+		"uberspark.platform.bridges.as_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/gnu-as/v2.26.1",
+		"uberspark.platform.bridges.casm_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/casm/vlatest",
+		"uberspark.platform.bridges.ld_bridge_namespace" : "uberspark/bridges/container/amd64/ld-bridge/x86_32/generic/gnu-ld/v2.26.1",
+		"uberspark.platform.bridges.uberspark_vf_bridge_namespace" : "uberspark/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0"
 
 
 }

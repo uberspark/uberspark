@@ -362,12 +362,12 @@ let initialize_from_config ()
 	let retval = ref false in
 
 	(* handle cc-bridge *)	
-	if Uberspark.Platform.json_node_uberspark_platform_var.binary.cc_bridge_namespace = "" then begin
+	if Uberspark.Platform.json_node_uberspark_platform_var.bridges.cc_bridge_namespace = "" then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "cc_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (cc_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.binary.cc_bridge_namespace) then begin
+	if not (cc_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.bridges.cc_bridge_namespace) then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load cc_bridge settings!";
 		(!retval)
 	end else 
@@ -388,12 +388,12 @@ let initialize_from_config ()
 	end;
 
 	(* handle as-bridge *)	
-	if Uberspark.Platform.json_node_uberspark_platform_var.binary.as_bridge_namespace = "" then begin
+	if Uberspark.Platform.json_node_uberspark_platform_var.bridges.as_bridge_namespace = "" then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (as_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.binary.as_bridge_namespace) then begin
+	if not (as_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.bridges.as_bridge_namespace) then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load as_bridge settings!";
 		(!retval)
 	end else 
@@ -415,12 +415,12 @@ let initialize_from_config ()
 
 
 	(* handle casm as-bridge *)	
-	if Uberspark.Platform.json_node_uberspark_platform_var.binary.casm_bridge_namespace = "" then begin
+	if Uberspark.Platform.json_node_uberspark_platform_var.bridges.casm_bridge_namespace = "" then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "casm as_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (casm_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.binary.casm_bridge_namespace) then begin
+	if not (casm_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.bridges.casm_bridge_namespace) then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load casm as_bridge settings!";
 		(!retval)
 	end else 
@@ -443,12 +443,12 @@ let initialize_from_config ()
 
 
 	(* handle ld-bridge *)	
-	if Uberspark.Platform.json_node_uberspark_platform_var.binary.ld_bridge_namespace = "" then begin
+	if Uberspark.Platform.json_node_uberspark_platform_var.bridges.ld_bridge_namespace = "" then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "ld_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (ld_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.binary.ld_bridge_namespace) then begin
+	if not (ld_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.bridges.ld_bridge_namespace) then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load ld_bridge settings!";
 		(!retval)
 	end else 
@@ -470,12 +470,12 @@ let initialize_from_config ()
 
 
 	(* handle uberspark vf-bridge *)	
-	if Uberspark.Platform.json_node_uberspark_platform_var.binary.uberspark_vf_bridge_namespace = "" then begin
+	if Uberspark.Platform.json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace = "" then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "uberspark vf_bridge is unspecified";
 		(!retval)
 	end else
 
-	if not (vf_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.binary.uberspark_vf_bridge_namespace) then begin
+	if not (vf_bridge#load Uberspark.Platform.json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace) then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load uberspark vf_bridge settings!";
 		(!retval)
 	end else 
