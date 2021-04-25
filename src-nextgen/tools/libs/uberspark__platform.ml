@@ -54,7 +54,9 @@ let json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_ube
 	uobjcoll_image_hdr_section_size = 0x200000;
 	uobjcoll_image_section_alignment= 0x200000;
 	uobjcoll_image_size = 0x02000000;
+	};
 
+	bridges = {
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
 	as_bridge_namespace = "";
@@ -83,7 +85,9 @@ let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_no
 	uobjcoll_image_hdr_section_size = 0x200000;
 	uobjcoll_image_section_alignment = 0x200000;
 	uobjcoll_image_size = 0x02000000;
+	};
 
+	bridges = {
 	(* bridge related configuration settings *)	
 	cc_bridge_namespace = "";
 	as_bridge_namespace = "";

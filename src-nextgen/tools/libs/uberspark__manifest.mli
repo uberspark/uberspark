@@ -108,6 +108,18 @@ module Platform : sig
   (* manifest node types *)
   (****************************************************************************)
 
+type json_node_uberspark_platform_bridges_t = 
+  {
+    (* bridge related configuration settings *)	
+    mutable cc_bridge_namespace : string;
+    mutable as_bridge_namespace : string;
+    mutable casm_bridge_namespace : string;
+    mutable ld_bridge_namespace : string;
+  	mutable uberspark_vf_bridge_namespace : string;
+
+  }
+
+
   type json_node_uberspark_platform_binary_t = 
   {
     (* uobj/uobjcoll binary related configuration settings *)	
@@ -139,6 +151,7 @@ module Platform : sig
   type json_node_uberspark_platform_t = 
   {
     mutable binary : json_node_uberspark_platform_binary_t;
+    mutable bridges : json_node_uberspark_platform_bridges_t;
 
   }
 
