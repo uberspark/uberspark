@@ -2828,7 +2828,7 @@
     fn_rettype fn_name (__VA_ARGS__) \
     { \
         __builtin_annot(".section "#fn_section); \
-        __builtin_annot(".align "#fn_align); \
+        __builtin_annot(".balign "#fn_align); \
         __builtin_annot(".global "#fn_name); \
         __builtin_annot(#fn_name": "); \
     fn_body \
