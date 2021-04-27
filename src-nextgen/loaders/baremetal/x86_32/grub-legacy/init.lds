@@ -54,9 +54,9 @@ MEMORY
   all (rwxai) : ORIGIN = 0x1E00000, LENGTH = 20M
   bl_hdr (rwxai) : ORIGIN = 0x1E00000, LENGTH = 0x1000	 /*4K*/
   bl_code (rwxai) : ORIGIN = 0x1E01000, LENGTH = 0x10000 /*64K*/
-  bl_data (rwxai) : ORIGIN = 0x1E11000, LENGTH = 0xF000  /*32K*/
-  bl_stack (rwxai) : ORIGIN = 0x1E20000, LENGTH = 0x500000 /*5M*/
-  bl_filler (rwxai) : ORIGIN = 0x2320000, LENGTH = 0x3EE0000 
+  bl_data (rwxai) : ORIGIN = 0x1E11000, LENGTH = 0x2F000  /*188K*/
+  bl_stack (rwxai) : ORIGIN = 0x1E40000, LENGTH = 0x500000 /*5M*/
+  bl_filler (rwxai) : ORIGIN = 0x2340000, LENGTH = 0x3EC0000 
   unaccounted (rwxai) : ORIGIN = 0, LENGTH = 0 /* see section .unaccounted at end */
 }
 
@@ -85,7 +85,7 @@ SECTIONS
 		*(.bss)
 		*(.comment)
 		*(.data.*)
-		. = 0xF000;
+		. = 0x2F000;
 	} >bl_data=0x0000
 
 	.stack : {
@@ -96,7 +96,7 @@ SECTIONS
 
 	.filler : {
 		LONG(0)
-		. = 0x3EE0000;
+		. = 0x3EC0000;
 	} >bl_filler=0x9090
 
 	/* this is to cause the link to fail if there is
