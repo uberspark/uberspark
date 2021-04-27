@@ -150,19 +150,22 @@ type slt_info_t =
     method initialize : ?builddir:string -> string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool
  	
 
-    method compile_c_files : unit -> bool
+    (*method compile_c_files : unit -> bool
     method compile_casm_files : unit -> bool
     method compile_asm_files : unit -> bool
     method link_object_files : unit -> bool
-
+    *)
+    
+    (*
     method install_create_ns : unit -> unit
     method install_h_files_ns : ?context_path_builddir:string -> unit
     method remove_ns : unit -> unit
+    *)
 
-  	method prepare_namespace_for_build : unit -> bool
+  	(* method prepare_namespace_for_build : unit -> bool
   	method build_image : unit -> bool
   	method verify : unit -> bool
-
+    *)
 
   	(*val d_uobj_mf_json_nodes : Uberspark.Manifest.Uobj.uobj_mf_json_nodes_t *)
   	(*method write_manifest : string -> bool*)

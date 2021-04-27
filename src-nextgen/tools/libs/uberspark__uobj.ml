@@ -1206,6 +1206,7 @@ class uobject
 	;
 
 
+	(*
 	(*--------------------------------------------------------------------------*)
 	(* compile c files *)
 	(*--------------------------------------------------------------------------*)
@@ -1370,10 +1371,10 @@ class uobject
 
 		(!retval)	
 	;
+	*)
 
 
-
-	method install_create_ns 
+	(*method install_create_ns 
 		()
 		: unit =
 		
@@ -1387,10 +1388,10 @@ class uobject
 		(* make namespace include folder if not already existing *)
 		Uberspark.Osservices.mkdir ~parent:true (uobj_path_ns ^ "/include") (`Octal 0o0777);
 
-	;
+	;*)
 
 
-	method install_h_files_ns 
+	(*method install_h_files_ns 
 		?(context_path_builddir = ".")
 		: unit =
 		
@@ -1412,10 +1413,10 @@ class uobject
 		Uberspark.Osservices.file_copy (uobj_path_to_mf_filename ^ "/" ^ context_path_builddir ^ "/" ^ Uberspark.Namespace.namespace_uobj_top_level_include_header_src_filename)
 			(uobj_path_ns ^ "/include/" ^ Uberspark.Namespace.namespace_uobj_top_level_include_header_src_filename);
 
-	;
+	;*)
 
 
-	method remove_ns 
+	(*method remove_ns 
 		()
 		: unit =
 		
@@ -1425,10 +1426,11 @@ class uobject
 		
 		(* remove the path and files within *)
 		Uberspark.Osservices.rmdir_recurse [ uobj_path_ns ];
-	;
+	;*)
 
 
 	(* assumes initialize method has been called *)
+	(*
 	method prepare_namespace_for_build
 		()
 		: bool =
@@ -1537,10 +1539,10 @@ class uobject
 
 		(!retval)
 	;
-	
+	*)
 
 	(* verify the uobj *)
-	method verify
+(*	method verify
 		()
 		: bool =
 
@@ -1603,6 +1605,7 @@ class uobject
 
 		(true)
 	;
+*)
 
 end;;
 
