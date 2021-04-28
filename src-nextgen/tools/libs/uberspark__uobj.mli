@@ -1,4 +1,4 @@
-type publicmethod_info_t =
+(*type publicmethod_info_t =
 {
 	mutable f_uobjpminfo			: Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
 	mutable f_uobjinfo    			: Uberspark.Defs.Basedefs.uobjinfo_t;			
@@ -26,11 +26,11 @@ type slt_info_t =
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 }
 
-
+*)
 
   class uobject :
   object
-    val d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
+ (*   val d_intrauobjcoll_callees_hashtbl : (string, string list) Hashtbl.t
 
     val d_interuobjcoll_callees_hashtbl :
       (string, string list) Hashtbl.t
@@ -146,7 +146,7 @@ type slt_info_t =
     method parse_uobjrtl_manifests : unit -> bool
 
   	method overlay_config_settings : unit -> bool
-
+*)
     method initialize : ?builddir:string -> string -> Uberspark.Defs.Basedefs.target_def_t -> int -> bool
  	
 

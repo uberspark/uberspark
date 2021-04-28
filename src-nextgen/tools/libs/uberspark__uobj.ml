@@ -26,7 +26,7 @@ open Str
 (* type definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
-
+(*
 type publicmethod_info_t =
 {
 	mutable f_uobjpminfo			: Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t;
@@ -54,7 +54,7 @@ type slt_info_t =
 	(* indexed by canonical legacy callee sentinel name *)
 	mutable f_legacy_callees_sentinel_address_hashtbl : (string, Uberspark.Defs.Basedefs.uobjcoll_sentinel_address_t)  Hashtbl.t; 
 };;
-
+*)
 
 
 (*---------------------------------------------------------------------------*)
@@ -68,7 +68,7 @@ class uobject
 	= object(self)
 
 	(*val log_tag = "Usuobj";*)
-	val d_ltag = "Usuobj";
+(*	val d_ltag = "Usuobj";
 
 	val d_mf_filename = ref "";
 	method get_d_mf_filename = !d_mf_filename;
@@ -225,9 +225,9 @@ class uobject
 
 	(* uobj slt indirect xfer table assoc list for legacy callees indexed by canonical pm sentinel name *)
 	val d_legacy_callees_slt_indirect_xfer_table_assoc_list : (string * Uberspark.Defs.Basedefs.slt_indirect_xfer_table_info_t) list ref = ref []; 
+*)
 
-
-
+(*
 	(*--------------------------------------------------------------------------*)
 	(* parse uobj manifest *)
 	(* usmf_filename = canonical uobj manifest filename *)
@@ -328,12 +328,12 @@ class uobject
 		(true)
 	;
 
+*)
 
 
 
 
-
-
+(*
 
 	(*--------------------------------------------------------------------------*)
 	(* parse sentinel linkage manifest *)
@@ -889,13 +889,13 @@ class uobject
 
 		()
 	;
-
+	*)
 
 
 	(*--------------------------------------------------------------------------*)
 	(* prepare uobj sources *)
 	(*--------------------------------------------------------------------------*)
-	method prepare_sources
+	(* method prepare_sources
 		()
 		: unit =
 
@@ -1121,7 +1121,7 @@ class uobject
 
 		()
 	;
-
+	*)
 
 
 
@@ -1135,6 +1135,7 @@ class uobject
 		(uobj_load_address : int)
 		: bool = 
 	
+		(*
 		(* store uobj manifest filename *)
 		self#set_d_mf_filename (Filename.basename uobj_mf_filename);
 
@@ -1201,6 +1202,7 @@ class uobject
 		(* create _build folder *)
 		Uberspark.Osservices.mkdir ~parent:true (self#get_d_builddir) (`Octal 0o0777);
 		end;
+		*)
 
 		(true)	
 	;
