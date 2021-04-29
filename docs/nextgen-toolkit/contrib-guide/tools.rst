@@ -95,15 +95,16 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
 
 
 ``Uberspark.Context`` is the top-level module that maintains the context for 
-verification and build. It contains several submodules which are
+verification and build. It contains several submodules (in order of dependency) which are
 available as ``Uberspark.Context.xxx`` (e.g., ``Uberspark.Context.Uobjcoll``):
 
    * Platform -- for platform (CPU, arch, devices, memory) information
-   * Uobjcoll -- |uobjcoll| related functionality
-   * Uobj -- |uobj| related functionality
+   * Codegen -- code generation 
    * Loader -- |uobjcoll| loader related functionality
    * Uobjrtl -- |uobjrtl| related functionality
+   * Uobj -- |uobj| related functionality
    * Actions -- |uobjcoll| and |uobj| manifest action orchestration
+   * Uobjcoll -- |uobjcoll| related functionality
 
 
    ``Uberspark.Context`` also contains global variables and interfaces that allow
@@ -111,16 +112,17 @@ creating, querying and destroying operation context. Once an operation context i
 created, the context information can be accessed via the ``Uberspark.Context`` and
 associated submodule interfaces.
 
-The following modules are context independent:
+The following modules (in order of dependencies) are context independent:
 
-   * Uberspark.Codegen -- code generation 
-   * Uberspark.Binary -- for binary support
-   * Uberspark.Bridge -- bridge support (native and containerized)
-   * Uberspark.Manifest -- manifest support
-   * Uberspark.Namespace -- namespace and associated functions
+   * Uberspark.Defs -- top-level type definitions
+   * Uberspark.Logger -- console logging functionality
    * Uberspark.Osservices -- operating system/shell services
    * Uberspark.Utils -- general utility functions
+   * Uberspark.Namespace -- namespace and associated functions
+   * Uberspark.Manifest -- manifest support
    * Uberspark.Staging -- staging related functionality (work-in-progress)
+   * Uberspark.Bridge -- bridge support (native and containerized)
+   * Uberspark.Binary -- for binary support
 
 
 

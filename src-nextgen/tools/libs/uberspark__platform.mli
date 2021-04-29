@@ -56,3 +56,25 @@ val remove : string -> bool
 *)
 
 
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* bridge_object variables *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+val cc_bridge : Uberspark.Bridge.bridge_object
+val as_bridge : Uberspark.Bridge.bridge_object
+val ld_bridge : Uberspark.Bridge.bridge_object
+val casm_bridge : Uberspark.Bridge.bridge_object
+val vf_bridge : Uberspark.Bridge.bridge_object
+val loader_bridge : Uberspark.Bridge.bridge_object
+
+
+
+
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+(* interface definitions *)
+(*---------------------------------------------------------------------------*)
+(*---------------------------------------------------------------------------*)
+
+val initialize_from_config : unit -> bool
