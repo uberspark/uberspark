@@ -1,0 +1,24 @@
+(*===========================================================================*)
+(*===========================================================================*)
+(*
+	uberSpark context interface implementation															 
+
+	author: amit vasudevan (amitvasudevan@acm.org)							 
+*)
+(*===========================================================================*)
+(*===========================================================================*)
+
+(*module Basedefs =
+struct
+
+#include "defs/basedefs.ml"
+
+end
+
+module Binformat =
+struct
+
+#include "defs/binformat.ml"
+
+end
+*)
