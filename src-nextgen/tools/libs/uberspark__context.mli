@@ -49,5 +49,8 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+val process_manifest_common : ?p_in_order:bool -> string -> string list -> bool
+val process_manifest : ?p_in_order:bool -> string -> string -> string list -> bool
+
 
 

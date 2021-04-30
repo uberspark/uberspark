@@ -75,7 +75,7 @@ let handler_build
   end;
 
   (* process uobjcoll manifest *)
-  let rval = (Uberspark.Uobjcoll.process_manifest 
+  let rval = (Uberspark.Context.process_manifest 
     ~p_in_order:false l_cwd_abs l_manifest_file_path_abs  
       [ "build"; ]) in
 
