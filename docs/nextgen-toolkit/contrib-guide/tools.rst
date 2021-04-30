@@ -93,37 +93,35 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
     ├── mylib.ml
     └── test.ml
 
+The following are the various modules (in order of dependencies) and are
+available as ``Uberspark.xxx`` where ``xxx`` is the
+module name:
+
+    * Uberspark.Defs -- top-level type definitions
+    * Uberspark.Logger -- console logging functionality
+    * Uberspark.Osservices -- operating system/shell services
+    * Uberspark.Utils -- general utility functions
+    * Uberspark.Namespace -- namespace and associated functions
+    * Uberspark.Manifest -- manifest support
+    * Uberspark.Staging -- staging related functionality (work-in-progress)
+    * Uberspark.Bridge -- bridge support (native and containerized)
+    * Uberspark.Binary -- for binary support
+    * Uberspark.Platform -- for platform (CPU, arch, devices, memory) information
+    * Uberspark.Codegen -- code generation 
+    * Uberspark.Loader -- |uobjcoll| loader related functionality
+    * Uberspark.Uobjrtl -- |uobjrtl| related functionality
+    * Uberspark.Uobj -- |uobj| related functionality
+    * Uberspark.Actions -- |uobjcoll| and |uobj| manifest action orchestration
+    * Uberspark.Uobjcoll -- |uobjcoll| related functionality
+    * Uberspark.Context -- module that establishes operating context for build and/or verification
 
 ``Uberspark.Context`` is the top-level module that maintains the context for 
-verification and build. It contains several submodules (in order of dependency) which are
-available as ``Uberspark.Context.xxx`` (e.g., ``Uberspark.Context.Uobjcoll``):
-
-   * Platform -- for platform (CPU, arch, devices, memory) information
-   * Codegen -- code generation 
-   * Loader -- |uobjcoll| loader related functionality
-   * Uobjrtl -- |uobjrtl| related functionality
-   * Uobj -- |uobj| related functionality
-   * Actions -- |uobjcoll| and |uobj| manifest action orchestration
-   * Uobjcoll -- |uobjcoll| related functionality
-
-
-   ``Uberspark.Context`` also contains global variables and interfaces that allow
-creating, querying and destroying operation context. Once an operation context is
-created, the context information can be accessed via the ``Uberspark.Context`` and
-associated submodule interfaces.
-
-The following modules (in order of dependencies) are context independent:
-
-   * Uberspark.Defs -- top-level type definitions
-   * Uberspark.Logger -- console logging functionality
-   * Uberspark.Osservices -- operating system/shell services
-   * Uberspark.Utils -- general utility functions
-   * Uberspark.Namespace -- namespace and associated functions
-   * Uberspark.Manifest -- manifest support
-   * Uberspark.Staging -- staging related functionality (work-in-progress)
-   * Uberspark.Bridge -- bridge support (native and containerized)
-   * Uberspark.Binary -- for binary support
-
-
-
+verification and build. It also
+contains global variables and interfaces that allow
+creating, querying and destroying operation context. 
+Once an operation context is
+created, the relevant context information can be accessed via 
+other modules. For example, |uobjcoll| 
+information for the context can be accessed via
+``Uberspark.Uobjcoll``.
 
