@@ -22,7 +22,7 @@
 	
 		"uberspark.platform.bridges.cc_bridge_namespace" : "uberspark/bridges/container/amd64/cc-bridge/armv8_32/generic/gcc/v4.9.3",
 		"uberspark.platform.bridges.as_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/gnu-as/v2.26.1",
-		"uberspark.platform.bridges.casm_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/casm/vlatest",
+		"uberspark.platform.bridges.casm_bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/casm/vlatest",
 		"uberspark.platform.bridges.ld_bridge_namespace" : "uberspark/bridges/container/amd64/ld-bridge/armv8_32/generic/gnu-ld/v2.26.1",
 		"uberspark.platform.bridges.uberspark_vf_bridge_namespace" : "uberspark/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0"
 
