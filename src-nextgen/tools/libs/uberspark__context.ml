@@ -1161,7 +1161,8 @@ let process_manifest
 let initialize
 	?(p_log_level = (Uberspark.Logger.ord Info)) 
   ?(p_print_banner = true)
-	: unit =
+	(p_banner : string list)
+  : unit =
 
   (* set console log level *)
   Uberspark.Logger.current_level := p_log_level;
@@ -1171,12 +1172,9 @@ let initialize
 
   (* print banner *)
   if p_print_banner then begin
-    Uberspark.Logger.log "enforcing verifiable object abstractions for commodity system software stacks";
-    Uberspark.Logger.log "front-end tool";
-    Uberspark.Logger.log "version: 6.0.0";
-    Uberspark.Logger.log "website: https://uberspark.org";
-    Uberspark.Logger.log "creator: amit vasudevan <amitvasudevan@acm.org>";
-    Uberspark.Logger.log "";
+    List.iter ( fun (p_str : string) ->
+      Uberspark.Logger.log "%s" p_str;    
+    ) p_banner;
   end;
 
   let mf_json_node_uberspark_installation_var : Uberspark.Manifest.Installation.json_node_uberspark_installation_t = 
