@@ -5,13 +5,13 @@ open Uberspark
 open Cmdliner
 
 (*
-  returns (is_manifest_present, is_error)
-  (true, false) => manifest present and no error
-  (false, false) => manifest not present and no error
-  (false, true) => manifest not present and error
+  returns (l_cwd_abs, l_manifest_file_path_abs, is_error)
+  (<cwd_abs>, <manifest file path abs>, false) => manifest present and no error
+  (<cwd_abs>, "", false) => manifest not present and no error
+  ("", "", true) => manifest not present and error
 *)
 let check_for_manifest 
-  (copts : Commonopts.opts) : (bool * bool) = 
+  (copts : Commonopts.opts) : (string * string * bool) = 
   
   (* setup logging level as specified in the cli and kick-start execution *)
   Uberspark.Logger.current_level := copts.log_level;
@@ -25,8 +25,8 @@ let check_for_manifest
 
   (* bail out on error *)
   if (rval == false) then
-    Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "check_for_manifest: could not get absolute path of current working directory!";
-    (false, true)
+    (*Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "check_for_manifest: could not get absolute path of current working directory!";*)
+    ("", "", true)
   else
 
   (* announce working directory *)
@@ -40,16 +40,35 @@ let check_for_manifest
 
   (* if not, display cli help and exit *)
   if (rval == false) then
-    (false, false)
+    (l_cwd_abs, "", false)
   else
 
-  (true, false)
+  (* announce absolute path of manifest filename *)
+  let l_dummy=0 in begin
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "check_for_manifest: using manifest: %s" l_manifest_file_path_abs;
+  end;
+
+  (l_cwd_abs, l_manifest_file_path_abs, false)
 ;;
 
 
+let initialize 
+  (copts : Commonopts.opts) = 
+  
+  Uberspark.Context.initialize ~p_log_level:copts.log_level
+    [
+      "enforcing verifiable object abstractions for commodity system software stacks";
+      "front-end tool";
+      "version: 6.0.0";
+      "website: https://uberspark.org";
+      "creator: amit vasudevan <amitvasudevan@acm.org>";
+      "";
+    ];
+
+;;
 
 
-let initialize_context 
+let create_and_initialize_context 
   (copts : Commonopts.opts) = 
   
   Uberspark.Context.initialize ~p_log_level:copts.log_level

@@ -11,43 +11,21 @@ let handler_default
   (copts : Commonopts.opts)
   = 
 
-  (* setup logging level as specified in the cli and kick-start execution *)
-  Uberspark.Logger.current_level := copts.log_level;
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "cmd_default...";
+  (* check for manifest *)
+  let (l_cwd_abs, 
+  l_manifest_file_path_abs, l_is_error) = (Commoninit.check_for_manifest copts) in
 
-  (* get current working directory *)
-  let l_cwd = Uberspark.Osservices.getcurdir() in
-
-  (* get the absolute path of the current working directory *)
-  let (rval, l_cwd_abs) = (Uberspark.Osservices.abspath l_cwd) in
-	
   (* bail out on error *)
-  if (rval == false) then
+  if l_is_error then
     `Error (false, "could not get absolute path of current working directory!")
-  else
-
-  (* announce working directory *)
-  let l_dummy=0 in begin
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "current working directory: %s" l_cwd_abs;
-  end;
-
-  (* check if manifest exists within current working directory *)
-  let l_manifest_file_path_abs = (l_cwd_abs ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
-  let rval = (Uberspark.Osservices.file_exists l_manifest_file_path_abs) in
-
-  (* if not, display cli help and exit *)
-  if (rval == false) then
+  else if (l_manifest_file_path_abs == "" && l_is_error == false) then
+    (* no manifest file found in current directory, display cli help and exit *)
     (`Help (`Pager, None))
   else
 
-  (* print banner, setup root directory and staging prefix, and load default configuration *)
+  (* create and initialize operation context *)
   let l_dummy=0 in begin
-  Commoninit.initialize copts;
-  end;
-
-  (* announce absolute path of manifest filename *)
-  let l_dummy=0 in begin
-  Uberspark.Logger.log "using manifest: %s" l_manifest_file_path_abs;
+  Commoninit.create_and_initialize_context copts;
   end;
 
   (* process uobjcoll manifest *)
