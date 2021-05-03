@@ -36,6 +36,9 @@ let handler_build
     (p_cmd_build_opts: opts)
   =
 
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
+
   (* check for manifest *)
   let (l_cwd_abs, 
   l_manifest_file_path_abs, l_is_error) = (Common.check_for_manifest p_copts) in

@@ -4,6 +4,19 @@
 open Uberspark
 open Cmdliner
 
+
+
+(*
+  initiaizes console logging 
+*)
+let initialize_logging 
+  (p_copts : Commonopts.opts) : unit = 
+
+  (* setup logging level as specified in the options *)
+  Uberspark.Logger.current_level := p_copts.log_level;
+
+;;
+
 (*
   returns (l_cwd_abs, l_manifest_file_path_abs, is_error)
   (<cwd_abs>, <manifest file path abs>, false) => manifest present and no error
@@ -13,8 +26,6 @@ open Cmdliner
 let check_for_manifest 
   (copts : Commonopts.opts) : (string * string * bool) = 
   
-  (* setup logging level as specified in the cli and kick-start execution *)
-  Uberspark.Logger.current_level := copts.log_level;
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "check_for_manifest...";
 
   (* get current working directory *)
@@ -52,7 +63,7 @@ let check_for_manifest
 ;;
 
 
-let initialize 
+(*let initialize 
   (copts : Commonopts.opts) = 
   
   Uberspark.Context.initialize ~p_log_level:copts.log_level
@@ -66,7 +77,7 @@ let initialize
     ];
 
 ;;
-
+*)
 
 let create_and_initialize_operation_context 
 	?(p_in_order = true) 

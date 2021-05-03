@@ -297,39 +297,33 @@ let handler_staging
   let retval = 
   match action with
     | `Create -> 
-        (* perform common initialization *)
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_create copts cmd_staging_opts path_ns)
     
     | `Switch ->
-        (* perform common initialization *)
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_switch copts cmd_staging_opts path_ns)
 
     | `List ->
-        (* perform common initialization *)
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_list copts cmd_staging_opts path_ns)
 
     | `Remove ->
-        (* perform common initialization *)
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_remove copts cmd_staging_opts path_ns)
 
     | `Config_set ->
-        (* perform common initialization *)
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_config_set copts cmd_staging_opts path_ns)
 
     | `Config_get ->
-        (* perform common initialization, but dont emit any messages *)
         copts.log_level <- (Uberspark.Logger.ord Uberspark.Logger.Stdoutput);
-        Common.initialize copts;
+        Common.initialize_logging copts;
 
         (handler_staging_config_get copts cmd_staging_opts path_ns)
 

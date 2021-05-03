@@ -105,15 +105,15 @@ let cmd_bridge_opts_t =
 
 (* bridges create action *)
 let handler_bridges_action_create 
-  (copts : Commonopts.opts)
+  (p_copts: Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
   : [> `Error of bool * string | `Ok of unit ] = 
 
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-  (* perform common initialization *)
-  Common.initialize copts;
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
 
   (* check to see if we have path_ns spcified *)
   let l_path_ns = ref "" in
@@ -163,15 +163,15 @@ let handler_bridges_action_create
 
 (* bridges dump action *)
 let handler_bridges_action_dump 
-  (copts : Commonopts.opts)
+  (p_copts: Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
   : [> `Error of bool * string | `Ok of unit ] = 
 
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-    (* perform common initialization *)
-    Common.initialize copts;
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
 
     (* check to see if we have path_ns spcified *)
     let l_path_ns = ref "" in
@@ -362,15 +362,15 @@ let helper_bridges_action_config_do
 
 (* bridges config action *)
 let handler_bridges_action_config 
-  (copts : Commonopts.opts)
+  (p_copts: Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
   : [> `Error of bool * string | `Ok of unit ] = 
 
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-    (* perform common initialization *)
-    Common.initialize copts;
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
 
     let l_path_ns = ref "" in
     let bridge_ns_prefix = ref "" in
@@ -479,15 +479,15 @@ let handler_bridges_action_config
 
 (* bridges remove action *)
 let handler_bridges_action_remove 
-  (copts : Commonopts.opts)
+  (p_copts: Commonopts.opts)
   (cmd_bridges_opts: opts)
   (path_ns : string option)
   : [> `Error of bool * string | `Ok of unit ] = 
 
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-    (* perform common initialization *)
-    Common.initialize copts;
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
 
     let l_path_ns = ref "" in
     let l_bridge_exectype = ref "" in
@@ -573,7 +573,7 @@ let handler_bridges_action_remove
 
 (* main handler for bridges command *)
 let handler_bridge 
-  (copts : Commonopts.opts)
+  (p_copts: Commonopts.opts)
   (cmd_bridges_opts: opts)
   (action : [> `Config | `Create | `Dump | `Remove] as 'a)
   (path_ns : string option)
@@ -584,19 +584,19 @@ let handler_bridge
   match action with
     | `Config -> 
  
-      retval := handler_bridges_action_config copts cmd_bridges_opts path_ns;
+      retval := handler_bridges_action_config p_copts cmd_bridges_opts path_ns;
 
     | `Create -> 
-      retval := handler_bridges_action_create copts cmd_bridges_opts path_ns;
+      retval := handler_bridges_action_create p_copts cmd_bridges_opts path_ns;
 
     | `Dump ->
 
-      retval := handler_bridges_action_dump copts cmd_bridges_opts path_ns;
+      retval := handler_bridges_action_dump p_copts cmd_bridges_opts path_ns;
 
 
     | `Remove -> 
 
-      retval := handler_bridges_action_remove copts cmd_bridges_opts path_ns;
+      retval := handler_bridges_action_remove p_copts cmd_bridges_opts path_ns;
 
   ;
 

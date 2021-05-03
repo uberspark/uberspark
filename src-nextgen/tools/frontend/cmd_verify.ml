@@ -36,6 +36,8 @@ let handler_verify
     (p_cmd_verify_opts: opts)
   =
 
+  (* initialize console logging *)
+  Common.initialize_logging p_copts;
 
   (* check for manifest *)
   let (l_cwd_abs, 
