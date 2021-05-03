@@ -63,22 +63,6 @@ let check_for_manifest
 ;;
 
 
-(*let initialize 
-  (copts : Commonopts.opts) = 
-  
-  Uberspark.Context.initialize ~p_log_level:copts.log_level
-    [
-      "enforcing verifiable object abstractions for commodity system software stacks";
-      "front-end tool";
-      "version: 6.0.0";
-      "website: https://uberspark.org";
-      "creator: amit vasudevan <amitvasudevan@acm.org>";
-      "";
-    ];
-
-;;
-*)
-
 let create_and_initialize_operation_context 
 	?(p_in_order = true) 
   (p_copts : Commonopts.opts) 
