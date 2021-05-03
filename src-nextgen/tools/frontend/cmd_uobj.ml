@@ -141,7 +141,7 @@ let handler_uobj
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   (* perform common initialization *)
-  Commoninit.initialize copts;
+  Common.initialize copts;
 
   match action with
     | `Build -> 
@@ -153,7 +153,7 @@ let handler_uobj
   ;
 
 (*  (* initialize bridges *)
-  if (Commoninit.initialize_bridges) then 
+  if (Common.initialize_bridges) then 
     begin
   
     end

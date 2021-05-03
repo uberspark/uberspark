@@ -113,7 +113,7 @@ let handler_bridges_action_create
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   (* perform common initialization *)
-  Commoninit.initialize copts;
+  Common.initialize copts;
 
   (* check to see if we have path_ns spcified *)
   let l_path_ns = ref "" in
@@ -171,7 +171,7 @@ let handler_bridges_action_dump
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
     (* perform common initialization *)
-    Commoninit.initialize copts;
+    Common.initialize copts;
 
     (* check to see if we have path_ns spcified *)
     let l_path_ns = ref "" in
@@ -370,7 +370,7 @@ let handler_bridges_action_config
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
     (* perform common initialization *)
-    Commoninit.initialize copts;
+    Common.initialize copts;
 
     let l_path_ns = ref "" in
     let bridge_ns_prefix = ref "" in
@@ -487,7 +487,7 @@ let handler_bridges_action_remove
     let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
     (* perform common initialization *)
-    Commoninit.initialize copts;
+    Common.initialize copts;
 
     let l_path_ns = ref "" in
     let l_bridge_exectype = ref "" in

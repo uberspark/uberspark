@@ -298,38 +298,38 @@ let handler_staging
   match action with
     | `Create -> 
         (* perform common initialization *)
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_create copts cmd_staging_opts path_ns)
     
     | `Switch ->
         (* perform common initialization *)
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_switch copts cmd_staging_opts path_ns)
 
     | `List ->
         (* perform common initialization *)
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_list copts cmd_staging_opts path_ns)
 
     | `Remove ->
         (* perform common initialization *)
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_remove copts cmd_staging_opts path_ns)
 
     | `Config_set ->
         (* perform common initialization *)
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_config_set copts cmd_staging_opts path_ns)
 
     | `Config_get ->
         (* perform common initialization, but dont emit any messages *)
         copts.log_level <- (Uberspark.Logger.ord Uberspark.Logger.Stdoutput);
-        Commoninit.initialize copts;
+        Common.initialize copts;
 
         (handler_staging_config_get copts cmd_staging_opts path_ns)
 

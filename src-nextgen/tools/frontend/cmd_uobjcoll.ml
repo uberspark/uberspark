@@ -136,7 +136,7 @@ let handler_uobjcoll
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   (* perform common initialization *)
-  Commoninit.initialize copts;
+  Common.initialize copts;
 
   match action with
     | `Build -> 

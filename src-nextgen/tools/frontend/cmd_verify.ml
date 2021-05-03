@@ -66,7 +66,7 @@ let handler_verify
 
   (* print banner, setup root directory and staging prefix, and load default configuration *)
   let l_dummy=0 in begin
-  Commoninit.initialize p_copts;
+  Common.initialize p_copts;
   end;
 
   (* announce absolute path of manifest filename *)

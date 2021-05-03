@@ -13,7 +13,7 @@ let handler_default
 
   (* check for manifest *)
   let (l_cwd_abs, 
-  l_manifest_file_path_abs, l_is_error) = (Commoninit.check_for_manifest copts) in
+  l_manifest_file_path_abs, l_is_error) = (Common.check_for_manifest copts) in
 
   (* bail out on error *)
   if l_is_error then
@@ -24,7 +24,7 @@ let handler_default
   else
 
   (* create and initialize operation context by processing manifest *)
-  let l_rval = (Commoninit.create_and_initialize_operation_context copts l_cwd_abs l_manifest_file_path_abs []) in
+  let l_rval = (Common.create_and_initialize_operation_context copts l_cwd_abs l_manifest_file_path_abs []) in
   
   (* bail out on error, else return success *)
   if (l_rval == false) then begin
