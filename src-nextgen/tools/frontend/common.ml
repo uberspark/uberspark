@@ -69,6 +69,7 @@ let initialize
 
 
 let create_and_initialize_operation_context 
+	?(p_in_order = true) 
   (p_copts : Commonopts.opts) 
   (p_cwd_abs : string)
   (p_manifest_file_path_abs : string)
@@ -87,7 +88,7 @@ let create_and_initialize_operation_context
 
   (* process uobjcoll manifest *)
   let rval = (Uberspark.Context.process_manifest 
-    ~p_in_order:true p_cwd_abs p_manifest_file_path_abs  
+    ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
       p_operations) in
 
   (rval)
