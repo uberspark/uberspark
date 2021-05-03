@@ -23,19 +23,12 @@ let handler_default
     (`Help (`Pager, None))
   else
 
-  (* create and initialize operation context *)
-  let l_dummy=0 in begin
-  Commoninit.create_and_initialize_context copts;
-  end;
-
-  (* process uobjcoll manifest *)
-  let rval = (Uberspark.Context.process_manifest 
-    ~p_in_order:true l_cwd_abs l_manifest_file_path_abs  
-      [ ]) in
-
+  (* create and initialize operation context by processing manifest *)
+  let l_rval = (Commoninit.create_and_initialize_operation_context copts l_cwd_abs l_manifest_file_path_abs []) in
+  
   (* bail out on error, else return success *)
-  if (rval == false) then begin
-    `Error (false, "could not process manifest!")
+  if (l_rval == false) then begin
+    `Error (false, "could not create and initialize operation context!")
   end else begin
     Uberspark.Logger.log "manifest processed succesfully!";
     `Ok()

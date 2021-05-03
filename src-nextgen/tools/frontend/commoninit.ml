@@ -68,10 +68,14 @@ let initialize
 ;;
 
 
-let create_and_initialize_context 
-  (copts : Commonopts.opts) = 
+let create_and_initialize_operation_context 
+  (p_copts : Commonopts.opts) 
+  (p_cwd_abs : string)
+  (p_manifest_file_path_abs : string)
+  (p_operations : string list)
+  : bool = 
   
-  Uberspark.Context.initialize ~p_log_level:copts.log_level
+  Uberspark.Context.initialize ~p_log_level:p_copts.log_level
     [
       "enforcing verifiable object abstractions for commodity system software stacks";
       "front-end tool";
@@ -81,5 +85,11 @@ let create_and_initialize_context
       "";
     ];
 
+  (* process uobjcoll manifest *)
+  let rval = (Uberspark.Context.process_manifest 
+    ~p_in_order:true p_cwd_abs p_manifest_file_path_abs  
+      p_operations) in
+
+  (rval)
 ;;
 
