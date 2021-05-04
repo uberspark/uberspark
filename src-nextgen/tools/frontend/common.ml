@@ -138,7 +138,7 @@ let create_staging
 	end;
 
 	(* invoke common manifest processing logic *)
-	(Uberspark.Context.process_manifest_common ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
+	(Uberspark.Context.process_uobjcoll_manifest ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
 ;;
 
 let initialize_operation_context 

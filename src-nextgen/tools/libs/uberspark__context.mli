@@ -49,7 +49,7 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val process_manifest_common : ?p_in_order:bool -> string -> string list -> bool
+val process_uobjcoll_manifest : ?p_in_order:bool -> string -> string list -> bool
 val initialize : ?p_log_level:int -> ?p_print_banner:bool -> string list -> unit
 
 

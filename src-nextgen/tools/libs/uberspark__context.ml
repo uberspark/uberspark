@@ -834,7 +834,7 @@ let initialize_uobjcoll_sources
 
 
 
-let process_manifest_common
+let process_uobjcoll_manifest
 	?(p_in_order = true) 
 	(p_uobjcoll_ns : string)
 	(p_targets : string list)
