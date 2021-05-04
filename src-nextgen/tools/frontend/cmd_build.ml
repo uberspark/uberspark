@@ -52,7 +52,7 @@ let handler_build
   else
 
   (* create and initialize operation context by processing manifest *)
-  let l_rval = (Common.create_and_initialize_operation_context ~p_in_order:false 
+  let l_rval = (Common.initialize_operation_context_with_staging ~p_in_order:false 
     p_copts l_cwd_abs l_manifest_file_path_abs [ "build"; ]) in
   
   (* bail out on error, else return success *)

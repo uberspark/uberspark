@@ -65,7 +65,9 @@ let check_for_manifest
   (l_cwd_abs, l_manifest_file_path_abs, false)
 ;;
 
-
+(*
+  create uobjcoll staging folder and populate it
+*)
 let create_staging
 	?(p_in_order = true) 
 	(abspath_cwd : string)
@@ -139,15 +141,13 @@ let create_staging
 	(Uberspark.Context.process_manifest_common ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
 ;;
 
-
-let create_and_initialize_operation_context 
-	?(p_in_order = true) 
+let initialize_operation_context 
   (p_copts : Commonopts.opts) 
-  (p_cwd_abs : string)
-  (p_manifest_file_path_abs : string)
-  (p_operations : string list)
-  : bool = 
+  : unit = 
   
+  (* initialize console logging *)
+  initialize_logging p_copts;
+
   Uberspark.Context.initialize ~p_log_level:p_copts.log_level
     [
       "enforcing verifiable object abstractions for commodity system software stacks";
@@ -158,7 +158,23 @@ let create_and_initialize_operation_context
       "";
     ];
 
-  (* process uobjcoll manifest *)
+  ()
+;;
+
+
+
+let initialize_operation_context_with_staging 
+	?(p_in_order = true) 
+  (p_copts : Commonopts.opts) 
+  (p_cwd_abs : string)
+  (p_manifest_file_path_abs : string)
+  (p_operations : string list)
+  : bool = 
+
+  (* initialize operation context *)
+  initialize_operation_context p_copts;
+
+  (* create staging and process uobjcoll manifest *)
   let rval = (create_staging 
     ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
       p_operations) in
