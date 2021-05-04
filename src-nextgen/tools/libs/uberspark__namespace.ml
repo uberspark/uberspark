@@ -53,7 +53,7 @@ let namespace_uobj_cclib_filename = "cclib.a";;
 (* uobjcoll *)
 let namespace_uobjcoll = "uobjcoll";;
 let namespace_uobjcoll_build_dir = "_build";;
-let namespace_uobjcoll_triage_dir = "_triage";;
+let namespace_uobjcoll_staging_dir = "_staging";;
 let namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename = "uobjcoll_uobj_binsec_map.S";;
 let namespace_uobjcoll_sentinel_definitions_src_filename = "uobjcoll_sentinels.s";;
 let namespace_uobjcoll_linkerscript_filename = "uobjcoll.lscript";;

@@ -95,12 +95,12 @@ let process_manifest
 
 	(* create triage folder *)
 	let dummy = 0 in begin
-	Uberspark.Osservices.mkdir ~parent:true Uberspark.Namespace.namespace_uobjcoll_triage_dir (`Octal 0o0777);
+	Uberspark.Osservices.mkdir ~parent:true Uberspark.Namespace.namespace_uobjcoll_staging_dir (`Octal 0o0777);
 	end;
 
 	(* create uobjcoll namespace folder within triage *)
 	(* TBD: sanity check uobjcoll namespace prefix *)
-	let l_abspath_uobjcoll_triage_dir = (abspath_cwd ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_triage_dir) in 
+	let l_abspath_uobjcoll_triage_dir = (abspath_cwd ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_staging_dir) in 
 	let l_abspath_uobjcoll_triage_dir_uobjcoll_ns = (l_abspath_uobjcoll_triage_dir ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace) in
 	begin
 	Uberspark.Osservices.mkdir ~parent:true l_abspath_uobjcoll_triage_dir_uobjcoll_ns (`Octal 0o0777);
