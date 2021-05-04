@@ -66,7 +66,7 @@ let check_for_manifest
 ;;
 
 
-let process_manifest
+let create_staging
 	?(p_in_order = true) 
 	(abspath_cwd : string)
 	(abspath_mf_filename : string)
@@ -159,10 +159,11 @@ let create_and_initialize_operation_context
     ];
 
   (* process uobjcoll manifest *)
-  let rval = (process_manifest 
+  let rval = (create_staging 
     ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
       p_operations) in
 
   (rval)
 ;;
+
 
