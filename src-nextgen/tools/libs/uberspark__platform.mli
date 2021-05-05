@@ -19,7 +19,7 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_uberspark_platform_t
+val json_node_uberspark_platform_var : Uberspark.Manifest.uberspark_manifest_var_t
 
 
 
@@ -34,7 +34,7 @@ val json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_ube
 val settings_restore : unit -> unit
 *)
 
-val load : string -> bool
+val load_from_manifest_file : string -> bool
 
 (*
 val settings_get : string ->  (bool * string)
@@ -44,7 +44,7 @@ val settings_get : string ->  (bool * string)
 val settings_set : string -> string -> bool
 *)
 
-val load_from_json : Yojson.Basic.json -> bool
+(*val load_from_json : Yojson.Basic.json -> bool*)
 
 (*
 val dump_to_file : string -> unit

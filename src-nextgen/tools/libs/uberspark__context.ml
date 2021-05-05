@@ -903,7 +903,7 @@ let process_uobjcoll_manifest
       (* debug dump uobjcoll platform and load platform configuration *)
       let l_dummy=0 in begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
-      retval := Uberspark.Platform.load (l_uberspark_manifest_var.uobjcoll.platform);
+      retval := Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform);
       end;
 
 			if (!retval) == false then
@@ -1141,7 +1141,7 @@ let initialize
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (mf_json_node_uberspark_installation_var.default_platform);
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
-  if not (Uberspark.Platform.load (mf_json_node_uberspark_installation_var.default_platform)) then 
+  if not (Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ mf_json_node_uberspark_installation_var.default_platform)) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
       ignore ( exit 1);
