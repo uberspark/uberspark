@@ -421,6 +421,7 @@ type uberspark_manifest_var_t =
 (* on failure: false; uberspark_manifest_var_t fields are untouched *)
 (*--------------------------------------------------------------------------*)
 let manifest_json_to_uberspark_manifest_var 
+	?(p_only_configurable = false)
 	(mf_json : Yojson.Basic.t)
 	(uberspark_manifest_var : uberspark_manifest_var_t) 
 	: bool =
@@ -436,7 +437,7 @@ let manifest_json_to_uberspark_manifest_var
 			let rval_4 = (Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json uberspark_manifest_var.uobjrtl) in
 			let rval_5 = (Sentinel.json_node_uberspark_sentinel_to_var mf_json uberspark_manifest_var.sentinel) in
 			let rval_6 = (Loader.json_node_uberspark_loader_to_var mf_json uberspark_manifest_var.loader) in
-			let rval_7 = (Platform.json_node_uberspark_platform_to_var mf_json uberspark_manifest_var.platform) in
+			let rval_7 = (Platform.json_node_uberspark_platform_to_var ~p_only_configurable:p_only_configurable mf_json uberspark_manifest_var.platform) in
 	
 			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6 && rval_7) then begin
 				retval:=true
@@ -457,6 +458,7 @@ let manifest_json_to_uberspark_manifest_var
 (* on failure: false; uberspark_manifest_var_t fields are untouched *)
 (*--------------------------------------------------------------------------*)
 let manifest_file_to_uberspark_manifest_var 
+	?(p_only_configurable = false)
 	(abspath_mf_filename : string)
 	(uberspark_manifest_var : uberspark_manifest_var_t) 
 	: bool =
@@ -465,7 +467,7 @@ let manifest_file_to_uberspark_manifest_var
 
 	try
 		let mf_json = Yojson.Basic.from_file abspath_mf_filename in
-		retval := manifest_json_to_uberspark_manifest_var mf_json uberspark_manifest_var;
+		retval := manifest_json_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable mf_json uberspark_manifest_var;
 
 	with Yojson.Json_error s -> 
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;

@@ -48,13 +48,13 @@ let manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manif
 
 
 let load_from_manifest_file 
+	?(p_only_configurable = false)
 	(p_manifest_file_abs_path: string)
 	: bool =
 
-	let rval = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var p_manifest_file_abs_path manifest_var in
+	let rval = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable p_manifest_file_abs_path manifest_var in
 	(rval)
 ;;
-
 
 
 let initialize_from_config () 

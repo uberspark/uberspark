@@ -41,5 +41,5 @@ val manifest_var : Uberspark.Manifest.uberspark_manifest_var_t
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val load_from_manifest_file : string -> bool
+val load_from_manifest_file : ?p_only_configurable:bool -> string -> bool
 val initialize_from_config : unit -> bool

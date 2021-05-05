@@ -148,7 +148,7 @@ type json_node_uberspark_platform_bridges_t =
 
   }
 
-  val json_node_uberspark_platform_to_var : Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
+  val json_node_uberspark_platform_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
   val json_node_uberspark_platform_var_to_jsonstr : json_node_uberspark_platform_t -> string
 
 end
@@ -429,8 +429,8 @@ type uberspark_manifest_var_t =
 (*---------------------------------------------------------------------------*)
 
 
-val manifest_json_to_uberspark_manifest_var : Yojson.Basic.t -> uberspark_manifest_var_t -> bool
-val manifest_file_to_uberspark_manifest_var : string -> uberspark_manifest_var_t -> bool
+val manifest_json_to_uberspark_manifest_var : ?p_only_configurable:bool -> Yojson.Basic.t -> uberspark_manifest_var_t -> bool
+val manifest_file_to_uberspark_manifest_var : ?p_only_configurable:bool -> string -> uberspark_manifest_var_t -> bool
 val uberspark_manifest_var_default_value : unit -> uberspark_manifest_var_t 
 val uberspark_manifest_var_copy :  uberspark_manifest_var_t -> 
   uberspark_manifest_var_t ->

@@ -1141,6 +1141,8 @@ let initialize
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (mf_json_node_uberspark_installation_var.default_platform);
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
+
+
   if not (Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ mf_json_node_uberspark_installation_var.default_platform)) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";

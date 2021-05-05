@@ -68,10 +68,13 @@ type json_node_uberspark_platform_t =
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_platform_to_var 
+	?(p_only_configurable = false)
 	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_platform_var : json_node_uberspark_platform_t) 
 	: bool =
 	let retval = ref false in
+
+	(* use not p_only_configurable for fields that cannot be overlayed *)
 
 	try
 		let open Yojson.Basic.Util in
@@ -117,13 +120,13 @@ let json_node_uberspark_platform_to_var
 			if (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_platform_var.bridges.as_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json) <> `Null then
+			if (not p_only_configurable) &&  (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_platform_var.bridges.casm_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json);
 
 			if (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_platform_var.bridges.ld_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json);
 
-			if (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json) <> `Null then
+			if (not p_only_configurable) && (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json) <> `Null then
 				json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json);
 
 			retval := true;
