@@ -411,7 +411,7 @@ type uberspark_manifest_var_t =
 	mutable uobjrtl : Uobjrtl.json_node_uberspark_uobjrtl_t;
 	mutable sentinel : Sentinel.json_node_uberspark_sentinel_t; 
 	mutable loader : Loader.json_node_uberspark_loader_t; 
-
+	mutable platform : Platform.json_node_uberspark_platform_t; 
 };;
 
 (*--------------------------------------------------------------------------*)
@@ -436,8 +436,9 @@ let manifest_json_to_uberspark_manifest_var
 			let rval_4 = (Uobjrtl.json_node_uberspark_uobjrtl_to_var mf_json uberspark_manifest_var.uobjrtl) in
 			let rval_5 = (Sentinel.json_node_uberspark_sentinel_to_var mf_json uberspark_manifest_var.sentinel) in
 			let rval_6 = (Loader.json_node_uberspark_loader_to_var mf_json uberspark_manifest_var.loader) in
+			let rval_7 = (Platform.json_node_uberspark_platform_to_var mf_json uberspark_manifest_var.platform) in
 	
-			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6) then begin
+			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6 && rval_7) then begin
 				retval:=true
 			end;
 			
@@ -548,6 +549,24 @@ let uberspark_manifest_var_copy
 	output.loader.bridge_namespace <- input.loader.bridge_namespace; 
 	output.loader.bridge_cmd <- input.loader.bridge_cmd; 
 
+	output.platform.binary.page_size 								<- 	input.platform.binary.page_size 							;
+	output.platform.binary.uobj_section_alignment 					<- 	input.platform.binary.uobj_section_alignment 				;
+	output.platform.binary.uobj_default_section_size 				<- 	input.platform.binary.uobj_default_section_size 			;
+	output.platform.binary.uobj_image_load_address 					<- 	input.platform.binary.uobj_image_load_address 				;
+	output.platform.binary.uobj_image_uniform_size 					<- 	input.platform.binary.uobj_image_uniform_size 				;
+	output.platform.binary.uobj_image_size 							<- 	input.platform.binary.uobj_image_size 						;
+	output.platform.binary.uobj_image_alignment 					<- 	input.platform.binary.uobj_image_alignment 				;
+	output.platform.binary.uobjcoll_image_load_address 				<- 	input.platform.binary.uobjcoll_image_load_address 			;
+	output.platform.binary.uobjcoll_image_hdr_section_alignment 	<- 	input.platform.binary.uobjcoll_image_hdr_section_alignment ;
+	output.platform.binary.uobjcoll_image_hdr_section_size 			<- 	input.platform.binary.uobjcoll_image_hdr_section_size 		;
+	output.platform.binary.uobjcoll_image_section_alignment 		<- 	input.platform.binary.uobjcoll_image_section_alignment 	;
+	output.platform.binary.uobjcoll_image_size 						<- 	input.platform.binary.uobjcoll_image_size 					;
+	output.platform.bridges.cc_bridge_namespace 					<- 	input.platform.bridges.cc_bridge_namespace 				;
+	output.platform.bridges.as_bridge_namespace 					<- 	input.platform.bridges.as_bridge_namespace 				;
+	output.platform.bridges.casm_bridge_namespace 					<- 	input.platform.bridges.casm_bridge_namespace 				;
+	output.platform.bridges.ld_bridge_namespace 					<- 	input.platform.bridges.ld_bridge_namespace 				;
+	output.platform.bridges.uberspark_vf_bridge_namespace 			<- 	input.platform.bridges.uberspark_vf_bridge_namespace 		;
+
 	()
 ;;
 
@@ -591,4 +610,28 @@ let uberspark_manifest_var_default_value ()
 		bridge_namespace = ""; bridge_cmd = [];
 		}; 
 
-	};;
+	platform ={
+		binary = {
+			page_size = 0;
+			uobj_section_alignment = 0;
+			uobj_default_section_size = 0;
+			uobj_image_load_address = 0;
+			uobj_image_uniform_size = true;
+			uobj_image_size = 0;
+			uobj_image_alignment = 0;
+			uobjcoll_image_load_address = 0;
+			uobjcoll_image_hdr_section_alignment = 0;
+			uobjcoll_image_hdr_section_size = 0;
+			uobjcoll_image_section_alignment = 0;
+			uobjcoll_image_size = 0;
+		};
+		bridges = {
+			cc_bridge_namespace = "";
+			as_bridge_namespace = "";
+			casm_bridge_namespace = "";
+			ld_bridge_namespace = "";
+			uberspark_vf_bridge_namespace = "";
+		};
+	};
+
+};;

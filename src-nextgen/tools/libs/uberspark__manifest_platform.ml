@@ -59,10 +59,12 @@ type json_node_uberspark_platform_t =
 
 
 (*--------------------------------------------------------------------------*)
-(* convert json node uberspark.platform.binary. into json_node_uberspark_platform_t variable *)
-(* return: *)
-(* on success: true; json_node_uberspark_platform_var.binary.fields are modified with parsed values *)
-(* on failure: false; json_node_uberspark_config_Var fields are untouched *)
+(* 
+	parse uberspark.platform.xxx json nodes and populate 
+	json_node_uberspark_platform_var if they are found
+	return: true on success, false if there was an issue with type errors 
+	during parsing
+*)
 (*--------------------------------------------------------------------------*)
 
 let json_node_uberspark_platform_to_var 

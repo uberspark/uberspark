@@ -417,6 +417,7 @@ type uberspark_manifest_var_t =
   mutable uobjrtl : Uobjrtl.json_node_uberspark_uobjrtl_t;
   mutable sentinel : Sentinel.json_node_uberspark_sentinel_t;
   mutable loader : Loader.json_node_uberspark_loader_t;
+  mutable platform : Platform.json_node_uberspark_platform_t;
 }
 
 
