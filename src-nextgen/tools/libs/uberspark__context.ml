@@ -885,31 +885,13 @@ let process_uobjcoll_manifest
 		(false)
 	else
 
-	let l_dummy=0 in begin
- 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
-	end;
-
-	(* load the uobjcoll platform definitions from the platform manifest *)
-	if not (Uberspark.Platform.load (d_uberspark_manifest_var.uobjcoll.platform)) then 
-		(false)
-	else
-
-	let l_dummy=0 in begin
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
-	end;
-
 	(* create uobjcoll manifest variables assoc list *)
 	(* TBD: revisions needed for multi-platform uobjcoll *) 
 	let l_dummy=0 in begin
-  	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
-
 	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, d_uberspark_manifest_var) ];
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "created uobjcoll manifest variable assoc list...";
 	end;
 
-	(* set default uobjcoll size and load address *)
-	d_load_address := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
-	d_size := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_size;
 
 	(* iterate through all uobjcolls *)
 	let retval = ref true in 
@@ -917,6 +899,24 @@ let process_uobjcoll_manifest
 		
 		if (!retval) then begin
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "processing uobjcoll: %s..." l_uobjcoll_ns;
+
+      (* debug dump uobjcoll platform and load platform configuration *)
+      let l_dummy=0 in begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
+      retval := Uberspark.Platform.load (l_uberspark_manifest_var.uobjcoll.platform);
+      end;
+
+			if (!retval) == false then
+				()
+			else
+
+      (* announce that we successfully loaded the platform definitions *)
+    	(* and set default uobjcoll size and load address *)
+      let l_dummy=0 in begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
+      d_load_address := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
+      d_size := Uberspark.Platform.json_node_uberspark_platform_var.binary.uobjcoll_image_size;
+      end;
 
 			(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
 			let l_dummy=0 in begin
