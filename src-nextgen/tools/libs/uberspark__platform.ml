@@ -295,7 +295,7 @@ let settings_set
 
 
 
-
+(*
 let dump_to_file 
 	(output_config_filename : string)
 	=
@@ -306,7 +306,7 @@ let dump_to_file
 			(Uberspark.Manifest.Platform.json_node_uberspark_platform_var_to_jsonstr json_node_uberspark_platform_var);
 		];
 ;;
-
+*)
 
 let initialize_from_config () 
 	: bool =

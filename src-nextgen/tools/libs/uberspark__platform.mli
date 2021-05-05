@@ -41,8 +41,9 @@ val settings_set : string -> string -> bool
 
 val load_from_json : Yojson.Basic.json -> bool
 
+(*
 val dump_to_file : string -> unit
-
+*)
 
 (*---------------------------------------------------------------------------*)
 (* FOR FUTURE EXPANSION *)
