@@ -19,49 +19,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val json_node_uberspark_platform_var : Uberspark.Manifest.uberspark_manifest_var_t
-
-
-
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-(* interface definitions *)
-(*---------------------------------------------------------------------------*)
-(*---------------------------------------------------------------------------*)
-
-(*val settings_save : unit -> unit
-
-val settings_restore : unit -> unit
-*)
-
-val load_from_manifest_file : string -> bool
-
-(*
-val settings_get : string ->  (bool * string)
-*)
-
-(*
-val settings_set : string -> string -> bool
-*)
-
-(*val load_from_json : Yojson.Basic.json -> bool*)
-
-(*
-val dump_to_file : string -> unit
-*)
-
-(*---------------------------------------------------------------------------*)
-(* FOR FUTURE EXPANSION *)
-(*---------------------------------------------------------------------------*)
-
-(*
-val create_from_file : string -> string -> (bool * string)
-val create_from_existing_ns : string -> string -> (bool * string)
-val switch : string -> bool
-val remove : string -> bool
-*)
-
-
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* bridge_object variables *)
@@ -74,6 +31,7 @@ val casm_bridge : Uberspark.Bridge.bridge_object
 val vf_bridge : Uberspark.Bridge.bridge_object
 val loader_bridge : Uberspark.Bridge.bridge_object
 
+val manifest_var : Uberspark.Manifest.uberspark_manifest_var_t
 
 
 
@@ -83,4 +41,5 @@ val loader_bridge : Uberspark.Bridge.bridge_object
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+val load_from_manifest_file : string -> bool
 val initialize_from_config : unit -> bool

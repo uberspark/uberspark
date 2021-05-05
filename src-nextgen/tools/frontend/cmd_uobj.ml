@@ -82,7 +82,7 @@ let handler_uobj_build
     		{platform = cmd_uobj_opts.platform; arch = cmd_uobj_opts.arch; cpu = cmd_uobj_opts.cpu} in
 
       let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_build (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) target_def 
-        Uberspark.Platform.json_node_uberspark_platform_var.platform.binary.uobj_image_load_address) in
+        Uberspark.Platform.manifest_var.platform.binary.uobj_image_load_address) in
       if (rval) then begin
         Uberspark.Logger.log "uobj build success!";
         `Ok ()
@@ -115,7 +115,7 @@ let handler_uobj_verify
     		{platform = cmd_uobj_opts.platform; arch = cmd_uobj_opts.arch; cpu = cmd_uobj_opts.cpu} in
 
       let (rval, uobj) = (Uberspark.Uobj.create_initialize_and_verify (uobj_path_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) target_def 
-        Uberspark.Platform.json_node_uberspark_platform_var.platform.binary.uobj_image_load_address) in
+        Uberspark.Platform.manifest_var.platform.binary.uobj_image_load_address) in
       if (rval) then begin
         Uberspark.Logger.log "[SUCCESS] uobj verification!";
         `Ok ()
