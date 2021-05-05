@@ -877,7 +877,16 @@ let process_uobjcoll_manifest
 
 	let l_dummy=0 in begin
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read manifest file into JSON object";
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
+	end;
+
+	(* sanity check we are an uobjcoll manifest and bail out on error*)
+  (* TBD: add support for multi-platform uobjcoll *)
+	if (d_uberspark_manifest_var.manifest.namespace <> Uberspark.Namespace.namespace_uobjcoll_mf_node_type_tag) then
+		(false)
+	else
+
+	let l_dummy=0 in begin
+ 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
 	end;
 
 	(* load the uobjcoll platform definitions from the platform manifest *)
@@ -889,14 +898,11 @@ let process_uobjcoll_manifest
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
 	end;
 
-	(* sanity check we are an uobjcoll manifest and bail out on error*)
-	if (d_uberspark_manifest_var.manifest.namespace <> Uberspark.Namespace.namespace_uobjcoll_mf_node_type_tag) then
-		(false)
-	else
-
 	(* create uobjcoll manifest variables assoc list *)
 	(* TBD: revisions needed for multi-platform uobjcoll *) 
 	let l_dummy=0 in begin
+  	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" d_uberspark_manifest_var.uobjcoll.platform;
+
 	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, d_uberspark_manifest_var) ];
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "created uobjcoll manifest variable assoc list...";
 	end;
