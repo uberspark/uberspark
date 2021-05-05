@@ -37,7 +37,9 @@ val load : string -> bool
 
 val settings_get : string ->  (bool * string)
 
+(*
 val settings_set : string -> string -> bool
+*)
 
 val load_from_json : Yojson.Basic.json -> bool
 

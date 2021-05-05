@@ -262,7 +262,7 @@ let settings_get
 	(!retstatus, !settings_value)
 ;;
 
-
+(*
 let settings_set 
 	(setting_name : string)
 	(setting_value : string)
@@ -292,7 +292,7 @@ let settings_set
 	
 	!retval
 ;;
-
+*)
 
 
 (*

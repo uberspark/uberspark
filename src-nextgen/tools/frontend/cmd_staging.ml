@@ -232,14 +232,9 @@ let handler_staging_config_set
 
   end else begin
 
-    let rval = (Uberspark.Platform.settings_set !l_setting_name !l_setting_value) in 
-    if rval == true then begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration setting via command line deprecated!";
-      `Ok()  
-    end else begin
-      `Error (false, "invalid configuration setting")
-    end;
-
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration setting via command line deprecated!";
+    `Ok()  
+    
   end;
 
 ;;
