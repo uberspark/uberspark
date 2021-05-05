@@ -29,13 +29,16 @@ val json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_ube
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val settings_save : unit -> unit
+(*val settings_save : unit -> unit
 
 val settings_restore : unit -> unit
+*)
 
 val load : string -> bool
 
+(*
 val settings_get : string ->  (bool * string)
+*)
 
 (*
 val settings_set : string -> string -> bool

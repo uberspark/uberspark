@@ -75,7 +75,7 @@ let json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_ube
 	};
 };;
 
-
+(*
 let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_node_uberspark_platform_t = {
 	binary = {
 	(* uobj/uobjcoll binary related configuration settings *)	
@@ -105,7 +105,7 @@ let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_no
 	uberspark_vf_bridge_namespace = "";
 	};
 };;
-
+*)
 
 
 (*---------------------------------------------------------------------------*)
@@ -114,7 +114,7 @@ let saved_json_node_uberspark_platform_var : Uberspark.Manifest.Platform.json_no
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-
+(*
 let settings_save 
 	() 
 	: unit =
@@ -172,7 +172,7 @@ let settings_restore
 	()
 ;;
 
-
+*)
 
 
 let load_from_json 
@@ -231,7 +231,7 @@ let load
 
 
 
-
+(*
 let settings_get 
 	(setting_name : string)
 	: (bool * string) =
@@ -261,6 +261,7 @@ let settings_get
 	
 	(!retstatus, !settings_value)
 ;;
+*)
 
 (*
 let settings_set 

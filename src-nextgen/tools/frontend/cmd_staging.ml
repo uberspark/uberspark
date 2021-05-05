@@ -212,30 +212,9 @@ let handler_staging_config_set
   (cmd_staging_opts: opts)
   (name : string option)
   =
-  let l_setting_name = ref "" in
-  let l_setting_value = ref "" in
 
-  (* grab setting name and setting value *)
-  match cmd_staging_opts.setting_name with
-    | None -> l_setting_name := "";
-    | Some sname -> l_setting_name := sname;
-  ;
-
-  match cmd_staging_opts.setting_value with
-    | None -> l_setting_value := "";
-    | Some sname -> l_setting_value := sname;
-  ;
-
-  if !l_setting_name = "" || !l_setting_value = "" then begin
-
-    `Error (true, "need staging configuration setting name and setting value")
-
-  end else begin
-
-    Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration setting via command line deprecated!";
-    `Ok()  
-    
-  end;
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration setting via command line deprecated!";
+  `Ok()  
 
 ;;
 
@@ -248,30 +227,8 @@ let handler_staging_config_get
   (name : string option)
   =
 
-  let l_setting_name = ref "" in
-  let l_setting_value = ref "" in
-
-  (* grab setting name *)
-  match cmd_staging_opts.setting_name with
-    | None -> l_setting_name := "";
-    | Some sname -> l_setting_name := sname;
-  ;
-
-  if !l_setting_name = "" then begin
-
-    `Error (true, "need staging configuration setting name")
-
-  end else begin
-
-    let(rval, setting_value) = Uberspark.Platform.settings_get !l_setting_name in
-    if rval == true then begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Stdoutput "%s" setting_value;
-      `Ok()
-    end else begin
-      `Error (false, "invalid configuration setting")
-    end;
-
-  end;
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration getting via command line deprecated!";
+  `Ok()  
 
 ;;
 
