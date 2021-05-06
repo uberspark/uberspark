@@ -78,7 +78,7 @@ let create_staging
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "processing uobjcoll manifest...";
 
 	(* read manifest file into manifest variable *)
-	let rval = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
+	let (rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
 
 	(* bail out on error *)
   	if (rval == false) then

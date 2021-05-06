@@ -461,20 +461,21 @@ let manifest_file_to_uberspark_manifest_var
 	?(p_only_configurable = false)
 	(abspath_mf_filename : string)
 	(uberspark_manifest_var : uberspark_manifest_var_t) 
-	: bool =
+	: bool * Yojson.Basic.t =
 
 	let retval = ref false in
+	let l_mf_json = ref `Null in 
 
 	try
-		let mf_json = Yojson.Basic.from_file abspath_mf_filename in
-		retval := manifest_json_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable mf_json uberspark_manifest_var;
+		l_mf_json := Yojson.Basic.from_file abspath_mf_filename;
+		retval := manifest_json_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable !l_mf_json uberspark_manifest_var;
 
 	with Yojson.Json_error s -> 
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;
 		retval := false;
 	;
 
-	(!retval)
+	(!retval, !l_mf_json)
 ;;
 
 

@@ -105,7 +105,8 @@ let create_uobj_manifest_var_assoc_list
 			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
 			let l_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
-			rval := Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
+      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var in
+      rval := l_rval;
 
 			if !rval then begin
 				d_uobj_manifest_var_assoc_list := !d_uobj_manifest_var_assoc_list @ [ (l_uobj_namespace, l_uberspark_manifest_var) ];
@@ -147,7 +148,8 @@ let create_uobjrtl_manifest_var_hashtbl
 
 				let l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
-				retval := Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var;
+				let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uobjrtl_manifest_var in
+        retval := l_rval;
 
 				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjrtl manifest sources=%u" (List.length l_uobjrtl_manifest_var.uobjrtl.sources);
 				if !retval then begin
@@ -184,7 +186,8 @@ let create_loader_manifest_var_hashtbl
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "loader manifest path=%s" abspath_mf_filename;
 
-			l_retval := Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var;
+			let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var in
+      l_retval := l_rval;
 
 			if !l_retval then begin
 				Hashtbl.remove d_loader_manifest_var_hashtbl l_loader_namespace;						
@@ -222,7 +225,8 @@ let create_sentinel_manifest_var_hashtbl
 
 			let l_sentinel_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
-			retval := Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
+      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var in
+			retval := l_rval;
 
 			if !retval then begin
 				Hashtbl.add d_sentinel_manifest_var_hashtbl l_sentinel_namespace l_sentinel_manifest_var;						
@@ -247,7 +251,8 @@ let create_sentinel_manifest_var_hashtbl
 
 					let l_sentinel_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
-					retval := Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var;
+          let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_abspath_mf_filename l_sentinel_manifest_var in
+					retval := l_rval;
 
 					if !retval then begin
 						Hashtbl.add d_sentinel_manifest_var_hashtbl l_sentinel_namespace l_sentinel_manifest_var;						
@@ -868,7 +873,7 @@ let process_uobjcoll_manifest
 
 	(* read manifest file into manifest variable *)
 	let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
-	let rval = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
+	let (rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
 
 	(* bail out on error *)
   	if (rval == false) then
@@ -917,6 +922,15 @@ let process_uobjcoll_manifest
       d_load_address := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_load_address;
       d_size := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_size;
       end;
+
+      (* overlay any platform definitions that the uobjcoll might have *)
+      let l_dummy=0 in begin
+      retval := true;
+      end;
+
+			if (!retval) == false then
+				()
+			else
 
 			(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
 			let l_dummy=0 in begin

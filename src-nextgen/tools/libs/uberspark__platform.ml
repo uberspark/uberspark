@@ -46,13 +46,25 @@ let manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manif
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+let load_from_manifest_json 
+	?(p_only_configurable = false)
+	(p_mf_json : Yojson.Basic.json)
+	: bool =
+
+	(Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:p_only_configurable	
+		p_mf_json manifest_var.platform)
+;;
+
+
 
 let load_from_manifest_file 
 	?(p_only_configurable = false)
 	(p_manifest_file_abs_path: string)
 	: bool =
 
-	let rval = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable p_manifest_file_abs_path manifest_var in
+	let (rval, _) = 
+	Uberspark.Manifest.manifest_file_to_uberspark_manifest_var ~p_only_configurable:p_only_configurable 
+		p_manifest_file_abs_path manifest_var in
 	(rval)
 ;;
 
