@@ -54,7 +54,7 @@ let d_staging_dir_prefix = ref "";;
 
 (* assoc list of uobjcoll manifest variables; maps uobjcoll namespace to uobjcoll manifest variable *)
 (* TBD: revisions needed for multi-platform uobjcoll *) 
-let d_uobjcoll_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];; 
+let d_uobjcoll_manifest_var_assoc_list : (string * (Uberspark.Manifest.uberspark_manifest_var_t * Yojson.Basic.t)) list ref = ref [];; 
 
 (* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
 let d_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];; 
@@ -873,7 +873,7 @@ let process_uobjcoll_manifest
 
 	(* read manifest file into manifest variable *)
 	let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
-	let (rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
+	let (rval, l_uobjcoll_manifest_json) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
 
 	(* bail out on error *)
   	if (rval == false) then
@@ -893,17 +893,21 @@ let process_uobjcoll_manifest
 	(* create uobjcoll manifest variables assoc list *)
 	(* TBD: revisions needed for multi-platform uobjcoll *) 
 	let l_dummy=0 in begin
-	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, d_uberspark_manifest_var) ];
+	d_uobjcoll_manifest_var_assoc_list := [ (p_uobjcoll_ns, (d_uberspark_manifest_var, l_uobjcoll_manifest_json)) ];
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "created uobjcoll manifest variable assoc list...";
 	end;
 
 
 	(* iterate through all uobjcolls *)
 	let retval = ref true in 
-	List.iter ( fun ( (l_uobjcoll_ns:string), (l_uberspark_manifest_var:Uberspark.Manifest.uberspark_manifest_var_t) ) -> 
+	(*List.iter ( fun ( (l_uobjcoll_ns:string), ((l_uberspark_manifest_var:Uberspark.Manifest.uberspark_manifest_var_t), l_uberspark_manifest_var_json:Yojson.Basic.t)) ) -> 
+	*)
+	List.iter ( fun ( (l_uobjcoll_ns:string), (l_varjson: Uberspark.Manifest.uberspark_manifest_var_t * Yojson.Basic.t) ) -> 
 		
 		if (!retval) then begin
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "processing uobjcoll: %s..." l_uobjcoll_ns;
+
+			let (l_uberspark_manifest_var, l_uberspark_manifest_var_json) = l_varjson in
 
       (* debug dump uobjcoll platform and load platform configuration *)
       let l_dummy=0 in begin
@@ -925,7 +929,7 @@ let process_uobjcoll_manifest
 
       (* overlay any platform definitions that the uobjcoll might have *)
       let l_dummy=0 in begin
-      retval := true;
+      retval := Uberspark.Platform.load_from_manifest_json ~p_only_configurable:true l_uberspark_manifest_var_json ;
       end;
 
 			if (!retval) == false then
