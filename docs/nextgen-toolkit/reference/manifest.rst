@@ -89,77 +89,91 @@ An example definition for a |uobjcoll| manifest follows:
 
 
 
-``uberspark.config.xxx`` Nodes
-------------------------------
 
-The ``uberspark.config.xxx`` nodes within the |ubersparkmf| can be (optionally) used to 
-selectively override configuration settings within the current staging environment.
+.. _reference-manifest-uberspark-platform:
+
+``uberspark.platform.xxx`` Nodes
+--------------------------------
+    
+
+The ``uberspark.platform.xxx`` nodes within the |ubersparkmf| define platform
+configuration settings for a given platform. Platform definitions can be (optionally)
+overriden within a |uobjcoll| manifest.
 
 .. note::   You can define only the required node properties that you want to override within
-            the ``uberspark.config.xxx`` node definition. See example that follows below.
+            the ``uberspark.platform.xxx`` node definition. See example that follows below.
 
-The JSON declaration of the ``uberspark.config.xxx`` node is as below:
+The JSON declaration of the ``uberspark.platform.xxx`` node is as below:
 
-.. json:object:: uberspark.config.xxx
+.. json:object:: uberspark.platform.xxx
 
-   :property uberspark.config.binary_page_size: size in bytes of a memory page within the |uobj|/|uobjcoll| binary
-   :proptype uberspark.config.binary_page_size: string
-   :options uberspark.config.binary_page_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.page_size: size in bytes of a memory page within the |uobj|/|uobjcoll| binary
+   :proptype uberspark.platform.binary.page_size: string
+   :options uberspark.platform.binary.page_size: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.binary_uobj_default_section_size: size in bytes of a |uobj| binary section (e.g., code, data)
-   :proptype uberspark.config.binary_uobj_default_section_size: string
-   :options uberspark.config.binary_uobj_default_section_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobj_default_section_size: size in bytes of a |uobj| binary section (e.g., code, data)
+   :proptype uberspark.platform.binary.uobj_default_section_size: string
+   :options uberspark.platform.binary.uobj_default_section_size: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.binary_uobj_section_alignment: memory alignment in bytes, of |uobj| binary section
-   :proptype uberspark.config.binary_uobj_section_alignment: string
-   :options uberspark.config.binary_uobj_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobj_section_alignment: memory alignment in bytes, of |uobj| binary section
+   :proptype uberspark.platform.binary.uobj_section_alignment: string
+   :options uberspark.platform.binary.uobj_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.uobj_binary_image_load_address: memory load address of |uobj| binary
-   :proptype uberspark.config.uobj_binary_image_load_address: string
-   :options uberspark.config.uobj_binary_image_load_address: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobj_image_load_address: memory load address of |uobj| binary
+   :proptype uberspark.platform.binary.uobj_image_load_address: string
+   :options uberspark.platform.binary.uobj_image_load_address: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.uobj_binary_image_uniform_size: indicates if all |uobjs| within a |uobjcoll| binary have the same size
-   :proptype uberspark.config.uobj_binary_image_uniform_size: boolean
-   :options uberspark.config.uobj_binary_image_uniform_size: true, false
+   :property uberspark.platform.binary.uobj_image_uniform_size: indicates if all |uobjs| within a |uobjcoll| binary have the same size
+   :proptype uberspark.platform.binary.uobj_image_uniform_size: boolean
+   :options uberspark.platform.binary.uobj_image_uniform_size: true, false
 
-   :property uberspark.config.uobj_binary_image_size: size in bytes of a |uobj| binary
-   :proptype uberspark.config.uobj_binary_image_size: string
-   :options uberspark.config.uobj_binary_image_size: "<hexadecimal integer>", default="0x2400000"
+   :property uberspark.platform.binary.uobj_image_size: size in bytes of a |uobj| binary
+   :proptype uberspark.platform.binary.uobj_image_size: string
+   :options uberspark.platform.binary.uobj_image_size: "<hexadecimal integer>", default="0x2400000"
 
-   :property uberspark.config.uobj_binary_image_alignment: memory alignment in bytes of a |uobj| binary image
-   :proptype uberspark.config.uobj_binary_image_alignment: string
-   :options uberspark.config.uobj_binary_image_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobj_image_alignment: memory alignment in bytes of a |uobj| binary image
+   :proptype uberspark.platform.binary.uobj_image_alignment: string
+   :options uberspark.platform.binary.uobj_image_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.uobjcoll_binary_image_load_address: memory load address of |uobjcoll| binary
-   :proptype uberspark.config.uobjcoll_binary_image_load_address: string
-   :options uberspark.config.uobjcoll_binary_image_load_address: "<hexadecimal integer>", default="0x60000000"
+   :property uberspark.platform.binary.uobjcoll_image_load_address: memory load address of |uobjcoll| binary
+   :proptype uberspark.platform.binary.uobjcoll_image_load_address: string
+   :options uberspark.platform.binary.uobjcoll_image_load_address: "<hexadecimal integer>", default="0x60000000"
 
-   :property uberspark.config.uobjcoll_binary_image_hdr_section_alignment: memory alignment in bytes, of |uobjcoll| binary header section
-   :proptype uberspark.config.uobjcoll_binary_image_hdr_section_alignment: string
-   :options uberspark.config.uobjcoll_binary_image_hdr_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobjcoll_image_hdr_section_alignment: memory alignment in bytes, of |uobjcoll| binary header section
+   :proptype uberspark.platform.binary.uobjcoll_image_hdr_section_alignment: string
+   :options uberspark.platform.binary.uobjcoll_image_hdr_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.uobjcoll_binary_image_hdr_section_size: size in bytes of a |uobjcoll| binary header section
-   :proptype uberspark.config.uobjcoll_binary_image_hdr_section_size: string
-   :options uberspark.config.uobjcoll_binary_image_hdr_section_size: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobjcoll_image_hdr_section_size: size in bytes of a |uobjcoll| binary header section
+   :proptype uberspark.platform.binary.uobjcoll_image_hdr_section_size: string
+   :options uberspark.platform.binary.uobjcoll_image_hdr_section_size: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.uobjcoll_binary_image_section_alignment: memory alignment in bytes, of |uobjcoll| binary section
-   :proptype uberspark.config.uobjcoll_binary_image_section_alignment: string
-   :options uberspark.config.uobjcoll_binary_image_section_alignment: "<hexadecimal integer>", default="0x200000"
+   :property uberspark.platform.binary.uobjcoll_image_section_alignment: memory alignment in bytes, of |uobjcoll| binary section
+   :proptype uberspark.platform.binary.uobjcoll_image_section_alignment: string
+   :options uberspark.platform.binary.uobjcoll_image_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.config.cc_bridge_namespace: C compiler <bridge namespace path>
-   :proptype uberspark.config.cc_bridge_namespace: string
-   :options uberspark.config.cc_bridge_namespace: "<bridge namespace path>"
+   :property uberspark.platform.bridges.cc_bridge_namespace: C compiler <bridge namespace path>
+   :proptype uberspark.platform.bridges.cc_bridge_namespace: string
+   :options uberspark.platform.bridges.cc_bridge_namespace: "<bridge namespace path>"
 
-   :property uberspark.config.as_bridge_namespace: Assembler <bridge namespace path>
-   :proptype uberspark.config.as_bridge_namespace: string
-   :options uberspark.config.as_bridge_namespace: "<bridge namespace path>"
+   :property uberspark.platform.bridges.as_bridge_namespace: Assembler <bridge namespace path>
+   :proptype uberspark.platform.bridges.as_bridge_namespace: string
+   :options uberspark.platform.bridges.as_bridge_namespace: "<bridge namespace path>"
 
-   :property uberspark.config.ld_bridge_namespace: Linker <bridge namespace path>
-   :proptype uberspark.config.ld_bridge_namespace: string
-   :options uberspark.config.ld_bridge_namespace: "<bridge namespace path>"
+   :property uberspark.platform.bridges.ld_bridge_namespace: Linker <bridge namespace path>
+   :proptype uberspark.platform.bridges.ld_bridge_namespace: string
+   :options uberspark.platform.bridges.ld_bridge_namespace: "<bridge namespace path>"
+
+   :property uberspark.platform.bridges.casm_bridge_namespace: CASM <bridge namespace path>
+   :proptype uberspark.platform.bridges.casm_bridge_namespace: string
+   :options uberspark.platform.bridges.casm_bridge_namespace: "<bridge namespace path>"
+
+   :property uberspark.platform.bridges.uberspark_vf_bridge_namespace: uberSpark verification bridge <bridge namespace path>
+   :proptype uberspark.platform.bridges.uberspark_vf_bridge_namespace: string
+   :options uberspark.platform.bridges.uberspark_vf_bridge_namespace: "<bridge namespace path>"
 
 
-An example definition of the ``uberspark.config.xxx`` nodes within |ubersparkmff| follows:
+
+An example definition of the ``uberspark.platform.xxx`` nodes within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
@@ -168,22 +182,12 @@ An example definition of the ``uberspark.config.xxx`` nodes within |ubersparkmff
         "uberspark.manifest.version_min" : "any",
         "uberspark.manifest.version_max" : "any",
 
-        "uberspark.config.binary_uobj_section_alignment" : "0x200000",
-        "uberspark.config.cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0"
+        "uberspark.platform.binary.uobj_section_alignment" : "0x200000",
+        "uberspark.platform.bridges.cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0"
     }
 
-The aforementioned definition selectively overrides the *binary_uobj_section_alignment* and *cc_bridge_namespace* 
-configuration settings within the current staging environment.
-
-
-.. _reference-manifest-uberspark-platform:
-
-``uberspark.platform.xxx`` Nodes
---------------------------------
-
-
-
-
+The aforementioned definition selectively overrides the *uobj_section_alignment* 
+and *cc_bridge_namespace* definitions within the current platform definition.
 
 
 

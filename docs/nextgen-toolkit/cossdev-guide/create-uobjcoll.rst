@@ -63,7 +63,14 @@ The *hpl* field within ``uberspark.uobjcoll.hpl`` JSON node specifies the hardwa
 the |uobjcoll|. The currently supported values are ``any`` to signify the |uobjcoll| can execute under
 any hardware privilege level.            
 
+A |uobjcoll| can override values of default platform definitions (where allowed) to provide
+|uobjcoll| specific values. For example, ``uberspark.platform.uobjcoll_image_load_address``
+is typically overridden with the load address of the |uobjcoll| binary image. 
 
+
+.. seealso::   |reference-manifest-ref|:::ref:`reference-manifest-uberspark-platform` 
+               for more information on platform definitions including definitions that
+               can be overridden
 
 |uobjcollcaps| |uobjs| and Public-method Definitions
 ----------------------------------------------------
