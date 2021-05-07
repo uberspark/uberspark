@@ -912,7 +912,8 @@ let process_uobjcoll_manifest
       (* debug dump uobjcoll platform and load platform configuration *)
       let l_dummy=0 in begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
-      retval := Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform);
+      retval := Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
+	  Uberspark.Namespace.namespace_root_mf_filename);
       end;
 
 			if (!retval) == false then
@@ -923,13 +924,13 @@ let process_uobjcoll_manifest
     	(* and set default uobjcoll size and load address *)
       let l_dummy=0 in begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
-      d_load_address := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_load_address;
-      d_size := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_size;
       end;
 
       (* overlay any platform definitions that the uobjcoll might have *)
       let l_dummy=0 in begin
       retval := Uberspark.Platform.load_from_manifest_json ~p_only_configurable:true l_uberspark_manifest_var_json ;
+      d_load_address := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_load_address;
+      d_size := Uberspark.Platform.manifest_var.platform.binary.uobjcoll_image_size;
       end;
 
 			if (!retval) == false then
@@ -1161,7 +1162,10 @@ let initialize
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
 
-  if not (Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ mf_json_node_uberspark_installation_var.default_platform)) then 
+  if not (Uberspark.Platform.load_from_manifest_file 
+  	((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
+	  mf_json_node_uberspark_installation_var.default_platform ^ "/" ^ 
+	  Uberspark.Namespace.namespace_root_mf_filename)) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
       ignore ( exit 1);

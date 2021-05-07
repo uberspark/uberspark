@@ -51,8 +51,9 @@ let load_from_manifest_json
 	(p_mf_json : Yojson.Basic.json)
 	: bool =
 
-	(Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:p_only_configurable	
-		p_mf_json manifest_var.platform)
+	let l_rval = Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:p_only_configurable	
+		p_mf_json manifest_var.platform in
+	(l_rval)
 ;;
 
 

@@ -3,18 +3,18 @@
 
 {
    		"uberspark.manifest.namespace" : "uberspark/platforms",
-		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_min" : "6.0.0",
 		"uberspark.manifest.version_max" : "any",
 	
 		"uberspark.platform.binary.page_size" : "0x1000",
 		"uberspark.platform.binary.uobj_section_alignment" : "0x1000",
 		"uberspark.platform.binary.uobj_default_section_size" : "0x1000",
-		"uberspark.platform.binary.uobj_image_load_address" : "0x60000000",
+		"uberspark.platform.binary.uobj_image_load_address" : "0x00400000",
 		"uberspark.platform.binary.uobj_image_uniform_size" : false,
 		"uberspark.platform.binary.uobj_image_size" : "0x00200000",
 		"uberspark.platform.binary.uobj_image_alignment" : "0x1000",
 
-		"uberspark.platform.binary.uobjcoll_image_load_address" : "0x00007000",
+		"uberspark.platform.binary.uobjcoll_image_load_address" : "0x00400000",
 		"uberspark.platform.binary.uobjcoll_image_hdr_section_alignment" : "0x200000",
 		"uberspark.platform.binary.uobjcoll_image_hdr_section_size" : "0x200000",
 		"uberspark.platform.binary.uobjcoll_image_section_alignment" : "0x1000",
