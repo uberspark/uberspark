@@ -150,6 +150,7 @@ type json_node_uberspark_platform_bridges_t =
 
   val json_node_uberspark_platform_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
   val json_node_uberspark_platform_var_to_jsonstr : json_node_uberspark_platform_t -> string
+  val json_node_uberspark_platform_var_copy : json_node_uberspark_platform_t -> json_node_uberspark_platform_t -> unit
 
 end
 

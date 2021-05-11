@@ -552,6 +552,9 @@ let uberspark_manifest_var_copy
 	output.loader.bridge_namespace <- input.loader.bridge_namespace; 
 	output.loader.bridge_cmd <- input.loader.bridge_cmd; 
 
+	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
+
+(*	
 	output.platform.binary.page_size 								<- 	input.platform.binary.page_size 							;
 	output.platform.binary.uobj_section_alignment 					<- 	input.platform.binary.uobj_section_alignment 				;
 	output.platform.binary.uobj_default_section_size 				<- 	input.platform.binary.uobj_default_section_size 			;
@@ -569,6 +572,7 @@ let uberspark_manifest_var_copy
 	output.platform.bridges.casm_bridge_namespace 					<- 	input.platform.bridges.casm_bridge_namespace 				;
 	output.platform.bridges.ld_bridge_namespace 					<- 	input.platform.bridges.ld_bridge_namespace 				;
 	output.platform.bridges.uberspark_vf_bridge_namespace 			<- 	input.platform.bridges.uberspark_vf_bridge_namespace 		;
+*)
 
 	()
 ;;

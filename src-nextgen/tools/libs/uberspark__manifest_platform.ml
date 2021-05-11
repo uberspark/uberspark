@@ -175,7 +175,35 @@ let json_node_uberspark_platform_var_to_jsonstr
 	(!retstr)
 ;;
 
+(* 
+	copy constructor for uberspark.platform.xxx nodes
+	we use this to copy one json_node_uberspark_platform_t 
+	variable into another 
+*)
+let json_node_uberspark_platform_var_copy 
+	(output : json_node_uberspark_platform_t )
+	(input : json_node_uberspark_platform_t )
+	: unit = 
 
+	output.binary.page_size 								<- 	input.binary.page_size 							;
+	output.binary.uobj_section_alignment 					<- 	input.binary.uobj_section_alignment 				;
+	output.binary.uobj_default_section_size 				<- 	input.binary.uobj_default_section_size 			;
+	output.binary.uobj_image_load_address 					<- 	input.binary.uobj_image_load_address 				;
+	output.binary.uobj_image_uniform_size 					<- 	input.binary.uobj_image_uniform_size 				;
+	output.binary.uobj_image_size 							<- 	input.binary.uobj_image_size 						;
+	output.binary.uobj_image_alignment 					<- 	input.binary.uobj_image_alignment 				;
+	output.binary.uobjcoll_image_load_address 				<- 	input.binary.uobjcoll_image_load_address 			;
+	output.binary.uobjcoll_image_hdr_section_alignment 	<- 	input.binary.uobjcoll_image_hdr_section_alignment ;
+	output.binary.uobjcoll_image_hdr_section_size 			<- 	input.binary.uobjcoll_image_hdr_section_size 		;
+	output.binary.uobjcoll_image_section_alignment 		<- 	input.binary.uobjcoll_image_section_alignment 	;
+	output.binary.uobjcoll_image_size 						<- 	input.binary.uobjcoll_image_size 					;
+	output.bridges.cc_bridge_namespace 					<- 	input.bridges.cc_bridge_namespace 				;
+	output.bridges.as_bridge_namespace 					<- 	input.bridges.as_bridge_namespace 				;
+	output.bridges.casm_bridge_namespace 					<- 	input.bridges.casm_bridge_namespace 				;
+	output.bridges.ld_bridge_namespace 					<- 	input.bridges.ld_bridge_namespace 				;
+	output.bridges.uberspark_vf_bridge_namespace 			<- 	input.bridges.uberspark_vf_bridge_namespace 		;
 
+	()
+;;
 
 
