@@ -58,3 +58,31 @@ let json_node_uberspark_installation_to_var
 ;;
 
 
+(* 
+	copy constructor for uberspark.platform.xxx nodes
+	we use this to copy one json_node_uberspark_installation_t 
+	variable into another 
+*)
+let json_node_uberspark_installation_var_copy 
+	(output : json_node_uberspark_installation_t )
+	(input : json_node_uberspark_installation_t )
+	: unit = 
+
+	output.root_directory <- input.root_directory; 
+	output.default_platform <- input.default_platform; 
+
+	()
+;;
+
+
+(* default json_node_uberspark_installation_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_installation_t *)
+let json_node_uberspark_installation_var_default_value () 
+	: json_node_uberspark_installation_t = 
+
+	{
+		root_directory = "";
+		default_platform = "";
+	}
+;;
+

@@ -175,6 +175,9 @@ module Installation : sig
 
   val json_node_uberspark_installation_to_var : Yojson.Basic.t -> json_node_uberspark_installation_t -> bool
 
+  val json_node_uberspark_installation_var_copy : json_node_uberspark_installation_t -> json_node_uberspark_installation_t -> unit
+  val json_node_uberspark_installation_var_default_value : unit -> json_node_uberspark_installation_t
+
 end
 
 
@@ -425,6 +428,7 @@ type uberspark_manifest_var_t =
   mutable loader : Loader.json_node_uberspark_loader_t;
   mutable platform : Platform.json_node_uberspark_platform_t;
  	mutable bridge : Bridge.json_node_uberspark_bridge_t; 
+ 	mutable installation : Installation.json_node_uberspark_installation_t; 
 }
 
 
