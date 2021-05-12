@@ -412,6 +412,7 @@ type uberspark_manifest_var_t =
 	mutable sentinel : Sentinel.json_node_uberspark_sentinel_t; 
 	mutable loader : Loader.json_node_uberspark_loader_t; 
 	mutable platform : Platform.json_node_uberspark_platform_t; 
+	mutable bridge : Bridge.json_node_uberspark_bridge_t; 
 };;
 
 (*--------------------------------------------------------------------------*)
@@ -438,8 +439,9 @@ let manifest_json_to_uberspark_manifest_var
 			let rval_5 = (Sentinel.json_node_uberspark_sentinel_to_var mf_json uberspark_manifest_var.sentinel) in
 			let rval_6 = (Loader.json_node_uberspark_loader_to_var mf_json uberspark_manifest_var.loader) in
 			let rval_7 = (Platform.json_node_uberspark_platform_to_var ~p_only_configurable:p_only_configurable mf_json uberspark_manifest_var.platform) in
+			let rval_8 = (Bridge.json_node_uberspark_bridge_to_var mf_json uberspark_manifest_var.bridge) in
 	
-			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6 && rval_7) then begin
+			if (rval_1 && rval_2 && rval_3 && rval_4 && rval_5 && rval_6 && rval_7 && rval_8 ) then begin
 				retval:=true
 			end;
 			
@@ -553,6 +555,7 @@ let uberspark_manifest_var_copy
 	output.loader.bridge_cmd <- input.loader.bridge_cmd; 
 
 	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
+	Bridge.json_node_uberspark_bridge_var_copy output.bridge input.bridge;
 
 (*	
 	output.platform.binary.page_size 								<- 	input.platform.binary.page_size 							;
@@ -644,5 +647,5 @@ let uberspark_manifest_var_default_value ()
 *)
 
 	platform = Platform.json_node_uberspark_platform_var_default_value ();
-
+	bridge = Bridge.json_node_uberspark_bridge_var_default_value ();
 };;

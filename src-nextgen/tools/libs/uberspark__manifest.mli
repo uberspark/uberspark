@@ -98,6 +98,9 @@ module Bridge : sig
   val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
   val json_node_uberspark_bridge_var_to_jsonstr : json_node_uberspark_bridge_t -> string
 
+  val json_node_uberspark_bridge_var_copy : json_node_uberspark_bridge_t -> json_node_uberspark_bridge_t -> unit
+  val json_node_uberspark_bridge_var_default_value : unit -> json_node_uberspark_bridge_t
+
 
 end
 
@@ -421,6 +424,7 @@ type uberspark_manifest_var_t =
   mutable sentinel : Sentinel.json_node_uberspark_sentinel_t;
   mutable loader : Loader.json_node_uberspark_loader_t;
   mutable platform : Platform.json_node_uberspark_platform_t;
+ 	mutable bridge : Bridge.json_node_uberspark_bridge_t; 
 }
 
 
