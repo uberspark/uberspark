@@ -554,5 +554,51 @@ let json_node_uberspark_uobj_to_var
 ;;
 
 
+(* 
+	copy constructor for uberspark.uobj.xxx nodes
+	we use this to copy one json_node_uberspark_uobj_t 
+	variable into another 
+*)
+let json_node_uberspark_uobj_var_copy 
+	(output : json_node_uberspark_uobj_t )
+	(input : json_node_uberspark_uobj_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu; 
+	(*
+	output.sources.source_h_files<- input.sources.source_h_files; 
+	output.sources.source_c_files <- input.sources.source_c_files; 
+	output.sources.source_casm_files <- input.sources.source_casm_files; 
+	output.sources.source_asm_files <- input.sources.source_asm_files;
+	*)
+	output.sources <- input.sources;
+	output.headers <- input.headers;
+
+	output.public_methods <- input.public_methods; 
+	output.intra_uobjcoll_callees <- input.intra_uobjcoll_callees; 
+	output.inter_uobjcoll_callees <- input.inter_uobjcoll_callees;
+	output.legacy_callees <- input.legacy_callees; 
+	output.sections <- input.sections; 
+	output.uobjrtl <- input.uobjrtl; 
+
+	()
+;;
+
+
+(* default json_node_uberspark_uobj_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_uobj_t *)
+let json_node_uberspark_uobj_var_default_value () 
+	: json_node_uberspark_uobj_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = []; headers = [];
+		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+		legacy_callees = []; sections = []; uobjrtl = []; 
+	}
+;;
 
 

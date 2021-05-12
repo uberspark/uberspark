@@ -293,6 +293,8 @@ module Uobj : sig
   val json_node_uberspark_uobj_uobjrtl_to_var : Yojson.Basic.t -> bool *  ((string * json_node_uberspark_uobj_uobjrtl_t) list)
   val json_node_uberspark_uobj_to_var : Yojson.Basic.t -> json_node_uberspark_uobj_t -> bool
 
+  val json_node_uberspark_uobj_var_copy : json_node_uberspark_uobj_t -> json_node_uberspark_uobj_t -> unit
+  val json_node_uberspark_uobj_var_default_value : unit -> json_node_uberspark_uobj_t
 
 end
 

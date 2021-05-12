@@ -515,25 +515,8 @@ let uberspark_manifest_var_copy
 	output.uobjcoll.sources <- input.uobjcoll.sources;
 
 
-	output.uobj.namespace <- input.uobj.namespace; 
-	output.uobj.platform <- input.uobj.platform; 
-	output.uobj.arch <- input.uobj.arch; 
-	output.uobj.cpu <- input.uobj.cpu; 
-	(*
-	output.uobj.sources.source_h_files<- input.uobj.sources.source_h_files; 
-	output.uobj.sources.source_c_files <- input.uobj.sources.source_c_files; 
-	output.uobj.sources.source_casm_files <- input.uobj.sources.source_casm_files; 
-	output.uobj.sources.source_asm_files <- input.uobj.sources.source_asm_files;
-	*)
-	output.uobj.sources <- input.uobj.sources;
-	output.uobj.headers <- input.uobj.headers;
+	Uobj.json_node_uberspark_uobj_var_copy output.uobj input.uobj;
 
-	output.uobj.public_methods <- input.uobj.public_methods; 
-	output.uobj.intra_uobjcoll_callees <- input.uobj.intra_uobjcoll_callees; 
-	output.uobj.inter_uobjcoll_callees <- input.uobj.inter_uobjcoll_callees;
-	output.uobj.legacy_callees <- input.uobj.legacy_callees; 
-	output.uobj.sections <- input.uobj.sections; 
-	output.uobj.uobjrtl <- input.uobj.uobjrtl; 
 
 	output.uobjrtl.namespace <- input.uobjrtl.namespace; 
 	output.uobjrtl.platform <- input.uobjrtl.platform; 
@@ -575,11 +558,8 @@ let uberspark_manifest_var_default_value ()
 		configdefs = [];
 		sources = [];
 	};
-	uobj = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sources = []; headers = [];
-		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
-		legacy_callees = []; sections = []; uobjrtl = []; 
-		};
+	uobj = Uobj.json_node_uberspark_uobj_var_default_value ();
+
 	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
 		sources = [];
 		};
