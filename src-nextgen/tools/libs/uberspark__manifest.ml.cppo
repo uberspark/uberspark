@@ -549,13 +549,8 @@ let uberspark_manifest_var_copy
 	output.sentinel.code_template <- input.sentinel.code_template; 
 	output.sentinel.library_code_template <- input.sentinel.library_code_template;
 
-	output.loader.namespace <- input.loader.namespace; 
-	output.loader.platform <- input.loader.platform; 
-	output.loader.arch <- input.loader.arch; 
-	output.loader.cpu <- input.loader.cpu; 
-	output.loader.bridge_namespace <- input.loader.bridge_namespace; 
-	output.loader.bridge_cmd <- input.loader.bridge_cmd; 
 
+	Loader.json_node_uberspark_loader_var_copy output.loader input.loader;
 	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
 	Bridge.json_node_uberspark_bridge_var_copy output.bridge input.bridge;
 	Installation.json_node_uberspark_installation_var_copy output.installation input.installation;
@@ -600,11 +595,8 @@ let uberspark_manifest_var_default_value ()
 		sizeof_code_template = 0; code_template = ""; library_code_template = "";
 		}; 
 
-	loader ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		bridge_namespace = ""; bridge_cmd = [];
-		}; 
-
-
+	
+	loader = Loader.json_node_uberspark_loader_var_default_value ();
 	platform = Platform.json_node_uberspark_platform_var_default_value ();
 	bridge = Bridge.json_node_uberspark_bridge_var_default_value ();
 	installation = Installation.json_node_uberspark_installation_var_default_value ();

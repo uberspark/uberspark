@@ -214,6 +214,9 @@ type json_node_uberspark_loader_t =
 
 val json_node_uberspark_loader_to_var : Yojson.Basic.t -> json_node_uberspark_loader_t -> bool
 
+  val json_node_uberspark_loader_var_copy : json_node_uberspark_loader_t -> json_node_uberspark_loader_t -> unit
+  val json_node_uberspark_loader_var_default_value : unit -> json_node_uberspark_loader_t
+
 end
 
 module Uobj : sig
