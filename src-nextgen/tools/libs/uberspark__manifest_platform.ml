@@ -207,3 +207,32 @@ let json_node_uberspark_platform_var_copy
 ;;
 
 
+(* default json_node_uberspark_platform_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_platform_t *)
+let json_node_uberspark_platform_var_default_value () 
+	: json_node_uberspark_platform_t = 
+
+	{
+		binary = {
+			page_size = 0;
+			uobj_section_alignment = 0;
+			uobj_default_section_size = 0;
+			uobj_image_load_address = 0;
+			uobj_image_uniform_size = true;
+			uobj_image_size = 0;
+			uobj_image_alignment = 0;
+			uobjcoll_image_load_address = 0;
+			uobjcoll_image_hdr_section_alignment = 0;
+			uobjcoll_image_hdr_section_size = 0;
+			uobjcoll_image_section_alignment = 0;
+			uobjcoll_image_size = 0;
+		};
+		bridges = {
+			cc_bridge_namespace = "";
+			as_bridge_namespace = "";
+			casm_bridge_namespace = "";
+			ld_bridge_namespace = "";
+			uberspark_vf_bridge_namespace = "";
+		};
+	}
+;;

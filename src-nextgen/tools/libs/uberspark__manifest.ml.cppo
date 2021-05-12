@@ -617,6 +617,7 @@ let uberspark_manifest_var_default_value ()
 		bridge_namespace = ""; bridge_cmd = [];
 		}; 
 
+(*
 	platform ={
 		binary = {
 			page_size = 0;
@@ -640,5 +641,8 @@ let uberspark_manifest_var_default_value ()
 			uberspark_vf_bridge_namespace = "";
 		};
 	};
+*)
+
+	platform = Platform.json_node_uberspark_platform_var_default_value ();
 
 };;
