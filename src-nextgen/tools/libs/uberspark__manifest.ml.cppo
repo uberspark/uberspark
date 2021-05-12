@@ -557,25 +557,6 @@ let uberspark_manifest_var_copy
 	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
 	Bridge.json_node_uberspark_bridge_var_copy output.bridge input.bridge;
 
-(*	
-	output.platform.binary.page_size 								<- 	input.platform.binary.page_size 							;
-	output.platform.binary.uobj_section_alignment 					<- 	input.platform.binary.uobj_section_alignment 				;
-	output.platform.binary.uobj_default_section_size 				<- 	input.platform.binary.uobj_default_section_size 			;
-	output.platform.binary.uobj_image_load_address 					<- 	input.platform.binary.uobj_image_load_address 				;
-	output.platform.binary.uobj_image_uniform_size 					<- 	input.platform.binary.uobj_image_uniform_size 				;
-	output.platform.binary.uobj_image_size 							<- 	input.platform.binary.uobj_image_size 						;
-	output.platform.binary.uobj_image_alignment 					<- 	input.platform.binary.uobj_image_alignment 				;
-	output.platform.binary.uobjcoll_image_load_address 				<- 	input.platform.binary.uobjcoll_image_load_address 			;
-	output.platform.binary.uobjcoll_image_hdr_section_alignment 	<- 	input.platform.binary.uobjcoll_image_hdr_section_alignment ;
-	output.platform.binary.uobjcoll_image_hdr_section_size 			<- 	input.platform.binary.uobjcoll_image_hdr_section_size 		;
-	output.platform.binary.uobjcoll_image_section_alignment 		<- 	input.platform.binary.uobjcoll_image_section_alignment 	;
-	output.platform.binary.uobjcoll_image_size 						<- 	input.platform.binary.uobjcoll_image_size 					;
-	output.platform.bridges.cc_bridge_namespace 					<- 	input.platform.bridges.cc_bridge_namespace 				;
-	output.platform.bridges.as_bridge_namespace 					<- 	input.platform.bridges.as_bridge_namespace 				;
-	output.platform.bridges.casm_bridge_namespace 					<- 	input.platform.bridges.casm_bridge_namespace 				;
-	output.platform.bridges.ld_bridge_namespace 					<- 	input.platform.bridges.ld_bridge_namespace 				;
-	output.platform.bridges.uberspark_vf_bridge_namespace 			<- 	input.platform.bridges.uberspark_vf_bridge_namespace 		;
-*)
 
 	()
 ;;
@@ -620,31 +601,6 @@ let uberspark_manifest_var_default_value ()
 		bridge_namespace = ""; bridge_cmd = [];
 		}; 
 
-(*
-	platform ={
-		binary = {
-			page_size = 0;
-			uobj_section_alignment = 0;
-			uobj_default_section_size = 0;
-			uobj_image_load_address = 0;
-			uobj_image_uniform_size = true;
-			uobj_image_size = 0;
-			uobj_image_alignment = 0;
-			uobjcoll_image_load_address = 0;
-			uobjcoll_image_hdr_section_alignment = 0;
-			uobjcoll_image_hdr_section_size = 0;
-			uobjcoll_image_section_alignment = 0;
-			uobjcoll_image_size = 0;
-		};
-		bridges = {
-			cc_bridge_namespace = "";
-			as_bridge_namespace = "";
-			casm_bridge_namespace = "";
-			ld_bridge_namespace = "";
-			uberspark_vf_bridge_namespace = "";
-		};
-	};
-*)
 
 	platform = Platform.json_node_uberspark_platform_var_default_value ();
 	bridge = Bridge.json_node_uberspark_bridge_var_default_value ();
