@@ -76,6 +76,40 @@ let json_node_uberspark_sentinel_to_var
 ;;
 
 
+(* 
+	copy constructor for uberspark.sentinel.xxx nodes
+	we use this to copy one json_node_uberspark_sentinel_t 
+	variable into another 
+*)
+let json_node_uberspark_sentinel_var_copy 
+	(output : json_node_uberspark_sentinel_t )
+	(input : json_node_uberspark_sentinel_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu; 
+	output.sizeof_code_template <- input.sizeof_code_template; 
+	output.code_template <- input.code_template; 
+	output.library_code_template <- input.library_code_template;
+
+
+
+	()
+;;
+
+
+(* default json_node_uberspark_sentinel_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_sentinel_t *)
+let json_node_uberspark_sentinel_var_default_value () 
+	: json_node_uberspark_sentinel_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sizeof_code_template = 0; code_template = ""; library_code_template = "";
+	}
+;;
 
 
 

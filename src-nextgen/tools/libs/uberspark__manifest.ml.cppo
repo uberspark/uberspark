@@ -541,15 +541,8 @@ let uberspark_manifest_var_copy
 	output.uobjrtl.cpu <- input.uobjrtl.cpu; 
 	output.uobjrtl.sources <- input.uobjrtl.sources; 
 	
-	output.sentinel.namespace <- input.sentinel.namespace; 
-	output.sentinel.platform <- input.sentinel.platform; 
-	output.sentinel.arch <- input.sentinel.arch; 
-	output.sentinel.cpu <- input.sentinel.cpu; 
-	output.sentinel.sizeof_code_template <- input.sentinel.sizeof_code_template; 
-	output.sentinel.code_template <- input.sentinel.code_template; 
-	output.sentinel.library_code_template <- input.sentinel.library_code_template;
 
-
+	Sentinel.json_node_uberspark_sentinel_var_copy output.sentinel input.sentinel;
 	Loader.json_node_uberspark_loader_var_copy output.loader input.loader;
 	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
 	Bridge.json_node_uberspark_bridge_var_copy output.bridge input.bridge;
@@ -591,11 +584,9 @@ let uberspark_manifest_var_default_value ()
 		sources = [];
 		};
 
-	sentinel ={namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sizeof_code_template = 0; code_template = ""; library_code_template = "";
-		}; 
 
-	
+
+	sentinel = Sentinel.json_node_uberspark_sentinel_var_default_value ();
 	loader = Loader.json_node_uberspark_loader_var_default_value ();
 	platform = Platform.json_node_uberspark_platform_var_default_value ();
 	bridge = Bridge.json_node_uberspark_bridge_var_default_value ();

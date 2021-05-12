@@ -198,6 +198,9 @@ module Sentinel : sig
 
   val json_node_uberspark_sentinel_to_var : Yojson.Basic.t -> json_node_uberspark_sentinel_t -> bool
 
+  val json_node_uberspark_sentinel_var_copy : json_node_uberspark_sentinel_t -> json_node_uberspark_sentinel_t -> unit
+  val json_node_uberspark_sentinel_var_default_value : unit -> json_node_uberspark_sentinel_t
+
 end
 
 module Loader : sig
