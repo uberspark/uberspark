@@ -115,8 +115,11 @@ let handler_bridges_action_create
   (* initialize console logging *)
   Common.initialize_logging p_copts;
 
-  (* check to see if we have path_ns spcified *)
-  let l_path_ns = ref "" in
+  (* TBD: future expansion 
+    plug in bridge create functionality to take a json and
+   add it to the appropriate bridge folder 
+  *)
+  (*let l_path_ns = ref "" in
   match path_ns with
   | None -> 
     begin
@@ -154,8 +157,10 @@ let handler_bridges_action_create
         end;
         
       (!retval)
-    end
+    end*)
+
   
+  (!retval)
 
 
 ;;

@@ -68,8 +68,8 @@ object
 	method load_from_json : Yojson.Basic.json ->  bool
 	method load_from_file : string -> bool
 	method load : string -> bool
-	method store_to_file : string -> bool
-	method store : unit -> bool
+	(*method store_to_file : string -> bool*)
+	(*method store : unit -> bool*)
 	method build : unit -> bool
 	method invoke :
 	?context_path_builddir:string -> 

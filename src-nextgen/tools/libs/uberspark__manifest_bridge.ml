@@ -13,12 +13,6 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-(* TBD
-	category
-	container_build_filename
-	namespace
-
-*)
 
 (* bridge-hdr json node type *)
 type json_node_uberspark_bridge_t = {
@@ -71,25 +65,6 @@ let json_node_bridge_hdr_to_var
 
 
 
-(* 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\" \" : \"%s\"," json_node_uberspark_bridge_cc_var.; *)
-
-(*--------------------------------------------------------------------------*)
-(* convert json_node_bridge_hdr_var to json string *)
-(*--------------------------------------------------------------------------*)
-let json_node_bridge_hdr_var_to_jsonstr  
-	(json_node_bridge_hdr_var : json_node_uberspark_bridge_t) 
-	: string =
-	let retstr = ref "" in
-
-	retstr := !retstr ^ Printf.sprintf  "\n";
- 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.bridge.namespace\" : \"%s\"," json_node_bridge_hdr_var.namespace; 
- 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.bridge.category\" : \"%s\"," json_node_bridge_hdr_var.category; 
- 	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.bridge.container_build_filename\" : \"%s\"," json_node_bridge_hdr_var.container_build_filename; 
-	retstr := !retstr ^ Printf.sprintf  "\n";
-
-	(!retstr)
-;;
-
 
 (*--------------------------------------------------------------------------*)
 (* convert json node "uberspark.bridge.xxx" into json_node_bridge_t variable *)
@@ -123,23 +98,6 @@ let json_node_uberspark_bridge_to_var
 	(!retval)
 ;;
 
-
-(* 	retstr := !retstr ^ Printf.sprintf  "\n\t\t\" \" : \"%s\"," json_node_uberspark_bridge_as_var.; *)
-
-(*--------------------------------------------------------------------------*)
-(* convert json_node_uberspark_bridge_var to json string *)
-(*--------------------------------------------------------------------------*)
-let json_node_uberspark_bridge_var_to_jsonstr  
-	(json_node_uberspark_bridge_var : json_node_uberspark_bridge_t) 
-	: string =
-	let retstr = ref "" in
-
-	retstr := !retstr ^ Printf.sprintf  "\n";
-	retstr := !retstr ^ (json_node_bridge_hdr_var_to_jsonstr json_node_uberspark_bridge_var) ;
-	retstr := !retstr ^ Printf.sprintf  "\n";
-
-	(!retstr)
-;;
 
 
 (* 

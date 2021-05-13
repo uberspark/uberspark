@@ -192,7 +192,7 @@ class bridge_object
 	;
 
 
-	method store_to_file 
+	(*method store_to_file 
 		(json_file : string)
 		: bool =
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "storing bridge settings to file: %s" json_file;
@@ -204,10 +204,10 @@ class bridge_object
 			];
 
 		(true)
-	;
+	;*)
 
 
-	method store 
+	(*method store 
 		()
 		: bool =
 		let retval = ref false in 
@@ -230,7 +230,7 @@ class bridge_object
 		;
 
 		(!retval)
-	;
+	;*)
 
 
 	method build 

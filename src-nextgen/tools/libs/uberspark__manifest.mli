@@ -63,12 +63,6 @@ val json_node_uberspark_manifest_actions_to_var :
 	Yojson.Basic.t ->
 	bool *  (json_node_uberspark_manifest_actions_t list)
 val json_node_uberspark_manifest_to_var :  Yojson.Basic.t -> json_node_uberspark_manifest_t -> bool
-val json_node_uberspark_manifest_var_to_jsonstr : json_node_uberspark_manifest_t -> string
-
-
-val write_prologue : ?prologue_str:string -> out_channel -> bool
-val write_epilogue : ?epilogue_str:string -> out_channel -> bool
-val write_to_file : string -> string list -> unit
 
 
 
@@ -93,11 +87,8 @@ module Bridge : sig
     mutable bridge_cmd : string list;
   }
 
-  val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-  val json_node_bridge_hdr_var_to_jsonstr  : json_node_uberspark_bridge_t -> string
+  (*val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool*)
   val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
-  val json_node_uberspark_bridge_var_to_jsonstr : json_node_uberspark_bridge_t -> string
-
   val json_node_uberspark_bridge_var_copy : json_node_uberspark_bridge_t -> json_node_uberspark_bridge_t -> unit
   val json_node_uberspark_bridge_var_default_value : unit -> json_node_uberspark_bridge_t
 
