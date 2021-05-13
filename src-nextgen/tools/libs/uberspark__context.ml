@@ -46,6 +46,10 @@ open Str
 (* manifest variable *)
 let d_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value ();;
 
+(* uobjcoll platform manifest variable *)
+let d_uobjcoll_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value ();;
+
+
 (* uobjcoll triage directory prefix *)
 let d_triage_dir_prefix = ref "";;
 
@@ -1064,6 +1068,7 @@ let process_uobjcoll_manifest
 			let l_dummy=0 in begin
 			retval := (Uberspark.Actions.initialize 
 				d_uberspark_manifest_var
+				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
