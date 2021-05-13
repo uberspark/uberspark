@@ -23,9 +23,7 @@ UBERSPARK_LIB_SOURCES += uberspark__staging.ml
 UBERSPARK_LIB_SOURCES += uberspark__bridge.ml
 UBERSPARK_LIB_SOURCES += uberspark__platform.ml
 UBERSPARK_LIB_SOURCES += uberspark__codegen.ml
-UBERSPARK_LIB_SOURCES += uberspark__uobj.ml
 UBERSPARK_LIB_SOURCES += uberspark__actions.ml
-UBERSPARK_LIB_SOURCES += uberspark__uobjcoll.ml
 UBERSPARK_LIB_SOURCES += uberspark__context.ml
 
 UBERSPARK_LIB_SOURCES_MLI := $(patsubst %.ml, %.mli, $(UBERSPARK_LIB_SOURCES))

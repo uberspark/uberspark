@@ -11,7 +11,5 @@ module Staging = Uberspark__staging
 module Bridge = Uberspark__bridge
 module Platform = Uberspark__platform
 module Codegen = Uberspark__codegen
-module Uobj = Uberspark__uobj
 module Actions = Uberspark__actions
-module Uobjcoll = Uberspark__uobjcoll
 module Context = Uberspark__context
