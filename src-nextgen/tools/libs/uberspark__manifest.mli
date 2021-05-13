@@ -386,6 +386,8 @@ module Uobjslt : sig
   }
 
   val json_node_uberspark_uobjslt_to_var : Yojson.Basic.t -> json_node_uberspark_uobjslt_t -> bool
+  val json_node_uberspark_uobjslt_var_copy : json_node_uberspark_uobjslt_t -> json_node_uberspark_uobjslt_t -> unit
+  val json_node_uberspark_uobjslt_var_default_value : unit -> json_node_uberspark_uobjslt_t
 
 
 end
