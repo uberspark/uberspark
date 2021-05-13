@@ -489,26 +489,15 @@ let uberspark_manifest_var_copy
 	(output : uberspark_manifest_var_t)
 	(input : uberspark_manifest_var_t)
 	: unit = 
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "copy constructor: %s" input.manifest.namespace;
 
 	output.manifest.namespace <- input.manifest.namespace; 
 	output.manifest.version_min <- input.manifest.version_min; 
 	output.manifest.version_max <- input.manifest.version_max;
 	output.manifest.actions <- input.manifest.actions;
 
-
-
 	Uobjcoll.json_node_uberspark_uobjcoll_var_copy output.uobjcoll input.uobjcoll;
 	Uobj.json_node_uberspark_uobj_var_copy output.uobj input.uobj;
-
-
-	output.uobjrtl.namespace <- input.uobjrtl.namespace; 
-	output.uobjrtl.platform <- input.uobjrtl.platform; 
-	output.uobjrtl.arch <- input.uobjrtl.arch; 
-	output.uobjrtl.cpu <- input.uobjrtl.cpu; 
-	output.uobjrtl.sources <- input.uobjrtl.sources; 
-	
-
+	Uobjrtl.json_node_uberspark_uobjrtl_var_copy output.uobjrtl input.uobjrtl;
 	Sentinel.json_node_uberspark_sentinel_var_copy output.sentinel input.sentinel;
 	Loader.json_node_uberspark_loader_var_copy output.loader input.loader;
 	Platform.json_node_uberspark_platform_var_copy output.platform input.platform;
@@ -525,24 +514,22 @@ let uberspark_manifest_var_copy
 let uberspark_manifest_var_default_value () 
 	: uberspark_manifest_var_t = 
 	{
-	manifest = {
-		namespace = ""; 
-		version_min = "any"; 
-		version_max = "any";
-		actions = [];
-	};
-	uobjcoll = Uobjcoll.json_node_uberspark_uobjcoll_var_default_value (); 
-	uobj = Uobj.json_node_uberspark_uobj_var_default_value ();
 
-	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
-		sources = [];
+		manifest = {
+			namespace = ""; 
+			version_min = "any"; 
+			version_max = "any";
+			actions = [];
 		};
 
+		uobjcoll = Uobjcoll.json_node_uberspark_uobjcoll_var_default_value (); 
+		uobj = Uobj.json_node_uberspark_uobj_var_default_value ();
+		uobjrtl = Uobjrtl.json_node_uberspark_uobjrtl_var_default_value ();
+		sentinel = Sentinel.json_node_uberspark_sentinel_var_default_value ();
+		loader = Loader.json_node_uberspark_loader_var_default_value ();
+		platform = Platform.json_node_uberspark_platform_var_default_value ();
+		bridge = Bridge.json_node_uberspark_bridge_var_default_value ();
+		installation = Installation.json_node_uberspark_installation_var_default_value ();
 
-
-	sentinel = Sentinel.json_node_uberspark_sentinel_var_default_value ();
-	loader = Loader.json_node_uberspark_loader_var_default_value ();
-	platform = Platform.json_node_uberspark_platform_var_default_value ();
-	bridge = Bridge.json_node_uberspark_bridge_var_default_value ();
-	installation = Installation.json_node_uberspark_installation_var_default_value ();
-};;
+	}
+;;

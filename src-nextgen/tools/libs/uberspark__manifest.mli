@@ -418,6 +418,8 @@ type json_node_uberspark_uobjrtl_t =
 }
 
   val json_node_uberspark_uobjrtl_to_var : Yojson.Basic.t -> json_node_uberspark_uobjrtl_t -> bool
+  val json_node_uberspark_uobjrtl_var_copy : json_node_uberspark_uobjrtl_t -> json_node_uberspark_uobjrtl_t -> unit
+  val json_node_uberspark_uobjrtl_var_default_value : unit -> json_node_uberspark_uobjrtl_t
 
 
 end
