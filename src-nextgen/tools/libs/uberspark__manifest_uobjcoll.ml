@@ -332,3 +332,54 @@ let json_node_uberspark_uobjcoll_to_var
 
 
 
+(* 
+	copy constructor for uberspark.uobjcoll.xxx nodes
+	we use this to copy one json_node_uberspark_uobjcoll_t 
+	variable into another 
+*)
+let json_node_uberspark_uobjcoll_var_copy 
+	(output : json_node_uberspark_uobjcoll_t )
+	(input : json_node_uberspark_uobjcoll_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu ; 
+	output.hpl <- input.hpl;
+	output.sentinels_intra_uobjcoll <- input.sentinels_intra_uobjcoll;
+	output.uobjs.master <- input.uobjs.master; 
+	output.uobjs.templars <- input.uobjs.templars;
+	output.init_method.uobj_namespace <- input.init_method.uobj_namespace; 
+	output.init_method.public_method <- input.init_method.public_method; 
+	output.init_method.sentinels <- input.init_method.sentinels;
+	output.public_methods <- input.public_methods;
+	output.loaders <- input.loaders;
+	output.configdefs_verbatim <- input.configdefs_verbatim;
+	output.configdefs <- input.configdefs;
+	output.sources <- input.sources;
+
+
+	()
+;;
+
+
+(* default json_node_uberspark_uobjcoll_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_uobjcoll_t *)
+let json_node_uberspark_uobjcoll_var_default_value () 
+	: json_node_uberspark_uobjcoll_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
+		sentinels_intra_uobjcoll = [];
+		uobjs = { master = ""; templars = [];};
+		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
+		public_methods = [];
+		loaders = [];
+		configdefs_verbatim = false;
+		configdefs = [];
+		sources = [];
+	}
+;;
+
+

@@ -363,6 +363,9 @@ module Uobjcoll : sig
   val json_node_uberspark_uobjcoll_to_var : Yojson.Basic.t -> json_node_uberspark_uobjcoll_t -> bool
   val json_node_uberspark_uobjcoll_configdefs_to_var : Yojson.Basic.t -> bool * ((string * json_node_uberspark_uobjcoll_configdefs_t) list)
 
+  val json_node_uberspark_uobjcoll_var_copy : json_node_uberspark_uobjcoll_t -> json_node_uberspark_uobjcoll_t -> unit
+  val json_node_uberspark_uobjcoll_var_default_value : unit -> json_node_uberspark_uobjcoll_t
+
 
  
 end

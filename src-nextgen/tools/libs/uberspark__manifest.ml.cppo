@@ -497,24 +497,8 @@ let uberspark_manifest_var_copy
 	output.manifest.actions <- input.manifest.actions;
 
 
-	output.uobjcoll.namespace <- input.uobjcoll.namespace; 
-	output.uobjcoll.platform <- input.uobjcoll.platform; 
-	output.uobjcoll.arch <- input.uobjcoll.arch; 
-	output.uobjcoll.cpu <- input.uobjcoll.cpu ; 
-	output.uobjcoll.hpl <- input.uobjcoll.hpl;
-	output.uobjcoll.sentinels_intra_uobjcoll <- input.uobjcoll.sentinels_intra_uobjcoll;
-	output.uobjcoll.uobjs.master <- input.uobjcoll.uobjs.master; 
-	output.uobjcoll.uobjs.templars <- input.uobjcoll.uobjs.templars;
-	output.uobjcoll.init_method.uobj_namespace <- input.uobjcoll.init_method.uobj_namespace; 
-	output.uobjcoll.init_method.public_method <- input.uobjcoll.init_method.public_method; 
-	output.uobjcoll.init_method.sentinels <- input.uobjcoll.init_method.sentinels;
-	output.uobjcoll.public_methods <- input.uobjcoll.public_methods;
-	output.uobjcoll.loaders <- input.uobjcoll.loaders;
-	output.uobjcoll.configdefs_verbatim <- input.uobjcoll.configdefs_verbatim;
-	output.uobjcoll.configdefs <- input.uobjcoll.configdefs;
-	output.uobjcoll.sources <- input.uobjcoll.sources;
 
-
+	Uobjcoll.json_node_uberspark_uobjcoll_var_copy output.uobjcoll input.uobjcoll;
 	Uobj.json_node_uberspark_uobj_var_copy output.uobj input.uobj;
 
 
@@ -547,17 +531,7 @@ let uberspark_manifest_var_default_value ()
 		version_max = "any";
 		actions = [];
 	};
-	uobjcoll = {
-		namespace = ""; platform = ""; arch = ""; cpu = ""; hpl = "";
-		sentinels_intra_uobjcoll = [];
-		uobjs = { master = ""; templars = [];};
-		init_method = {uobj_namespace = ""; public_method = ""; sentinels = [];};
-		public_methods = [];
-		loaders = [];
-		configdefs_verbatim = false;
-		configdefs = [];
-		sources = [];
-	};
+	uobjcoll = Uobjcoll.json_node_uberspark_uobjcoll_var_default_value (); 
 	uobj = Uobj.json_node_uberspark_uobj_var_default_value ();
 
 	uobjrtl = {namespace = ""; platform = ""; arch = ""; cpu = ""; 
