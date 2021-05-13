@@ -179,55 +179,33 @@ let handler_staging_remove
   (name : string option)
   =
 
-
-  let l_name = ref "" in
-
-  match name with
-    | None -> l_name := "";
-    | Some s_name -> l_name := s_name;
-  ;
-
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_name=%s" !l_name;
-
-  if (!l_name <> "") then begin
-
-    if not (Uberspark.Staging.remove !l_name) then begin
-      `Error (false, "could not rempve specified staging: does not exist or is currently active!.")
-    end else begin
-      Uberspark.Logger.log "successfully removed staging: '%s'" !l_name;
-      `Ok ()
-    end;
-
-  end else begin
-    `Error (true, "need to specify staging name.")
-  end;
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "staging command line options deprecated!";
+  `Ok()  
 
 ;;
 
 
 (* uberspark staging config-set sub-handler *)
-(* TBD process option --from-file and integrate Uberspark.Platform.load_from_file *)
 let handler_staging_config_set
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
   (name : string option)
   =
 
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration setting via command line deprecated!";
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "staging command line options deprecated!";
   `Ok()  
 
 ;;
 
 
 (* uberspark staging config-get sub-handler *)
-(* TBD process option --to-file and integrate Uberspark.Platform.load_from_file *)
 let handler_staging_config_get
   (copts : Commonopts.opts)
   (cmd_staging_opts: opts)
   (name : string option)
   =
 
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "configuration getting via command line deprecated!";
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Warn "staging command line options deprecated!";
   `Ok()  
 
 ;;
