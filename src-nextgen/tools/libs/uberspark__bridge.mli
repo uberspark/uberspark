@@ -61,7 +61,7 @@ val bridge_parameter_to_string :
 class bridge_object :
 object
 
-	val json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_manifest_t 
+	val json_node_uberspark_manifest_var: Uberspark.Manifest.uberspark_manifest_var_t 
 	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t
 	
 	method get_json_node_uberspark_bridge_var : Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t

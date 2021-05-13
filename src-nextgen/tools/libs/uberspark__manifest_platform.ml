@@ -140,41 +140,6 @@ let json_node_uberspark_platform_to_var
 
 
 
-(*--------------------------------------------------------------------------*)
-(* convert json_node_uberspark_platform_var.binary.to json string *)
-(*--------------------------------------------------------------------------*)
-let json_node_uberspark_platform_var_to_jsonstr  
-	(json_node_uberspark_platform_var : json_node_uberspark_platform_t) 
-	: string =
-	let retstr = ref "" in
-
-
-	retstr := !retstr ^ Printf.sprintf  "\n";
-
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.page_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.page_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_default_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_default_section_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_load_address;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_uniform_size\" : %B," json_node_uberspark_platform_var.binary.uobj_image_uniform_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobj_image_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobj_image_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_load_address\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_load_address;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_hdr_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_hdr_section_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_hdr_section_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_section_alignment\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_section_alignment;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.binary.uobjcoll_image_size\" : \"0x%x\"," json_node_uberspark_platform_var.binary.uobjcoll_image_size;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.cc_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.cc_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.as_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.as_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.casm_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.casm_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.ld_bridge_namespace\" : \"%s\"," json_node_uberspark_platform_var.bridges.ld_bridge_namespace;
-	retstr := !retstr ^ Printf.sprintf  "\n\t\"uberspark.platform.bridges.uberspark_vf_bridge_namespace\" : \"%s\"" json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace;
-
-
-	retstr := !retstr ^ Printf.sprintf  "\n";
-
-	(!retstr)
-;;
-
 (* 
 	copy constructor for uberspark.platform.xxx nodes
 	we use this to copy one json_node_uberspark_platform_t 

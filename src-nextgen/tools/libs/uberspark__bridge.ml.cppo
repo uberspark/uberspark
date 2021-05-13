@@ -106,12 +106,8 @@ class bridge_object
 
 
 	(* uberspark-manifest json node variable *)	
-	val json_node_uberspark_manifest_var: Uberspark.Manifest.json_node_uberspark_manifest_t = {
-		namespace = "uberspark/bridges";
-		version_min = "any";
-		version_max = "any";
-		actions = [];
-	};
+	val json_node_uberspark_manifest_var: Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () ;
+
 
 	(* uberspark-bridge-as json node variable *)	
 	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t = {
@@ -152,18 +148,10 @@ class bridge_object
 		let retval = ref false in
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "loading bridge settings from file: %s" json_file;
 
-		let (rval, mf_json) = Uberspark.Manifest.get_json_for_manifest json_file in
+		let (rval, mf_json) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var json_file json_node_uberspark_manifest_var in
 
 			if rval then begin
-
-				let rval = Uberspark.Manifest.json_node_uberspark_manifest_to_var mf_json json_node_uberspark_manifest_var in
-
-				if rval then begin
-						retval := self#load_from_json mf_json; 
-				end	else begin
-						retval := false;
-				end;
-
+					retval := self#load_from_json mf_json; 
 			end	else begin
 					retval := false;
 			end;
