@@ -918,8 +918,6 @@ let process_uobjcoll_manifest
       (* debug dump uobjcoll platform and load platform configuration *)
       let l_dummy=0 in begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
-      (*retval := Uberspark.Platform.load_from_manifest_file (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
-	  Uberspark.Namespace.namespace_root_mf_filename);*)
       let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
 	  Uberspark.Namespace.namespace_root_mf_filename) d_uobjcoll_platform_manifest_var in
 	  retval := l_rval;
@@ -938,7 +936,6 @@ let process_uobjcoll_manifest
 
       (* overlay any platform definitions that the uobjcoll might have *)
       let l_dummy=0 in begin
-      (*retval := Uberspark.Platform.load_from_manifest_json ~p_only_configurable:true l_uberspark_manifest_var_json ;*)
 	  retval := Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:true	
 		l_uberspark_manifest_var_json d_uobjcoll_platform_manifest_var.platform;
 
@@ -1169,11 +1166,11 @@ let initialize
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
-
-  if not (Uberspark.Platform.load_from_manifest_file 
+	let (l_rval, _) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var
   	((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
 	  l_json_node_uberspark_manifest_var.installation.default_platform ^ "/" ^ 
-	  Uberspark.Namespace.namespace_root_mf_filename)) then 
+	  Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
+  if not l_rval then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
       ignore ( exit 1);
