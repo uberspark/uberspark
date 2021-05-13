@@ -58,8 +58,6 @@ val json_node_pretty_print_to_string : Yojson.Basic.t -> string
 val json_node_update : string -> Yojson.Basic.t -> Yojson.Basic.t -> bool * Yojson.Basic.t
 
 
-val get_json_for_manifest : string -> bool * Yojson.Basic.json
-
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -82,7 +80,6 @@ module Bridge : sig
     mutable bridge_cmd : string list;
   }
 
-  (*val json_node_bridge_hdr_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool*)
   val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
   val json_node_uberspark_bridge_var_copy : json_node_uberspark_bridge_t -> json_node_uberspark_bridge_t -> unit
   val json_node_uberspark_bridge_var_default_value : unit -> json_node_uberspark_bridge_t

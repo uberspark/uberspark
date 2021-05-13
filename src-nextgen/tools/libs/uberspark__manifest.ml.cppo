@@ -95,35 +95,6 @@ let json_node_update key new_value json_node
 
 
 
-(*--------------------------------------------------------------------------*)
-(* 	
-	read manifest file into json 
-	note: this does not check if this is a valid uberspark manifest; 
-	only checked if it is a valid json file 
-*)
-(*--------------------------------------------------------------------------*)
-
-let get_json_for_manifest 
-	(mf_filename : string)
-	: bool * Yojson.Basic.json = 
-
-	let retval = ref false in
-	let retjson = ref `Null in
-
-	try
-		let mf_json = Yojson.Basic.from_file mf_filename in
-		retjson := mf_json;
-		retval := true;
-
-	with Yojson.Json_error s -> 
-		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" s;
-		retval := false;
-	;
-
-	(!retval, !retjson)
-;;
-
-
 
 (*--------------------------------------------------------------------------*)
 (* parse manifest json sub-node "uberspark.manifest.actions" into var *)

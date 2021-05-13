@@ -1130,41 +1130,35 @@ let initialize
     ) p_banner;
   end;
 
-  let mf_json_node_uberspark_installation_var : Uberspark.Manifest.Installation.json_node_uberspark_installation_t = 
-		  {root_directory = ""; default_platform = "";} in
+  let l_json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
+		  (Uberspark.Manifest.uberspark_manifest_var_default_value ()) in
 
   (* setup namespace root directory *)
   (* we open the installation manifest to figure out the root directory *)
   let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
         Uberspark.Namespace.namespace_root_mf_filename in
-  let (rval, mf_json) = (Uberspark.Manifest.get_json_for_manifest installation_manifest_filename ) in
-    if(rval == true) then	begin
-      (* convert to var *)
-      let rval =	(Uberspark.Manifest.Installation.json_node_uberspark_installation_to_var mf_json mf_json_node_uberspark_installation_var) in
+
+
+  let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var installation_manifest_filename l_json_node_uberspark_manifest_var) in
         if rval then begin
-          Uberspark.Namespace.set_namespace_root_dir_prefix mf_json_node_uberspark_installation_var.root_directory;
+          Uberspark.Namespace.set_namespace_root_dir_prefix l_json_node_uberspark_manifest_var.installation.root_directory;
 
         end else begin
           Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;
           ignore (exit 1);
         end;
 
-    end else begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Could not load installation configuration manifest from: %s" installation_manifest_filename;
-      ignore (exit 1);
-    end;
-  
   
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_staging_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (mf_json_node_uberspark_installation_var.default_platform);
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (l_json_node_uberspark_manifest_var.installation.default_platform);
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
 
   if not (Uberspark.Platform.load_from_manifest_file 
   	((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
-	  mf_json_node_uberspark_installation_var.default_platform ^ "/" ^ 
+	  l_json_node_uberspark_manifest_var.installation.default_platform ^ "/" ^ 
 	  Uberspark.Namespace.namespace_root_mf_filename)) then 
     begin
       Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";

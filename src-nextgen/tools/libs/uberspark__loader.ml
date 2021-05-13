@@ -44,11 +44,9 @@ class uobjcoll_loader
 
 
 	(* uobj manifest uberspark-loader json node var *)
-	val json_node_uberspark_loader_var : Uberspark.Manifest.Loader.json_node_uberspark_loader_t =
-		{namespace = ""; platform = ""; arch = ""; cpu = ""; 
-         bridge_namespace = ""; bridge_cmd = []; 
-		};
-	method get_d_json_node_uberspark_loader_var = json_node_uberspark_loader_var;
+	val json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t =
+		Uberspark.Manifest.uberspark_manifest_var_default_value ();
+	method get_d_json_node_uberspark_manifest_var = json_node_uberspark_manifest_var;
 
 
 	(*--------------------------------------------------------------------------*)
@@ -60,9 +58,9 @@ class uobjcoll_loader
 		: bool =
 
 		(* read manifest JSON *)
-		let (rval, mf_json) = (Uberspark.Manifest.get_json_for_manifest 
-			self#get_d_loader_mf_filename_abspath) in
-		
+		let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var 
+			self#get_d_loader_mf_filename_abspath json_node_uberspark_manifest_var)  in
+
 		if (rval == false) then (false)
 		else
 
@@ -70,13 +68,6 @@ class uobjcoll_loader
 		let dummy = 0 in begin
 		d_mf_json := mf_json;
 		end;
-
-		(* parse uberspark-loader node *)
-		let rval = (Uberspark.Manifest.Loader.json_node_uberspark_loader_to_var mf_json
-				json_node_uberspark_loader_var) in
-
-		if (rval == false) then (false)
-		else
 
 		(true)
 	;
@@ -174,7 +165,7 @@ class uobjcoll_loader
             end else begin
 	            Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "skipping command: %s" bcmd;
             end;
-        ) json_node_uberspark_loader_var.bridge_cmd;
+        ) json_node_uberspark_manifest_var.loader.bridge_cmd;
 
 		(!retval)	
 	;
@@ -209,7 +200,7 @@ let create_initialize
 	let l_rval = ref true in 
 	let dummy = 0 in begin
 
-       	if not (Uberspark.Platform.loader_bridge#load (loader#get_d_json_node_uberspark_loader_var).bridge_namespace) then begin
+       	if not (Uberspark.Platform.loader_bridge#load (loader#get_d_json_node_uberspark_manifest_var).loader.bridge_namespace) then begin
 		    Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to load loader bridge!";
 		    l_rval := false;
     	end else begin
