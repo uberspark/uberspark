@@ -50,11 +50,11 @@ let d_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Ube
 let d_uobjcoll_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value ();;
 
 
-(* uobjcoll triage directory prefix *)
-let d_triage_dir_prefix = ref "";;
+(* uobjcoll staging directory prefix *)
+let d_uobjcoll_staging_dir_prefix = ref "";;
 
-(* staging directory prefix *)
-let d_staging_dir_prefix = ref "";;
+(* namespace root directory prefix *)
+let d_namespace_root_dir_prefix = ref "";;
 
 (* assoc list of uobjcoll manifest variables; maps uobjcoll namespace to uobjcoll manifest variable *)
 (* TBD: revisions needed for multi-platform uobjcoll *) 
@@ -116,7 +116,7 @@ let create_uobj_manifest_var_assoc_list
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug ~crlf:false "scanning uobj: %s..." l_uobj_namespace;
 
 			(* read manifest file into manifest variable *)
-			let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
+			let abspath_mf_filename = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
 			let l_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
       let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var in
@@ -297,11 +297,11 @@ let copy_uobjrtl_to_triage
 
 		(* create uobjcoll namespace folder within triage *)
 		(* TBD: sanity check uobjrtl namespace *)
-		let l_abspath_uobjrtl_triage_dir = (!d_triage_dir_prefix ^ "/" ^ l_uobjrtl_ns) in
+		let l_abspath_uobjrtl_triage_dir = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ l_uobjrtl_ns) in
 		Uberspark.Osservices.mkdir ~parent:true l_abspath_uobjrtl_triage_dir (`Octal 0o0777);
 
 		(* copy over uobjrtl sources folder structure into uobjrtl triage dir *)
-		let l_uobjrtl_src_dir = (!d_staging_dir_prefix ^ "/" ^ l_uobjrtl_ns ^ "/.") in
+		let l_uobjrtl_src_dir = (!d_namespace_root_dir_prefix ^ "/" ^ l_uobjrtl_ns ^ "/.") in
 		let l_uobjrtl_dst_dir = (l_abspath_uobjrtl_triage_dir ^ "/.") in
 		Uberspark.Osservices.cp ~recurse:true l_uobjrtl_src_dir l_uobjrtl_dst_dir;
 
@@ -326,11 +326,11 @@ let copy_loaders_to_triage
 
 		(* create loader namespace folder within triage *)
 		(* TBD: sanity check loader namespace *)
-		let l_abspath_loader_triage_dir = (!d_triage_dir_prefix ^ "/" ^ l_loader_ns) in
+		let l_abspath_loader_triage_dir = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ l_loader_ns) in
 		Uberspark.Osservices.mkdir ~parent:true l_abspath_loader_triage_dir (`Octal 0o0777);
 
 		(* copy over loader sources folder structure into uobjrtl triage dir *)
-		let l_loader_src_dir = (!d_staging_dir_prefix ^ "/" ^ l_loader_ns ^ "/.") in
+		let l_loader_src_dir = (!d_namespace_root_dir_prefix ^ "/" ^ l_loader_ns ^ "/.") in
 		let l_loader_dst_dir = (l_abspath_loader_triage_dir ^ "/.") in
 		Uberspark.Osservices.cp ~recurse:true l_loader_src_dir l_loader_dst_dir;
 
@@ -470,7 +470,7 @@ let generate_sentinels_for_uobjcoll_methods
 	if !retval then begin
 		(* generate the sentinels filename within the main uobjcoll triage folder *)
 		retval := Uberspark.Codegen.Uobjcoll.generate_sentinel_code 
-			(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_sentinel_definitions_src_filename)
+			(!d_uobjcoll_staging_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_sentinel_definitions_src_filename)
 			!d_sentinel_info_for_codegen_list;
 
 		if !retval then begin
@@ -496,7 +496,7 @@ let generate_uobjcoll_header_file
 
 	Uberspark.Logger.log ~crlf:false "Generating uobjcoll top-level include header source...";
 	Uberspark.Codegen.Uobjcoll.generate_top_level_include_header 
-			(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/include/" ^ Uberspark.Namespace.namespace_uobjcoll_top_level_include_header_src_filename)
+			(!d_uobjcoll_staging_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/include/" ^ Uberspark.Namespace.namespace_uobjcoll_top_level_include_header_src_filename)
 			d_uberspark_manifest_var.uobjcoll.configdefs_verbatim
 			d_uberspark_manifest_var.uobjcoll.configdefs;
 	Uberspark.Logger.log ~tag:"" "[OK]";
@@ -519,7 +519,7 @@ let generate_header_files_for_uobjs
 
 		Uberspark.Logger.log ~crlf:false "Generating header file for uobj: %s..." l_uobj_ns;
 		Uberspark.Codegen.Uobj.generate_header_file 
-			(!d_triage_dir_prefix ^ "/" ^ l_uobj_ns ^ "/include/" ^ Uberspark.Namespace.namespace_uobj_top_level_include_header_src_filename)
+			(!d_uobjcoll_staging_dir_prefix ^ "/" ^ l_uobj_ns ^ "/include/" ^ Uberspark.Namespace.namespace_uobj_top_level_include_header_src_filename)
 			l_uberspark_manifest_var.uobj.public_methods;
 		Uberspark.Logger.log ~tag:"" "[OK]";
 
@@ -787,7 +787,7 @@ let generate_uobjcoll_linker_script
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Generating uobjcoll linker script: load_address=0x%08x, size=0x%08x..." !d_load_address !d_size;
 
 	retval := Uberspark.Codegen.Uobjcoll.generate_linker_script	
-		(!d_triage_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename) 
+		(!d_uobjcoll_staging_dir_prefix ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename) 
 		!d_load_address !d_size !d_memorymapped_sections_list;
 
 	(!retval)
@@ -875,18 +875,18 @@ let process_uobjcoll_manifest
 
 	(* announce working directory and store in triage dir prefix*)
 	let l_dummy=0 in begin
-	d_triage_dir_prefix := l_cwd_abs;
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "current working directory: %s" !d_triage_dir_prefix;
+	d_uobjcoll_staging_dir_prefix := l_cwd_abs;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "current working directory: %s" !d_uobjcoll_staging_dir_prefix;
 	end;
 
 	(* announce staging directory and store in staging dir prefix*)
 	let l_dummy=0 in begin
-	d_staging_dir_prefix := Uberspark.Namespace.get_namespace_staging_dir_prefix ();
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_staging_dir_prefix;
+	d_namespace_root_dir_prefix := Uberspark.Namespace.get_namespace_staging_dir_prefix ();
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_namespace_root_dir_prefix;
 	end;
 
 	(* read manifest file into manifest variable *)
-	let abspath_mf_filename = (!d_triage_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
+	let abspath_mf_filename = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
 	let (rval, l_uobjcoll_manifest_json) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename d_uberspark_manifest_var in
 
 	(* bail out on error *)
@@ -926,7 +926,7 @@ let process_uobjcoll_manifest
       (* debug dump uobjcoll platform and load platform configuration *)
       let l_dummy=0 in begin
       Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
-      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var (!d_staging_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
+      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var (!d_namespace_root_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
 	  Uberspark.Namespace.namespace_root_mf_filename) d_uobjcoll_platform_manifest_var in
 	  retval := l_rval;
 
@@ -1086,8 +1086,8 @@ let process_uobjcoll_manifest
 				!d_uobj_manifest_var_assoc_list
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
-				!d_triage_dir_prefix
-				!d_staging_dir_prefix);
+				!d_uobjcoll_staging_dir_prefix
+				!d_namespace_root_dir_prefix);
 				
 			end;
 
