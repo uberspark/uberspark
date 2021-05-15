@@ -200,6 +200,7 @@ let cmd_bridges =
 
 
 (* kicks in when uberspark staging ... is issued *)
+(*
 let cmd_staging =
 	let action = 
 	let action = [ 	"create", `Create; 
@@ -255,7 +256,7 @@ let cmd_staging =
 	] in
   Term.(ret (const Cmd_staging.handler_staging $ Commonopts.opts_t $ Cmd_staging.cmd_staging_opts_t $ action $ path_ns )),
   Term.info "staging" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
-
+*)
 
 
 
@@ -330,7 +331,7 @@ let cmd_default =
 
 (* additional commands *)	
 (*let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]*)
-let cmd_additions = [cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]
+let cmd_additions = [cmd_bridges; cmd_build; cmd_verify; ]
 
 
 (*----------------------------------------------------------------------------*)

@@ -95,7 +95,6 @@ module name:
     * Uberspark.Utils -- general utility functions
     * Uberspark.Namespace -- namespace and associated functions
     * Uberspark.Manifest -- manifest support
-    * Uberspark.Staging -- staging related functionality (work-in-progress)
     * Uberspark.Bridge -- bridge support (native and containerized)
     * Uberspark.Platform -- for platform (CPU, arch, devices, memory) information
     * Uberspark.Codegen -- code generation 
