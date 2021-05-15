@@ -39,8 +39,6 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
 ├── META
 ├── uberspark__actions.ml
 ├── uberspark__actions.mli
-├── uberspark__binary.ml
-├── uberspark__binary.mli
 ├── uberspark__bridge_container.ml
 ├── uberspark__bridge.ml.cppo
 ├── uberspark__bridge.mli
@@ -49,10 +47,10 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
 ├── uberspark__codegen.mli
 ├── uberspark__codegen_uobjcoll.ml
 ├── uberspark__codegen_uobj.ml
+├── uberspark__context.ml
+├── uberspark__context.mli
 ├── uberspark__defs.ml.cppo
 ├── uberspark__defs.mli.cppo
-├── uberspark__loader.ml
-├── uberspark__loader.mli
 ├── uberspark__logger.ml
 ├── uberspark__logger.mli
 ├── uberspark__manifest_bridge.ml
@@ -67,21 +65,14 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
 ├── uberspark__manifest_uobjrtl.ml
 ├── uberspark__manifest_uobjslt.ml
 ├── uberspark.ml
-├── uberspark.mli.cppo
 ├── uberspark__module_template.ml
 ├── uberspark__module_template.mli
 ├── uberspark__namespace.ml
 ├── uberspark__namespace.mli
 ├── uberspark__osservices.ml
 ├── uberspark__osservices.mli
-├── uberspark__platform.ml
-├── uberspark__platform.mli
 ├── uberspark__staging.ml
 ├── uberspark__staging.mli
-├── uberspark__uobjcoll.ml
-├── uberspark__uobjcoll.mli
-├── uberspark__uobj.ml
-├── uberspark__uobj.mli
 ├── uberspark__utils.ml
 ├── uberspark__utils.mli
 └── unit_test
@@ -92,6 +83,7 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
     ├── mylib__b.mli
     ├── mylib.ml
     └── test.ml
+
 
 The following are the various modules (in order of dependencies) and are
 available as ``Uberspark.xxx`` where ``xxx`` is the
@@ -105,23 +97,16 @@ module name:
     * Uberspark.Manifest -- manifest support
     * Uberspark.Staging -- staging related functionality (work-in-progress)
     * Uberspark.Bridge -- bridge support (native and containerized)
-    * Uberspark.Binary -- for binary support
     * Uberspark.Platform -- for platform (CPU, arch, devices, memory) information
     * Uberspark.Codegen -- code generation 
-    * Uberspark.Loader -- |uobjcoll| loader related functionality
-    * Uberspark.Uobjrtl -- |uobjrtl| related functionality
-    * Uberspark.Uobj -- |uobj| related functionality
     * Uberspark.Actions -- |uobjcoll| and |uobj| manifest action orchestration
-    * Uberspark.Uobjcoll -- |uobjcoll| related functionality
     * Uberspark.Context -- module that establishes operating context for build and/or verification
 
 ``Uberspark.Context`` is the top-level module that maintains the context for 
 verification and build. It also
 contains global variables and interfaces that allow
 creating, querying and destroying operation context. 
-Once an operation context is
-created, the relevant context information can be accessed via 
-other modules. For example, |uobjcoll| 
-information for the context can be accessed via
-``Uberspark.Uobjcoll``.
+The ``Uberspark.Context`` module uses the 
+``Uberspark.Actions`` module interfaces in order to consolidate
+all manifest actions and execute them.
 
