@@ -71,8 +71,6 @@ For example, ``uberspark__namespace.{ml,mli}`` is available as ``Uberspark.Names
 ├── uberspark__namespace.mli
 ├── uberspark__osservices.ml
 ├── uberspark__osservices.mli
-├── uberspark__staging.ml
-├── uberspark__staging.mli
 ├── uberspark__utils.ml
 ├── uberspark__utils.mli
 └── unit_test
