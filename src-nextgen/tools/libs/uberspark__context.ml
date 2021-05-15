@@ -156,7 +156,7 @@ let create_uobjrtl_manifest_var_hashtbl
 
 				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjrtl namespace=%s" uobjrtl_entry.namespace;
 
-				let abspath_mf_filename = ((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ uobjrtl_entry.namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
+				let abspath_mf_filename = ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ uobjrtl_entry.namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
 
 				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjrtl manifest path=%s" abspath_mf_filename;
 
@@ -195,7 +195,7 @@ let create_loader_manifest_var_hashtbl
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug ~crlf:false "scanning loader: %s..." l_loader_namespace;
 
 			(* read manifest file into manifest variable *)
-			let abspath_mf_filename = ((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_loader_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
+			let abspath_mf_filename = ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ l_loader_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
 			let l_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "loader manifest path=%s" abspath_mf_filename;
@@ -233,7 +233,7 @@ let create_sentinel_manifest_var_hashtbl
 		if !retval then begin
 			let l_sentinel_namespace = "uberspark/sentinels/init/" ^ 
 				d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_entry.sentinel_type in
-			let l_abspath_mf_filename = ((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
+			let l_abspath_mf_filename = ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
 
@@ -259,7 +259,7 @@ let create_sentinel_manifest_var_hashtbl
 				if !retval then begin
 					let l_sentinel_namespace = "uberspark/sentinels/pmethod/" ^ 
 						d_uberspark_manifest_var.uobjcoll.arch ^ "/" ^ sentinel_type in
-					let l_abspath_mf_filename = ((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
+					let l_abspath_mf_filename = ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ l_sentinel_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in
 
 					Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "proceeding to read sentinel manifest from: %s" l_abspath_mf_filename;
 
@@ -881,7 +881,7 @@ let process_uobjcoll_manifest
 
 	(* announce staging directory and store in staging dir prefix*)
 	let l_dummy=0 in begin
-	d_namespace_root_dir_prefix := Uberspark.Namespace.get_namespace_staging_dir_prefix ();
+	d_namespace_root_dir_prefix := Uberspark.Namespace.get_namespace_root_dir_prefix ();
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_namespace_root_dir_prefix;
 	end;
 
@@ -1169,13 +1169,13 @@ let initialize
 
   
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_staging_dir_prefix ());
+  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
   Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (l_json_node_uberspark_manifest_var.installation.default_platform);
  
   Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
 	let (l_rval, _) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var
-  	((Uberspark.Namespace.get_namespace_staging_dir_prefix ()) ^ "/" ^ 
+  	((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
 	  l_json_node_uberspark_manifest_var.installation.default_platform ^ "/" ^ 
 	  Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
   if not l_rval then 
