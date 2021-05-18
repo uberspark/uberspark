@@ -346,21 +346,9 @@ let consolidate_actions ()
 
 
 (*--------------------------------------------------------------------------*)
-(* initiatize actions processing *)
+(* add default uobjcoll actions *)
 (*--------------------------------------------------------------------------*)
-let initialize
-	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
-	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
-	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
-	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
-	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
-	(p_triage_dir_prefix : string )
-	(p_staging_dir_prefix : string )
-	: bool =
-
-	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
-
-	let l_add_default_uobjcoll_actions () : 
+let add_default_uobjcoll_actions () : 
 		Uberspark.Manifest.json_node_uberspark_manifest_actions_t list =
 		let l_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
@@ -452,7 +440,24 @@ let initialize
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
 
 		(!l_actions_list)
-	in
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* initiatize actions processing *)
+(*--------------------------------------------------------------------------*)
+let initialize
+	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
+	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
+	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
+	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_triage_dir_prefix : string )
+	(p_staging_dir_prefix : string )
+	: bool =
+
+	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
 	(* store triage and staging dir prefix *)
 	g_triage_dir_prefix := p_triage_dir_prefix;
@@ -522,7 +527,7 @@ let initialize
 		Uberspark.Manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
 
 		if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
-			g_uobjcoll_manifest_var.manifest.actions <- l_add_default_uobjcoll_actions ();
+			g_uobjcoll_manifest_var.manifest.actions <- add_default_uobjcoll_actions ();
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added default actions to uobjcoll: %s" 
 				g_uobjcoll_manifest_var.uobjcoll.namespace; 
@@ -532,7 +537,7 @@ let initialize
 			List.iter ( fun (l_uobjcoll_action : Uberspark.Manifest.json_node_uberspark_manifest_actions_t) -> 
 
 				if l_uobjcoll_action.category == "default_action" then begin
-					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ (l_add_default_uobjcoll_actions ());
+					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ (add_default_uobjcoll_actions ());
 				end else begin
 					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ [ l_uobjcoll_action; ];
 				end;
