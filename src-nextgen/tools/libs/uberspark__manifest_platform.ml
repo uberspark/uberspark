@@ -13,6 +13,13 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_platform_bridgesx_t = 
+{
+	mutable bridge_id : string;
+	mutable bridge_namespace : string;
+
+};;
+
 type json_node_uberspark_platform_bridges_t = 
 {
 	(* bridge related configuration settings *)	
@@ -21,6 +28,7 @@ type json_node_uberspark_platform_bridges_t =
 	mutable casm_bridge_namespace : string;
 	mutable ld_bridge_namespace : string;
 	mutable uberspark_vf_bridge_namespace : string;
+
 };;
 
 type json_node_uberspark_platform_binary_t = 
@@ -49,6 +57,8 @@ type json_node_uberspark_platform_t =
 {
 	mutable binary : json_node_uberspark_platform_binary_t;
 	mutable bridges : json_node_uberspark_platform_bridges_t;
+	mutable bridgesx : (string * json_node_uberspark_platform_bridgesx_t) list; 
+	
 };;
 
 (*---------------------------------------------------------------------------*)
@@ -56,6 +66,60 @@ type json_node_uberspark_platform_t =
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+
+
+(*--------------------------------------------------------------------------*)
+(* 
+	parse uberspark.platform.bridges json nodes and populate
+	bridges field of provided platform variable
+	return: true on success, false if there was an issue with type errors 
+	during parsing
+*)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_platform_bridges_to_var 
+	?(p_only_configurable = false)
+	(mf_json : Yojson.Basic.t)
+	(json_node_uberspark_platform_var : json_node_uberspark_platform_t) 
+	: bool =
+	let retval = ref true in
+
+	let l_bridges_list : (string * json_node_uberspark_platform_bridgesx_t) list ref = ref [] in
+
+	(* copy over all the input list values to begin with *)
+	l_bridges_list := json_node_uberspark_platform_var.bridgesx;
+
+	(* we don't use p_only_configurable currently; we allow overriding all 
+	bridge_id, bridge_namespace values *)
+	try
+		let open Yojson.Basic.Util in
+
+		if (mf_json |> member "uberspark.platform.bridges") <> `Null then
+		begin
+			let l_node_list =  mf_json |> member "uberspark.platform.bridges" |> to_list in
+			List.iter (fun x -> 
+				let l_bridges_var : json_node_uberspark_platform_bridgesx_t = 
+					{ bridge_id = ""; bridge_namespace = ""; } in
+
+				l_bridges_var.bridge_id <- x |> member "bridge_id" |> to_string;
+				l_bridges_var.bridge_namespace <- x |> member "bridge_namespace" |> to_string;
+	
+				(* add to l_bridges_list by overriding existing values if any *)
+				l_bridges_list := List.remove_assoc l_bridges_var.bridge_id !l_bridges_list;
+				l_bridges_list := !l_bridges_list @ [(l_bridges_var.bridge_id, l_bridges_var);] ;
+
+			) l_node_list;
+
+			json_node_uberspark_platform_var.bridgesx <- !l_bridges_list;
+		end;
+
+
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+	(!retval)
+;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -78,6 +142,12 @@ let json_node_uberspark_platform_to_var
 
 	try
 		let open Yojson.Basic.Util in
+
+		if not (json_node_uberspark_platform_bridges_to_var ~p_only_configurable:p_only_configurable
+			mf_json json_node_uberspark_platform_var) then begin
+			retval := false;
+		end else begin
+			
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.page_size" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.page_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.page_size" mf_json));
 
@@ -130,6 +200,7 @@ let json_node_uberspark_platform_to_var
 				json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json);
 
 			retval := true;
+		end;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
@@ -167,6 +238,7 @@ let json_node_uberspark_platform_var_copy
 	output.bridges.casm_bridge_namespace 					<- 	input.bridges.casm_bridge_namespace 				;
 	output.bridges.ld_bridge_namespace 					<- 	input.bridges.ld_bridge_namespace 				;
 	output.bridges.uberspark_vf_bridge_namespace 			<- 	input.bridges.uberspark_vf_bridge_namespace 		;
+	output.bridgesx 			<- 	input.bridgesx	;
 
 	()
 ;;
@@ -199,5 +271,6 @@ let json_node_uberspark_platform_var_default_value ()
 			ld_bridge_namespace = "";
 			uberspark_vf_bridge_namespace = "";
 		};
+		bridgesx = [];
 	}
 ;;
