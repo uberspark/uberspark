@@ -87,14 +87,6 @@ let d_memorymapped_sections_list : (string * Uberspark.Defs.Basedefs.section_inf
 let d_sentinel_info_for_codegen_list : Uberspark.Codegen.Uobjcoll.sentinel_info_t list ref = ref [];;
 
 
-(* bridge_object variables *)
-let cc_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-let as_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-let ld_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-let casm_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-let vf_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-let loader_bridge : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object;;
-
 
 
 (*---------------------------------------------------------------------------*)
