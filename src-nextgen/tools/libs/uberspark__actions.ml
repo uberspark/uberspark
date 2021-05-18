@@ -457,6 +457,7 @@ let initialize
 	(p_staging_dir_prefix : string )
 	: bool =
 
+	let l_rval = ref true in 
 	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
 	(* store triage and staging dir prefix *)
@@ -466,6 +467,19 @@ let initialize
 	(* store uberspark platform manifest var *)
 	Uberspark.Manifest.uberspark_manifest_var_copy g_uberspark_platform_manifest_var p_uberspark_platform_manifest_var;
 
+	(* sanity check platform manifest var bridges to ensure default bridges
+	 have been specified *)
+	l_rval := (List.mem_assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&	
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx);
+
+	if !l_rval = false then
+		(false)
+	else
+
+	let dummy = 0 in begin
 	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
 	(* Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;*)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
@@ -484,7 +498,6 @@ let initialize
 
 
 	(* if loader manifest actions is empty for any given loader, then emit error *)
-	let l_rval = ref true in 
 	Hashtbl.iter (fun (l_loader_ns : string) (l_loader_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		if !l_rval then begin
 			if List.length l_loader_manifest_var.manifest.actions == 0 then begin
@@ -500,6 +513,7 @@ let initialize
 		
 		end;
 	) p_loader_manifest_var_hashtbl;
+	end;
 
 	if !l_rval = false then
 		(false)
