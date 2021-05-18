@@ -151,26 +151,17 @@ The JSON declaration of the ``uberspark.platform.xxx`` node is as below:
    :proptype uberspark.platform.binary.uobjcoll_image_section_alignment: string
    :options uberspark.platform.binary.uobjcoll_image_section_alignment: "<hexadecimal integer>", default="0x200000"
 
-   :property uberspark.platform.bridges.cc_bridge_namespace: C compiler <bridge namespace path>
-   :proptype uberspark.platform.bridges.cc_bridge_namespace: string
-   :options uberspark.platform.bridges.cc_bridge_namespace: "<bridge namespace path>"
+   :property uberspark.platform.bridges: comma delimited list of platform bridge decaration sub-nodes
+   :proptype uberspark.platform.bridges: :json:object:`bridges` list
 
-   :property uberspark.platform.bridges.as_bridge_namespace: Assembler <bridge namespace path>
-   :proptype uberspark.platform.bridges.as_bridge_namespace: string
-   :options uberspark.platform.bridges.as_bridge_namespace: "<bridge namespace path>"
+.. json:object:: bridges
 
-   :property uberspark.platform.bridges.ld_bridge_namespace: Linker <bridge namespace path>
-   :proptype uberspark.platform.bridges.ld_bridge_namespace: string
-   :options uberspark.platform.bridges.ld_bridge_namespace: "<bridge namespace path>"
-
-   :property uberspark.platform.bridges.casm_bridge_namespace: CASM <bridge namespace path>
-   :proptype uberspark.platform.bridges.casm_bridge_namespace: string
-   :options uberspark.platform.bridges.casm_bridge_namespace: "<bridge namespace path>"
-
-   :property uberspark.platform.bridges.uberspark_vf_bridge_namespace: uberSpark verification bridge <bridge namespace path>
-   :proptype uberspark.platform.bridges.uberspark_vf_bridge_namespace: string
-   :options uberspark.platform.bridges.uberspark_vf_bridge_namespace: "<bridge namespace path>"
-
+   :property bridge_id: identifier of the bridge
+   :proptype bridge_id: string 
+   :options bridge_id: @@<id>@@ where id is a identifier name. Pre-defined values of id are @@CC_BRIDGE@@, @@AS_BRIDGE@@, @@CASM_BRIDGE@@, @@LD_BRIDGE@@, and @@VF_BRIDGE_UBERSPARK@@
+   
+   :property bridge_namespace: namespace for the bridge
+   :proptype bridge_namespace: string 
 
 
 An example definition of the ``uberspark.platform.xxx`` nodes within |ubersparkmff| follows:
@@ -182,12 +173,11 @@ An example definition of the ``uberspark.platform.xxx`` nodes within |ubersparkm
         "uberspark.manifest.version_min" : "any",
         "uberspark.manifest.version_max" : "any",
 
-        "uberspark.platform.binary.uobj_section_alignment" : "0x200000",
-        "uberspark.platform.bridges.cc_bridge_namespace" : "container/amd64/x86_32/generic/gcc/v5.4.0"
+        "uberspark.platform.binary.uobj_section_alignment" : "0x200000"
     }
 
-The aforementioned definition selectively overrides the *uobj_section_alignment* 
-and *cc_bridge_namespace* definitions within the current platform definition.
+The aforementioned definition selectively overrides the 
+*uobj_section_alignment* definition within the current platform definition.
 
 
 
@@ -195,7 +185,7 @@ and *cc_bridge_namespace* definitions within the current platform definition.
 
 .. _reference-manifest-uberspark-bridge:
 
-``uberspark.bridges.xxx`` Nodes
+``uberspark.bridge.xxx`` Nodes
 -------------------------------
 
 |uberspark| supports a variety of bridges such as compilers, assemblers, linkers, verification tools, build system etc.
