@@ -20,17 +20,6 @@ type json_node_uberspark_platform_bridgesx_t =
 
 };;
 
-type json_node_uberspark_platform_bridges_t = 
-{
-	(* bridge related configuration settings *)	
-	mutable cc_bridge_namespace : string;
-	mutable as_bridge_namespace : string;
-	mutable casm_bridge_namespace : string;
-	mutable ld_bridge_namespace : string;
-	mutable uberspark_vf_bridge_namespace : string;
-
-};;
-
 type json_node_uberspark_platform_binary_t = 
 {
 
@@ -56,7 +45,6 @@ type json_node_uberspark_platform_binary_t =
 type json_node_uberspark_platform_t = 
 {
 	mutable binary : json_node_uberspark_platform_binary_t;
-	mutable bridges : json_node_uberspark_platform_bridges_t;
 	mutable bridgesx : (string * json_node_uberspark_platform_bridgesx_t) list; 
 	
 };;
@@ -184,21 +172,6 @@ let json_node_uberspark_platform_to_var
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json));
 
-			if (Yojson.Basic.Util.member "uberspark.platform.bridges.cc_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.bridges.cc_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.cc_bridge_namespace" mf_json);
-
-			if (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.bridges.as_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.as_bridge_namespace" mf_json);
-
-			if (not p_only_configurable) &&  (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.bridges.casm_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.casm_bridge_namespace" mf_json);
-
-			if (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.bridges.ld_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.ld_bridge_namespace" mf_json);
-
-			if (not p_only_configurable) && (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json) <> `Null then
-				json_node_uberspark_platform_var.bridges.uberspark_vf_bridge_namespace <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.bridges.uberspark_vf_bridge_namespace" mf_json);
-
 			retval := true;
 		end;
 
@@ -233,11 +206,7 @@ let json_node_uberspark_platform_var_copy
 	output.binary.uobjcoll_image_hdr_section_size 			<- 	input.binary.uobjcoll_image_hdr_section_size 		;
 	output.binary.uobjcoll_image_section_alignment 		<- 	input.binary.uobjcoll_image_section_alignment 	;
 	output.binary.uobjcoll_image_size 						<- 	input.binary.uobjcoll_image_size 					;
-	output.bridges.cc_bridge_namespace 					<- 	input.bridges.cc_bridge_namespace 				;
-	output.bridges.as_bridge_namespace 					<- 	input.bridges.as_bridge_namespace 				;
-	output.bridges.casm_bridge_namespace 					<- 	input.bridges.casm_bridge_namespace 				;
-	output.bridges.ld_bridge_namespace 					<- 	input.bridges.ld_bridge_namespace 				;
-	output.bridges.uberspark_vf_bridge_namespace 			<- 	input.bridges.uberspark_vf_bridge_namespace 		;
+
 	output.bridgesx 			<- 	input.bridgesx	;
 
 	()
@@ -263,13 +232,6 @@ let json_node_uberspark_platform_var_default_value ()
 			uobjcoll_image_hdr_section_size = 0;
 			uobjcoll_image_section_alignment = 0;
 			uobjcoll_image_size = 0;
-		};
-		bridges = {
-			cc_bridge_namespace = "";
-			as_bridge_namespace = "";
-			casm_bridge_namespace = "";
-			ld_bridge_namespace = "";
-			uberspark_vf_bridge_namespace = "";
 		};
 		bridgesx = [];
 	}
