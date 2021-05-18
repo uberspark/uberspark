@@ -13,7 +13,7 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-type json_node_uberspark_platform_bridgesx_t = 
+type json_node_uberspark_platform_bridges_t = 
 {
 	mutable bridge_id : string;
 	mutable bridge_namespace : string;
@@ -45,7 +45,7 @@ type json_node_uberspark_platform_binary_t =
 type json_node_uberspark_platform_t = 
 {
 	mutable binary : json_node_uberspark_platform_binary_t;
-	mutable bridgesx : (string * json_node_uberspark_platform_bridgesx_t) list; 
+	mutable bridges : (string * json_node_uberspark_platform_bridges_t) list; 
 	
 };;
 
@@ -72,10 +72,10 @@ let json_node_uberspark_platform_bridges_to_var
 	: bool =
 	let retval = ref true in
 
-	let l_bridges_list : (string * json_node_uberspark_platform_bridgesx_t) list ref = ref [] in
+	let l_bridges_list : (string * json_node_uberspark_platform_bridges_t) list ref = ref [] in
 
 	(* copy over all the input list values to begin with *)
-	l_bridges_list := json_node_uberspark_platform_var.bridgesx;
+	l_bridges_list := json_node_uberspark_platform_var.bridges;
 
 	(* we don't use p_only_configurable currently; we allow overriding all 
 	bridge_id, bridge_namespace values *)
@@ -86,7 +86,7 @@ let json_node_uberspark_platform_bridges_to_var
 		begin
 			let l_node_list =  mf_json |> member "uberspark.platform.bridges" |> to_list in
 			List.iter (fun x -> 
-				let l_bridges_var : json_node_uberspark_platform_bridgesx_t = 
+				let l_bridges_var : json_node_uberspark_platform_bridges_t = 
 					{ bridge_id = ""; bridge_namespace = ""; } in
 
 				l_bridges_var.bridge_id <- x |> member "bridge_id" |> to_string;
@@ -98,7 +98,7 @@ let json_node_uberspark_platform_bridges_to_var
 
 			) l_node_list;
 
-			json_node_uberspark_platform_var.bridgesx <- !l_bridges_list;
+			json_node_uberspark_platform_var.bridges <- !l_bridges_list;
 		end;
 
 
@@ -207,7 +207,7 @@ let json_node_uberspark_platform_var_copy
 	output.binary.uobjcoll_image_section_alignment 		<- 	input.binary.uobjcoll_image_section_alignment 	;
 	output.binary.uobjcoll_image_size 						<- 	input.binary.uobjcoll_image_size 					;
 
-	output.bridgesx 			<- 	input.bridgesx	;
+	output.bridges 			<- 	input.bridges	;
 
 	()
 ;;
@@ -233,6 +233,6 @@ let json_node_uberspark_platform_var_default_value ()
 			uobjcoll_image_section_alignment = 0;
 			uobjcoll_image_size = 0;
 		};
-		bridgesx = [];
+		bridges = [];
 	}
 ;;

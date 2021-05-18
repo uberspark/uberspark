@@ -94,7 +94,7 @@ module Platform : sig
   (* manifest node types *)
   (****************************************************************************)
 
-type json_node_uberspark_platform_bridgesx_t = 
+type json_node_uberspark_platform_bridges_t = 
 {
 	mutable bridge_id : string;
 	mutable bridge_namespace : string;
@@ -126,7 +126,7 @@ type json_node_uberspark_platform_bridgesx_t =
   type json_node_uberspark_platform_t = 
   {
     mutable binary : json_node_uberspark_platform_binary_t;
-   	mutable bridgesx : (string * json_node_uberspark_platform_bridgesx_t) list; 
+   	mutable bridges : (string * json_node_uberspark_platform_bridges_t) list; 
 
   }
 

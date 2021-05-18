@@ -108,7 +108,7 @@ let consolidate_actions_uobj
 						category = "translation";
 						name = "verifying überSpark invariants";
 						input = [ "*.c" ]; output = [ ]; 
-						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; 
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
 						bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
@@ -119,7 +119,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -129,7 +129,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -139,7 +139,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -149,7 +149,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .S to .o";
 						category = "translation";
-						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -193,7 +193,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -203,7 +203,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -213,7 +213,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -402,7 +402,7 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -412,7 +412,7 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -422,7 +422,7 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -437,7 +437,7 @@ let add_default_uobjcoll_actions () :
 		l_uobjcoll_action.category <- "translation";
 		l_uobjcoll_action.input <- ["*.o";];
 		l_uobjcoll_action.output <- [ "uobjcoll.flat";];
-		l_uobjcoll_action.bridge_namespace <- (List.assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx).bridge_namespace;
+		l_uobjcoll_action.bridge_namespace <- (List.assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace;
 					
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
 
@@ -471,11 +471,11 @@ let initialize
 
 	(* sanity check platform manifest var bridges to ensure default bridges
 	 have been specified *)
-	l_rval := (List.mem_assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
-				(List.mem_assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&	
-				(List.mem_assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
-				(List.mem_assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx) &&
-				(List.mem_assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridgesx);
+	l_rval := (List.mem_assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&	
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges);
 
 	if !l_rval = false then
 		(false)
