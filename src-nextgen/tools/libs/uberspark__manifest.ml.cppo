@@ -267,6 +267,10 @@ module Uobjrtl = struct
 	#include "uberspark__manifest_uobjrtl.ml"
 end
 
+module Hwm = struct
+	#include "uberspark__manifest_hwm.ml"
+end
+
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
