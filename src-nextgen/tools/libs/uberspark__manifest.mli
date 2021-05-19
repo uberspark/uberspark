@@ -402,6 +402,7 @@ type uberspark_manifest_var_t =
   mutable platform : Platform.json_node_uberspark_platform_t;
  	mutable bridge : Bridge.json_node_uberspark_bridge_t; 
  	mutable installation : Installation.json_node_uberspark_installation_t; 
+ 	mutable hwm : Hwm.json_node_uberspark_hwm_t; 
 }
 
 
