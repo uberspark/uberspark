@@ -360,6 +360,31 @@ type json_node_uberspark_uobjrtl_t =
 end
 
 
+module Hwm : sig
+
+type json_node_uberspark_hwm_cpu_t = 
+{
+
+	mutable arch : string;
+	mutable addressing : string;
+	mutable model : string;
+}
+
+type json_node_uberspark_hwm_t = 
+{
+	mutable cpu : json_node_uberspark_hwm_cpu_t;
+	
+}
+
+  val json_node_uberspark_hwm_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_hwm_t -> bool
+  val json_node_uberspark_hwm_var_copy : json_node_uberspark_hwm_t -> json_node_uberspark_hwm_t -> unit
+  val json_node_uberspark_hwm_var_default_value : unit -> json_node_uberspark_hwm_t
+
+
+end
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* type definitions *)
