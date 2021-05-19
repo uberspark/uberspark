@@ -16,6 +16,7 @@
 type json_node_uberspark_installation_t =
 {
 	mutable root_directory : string;
+	mutable default_platform : string;
 };;
 
 
@@ -37,19 +38,17 @@ let json_node_uberspark_installation_to_var
 	(mf_json : Yojson.Basic.t)
 	(json_node_uberspark_installation_var : json_node_uberspark_installation_t) 
 	: bool =
-	let retval = ref false in
+	let retval = ref true in
 
 	try
 		let open Yojson.Basic.Util in
-			let json_node_uberspark_installation = mf_json |> member Uberspark.Namespace.namespace_installation_mf_node_type_tag in
-		
-			if(json_node_uberspark_installation <> `Null) then
-				begin
+			if (mf_json |> member "uberspark.installation.root_directory") != `Null then
+				json_node_uberspark_installation_var.root_directory <- mf_json |> member "uberspark.installation.root_directory" |> to_string;
 
-					json_node_uberspark_installation_var.root_directory <- json_node_uberspark_installation |> member "root_directory" |> to_string;
-					retval := true;
-				end
-			;
+			if (mf_json |> member "uberspark.installation.default_platform") != `Null then
+				json_node_uberspark_installation_var.default_platform <- mf_json |> member "uberspark.installation.default_platform" |> to_string;
+
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
@@ -58,4 +57,32 @@ let json_node_uberspark_installation_to_var
 	(!retval)
 ;;
 
+
+(* 
+	copy constructor for uberspark.platform.xxx nodes
+	we use this to copy one json_node_uberspark_installation_t 
+	variable into another 
+*)
+let json_node_uberspark_installation_var_copy 
+	(output : json_node_uberspark_installation_t )
+	(input : json_node_uberspark_installation_t )
+	: unit = 
+
+	output.root_directory <- input.root_directory; 
+	output.default_platform <- input.default_platform; 
+
+	()
+;;
+
+
+(* default json_node_uberspark_installation_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_installation_t *)
+let json_node_uberspark_installation_var_default_value () 
+	: json_node_uberspark_installation_t = 
+
+	{
+		root_directory = "";
+		default_platform = "";
+	}
+;;
 

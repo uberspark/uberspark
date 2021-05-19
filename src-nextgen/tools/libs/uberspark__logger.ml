@@ -54,6 +54,8 @@ let log_print_string_default_backend
 	(p_str : string) :
 	unit =
 		print_string p_str;
+		flush stdout;
+	()
 ;;
 
 

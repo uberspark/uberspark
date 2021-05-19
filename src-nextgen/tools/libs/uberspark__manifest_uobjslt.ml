@@ -65,4 +65,43 @@ let json_node_uberspark_uobjslt_to_var
 	(!retval)
 ;;
 
+(* 
+	copy constructor for uberspark.uobjslt.xxx nodes
+	we use this to copy one json_node_uberspark_uobjslt_t 
+	variable into another 
+*)
+let json_node_uberspark_uobjslt_var_copy 
+	(output : json_node_uberspark_uobjslt_t )
+	(input : json_node_uberspark_uobjslt_t )
+	: unit = 
+
+	output.namespace						<- input.namespace;					
+	output.platform 						<- input.platform ;					
+	output.arch 							<- input.arch 	;					
+	output.cpu 								<- input.cpu 	;						
+	output.sizeof_addressing 				<- input.sizeof_addressing 			;
+	output.code_template_directxfer 		<- input.code_template_directxfer 	;
+	output.code_template_indirectxfer 		<- input.code_template_indirectxfer ;	
+	output.code_template_data_definition 	<- input.code_template_data_definition;
+
+	()
+;;
+
+
+(* default json_node_uberspark_uobjslt_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_uobjslt_t *)
+let json_node_uberspark_uobjslt_var_default_value () 
+	: json_node_uberspark_uobjslt_t = 
+
+	{
+		namespace = "";
+		platform = "";
+		arch = "";
+		cpu = "";
+		sizeof_addressing = 0;
+		code_template_directxfer = "";
+		code_template_indirectxfer = "";
+		code_template_data_definition = "";
+	}
+;;
 

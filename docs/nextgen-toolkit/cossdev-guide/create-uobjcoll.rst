@@ -34,17 +34,46 @@ for interaction with legacy |coss| code, in addition to other attributes. See
 |reference-manifest-ref|:::ref:`reference-manifest-uberspark-uobjcoll` for further details on the ``uberspark.uobjcoll.xxx``
 manifest nodes and definitions.
 
+.. _cossdev-guide-create-uobjcoll-nsplatformdef:
+
+|uobjcollcaps| Namespace and Platform Definition
+------------------------------------------------
+
 The |uobjcoll| *namespace* in our example (`uberspark/ubjcoll/generic/hello_mul`) is composed of
 two parts. 
 A |uobjcoll| prefix that is always is required to start with `uberspark/uobjcoll`, followed by
 a user-defined |uobjcoll| namespace suffix. We choose `generic/hello_mul` as our user-defined |uobjcoll| namespace suffix 
 since ``hello_mul`` is architecture agnostic. 
 
-Accordingly |uobjcoll| *platform*, *arch*, and *cpu* fields are set to ``generic``.
+The |uobjcoll| *platform* is specified using the ``uberspark.uobjcoll.platform`` JSON node
+and refers to a valid platform namespace.
+A platform namespace is composed of: a ``uberspark/platforms/`` prefix,
+followed by a board name, CPU architecture, and CPU triad.
+For example, ``uberspark/platforms/rpi3/armv8a/32-bit/cortex-a53`` refers to 
+a platform comprising the Raspberry Pi 3 (``rpi3``) board, with a ``armv8a/32-bit``
+architecture, running the ``cortex-a53`` CPU. 
+
+A |uobjcoll| must specify a valid *platform* to produce a successful binary.
+
+.. seealso::   |contrib-guide-ref|:::ref:`contrib-guide-platform-intro` 
+               for more information on |uspark| platforms.
+
 
 The *hpl* field within ``uberspark.uobjcoll.hpl`` JSON node specifies the hardware privilege level of
 the |uobjcoll|. The currently supported values are ``any`` to signify the |uobjcoll| can execute under
 any hardware privilege level.            
+
+A |uobjcoll| can override values of default platform definitions (where allowed) to provide
+|uobjcoll| specific values. For example, ``uberspark.platform.uobjcoll_image_load_address``
+is typically overridden with the load address of the |uobjcoll| binary image. 
+
+
+.. seealso::   |reference-manifest-ref|:::ref:`reference-manifest-uberspark-platform` 
+               for more information on platform definitions including definitions that
+               can be overridden
+
+|uobjcollcaps| |uobjs| and Public-method Definitions
+----------------------------------------------------
 
 The *uobjs* node within the ``uberspark.uobjcoll.uobjs`` manifest node, describes all the |uobjs| that are part of the
 |uobjcoll|. The |uobjs| are categorized into *master* and *templars*. 
@@ -76,6 +105,7 @@ to specify this gateway as a regular branch/call instruction.
 ..  note::  There can be multiple types of sentinel implementations in principle and the sentinel types for
             *sentinels-intrauobjcoll* can be different from that of the *publicmethods*.
             Presently only the ``call`` sentinel is supported.
+
 
 
 |uobjcollcaps| Configuration Definitions

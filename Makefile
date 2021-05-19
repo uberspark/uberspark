@@ -11,6 +11,7 @@ export USPARK_INSTALL_BINDIR := /usr/bin
 export USPARK_INSTALL_CONFIGDIR := /etc/uberspark
 export USPARK_INSTALL_CONFIGFILENAME := uberspark.json
 export USPARK_VERSION := 6.0.0
+export USPARK_DEFAULT_PLATFORM := uberspark/platforms/pcintel-generic/x86/32-bit/core-gen1
 
 
 
@@ -43,9 +44,8 @@ define USPARK_CONFIG_CONTENTS
 		"uberspark.manifest.version_min" : "$(USPARK_VERSION)",
 		"uberspark.manifest.version_max" : "$(USPARK_VERSION)",
 
-    "uberspark-installation" : {
-		"root_directory" : "$(ROOT_DIR)"
-	}
+    	"uberspark.installation.root_directory" : "$(ROOT_DIR)",
+		"uberspark.installation.default_platform" : "$(USPARK_DEFAULT_PLATFORM)"
 }
 endef
 
@@ -211,20 +211,7 @@ install: check_wslrootdir build_bootstrap
 	fi
 	rm -rf $(USPARK_NAMESPACEROOTDIR)
 	mkdir -p $(USPARK_NAMESPACEROOTDIR)
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/docs
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/bridges
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/tools
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/platforms
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging_golden/uberspark
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging
-	mkdir -p $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark
-	cp -Rf $(USPARK_INSTALLPREPDIR)/docs/* $(USPARK_NAMESPACEROOTDIR)/docs/ 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/bridges/* $(USPARK_NAMESPACEROOTDIR)/bridges/ 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/tools/* $(USPARK_NAMESPACEROOTDIR)/tools/ 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/platforms/* $(USPARK_NAMESPACEROOTDIR)/platforms/ 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging_golden/uberspark 
-	cp -Rf $(USPARK_INSTALLPREPDIR)/staging/* $(USPARK_NAMESPACEROOTDIR)/staging/default/uberspark 
-	ln -sf $(USPARK_NAMESPACEROOTDIR)/staging/default $(USPARK_NAMESPACEROOTDIR)/staging/current
+	cp -Rf $(USPARK_INSTALLPREPDIR)/* $(USPARK_NAMESPACEROOTDIR)/. 
 	@echo Populated install namespace successfully
 	@echo Installing global configuration to $(USPARK_INSTALL_CONFIGDIR)...
 	@echo Note: You may need to enter your sudo password. 

@@ -95,3 +95,34 @@ let json_node_uberspark_uobjrtl_to_var
 ;;
 
 
+(* 
+	copy constructor for uberspark.uobjrtl.xxx nodes
+	we use this to copy one json_node_uberspark_uobjrtl_t 
+	variable into another 
+*)
+let json_node_uberspark_uobjrtl_var_copy 
+	(output : json_node_uberspark_uobjrtl_t )
+	(input : json_node_uberspark_uobjrtl_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu; 
+	output.sources <- input.sources; 
+
+
+	()
+;;
+
+
+(* default json_node_uberspark_uobjrtl_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_uobjrtl_t *)
+let json_node_uberspark_uobjrtl_var_default_value () 
+	: json_node_uberspark_uobjrtl_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = [];
+	}
+;;

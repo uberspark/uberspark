@@ -78,9 +78,11 @@ libraries and |coss|
 
    nextgen-toolkit/contrib-guide/intro
    nextgen-toolkit/contrib-guide/docs.rst
+   nextgen-toolkit/contrib-guide/platforms.rst
    nextgen-toolkit/contrib-guide/bridges.rst
    nextgen-toolkit/contrib-guide/uobjrtl.rst
    nextgen-toolkit/contrib-guide/hwm.rst
+   nextgen-toolkit/contrib-guide/tools.rst
 
 
 .. toctree::

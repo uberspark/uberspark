@@ -51,7 +51,7 @@ val namespace_uobj_cclib_filename : string
 (* uobjcoll *)
 val namespace_uobjcoll : string
 val namespace_uobjcoll_build_dir : string
-val namespace_uobjcoll_triage_dir : string
+val namespace_uobjcoll_staging_dir : string
 val namespace_uobjcoll_uobj_binary_image_section_mapping_src_filename : string
 val namespace_uobjcoll_sentinel_definitions_src_filename : string
 val namespace_uobjcoll_linkerscript_filename : string
@@ -88,20 +88,20 @@ val namespace_staging_current : string
 val namespace_staging_golden : string
 val namespace_staging_default : string
 
-(* config *)
-val namespace_config : string
-val namespace_config_mf_node_type_tag : string
+(* platform *)
+val namespace_platform : string
+val namespace_platform_mf_node_type_tag : string
 
 (* bridges *)
 val namespace_bridge : string
 val namespace_bridge_container_filename : string
 val namespace_bridge_container_mountpoint : string
 
-val namespace_bridge_cc_mf_node_type_tag : string
-val namespace_bridge_ld_mf_node_type_tag : string
-val namespace_bridge_as_mf_node_type_tag : string
-val namespace_bridge_vf_mf_node_type_tag : string
-val namespace_bridge_loader_mf_node_type_tag : string
+val namespace_bridge_cc_bridge_id : string
+val namespace_bridge_ld_bridge_id : string
+val namespace_bridge_as_bridge_id : string
+val namespace_bridge_casm_bridge_id : string
+val namespace_bridge_vf_uberspark_bridge_id : string
 
 val namespace_bridge_ar_bridge_name : string
 val namespace_bridge_as_bridge_name : string

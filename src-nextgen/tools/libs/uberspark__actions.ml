@@ -78,6 +78,9 @@ let new_action_element ()
 let g_actions_assoc_list : (string * uberspark_action_t) list ref = ref [];; 
 
 
+(* platform manifest variable *)
+let g_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t =
+	Uberspark.Manifest.uberspark_manifest_var_default_value ();;	
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -104,7 +107,9 @@ let consolidate_actions_uobj
 						targets = [ "verify"; ];
 						category = "translation";
 						name = "verifying überSpark invariants";
-						input = [ "*.c" ]; output = [ ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.uberspark_vf_bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ ]; 
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
+						bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -114,7 +119,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -124,7 +129,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -134,7 +139,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -144,7 +149,7 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .S to .o";
 						category = "translation";
-						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -188,7 +193,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -198,7 +203,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -208,7 +213,7 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -343,20 +348,9 @@ let consolidate_actions ()
 
 
 (*--------------------------------------------------------------------------*)
-(* initiatize actions processing *)
+(* add default uobjcoll actions *)
 (*--------------------------------------------------------------------------*)
-let initialize
-	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
-	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
-	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
-	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
-	(p_triage_dir_prefix : string )
-	(p_staging_dir_prefix : string )
-	: bool =
-
-	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
-
-	let l_add_default_uobjcoll_actions () : 
+let add_default_uobjcoll_actions () : 
 		Uberspark.Manifest.json_node_uberspark_manifest_actions_t list =
 		let l_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
@@ -408,7 +402,7 @@ let initialize
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.cc_bridge_namespace; bridge_cmd = [];
+						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -418,7 +412,7 @@ let initialize
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.casm_bridge_namespace; bridge_cmd = [];
+						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -428,7 +422,7 @@ let initialize
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = Uberspark.Config.json_node_uberspark_config_var.as_bridge_namespace; bridge_cmd = [];
+						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -443,17 +437,51 @@ let initialize
 		l_uobjcoll_action.category <- "translation";
 		l_uobjcoll_action.input <- ["*.o";];
 		l_uobjcoll_action.output <- [ "uobjcoll.flat";];
-		l_uobjcoll_action.bridge_namespace <- Uberspark.Config.json_node_uberspark_config_var.ld_bridge_namespace;
+		l_uobjcoll_action.bridge_namespace <- (List.assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace;
 					
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
 
 		(!l_actions_list)
-	in
+;;
+
+
+
+(*--------------------------------------------------------------------------*)
+(* initiatize actions processing *)
+(*--------------------------------------------------------------------------*)
+let initialize
+	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
+	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
+	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
+	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_triage_dir_prefix : string )
+	(p_staging_dir_prefix : string )
+	: bool =
+
+	let l_rval = ref true in 
+	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
 	(* store triage and staging dir prefix *)
 	g_triage_dir_prefix := p_triage_dir_prefix;
 	g_staging_dir_prefix := p_staging_dir_prefix;
 
+	(* store uberspark platform manifest var *)
+	Uberspark.Manifest.uberspark_manifest_var_copy g_uberspark_platform_manifest_var p_uberspark_platform_manifest_var;
+
+	(* sanity check platform manifest var bridges to ensure default bridges
+	 have been specified *)
+	l_rval := (List.mem_assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&	
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridges) &&
+				(List.mem_assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges);
+
+	if !l_rval = false then
+		(false)
+	else
+
+	let dummy = 0 in begin
 	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
 	(* Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;*)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
@@ -472,7 +500,6 @@ let initialize
 
 
 	(* if loader manifest actions is empty for any given loader, then emit error *)
-	let l_rval = ref true in 
 	Hashtbl.iter (fun (l_loader_ns : string) (l_loader_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		if !l_rval then begin
 			if List.length l_loader_manifest_var.manifest.actions == 0 then begin
@@ -488,6 +515,7 @@ let initialize
 		
 		end;
 	) p_loader_manifest_var_hashtbl;
+	end;
 
 	if !l_rval = false then
 		(false)
@@ -515,7 +543,7 @@ let initialize
 		Uberspark.Manifest.uberspark_manifest_var_copy g_uobjcoll_manifest_var p_uobjcoll_manifest_var;
 
 		if List.length p_uobjcoll_manifest_var.manifest.actions == 0 then begin
-			g_uobjcoll_manifest_var.manifest.actions <- l_add_default_uobjcoll_actions ();
+			g_uobjcoll_manifest_var.manifest.actions <- add_default_uobjcoll_actions ();
 
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added default actions to uobjcoll: %s" 
 				g_uobjcoll_manifest_var.uobjcoll.namespace; 
@@ -525,7 +553,7 @@ let initialize
 			List.iter ( fun (l_uobjcoll_action : Uberspark.Manifest.json_node_uberspark_manifest_actions_t) -> 
 
 				if l_uobjcoll_action.category == "default_action" then begin
-					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ (l_add_default_uobjcoll_actions ());
+					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ (add_default_uobjcoll_actions ());
 				end else begin
 					l_uobjcoll_actions_list := !l_uobjcoll_actions_list @ [ l_uobjcoll_action; ];
 				end;

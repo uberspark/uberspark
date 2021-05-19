@@ -74,3 +74,36 @@ let json_node_uberspark_loader_to_var
 	(!retval)
 ;;
 
+
+(* 
+	copy constructor for uberspark.loader.xxx nodes
+	we use this to copy one json_node_uberspark_loader_t 
+	variable into another 
+*)
+let json_node_uberspark_loader_var_copy 
+	(output : json_node_uberspark_loader_t )
+	(input : json_node_uberspark_loader_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu; 
+	output.bridge_namespace <- input.bridge_namespace; 
+	output.bridge_cmd <- input.bridge_cmd; 
+
+
+	()
+;;
+
+
+(* default json_node_uberspark_loader_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_loader_t *)
+let json_node_uberspark_loader_var_default_value () 
+	: json_node_uberspark_loader_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		bridge_namespace = ""; bridge_cmd = [];
+	}
+;;

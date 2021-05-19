@@ -40,13 +40,16 @@ module Uobj : sig
   (****************************************************************************)
   (* interfaces *)
   (****************************************************************************)
-  val generate_src_binhdr : 
+  
+  (* TBD: future expansion *)
+  (*val generate_src_binhdr : 
     string ->
     string ->
     int ->
     int ->
     (string * Uberspark.Defs.Basedefs.section_info_t) list ->
     unit
+*)
 
   val generate_src_publicmethods_info : string -> string -> ((string, Uberspark.Manifest.Uobj.json_node_uberspark_uobj_publicmethods_t)  Hashtbl.t) -> unit 
   val generate_src_intrauobjcoll_callees_info : string -> ((string, string list)  Hashtbl.t) -> unit

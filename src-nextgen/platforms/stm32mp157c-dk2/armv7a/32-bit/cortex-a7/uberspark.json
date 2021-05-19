@@ -1,0 +1,55 @@
+/* uberSpark configuration file */
+
+
+{
+   		"uberspark.manifest.namespace" : "uberspark/platforms",
+		"uberspark.manifest.version_min" : "any",
+		"uberspark.manifest.version_max" : "any",
+	
+		"uberspark.platform.binary.page_size" : "0x200000",
+		"uberspark.platform.binary.uobj_section_alignment" : "0x200000",
+		"uberspark.platform.binary.uobj_default_section_size" : "0x200000",
+		"uberspark.platform.binary.uobj_image_load_address" : "0x60000000",
+		"uberspark.platform.binary.uobj_image_uniform_size" : false,
+		"uberspark.platform.binary.uobj_image_size" : "0x14900000",
+		"uberspark.platform.binary.uobj_image_alignment" : "0x200000",
+
+		"uberspark.platform.binary.uobjcoll_image_load_address" : "0x60000000",
+		"uberspark.platform.binary.uobjcoll_image_hdr_section_alignment" : "0x200000",
+		"uberspark.platform.binary.uobjcoll_image_hdr_section_size" : "0x200000",
+		"uberspark.platform.binary.uobjcoll_image_section_alignment" : "0x200000",
+		"uberspark.platform.binary.uobjcoll_image_size" : "0x02000000",
+	
+
+		"uberspark.platform.bridges" : [
+			
+			{
+				"bridge_id" : "@@CC_BRIDGE@@",
+				"bridge_namespace" : "uberspark/bridges/container/amd64/cc-bridge/armv7_32/generic/gcc/v10.2"
+			},
+			
+			{
+				"bridge_id" : "@@AS_BRIDGE@@",
+				"bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/armv7_32/cortex-a7/gnu-as/v2.34"
+			},
+
+			{
+				"bridge_id" : "@@CASM_BRIDGE@@",
+				"bridge_namespace" : "uberspark/bridges/container/amd64/as-bridge/x86_32/generic/casm/vlatest"
+			},
+
+			{
+				"bridge_id" : "@@LD_BRIDGE@@",
+				"bridge_namespace" : "uberspark/bridges/container/amd64/ld-bridge/armv7_32/generic/gnu-ld/v2.34"
+			},
+
+			{
+				"bridge_id" : "@@VF_BRIDGE_UBERSPARK@@",
+				"bridge_namespace" : "uberspark/bridges/container/amd64/vf-bridge/generic/generic/uberspark/v6.0.0"
+			}
+
+		]
+		
+
+
+}

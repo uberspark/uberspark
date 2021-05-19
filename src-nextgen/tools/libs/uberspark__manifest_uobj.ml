@@ -17,16 +17,6 @@ type json_node_uberspark_uobj_uobjrtl_t =
 	mutable namespace: string;
 };;
 
-(*
-type json_node_uberspark_uobj_sources_t = 
-{
-	mutable source_h_files: string list;
-	mutable source_c_files: string list;
-	mutable source_casm_files: string list;
-	mutable source_asm_files : string list;
-};;
-*)
-
 type json_node_uberspark_uobj_publicmethods_t = 
 {
 	mutable fn_name: string;
@@ -36,22 +26,6 @@ type json_node_uberspark_uobj_publicmethods_t =
 	mutable fn_address : int;
 };;
 	
-(*
-type json_node_uberspark_uobj_t = 
-{
-	mutable namespace: string;
-	mutable platform : string;
-	mutable arch: string;
-	mutable cpu : string;
-	mutable sources : json_node_uberspark_uobj_sources_t;
-	mutable public_methods :  (string * json_node_uberspark_uobj_publicmethods_t) list;
-	mutable intra_uobjcoll_callees : (string * string list) list;
-	mutable inter_uobjcoll_callees : (string * string list) list;
-	mutable legacy_callees : (string * string list) list;
-	mutable sections : (string * Uberspark.Defs.Basedefs.section_info_t) list;
-	mutable uobjrtl : (string * json_node_uberspark_uobj_uobjrtl_t) list;
-};;
-*)
 
 type json_node_uberspark_uobj_t = 
 {
@@ -77,75 +51,6 @@ type json_node_uberspark_uobj_t =
 (*---------------------------------------------------------------------------*)
 
 
-(*--------------------------------------------------------------------------*)
-(* parse manifest json sub-node "sources" into var *)
-(* return: *)
-(* on success: true; var is modified with h,c,casm,asm file lists *)
-(* on failure: false; var is unmodified *)
-(*--------------------------------------------------------------------------*)
-(*
-let json_node_uberspark_uobj_sources_to_var 
-	(mf_json : Yojson.Basic.t)
-	(json_node_uberspark_uobj_source_var : json_node_uberspark_uobj_sources_t)
-	: bool =
-
-	let retval = ref true in
-
-	try
-		let open Yojson.Basic.Util in
-
-						let mf_hfiles_json = mf_json |> member "uberspark.uobj.source_h_files" in
-							if mf_hfiles_json != `Null then
-								begin
-									let hfiles_json_list = mf_hfiles_json |> 
-											to_list in 
-										List.iter (fun x -> json_node_uberspark_uobj_source_var.source_h_files <- 
-												json_node_uberspark_uobj_source_var.source_h_files @ [(x |> to_string)]
-											) hfiles_json_list;
-								end
-							;
-
-						let mf_cfiles_json = mf_json |> member "uberspark.uobj.source_c_files" in
-							if mf_cfiles_json != `Null then
-								begin
-									let cfiles_json_list = mf_cfiles_json |> 
-											to_list in 
-										List.iter (fun x -> json_node_uberspark_uobj_source_var.source_c_files <- 
-												json_node_uberspark_uobj_source_var.source_c_files @ [(x |> to_string)]
-											) cfiles_json_list;
-								end
-							;
-
-						let mf_casmfiles_json = mf_json |> member "uberspark.uobj.source_casm_files" in
-							if mf_casmfiles_json != `Null then
-								begin
-									let casmfiles_json_list = mf_casmfiles_json |> 
-											to_list in 
-										List.iter (fun x -> json_node_uberspark_uobj_source_var.source_casm_files <- 
-												json_node_uberspark_uobj_source_var.source_casm_files @ [(x |> to_string)]
-											) casmfiles_json_list;
-								end
-							;
-
-						let mf_asmfiles_json = mf_json |> member "uberspark.uobj.source_asm_files" in
-							if mf_asmfiles_json != `Null then
-								begin
-									let asmfiles_json_list = mf_asmfiles_json |> 
-											to_list in 
-										List.iter (fun x -> json_node_uberspark_uobj_source_var.source_asm_files <- 
-												json_node_uberspark_uobj_source_var.source_asm_files @ [(x |> to_string)]
-											) asmfiles_json_list;
-								end
-							;
-							
-				
-	with Yojson.Basic.Util.Type_error _ -> 
-			retval := false;
-	;
-
-	(!retval)
-;;
-*)
 
 (*--------------------------------------------------------------------------*)
 (* parse manifest json sub-node "public_methods" into var *)
@@ -554,5 +459,51 @@ let json_node_uberspark_uobj_to_var
 ;;
 
 
+(* 
+	copy constructor for uberspark.uobj.xxx nodes
+	we use this to copy one json_node_uberspark_uobj_t 
+	variable into another 
+*)
+let json_node_uberspark_uobj_var_copy 
+	(output : json_node_uberspark_uobj_t )
+	(input : json_node_uberspark_uobj_t )
+	: unit = 
+
+	output.namespace <- input.namespace; 
+	output.platform <- input.platform; 
+	output.arch <- input.arch; 
+	output.cpu <- input.cpu; 
+	(*
+	output.sources.source_h_files<- input.sources.source_h_files; 
+	output.sources.source_c_files <- input.sources.source_c_files; 
+	output.sources.source_casm_files <- input.sources.source_casm_files; 
+	output.sources.source_asm_files <- input.sources.source_asm_files;
+	*)
+	output.sources <- input.sources;
+	output.headers <- input.headers;
+
+	output.public_methods <- input.public_methods; 
+	output.intra_uobjcoll_callees <- input.intra_uobjcoll_callees; 
+	output.inter_uobjcoll_callees <- input.inter_uobjcoll_callees;
+	output.legacy_callees <- input.legacy_callees; 
+	output.sections <- input.sections; 
+	output.uobjrtl <- input.uobjrtl; 
+
+	()
+;;
+
+
+(* default json_node_uberspark_uobj_t variable definition *)
+(* we use this to initialize variables of type json_node_uberspark_uobj_t *)
+let json_node_uberspark_uobj_var_default_value () 
+	: json_node_uberspark_uobj_t = 
+
+	{
+		namespace = ""; platform = ""; arch = ""; cpu = ""; 
+		sources = []; headers = [];
+		public_methods = []; intra_uobjcoll_callees = []; inter_uobjcoll_callees = [];
+		legacy_callees = []; sections = []; uobjrtl = []; 
+	}
+;;
 
 
