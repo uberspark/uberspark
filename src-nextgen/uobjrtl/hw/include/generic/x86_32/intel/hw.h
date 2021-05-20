@@ -51,7 +51,7 @@
 // include hardware model
 #include <uberspark/include/uberspark.h>
 
-#include <uberspark/hwm/include/arch/x86_32/intel/hwm.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>
 
 #include <uberspark/hwm/include/device/iommu/intel/hwm.h>
 #include <uberspark/hwm/include/device/net/ethernet/intel/e1000/hwm.h>

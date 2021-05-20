@@ -7,7 +7,7 @@
 */
 
 #include <uberspark/include/uberspark.h>
-#include <uberspark/hwm/include/arch/x86_32/generic/hwm.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>
 
 CASM_FUNCDECL(void main_nullfunc(void *noparam));
 

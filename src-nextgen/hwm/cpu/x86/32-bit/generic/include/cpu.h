@@ -197,8 +197,8 @@
 #endif // __ASSEMBLY__
 
 
-    #include <uberspark/hwm/include/arch/x86/generic/lapic.h>	    //APIC
-    #include <uberspark/hwm/include/arch/x86/generic/mem.h>			//Memory regions
+    #include <uberspark/hwm/cpu/x86/32-bit/generic/include/lapic.h>	    //APIC
+    #include <uberspark/hwm/cpu/x86/32-bit/generic/include/mem.h>			//Memory regions
 
 
 #ifndef __ASSEMBLY__
