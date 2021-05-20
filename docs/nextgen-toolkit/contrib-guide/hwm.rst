@@ -23,6 +23,14 @@ HWM Namespace and Directory Layout
 
 The HWM organization is split into various sub-models, each housing an architecture, device, or platform specific hardware model:
 
+CPU is organized as hwm/cpu/<arch>/<addressing>/<cpumodel>
+Here <arch> is the CPU instruction architecture (x86, ARM, RISC-V),
+<adressing> is the addressing mode (32-bit/64-bit) and <cpumodel> is the
+model of the CPU (e.g. AMD-Opteron, intelcore-genx). This scheme allows us
+to target a specific CPU architecture along with architecture customization
+and micro-architectural details with <cpumodel>
+
+
 ``arch``
     various supported architecture and CPU specific instruction level hardware modeling,    
     including a general device interface abstraction to integrate device level modeling

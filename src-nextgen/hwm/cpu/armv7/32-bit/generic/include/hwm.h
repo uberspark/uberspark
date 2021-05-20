@@ -45,12 +45,13 @@
  */
 
 
-//XMHF x86_32 generic hardware interface
+//XMHF armv7_32 hardware interface
 //author: ethan joseph (ethanj217@gmail.com)
 
-#ifndef __HWM_ARCH_x86_32_GENERIC__HWM_H__
-#define __HWM_ARCH_x86_32_GENERIC__HWM_H__
+#ifndef __HWM_CPU_ARMV7_32BIT_GENERIC_HWM_H__
+#define __HWM_CPU_ARMV7_32BIT_GENERIC_HWM_H__
 
-#include <uberspark/hwm/include/arch/x86/generic/hwm.h>
+#include <uberspark/hwm/cpu/armv7/32-bit/generic/include/cpu.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
-#endif //__HWM_ARCH_x86_32_GENERIC__HWM_H__
+#endif //__HWM_CPU_ARMV7_32BIT_GENERIC_HWM_H__

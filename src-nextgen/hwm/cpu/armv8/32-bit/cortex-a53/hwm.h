@@ -44,33 +44,14 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
-// XMHF memory emulation
-// author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __HWM_ARCH_x86_GENERIC__LAPIC_H__
-#define __HWM_ARCH_x86_GENERIC__LAPIC_H__
+//author: ethan joseph (ethanj217@gmail.com)
+//  amit vasudevan <amitvasudevan@acm.org>
 
-#ifndef __ASSEMBLY__
-#define LAPIC_ICR_LOW   (0x300)
-#define LAPIC_ICR_HIGH  (0x310)
-#define LAPIC_ID        (0x20)
+#ifndef __HWM_CPU_ARMV8_32BIT_CORTEXA53_HWM_H__
+#define __HWM_CPU_ARMV8_32BIT_CORTEXA53_HWM_H__
 
-//LAPIC emulation defines
-#define LAPIC_OP_RSVD   (3)
-#define LAPIC_OP_READ   (2)
-#define LAPIC_OP_WRITE  (1)
+#include <uberspark/hwm/cpu/armv8/32-bit/cortex-53/include/cpu.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
-#define HWM_LAPIC_REG_ID	(MMIO_APIC_BASE+LAPIC_ID)
-
-extern uint32_t hwm_lapic_reg_id;
-
-
-bool _impl_hwm_lapic_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
-bool _impl_hwm_lapic_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
-
-
-#endif	//__ASSEMBLY__
-
-
-
-#endif //__HWM_ARCH_x86_GENERIC__LAPIC_H__
+#endif //__HWM_CPU_ARMV8_32BIT_CORTEXA53_HWM_H__

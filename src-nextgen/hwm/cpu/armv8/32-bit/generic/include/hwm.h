@@ -45,15 +45,14 @@
  */
 
 
-//XMHF x86_32 intel hardware interface
 //author: ethan joseph (ethanj217@gmail.com)
+//          amit vasudevan <amitvasudevan@acm.org>
 
-#ifndef __HWM_ARCH_x86_32_INTEL__HWM_H__
-#define __HWM_ARCH_x86_32_INTEL__HWM_H__
 
-#include <uberspark/hwm/include/arch/x86/intel/hwm.h>
-#include <uberspark/hwm/include/arch/x86_32/generic/hwm.h>
+#ifndef __HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__
+#define __HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__
 
-#include <uberspark/hwm/include/arch/x86_32/intel/txt.h>
+#include <uberspark/hwm/cpu/armv8/32-bit/generic/include/cpu.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
-#endif //__HWM_ARCH_x86_32_INTEL__HWM_H__
+#endif //__HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__

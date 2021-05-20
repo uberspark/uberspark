@@ -47,8 +47,8 @@
 // xmhf-casm.h - CASM pseudo-language decls.
 // author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __HWM_ARCH_X86_GENERIC__CASM_H_
-#define __HWM_ARCH_X86_GENERIC__CASM_H_
+#ifndef __HWM_CPU_X86_32BIT_GENERIC_CASM_H__
+#define __HWM_CPU_X86_32BIT_GENERIC_CASM_H__
 
 #ifndef __ASSEMBLY__
 
@@ -2842,4 +2842,4 @@
 
 #endif // __ASSEMBLY__
 
-#endif /* __HWM_ARCH_X86_GENERIC__CASM_H_ */
+#endif /* __HWM_CPU_X86_32BIT_GENERIC_CASM_H__ */

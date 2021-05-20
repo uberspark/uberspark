@@ -47,8 +47,8 @@
 //XMHF HWM CPU declarations
 //author: amit vasudevan (amitvasudevan@acm.org)
 
-#ifndef __HWM_ARCH_X86_GENERIC__CPU_H__
-#define __HWM_ARCH_X86_GENERIC__CPU_H__
+#ifndef __HWM_CPU_X86_32BIT_GENERIC_CPU_H__
+#define __HWM_CPU_X86_32BIT_GENERIC_CPU_H__
 
 //////
 // general
@@ -149,6 +149,56 @@
 
 //extended control registers
 #define XCR_XFEATURE_ENABLED_MASK       0x00000000
+
+
+#ifndef __ASSEMBLY__
+
+#define __CASMFNDEF__(x) __attribute__((naked))
+#define __CASMFNCALL__(x) (x);
+
+#endif // __ASSEMBLY__
+
+
+
+// #if defined(__XMHF_TARGET_TRIAD_X86_VMX_X86PC__)
+
+#define	MAX_PLATFORM_CPUS					(256)
+
+
+#ifndef __ASSEMBLY__
+
+	typedef struct {
+		uint32_t addr_start;
+		uint32_t addr_end;
+		uint32_t protection;
+	} physmem_extent_t;
+
+	typedef enum {
+		SYSMEMREADU8,
+		SYSMEMREADU16,
+		SYSMEMREADU32,
+		SYSMEMREADU64
+	} sysmem_read_t;
+
+	typedef enum {
+		SYSMEMWRITEU8,
+		SYSMEMWRITEU16,
+		SYSMEMWRITEU32,
+		SYSMEMWRITEU64
+	} sysmem_write_t;
+
+	typedef enum {
+		SYSMEMCOPYSYS2OBJ,
+		SYSMEMCOPYOBJ2SYS,
+	} sysmem_copy_t;
+
+
+
+#endif // __ASSEMBLY__
+
+
+    #include <uberspark/hwm/include/arch/x86/generic/lapic.h>	    //APIC
+    #include <uberspark/hwm/include/arch/x86/generic/mem.h>			//Memory regions
 
 
 #ifndef __ASSEMBLY__
@@ -3403,6 +3453,6 @@ extern void _impl__casm__addl_ecx_eax(void);
 
 
 
-#endif /* __HWM_ARCH_X86_GENERIC__CPU_H__ */
+#endif /* __HWM_CPU_X86_32BIT_GENERIC_CPU_H__ */
 
 

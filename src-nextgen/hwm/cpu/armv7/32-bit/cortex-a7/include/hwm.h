@@ -45,12 +45,13 @@
  */
 
 
-//XMHF armv8_32 hardware interface
+//XMHF armv7_32 hardware interface
 //author: ethan joseph (ethanj217@gmail.com)
 
-#ifndef __HWM_ARCH_ARMV8_32__HWM_H__
-#define __HWM_ARCH_ARMV8_32__HWM_H__
+#ifndef __HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__
+#define __HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__
 
-#include <uberspark/hwm/include/arch/arm/hwm.h>
+#include <uberspark/hwm/cpu/armv7/32-bit/cortex-a7/include/cpu.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
-#endif //__HWM_ARCH_ARMV8_32__HWM_H__
+#endif //__HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__

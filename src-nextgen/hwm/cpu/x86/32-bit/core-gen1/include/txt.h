@@ -44,72 +44,53 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
+// XMHF HWM TXT hardware decls.
+// author: amit vasudevan (amitvasudevan@acm.org)
 
-//XMHF x86 generic hardware interface
-//author: amit vasudevan (amitvasudevan@acm.org)
+#ifndef __HWM_CPU_X86_32BIT_COREGEN1_TXT_H__
+#define __HWM_CPU_X86_32BIT_COREGEN1_TXT_H__
 
-#ifndef __HWM_ARCH_x86_GENERIC__HWM_H__
-#define __HWM_ARCH_x86_GENERIC__HWM_H__
-
-#include <uberspark/include/uberspark.h>
-
-#ifndef __ASSEMBLY__
-
-#define __CASMFNDEF__(x) __attribute__((naked))
-#define __CASMFNCALL__(x) (x);
-
-#endif // __ASSEMBLY__
-
-
-
-// #if defined(__XMHF_TARGET_TRIAD_X86_VMX_X86PC__)
-
-#define	MAX_PLATFORM_CPUS					(256)
-
+#define HWM_TXT_SYSMEM_HEAPBASE	0xEE000000UL	//TODO: remove hard-coding
+#define HWM_TXT_SYSMEM_RLPWAKEUPADDR	0xdbf01b10UL
 
 #ifndef __ASSEMBLY__
 
-	typedef struct {
-		uint32_t addr_start;
-		uint32_t addr_end;
-		uint32_t protection;
-	} physmem_extent_t;
+typedef struct {
+	uint64_t biosdatasize;
+        bios_data_t biosdata;
+	uint64_t osmledatasize;
+	uint8_t osmledata[PAGE_SIZE_4K];
+	uint64_t ossinitdatasize;
+        os_sinit_data_t ossinitdata;
+	uint64_t sinitmledatasize;
+        sinit_mle_data_t sinitmledata;
+} __attribute__((packed)) hwm_txt_heap_t;
 
-	typedef enum {
-		SYSMEMREADU8,
-		SYSMEMREADU16,
-		SYSMEMREADU32,
-		SYSMEMREADU64
-	} sysmem_read_t;
+extern hwm_txt_heap_t hwm_txt_heap;
 
-	typedef enum {
-		SYSMEMWRITEU8,
-		SYSMEMWRITEU16,
-		SYSMEMWRITEU32,
-		SYSMEMWRITEU64
-	} sysmem_write_t;
+extern uint32_t hwm_txt_heap_base_hi;
+extern uint32_t hwm_txt_heap_base_lo;
 
-	typedef enum {
-		SYSMEMCOPYSYS2OBJ,
-		SYSMEMCOPYOBJ2SYS,
-	} sysmem_copy_t;
+extern uint32_t hwm_txt_heap_size_hi;
+extern uint32_t hwm_txt_heap_size_lo;
 
+extern uint32_t hwm_txt_mle_join_hi;
+extern uint32_t hwm_txt_mle_join_lo;
+
+extern uint32_t hwm_txt_rlp_wakeup_addr;
+
+
+extern void hwm_vdriver_txt_write_rlp_wakeup_addr(uint32_t oldval, uint32_t newval);
+
+
+
+bool _impl_hwm_txt_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_hwm_txt_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
+bool _impl_hwm_txt_sysmemcopy(sysmem_copy_t sysmemcopy_type,
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size);
 
 
 #endif // __ASSEMBLY__
 
 
-    #include <uberspark/hwm/include/arch/x86/generic/casm.h>  		//CPU
-    #include <uberspark/hwm/include/arch/x86/generic/cpu.h>  		//CPU
-    #include <uberspark/hwm/include/arch/x86/generic/lapic.h>	    //APIC
-    #include <uberspark/hwm/include/arch/x86/generic/mem.h>			//Memory regions
-
-
-// #else
-
-// 	#error "You must define a valid cpu-container-platform triad before trying to build."
-
-// #endif
-
-
-#endif //__HWM_ARCH_x86_GENERIC__HWM_H__
+#endif // __HWM_CPU_X86_32BIT_COREGEN1_TXT_H__

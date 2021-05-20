@@ -44,13 +44,36 @@
  * @XMHF_LICENSE_HEADER_END@
  */
 
+// XMHF memory emulation
+// author: amit vasudevan (amitvasudevan@acm.org)
 
-//XMHF x86 intel hardware interface
-//author: ethan joseph (ethanj217@gmail.com)
+#ifndef __HWM_CPU_X86_32BIT_GENERIC_MEM_H__
+#define __HWM_CPU_X86_32BIT_GENERIC_MEM_H__
 
-#ifndef __HWM_ARCH_x86_INTEL__HWM_H__
-#define __HWM_ARCH_x86_INTEL__HWM_H__
+#ifndef __ASSEMBLY__
 
-#include <uberspark/hwm/include/arch/x86/generic/hwm.h>
 
-#endif //__HWM_ARCH_x86_INTEL__HWM_H__
+#define HWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE	(0x1100 << 4)
+#define HWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE	256
+#define HWM_MEM_X86SMP_APBOOTSTRAP_CODESEG_BASE	(0x1000 << 4)
+#define HWM_MEM_X86SMP_APBOOTSTRAP_CODESEG_SIZE	PAGE_SIZE_4K
+
+
+extern uint8_t hwm_mem_region_apbootstrap_dataseg[HWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
+
+
+extern void hwm_vdriver_mem_copy_to_apbootstrap_codeseg(uint32_t sourceaddr);
+
+
+bool _impl_hwm_mem_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_hwm_mem_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
+bool _impl_hwm_mem_sysmemcopy(sysmem_copy_t sysmemcopy_type,
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size);
+
+
+
+#endif	//__ASSEMBLY__
+
+
+
+#endif //__HWM_CPU_X86_32BIT_GENERIC_MEM_H__

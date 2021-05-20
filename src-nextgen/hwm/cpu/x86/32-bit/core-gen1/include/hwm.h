@@ -45,13 +45,13 @@
  */
 
 
-//XMHF arm hardware interface
 //author: ethan joseph (ethanj217@gmail.com)
+//          amit vasudevan <amitvasudevan@acm.org>
 
-#ifndef __HWM_ARCH_ARM__HWM_H__
-#define __HWM_ARCH_ARM__HWM_H__
+#ifndef __HWM_CPU_X86_32BIT_COREGEN1_HWM_H__
+#define __HWM_CPU_X86_32BIT_COREGEN1_HWM_H__
 
-#include <uberspark/hwm/include/arch/arm/cpu.h>
-#include <uberspark/hwm/include/arch/x86/generic/casm.h>
+#include <uberspark/hwm/cpu/x86/32-bit/core-gen1/include/cpu.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
-#endif //__HWM_ARCH_ARM__HWM_H__
+#endif //__HWM_CPU_X86_32BIT_COREGEN1_HWM_H__
