@@ -1,0 +1,16 @@
+/* uberSpark configuration file */
+
+
+{
+
+    "uberspark.manifest.namespace" : "uberspark/hwm",
+    "uberspark.manifest.version_min" : "any",
+    "uberspark.manifest.version_max" : "any",
+
+    "uberspark.hwm.cpu.arch" : "x86",
+    "uberspark.hwm.cpu.addressing" : "32-bit",
+    "uberspark.hwm.cpu.model" : "core-gen1"
+
+
+
+}
