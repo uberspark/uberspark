@@ -362,12 +362,28 @@ end
 
 module Hwm : sig
 
+type json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t =
+{
+	mutable fn_name : string;
+}
+
+
+type json_node_uberspark_hwm_cpu_modules_spec_t =
+{
+	mutable path : string;
+	mutable fn_decls : json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t list;
+}
+
+
 type json_node_uberspark_hwm_cpu_t = 
 {
 
 	mutable arch : string;
 	mutable addressing : string;
 	mutable model : string;
+
+	mutable sources: json_node_uberspark_hwm_cpu_modules_spec_t list;
+
 }
 
 type json_node_uberspark_hwm_t = 
