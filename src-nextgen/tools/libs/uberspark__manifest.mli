@@ -94,6 +94,16 @@ module Platform : sig
   (* manifest node types *)
   (****************************************************************************)
 
+type json_node_uberspark_platform_cpu_t = 
+{
+
+	mutable arch : string;
+	mutable addressing : string;
+	mutable model : string;
+}
+
+
+
 type json_node_uberspark_platform_bridges_t = 
 {
 	mutable bridge_id : string;
@@ -127,7 +137,7 @@ type json_node_uberspark_platform_bridges_t =
   {
     mutable binary : json_node_uberspark_platform_binary_t;
    	mutable bridges : (string * json_node_uberspark_platform_bridges_t) list; 
-
+  	mutable cpu : json_node_uberspark_platform_cpu_t;
   }
 
   val json_node_uberspark_platform_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
