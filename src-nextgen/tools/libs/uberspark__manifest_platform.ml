@@ -182,6 +182,17 @@ let json_node_uberspark_platform_to_var
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json));
 
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.arch" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.arch <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.arch" mf_json);
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.addressing" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.addressing <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.addressing" mf_json);
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.model" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.model <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.model" mf_json);
+
+
 			retval := true;
 		end;
 
