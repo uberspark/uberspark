@@ -115,27 +115,28 @@ let create_hwm_manifest_var_hashtbl
 		d_uobjcoll_platform_manifest_var.platform.cpu.model;
 
 
-(*	List.iter (fun l_uobj_namespace ->
-		if !rval then begin
-			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug ~crlf:false "scanning uobj: %s..." l_uobj_namespace;
+	(* read cpu hwm manifest variable *)
+	let l_hwm_cpu_manifest_file_namespace_path = 	(Uberspark.Namespace.get_manifest_file_namespace_path_for_hwm_cpu 
+			d_uobjcoll_platform_manifest_var.platform.cpu.arch
+			d_uobjcoll_platform_manifest_var.platform.cpu.addressing
+			d_uobjcoll_platform_manifest_var.platform.cpu.model) in
+	let l_hwm_cpu_manifest_file_abspath = (!d_namespace_root_dir_prefix ^ "/" ^ 
+		l_hwm_cpu_manifest_file_namespace_path) in 
 
-			(* read manifest file into manifest variable *)
-			let abspath_mf_filename = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ l_uobj_namespace ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
-			let l_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value () in
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_hwm_cpu_manifest_file_abspath=%s" 
+		l_hwm_cpu_manifest_file_abspath;
+	let l_hwm_cpu_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
+		Uberspark.Manifest.uberspark_manifest_var_default_value () in
 
-      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var abspath_mf_filename l_uberspark_manifest_var in
-      rval := l_rval;
+    let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_hwm_cpu_manifest_file_abspath l_hwm_cpu_manifest_var in
+    rval := l_rval;
 
-			if !rval then begin
-				d_uobj_manifest_var_assoc_list := !d_uobj_manifest_var_assoc_list @ [ (l_uobj_namespace, l_uberspark_manifest_var) ];
-				Uberspark.Logger.log ~tag:"" "[OK]";
-			end;
-		end;
+	if !rval then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.hwm.cpu.arch=%s" 
+			l_hwm_cpu_manifest_var.hwm.cpu.arch;
+	end;
 
-	) d_uberspark_manifest_var.uobjcoll.uobjs.templars;
-*)
-
-	(true)
+	(!rval)
 ;;
 
 

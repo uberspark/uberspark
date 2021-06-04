@@ -3,7 +3,7 @@
 
 {
 
-    "uberspark.manifest.namespace" : "uberspark/hwm",
+    "uberspark.manifest.namespace" : "uberspark/hwm/cpu",
     "uberspark.manifest.version_min" : "any",
     "uberspark.manifest.version_max" : "any",
 

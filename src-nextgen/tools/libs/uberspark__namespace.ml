@@ -128,6 +128,11 @@ let namespace_loader_binary_image_filename = "loader.exe";;
 let namespace_loader_binary_flat_image_filename = "loader.exe.flat";;
 
 
+(* hwm *)
+let namespace_hwm = "hwm";;
+let namespace_hwm_cpu = (namespace_hwm ^ "/" ^ "cpu");;
+
+
 
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
@@ -299,4 +304,19 @@ let get_namespace_basename
 	: string =
 
 	(Filename.basename ns)
+;;
+
+
+let get_manifest_file_namespace_path_for_hwm_cpu
+	(p_hwm_cpu_arch : string)
+	(p_hwm_cpu_addressing : string)
+	(p_hwm_cpu_model : string)
+	: string =
+
+	(namespace_root ^ "/" ^
+		namespace_hwm_cpu ^ "/" ^
+		p_hwm_cpu_arch ^ "/" ^
+		p_hwm_cpu_addressing ^ "/" ^ 
+		p_hwm_cpu_model ^ "/" ^ 
+		namespace_root_mf_filename)
 ;;
