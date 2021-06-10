@@ -398,7 +398,8 @@ type json_node_uberspark_hwm_cpu_t =
 
 type json_node_uberspark_hwm_t = 
 {
-	mutable cpu : json_node_uberspark_hwm_cpu_t;
+	mutable namespace : string;
+  mutable cpu : json_node_uberspark_hwm_cpu_t;
 	
 }
 

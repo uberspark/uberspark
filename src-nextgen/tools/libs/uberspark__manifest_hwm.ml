@@ -42,6 +42,7 @@ type json_node_uberspark_hwm_cpu_t =
 
 type json_node_uberspark_hwm_t = 
 {
+	mutable namespace: string;
 	mutable cpu : json_node_uberspark_hwm_cpu_t;
 	
 };;
@@ -128,6 +129,9 @@ let json_node_uberspark_hwm_to_var
 	try
 		let open Yojson.Basic.Util in
 
+		if (Yojson.Basic.Util.member "uberspark.hwm.namespace" mf_json) <> `Null then
+			json_node_uberspark_hwm_var.namespace <- (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.hwm.namespace" mf_json));
+
 		let (l_rval1) = (json_node_uberspark_hwm_cpu_to_var ~p_only_configurable:p_only_configurable
 					mf_json json_node_uberspark_hwm_var) in
 
@@ -153,6 +157,8 @@ let json_node_uberspark_hwm_var_copy
 	(input : json_node_uberspark_hwm_t )
 	: unit = 
 
+	output.namespace 								<- 	input.namespace				;
+
 	output.cpu.arch 								<- 	input.cpu.arch				;
 	output.cpu.addressing 					<- 	input.cpu.addressing				;
 	output.cpu.model  				<- 	input.cpu.model 			;
@@ -168,6 +174,7 @@ let json_node_uberspark_hwm_var_default_value ()
 	: json_node_uberspark_hwm_t = 
 
 	{
+		namespace = "";
 		cpu = {
 			arch = "";
 			addressing = "";

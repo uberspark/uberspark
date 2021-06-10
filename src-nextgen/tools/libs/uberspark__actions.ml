@@ -492,7 +492,7 @@ let initialize
 			(Hashtbl.length p_hwm_manifest_var_hashtbl);
 	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added hwm namespace=%s, manifest namespace=%s" 
-			l_hwm_ns l_hwm_manifest_var.manifest.namespace;
+			l_hwm_ns l_hwm_manifest_var.hwm.namespace;
 		Hashtbl.add g_hwm_manifest_var_hashtbl l_hwm_ns l_hwm_manifest_var;
 	) p_hwm_manifest_var_hashtbl;
 
@@ -936,11 +936,25 @@ let get_action_input_output_filename_lists
 let get_uobj_verification_aux_sources
 	() : string list =
 
+	let l_hwm_list : string list ref = ref [] in 
 	let l_uobjcoll_list : string list ref = ref [] in 
 	let l_uobjrtl_list : string list ref = ref [] in 
 	let l_return_list : string list ref = ref [] in 
 
-	(* grab the uobjcoll sources first; we need all .c files with g_uobjcoll_staging_dir_prefix *)
+	(* grab the hwm sources; we need all .c files with g_uobjcoll_staging_dir_prefix *)
+	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+		l_hwm_list := [];
+		l_hwm_list := (get_sources_filename_list l_hwm_manifest_var true);
+		l_hwm_list := Uberspark.Utils.filename_list_append_path_prefix
+							!l_hwm_list (!g_namespace_root_dir_prefix ^ "/" ^ l_hwm_manifest_var.hwm.namespace ^ "/");
+		l_hwm_list := Uberspark.Utils.filename_list_substitute_extension
+							!l_hwm_list ".c";
+
+		l_return_list := !l_return_list @ !l_hwm_list;
+	)g_hwm_manifest_var_hashtbl;
+
+
+	(* grab the uobjcoll sources; we need all .c files with g_uobjcoll_staging_dir_prefix *)
 	l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
 	l_uobjcoll_list := Uberspark.Utils.filename_list_append_path_prefix
 						!l_uobjcoll_list (!g_uobjcoll_staging_dir_prefix ^ "/" ^ g_uobjcoll_manifest_var.uobjcoll.namespace ^ "/");
