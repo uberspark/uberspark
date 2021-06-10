@@ -306,8 +306,7 @@ let get_namespace_basename
 	(Filename.basename ns)
 ;;
 
-
-let get_manifest_file_namespace_path_for_hwm_cpu
+let get_namespace_for_hwm_cpu
 	(p_hwm_cpu_arch : string)
 	(p_hwm_cpu_addressing : string)
 	(p_hwm_cpu_model : string)
@@ -317,6 +316,16 @@ let get_manifest_file_namespace_path_for_hwm_cpu
 		namespace_hwm_cpu ^ "/" ^
 		p_hwm_cpu_arch ^ "/" ^
 		p_hwm_cpu_addressing ^ "/" ^ 
-		p_hwm_cpu_model ^ "/" ^ 
+		p_hwm_cpu_model )
+;;
+
+let get_manifest_file_namespace_path_for_hwm_cpu
+	(p_hwm_cpu_arch : string)
+	(p_hwm_cpu_addressing : string)
+	(p_hwm_cpu_model : string)
+	: string =
+
+	((get_namespace_for_hwm_cpu	p_hwm_cpu_arch p_hwm_cpu_addressing p_hwm_cpu_model) ^ "/" ^ 
 		namespace_root_mf_filename)
 ;;
+

@@ -66,6 +66,9 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_mani
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
+(* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
+let d_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+
 (* hash table of loader manifest variables: maps loader namespace to loader manifest variable *)
 let d_loader_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
@@ -116,6 +119,10 @@ let create_hwm_manifest_var_hashtbl
 
 
 	(* read cpu hwm manifest variable *)
+	let l_hwm_cpu_namespace = (Uberspark.Namespace.get_namespace_for_hwm_cpu 
+		d_uobjcoll_platform_manifest_var.platform.cpu.arch
+			d_uobjcoll_platform_manifest_var.platform.cpu.addressing
+			d_uobjcoll_platform_manifest_var.platform.cpu.model) in
 	let l_hwm_cpu_manifest_file_namespace_path = 	(Uberspark.Namespace.get_manifest_file_namespace_path_for_hwm_cpu 
 			d_uobjcoll_platform_manifest_var.platform.cpu.arch
 			d_uobjcoll_platform_manifest_var.platform.cpu.addressing
@@ -134,6 +141,11 @@ let create_hwm_manifest_var_hashtbl
 	if !rval then begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.hwm.cpu.arch=%s" 
 			l_hwm_cpu_manifest_var.hwm.cpu.arch;
+	
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(uberspark.hwm.cpu.sources)=%u" 
+			(List.length l_hwm_cpu_manifest_var.hwm.cpu.sources);
+
+		Hashtbl.add d_hwm_manifest_var_hashtbl l_hwm_cpu_namespace l_hwm_cpu_manifest_var;						
 	end;
 
 	(!rval)

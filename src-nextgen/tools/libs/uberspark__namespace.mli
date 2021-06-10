@@ -148,4 +148,5 @@ val is_uobj_uobjcoll_canonical_namespace : string -> bool
 val is_uobj_ns_in_uobjcoll_ns : string -> string -> bool
 val get_namespace_basename : string -> string
 
+val get_namespace_for_hwm_cpu : string -> string -> string -> string
 val get_manifest_file_namespace_path_for_hwm_cpu : string -> string -> string -> string
