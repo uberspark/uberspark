@@ -32,6 +32,7 @@ val initialize :
      (string * Uberspark.Manifest.uberspark_manifest_var_t) list ->
     ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t) ->
     ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t) ->
+    ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t) ->
     string ->
     string ->
     bool

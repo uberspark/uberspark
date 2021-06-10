@@ -1143,6 +1143,7 @@ let process_uobjcoll_manifest
 				d_uberspark_manifest_var
 				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
+				d_hwm_manifest_var_hashtbl
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
 				!d_uobjcoll_staging_dir_prefix

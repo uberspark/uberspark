@@ -40,6 +40,9 @@ let g_staging_dir_prefix = ref "";;
 (* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
 let g_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];; 
 
+(* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
+let g_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let g_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
@@ -453,6 +456,7 @@ let initialize
 	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
+	(p_hwm_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_triage_dir_prefix : string )
@@ -482,8 +486,18 @@ let initialize
 	else
 
 	let dummy = 0 in begin
+	(* we currently have no default actions for hwm, just copy over the input
+		parameter *)
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(p_hwm_manifest_var_hashtbl)=%u" 
+			(Hashtbl.length p_hwm_manifest_var_hashtbl);
+	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added hwm namespace=%s, manifest namespace=%s" 
+			l_hwm_ns l_hwm_manifest_var.manifest.namespace;
+		Hashtbl.add g_hwm_manifest_var_hashtbl l_hwm_ns l_hwm_manifest_var;
+	) p_hwm_manifest_var_hashtbl;
+
+		
 	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
-	(* Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;*)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		
 		if List.length l_uobjrtl_manifest_var.manifest.actions == 0 then begin
