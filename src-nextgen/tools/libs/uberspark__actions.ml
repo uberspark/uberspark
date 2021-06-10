@@ -941,7 +941,7 @@ let get_uobj_verification_aux_sources
 	let l_uobjrtl_list : string list ref = ref [] in 
 	let l_return_list : string list ref = ref [] in 
 
-	(* grab the hwm sources; we need all .c files with g_uobjcoll_staging_dir_prefix *)
+	(* grab the hwm sources; we need all .c files with g_namespace_root_dir_prefix *)
 	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		l_hwm_list := [];
 		l_hwm_list := (get_sources_filename_list l_hwm_manifest_var true);
