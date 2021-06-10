@@ -82,6 +82,22 @@ let json_node_uberspark_hwm_cpu_to_var
 		if (Yojson.Basic.Util.member "uberspark.hwm.cpu.model" mf_json) <> `Null then
 			json_node_uberspark_hwm_var.cpu.model <- (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.hwm.cpu.model" mf_json));
 
+		if (mf_json |> member "uberspark.hwm.cpu.sources") <> `Null then
+		begin
+			let json_node_uberspark_hwm_cpu_modules_spec_c_list =  mf_json |> member "uberspark.hwm.cpu.sources" |> to_list in
+			List.iter (fun x -> 
+				let f_modules_spec_c_element : json_node_uberspark_hwm_cpu_modules_spec_t = 
+					{ path = ""; fn_decls = []; } in
+
+				f_modules_spec_c_element.path <- x |> member "path" |> to_string;
+
+				(* add to f_modules_spec list *)
+				json_node_uberspark_hwm_var.cpu.sources <- json_node_uberspark_hwm_var.cpu.sources @ [ f_modules_spec_c_element ];
+			) json_node_uberspark_hwm_cpu_modules_spec_c_list;
+		end;
+
+
+
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
 	;
