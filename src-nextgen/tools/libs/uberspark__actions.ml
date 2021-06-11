@@ -638,7 +638,17 @@ let get_sources_filename_list
 		List.iter ( fun (l_filename : string) ->
 			l_return_list := !l_return_list @ [ l_filename; ];
 		) p_uberspark_manifest_var.uobj.sources;
-		
+
+	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/hwm/cpu" then begin
+
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: processing for uberspark/hwm/cpu (total files=%u)..." 
+			__LOC__ (List.length p_uberspark_manifest_var.hwm.cpu.sources);
+
+		List.iter ( fun (l_source_file : Uberspark.Manifest.Hwm.json_node_uberspark_hwm_cpu_modules_spec_t) -> 
+			l_return_list := !l_return_list @ [ l_source_file.path; ];
+		) p_uberspark_manifest_var.hwm.cpu.sources;
+
+
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: processing for uberspark/uobjrtl (total files=%u)..." 
@@ -666,20 +676,6 @@ let get_sources_filename_list
 				end;		
 			end;
 			
-			(*if p_filename_ext_replace then begin	
-				if p_filename_ext = ".o" && 
-					((Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
-					l_return_list := !l_return_list @ [ p_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
-				end else begin
-					l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
-				end;		
-			end else begin
-				(* return only uobjcoll sources, not uobjrtl or uobj *)
-				if ((Filename.extension l_source_file) = p_filename_ext) && 
-				   ((Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
-					l_return_list := !l_return_list @ [ l_source_file; ];
-				end;
-			end;*)
 		) p_uberspark_manifest_var.uobjcoll.sources;
 
 
