@@ -54,5 +54,13 @@
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/cpu.h>
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
+//TBD: we need to decouple this from the cpu
+//these exist since the cpu model currently has hard-coded
+//interfaces to devices
+#include <uberspark/hwm/include/device/pci/hwm.h>
+#include <uberspark/hwm/include/device/iommu/intel/hwm.h>
+#include <uberspark/hwm/include/device/net/ethernet/intel/e1000/hwm.h>
+#include <uberspark/hwm/include/platform/pc/hwm.h>
+
 
 #endif //__HWM_ARCH_x86_GENERIC__HWM_H__

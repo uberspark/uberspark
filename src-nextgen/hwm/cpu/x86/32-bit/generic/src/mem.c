@@ -51,6 +51,7 @@
 
 
 #include <uberspark/include/uberspark.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>
 
 uint8_t hwm_mem_region_apbootstrap_dataseg[HWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
 

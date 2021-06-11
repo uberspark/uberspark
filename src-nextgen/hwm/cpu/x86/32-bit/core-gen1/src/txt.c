@@ -51,6 +51,7 @@
 
 
 #include <uberspark/include/uberspark.h>
+#include <uberspark/hwm/cpu/x86/32-bit/core-gen1/include/hwm.h>
 
 
 hwm_txt_heap_t hwm_txt_heap = {

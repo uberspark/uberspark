@@ -51,6 +51,7 @@
 
 
 #include <uberspark/include/uberspark.h>
+#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>
 
 uint32_t hwm_lapic_reg_id=0;
 

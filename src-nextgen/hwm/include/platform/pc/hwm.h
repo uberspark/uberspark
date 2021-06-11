@@ -51,7 +51,6 @@
 #ifndef __HWM_PLATFORM_PC__HWM_H__
 #define __HWM_PLATFORM_PC__HWM_H__
 
-#include <uberspark/hwm/include/arch/x86/generic/hwm.h>
 #include <uberspark/hwm/include/platform/pc/bios.h> //VMX DMA protection
 
 #endif //__HWM_PLATFORM_PC__HWM_H__
