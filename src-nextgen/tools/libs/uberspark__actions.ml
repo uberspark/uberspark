@@ -937,7 +937,8 @@ let get_uobj_verification_aux_sources
 	let l_uobjrtl_list : string list ref = ref [] in 
 	let l_return_list : string list ref = ref [] in 
 
-	(* grab the hwm sources; we need all .c files with g_namespace_root_dir_prefix *)
+	(* grab the hwm sources; we need all .c files with 
+		g_namespace_root_dir_prefix *)
 	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		l_hwm_list := [];
 		l_hwm_list := (get_sources_filename_list l_hwm_manifest_var true);
@@ -950,21 +951,24 @@ let get_uobj_verification_aux_sources
 	)g_hwm_manifest_var_hashtbl;
 
 
-	(* grab the uobjcoll sources; we need all .c files with g_uobjcoll_staging_dir_prefix *)
-	l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
+	(* grab the uobjcoll sources; we need all .c files with prefix of
+		Uberspark.Namespace.namespace_bridge_container_mountpoint *)
+	(*l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
 	l_uobjcoll_list := Uberspark.Utils.filename_list_append_path_prefix
-						!l_uobjcoll_list (!g_uobjcoll_staging_dir_prefix ^ "/" ^ g_uobjcoll_manifest_var.uobjcoll.namespace ^ "/");
+						!l_uobjcoll_list (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ g_uobjcoll_manifest_var.uobjcoll.namespace ^ "/");
 	l_uobjcoll_list := Uberspark.Utils.filename_list_substitute_extension
 						!l_uobjcoll_list ".c";
 
 	l_return_list := !l_return_list @ !l_uobjcoll_list;
-
-	(* grab the uobjrtl sources; we need all .c files with g_uobjcoll_staging_dir_prefix *)
+	*)
+	
+	(* grab the uobjrtl sources; we need all .c files with prefix of
+		Uberspark.Namespace.namespace_bridge_container_mountpoint *)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		l_uobjrtl_list := [];
 		l_uobjrtl_list := (get_sources_filename_list l_uobjrtl_manifest_var true);
 		l_uobjrtl_list := Uberspark.Utils.filename_list_append_path_prefix
-						!l_uobjrtl_list (!g_uobjcoll_staging_dir_prefix ^ "/" ^ l_uobjrtl_ns ^ "/");
+						!l_uobjrtl_list (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_uobjrtl_ns ^ "/");
 		l_uobjrtl_list := Uberspark.Utils.filename_list_substitute_extension
 						!l_uobjrtl_list ".c";
 	
