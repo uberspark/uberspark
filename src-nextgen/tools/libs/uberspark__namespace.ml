@@ -97,7 +97,7 @@ let namespace_platform_mf_node_type_tag = "uberspark/platform";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
-let namespace_bridge_container_mountpoint = "/home/uberspark/uobjcoll/_triage";;
+let namespace_bridge_container_mountpoint = "/home/uberspark/uobjcoll/_staging";;
 let namespace_bridge_cc_bridge_id = "@@CC_BRIDGE@@";;
 let namespace_bridge_ld_bridge_id = "@@LD_BRIDGE@@";;
 let namespace_bridge_as_bridge_id = "@@AS_BRIDGE@@";;

@@ -15,6 +15,7 @@
 		"uberspark.bridge.bridge_cmd" : [
 			"	
 				echo source C files: @@BRIDGE_INPUT_FILES@@ &&
+				echo aux source C files: @@BRIDGE_AUX_SOURCE_FILES@@ &&
 				echo include dirs: @@BRIDGE_INCLUDE_DIRS@@ &&
 				echo include dirs with prefix: @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ &&
 				echo bridge plugin dir: @@BRIDGE_PLUGIN_DIR@@ &&
