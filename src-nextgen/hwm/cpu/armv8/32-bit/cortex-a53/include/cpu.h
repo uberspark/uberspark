@@ -50,7 +50,7 @@
 #define __HWM_CPU_ARMV8_32BIT_CORTEXA53_CPU_H__
 
 //bring in armv8 generic cpu declarations
-#include <uberspark/hwm/cpu/armv8/32-bit/generic/cpu.h>
+#include <uberspark/hwm/cpu/armv8/32-bit/generic/include/cpu.h>
 
 //bring in cortex-a53 specific cpu declaration headers
 

@@ -55,7 +55,7 @@
 #include <uberspark/hwm/cpu/armv8/32-bit/generic/include/hwm.h>
 
 //bring in cortex-a53 specific headers
-#include <uberspark/hwm/cpu/armv8/32-bit/cortex-53/include/cpu.h>
+#include <uberspark/hwm/cpu/armv8/32-bit/cortex-a53/include/cpu.h>
 
 //TBD: make this generic casm header include; eventually to be deprecated
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
