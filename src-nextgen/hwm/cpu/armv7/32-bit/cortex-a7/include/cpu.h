@@ -52,6 +52,11 @@
 #ifndef __HWM_CPU_ARMV7_32BIT_CORTEXA7_CPU_H__
 #define __HWM_CPU_ARMV7_32BIT_CORTEXA7_CPU_H__
 
+
+//bring in armv7 generic cpu declarations
 #include <uberspark/hwm/cpu/armv7/32-bit/generic/include/cpu.h>
+
+//bring in cortex-a7 specific cpu declaration headers
+
 
 #endif /* __HWM_CPU_ARMV7_32BIT_CORTEXA7_CPU_H__ */

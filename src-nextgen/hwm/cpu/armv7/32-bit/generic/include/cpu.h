@@ -52,8 +52,6 @@
 #ifndef __HWM_CPU_ARMV7_32BIT_GENERIC_CPU_H__
 #define __HWM_CPU_ARMV7_32BIT_GENERIC_CPU_H__
 
-#include <uberspark/include/uberspark.h>
-
 #define CASM_RET_LR	0xDEADBEEF
 
 // #define __casm__add(RD, RN, OP2) \

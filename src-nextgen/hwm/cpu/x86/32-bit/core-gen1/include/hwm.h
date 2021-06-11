@@ -56,6 +56,8 @@
 
 //bring in core-gen1 specific headers
 #include <uberspark/hwm/cpu/x86/32-bit/core-gen1/include/cpu.h>
+
+//TBD: make this generic casm header include; eventually to be deprecated
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
 #endif //__HWM_CPU_X86_32BIT_COREGEN1_HWM_H__

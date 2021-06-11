@@ -51,7 +51,13 @@
 #ifndef __HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__
 #define __HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__
 
+//bring in generic armv7 hwm header
+#include <uberspark/hwm/cpu/armv7/32-bit/generic/include/hwm.h>
+
+//bring in cortex-a7 specific headers
 #include <uberspark/hwm/cpu/armv7/32-bit/cortex-a7/include/cpu.h>
+
+//TBD: make this generic casm header include; eventually to be deprecated
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
 #endif //__HWM_CPU_ARMV7_32BIT_CORTEXA7_HWM_H__
