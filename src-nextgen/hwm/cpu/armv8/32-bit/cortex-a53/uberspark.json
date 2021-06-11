@@ -1,0 +1,26 @@
+/* uberSpark configuration file */
+
+
+{
+
+    "uberspark.manifest.namespace" : "uberspark/hwm/cpu",
+    "uberspark.manifest.version_min" : "any",
+    "uberspark.manifest.version_max" : "any",
+
+    "uberspark.hwm.namespace" : "uberspark/hwm/cpu/armv8/32-bit/cortex-a53",
+    "uberspark.hwm.cpu.arch" : "armv8",
+    "uberspark.hwm.cpu.addressing" : "32-bit",
+    "uberspark.hwm.cpu.model" : "cortex-a53",
+
+    "uberspark.hwm.cpu.sources" : [
+
+        /* common sources */
+        {
+            "path" : "../../../armv7/32-bit/generic/src/cpu.c",
+            "fn_decls" :  []
+        }
+        
+        /* cortex-a53 specific sources */
+    ]        
+
+}

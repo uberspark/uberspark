@@ -20,6 +20,9 @@
  "uberspark.platform.binary.uobjcoll_image_section_alignment" : "0x200000",
  "uberspark.platform.binary.uobjcoll_image_size" : "0x00200000",
 
+ "uberspark.platform.cpu.arch" : "x86",
+ "uberspark.platform.cpu.addressing" : "32-bit",
+ "uberspark.platform.cpu.model" : "core-gen4",
 
  "uberspark.platform.bridges" : [
 			
