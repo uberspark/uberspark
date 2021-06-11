@@ -1051,6 +1051,7 @@ let invoke_bridge
 					("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
+					("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
 					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
 					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
 					("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
