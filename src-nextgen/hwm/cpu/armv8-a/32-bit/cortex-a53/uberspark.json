@@ -7,20 +7,20 @@
     "uberspark.manifest.version_min" : "any",
     "uberspark.manifest.version_max" : "any",
 
-    "uberspark.hwm.namespace" : "uberspark/hwm/cpu/armv8/32-bit/cortex-a7",
-    "uberspark.hwm.cpu.arch" : "armv7",
+    "uberspark.hwm.namespace" : "uberspark/hwm/cpu/armv8/32-bit/cortex-a53",
+    "uberspark.hwm.cpu.arch" : "armv8-a",
     "uberspark.hwm.cpu.addressing" : "32-bit",
-    "uberspark.hwm.cpu.model" : "cortex-a7",
+    "uberspark.hwm.cpu.model" : "cortex-a53",
 
     "uberspark.hwm.cpu.sources" : [
 
         /* common sources */
         {
-            "path" : "../generic/src/cpu.c",
+            "path" : "../../../armv7/32-bit/generic/src/cpu.c",
             "fn_decls" :  []
         }
         
-        /* cortex-a7 specific sources */
+        /* cortex-a53 specific sources */
     ]        
 
 }
