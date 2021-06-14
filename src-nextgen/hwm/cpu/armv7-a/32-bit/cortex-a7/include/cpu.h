@@ -54,7 +54,7 @@
 
 
 //bring in armv7 generic cpu declarations
-#include <uberspark/hwm/cpu/armv7/32-bit/generic/include/cpu.h>
+#include <uberspark/hwm/cpu/armv7-a/32-bit/generic/include/cpu.h>
 
 //bring in cortex-a7 specific cpu declaration headers
 

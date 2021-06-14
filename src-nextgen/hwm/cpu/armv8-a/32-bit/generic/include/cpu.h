@@ -49,6 +49,6 @@
 #ifndef __HWM_CPU_ARMV8_32BIT_GENERIC_CPU_H__
 #define __HWM_CPU_ARMV8_32BIT_GENERIC_CPU_H__
 
-#include <uberspark/hwm/cpu/armv7/32-bit/generic/include/cpu.h>
+#include <uberspark/hwm/cpu/armv7-a/32-bit/generic/include/cpu.h>
 
 #endif //__HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__

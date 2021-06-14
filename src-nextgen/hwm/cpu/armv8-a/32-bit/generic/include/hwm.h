@@ -52,7 +52,7 @@
 #ifndef __HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__
 #define __HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__
 
-#include <uberspark/hwm/cpu/armv8/32-bit/generic/include/cpu.h>
+#include <uberspark/hwm/cpu/armv8-a/32-bit/generic/include/cpu.h>
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/casm.h>
 
 #endif //__HWM_CPU_ARMV8_32BIT_GENERIC_HWM_H__
