@@ -48,8 +48,8 @@
 //author: ethan joseph (ethanj217@gmail.com)
 //          amit vasudevan <amitvasudevan@acm.org>
 
-#ifndef __HWM_CPU_X86_32BIT_COREGEN1_CPU_H__
-#define __HWM_CPU_X86_32BIT_COREGEN1_CPU_H__
+#ifndef __HWM__CPU__X86__32_BIT__CORE_GEN1__CPU__H__
+#define __HWM__CPU__X86__32_BIT__CORE_GEN1__CPU__H__
 
 //bring in x86 generic cpu declarations
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/cpu.h>
@@ -57,4 +57,4 @@
 //bring in core-gen1 specific cpu declaration headers
 #include <uberspark/hwm/cpu/x86/32-bit/core-gen1/include/txt.h>
 
-#endif //__HWM_CPU_X86_32BIT_COREGEN1_CPU_H__
+#endif //__HWM__CPU__X86__32_BIT__CORE_GEN1__CPU__H__
