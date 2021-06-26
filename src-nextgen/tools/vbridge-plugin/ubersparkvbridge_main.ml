@@ -40,7 +40,7 @@ let run () =
         Ubersparkvbridge_options.Start.set(false);
         Uberspark.Logger.log "START functionality : %u" !g_count;
         Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "START functionality : log_level=%u" (!Uberspark.Logger.current_level);
-        (*Ubersparkvbridge_ast.ast_dump ();*)
+        Ubersparkvbridge_ast.ast_dump ();
 
     end;
 

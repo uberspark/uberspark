@@ -51,8 +51,6 @@
 #ifndef __HWM_DEVICE_IOMMU_INTEL__HWM_H__
 #define __HWM_DEVICE_IOMMU_INTEL__HWM_H__
 
-#include <uberspark/hwm/include/arch/x86/intel/hwm.h>
-
 #include <uberspark/hwm/include/device/iommu/intel/vtd.h> //VMX DMA protection
 
 #endif //__HWM_DEVICE_IOMMU_INTEL__HWM_H__

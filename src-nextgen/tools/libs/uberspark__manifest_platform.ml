@@ -13,6 +13,15 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_platform_cpu_t = 
+{
+
+	mutable arch : string;
+	mutable addressing : string;
+	mutable model : string;
+};;
+
+
 type json_node_uberspark_platform_bridges_t = 
 {
 	mutable bridge_id : string;
@@ -46,6 +55,7 @@ type json_node_uberspark_platform_t =
 {
 	mutable binary : json_node_uberspark_platform_binary_t;
 	mutable bridges : (string * json_node_uberspark_platform_bridges_t) list; 
+	mutable cpu : json_node_uberspark_platform_cpu_t;
 	
 };;
 
@@ -172,6 +182,17 @@ let json_node_uberspark_platform_to_var
 			if (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json) <> `Null then
 				json_node_uberspark_platform_var.binary.uobjcoll_image_size <- int_of_string (Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.binary.uobjcoll_image_size" mf_json));
 
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.arch" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.arch <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.arch" mf_json);
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.addressing" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.addressing <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.addressing" mf_json);
+
+			if (Yojson.Basic.Util.member "uberspark.platform.cpu.model" mf_json) <> `Null then
+				json_node_uberspark_platform_var.cpu.model <- Yojson.Basic.Util.to_string (Yojson.Basic.Util.member "uberspark.platform.cpu.model" mf_json);
+
+
 			retval := true;
 		end;
 
@@ -209,6 +230,10 @@ let json_node_uberspark_platform_var_copy
 
 	output.bridges 			<- 	input.bridges	;
 
+	output.cpu.arch 						<- 	input.cpu.arch 					;
+	output.cpu.addressing						<- 	input.cpu.addressing 					;
+	output.cpu.model 						<- 	input.cpu.model 					;
+
 	()
 ;;
 
@@ -234,5 +259,12 @@ let json_node_uberspark_platform_var_default_value ()
 			uobjcoll_image_size = 0;
 		};
 		bridges = [];
+
+		cpu = {
+			arch = "";
+			addressing = "";
+			model = "";
+		};
+
 	}
 ;;

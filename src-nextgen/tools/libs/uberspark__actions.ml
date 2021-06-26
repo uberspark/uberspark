@@ -31,14 +31,17 @@ let g_actions_list : uberspark_action_t list ref = ref [];;
 (* manifest variable *)
 let g_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = Uberspark.Manifest.uberspark_manifest_var_default_value ();;
 
-(* uobjcoll triage directory prefix *)
-let g_triage_dir_prefix = ref "";;
+(* uobjcoll staging directory prefix *)
+let g_uobjcoll_staging_dir_prefix = ref "";;
 
-(* staging directory prefix *)
-let g_staging_dir_prefix = ref "";;
+(* namespace root directory prefix *)
+let g_namespace_root_dir_prefix = ref "";;
 
 (* assoc list of uobj manifest variables; maps uobj namespace to uobj manifest variable *)
 let g_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];; 
+
+(* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
+let g_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let g_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
@@ -453,6 +456,7 @@ let initialize
 	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
+	(p_hwm_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_triage_dir_prefix : string )
@@ -462,9 +466,9 @@ let initialize
 	let l_rval = ref true in 
 	let l_uobjcoll_actions_list : Uberspark.Manifest.json_node_uberspark_manifest_actions_t list ref = ref [] in 
 
-	(* store triage and staging dir prefix *)
-	g_triage_dir_prefix := p_triage_dir_prefix;
-	g_staging_dir_prefix := p_staging_dir_prefix;
+	(* store staging and staging dir prefix *)
+	g_uobjcoll_staging_dir_prefix := p_triage_dir_prefix;
+	g_namespace_root_dir_prefix := p_staging_dir_prefix;
 
 	(* store uberspark platform manifest var *)
 	Uberspark.Manifest.uberspark_manifest_var_copy g_uberspark_platform_manifest_var p_uberspark_platform_manifest_var;
@@ -482,8 +486,18 @@ let initialize
 	else
 
 	let dummy = 0 in begin
+	(* we currently have no default actions for hwm, just copy over the input
+		parameter *)
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(p_hwm_manifest_var_hashtbl)=%u" 
+			(Hashtbl.length p_hwm_manifest_var_hashtbl);
+	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added hwm namespace=%s, manifest namespace=%s" 
+			l_hwm_ns l_hwm_manifest_var.hwm.namespace;
+		Hashtbl.add g_hwm_manifest_var_hashtbl l_hwm_ns l_hwm_manifest_var;
+	) p_hwm_manifest_var_hashtbl;
+
+		
 	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
-	(* Hashtbl.iter (fun x y -> Hashtbl.add g_uobjrtl_manifest_var_hashtbl x y; )p_uobjrtl_manifest_var_hashtbl;*)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		
 		if List.length l_uobjrtl_manifest_var.manifest.actions == 0 then begin
@@ -586,8 +600,8 @@ let initialize
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjrtl (%s) total actions: %u" 
 				l_uobjrtl_manifest_var.uobjrtl.namespace (List.length l_uobjrtl_manifest_var.manifest.actions);
 		) g_uobjrtl_manifest_var_hashtbl;
-		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "triage dir prefix=%s" !g_triage_dir_prefix;
-		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" !g_staging_dir_prefix;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" !g_uobjcoll_staging_dir_prefix;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" !g_namespace_root_dir_prefix;
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "consolidated actions: %u" (List.length !g_actions_list);
 
 	end;
@@ -624,7 +638,17 @@ let get_sources_filename_list
 		List.iter ( fun (l_filename : string) ->
 			l_return_list := !l_return_list @ [ l_filename; ];
 		) p_uberspark_manifest_var.uobj.sources;
-		
+
+	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/hwm/cpu" then begin
+
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: processing for uberspark/hwm/cpu (total files=%u)..." 
+			__LOC__ (List.length p_uberspark_manifest_var.hwm.cpu.sources);
+
+		List.iter ( fun (l_source_file : Uberspark.Manifest.Hwm.json_node_uberspark_hwm_cpu_modules_spec_t) -> 
+			l_return_list := !l_return_list @ [ l_source_file.path; ];
+		) p_uberspark_manifest_var.hwm.cpu.sources;
+
+
 	end else if p_uberspark_manifest_var.manifest.namespace = "uberspark/uobjrtl" then begin
 
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: processing for uberspark/uobjrtl (total files=%u)..." 
@@ -652,20 +676,6 @@ let get_sources_filename_list
 				end;		
 			end;
 			
-			(*if p_filename_ext_replace then begin	
-				if p_filename_ext = ".o" && 
-					((Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
-					l_return_list := !l_return_list @ [ p_uberspark_manifest_var.uobjcoll.namespace ^ "/" ^ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
-				end else begin
-					l_return_list := !l_return_list @ [ ((Filename.remove_extension l_source_file) ^ p_filename_ext) ; ];
-				end;		
-			end else begin
-				(* return only uobjcoll sources, not uobjrtl or uobj *)
-				if ((Filename.extension l_source_file) = p_filename_ext) && 
-				   ((Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" )) l_source_file 0) = false) then begin
-					l_return_list := !l_return_list @ [ l_source_file; ];
-				end;
-			end;*)
 		) p_uberspark_manifest_var.uobjcoll.sources;
 
 
@@ -739,8 +749,8 @@ let get_action_input_filename_list
 							l_input_list := !l_input_list @ [ Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_filename];
 						
 						end else begin
-						(* else we add triage dir prefix *)
-							l_input_list := !l_input_list @ [ !g_triage_dir_prefix ^ "/" ^ l_filename];
+						(* else we add staging dir prefix *)
+							l_input_list := !l_input_list @ [ !g_uobjcoll_staging_dir_prefix ^ "/" ^ l_filename];
 						end;
 					end;
 			
@@ -922,33 +932,49 @@ let get_action_input_output_filename_lists
 let get_uobj_verification_aux_sources
 	() : string list =
 
+	let l_hwm_list : string list ref = ref [] in 
 	let l_uobjcoll_list : string list ref = ref [] in 
 	let l_uobjrtl_list : string list ref = ref [] in 
 	let l_return_list : string list ref = ref [] in 
 
-	(* grab the uobjcoll sources first *)
-	l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
+	(* grab the hwm sources; we need all .c files with 
+		g_namespace_root_dir_prefix *)
+	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+		l_hwm_list := [];
+		l_hwm_list := (get_sources_filename_list l_hwm_manifest_var true);
+		l_hwm_list := Uberspark.Utils.filename_list_append_path_prefix
+							!l_hwm_list (!g_namespace_root_dir_prefix ^ "/" ^ l_hwm_manifest_var.hwm.namespace ^ "/");
+		l_hwm_list := Uberspark.Utils.filename_list_substitute_extension
+							!l_hwm_list ".c";
+
+		l_return_list := !l_return_list @ !l_hwm_list;
+	)g_hwm_manifest_var_hashtbl;
+
+
+	(* grab the uobjcoll sources; we need all .c files with prefix of
+		Uberspark.Namespace.namespace_bridge_container_mountpoint *)
+	(*l_uobjcoll_list := (get_sources_filename_list g_uobjcoll_manifest_var true);
 	l_uobjcoll_list := Uberspark.Utils.filename_list_append_path_prefix
-						!l_uobjcoll_list (g_uobjcoll_manifest_var.uobjcoll.namespace ^ "/");
+						!l_uobjcoll_list (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ g_uobjcoll_manifest_var.uobjcoll.namespace ^ "/");
+	l_uobjcoll_list := Uberspark.Utils.filename_list_substitute_extension
+						!l_uobjcoll_list ".c";
 
 	l_return_list := !l_return_list @ !l_uobjcoll_list;
-
+	*)
+	
+	(* grab the uobjrtl sources; we need all .c files with prefix of
+		Uberspark.Namespace.namespace_bridge_container_mountpoint *)
 	Hashtbl.iter (fun (l_uobjrtl_ns : string) (l_uobjrtl_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
 		l_uobjrtl_list := [];
 		l_uobjrtl_list := (get_sources_filename_list l_uobjrtl_manifest_var true);
 		l_uobjrtl_list := Uberspark.Utils.filename_list_append_path_prefix
-						!l_uobjrtl_list (l_uobjrtl_ns ^ "/");
+						!l_uobjrtl_list (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_uobjrtl_ns ^ "/");
+		l_uobjrtl_list := Uberspark.Utils.filename_list_substitute_extension
+						!l_uobjrtl_list ".c";
 	
 		l_return_list := !l_return_list @ !l_uobjrtl_list;
 
 	)g_uobjrtl_manifest_var_hashtbl;
-
-
-	Uberspark.Utils.filename_list_append_path_prefix
-						!l_return_list (!g_triage_dir_prefix ^ "/");
-
-	Uberspark.Utils.filename_list_substitute_extension
-						!l_return_list ".c";
 
 	(!l_return_list)		
 ;;
@@ -1025,12 +1051,13 @@ let invoke_bridge
 				[
 					("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
 					("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
-					("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_staging_dir_prefix);
+					("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);
 					("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
 					("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
 					("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_triage_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
-					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_triage_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_staging_dir_prefix; ]));
+					("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
+					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
+					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
 					("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
 					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
 					("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));

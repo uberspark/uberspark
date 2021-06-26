@@ -94,6 +94,16 @@ module Platform : sig
   (* manifest node types *)
   (****************************************************************************)
 
+type json_node_uberspark_platform_cpu_t = 
+{
+
+	mutable arch : string;
+	mutable addressing : string;
+	mutable model : string;
+}
+
+
+
 type json_node_uberspark_platform_bridges_t = 
 {
 	mutable bridge_id : string;
@@ -127,7 +137,7 @@ type json_node_uberspark_platform_bridges_t =
   {
     mutable binary : json_node_uberspark_platform_binary_t;
    	mutable bridges : (string * json_node_uberspark_platform_bridges_t) list; 
-
+  	mutable cpu : json_node_uberspark_platform_cpu_t;
   }
 
   val json_node_uberspark_platform_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_platform_t -> bool
@@ -360,6 +370,48 @@ type json_node_uberspark_uobjrtl_t =
 end
 
 
+module Hwm : sig
+
+type json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t =
+{
+	mutable fn_name : string;
+}
+
+
+type json_node_uberspark_hwm_cpu_modules_spec_t =
+{
+	mutable path : string;
+	mutable fn_decls : json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t list;
+}
+
+
+type json_node_uberspark_hwm_cpu_t = 
+{
+
+	mutable arch : string;
+	mutable addressing : string;
+	mutable model : string;
+
+	mutable sources: json_node_uberspark_hwm_cpu_modules_spec_t list;
+
+}
+
+type json_node_uberspark_hwm_t = 
+{
+	mutable namespace : string;
+  mutable cpu : json_node_uberspark_hwm_cpu_t;
+	
+}
+
+  val json_node_uberspark_hwm_to_var : ?p_only_configurable:bool -> Yojson.Basic.t -> json_node_uberspark_hwm_t -> bool
+  val json_node_uberspark_hwm_var_copy : json_node_uberspark_hwm_t -> json_node_uberspark_hwm_t -> unit
+  val json_node_uberspark_hwm_var_default_value : unit -> json_node_uberspark_hwm_t
+
+
+end
+
+
+
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 (* type definitions *)
@@ -377,6 +429,7 @@ type uberspark_manifest_var_t =
   mutable platform : Platform.json_node_uberspark_platform_t;
  	mutable bridge : Bridge.json_node_uberspark_bridge_t; 
  	mutable installation : Installation.json_node_uberspark_installation_t; 
+ 	mutable hwm : Hwm.json_node_uberspark_hwm_t; 
 }
 
 

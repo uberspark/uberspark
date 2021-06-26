@@ -51,8 +51,6 @@
 #ifndef __HWM_DEVICE_NET_ETHERNET_INTEL__E1000_HWM_H__
 #define __HWM_DEVICE_NET_ETHERNET_INTEL__E1000_HWM_H__
 
-#include <uberspark/hwm/include/arch/x86/intel/hwm.h>
-
 #include <uberspark/hwm/include/device/net/ethernet/intel/e1000/e1000.h> //e1000 network card
 
 #endif //__HWM_DEVICE_NET_ETHERNET_INTEL__E1000_HWM_H__

@@ -1,0 +1,41 @@
+/* uberSpark configuration file */
+
+
+{
+
+    "uberspark.manifest.namespace" : "uberspark/hwm/cpu",
+    "uberspark.manifest.version_min" : "any",
+    "uberspark.manifest.version_max" : "any",
+
+    "uberspark.hwm.namespace" : "uberspark/hwm/cpu/x86/32-bit/core-gen1",
+    "uberspark.hwm.cpu.arch" : "x86",
+    "uberspark.hwm.cpu.addressing" : "32-bit",
+    "uberspark.hwm.cpu.model" : "core-gen1",
+
+    "uberspark.hwm.cpu.sources" : [
+
+        /* common sources */
+        {
+            "path" : "../generic/src/cpu.c",
+            "fn_decls" :  []
+        },
+
+        {
+            "path" : "../generic/src/lapic.c",
+            "fn_decls" :  []
+        },
+
+        {
+            "path" : "../generic/src/mem.c",
+            "fn_decls" :  []
+        },
+
+
+        /* core-gen1 specific sources */
+        {
+            "path" : "src/txt.c",
+            "fn_decls" :  []
+        }
+    ]        
+
+}

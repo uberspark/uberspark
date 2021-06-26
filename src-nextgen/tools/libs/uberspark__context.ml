@@ -66,6 +66,9 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_mani
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
+(* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
+let d_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+
 (* hash table of loader manifest variables: maps loader namespace to loader manifest variable *)
 let d_loader_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
@@ -94,6 +97,61 @@ let d_sentinel_info_for_codegen_list : Uberspark.Codegen.Uobjcoll.sentinel_info_
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+
+(*--------------------------------------------------------------------------*)
+(* 
+	parse all hardware models for uobjcoll and bring them into a hwm-namespace, 
+	hwm-manifest variable hash table 
+*)
+(*--------------------------------------------------------------------------*)
+let create_hwm_manifest_var_hashtbl
+	()
+	: bool =
+	let rval = ref true in 
+
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.platform.cpu.arch=%s" 
+		d_uobjcoll_platform_manifest_var.platform.cpu.arch;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.platform.cpu.addressing=%s" 
+		d_uobjcoll_platform_manifest_var.platform.cpu.addressing;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.platform.cpu.model=%s" 
+		d_uobjcoll_platform_manifest_var.platform.cpu.model;
+
+
+	(* read cpu hwm manifest variable *)
+	let l_hwm_cpu_namespace = (Uberspark.Namespace.get_namespace_for_hwm_cpu 
+		d_uobjcoll_platform_manifest_var.platform.cpu.arch
+			d_uobjcoll_platform_manifest_var.platform.cpu.addressing
+			d_uobjcoll_platform_manifest_var.platform.cpu.model) in
+	let l_hwm_cpu_manifest_file_namespace_path = 	(Uberspark.Namespace.get_manifest_file_namespace_path_for_hwm_cpu 
+			d_uobjcoll_platform_manifest_var.platform.cpu.arch
+			d_uobjcoll_platform_manifest_var.platform.cpu.addressing
+			d_uobjcoll_platform_manifest_var.platform.cpu.model) in
+	let l_hwm_cpu_manifest_file_abspath = (!d_namespace_root_dir_prefix ^ "/" ^ 
+		l_hwm_cpu_manifest_file_namespace_path) in 
+
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "l_hwm_cpu_manifest_file_abspath=%s" 
+		l_hwm_cpu_manifest_file_abspath;
+	let l_hwm_cpu_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
+		Uberspark.Manifest.uberspark_manifest_var_default_value () in
+
+    let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var l_hwm_cpu_manifest_file_abspath l_hwm_cpu_manifest_var in
+    rval := l_rval;
+
+	if !rval then begin
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uberspark.hwm.cpu.arch=%s" 
+			l_hwm_cpu_manifest_var.hwm.cpu.arch;
+	
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(uberspark.hwm.cpu.sources)=%u" 
+			(List.length l_hwm_cpu_manifest_var.hwm.cpu.sources);
+
+		Hashtbl.add d_hwm_manifest_var_hashtbl l_hwm_cpu_namespace l_hwm_cpu_manifest_var;						
+	end;
+
+	(!rval)
+;;
+
+
 
 (*--------------------------------------------------------------------------*)
 (* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
@@ -687,7 +745,7 @@ let generate_uobjcoll_section_info
 		let uobjcoll_namespace_varname = (Uberspark.Namespace.get_variable_name_prefix_from_ns d_uberspark_manifest_var.uobjcoll.namespace) in 
 		d_memorymapped_sections_list := !d_memorymapped_sections_list @ [ ((uobjcoll_namespace_varname ^ "__uobjs"), 
 			{ fn_name = (uobjcoll_namespace_varname ^ "__uobjs");	
-				f_subsection_list = [ ".hdrdata"; ".text";  ".data"; ".rodata"; ".bss"; ".stack"; ".dmadata"; ];	
+				f_subsection_list = [ ".hdrdata"; ".text";  ".data"; ".rodata"; ".bss"; ".stack"; ".dmadata"; "COMMON";];	
 				usbinformat = { f_type=Uberspark.Defs.Binformat.const_USBINFORMAT_SECTION_TYPE_UOBJ; 
 								f_prot=0; 
 								f_size = section_size;
@@ -915,37 +973,46 @@ let process_uobjcoll_manifest
 
 			let (l_uberspark_manifest_var, l_uberspark_manifest_var_json) = l_varjson in
 
-      (* debug dump uobjcoll platform and load platform configuration *)
-      let l_dummy=0 in begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
-      let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var (!d_namespace_root_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
-	  Uberspark.Namespace.namespace_root_mf_filename) d_uobjcoll_platform_manifest_var in
-	  retval := l_rval;
+			(* debug dump uobjcoll platform and load platform configuration *)
+			let l_dummy=0 in begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "uobjcoll platform: %s" l_uberspark_manifest_var.uobjcoll.platform;
+			let (l_rval, _) = Uberspark.Manifest.manifest_file_to_uberspark_manifest_var (!d_namespace_root_dir_prefix ^ "/" ^ l_uberspark_manifest_var.uobjcoll.platform  ^ "/" ^ 
+			Uberspark.Namespace.namespace_root_mf_filename) d_uobjcoll_platform_manifest_var in
+			retval := l_rval;
+		    end;
 
-      end;
+			if (!retval) == false then
+				()
+			else
+
+			(* announce that we successfully loaded the platform definitions *)
+			(* and set default uobjcoll size and load address *)
+			let l_dummy=0 in begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
+			end;
+
+			(* overlay any platform definitions that the uobjcoll might have *)
+			let l_dummy=0 in begin
+			retval := Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:true	
+				l_uberspark_manifest_var_json d_uobjcoll_platform_manifest_var.platform;
+
+			d_load_address := d_uobjcoll_platform_manifest_var.platform.binary.uobjcoll_image_load_address;
+			d_size := d_uobjcoll_platform_manifest_var.platform.binary.uobjcoll_image_size;
+			end;
 
 			if (!retval) == false then
 				()
 			else
 
-      (* announce that we successfully loaded the platform definitions *)
-    	(* and set default uobjcoll size and load address *)
-      let l_dummy=0 in begin
-      Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "read uobjcoll platform definitions";
-      end;
-
-      (* overlay any platform definitions that the uobjcoll might have *)
-      let l_dummy=0 in begin
-	  retval := Uberspark.Manifest.Platform.json_node_uberspark_platform_to_var ~p_only_configurable:true	
-		l_uberspark_manifest_var_json d_uobjcoll_platform_manifest_var.platform;
-
-      d_load_address := d_uobjcoll_platform_manifest_var.platform.binary.uobjcoll_image_load_address;
-      d_size := d_uobjcoll_platform_manifest_var.platform.binary.uobjcoll_image_size;
-      end;
+			(* create hwm to hwm manifest variable hashtbl *)
+			let l_dummy=0 in begin
+			retval := create_hwm_manifest_var_hashtbl ();
+			end;
 
 			if (!retval) == false then
 				()
 			else
+
 
 			(* parse all uobjs and create uobj namespace to uobj manifest variable association list *)
 			let l_dummy=0 in begin
@@ -1076,6 +1143,7 @@ let process_uobjcoll_manifest
 				d_uberspark_manifest_var
 				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
+				d_hwm_manifest_var_hashtbl
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
 				!d_uobjcoll_staging_dir_prefix

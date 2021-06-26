@@ -97,7 +97,7 @@ let namespace_platform_mf_node_type_tag = "uberspark/platform";;
 (* bridges *)
 let namespace_bridge = "bridges";;
 let namespace_bridge_container_filename = "uberspark-bridge.Dockerfile";;
-let namespace_bridge_container_mountpoint = "/home/uberspark/uobjcoll/_triage";;
+let namespace_bridge_container_mountpoint = "/home/uberspark/uobjcoll/_staging";;
 let namespace_bridge_cc_bridge_id = "@@CC_BRIDGE@@";;
 let namespace_bridge_ld_bridge_id = "@@LD_BRIDGE@@";;
 let namespace_bridge_as_bridge_id = "@@AS_BRIDGE@@";;
@@ -126,6 +126,11 @@ let namespace_bridge_bldsys_bridge = namespace_bridge ^ "/" ^ namespace_bridge_b
 let namespace_loader_build_dir = "_build";;
 let namespace_loader_binary_image_filename = "loader.exe";;
 let namespace_loader_binary_flat_image_filename = "loader.exe.flat";;
+
+
+(* hwm *)
+let namespace_hwm = "hwm";;
+let namespace_hwm_cpu = (namespace_hwm ^ "/" ^ "cpu");;
 
 
 
@@ -300,3 +305,27 @@ let get_namespace_basename
 
 	(Filename.basename ns)
 ;;
+
+let get_namespace_for_hwm_cpu
+	(p_hwm_cpu_arch : string)
+	(p_hwm_cpu_addressing : string)
+	(p_hwm_cpu_model : string)
+	: string =
+
+	(namespace_root ^ "/" ^
+		namespace_hwm_cpu ^ "/" ^
+		p_hwm_cpu_arch ^ "/" ^
+		p_hwm_cpu_addressing ^ "/" ^ 
+		p_hwm_cpu_model )
+;;
+
+let get_manifest_file_namespace_path_for_hwm_cpu
+	(p_hwm_cpu_arch : string)
+	(p_hwm_cpu_addressing : string)
+	(p_hwm_cpu_model : string)
+	: string =
+
+	((get_namespace_for_hwm_cpu	p_hwm_cpu_arch p_hwm_cpu_addressing p_hwm_cpu_model) ^ "/" ^ 
+		namespace_root_mf_filename)
+;;
+
