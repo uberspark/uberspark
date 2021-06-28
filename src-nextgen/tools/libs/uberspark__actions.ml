@@ -1249,6 +1249,8 @@ let process_actions_category
 let process_actions 
 	?(p_in_order = true) 
 	(p_targets: string list)
+	(p_options : (string * string)list )
+
 	: bool =
 	let retval = ref true in 
 

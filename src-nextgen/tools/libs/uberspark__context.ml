@@ -907,6 +907,7 @@ let process_uobjcoll_manifest
 	?(p_in_order = true) 
 	(p_uobjcoll_ns : string)
 	(p_targets : string list)
+	(p_options : (string * string)list )
 	: bool =
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "process_manifest_common (p_uobjcoll_ns=%s)..." p_uobjcoll_ns;
@@ -1158,7 +1159,7 @@ let process_uobjcoll_manifest
 
 			(* process actions *)
 			let l_dummy=0 in begin
-			retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets;
+			retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets p_options;
 			end;
 
 			if (!retval) == false then
