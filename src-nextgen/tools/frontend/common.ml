@@ -73,6 +73,7 @@ let create_staging
 	(abspath_cwd : string)
 	(abspath_mf_filename : string)
 	(p_targets : string list)
+  (p_options : (string * string) list)
 	: bool =
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "processing uobjcoll manifest...";
@@ -169,6 +170,7 @@ let initialize_operation_context_with_staging
   (p_cwd_abs : string)
   (p_manifest_file_path_abs : string)
   (p_operations : string list)
+  (p_options : (string * string) list)
   : bool = 
 
   (* initialize operation context *)
@@ -177,7 +179,7 @@ let initialize_operation_context_with_staging
   (* create staging and process uobjcoll manifest *)
   let rval = (create_staging 
     ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
-      p_operations) in
+      p_operations p_options) in
 
   (rval)
 ;;

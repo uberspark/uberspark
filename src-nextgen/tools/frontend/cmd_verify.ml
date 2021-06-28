@@ -82,7 +82,7 @@ let handler_verify
 
   (* create and initialize operation context by processing manifest *)
   let l_rval = (Common.initialize_operation_context_with_staging ~p_in_order:false 
-    p_copts l_cwd_abs l_manifest_file_path_abs [ "verify"; ]) in
+    p_copts l_cwd_abs l_manifest_file_path_abs [ "verify"; ] !l_cmd_verify_opts_list) in
   
   (* bail out on error, else return success *)
   if (l_rval == false) then begin
