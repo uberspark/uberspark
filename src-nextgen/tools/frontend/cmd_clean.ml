@@ -43,10 +43,15 @@ let handler_clean
   let (l_cwd_abs, 
   l_manifest_file_path_abs, l_is_error) = (Common.check_for_manifest p_copts) in
 
+  let dummy=0 in begin
+    Uberspark.Logger.log "l_cwd_abs=%s l_manifest_file_path_abs=%s l_is_error=%b"
+      l_cwd_abs l_manifest_file_path_abs l_is_error;
+  end;
+
   (* bail out on error *)
   if l_is_error then
     `Error (false, "could not get absolute path of current working directory!")
-  else if (l_manifest_file_path_abs == "" && l_is_error == false) then
+  else if (l_manifest_file_path_abs = "" && l_is_error = false) then
     (* no manifest file found in current directory, display cli help and exit *)
     (`Help (`Pager, None))
   else

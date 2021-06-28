@@ -53,7 +53,7 @@ let check_for_manifest
   let rval = (Uberspark.Osservices.file_exists l_manifest_file_path_abs) in
 
   (* if not, display cli help and exit *)
-  if (rval == false) then
+  if (rval == false) then 
     (l_cwd_abs, "", false)
   else
 
