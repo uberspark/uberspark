@@ -51,13 +51,19 @@ let handler_clean
     (`Help (`Pager, None))
   else
 
-  (* create and initialize operation context by processing manifest *)
-  let l_rval = (Common.initialize_operation_context_with_staging ~p_in_order:false 
-    p_copts l_cwd_abs l_manifest_file_path_abs [ "clean"; ]) in
+  let dummy=0 in begin
+  Common.initialize_operation_context p_copts;
+  end;
+
+  (* check to see if we have staging directory *)
+	let l_abspath_uobjcoll_staging_dir = (l_cwd_abs ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_staging_dir) in 
+
+  let l_rval = (Uberspark.Osservices.file_exists l_abspath_uobjcoll_staging_dir) in 
   
   (* bail out on error, else return success *)
   if (l_rval == false) then begin
-    `Error (false, "could not create and initialize operation context!")
+    Uberspark.Logger.log "nothing to do. no staging present!";
+    `Ok()
   end else begin
     Uberspark.Logger.log "staging cleanup success!";
     `Ok()

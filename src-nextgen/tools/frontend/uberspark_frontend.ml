@@ -332,7 +332,7 @@ let cmd_clean =
 	in
 
 	Term.(ret (const Cmd_clean.handler_clean $ Commonopts.opts_t $ Cmd_clean.cmd_clean_opts_t )),
-  	Term.info "verify" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+  	Term.info "clean" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
 
