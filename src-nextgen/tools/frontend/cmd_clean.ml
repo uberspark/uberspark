@@ -70,6 +70,9 @@ let handler_clean
     Uberspark.Logger.log "nothing to do. no staging present!";
     `Ok()
   end else begin
+    (* remove the staging folder for now *)
+    (* TBD: more granular cleanup later *)
+    Uberspark.Osservices.rmdir_recurse [l_abspath_uobjcoll_staging_dir;];
     Uberspark.Logger.log "staging cleanup success!";
     `Ok()
   end;
