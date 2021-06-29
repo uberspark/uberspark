@@ -1234,9 +1234,42 @@ let process_action_for_target_verify
 
 	: uberspark_action_processing_t =
 	let retval = ref Action_Processed in 
+	let l_option_uobject = List.assoc "uobject" p_options in
 
-	(*TBD: parse p_options to qualify this verify action *)
-	retval := process_actions_category p_action;
+	if l_option_uobject <> "" then begin
+		(* so we have a specific uobject mentioned in the cli *)
+		let l_option_uobject_namespace = (Uberspark.Namespace.get_namespace_for_uobj g_uobjcoll_manifest_var.uobjcoll.namespace l_option_uobject) in
+		(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: l_option_uobject_namespace=%s"
+			__LOC__ l_option_uobject_namespace;
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: manifest.namespace=%s"
+			__LOC__ p_action.uberspark_manifest_var.manifest.namespace;
+		*)
+
+		if p_action.uberspark_manifest_var.manifest.namespace = Uberspark.Namespace.namespace_uobj_mf_node_type_tag then begin
+			(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: uobj namespace=%s"
+				__LOC__ p_action.uberspark_manifest_var.uobj.namespace;
+			*)
+
+			if p_action.uberspark_manifest_var.uobj.namespace = l_option_uobject_namespace then begin
+				retval := process_actions_category p_action;
+			end else begin
+				retval := Action_Skipped;
+			end;
+
+		end else begin
+			(* allow all other verify actions to go through, this will include
+				uobjcoll verify actions and uobjrtl verify actions *)
+			(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: not uobject action" __LOC__;*)
+			retval := process_actions_category p_action;
+		end;
+
+	end else begin
+		(* allow all other verify actions to go through, this will include
+			uobjcoll verify actions and uobjrtl verify actions *)
+		(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: not uobject action" __LOC__;*)
+		retval := process_actions_category p_action;
+	end;
+
 
 	(!retval)
 ;;
