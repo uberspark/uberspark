@@ -150,3 +150,5 @@ val get_namespace_basename : string -> string
 
 val get_namespace_for_hwm_cpu : string -> string -> string -> string
 val get_manifest_file_namespace_path_for_hwm_cpu : string -> string -> string -> string
+
+val get_namespace_for_uobj : string -> string -> string

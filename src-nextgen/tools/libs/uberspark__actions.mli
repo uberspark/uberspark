@@ -11,6 +11,11 @@
 (* type definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+type uberspark_action_processing_t =
+	| Action_Processed
+	| Action_Error
+	| Action_Skipped
+
 
 
 (*---------------------------------------------------------------------------*)
@@ -40,5 +45,6 @@ val initialize :
 val process_actions :
     ?p_in_order:bool ->
     string list ->
+    (string * string) list ->
     bool
 

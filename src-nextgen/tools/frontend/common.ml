@@ -53,7 +53,7 @@ let check_for_manifest
   let rval = (Uberspark.Osservices.file_exists l_manifest_file_path_abs) in
 
   (* if not, display cli help and exit *)
-  if (rval == false) then
+  if (rval == false) then 
     (l_cwd_abs, "", false)
   else
 
@@ -73,6 +73,7 @@ let create_staging
 	(abspath_cwd : string)
 	(abspath_mf_filename : string)
 	(p_targets : string list)
+  (p_options : (string * string) list)
 	: bool =
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "processing uobjcoll manifest...";
@@ -138,7 +139,7 @@ let create_staging
 	end;
 
 	(* invoke common manifest processing logic *)
-	(Uberspark.Context.process_uobjcoll_manifest ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets)
+	(Uberspark.Context.process_uobjcoll_manifest ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets p_options)
 ;;
 
 let initialize_operation_context 
@@ -169,6 +170,7 @@ let initialize_operation_context_with_staging
   (p_cwd_abs : string)
   (p_manifest_file_path_abs : string)
   (p_operations : string list)
+  (p_options : (string * string) list)
   : bool = 
 
   (* initialize operation context *)
@@ -177,7 +179,7 @@ let initialize_operation_context_with_staging
   (* create staging and process uobjcoll manifest *)
   let rval = (create_staging 
     ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
-      p_operations) in
+      p_operations p_options) in
 
   (rval)
 ;;

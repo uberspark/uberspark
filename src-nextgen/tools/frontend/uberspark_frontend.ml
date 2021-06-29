@@ -310,6 +310,30 @@ let cmd_verify =
   	Term.info "verify" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
 
 
+(* kicks in when uberspark clean ... is issued *)
+let cmd_clean =
+
+  	let doc = "Manage uberSpark uobjcoll staging cleanup" in
+	let man =
+		[
+			`S Manpage.s_synopsis;
+			`P "$(mname) $(tname) [$(i,VERIFY_OPTIONS)]... [$(i,OPTIONS)]";
+			`S Manpage.s_description;
+			`P "The $(tname) command allows managing staging cleanup of üobjcoll and associated
+			loaders.";
+		
+		 	`S "CLEAN OPTIONS";
+	  		`P "These options qualify the clean command.";
+
+			`Blocks manpage_sec_common_options;
+			`Blocks manpage_sec_issues;
+			`S Manpage.s_exit_status;
+		] 
+	in
+
+	Term.(ret (const Cmd_clean.handler_clean $ Commonopts.opts_t $ Cmd_clean.cmd_clean_opts_t )),
+  	Term.info "clean" ~doc ~sdocs:Manpage.s_common_options ~exits ~man
+
 
 
 (* kicks in when user just issues uberspark without any parameters *)
@@ -331,7 +355,7 @@ let cmd_default =
 
 (* additional commands *)	
 (*let cmd_additions = [cmd_uobj; cmd_uobjcoll; cmd_staging; cmd_bridges; cmd_build; cmd_verify; ]*)
-let cmd_additions = [cmd_bridges; cmd_build; cmd_verify; ]
+let cmd_additions = [cmd_bridges; cmd_build; cmd_verify; cmd_clean;]
 
 
 (*----------------------------------------------------------------------------*)

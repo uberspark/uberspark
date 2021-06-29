@@ -46,7 +46,7 @@ let namespace_uobj_linkerscript_filename = "uobj.lscript";;
 let namespace_uobj_binary_image_filename = "uobj.exe";;
 let namespace_uobj_binary_flat_image_filename = "uobj.exe.flat";;
 let namespace_uobj_top_level_include_header_src_filename = "uobj.h";;
-let namespace_uobj_mf_node_type_tag = "uberspark-uobj";;
+let namespace_uobj_mf_node_type_tag = "uberspark/uobj";;
 let namespace_uobj_cclib_filename = "cclib.a";;
 
 
@@ -327,5 +327,14 @@ let get_manifest_file_namespace_path_for_hwm_cpu
 
 	((get_namespace_for_hwm_cpu	p_hwm_cpu_arch p_hwm_cpu_addressing p_hwm_cpu_model) ^ "/" ^ 
 		namespace_root_mf_filename)
+;;
+
+
+let get_namespace_for_uobj
+	(p_uobjcoll_namespace : string)
+	(p_uobjname : string)
+	: string =
+
+	(p_uobjcoll_namespace ^ "/uobjs/" ^ p_uobjname)
 ;;
 
