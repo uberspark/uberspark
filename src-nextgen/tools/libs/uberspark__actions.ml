@@ -1374,7 +1374,7 @@ let process_actions
 
 					if (Uberspark.Utils.string_list_exists_string l_action.uberspark_manifest_action.targets l_target) then begin
 
-						Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Processing action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Processing action [%u/%u][category:%s]..." !l_current_action_index (List.length !g_actions_list) l_action.uberspark_manifest_action.category;
 						let l_actions_processing = ref Action_Processed in
 						
 						if l_target = "verify" then begin
@@ -1394,14 +1394,14 @@ let process_actions
 								retval := false;
 							
 							| Action_Skipped ->
-								Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Skipping action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+								Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Skipping action [%u/%u][category:%s]..." !l_current_action_index (List.length !g_actions_list) l_action.uberspark_manifest_action.category;
 								l_current_action_index := !l_current_action_index + 1;
 								retval := true;						
 						;
 
 	
 					end else begin
-						Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Skipping action [%u/%u]..." !l_current_action_index (List.length !g_actions_list);
+						Uberspark.Logger.log ~lvl:Uberspark.Logger.Info "Skipping action [%u/%u][category:%s]..." !l_current_action_index (List.length !g_actions_list) l_action.uberspark_manifest_action.category;
 						l_current_action_index := !l_current_action_index + 1;
 					end;
 				end;
