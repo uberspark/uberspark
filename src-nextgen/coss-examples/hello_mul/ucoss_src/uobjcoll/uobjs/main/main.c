@@ -9,7 +9,7 @@
 #include <uberspark/include/uberspark.h>
 #include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>
 
-CASM_FUNCDECL(void main_nullfunc(void *noparam));
+extern void casm_main_nullfunc(void);
 
 extern uint32_t init (void);
 extern uint32_t test_call (uint32_t value);
@@ -36,7 +36,7 @@ uint32_t main (uint32_t multiplicand, uint32_t multiplier){
     char l_mybuf[5];
     char *p= &l_mybuf;
 
-    CASM_FUNCCALL(main_nullfunc, CASM_NOPARAM);
+		casm_main_nullfunc();
     //whois(0);
     result = multiplicand * multiplier;
 
