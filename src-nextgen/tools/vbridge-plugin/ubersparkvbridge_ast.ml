@@ -71,8 +71,110 @@ as global annotations *)
 let l_annotation_emitter = Emitter.create
     "uberSpark Interrupt Check" [ Emitter.Code_annot; Emitter.Global_annot ] ~correctness:[] ~tuning:[];;
 
+let is_casm_func_call e = 
+  match e.enode with
+  | Lval (lh, _) ->
+    (match lh with 
+     | Var (v) ->
+       if (String.length v.vorig_name) < 5 then false
+       else if String.sub v.vorig_name 0 5 = "casm_" then true 
+       else false
+     | _ -> false)
+  | _ -> false
+;;
+
+let rec casm_func_call_push_args = function 
+  [] -> []
+  | e::l ->
+    Cil_types.CastE (Cil_types.TInt (IUInt, []), e) :: casm_func_call_push_args l
+;;
+
+let rec casm_func_call_pop_args e_list loc = 
+  match e_list with  
+  |  [] ->
+    let const = Cil_types.CInt64 ((Integer.of_int 4), Cil_types.IUInt, Some "0x4") in 
+    let const_enode = Cil_types.Const const in 
+    let const_exp = Cil.new_exp loc const_enode in 
+    Cil_types.CastE (Cil_types.TInt (IUInt, []), const_exp) :: []
+  | e::l ->
+    let const = Cil_types.CInt64 ((Integer.of_int 4), Cil_types.IUInt, Some "0x4") in 
+    let const_enode = Cil_types.Const const in 
+    let const_exp = Cil.new_exp loc const_enode in 
+    Cil_types.CastE (Cil_types.TInt (IUInt, []), const_exp) :: casm_func_call_pop_args l loc
+;;
+
+let casm_func_call_ret lv_opt loc = 
+  match lv_opt with 
+  | None -> []
+  | Some lv -> 
+    (* Start building the first binary op*)
+    (* this is for cast hwm_cpu_gprs_edx *)
+    let edx_varinfo = (Globals.Vars.find_from_astinfo "hwm_cpu_gprs_edx" VGlobal) in
+    let edx_enode = Cil_types.Lval (Cil.var edx_varinfo) in
+    let edx_exp = Cil.new_exp loc edx_enode in
+    let edx_cast_enode = Cil_types.CastE (Cil_types.TInt (IULongLong, []), edx_exp) in 
+    let edx_cast_exp = Cil.new_exp loc edx_cast_enode in
+    (* cast 32*)
+    let const = Cil_types.CInt64 ((Integer.of_int 32), Cil_types.IInt, Some "32") in 
+    let const_enode = Cil_types.Const const in 
+    let const_exp = Cil.new_exp loc const_enode in 
+    (* construct the first binop*)
+    let sl_binop_enode
+      = Cil_types.BinOp (Cil_types.Shiftlt, edx_cast_exp, const_exp, Cil_types.TInt (Cil_types.IULongLong, [])) in
+    let sl_binop_exp = Cil.new_exp loc sl_binop_enode in
+    (* cast hwm_cpu_gprs_eax *)
+    let eax_varinfo = (Globals.Vars.find_from_astinfo "hwm_cpu_gprs_eax" VGlobal) in
+    let eax_enode = Cil_types.Lval (Cil.var eax_varinfo) in
+    let eax_exp = Cil.new_exp loc eax_enode in
+    let eax_cast_enode = Cil_types.CastE (Cil_types.TInt (IULongLong, []), eax_exp) in 
+    let eax_cast_exp = Cil.new_exp loc eax_cast_enode in
+    (* the whole binop*)
+    let or_binop_enode
+      = Cil_types.BinOp (Cil_types.BOr, sl_binop_exp, eax_cast_exp, Cil_types.TInt (Cil_types.IULongLong, [])) in
+    let or_binop_exp = Cil.new_exp loc or_binop_enode in
+    let ret_instr = Cil_types.Set(lv, or_binop_exp, loc) in
+    let ret_stmt = Cil.mkStmt ~valid_sid:true (Cil_types.Instr ret_instr) in
+    [ret_stmt]
+;;
 
 
+let casm_func_call_wrapper' lv_opt e e_list loc = 
+  let pushl_kf = (Globals.Functions.find_by_name "_impl__casm__pushl_mem") in 
+  let pushl_varinfo = (Globals.Functions.get_vi pushl_kf) in
+  (* let try_lv = (Cil_types.Var try_varinfo, Cil_types.NoOffset) in *)
+  let pushl_lv = Cil.var pushl_varinfo in
+  let pushl_enode = Cil_types.Lval pushl_lv in
+  let pushl_exp = Cil.new_exp loc pushl_enode in
+  (*construct constant*)
+  let const = Cil_types.CInt64 ((Integer.of_int 3735928559), Cil_types.IUInt, Some "0xDEADBEEF") in 
+  let const_enode = Cil_types.Const const in 
+  let const_exp = Cil.new_exp loc const_enode in 
+  let rip_instr = Cil_types.Call( None, pushl_exp, [const_exp], loc) in
+  let rip_insert_stmt = Cil.mkStmt ~valid_sid:true (Cil_types.Instr rip_instr) in
+
+  (* parameters set up*)
+  let push_args = casm_func_call_push_args e_list in 
+  let push_args_instrs = List.map (fun enode -> Cil_types.Call(None, pushl_exp, [Cil.new_exp loc enode], loc))  push_args in
+  let push_args_stmts = List.map (fun instr -> Cil.mkStmt ~valid_sid:true (Cil_types.Instr instr)) push_args_instrs in
+
+  (* pop args *)
+  let addl_kf = (Globals.Functions.find_by_name "_impl__casm__addl_imm_esp") in 
+  let addl_varinfo = (Globals.Functions.get_vi addl_kf) in
+  let addl_lv = Cil.var addl_varinfo in
+  let addl_enode = Cil_types.Lval addl_lv in
+  let addl_exp = Cil.new_exp loc addl_enode in
+  (* Const 0X40 *) 
+  let pop_args = casm_func_call_pop_args e_list loc in 
+  let pop_args_instrs = List.map (fun enode -> Cil_types.Call(None, addl_exp, [Cil.new_exp loc enode], loc))  pop_args in
+  let pop_args_stmts = List.map (fun instr -> Cil.mkStmt ~valid_sid:true (Cil_types.Instr instr)) pop_args_instrs in
+  let ret_stmt = casm_func_call_ret lv_opt loc in 
+
+  (push_args_stmts @ [rip_insert_stmt], pop_args_stmts @ ret_stmt)
+;;
+
+let casm_func_call_wrapper lv_opt e e_list loc = 
+  if is_casm_func_call e then (casm_func_call_wrapper' lv_opt e e_list loc) else ([],[])
+;;
 
 (*--------------------------------------------------------------------------*)
 (* given a function comb through it and find calls *)
@@ -97,9 +199,11 @@ class function_call_visitor (p_kf : Cil_types.kernel_function) = object (self)
         let l_instr = Cil_types.Set(Cil.var l_g_int_vi, Cil.integer ~loc 1, loc) in
         let l_insert_stmt = Cil.mkStmt ~valid_sid:true (Cil_types.Instr l_instr) in
         
+        let (prologue, epilogue) = casm_func_call_wrapper lv_opt e e_list loc in
+
         l_insert_stmt.labels <- stmt.labels;
         stmt.labels <- [];
-        let l_bloc_kind = Cil_types.Block(Cil.mkBlock [l_insert_stmt; stmt]) in
+        let l_bloc_kind = Cil_types.Block(Cil.mkBlock ( (l_insert_stmt :: prologue) @ (stmt :: epilogue))) in
         let l_new_stmt = Cil.mkStmt ~valid_sid:true l_bloc_kind in
         Cil.ChangeTo l_new_stmt
   
