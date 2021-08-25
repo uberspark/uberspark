@@ -92,12 +92,12 @@ let rec casm_func_call_push_args = function
 let rec casm_func_call_pop_args e_list loc = 
   match e_list with  
   |  [] ->
-    let const = Cil_types.CInt64 ((Integer.of_string "4"), Cil_types.IUInt, Some "0x4") in 
+    let const = Cil_types.CInt64 ((Integer.of_int 4), Cil_types.IUInt, Some "0x4") in 
     let const_enode = Cil_types.Const const in 
     let const_exp = Cil.new_exp loc const_enode in 
     Cil_types.CastE (Cil_types.TInt (IUInt, []), const_exp) :: []
   | e::l ->
-    let const = Cil_types.CInt64 ((Integer.of_string "4"), Cil_types.IUInt, Some "0x4") in 
+    let const = Cil_types.CInt64 ((Integer.of_int 4), Cil_types.IUInt, Some "0x4") in 
     let const_enode = Cil_types.Const const in 
     let const_exp = Cil.new_exp loc const_enode in 
     Cil_types.CastE (Cil_types.TInt (IUInt, []), const_exp) :: casm_func_call_pop_args l loc
@@ -115,7 +115,7 @@ let casm_func_call_ret lv_opt loc =
     let edx_cast_enode = Cil_types.CastE (Cil_types.TInt (IULongLong, []), edx_exp) in 
     let edx_cast_exp = Cil.new_exp loc edx_cast_enode in
     (* cast 32*)
-    let const = Cil_types.CInt64 ((Integer.of_string "32"), Cil_types.IInt, Some "32") in 
+    let const = Cil_types.CInt64 ((Integer.of_int 32), Cil_types.IInt, Some "32") in 
     let const_enode = Cil_types.Const const in 
     let const_exp = Cil.new_exp loc const_enode in 
     (* construct the first binop*)
@@ -146,7 +146,7 @@ let casm_func_call_wrapper' lv_opt e e_list loc =
   let pushl_enode = Cil_types.Lval pushl_lv in
   let pushl_exp = Cil.new_exp loc pushl_enode in
   (*construct constant*)
-  let const = Cil_types.CInt64 ((Integer.of_string "3735928559"), Cil_types.IUInt, Some "0xDEADBEEF") in 
+  let const = Cil_types.CInt64 ((Integer.of_int 3735928559), Cil_types.IUInt, Some "0xDEADBEEF") in 
   let const_enode = Cil_types.Const const in 
   let const_exp = Cil.new_exp loc const_enode in 
   let rip_instr = Cil_types.Call( None, pushl_exp, [const_exp], loc) in
