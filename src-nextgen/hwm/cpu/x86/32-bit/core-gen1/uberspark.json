@@ -129,7 +129,7 @@
 
         {
             "casm_mnemonic" : "__casm__call",
-            "casm_total_operands" : "1"
+            "casm_total_operands" : "1",
             "output_assembly" : [
                 "call #1 "
             ],
