@@ -37,5 +37,1978 @@
             "fn_decls" :  []
         }
     ]        
+    "uberspark.hwm.cpu.casm_instructions" : [ 
+        {
+            "casm_mnemonic" : "__casm__jmplabel",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jmp #1 "
+            ],
+            "casm_implementation" : [
+                "if(1) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jc",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jc #1 "
+            ],
+            "casm_implementation" : [
+                "if(hwm_cpu_eflags & EFLAGS_CF) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jnc",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jnc #1 "
+            ],
+            "casm_implementation" : [
+                "if(!(hwm_cpu_eflags & EFLAGS_CF)) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jz",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jz #1 "
+            ],
+            "casm_implementation" : [
+                "if((hwm_cpu_eflags & EFLAGS_ZF)) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jnz",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jnz #1 "
+            ],
+            "casm_implementation" : [
+                "if(!(hwm_cpu_eflags & EFLAGS_ZF)) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__je",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "je #1 "
+            ],
+            "casm_implementation" : [
+                "if(hwm_cpu_eflags & EFLAGS_ZF) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jbe",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "jbe #1 "
+            ],
+            "casm_implementation" : [
+                "if((hwm_cpu_eflags & EFLAGS_ZF) && (hwm_cpu_eflags & EFLAGS_CF)) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__ja",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "ja #1 "
+            ],
+            "casm_implementation" : [
+                "if(!(hwm_cpu_eflags & EFLAGS_ZF) && !(hwm_cpu_eflags & EFLAGS_CF)) goto #1"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__call",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "call #1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__call()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__call_c",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "call #1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_mem(CASM_RET_EIP)",
+                "#1()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__call_c_1p",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "call #1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_mem(CASM_RET_EIP)",
+                "#1( (#2) *((uint32_t *)(hwm_cpu_gprs_esp+4)) )"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__call_c_2p",
+            "casm_total_operands" : "3"
+            "output_assembly" : [
+                "call #1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_mem(CASM_RET_EIP)",
+                "#1( (#2) *((uint32_t *)(hwm_cpu_gprs_esp+4)) , (#3) *((uint32_t *)(hwm_cpu_gprs_esp+8)) )"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__ret",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "ret "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "return"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__retu32",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "ret "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "return hwm_cpu_gprs_eax"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__retu64",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "ret "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "return (uint64_t)(((uint64_t)hwm_cpu_gprs_edx << 32) | hwm_cpu_gprs_eax)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__lret",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "lret "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "hwm_cpu_cs_selector = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "return"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpapentry",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "jmpl *%eax ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_vdriver_apentry()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpsmpcommon",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "jmp gp_s5_entry ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_vdriver_smpcommon()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpsentinel",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl $0x02400000, %eax",
+                "jmpl *%eax ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_vdriver_sentinel()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpslabep",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "jmpl *%eax ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = hwm_cpu_gprs_eax",
+                "hwm_vdriver_slabep()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpvhslabretaddr",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "ret ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp",
+                "hwm_cpu_gprs_esp += sizeof(uint32_t)",
+                "hwm_vdriver_vhslabretaddr()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__jmpuhslabretaddr",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "sysexit ",
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "hwm_cpu_gprs_eip = hwm_cpu_gprs_edx",
+                "hwm_cpu_gprs_esp = hwm_cpu_gprs_ecx",
+                "hwm_vdriver_uhslabretaddr()",
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__cld",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "cld"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__cld()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__rep_movsb",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "rep movsb"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__rep_movsb()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__rep_movsb_sys2obj",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "rep movsb"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__rep_movsb_sysmem(SYSMEMCOPYSYS2OBJ)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__rep_movsb_obj2sys",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "rep movsb"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__rep_movsb_sysmem(SYSMEMCOPYOBJ2SYS)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %eax"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_esp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %esp"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_esp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_esi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %esi"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_esi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_ebx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %ebx"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_ebx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %ecx"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %edx"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_edi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl $#1, %edi"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_edi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_imm_ax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movw $#1, %ax"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_imm_ax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_mesp",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "movl $#1, #2(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_mesp(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_imm_meax",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "movl $#1, #2(%eax) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_imm_meax(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__cmpl_imm_meax",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "cmpl $#1, #2(%eax) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__cmpl_imm_meax(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ecx_meax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %ecx, #1(%eax) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ecx_meax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_edx_meax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %edx, #1(%eax) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_edx_meax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %eax, #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_esp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_esp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_edx_esp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %edx, %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_edx_esp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_mesp_ax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movw #1(%esp), %ax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_mesp_ax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_ebx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_ebx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_ebx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_ebx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_edi",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %edi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_edi()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_esi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %esi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_esi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesp_edi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esp), %edi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesp_edi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mecx_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%ecx), %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mecx_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mecx_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%ecx), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mecx_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %eax, #1(%esi) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ebx_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %ebx, #1(%esi) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ebx_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ecx_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %ecx, #1(%esi) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ecx_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_edx_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl %edx, #1(%esi) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_edx_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_ebx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_ebx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_edi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %edi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_edi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_esi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %esi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_esi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_ebp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %ebp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_ebp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_meax_esp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%eax), %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_meax_esp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mebx_ebx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%ebx), %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mebx_ebx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mecx_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%ecx), %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mecx_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_medx_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%edx), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_medx_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesi_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esi), %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesi_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_mesi_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movl #1(%esi), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_mesi_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movb_al_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movb %al,#1(%esi)"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movb_al_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_mesi",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "movw %ax,#1(%esi)"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_mesi(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_edx_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %edx, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_edx_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_esp_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %esp, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_esp_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_esp_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %esp, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_esp_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_esp_edx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %esp, %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_esp_edx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_ebp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %ebp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_ebp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_edi",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %edi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_edi()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_esi",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %esi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_esi()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_ebx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_ebx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_edx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_edx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_esp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushl %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_esp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "pushl #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_ebx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %ebx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_ebx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_edx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_edx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_esi",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %esi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_esi()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_edi",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %edi "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_edi()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_ebp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popl %ebp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popl_ebp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_imm",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "pushl $#1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_imm(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushl_mem",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "pushl #1 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushl_mem(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popl_mem",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "popl #1 "
+            ],
+            "casm_implementation" : [
+                "x = _impl__casm__popl_mem()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushfl",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushfl "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushfl()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__popfl",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "popfl "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__popfl()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pushal",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pushal "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pushal()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__xorl_eax_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "xorl %eax, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__xorl_eax_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__xorl_edx_edx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "xorl %edx, %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__xorl_edx_edx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_imm_esp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "addl $#1, %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_imm_esp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__subl_imm_esp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "subl $#1, %esp "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__subl_imm_esp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_eax_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "addl %eax, %ecx"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_eax_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_eax_esp",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "addl %eax, %esp"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_eax_esp()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_ecx_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "addl %ecx, %eax"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_ecx_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_imm_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "addl $#1, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_imm_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__addl_imm_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "addl $#1, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__addl_imm_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__andl_imm_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "andl $#1, %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__andl_imm_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__andl_imm_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "andl $#1, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__andl_imm_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__andl_imm_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "andl $#1, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__andl_imm_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__shl_imm_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "shl $#1, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__shl_imm_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__shr_imm_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "shr $#1, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__shr_imm_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__orl_ecx_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "orl %ecx, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__orl_ecx_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__orl_edx_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "orl %edx, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__orl_edx_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__orl_imm_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "orl $#1, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__orl_imm_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__btl_imm_mecx",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "btl $#1, #2(%ecx) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__btl_imm_mecx(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__btrl_imm_mecx",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "btrl $#1, #2(%ecx) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__btrl_imm_mecx(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__btsl_imm_mecx",
+            "casm_total_operands" : "2"
+            "output_assembly" : [
+                "btsl $#1, #2(%ecx) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__btsl_imm_mecx(#1,#2)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__bsrl_mesp_eax",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "bsrl #1(%esp), %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__bsrl_mesp_eax(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__mull_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "mull %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__mull_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_cs_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %cs, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_cs_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ds_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %ds, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ds_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_es_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %es, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_es_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_fs_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %fs, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_fs_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_gs_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %gs, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_gs_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ss_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %ss, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ss_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ds_ax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ds, %ax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ds_ax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_ds",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ax, %ds "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_ds()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_es",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ax, %es "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_es()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_fs",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ax, %fs "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_fs()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_gs",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ax, %gs "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_gs()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movw_ax_ss",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movw %ax, %ss "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movw_ax_ss()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_cr0_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %cr0, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_cr0_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_cr0",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %cr0 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_cr0()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_cr2_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %cr2, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_cr2_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_cr3_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %cr3, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_cr3_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_cr3",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %cr3 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_cr3()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_ebx_cr3",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %ebx, %cr3 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_ebx_cr3()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_cr4_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %cr4, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_cr4_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__movl_eax_cr4",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "movl %eax, %cr4 "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__movl_eax_cr4()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__pause",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "pause "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__pause()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__cpuid",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "cpuid "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__cpuid()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__rdtsc",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "rdtsc "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__rdtsc()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__hlt",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "hlt "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__hlt()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__cli",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "cli "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__cli()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__sti",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "sti "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__sti()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__inb_dx_al",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "inb %dx, %al "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__inb_dx_al()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__inw_dx_ax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "inw %dx, %ax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__inw_dx_ax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__inl_dx_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "inl %dx, %eax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__inl_dx_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__outb_al_dx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "outb %al, %dx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__outb_al_dx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__outw_ax_dx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "outw %ax, %dx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__outw_ax_dx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__outl_eax_dx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "outl %eax, %dx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__outl_eax_dx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__rdmsr",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "rdmsr "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__rdmsr()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__wrmsr",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "wrmsr "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__wrmsr()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__wbinvd",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "wbinvd "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__wbinvd()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__sgdt_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "sgdt #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__sgdt_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__str_ax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "str %ax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__str_ax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__sidt_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "sidt #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__sidt_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__lidt_mecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "lidt #1(%ecx) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__lidt_mecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__ltr_ax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "ltr %ax "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__ltr_ax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__lgdt_mecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "lgdt #1(%ecx) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__lgdt_mecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__lock",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "lock "
+            ],
+        },
+
+        {
+            "casm_mnemonic" : "__casm__xsetbv",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "xsetbv "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__xsetbv()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__xgetbv",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "xgetbv "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__xgetbv()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__iretl",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "iretl "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__iretl()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__sysenter",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "sysenter "
+            ],
+        },
+
+        {
+            "casm_mnemonic" : "__casm__getsec",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                IA32_GETSEC_OPCODE
+            ],
+            "casm_implementation" : [
+                "_impl__casm__getsec()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmlaunch",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "vmlaunch "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmlaunch()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmxon_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "vmxon #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmxon_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmwrite_eax_ecx",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "vmwrite %eax, %ecx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmwrite_eax_ecx()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmread_ecx_eax",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "vmread %ecx, %eax"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmread_ecx_eax()"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmclear_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "vmclear #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmclear_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmptrld_mesp",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "vmptrld #1(%esp) "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmptrld_mesp(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__invvpid_mesp_ecx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "invvpid #1(%esp), %ecx"
+            ],
+            "casm_implementation" : [
+                "_impl__casm__invvpid_mesp_ecx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__invept_mesp_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "invept #1(%esp), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__invept_mesp_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__invvpid_mesp_edx",
+            "casm_total_operands" : "1"
+            "output_assembly" : [
+                "invvpid #1(%esp), %edx "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__invvpid_mesp_edx(#1)"
+            ]
+        },
+
+        {
+            "casm_mnemonic" : "__casm__vmresume",
+            "casm_total_operands" : "0",
+            "output_assembly" : [
+                "vmresume "
+            ],
+            "casm_implementation" : [
+                "_impl__casm__vmresume()"
+            ]
+        }
+    ]
 
 }
