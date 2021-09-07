@@ -1894,7 +1894,7 @@
             "casm_mnemonic" : "__casm__getsec",
             "casm_total_operands" : "0",
             "output_assembly" : [
-                IA32_GETSEC_OPCODE
+                "IA32_GETSEC_OPCODE"
             ],
             "casm_implementation" : [
                 "_impl__casm__getsec()"
