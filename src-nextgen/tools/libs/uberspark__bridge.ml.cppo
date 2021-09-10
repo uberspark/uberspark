@@ -110,14 +110,9 @@ class bridge_object
 
 
 	(* uberspark-bridge-as json node variable *)	
-	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t = {
-		namespace = "";
-		category = "";
-		container_build_filename = "";
-		bridge_cmd = [];
-	};
-
-
+	val json_node_uberspark_bridge_var: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t = 
+		Uberspark.Manifest.Bridge.json_node_uberspark_bridge_var_default_value ();
+	
 	method get_json_node_uberspark_bridge_var 
 		: Uberspark.Manifest.Bridge.json_node_uberspark_bridge_t =
 		(json_node_uberspark_bridge_var)

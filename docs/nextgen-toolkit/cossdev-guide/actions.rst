@@ -54,14 +54,14 @@ within a |uobj| manifest:
    :linenos:
 
    {
-    	"uberspark.uobj.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "build" ],
                 "name" : "user specified action name",
                 "category" : "translation",
                 "input" : [".c"],
                 "output" : [".o"],
-                "bridge" : "compiler bridge namespace",
+                "bridge_namespace" : "compiler bridge namespace",
             }
         ]
    }
@@ -73,14 +73,14 @@ within a |uobj| manifest:
    :linenos:
 
    {
-    	"uberspark.uobj.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "verify" ],
                 "name" : "user specified action name",
                 "category" : "translation",
                 "input" : ["sample.c"],
                 "output" : ["sample.c"],
-                "bridge" : "verification bridge namespace",
+                "bridge_namespace" : "verification bridge namespace",
                 "bridge_cmd" : "verification bridge command"
             }
         ]
@@ -93,14 +93,14 @@ sources within a |uobj| manifest:
    :linenos:
 
    {
-    	"uberspark.uobj.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "verify" ],
                 "name" : "source to source translation",
                 "category" : "translation",
                 "input" : [".cS"],
                 "output" : [".c"],
-                "bridge" : "native",
+                "bridge_namespace" : "native",
                 "bridge_cmd" : [
                     "cp *.cS *.c"
                 ]
@@ -117,26 +117,26 @@ on the |uobj| sources within a |uobj| manifest:
    :linenos:
 
    {
-    	"uberspark.uobj.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "verify" ],
                 "name" : "uberSpark invariant checks",
                 "category" : "translation",
                 "input" : [".c"],
                 "output" : [".c"],
-                "bridge" : "uberSpark verification bridge namespace"
+                "bridge_namespace" : "uberSpark verification bridge namespace"
             }
         ]
    }
 
-Finally, here is the action node spefication which brings in all the uobj actions in sequence into a |uobjcoll| manifest
-action node:
+Finally, here is the action node spefication which brings in all the uobj actions in 
+sequence into a |uobjcoll| manifest action node:
 
 .. code-block:: json
    :linenos:
 
    {
-    	"uberspark.uobjcoll.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "build", "verify", "docs", "install" ],
                 "name" : "uobjaction specification",
@@ -156,7 +156,7 @@ as below:
    :linenos:
 
    {
-    	"uberspark.uobjcoll.actions" : [
+    	"uberspark.manifest.actions" : [
             {
                 "targets" : [ "build", "verify", "docs", "install" ],
                 "name" : "default actions",
@@ -228,7 +228,7 @@ set from the sources and outputs files of that set into the extension specified.
 ..  note::
     *.cSs is only used if we need to bundle all the assembly into one single
     file to be used by a certified assembler for example. The assembler bridge
-    will then have the rule *.cSs --> *.o or *.cSs --> *.flat for binary generation
+    will then have the targets *.cSs --> *.o or *.cSs --> *.flat for binary generation
 
 
 The above will select 4.cS and 5.cS as inputs and produce outputs with

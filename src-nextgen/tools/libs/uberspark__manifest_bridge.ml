@@ -13,6 +13,13 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_bridge_targets_t =
+{
+	mutable input : string;
+	mutable output : string;
+	mutable cmd: string list;
+};;
+
 
 (* bridge-hdr json node type *)
 type json_node_uberspark_bridge_t = {
@@ -20,6 +27,7 @@ type json_node_uberspark_bridge_t = {
 	mutable category : string;
 	mutable container_build_filename: string;
 	mutable bridge_cmd : string list;
+	mutable targets : json_node_uberspark_bridge_targets_t list;
 }
 ;;
 
@@ -114,6 +122,7 @@ let json_node_uberspark_bridge_var_copy
 	output.category <- input.category; 
 	output.container_build_filename <- input.container_build_filename ; 
 	output.bridge_cmd <- input.bridge_cmd; 
+	output.targets <- input.targets;
 
 	()
 ;;
@@ -129,6 +138,7 @@ let json_node_uberspark_bridge_var_default_value ()
 		category = "";
 		container_build_filename = "";
 		bridge_cmd = [];
+		targets = [];
 	}
 ;;
 

@@ -202,20 +202,31 @@ A supported bridge is described by a bridge manifest node which follows the gene
             "command1",
             "command2",
             ...
-        }
+        },
+
+        "uberspark.bridge.targets" : [
+            {
+                "input" : ".x",
+                "output" : ".y",
+                "cmd" : [
+                    "command1"
+                ]
+            }
+
+        ]
     }
 
-The JSON declaration of the ``uberspark.bridges.xxx`` nodes are as below:
+The JSON declaration of the ``uberspark.bridge.xxx`` nodes are as below:
 
-.. json:object:: uberspark.bridges.xxx
+.. json:object:: uberspark.bridge.xxx
 
-   :property uberspark.bridges.namespace: namespace for the bridge of the format - "uberspark/bridges/<category>/<devenv>/<bridge-type>/<name>/<arch>/<cpu>/<name>/<version>"
-   :proptype uberspark.bridges.namespace: string
-   :options uberspark.bridges.namespace: <category>=container or native; <devenv>=amd64; <bridge-type>=as-bridge,cc-bridge,ld-bridge,vf-bridge,loader-bridge; <arch>=x86_32,armv8_32; <cpu>=generic; <name>=name of the bridge; <version>=vx.y.z
+   :property uberspark.bridge.namespace: namespace for the bridge of the format - "uberspark/bridges/<category>/<devenv>/<bridge-type>/<name>/<arch>/<cpu>/<name>/<version>"
+   :proptype uberspark.bridge.namespace: string
+   :options uberspark.bridge.namespace: <category>=container or native; <devenv>=amd64; <bridge-type>=as-bridge,cc-bridge,ld-bridge,vf-bridge,loader-bridge; <arch>=x86_32,armv8_32; <cpu>=generic; <name>=name of the bridge; <version>=vx.y.z
    
-   :property uberspark.bridges.category: category of the bridge
-   :proptype uberspark.bridges.category: string
-   :options uberspark.bridges.category: "container", "native"
+   :property uberspark.bridge.category: category of the bridge
+   :proptype uberspark.bridge.category: string
+   :options uberspark.bridge.category: "container", "native"
 
    :property uberspark.bridge.container_build_filename: if uberspark.bridges.category is container, then specifies the container build filename
    :proptype uberspark.bridge.container_build_filename: string
@@ -225,7 +236,22 @@ The JSON declaration of the ``uberspark.bridges.xxx`` nodes are as below:
    :proptype uberspark.bridge.bridge_cmd: string list
    :options uberspark.bridge.bridge_cmd: 
 
-An example definition of the ``uberspark.bridged.xxx`` nodes for the GNU-as Assembler, within |ubersparkmff| follows:
+   :property uberspark.bridge.targets: comma delimited list of bridge target sub-nodes
+   :proptype uberspark.bridge.targets: :json:object:`targets` list
+
+.. json:object:: targets
+
+   :property input: wildcard of input files
+   :proptype input: string 
+   
+   :property output: wildcard of output files
+   :proptype output: string 
+
+   :property cmd: comma seperated string list of commands to be executed for the bridge target
+   :proptype cmd: string list
+
+
+An example definition of the ``uberspark.bridge.xxx`` nodes for the GNU-as Assembler, within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
