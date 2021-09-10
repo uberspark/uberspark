@@ -5,13 +5,6 @@ open Uberspark
 open Cmdliner
 
 type opts = { 
-  ar_bridge: bool;
-  as_bridge: bool;
-  cc_bridge: bool;
-  ld_bridge: bool;
-  pp_bridge: bool;
-  vf_bridge: bool;
-  loader_bridge: bool;
   build: bool;
   output_directory: string option;
   bridge_exectype : string option;
@@ -19,24 +12,12 @@ type opts = {
 
 (* fold all bridges options into type opts *)
 let cmd_bridge_opts_handler 
-  (ar_bridge: bool)
-  (as_bridge: bool)
-  (cc_bridge: bool)
-  (ld_bridge: bool)
-  (pp_bridge: bool)
-  (vf_bridge: bool)
-  (loader_bridge: bool)
   (build : bool)
   (output_directory: string option)
   (bridge_exectype : string option)
   : opts = 
-  { ar_bridge=ar_bridge;
-    as_bridge=as_bridge;
-    cc_bridge=cc_bridge;
-    ld_bridge=ld_bridge;
-    pp_bridge=pp_bridge;
-    vf_bridge=vf_bridge;
-    loader_bridge=loader_bridge;
+  { 
+    
     build=build;
     output_directory=output_directory;
     bridge_exectype=bridge_exectype;
@@ -47,40 +28,6 @@ let cmd_bridge_opts_handler
 let cmd_bridge_opts_t =
   let docs = "ACTION OPTIONS" in
   
-  let ar_bridge =
-  let doc = "Select archiver (ar) bridge namespace prefix." in
-  Arg.(value & flag & info ["ar"; "ar-bridge"] ~doc ~docs)
-  in
-
-  let as_bridge =
-  let doc = "Select assembler (as) bridge namespace prefix." in
-  Arg.(value & flag & info ["as"; "as-bridge"] ~doc ~docs)
-  in
-
-  let cc_bridge =
-  let doc = "Select compiler (cc) bridge namespace prefix." in
-  Arg.(value & flag & info ["cc"; "cc-bridge"] ~doc ~docs)
-  in
-
-  let ld_bridge =
-  let doc = "Select linker (ld) bridge namespace prefix." in
-  Arg.(value & flag & info ["ld"; "ld-bridge"] ~doc ~docs)
-  in
-
-  let pp_bridge =
-  let doc = "Select pre-processor (pp) bridge namespace prefix." in
-  Arg.(value & flag & info ["pp"; "pp-bridge"] ~doc ~docs)
-  in
-
-  let vf_bridge =
-  let doc = "Select verification (vf) bridge namespace prefix." in
-  Arg.(value & flag & info ["vf"; "vf-bridge"] ~doc ~docs)
-  in
-
-  let loader_bridge =
-  let doc = "Select loader bridge namespace prefix." in
-  Arg.(value & flag & info ["loader"; "loader-bridge"] ~doc ~docs)
-  in
 
   let build =
   let doc = "Build the bridge if bridge execution type is 'container'" in
@@ -98,7 +45,7 @@ let cmd_bridge_opts_t =
   in
 
 
-  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ loader_bridge $ build $ output_directory $ bridge_exectype)
+  Term.(const cmd_bridge_opts_handler $ build $ output_directory $ bridge_exectype)
 
 
 
