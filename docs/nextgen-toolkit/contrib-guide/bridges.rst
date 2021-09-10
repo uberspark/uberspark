@@ -145,14 +145,14 @@ Building/Testing a Bridge
 Briges supported by containers can be built and tested via
 the command line tool interface (see :ref:`frontend-cli-intro`) as below:
 
-``uberspark bridge config --cc-bridge --build <bridge-ns>``
+``uberspark bridge config --build <bridge-ns>``
 
 where `<bridge-ns>` is the bridge namespace as described in
 :ref:`contrib-guide-bridges-nsdirlayout`.
 
 The following example builds the Compcert v3.1 compiler bridge:
 
-``uberspark bridge config --cc-bridge --build amd64/x86_32/generic/compcert/v3.1``
+``uberspark bridge config --build uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/compcert/v3.1``
 
 ..  note::  The above command uses `--cc-bridge` to identify a 
             compiler bridge. See and |reference-manifest-ref|:::ref:`frontend-cli-bridges`

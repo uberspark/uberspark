@@ -162,6 +162,27 @@ let initialize_operation_context
   ()
 ;;
 
+let setup_namespace_root_directory ()
+  : bool =
+
+  let l_json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
+		  (Uberspark.Manifest.uberspark_manifest_var_default_value ()) in
+
+  (* setup namespace root directory *)
+  (* we open the installation manifest to figure out the root directory *)
+  let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
+        Uberspark.Namespace.namespace_root_mf_filename in
+
+
+  let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var installation_manifest_filename l_json_node_uberspark_manifest_var) in
+        if rval then begin
+          Uberspark.Namespace.set_namespace_root_dir_prefix l_json_node_uberspark_manifest_var.installation.root_directory;
+          (true)
+        end else begin
+          (*Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;*)
+          (false)
+        end;
+;;
 
 
 let initialize_operation_context_with_staging 

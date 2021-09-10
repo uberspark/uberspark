@@ -201,6 +201,26 @@ let handler_bridges_action_config
         begin
           l_path_ns := path_ns_qname;
 
+          let l_bridge_object : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object in
+          let l_rval = (l_bridge_object#load !l_path_ns) in
+
+  				if l_rval then begin
+
+            (* if bridge cateogory is container, then build the bridge *)
+            if (l_bridge_object#get_json_node_uberspark_bridge_var).category = "container" then begin
+              if not (l_bridge_object#build ()) then begin
+                retval := `Error (false, "could not build bridge!");
+              end else begin
+                retval := `Ok();
+              end;
+            end;
+ 
+          end else begin
+            retval := `Error (false, "unable to load bridge manifest!");
+          end
+          ;  
+
+
           (* 
             TBD: use the namespace and Uberspark.Bridge. to create
             a new bridge object, load and build the container 
@@ -282,26 +302,34 @@ let handler_bridge
 
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-  match action with
-    | `Config -> 
- 
-      retval := handler_bridges_action_config p_copts cmd_bridges_opts path_ns;
+  (* initialize operation context *)
+  Common.initialize_operation_context p_copts;
+  
+  if (Common.setup_namespace_root_directory ()) then begin
 
-    | `Create -> 
-      retval := handler_bridges_action_create p_copts cmd_bridges_opts path_ns;
+    match action with
+      | `Config -> 
+  
+        retval := handler_bridges_action_config p_copts cmd_bridges_opts path_ns;
 
-    | `Dump ->
+      | `Create -> 
+        retval := handler_bridges_action_create p_copts cmd_bridges_opts path_ns;
 
-      retval := handler_bridges_action_dump p_copts cmd_bridges_opts path_ns;
+      | `Dump ->
+
+        retval := handler_bridges_action_dump p_copts cmd_bridges_opts path_ns;
 
 
-    | `Remove -> 
+      | `Remove -> 
 
-      retval := handler_bridges_action_remove p_copts cmd_bridges_opts path_ns;
+        retval := handler_bridges_action_remove p_copts cmd_bridges_opts path_ns;
 
-  ;
+    ;
 
-    (!retval)
+  end else begin
+    retval := `Error (false, "unable to load installation configuration!");
+  end;
 
+  (!retval)
 
 ;;
