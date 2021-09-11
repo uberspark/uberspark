@@ -1118,6 +1118,8 @@ let initialize_bridges ()
 				let l_rval = (l_bridge_object#load l_action.uberspark_manifest_action.bridge_namespace) in
 				
 				if l_rval then begin
+					Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "number of bridge targets: %u" 
+						(List.length (l_bridge_object#get_json_node_uberspark_bridge_var).targets);
 
 					(* if bridge cateogory is container, then build the bridge *)
 					if (l_bridge_object#get_json_node_uberspark_bridge_var).category = "container" then begin
