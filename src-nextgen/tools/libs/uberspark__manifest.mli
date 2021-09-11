@@ -72,7 +72,7 @@ module Bridge : sig
   (* manifest node types *)
   (****************************************************************************)
 
-  type json_node_uberspark_bridge_targets_t =
+  type json_node_uberspark_bridge_target_t =
   {
     mutable input : string;
     mutable output : string;
@@ -85,7 +85,7 @@ module Bridge : sig
     mutable category : string;
     mutable container_build_filename: string;
     mutable bridge_cmd : string list;
-    mutable targets: json_node_uberspark_bridge_targets_t list;
+    mutable targets: (string * json_node_uberspark_bridge_target_t) list;
   }
 
   val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
