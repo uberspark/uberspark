@@ -136,14 +136,16 @@ let json_node_uberspark_bridge_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let rval = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_var in
+			let rval1 = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_var in
+			let (rval2, json_node_uberspark_bridge_targets_var) = (json_node_uberspark_bridge_targets_to_var mf_json) in
 
-				if rval then begin
-					if (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json) <> `Null then
-						json_node_uberspark_bridge_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
+			if rval2 then
+				json_node_uberspark_bridge_var.targets <- json_node_uberspark_bridge_targets_var;
 
-					retval := true;
-				end;
+			if (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json) <> `Null then
+				json_node_uberspark_bridge_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
+
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
