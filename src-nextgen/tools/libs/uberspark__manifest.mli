@@ -19,8 +19,8 @@ type json_node_uberspark_manifest_actions_t =
 	mutable category : string;
 
 	(* if category == translation *)
-	mutable input : string list;
-	mutable output : string list;
+	mutable input : string;
+	mutable output : string;
 	mutable bridge_namespace: string; 
 	mutable bridge_cmd : string list; 
 	

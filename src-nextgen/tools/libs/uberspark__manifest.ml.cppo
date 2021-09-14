@@ -25,8 +25,8 @@ type json_node_uberspark_manifest_actions_t =
 	mutable category : string;
 
 	(* if category == translation *)
-	mutable input : string list;
-	mutable output : string list;
+	mutable input : string;
+	mutable output : string;
 	mutable bridge_namespace: string; 
 	mutable bridge_cmd : string list; 
 	
@@ -121,7 +121,7 @@ let json_node_uberspark_manifest_actions_to_var
 							List.iter (fun (l_actions_json : Yojson.Basic.t) ->
 								let actions_entry : json_node_uberspark_manifest_actions_t = {
 									targets = []; name = ""; category = "";
-									input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
+									input = ""; output = ""; bridge_namespace = ""; bridge_cmd = [];
 									uobj_namespace = "";
 									uobjrtl_namespace = "";
 									loader_namespace = "";
@@ -137,10 +137,10 @@ let json_node_uberspark_manifest_actions_to_var
 									actions_entry.category <- (l_actions_json |> member "category" |> to_string);
 
 								if (l_actions_json |> member "input") <> `Null then 
-									actions_entry.input <- json_list_to_string_list (l_actions_json |> member "input" |> to_list);
+									actions_entry.input <- (l_actions_json |> member "input" |> to_string);
 
 								if (l_actions_json |> member "output") <> `Null then 
-									actions_entry.output <- json_list_to_string_list (l_actions_json |> member "output" |> to_list);
+									actions_entry.output <- (l_actions_json |> member "output" |> to_string);
 
 								if (l_actions_json |> member "bridge_namespace") <> `Null then 
 									actions_entry.bridge_namespace <- (l_actions_json |> member "bridge_namespace" |> to_string);
