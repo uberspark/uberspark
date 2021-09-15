@@ -280,6 +280,69 @@ An example definition of the ``uberspark.bridge.xxx`` nodes for the GNU-as Assem
             environment (e.g., ubuntu or alpine)
 
 
+Below is another example definition of the ``uberspark.bridge.xxx`` nodes for the |uspark|
+CASM Assembler, within |ubersparkmff|. This example serves to demonstrate the use of the
+``uberspark.bridge.targets`` node definition.
+
+
+.. code-block:: JSON
+    
+    {
+            "uberspark.manifest.namespace" : "uberspark/bridges",
+            "uberspark.manifest.version_min" : "any",
+            "uberspark.manifest.version_max" : "any",
+
+            "uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/casm/vlatest",
+            "uberspark.bridge.category" : "container",
+            "uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+            "uberspark.bridge.targets" : [
+                {
+                    "input" : ".cS",
+                    "output" : ".c",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.c ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c ; done"
+                    ]
+                },
+
+                {
+                    "input" : ".cS",
+                    "output" : ".s",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.s ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s ; done"
+                    ]
+                },
+
+                {
+                    "input" : ".cS",
+                    "output" : ".o",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.o ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && rm -f ${source_file_name%.*}.o && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s && gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -m32 -c ${var_bridge_include_dirs_with_prefix} ${source_file_name%.*}.s -o ${source_file_name%.*}.o ; done"
+                    ]
+                }
+
+
+            ]
+
+    }
+
+
+
 .. note::   Variables within ``@@`` are special bridge environment variables that are pre-populated by 
             the framework and can be used by the bridge commands as shown in the above example with source
             files and include directories
