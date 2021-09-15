@@ -103,6 +103,7 @@ let json_node_uberspark_bridge_targets_to_var
 								f_target_element.cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "cmd" x));
 								
 								let l_key = (f_target_element.input ^ "__" ^ f_target_element.output) in 
+								Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "bridge manifest targets: l_key=%s" l_key;
 								bridge_targets_assoc_list := !bridge_targets_assoc_list @ [ (l_key, f_target_element) ];
 													
 								()

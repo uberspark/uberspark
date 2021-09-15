@@ -116,6 +116,18 @@ let consolidate_actions_uobj
 					{
 						targets = [ "verify"; ];
 						category = "translation";
+						name = "translating .cS to .c";
+						input = ".cS"; output = ".c"; 
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
+						bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+						loader_namespace = "";
+					};
+
+					{
+						targets = [ "verify"; ];
+						category = "translation";
 						name = "verifying überSpark invariants";
 						input = ".c"; output = ".c"; 
 						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
@@ -1017,7 +1029,9 @@ let invoke_bridge
 
 
 		(* obtain bridge command to execute based on input and output *)
-		let l_binding = (p_action.uberspark_manifest_action.input ^ "__" ^ p_action.uberspark_manifest_action.input) in
+		let l_binding = (p_action.uberspark_manifest_action.input ^ "__" ^ p_action.uberspark_manifest_action.output) in
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "invoke_bridge: l_binding=%s" l_binding;
+
 		if (List.mem_assoc l_binding (l_bridge_object#get_json_node_uberspark_bridge_var).targets) then begin
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "using bridge target cmd for target: %s --> %s!"
 				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
