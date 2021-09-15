@@ -989,6 +989,7 @@ let invoke_bridge
 		let l_bridge_object = Hashtbl.find g_bridge_hashtbl  p_action.uberspark_manifest_action.bridge_namespace in
 		let l_build_dir = ref "" in
 		let l_bridge_cmd : string list ref = ref [] in
+		let l_invoke_bridge_cmd : string list ref = ref [] in 
 
 		if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
 			l_build_dir := p_action.uberspark_manifest_var.uobjcoll.namespace;
@@ -1015,32 +1016,51 @@ let invoke_bridge
 		end;
 
 
-		(* TBD: match bridge extension with input and output ext lists *)
-		l_retval := l_bridge_object#invoke 
-					~context_path_builddir:!l_build_dir 
-				[
-					("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
-					("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
-					("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);
-					("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
-					("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
-					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
-					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
-					("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
-					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
-					("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
-					("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
-					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
-					Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_vf_bridge_plugin));
-					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
-					("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename);
-					("@@BRIDGE_BINARY_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_image_filename);
-					("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_flat_image_filename);
-					("@@BRIDGE_CCLIB_FILENAME@@", (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ Uberspark.Namespace.namespace_uobj_cclib_filename));
-				];
+		(* obtain bridge command to execute based on input and output *)
+		let l_binding = (p_action.uberspark_manifest_action.input ^ "__" ^ p_action.uberspark_manifest_action.input) in
+		if (List.mem_assoc l_binding (l_bridge_object#get_json_node_uberspark_bridge_var).targets) then begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "using bridge target cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			let l_bridge_target_element = (List.assoc l_binding (l_bridge_object#get_json_node_uberspark_bridge_var).targets) in 
+			l_invoke_bridge_cmd := l_bridge_target_element.cmd; 
 
+		end else if (List.length (l_bridge_object#get_json_node_uberspark_bridge_var).bridge_cmd) > 0 then begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "using bridge_cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			l_invoke_bridge_cmd := l_bridge_object#get_json_node_uberspark_bridge_var.bridge_cmd;
+
+		end else begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not find bridge cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			l_retval := false;
+		end; 
+
+		if (!l_retval) then begin
+			l_retval := l_bridge_object#invoke 
+						~context_path_builddir:!l_build_dir 
+					[
+						("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
+						("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
+						("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);
+						("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
+						("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
+						("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
+						("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
+						("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
+						("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
+						("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
+						("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
+						("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
+						("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
+						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+						Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_vf_bridge_plugin));
+						("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
+						("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename);
+						("@@BRIDGE_BINARY_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_image_filename);
+						("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_flat_image_filename);
+						("@@BRIDGE_CCLIB_FILENAME@@", (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ Uberspark.Namespace.namespace_uobj_cclib_filename));
+					];
+		end;
 
 	end else begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to find entry in bridge hashtbl for bridge_namespace=%s!"
