@@ -27,6 +27,8 @@ type json_node_uberspark_manifest_actions_t =
 	(* if category == translation *)
 	mutable input : string;
 	mutable output : string;
+	mutable filter: bool;
+
 	mutable bridge_namespace: string; 
 	mutable bridge_cmd : string list; 
 	
@@ -121,7 +123,7 @@ let json_node_uberspark_manifest_actions_to_var
 							List.iter (fun (l_actions_json : Yojson.Basic.t) ->
 								let actions_entry : json_node_uberspark_manifest_actions_t = {
 									targets = []; name = ""; category = "";
-									input = ""; output = ""; bridge_namespace = ""; bridge_cmd = [];
+									input = ""; output = ""; filter = true; bridge_namespace = ""; bridge_cmd = [];
 									uobj_namespace = "";
 									uobjrtl_namespace = "";
 									loader_namespace = "";
@@ -156,6 +158,13 @@ let json_node_uberspark_manifest_actions_to_var
 
 								if (l_actions_json |> member "loader_namespace") <> `Null then 
 									actions_entry.loader_namespace <- (l_actions_json |> member "loader_namespace" |> to_string);
+
+								if (Yojson.Basic.Util.member "filter" l_actions_json) <> `Null then begin
+									actions_entry.filter <- Yojson.Basic.Util.to_bool (l_actions_json |> member "filter");
+								end else begin
+									actions_entry.filter <- true;
+								end;
+
 
 								actions_list := !actions_list @ [ actions_entry ];
 					
