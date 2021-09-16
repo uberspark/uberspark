@@ -11,46 +11,28 @@
 
 *)
 
-let help_msg = "output a warm welcome message to the user"
-
 module Self = Plugin.Register
     (struct
-        let name = "uberSpark verification bridge plugin"
-        let shortname = "uberspark-vbridge"
-        let help = help_msg
+        let name = "uberSpark CASM bridge plugin"
+        let shortname = "casmbridge"
+        let help = ""
     end)
 
-module Start = Self.False
+(* option to generate C code *)
+module CasmGenc = Self.False
     (struct
-        let option_name = "-hstart"
-        let help = "when on (off by default), " ^ help_msg
+        let option_name = "-casm-genc"
+        let help = "when on (off by default), generate C code with hardware model"
     end)
 
-
-module Finish = Self.False
+(* option to generate Assembly code *)
+module CasmGenasm = Self.False
     (struct
-        let option_name = "-hfinish"
-        let help = "when on (off by default), " ^ help_msg
+        let option_name = "-casm-genasm"
+        let help = "when on (off by default), generate Assembly code"
     end)
 
-
-module Output_file = Self.String
-    (struct
-        let option_name = "-hello-output"
-        let default = "-"
-        let arg_name = "output-file"
-        let help =
-            "file where the message is output (default: output to the console)"
-    end)
-
-
-module Casm = Self.False
-    (struct
-        let option_name = "-casm"
-        let help = "when on (off by default), " ^ help_msg
-    end)
-
-
+(* input file name *)
 module CasmInputFile = Self.String
 	(struct
 		let option_name = "-casm-infile"
@@ -59,12 +41,13 @@ module CasmInputFile = Self.String
 		let help = "CASM input file"
 	end)
 
+(* output file name *)
 module CasmOutputFile = Self.String
 	(struct
 		let option_name = "-casm-outfile"
 		let default = "casm.s"
 		let arg_name = "output-file"
-		let help = "CASM Assembly output file"
+		let help = "CASM output file"
 	end)
 
 
