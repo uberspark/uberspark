@@ -1070,6 +1070,7 @@ let invoke_bridge
 						~context_path_builddir:!l_build_dir 
 						!l_invoke_bridge_cmd
 					[
+						("@@BRIDGE_UOBJCOLL_NAMESPACE@@", g_uobjcoll_manifest_var.uobjcoll.namespace);
 						("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
 						("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
 						("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);

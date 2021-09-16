@@ -59,3 +59,10 @@ module LogLevel = Self.Int
 		let help = "Output logging level"
     end)
 
+module UobjcollNamespace = Self.String
+    (struct
+		let option_name = "-uobjcoll-ns"
+		let default = ""
+		let arg_name = "uobjcoll-ns"
+		let help = "uobjcoll namespace"
+    end)

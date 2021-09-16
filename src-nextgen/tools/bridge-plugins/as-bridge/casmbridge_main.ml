@@ -28,6 +28,7 @@ let initialize_logging () : unit =
 *)
 let run () =
     initialize_logging ();
+    Uberspark.Logger.log "CASM: uobjcoll namespace=%s" (Casmbridge_options.UobjcollNamespace.get());
 
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);
