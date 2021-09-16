@@ -34,6 +34,7 @@ let initialize_logging () : unit =
 *)
 let run () =
     initialize_logging ();
+    Uberspark.Logger.log "vf-bridge plugin: uobjcoll namespace=%s" (Ubersparkvbridge_options.UobjcollNamespace.get());
 
     if Ubersparkvbridge_options.Start.get() then begin
         g_count := !g_count +1;
