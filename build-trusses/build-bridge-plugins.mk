@@ -16,9 +16,12 @@ include ./commondefs.mk
 all: 
 	$(MAKE) -f build-libs.mk -w all
 	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/vf-bridge && $(MAKE) -w all
+	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/as-bridge && $(MAKE) -w all
 
 .PHONY: clean
 clean: 
 	$(MAKE) -f build-libs.mk -w clean
 	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/vf-bridge && $(MAKE) -w clean
 	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/vf-bridge && rm -rf top/
+	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/as-bridge && $(MAKE) -w clean
+	cd $(UBERSPARK_SRCDIR)/tools/bridge-plugins/as-bridge && rm -rf top/
