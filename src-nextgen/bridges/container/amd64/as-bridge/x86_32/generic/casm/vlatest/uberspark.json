@@ -36,12 +36,19 @@
 				"input" : ".cS",
 				"output" : ".s",
 				"cmd" : [
-					"export var_bridge_include_dirs_with_prefix",
-					"export var_bridge_source_files",
-					"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
-					"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
-					"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
-					"for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.s ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/as-bridge/Casmbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm-genasm -log-level @@BRIDGE_LOG_LEVEL@@ -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s ; done"
+					"
+						export var_bridge_source_files &&
+						export var_bridge_include_dirs &&
+						export vararray_bridge_include_dirs &&
+						export include_prefix=\"-I\" &&
+						export include_string &&
+						var_bridge_include_dirs=\" @@BRIDGE_INCLUDE_DIRS@@ \" &&
+						vararray_bridge_include_dirs=$(echo $var_bridge_include_dirs | tr \" \" \"\\n\") &&
+						for include_dir_name in $vararray_bridge_include_dirs; do include_string=\"${include_string} ${include_prefix}${include_dir_name}\"; done &&
+						var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \" &&
+						vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\") &&
+						for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.s ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/as-bridge/Casmbridge -machdep gcc_x86_32 -kernel-msg-key pp -cpp-extra-args=\"$include_string\" ${source_file_name%.*}.c  -casm-genasm -log-level @@BRIDGE_LOG_LEVEL@@ -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s ; done
+					"
 				]
 			},
 
@@ -49,12 +56,19 @@
 				"input" : ".cS",
 				"output" : ".o",
 				"cmd" : [
-					"export var_bridge_include_dirs_with_prefix",
-					"export var_bridge_source_files",
-					"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
-					"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
-					"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
-					"for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.o ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && rm -f ${source_file_name%.*}.o && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/as-bridge/Casmbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm-genasm -log-level @@BRIDGE_LOG_LEVEL@@ -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s && gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -m32 -c ${var_bridge_include_dirs_with_prefix} ${source_file_name%.*}.s -o ${source_file_name%.*}.o ; done"
+					"
+						export var_bridge_source_files &&
+						export var_bridge_include_dirs &&
+						export vararray_bridge_include_dirs &&
+						export include_prefix=\"-I\" &&
+						export include_string &&
+						var_bridge_include_dirs=\" @@BRIDGE_INCLUDE_DIRS@@ \" &&
+						vararray_bridge_include_dirs=$(echo $var_bridge_include_dirs | tr \" \" \"\\n\") &&
+						for include_dir_name in $vararray_bridge_include_dirs; do include_string=\"${include_string} ${include_prefix}${include_dir_name}\"; done &&
+						var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \" &&
+						vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\") &&
+						for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.o ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && rm -f ${source_file_name%.*}.o && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/as-bridge/Casmbridge -machdep gcc_x86_32 -kernel-msg-key pp -cpp-extra-args=\"$include_string\" ${source_file_name%.*}.c -casm-genasm -log-level @@BRIDGE_LOG_LEVEL@@ -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s && gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -m32 -c ${var_bridge_include_dirs_with_prefix} ${source_file_name%.*}.s -o ${source_file_name%.*}.o ; done
+					"
 				]
 			}
 
