@@ -21,7 +21,7 @@
 					"var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
 					"var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
 					"vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
-					"for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.c ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c ; done"
+					"for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.c ...\" && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/as-bridge/Casmbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm-genc -casm-infile ${source_file_name%.*}.cS -casm-outfile ${source_file_name%.*}.c ; done"
 				]
 			},
 

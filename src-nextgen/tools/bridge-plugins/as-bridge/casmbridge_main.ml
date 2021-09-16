@@ -38,6 +38,17 @@ let run () =
             Casmbridge_gensrc.casm_extract input_file output_file;
     end;
 
+
+    if Casmbridge_options.CasmGenc.get() then begin
+        Casmbridge_options.CasmGenc.set(false);
+        Uberspark.Logger.log "CASM: Generating C code with HWM embedding...";
+        let input_file = Casmbridge_options.CasmInputFile.get() in
+        let output_file = Casmbridge_options.CasmOutputFile.get() in
+            Uberspark.Logger.log "inputfile=%s, outputfile=%s" input_file output_file;
+            Casmbridge_gensrc.casm_genc input_file output_file;
+    end;
+
+
     ()
 
 let () = Db.Main.extend run

@@ -77,6 +77,17 @@ let casm_extract
 		()
 
 
+let casm_genc 
+    (input_file : string)
+    (output_file : string)
+    : unit =
+    Uberspark.Logger.log "Generating CASM C with hardware model embedding...\n";
+    (* for now just copy input file to output file *)
+    Uberspark.Osservices.file_copy input_file output_file;
+		Uberspark.Logger.log "Done.\n";
+		()
+
+
 
 
 
