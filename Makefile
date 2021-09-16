@@ -102,8 +102,8 @@ all: all_but_docs docs_html
 	@echo uberspark toolkit build success!
 
 .PHONY: all_but_docs
-all_but_docs: build_bootstrap frontend vbridge-plugin
-	@echo uberspark libs, front-end and vbridge-plugin build success!
+all_but_docs: build_bootstrap frontend bridge-plugins
+	@echo uberspark libs, front-end and bridge-plugins build success!
 
 
 ###### build bootstrap target
@@ -174,10 +174,10 @@ libs: build_bootstrap
 frontend: libs
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-frontend.mk -w all, $(shell id -u), $(shell id -g))
 
-### build vbridge plugin
-.PHONY: vbridge-plugin
-vbridge-plugin: libs
-	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-vbridge-plugin.mk -w all, $(shell id -u), $(shell id -g))
+### build bridge plugins
+.PHONY: bridge-plugins
+bridge-plugins: libs
+	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-bridge-plugins.mk -w all, $(shell id -u), $(shell id -g))
 
 
 ###### check to see if ROOT_DIR is specified when we are operating under WSL 
@@ -239,7 +239,7 @@ clean: generate_buildtruss
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-docs.mk -w docs_clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-frontend.mk -w clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-libs.mk -w clean, $(shell id -u), $(shell id -g))
-	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-vbridge-plugin.mk -w clean, $(shell id -u), $(shell id -g))
+	$(call docker_run, $(USPARK_VBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f build-bridge-plugins.mk -w clean, $(shell id -u), $(shell id -g))
 	$(call docker_run, $(USPARK_BLDBRIDGE_NS_AMD64), cd $(USPARK_BUILDTRUSSESDIR_MOUNT) && make -f install.mk -w clean, $(shell id -u), $(shell id -g))
 
 

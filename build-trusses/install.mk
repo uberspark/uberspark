@@ -22,7 +22,8 @@ install_createnamespace:
 	mkdir -p $(UBERSPARK_INSTALLDIR)
 	mkdir -p $(UBERSPARK_INSTALLDIR)/bin
 	mkdir -p $(UBERSPARK_INSTALLDIR)/tools
-	mkdir -p $(UBERSPARK_INSTALLDIR)/tools/vbridge-plugin
+	mkdir -p $(UBERSPARK_INSTALLDIR)/tools/bridge-plugins
+	mkdir -p $(UBERSPARK_INSTALLDIR)/tools/bridge-plugins/vf-bridge
 	mkdir -p $(UBERSPARK_INSTALLDIR)/bridges
 	mkdir -p $(UBERSPARK_INSTALLDIR)/docs
 	mkdir -p $(UBERSPARK_INSTALLDIR)/platforms
@@ -52,7 +53,7 @@ install_populateamespace_include:
 install_populateamespace: install_populateamespace_include
 	@echo Populating namespace within: $(UBERSPARK_INSTALLDIR)...
 	cp -rf $(UBERSPARK_SRCDIR)/bridges/* $(UBERSPARK_INSTALLDIR)/bridges/
-	cp -f $(UBERSPARK_SRCDIR)/tools/vbridge-plugin/top/* $(UBERSPARK_INSTALLDIR)/tools/vbridge-plugin/.
+	cp -f $(UBERSPARK_SRCDIR)/tools/bridge-plugins/vf-bridge/top/* $(UBERSPARK_INSTALLDIR)/tools/bridge-plugins/vf-bridge/.
 	cp -rf $(UBERSPARK_DOCSDIR)/_build/* $(UBERSPARK_INSTALLDIR)/docs/
 	cp -rf $(UBERSPARK_SRCDIR)/platforms/* $(UBERSPARK_INSTALLDIR)/platforms/
 	cp -rf $(UBERSPARK_SRCDIR)/hwm/* $(UBERSPARK_INSTALLDIR)/hwm/

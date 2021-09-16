@@ -1084,7 +1084,7 @@ let invoke_bridge
 						("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
 						("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
 						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
-						Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_vf_bridge_plugin));
+						Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_bridge_plugins));
 						("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
 						("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename);
 						("@@BRIDGE_BINARY_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_image_filename);
