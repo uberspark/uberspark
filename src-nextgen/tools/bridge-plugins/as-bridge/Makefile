@@ -5,7 +5,6 @@ PLUGIN_NAME = Casmbridge
 
 PLUGIN_CMO = casmbridge_options 
 PLUGIN_CMO += casmbridge_gensrc 
-PLUGIN_CMO += casmbridge_ast 
 PLUGIN_CMO += casmbridge_main
 
 # extra libraries that the plugin depends upon
