@@ -33,6 +33,12 @@ let run () =
     Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: root-dir=%s" (Casmbridge_options.RootDir.get());
     Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: staging-dir=%s" (Casmbridge_options.StagingDir.get());
 
+    Uberspark.Context.initialize ~p_log_level:!Uberspark.Logger.current_level
+        ~p_print_banner:false 
+        (Casmbridge_options.RootDir.get())
+        (Casmbridge_options.StagingDir.get())        
+        (Casmbridge_options.UobjcollPlatformNamespace.get()) [];
+
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);
         Uberspark.Logger.log "CASM: Generating Assembly code...";
