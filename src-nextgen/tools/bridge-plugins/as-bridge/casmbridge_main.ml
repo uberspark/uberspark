@@ -28,7 +28,10 @@ let initialize_logging () : unit =
 *)
 let run () =
     initialize_logging ();
-    Uberspark.Logger.log "CASM: uobjcoll namespace=%s" (Casmbridge_options.UobjcollNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: uobjcoll namespace=%s" (Casmbridge_options.UobjcollNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: uobjcoll platform namespace=%s" (Casmbridge_options.UobjcollPlatformNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: root-dir=%s" (Casmbridge_options.RootDir.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "CASM: staging-dir=%s" (Casmbridge_options.StagingDir.get());
 
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);

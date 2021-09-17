@@ -83,3 +83,28 @@ module UobjcollNamespace = Self.String
 		let arg_name = "uobjcoll-ns"
 		let help = "uobjcoll namespace"
     end)
+
+module UobjcollPlatformNamespace = Self.String
+    (struct
+		let option_name = "-uobjcoll-platform-ns"
+		let default = ""
+		let arg_name = "uobjcoll-platform-ns"
+		let help = "uobjcoll platform namespace"
+    end)
+
+module RootDir = Self.String
+    (struct
+		let option_name = "-root-dir"
+		let default = ""
+		let arg_name = "root-dir"
+		let help = "uberspark root directory"
+    end)
+
+
+module StagingDir = Self.String
+    (struct
+		let option_name = "-staging-dir"
+		let default = ""
+		let arg_name = "staging-dir"
+		let help = "uobjcoll staging directory"
+    end)

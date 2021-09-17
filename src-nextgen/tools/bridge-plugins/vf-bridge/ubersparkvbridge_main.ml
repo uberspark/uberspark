@@ -34,7 +34,10 @@ let initialize_logging () : unit =
 *)
 let run () =
     initialize_logging ();
-    Uberspark.Logger.log "vf-bridge plugin: uobjcoll namespace=%s" (Ubersparkvbridge_options.UobjcollNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: uobjcoll namespace=%s" (Ubersparkvbridge_options.UobjcollNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: uobjcoll platform namespace=%s" (Ubersparkvbridge_options.UobjcollPlatformNamespace.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: root-dir=%s" (Ubersparkvbridge_options.RootDir.get());
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: staging-dir=%s" (Ubersparkvbridge_options.StagingDir.get());
 
     if Ubersparkvbridge_options.Start.get() then begin
         g_count := !g_count +1;
