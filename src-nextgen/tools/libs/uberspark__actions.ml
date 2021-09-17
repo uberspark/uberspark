@@ -1071,9 +1071,10 @@ let invoke_bridge
 						!l_invoke_bridge_cmd
 					[
 						("@@BRIDGE_UOBJCOLL_NAMESPACE@@", g_uobjcoll_manifest_var.uobjcoll.namespace);
+						("@@BRIDGE_UOBJCOLL_PLATFORM_NAMESPACE@@", g_uobjcoll_manifest_var.uobjcoll.platform);
 						("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
 						("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
-						("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);
+						("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
 						("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
 						("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
 						("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));

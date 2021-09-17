@@ -19,6 +19,10 @@
 				echo include dirs: @@BRIDGE_INCLUDE_DIRS@@ &&
 				echo include dirs with prefix: @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ &&
 				echo bridge plugin dir: @@BRIDGE_PLUGIN_DIR@@ &&
+				echo uobjcoll namespace: @@BRIDGE_UOBJCOLL_NAMESPACE@@ &&
+				echo uobjcoll platform namespace: @@BRIDGE_UOBJCOLL_PLATFORM_NAMESPACE@@ &&
+				echo uberspark root dir prefix: @@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@ &&
+				echo uberspark staging dir prefix: @@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@ &&
 				export var_bridge_include_dirs &&
 				export vararray_bridge_include_dirs &&
 				export include_prefix=\"-I\" &&
