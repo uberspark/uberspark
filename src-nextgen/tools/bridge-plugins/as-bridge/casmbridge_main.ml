@@ -39,6 +39,14 @@ let run () =
         (Casmbridge_options.StagingDir.get())        
         (Casmbridge_options.UobjcollPlatformNamespace.get()) [];
 
+    (* bail out if we are unable to process uobjcoll manifest *)
+    if not (Uberspark.Context.process_uobjcoll_manifest ~p_only_stateinit:true
+        (Casmbridge_options.UobjcollNamespace.get()) [] []) then begin
+        Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to process uobjcoll manifest!";
+        ignore(exit 1);
+    end;
+
+
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);
         Uberspark.Logger.log "CASM: Generating Assembly code...";

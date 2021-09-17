@@ -1084,7 +1084,7 @@ let process_uobjcoll_manifest
 
 			(* iterate through uobjrtl list and copy uobjrtl sources to triage area *)
 			let l_dummy=0 in begin
-			retval := copy_uobjrtl_to_triage ();
+			if p_only_stateinit = false then retval := copy_uobjrtl_to_triage ();
 			end;
 
 			if (!retval) == false then
@@ -1093,7 +1093,7 @@ let process_uobjcoll_manifest
 
 			(* iterate through loader list and copy loader sources to triage area *)
 			let l_dummy=0 in begin
-			retval := copy_loaders_to_triage ();
+			if p_only_stateinit = false then retval := copy_loaders_to_triage ();
 			end;
 
 			if (!retval) == false then
@@ -1103,7 +1103,7 @@ let process_uobjcoll_manifest
 
 			(* generate sentinels for uobjcoll methods *)
 			let l_dummy=0 in begin
-			retval := generate_sentinels_for_uobjcoll_methods ();
+			if p_only_stateinit = false then retval := generate_sentinels_for_uobjcoll_methods ();
 			end;
 
 			if (!retval) == false then
@@ -1113,7 +1113,7 @@ let process_uobjcoll_manifest
 
 			(* generate uobjcoll header file *)
 			let l_dummy=0 in begin
-			retval := generate_uobjcoll_header_file ();
+			if p_only_stateinit = false then retval := generate_uobjcoll_header_file ();
 			end;
 
 			if (!retval) == false then
@@ -1122,7 +1122,7 @@ let process_uobjcoll_manifest
 
 			(* generate header files for uobjs *)
 			let l_dummy=0 in begin
-			retval := generate_header_files_for_uobjs ();
+			if p_only_stateinit = false then retval := generate_header_files_for_uobjs ();
 			end;
 
 			if (!retval) == false then
@@ -1140,7 +1140,7 @@ let process_uobjcoll_manifest
 
 			(* generate uobjcoll linker script *)
 			let l_dummy=0 in begin
-			retval := generate_uobjcoll_linker_script ();
+			if p_only_stateinit = false then retval := generate_uobjcoll_linker_script ();
 			end;
 
 			if (!retval) == false then
@@ -1149,7 +1149,7 @@ let process_uobjcoll_manifest
 
 			(* initialize actions *)
 			let l_dummy=0 in begin
-			retval := (Uberspark.Actions.initialize 
+			if p_only_stateinit = false then retval := (Uberspark.Actions.initialize 
 				d_uberspark_manifest_var
 				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
@@ -1168,7 +1168,7 @@ let process_uobjcoll_manifest
 
 			(* process actions *)
 			let l_dummy=0 in begin
-			retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets p_options;
+			if p_only_stateinit = false then retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets p_options;
 			end;
 
 			if (!retval) == false then
