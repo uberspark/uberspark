@@ -96,12 +96,12 @@ let create_staging
 		(false)
 	else
 
-	(* create triage folder *)
+	(* create staging folder *)
 	let dummy = 0 in begin
 	Uberspark.Osservices.mkdir ~parent:true Uberspark.Namespace.namespace_uobjcoll_staging_dir (`Octal 0o0777);
 	end;
 
-	(* create uobjcoll namespace folder within triage *)
+	(* create uobjcoll namespace folder within staging *)
 	(* TBD: sanity check uobjcoll namespace prefix *)
 	let l_abspath_uobjcoll_triage_dir = (abspath_cwd ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_staging_dir) in 
 	let l_abspath_uobjcoll_triage_dir_uobjcoll_ns = (l_abspath_uobjcoll_triage_dir ^ "/" ^ d_uberspark_manifest_var.uobjcoll.namespace) in
@@ -142,26 +142,65 @@ let create_staging
 	(Uberspark.Context.process_uobjcoll_manifest ~p_in_order:p_in_order (d_uberspark_manifest_var.uobjcoll.namespace) p_targets p_options)
 ;;
 
+
+(* initializes operation context *)
 let initialize_operation_context 
   (p_copts : Commonopts.opts) 
-  : unit = 
-  
+  : bool = 
+  let l_retval = ref true in 
+
   (* initialize console logging *)
   initialize_logging p_copts;
 
-  Uberspark.Context.initialize ~p_log_level:p_copts.log_level
-    [
-      "enforcing verifiable object abstractions for commodity system software stacks";
-      "front-end tool";
-      "version: 6.0.0";
-      "website: https://uberspark.org";
-      "creator: amit vasudevan <amitvasudevan@acm.org>";
-      "";
-    ];
+  (* get current working directory *)
+  let l_cwd = Uberspark.Osservices.getcurdir() in
 
-  ()
+  (* get the absolute path of the current working directory *)
+  let (rval, l_cwd_abs) = (Uberspark.Osservices.abspath l_cwd) in
+
+  (* bail out on error *)
+  if (rval == false) then begin
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Could not obtain absolute path of current working directory!";
+    l_retval := false;
+  end else begin
+
+    let l_json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
+        (Uberspark.Manifest.uberspark_manifest_var_default_value ()) in
+
+    (* setup namespace root directory *)
+    (* we open the installation manifest to figure out the root directory *)
+    let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
+          Uberspark.Namespace.namespace_root_mf_filename in
+
+
+    let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var installation_manifest_filename l_json_node_uberspark_manifest_var) in
+    
+    if rval then begin
+
+      Uberspark.Context.initialize ~p_log_level:p_copts.log_level
+        l_json_node_uberspark_manifest_var.installation.root_directory
+        (l_cwd_abs ^ "/" ^ Uberspark.Namespace.namespace_uobjcoll_staging_dir)
+        l_json_node_uberspark_manifest_var.installation.default_platform
+        [
+          "enforcing verifiable object abstractions for commodity system software stacks";
+          "front-end tool";
+          "version: 6.0.0";
+          "website: https://uberspark.org";
+          "creator: amit vasudevan <amitvasudevan@acm.org>";
+          "";
+        ];
+
+      l_retval := true;
+    end else begin
+      Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;
+      l_retval := false;
+    end;
+  end;
+
+  (!l_retval)
 ;;
 
+(*
 let setup_namespace_root_directory ()
   : bool =
 
@@ -183,7 +222,7 @@ let setup_namespace_root_directory ()
           (false)
         end;
 ;;
-
+*)
 
 let initialize_operation_context_with_staging 
 	?(p_in_order = true) 
@@ -195,14 +234,19 @@ let initialize_operation_context_with_staging
   : bool = 
 
   (* initialize operation context *)
-  initialize_operation_context p_copts;
+  let rval1 = (initialize_operation_context p_copts) in 
 
-  (* create staging and process uobjcoll manifest *)
-  let rval = (create_staging 
-    ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
-      p_operations p_options) in
+  if rval1 then begin
 
-  (rval)
+    (* create staging and process uobjcoll manifest *)
+    let rval2 = (create_staging 
+      ~p_in_order:p_in_order p_cwd_abs p_manifest_file_path_abs  
+        p_operations p_options) in
+
+    (rval2)
+  end else begin
+    (false)
+  end;
 ;;
 
 

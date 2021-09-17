@@ -250,10 +250,8 @@ let handler_bridge
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
   (* initialize operation context *)
-  Common.initialize_operation_context p_copts;
+  if (Common.initialize_operation_context p_copts) then begin
   
-  if (Common.setup_namespace_root_directory ()) then begin
-
     match action with
       | `Config -> 
   
@@ -274,7 +272,7 @@ let handler_bridge
     ;
 
   end else begin
-    retval := `Error (false, "unable to load installation configuration!");
+    retval := `Error (false, "unable to initialize operation context!");
   end;
 
   (!retval)

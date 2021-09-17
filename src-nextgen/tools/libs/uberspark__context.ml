@@ -902,9 +902,13 @@ let initialize_uobjcoll_sources
 
 
 
-
+(* process uobjcoll manifest and carry out required actions. 
+	actions are suppressed if p_only_stateinit is true
+	we are already within the uobjcoll staging directory when this is called
+*)
 let process_uobjcoll_manifest
 	?(p_in_order = true) 
+	?(p_only_stateinit = false) 
 	(p_uobjcoll_ns : string)
 	(p_targets : string list)
 	(p_options : (string * string)list )
@@ -912,6 +916,7 @@ let process_uobjcoll_manifest
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "process_manifest_common (p_uobjcoll_ns=%s)..." p_uobjcoll_ns;
 
+(*
 	(* get current working directory *)
 	let l_cwd = Uberspark.Osservices.getcurdir() in
 
@@ -924,17 +929,21 @@ let process_uobjcoll_manifest
 		(false) 
 	end else
 
+
 	(* announce working directory and store in triage dir prefix*)
 	let l_dummy=0 in begin
 	d_uobjcoll_staging_dir_prefix := l_cwd_abs;
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "current working directory: %s" !d_uobjcoll_staging_dir_prefix;
 	end;
 
-	(* announce staging directory and store in staging dir prefix*)
+	(* announce root directory and store in root dir prefix*)
 	let l_dummy=0 in begin
 	d_namespace_root_dir_prefix := Uberspark.Namespace.get_namespace_root_dir_prefix ();
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_namespace_root_dir_prefix;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "root-directory directory: %s" !d_namespace_root_dir_prefix;
 	end;
+*)
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "root-directory directory: %s" !d_namespace_root_dir_prefix;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_uobjcoll_staging_dir_prefix;
 
 	(* read manifest file into manifest variable *)
 	let abspath_mf_filename = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
@@ -1188,12 +1197,18 @@ let process_uobjcoll_manifest
 (*--------------------------------------------------------------------------*)
 (* 
   initialize operating context
+
+  takes in root directory --> where uberspark is installed and
+  staging directory --> where uobjcoll build and verification is staged
 *)
 (*--------------------------------------------------------------------------*)
 
 let initialize
 	?(p_log_level = (Uberspark.Logger.ord Info)) 
-  ?(p_print_banner = true)
+	?(p_print_banner = true)
+	(p_root_dir : string)
+	(p_staging_dir : string)
+	(p_platform : string)
 	(p_banner : string list)
   : unit =
 
@@ -1210,43 +1225,32 @@ let initialize
     ) p_banner;
   end;
 
-  let l_json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
-		  (Uberspark.Manifest.uberspark_manifest_var_default_value ()) in
-
-  (* setup namespace root directory *)
-  (* we open the installation manifest to figure out the root directory *)
-  let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
-        Uberspark.Namespace.namespace_root_mf_filename in
+	(* setup namespace root directory and uobjcoll staging directory *)
+	d_namespace_root_dir_prefix := p_root_dir;
+	d_uobjcoll_staging_dir_prefix := p_staging_dir;
 
 
-  let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var installation_manifest_filename l_json_node_uberspark_manifest_var) in
-        if rval then begin
-          Uberspark.Namespace.set_namespace_root_dir_prefix l_json_node_uberspark_manifest_var.installation.root_directory;
+	(* update namespace module variables*)
+	Uberspark.Namespace.set_namespace_root_dir_prefix !d_namespace_root_dir_prefix;
 
-        end else begin
-          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;
-          ignore (exit 1);
-        end;
-
-  
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (l_json_node_uberspark_manifest_var.installation.default_platform);
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "platform=%s" p_platform;
  
-  Uberspark.Logger.log ~crlf:false "Loading current configuration...";
+	Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
 	let (l_rval, _) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var
-  	((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
-	  l_json_node_uberspark_manifest_var.installation.default_platform ^ "/" ^ 
-	  Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
-  if not l_rval then 
-    begin
-      Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
-      ignore ( exit 1);
-    end
-  ;
+		((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		p_platform ^ "/" ^ 
+		Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
+	if not l_rval then 
+		begin
+		Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
+		ignore ( exit 1);
+		end
+	;
 
-  Uberspark.Logger.log ~tag:"" "[OK]";
+	  Uberspark.Logger.log ~tag:"" "[OK]";
 
-  ()
+  	()
 ;;

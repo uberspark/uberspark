@@ -49,8 +49,8 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val process_uobjcoll_manifest : ?p_in_order:bool -> string -> string list -> (string * string) list -> bool
-val initialize : ?p_log_level:int -> ?p_print_banner:bool -> string list -> unit
+val process_uobjcoll_manifest : ?p_in_order:bool -> ?p_only_stateinit:bool -> string -> string list -> (string * string) list -> bool
+val initialize : ?p_log_level:int -> ?p_print_banner:bool -> string -> string -> string -> string list -> unit
 
 
 
