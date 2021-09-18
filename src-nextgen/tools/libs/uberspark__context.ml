@@ -109,6 +109,17 @@ let get_hwm_manifest_var_assoc_list ()
 	(!d_hwm_manifest_var_assoc_list)
 ;;
 
+(*--------------------------------------------------------------------------*)
+(* 
+	return the cpu hwm manifest var, which is always the 0th entry
+*)
+(*--------------------------------------------------------------------------*)
+let get_hwm_manifest_var_cpu ()
+	: Uberspark.Manifest.uberspark_manifest_var_t = 
+	let (l_cpu_hwm_ns, l_cpu_hwm_manifest_var) = List.nth !d_hwm_manifest_var_assoc_list 0 in
+		(l_cpu_hwm_manifest_var)
+;;
+
 
 (*--------------------------------------------------------------------------*)
 (* 
