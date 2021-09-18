@@ -101,6 +101,17 @@ let d_sentinel_info_for_codegen_list : Uberspark.Codegen.Uobjcoll.sentinel_info_
 
 (*--------------------------------------------------------------------------*)
 (* 
+	return the hwm manifest var hashtable data structure
+*)
+(*--------------------------------------------------------------------------*)
+let get_hwm_manifest_var_hashtbl ()
+	: (string, Uberspark.Manifest.uberspark_manifest_var_t) Hashtbl.t = 
+	(d_hwm_manifest_var_hashtbl)
+;;
+
+
+(*--------------------------------------------------------------------------*)
+(* 
 	parse all hardware models for uobjcoll and bring them into a hwm-namespace, 
 	hwm-manifest variable hash table 
 *)

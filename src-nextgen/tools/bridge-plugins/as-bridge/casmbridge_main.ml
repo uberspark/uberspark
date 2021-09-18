@@ -46,6 +46,8 @@ let run () =
         ignore(exit 1);
     end;
 
+    (* debug: print the number of hwms associated with the uobjcoll *)
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "number of hwms for uobjcoll=%u" (Hashtbl.length (Uberspark.Context.get_hwm_manifest_var_hashtbl ()));
 
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);
