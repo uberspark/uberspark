@@ -1846,7 +1846,10 @@
             "casm_total_operands" : "0",
             "output_assembly" : [
                 "lock "
+            ],
+            "casm_implementation" : [
             ]
+
         },
 
         {
@@ -1887,7 +1890,10 @@
             "casm_total_operands" : "0",
             "output_assembly" : [
                 "sysenter "
+            ],
+            "casm_implementation" : [
             ]
+
         },
 
         {

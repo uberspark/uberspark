@@ -28,6 +28,14 @@ type json_node_uberspark_hwm_cpu_modules_spec_t =
 	mutable fn_decls : json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t list;
 };;
 
+type json_node_uberspark_hwm_cpu_casm_instruction_t =
+{
+	mutable casm_mnemonic : string;
+	mutable casm_total_operands : int;
+	mutable output_assembly : string list;
+	mutable casm_implementation : string list;
+};;
+
 
 type json_node_uberspark_hwm_cpu_t = 
 {
@@ -37,7 +45,7 @@ type json_node_uberspark_hwm_cpu_t =
 	mutable model : string;
 
 	mutable sources: json_node_uberspark_hwm_cpu_modules_spec_t list;
-
+	mutable casm_instructions: (string * json_node_uberspark_hwm_cpu_casm_instruction_t) list;
 };;
 
 type json_node_uberspark_hwm_t = 
@@ -97,10 +105,36 @@ let json_node_uberspark_hwm_cpu_to_var
 			) json_node_uberspark_hwm_cpu_modules_spec_c_list;
 		end;
 
+		if (mf_json |> member "uberspark.hwm.cpu.casm_instructions") <> `Null then
+		begin
+			let json_node_uberspark_hwm_cpu_casm_instructions_list =  
+				mf_json |> member "uberspark.hwm.cpu.casm_instructions" |> to_list in
+			(*let l_entry_count = ref 0 in *)
+
+			List.iter (fun x -> 
+				let f_casm_instruction_element : json_node_uberspark_hwm_cpu_casm_instruction_t = 
+					{ casm_mnemonic = ""; casm_total_operands = 0; output_assembly = []; casm_implementation = [];} in
 
 
-	with Yojson.Basic.Util.Type_error _ -> 
-			retval := false;
+				f_casm_instruction_element.casm_mnemonic <- x |> member "casm_mnemonic" |> to_string;
+				(*l_entry_count := !l_entry_count + 1;
+				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Processing entry: %u: %s" !l_entry_count f_casm_instruction_element.casm_mnemonic;
+				*)
+				f_casm_instruction_element.casm_total_operands <- int_of_string (x |> member "casm_total_operands" |> to_string);
+				f_casm_instruction_element.output_assembly <- json_list_to_string_list (x |> member "output_assembly" |> to_list);
+
+				if (x |> member "casm_implementation") <> `Null then
+					f_casm_instruction_element.casm_implementation <- json_list_to_string_list (x |> member "casm_implementation" |> to_list);
+
+				json_node_uberspark_hwm_var.cpu.casm_instructions <- json_node_uberspark_hwm_var.cpu.casm_instructions @ [ (f_casm_instruction_element.casm_mnemonic, f_casm_instruction_element) ];
+			) json_node_uberspark_hwm_cpu_casm_instructions_list;
+		end;
+
+
+	with Yojson.Basic.Util.Type_error (e, j) -> 
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s" e;
+		
+		retval := false;
 	;
 
 	(!retval)
@@ -163,6 +197,7 @@ let json_node_uberspark_hwm_var_copy
 	output.cpu.addressing 					<- 	input.cpu.addressing				;
 	output.cpu.model  				<- 	input.cpu.model 			;
 	output.cpu.sources  				<- 	input.cpu.sources 			;
+	output.cpu.casm_instructions  				<- 	input.cpu.casm_instructions 			;
 
 	()
 ;;
@@ -181,6 +216,7 @@ let json_node_uberspark_hwm_var_default_value ()
 			model = "";
 
 			sources = [];
+			casm_instructions = [];
 		};
 	}
 ;;

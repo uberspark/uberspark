@@ -54,6 +54,10 @@ let run () =
         l_cpu_hwm_manifest_var.hwm.cpu.addressing
         l_cpu_hwm_manifest_var.hwm.cpu.model;
 
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "cpu hwm casm_instructions count=%u"
+        (List.length l_cpu_hwm_manifest_var.hwm.cpu.casm_instructions); 
+
+
     if Casmbridge_options.CasmGenasm.get() then begin
         Casmbridge_options.CasmGenasm.set(false);
         Uberspark.Logger.log "CASM: Generating Assembly code...";

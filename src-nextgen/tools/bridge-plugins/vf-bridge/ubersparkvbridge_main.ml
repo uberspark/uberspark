@@ -56,6 +56,8 @@ let run () =
         l_cpu_hwm_manifest_var.hwm.cpu.addressing
         l_cpu_hwm_manifest_var.hwm.cpu.model;
 
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "cpu hwm casm_instructions count=%u"
+        (List.length l_cpu_hwm_manifest_var.hwm.cpu.casm_instructions); 
 
     (* this currently adds CASM call and return 
     glue, dumps AST and runs abstract interpretation
