@@ -67,7 +67,7 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_mani
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
 (* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
-let d_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+let d_hwm_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];;
 
 (* hash table of loader manifest variables: maps loader namespace to loader manifest variable *)
 let d_loader_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
@@ -104,9 +104,9 @@ let d_sentinel_info_for_codegen_list : Uberspark.Codegen.Uobjcoll.sentinel_info_
 	return the hwm manifest var hashtable data structure
 *)
 (*--------------------------------------------------------------------------*)
-let get_hwm_manifest_var_hashtbl ()
-	: (string, Uberspark.Manifest.uberspark_manifest_var_t) Hashtbl.t = 
-	(d_hwm_manifest_var_hashtbl)
+let get_hwm_manifest_var_assoc_list ()
+	: (string * Uberspark.Manifest.uberspark_manifest_var_t) list = 
+	(!d_hwm_manifest_var_assoc_list)
 ;;
 
 
@@ -156,7 +156,7 @@ let create_hwm_manifest_var_hashtbl
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(uberspark.hwm.cpu.sources)=%u" 
 			(List.length l_hwm_cpu_manifest_var.hwm.cpu.sources);
 
-		Hashtbl.add d_hwm_manifest_var_hashtbl l_hwm_cpu_namespace l_hwm_cpu_manifest_var;						
+		d_hwm_manifest_var_assoc_list := !d_hwm_manifest_var_assoc_list @ [ (l_hwm_cpu_namespace, l_hwm_cpu_manifest_var)]; 
 	end;
 
 	(!rval)
@@ -1164,7 +1164,7 @@ let process_uobjcoll_manifest
 				d_uberspark_manifest_var
 				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
-				d_hwm_manifest_var_hashtbl
+				!d_hwm_manifest_var_assoc_list
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
 				!d_uobjcoll_staging_dir_prefix
