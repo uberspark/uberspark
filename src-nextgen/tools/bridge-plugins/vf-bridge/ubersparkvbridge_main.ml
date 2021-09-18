@@ -35,6 +35,28 @@ let run () =
     Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: root-dir=%s" (Ubersparkvbridge_options.RootDir.get());
     Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "vf-bridge plugin: staging-dir=%s" (Ubersparkvbridge_options.StagingDir.get());
 
+    Uberspark.Context.initialize ~p_log_level:!Uberspark.Logger.current_level
+        ~p_print_banner:false 
+        (Ubersparkvbridge_options.RootDir.get())
+        (Ubersparkvbridge_options.StagingDir.get())        
+        (Ubersparkvbridge_options.UobjcollPlatformNamespace.get()) [];
+
+    (* bail out if we are unable to process uobjcoll manifest *)
+    if not (Uberspark.Context.process_uobjcoll_manifest ~p_only_stateinit:true
+        (Ubersparkvbridge_options.UobjcollNamespace.get()) [] []) then begin
+        Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to process uobjcoll manifest!";
+        ignore(exit 1);
+    end;
+
+    (* debug: print the number of hwms associated with the uobjcoll *)
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "number of hwms for uobjcoll=%u" (List.length (Uberspark.Context.get_hwm_manifest_var_assoc_list ()));
+    let l_cpu_hwm_manifest_var = Uberspark.Context.get_hwm_manifest_var_cpu () in 
+    Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "cpu arch=%s, addressing=%s, model=%s" 
+        l_cpu_hwm_manifest_var.hwm.cpu.arch
+        l_cpu_hwm_manifest_var.hwm.cpu.addressing
+        l_cpu_hwm_manifest_var.hwm.cpu.model;
+
+
     (* this currently adds CASM call and return 
     glue, dumps AST and runs abstract interpretation
     engine *)
