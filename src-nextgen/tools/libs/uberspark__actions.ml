@@ -48,7 +48,7 @@ let g_namespace_root_dir_prefix = ref "";;
 let g_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];; 
 
 (* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
-let g_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+let g_hwm_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];;
 
 (* hash table of uobjrtl manifest variables: maps uobjrtl namespace to uobjrtl manifest variable *)
 let g_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
@@ -65,7 +65,8 @@ let g_default_action : Uberspark.Manifest.json_node_uberspark_manifest_actions_t
 	targets = [ "build"; "verify"; "docs"; "install"; ];
 	name = "default action";
 	category = "default_action";
-	input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
+	input = ""; output = ""; filter = true;
+	bridge_namespace = ""; bridge_cmd = [];
 	uobj_namespace = "";
 	uobjrtl_namespace = "";
 	loader_namespace = "";
@@ -77,7 +78,8 @@ let new_action_element ()
 	targets = [ "build"; "verify"; "docs"; "install"; ];
 	name = "default action";
 	category = "default_action";
-	input = []; output = []; bridge_namespace = ""; bridge_cmd = [];
+	input = ""; output = ""; filter = true;
+	bridge_namespace = ""; bridge_cmd = [];
 	uobj_namespace = "";
 	uobjrtl_namespace = "";
 	loader_namespace = "";
@@ -116,8 +118,20 @@ let consolidate_actions_uobj
 					{
 						targets = [ "verify"; ];
 						category = "translation";
+						name = "translating .cS to .c";
+						input = ".cS"; output = ".c"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
+						bridge_cmd = [];
+						uobj_namespace = "";
+						uobjrtl_namespace = "";
+						loader_namespace = "";
+					};
+
+					{
+						targets = [ "verify"; ];
+						category = "translation";
 						name = "verifying überSpark invariants";
-						input = [ "*.c" ]; output = [ ]; 
+						input = ".c"; output = ".c"; filter = false;
 						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_vf_uberspark_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; 
 						bridge_cmd = [];
 						uobj_namespace = "";
@@ -129,7 +143,8 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".c"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -139,7 +154,8 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".cS"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -149,7 +165,8 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".s"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -159,7 +176,8 @@ let consolidate_actions_uobj
 						targets = [ "build"; ];
 						name = "translating .S to .o";
 						category = "translation";
-						input = [ "*.S" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".S"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -203,7 +221,8 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".c"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -213,7 +232,8 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".cS"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -223,7 +243,8 @@ let consolidate_actions_uobjrtl
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".s"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -412,7 +433,8 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .c to .o";
 						category = "translation";
-						input = [ "*.c" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".c" ; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_cc_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -422,7 +444,8 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .cS to .o";
 						category = "translation";
-						input = [ "*.cS" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".cS"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_casm_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -432,7 +455,8 @@ let add_default_uobjcoll_actions () :
 						targets = [ "build"; ];
 						name = "translating .s to .o";
 						category = "translation";
-						input = [ "*.s" ]; output = [ "*.o" ]; bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
+						input = ".s"; output = ".o"; filter = true;
+						bridge_namespace = (List.assoc Uberspark.Namespace.namespace_bridge_as_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace; bridge_cmd = [];
 						uobj_namespace = "";
 						uobjrtl_namespace = "";
 						loader_namespace = "";
@@ -445,8 +469,8 @@ let add_default_uobjcoll_actions () :
 		l_uobjcoll_action.targets <- ["build";];
 		l_uobjcoll_action.name <- "uobjcoll binary build action";
 		l_uobjcoll_action.category <- "translation";
-		l_uobjcoll_action.input <- ["*.o";];
-		l_uobjcoll_action.output <- [ "uobjcoll.flat";];
+		l_uobjcoll_action.input <- ".o";
+		l_uobjcoll_action.output <- ".flat";
 		l_uobjcoll_action.bridge_namespace <- (List.assoc Uberspark.Namespace.namespace_bridge_ld_bridge_id g_uberspark_platform_manifest_var.platform.bridges).bridge_namespace;
 					
 		l_actions_list := !l_actions_list @ [ l_uobjcoll_action; ];
@@ -463,7 +487,7 @@ let initialize
 	(p_uobjcoll_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uberspark_platform_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list)
-	(p_hwm_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
+	(p_hwm_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t)  list)
 	(p_uobjrtl_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_loader_manifest_var_hashtbl : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t))
 	(p_triage_dir_prefix : string )
@@ -495,13 +519,13 @@ let initialize
 	let dummy = 0 in begin
 	(* we currently have no default actions for hwm, just copy over the input
 		parameter *)
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(p_hwm_manifest_var_hashtbl)=%u" 
-			(Hashtbl.length p_hwm_manifest_var_hashtbl);
-	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(p_hwm_manifest_var_assoc_list)=%u" 
+			(List.length p_hwm_manifest_var_assoc_list);
+	List.iter ( fun ( (l_hwm_ns: string), (l_hwm_manifest_var: Uberspark.Manifest.uberspark_manifest_var_t) ) ->
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "Added hwm namespace=%s, manifest namespace=%s" 
 			l_hwm_ns l_hwm_manifest_var.hwm.namespace;
-		Hashtbl.add g_hwm_manifest_var_hashtbl l_hwm_ns l_hwm_manifest_var;
-	) p_hwm_manifest_var_hashtbl;
+		g_hwm_manifest_var_assoc_list := !g_hwm_manifest_var_assoc_list @ [(l_hwm_ns, l_hwm_manifest_var)];
+	) p_hwm_manifest_var_assoc_list;
 
 		
 	(* if uobjrtl manifest actions is empty for any given uobjrtl, then add default actions *)
@@ -621,16 +645,13 @@ let initialize
 (*--------------------------------------------------------------------------*)
 (* create and return a list of source files *)
 (* given a manifest var and filename extension *)
-(* if filter specified, it will filter only the files with specified filename extension *)
-(* if replace specified, it will return all files with the extension replaced with *)
-(* the filename extension *)
+(* if manifest var belongs to uobjcoll and p_only_local_sources is true then *)
+(* the returned list will only include uobjcoll local files and not files of the *)
+(* encompassing uobjs and uobjrtl *)
 (*--------------------------------------------------------------------------*)
 let get_sources_filename_list 
 	(p_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)
 	(p_only_local_sources : bool)
-(*)	(p_filename_ext : string) 
-	(p_filename_ext_replace : bool)
-*)
 	: string list =
 
 	let l_return_list : string list ref = ref [] in 
@@ -701,109 +722,84 @@ let get_sources_filename_list
 
 
 (*--------------------------------------------------------------------------*)
-(* given an action with input list, produce the list of input file names *)
+(* given an action, produce the list of input file names *)
 (*--------------------------------------------------------------------------*)
-(* return value, return list, boolean wildcard/nowildcard, sorted list of input extensions *)
+(* returns:  *)
+(* return status (bool), list of input file names *)
 let get_action_input_filename_list 
 	(p_uberspark_action : uberspark_action_t )
-	: bool * string list * bool * string list =
+	: bool * string list =
 
 	let l_retval = ref true in
 	let l_input_list : string list ref = ref [] in 
-	let l_input_has_wildcard = ref false in 
-	let l_input_ext_list : string list ref = ref [] in 
 
 	let l_input_ext_hashtbl = ((Hashtbl.create 32) : ((string, string)  Hashtbl.t)) in
 
-	(* check if the string begins with wildcard characters *)
-	let l_wildcard_check (p_str : string ) : bool =
-		if (Filename.remove_extension p_str) = "*" then begin
-			(true)
-		end else begin
-			(false)
-		end
-	in
 
-	(* input can be wilcard; .c, .cS, .o *)
+	(* input can be wilcard; .c, .cS, .o or empty*)
 	(* input will temporarily also allow .s *)
-	(* input can be a list of files without wildcard *)
 
-	(* check if we have a wildcard in the action input list *)
-	if (List.exists l_wildcard_check p_uberspark_action.uberspark_manifest_action.input) then begin
-		l_input_has_wildcard := true;
+	if p_uberspark_action.uberspark_manifest_action.input = "" then begin
+		(* action input was empty, do nothing *)
+		l_retval := true;
 
-		if List.length p_uberspark_action.uberspark_manifest_action.input = 1 then begin
-			let l_input_wildcard_ext = (Filename.extension (List.nth p_uberspark_action.uberspark_manifest_action.input 0)) in   			
+	end else if (String.sub p_uberspark_action.uberspark_manifest_action.input 0 1) = "." then begin
+ 		(* action input has wildcard *)
+		
+		let l_input_wildcard_ext = p_uberspark_action.uberspark_manifest_action.input in   			
 
-			(* special handling for input *.o *)
-			if l_input_wildcard_ext = ".o" then begin
-				let l_l_input_list : string list ref = ref [] in
-				l_l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var false;
-				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: len(l_l_input_list)=%u" 
-					__LOC__ (List.length !l_l_input_list);
-				l_l_input_list := Uberspark.Utils.filename_list_substitute_extension !l_l_input_list l_input_wildcard_ext;
-				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: len(l_l_input_list)=%u" 
-					__LOC__ (List.length !l_l_input_list);
-			
-
-				List.iter ( fun (l_filename : string) ->
-					(* if bridge namespace is not null *)
-					if p_uberspark_action.uberspark_manifest_action.bridge_namespace <> "" then begin
-
-						(* and bridge namespace points to a container bridge then we add container mount point prefix *)
-						if (Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" ^ 
-							Uberspark.Namespace.namespace_bridge ^ "/")) p_uberspark_action.uberspark_manifest_action.bridge_namespace 0) then begin
-							l_input_list := !l_input_list @ [ Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_filename];
-						
-						end else begin
-						(* else we add staging dir prefix *)
-							l_input_list := !l_input_list @ [ !g_uobjcoll_staging_dir_prefix ^ "/" ^ l_filename];
-						end;
-					end;
-			
-				) !l_l_input_list;
-
-				Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s: len(l_input_list)=%u" 
-					__LOC__ (List.length !l_input_list);
-
-
-			end else begin
-				l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var true;
-				l_input_list := Uberspark.Utils.filename_list_filter_by_extension !l_input_list l_input_wildcard_ext;
-			end;
-
-			l_input_ext_list := !l_input_ext_list @ [ l_input_wildcard_ext; ];
-
-		end else begin
-			Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "%s: action input is a wildcard but has more than 1 element!" __LOC__; 
-			l_retval := false;
-		end;
+		(* special handling for input *.o *)
+		if l_input_wildcard_ext = ".o" then begin
+			let l_l_input_list : string list ref = ref [] in
+			l_l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var false;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s(.o): len(l_l_input_list)=%u" 
+				__LOC__ (List.length !l_l_input_list);
+			l_l_input_list := Uberspark.Utils.filename_list_substitute_extension !l_l_input_list l_input_wildcard_ext;
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s(.o): len(l_l_input_list)=%u" 
+				__LOC__ (List.length !l_l_input_list);
 		
 
+			List.iter ( fun (l_filename : string) ->
+				(* if bridge namespace is not null *)
+				if p_uberspark_action.uberspark_manifest_action.bridge_namespace <> "" then begin
+
+					(* and bridge namespace points to a container bridge then we add container mount point prefix *)
+					if (Str.string_match (Str.regexp_string (Uberspark.Namespace.namespace_root ^ "/" ^ 
+						Uberspark.Namespace.namespace_bridge ^ "/")) p_uberspark_action.uberspark_manifest_action.bridge_namespace 0) then begin
+						l_input_list := !l_input_list @ [ Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ l_filename];
+					
+					end else begin
+					(* else we add staging dir prefix *)
+						l_input_list := !l_input_list @ [ !g_uobjcoll_staging_dir_prefix ^ "/" ^ l_filename];
+					end;
+				end;
+		
+			) !l_l_input_list;
+
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "%s(.o): len(l_input_list)=%u" 
+				__LOC__ (List.length !l_input_list);
+
+
+		end else begin
+			l_input_list := get_sources_filename_list p_uberspark_action.uberspark_manifest_var true;
+			if p_uberspark_action.uberspark_manifest_action.filter then begin 
+				l_input_list := Uberspark.Utils.filename_list_filter_by_extension !l_input_list l_input_wildcard_ext;
+			end else begin
+				l_input_list := Uberspark.Utils.filename_list_substitute_extension !l_input_list l_input_wildcard_ext;
+			end;
+		end;
+
 	end else begin
-		(* no wildcard in the action input list, so copy over the list while storing unique extensions *)
-		l_input_has_wildcard := false;
-
-		List.iter ( fun (l_filename : string) ->
-			l_input_list := !l_input_list @ [ l_filename; ];
-			Hashtbl.remove l_input_ext_hashtbl (Filename.extension l_filename); 
-			Hashtbl.add l_input_ext_hashtbl (Filename.extension l_filename) "";
-		)p_uberspark_action.uberspark_manifest_action.input;
-
-		(* generate sorted list of input extensions *)
-		Hashtbl.iter ( fun (l_filename_ext : string) (l_dummy : string) -> 
-			l_input_ext_list := !l_input_ext_list @ [ l_filename_ext; ];
-		) l_input_ext_hashtbl;
-
-		l_input_ext_list := List.sort compare !l_input_ext_list;
+		(* action input must start with wildcard or be empty *)
+		l_retval := false;
 
 	end;
 
-	(!l_retval, !l_input_list, !l_input_has_wildcard, !l_input_ext_list)
+	(!l_retval, !l_input_list)
 ;;
 
 
-
+(*
 (*--------------------------------------------------------------------------*)
 (* given an action and input filename list, produce the list of output file names *)
 (*--------------------------------------------------------------------------*)
@@ -874,7 +870,7 @@ let get_action_output_filename_list
 
 	(!l_retval, !l_output_list, !l_output_has_wildcard, !l_output_ext_list)
 ;;
-
+*)
 
 
 (*--------------------------------------------------------------------------*)
@@ -892,18 +888,16 @@ let get_action_input_output_filename_lists
 	: bool * string list * string list * bool * bool * string list * string list =
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "> building input file list for action...";
-	let (l_rval_input, l_input_file_list, 
-		l_input_has_wildcard, l_input_ext_list) = 
+	let (l_rval_input, l_input_file_list) = 
 		get_action_input_filename_list p_action in
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug 
-		"> l_rval_input=%b, len(l_input_file_list)=%u, l_input_has_wildcard=%b len(l_input_ext_list)=%u"
-		l_rval_input (List.length l_input_file_list) l_input_has_wildcard
-		(List.length l_input_ext_list);
+		"> l_rval_input=%b, len(l_input_file_list)=%u"
+		l_rval_input (List.length l_input_file_list) ;
 
 	if l_rval_input then begin
 		
-		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "> building ouput file list for action...";
+		(*Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "> building ouput file list for action...";
 		let (l_rval_output, l_output_file_list, 
 			l_output_has_wildcard, l_output_ext_list) = 
 			get_action_output_filename_list p_action l_input_file_list in
@@ -921,7 +915,10 @@ let get_action_input_output_filename_lists
 		end else begin
 			Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to build output file list for action!";
 			(false, [], [], false, false, [], [])
-		end;
+		end;*)
+
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "> successfully built input file list for action";
+		(true, l_input_file_list, [], true, false, [], [])
 
 
 	end else begin
@@ -946,7 +943,7 @@ let get_uobj_verification_aux_sources
 
 	(* grab the hwm sources; we need all .c files with 
 		g_namespace_root_dir_prefix *)
-	Hashtbl.iter (fun (l_hwm_ns : string) (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t)  ->
+	List.iter (fun ( (l_hwm_ns : string), (l_hwm_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t))  ->
 		l_hwm_list := [];
 		l_hwm_list := (get_sources_filename_list l_hwm_manifest_var true);
 		l_hwm_list := Uberspark.Utils.filename_list_append_path_prefix
@@ -955,7 +952,7 @@ let get_uobj_verification_aux_sources
 							!l_hwm_list ".c";
 
 		l_return_list := !l_return_list @ !l_hwm_list;
-	)g_hwm_manifest_var_hashtbl;
+	)!g_hwm_manifest_var_assoc_list;
 
 
 	(* grab the uobjcoll sources; we need all .c files with prefix of
@@ -1020,6 +1017,7 @@ let invoke_bridge
 		let l_bridge_object = Hashtbl.find g_bridge_hashtbl  p_action.uberspark_manifest_action.bridge_namespace in
 		let l_build_dir = ref "" in
 		let l_bridge_cmd : string list ref = ref [] in
+		let l_invoke_bridge_cmd : string list ref = ref [] in 
 
 		if p_action.uberspark_manifest_var.manifest.namespace = "uberspark/uobjcoll" then begin
 			l_build_dir := p_action.uberspark_manifest_var.uobjcoll.namespace;
@@ -1039,45 +1037,63 @@ let invoke_bridge
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "> l_bridge_object category=%s" (l_bridge_object#get_json_node_uberspark_bridge_var).category ;
 		
 		let l_bridge_defs_list : string list ref = ref [] in
-		let l_is_assembly_ext (p_ext : string ) : bool =
-			if (p_ext = ".s") || (p_ext = ".S") then begin
-				(true)
-			end else begin
-				(false)
-			end
-		in
 
-		if (List.exists l_is_assembly_ext p_input_file_ext_list) then begin
+		if p_action.uberspark_manifest_action.input = ".s" ||
+			p_action.uberspark_manifest_action.input = ".S" then begin
 			l_bridge_defs_list := [ "__ASSEMBLY__"; ];
 		end;
 
 
-		(* TBD: match bridge extension with input and output ext lists *)
-		l_retval := l_bridge_object#invoke 
-					~context_path_builddir:!l_build_dir 
-				[
-					("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
-					("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
-					("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", !g_namespace_root_dir_prefix);
-					("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
-					("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
-					("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
-					("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
-					("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
-					("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
-					("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
-					("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
-					("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
-					("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
-					Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_vf_bridge_plugin));
-					("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
-					("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename);
-					("@@BRIDGE_BINARY_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_image_filename);
-					("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_flat_image_filename);
-					("@@BRIDGE_CCLIB_FILENAME@@", (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ Uberspark.Namespace.namespace_uobj_cclib_filename));
-				];
+		(* obtain bridge command to execute based on input and output *)
+		let l_binding = (p_action.uberspark_manifest_action.input ^ "__" ^ p_action.uberspark_manifest_action.output) in
+		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "invoke_bridge: l_binding=%s" l_binding;
 
+		if (List.mem_assoc l_binding (l_bridge_object#get_json_node_uberspark_bridge_var).targets) then begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "using bridge target cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			let l_bridge_target_element = (List.assoc l_binding (l_bridge_object#get_json_node_uberspark_bridge_var).targets) in 
+			l_invoke_bridge_cmd := l_bridge_target_element.cmd; 
+
+		end else if (List.length (l_bridge_object#get_json_node_uberspark_bridge_var).bridge_cmd) > 0 then begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "using bridge_cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			l_invoke_bridge_cmd := l_bridge_object#get_json_node_uberspark_bridge_var.bridge_cmd;
+
+		end else begin
+			Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "could not find bridge cmd for target: %s --> %s!"
+				p_action.uberspark_manifest_action.input p_action.uberspark_manifest_action.output;
+			l_retval := false;
+		end; 
+
+		if (!l_retval) then begin
+			l_retval := l_bridge_object#invoke 
+						~context_path_builddir:!l_build_dir 
+						!l_invoke_bridge_cmd
+					[
+						("@@BRIDGE_UOBJCOLL_NAMESPACE@@", g_uobjcoll_manifest_var.uobjcoll.namespace);
+						("@@BRIDGE_UOBJCOLL_PLATFORM_NAMESPACE@@", g_uobjcoll_manifest_var.uobjcoll.platform);
+						("@@BRIDGE_LOG_LEVEL@@", (Printf.sprintf "%u" !Uberspark.Logger.current_level));
+						("@@BRIDGE_UBERSPARK_ROOT_DIR_PREFIX@@", (Uberspark.Namespace.get_namespace_root_dir_prefix ()));
+						("@@BRIDGE_UBERSPARK_STAGING_DIR_PREFIX@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
+						("@@BRIDGE_CMD@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:" && " !l_bridge_cmd));
+						("@@BRIDGE_INPUT_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
+						("@@BRIDGE_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string p_input_file_list));
+						("@@BRIDGE_AUX_SOURCE_FILES@@", (Uberspark.Bridge.bridge_parameter_to_string (get_uobj_verification_aux_sources ())));
+						("@@BRIDGE_INCLUDE_DIRS@@", (Uberspark.Bridge.bridge_parameter_to_string [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
+						("@@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-I " [ "."; !g_uobjcoll_staging_dir_prefix; Uberspark.Namespace.namespace_bridge_container_mountpoint; !g_namespace_root_dir_prefix; ]));
+						("@@BRIDGE_COMPILEDEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
+						("@@BRIDGE_COMPILEDEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
+						("@@BRIDGE_DEFS@@", (Uberspark.Bridge.bridge_parameter_to_string !l_bridge_defs_list));
+						("@@BRIDGE_DEFS_WITH_PREFIX@@", (Uberspark.Bridge.bridge_parameter_to_string ~prefix:"-D " !l_bridge_defs_list));
+						("@@BRIDGE_PLUGIN_DIR@@", ((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^
+						Uberspark.Namespace.namespace_root ^ "/" ^ Uberspark.Namespace.namespace_root_bridge_plugins));
+						("@@BRIDGE_CONTAINER_MOUNT_POINT@@", Uberspark.Namespace.namespace_bridge_container_mountpoint);
+						("@@BRIDGE_LSCRIPT_FILENAME@@",	Uberspark.Namespace.namespace_uobjcoll_linkerscript_filename);
+						("@@BRIDGE_BINARY_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_image_filename);
+						("@@BRIDGE_BINARY_FLAT_FILENAME@@", Uberspark.Namespace.namespace_uobjcoll_binary_flat_image_filename);
+						("@@BRIDGE_CCLIB_FILENAME@@", (Uberspark.Namespace.namespace_bridge_container_mountpoint ^ "/" ^ Uberspark.Namespace.namespace_uobj_cclib_filename));
+					];
+		end;
 
 	end else begin
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "unable to find entry in bridge hashtbl for bridge_namespace=%s!"
@@ -1118,6 +1134,8 @@ let initialize_bridges ()
 				let l_rval = (l_bridge_object#load l_action.uberspark_manifest_action.bridge_namespace) in
 				
 				if l_rval then begin
+					Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "number of bridge targets: %u" 
+						(List.length (l_bridge_object#get_json_node_uberspark_bridge_var).targets);
 
 					(* if bridge cateogory is container, then build the bridge *)
 					if (l_bridge_object#get_json_node_uberspark_bridge_var).category = "container" then begin

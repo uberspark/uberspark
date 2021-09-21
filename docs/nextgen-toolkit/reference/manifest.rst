@@ -202,20 +202,31 @@ A supported bridge is described by a bridge manifest node which follows the gene
             "command1",
             "command2",
             ...
-        }
+        },
+
+        "uberspark.bridge.targets" : [
+            {
+                "input" : ".x",
+                "output" : ".y",
+                "cmd" : [
+                    "command1"
+                ]
+            }
+
+        ]
     }
 
-The JSON declaration of the ``uberspark.bridges.xxx`` nodes are as below:
+The JSON declaration of the ``uberspark.bridge.xxx`` nodes are as below:
 
-.. json:object:: uberspark.bridges.xxx
+.. json:object:: uberspark.bridge.xxx
 
-   :property uberspark.bridges.namespace: namespace for the bridge of the format - "uberspark/bridges/<category>/<devenv>/<bridge-type>/<name>/<arch>/<cpu>/<name>/<version>"
-   :proptype uberspark.bridges.namespace: string
-   :options uberspark.bridges.namespace: <category>=container or native; <devenv>=amd64; <bridge-type>=as-bridge,cc-bridge,ld-bridge,vf-bridge,loader-bridge; <arch>=x86_32,armv8_32; <cpu>=generic; <name>=name of the bridge; <version>=vx.y.z
+   :property uberspark.bridge.namespace: namespace for the bridge of the format - "uberspark/bridges/<category>/<devenv>/<bridge-type>/<name>/<arch>/<cpu>/<name>/<version>"
+   :proptype uberspark.bridge.namespace: string
+   :options uberspark.bridge.namespace: <category>=container or native; <devenv>=amd64; <bridge-type>=as-bridge,cc-bridge,ld-bridge,vf-bridge,loader-bridge; <arch>=x86_32,armv8_32; <cpu>=generic; <name>=name of the bridge; <version>=vx.y.z
    
-   :property uberspark.bridges.category: category of the bridge
-   :proptype uberspark.bridges.category: string
-   :options uberspark.bridges.category: "container", "native"
+   :property uberspark.bridge.category: category of the bridge
+   :proptype uberspark.bridge.category: string
+   :options uberspark.bridge.category: "container", "native"
 
    :property uberspark.bridge.container_build_filename: if uberspark.bridges.category is container, then specifies the container build filename
    :proptype uberspark.bridge.container_build_filename: string
@@ -225,7 +236,22 @@ The JSON declaration of the ``uberspark.bridges.xxx`` nodes are as below:
    :proptype uberspark.bridge.bridge_cmd: string list
    :options uberspark.bridge.bridge_cmd: 
 
-An example definition of the ``uberspark.bridged.xxx`` nodes for the GNU-as Assembler, within |ubersparkmff| follows:
+   :property uberspark.bridge.targets: comma delimited list of bridge target sub-nodes
+   :proptype uberspark.bridge.targets: :json:object:`targets` list
+
+.. json:object:: targets
+
+   :property input: wildcard of input files
+   :proptype input: string 
+   
+   :property output: wildcard of output files
+   :proptype output: string 
+
+   :property cmd: comma seperated string list of commands to be executed for the bridge target
+   :proptype cmd: string list
+
+
+An example definition of the ``uberspark.bridge.xxx`` nodes for the GNU-as Assembler, within |ubersparkmff| follows:
 
 .. code-block:: JSON
     
@@ -252,6 +278,69 @@ An example definition of the ``uberspark.bridged.xxx`` nodes for the GNU-as Asse
 .. note::   Here the Assembler bridge type is defined to be a container and ``uberspark_bridges.Dockerfile``
             is the container dockerfile that includes the build for running GNU-as within an ``amd64`` 
             environment (e.g., ubuntu or alpine)
+
+
+Below is another example definition of the ``uberspark.bridge.xxx`` nodes for the |uspark|
+CASM Assembler, within |ubersparkmff|. This example serves to demonstrate the use of the
+``uberspark.bridge.targets`` node definition.
+
+
+.. code-block:: JSON
+    
+    {
+            "uberspark.manifest.namespace" : "uberspark/bridges",
+            "uberspark.manifest.version_min" : "any",
+            "uberspark.manifest.version_max" : "any",
+
+            "uberspark.bridge.namespace" : "uberspark/bridges/container/amd64/as-bridge/armv8_32/generic/casm/vlatest",
+            "uberspark.bridge.category" : "container",
+            "uberspark.bridge.container_build_filename" : "uberspark_bridges.Dockerfile",
+
+            "uberspark.bridge.targets" : [
+                {
+                    "input" : ".cS",
+                    "output" : ".c",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.c ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c ; done"
+                    ]
+                },
+
+                {
+                    "input" : ".cS",
+                    "output" : ".s",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.s ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s ; done"
+                    ]
+                },
+
+                {
+                    "input" : ".cS",
+                    "output" : ".o",
+                    "cmd" : [
+                        "export var_bridge_include_dirs_with_prefix",
+                        "export var_bridge_source_files",
+                        "var_bridge_include_dirs_with_prefix=\" @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ \"",
+                        "var_bridge_source_files=\" @@BRIDGE_SOURCE_FILES@@ \"",
+                        "vararray_bridge_source_files=$(echo $var_bridge_source_files | tr \" \" \"\\n\")",
+                        "for source_file_name in $vararray_bridge_source_files; do echo \"CASM target: ${source_file_name} --> ${source_file_name%.*}.o ...\" && cp -f ${source_file_name} ${source_file_name%.*}.c && ccomp @@BRIDGE_INCLUDE_DIRS_WITH_PREFIX@@ -O0 -fpacked-structs -c -dmach ${source_file_name%.*}.c && rm -f ${source_file_name%.*}.o && export vtmp=`dirname ${source_file_name}` && vtmp1=`basename ${source_file_name}` && mv -f ${vtmp1%.*}.mach ${vtmp}/. 2>/dev/null; true  && frama-c -load-module @@BRIDGE_PLUGIN_DIR@@/Ubersparkvbridge -machdep gcc_x86_32 -kernel-msg-key pp -casm -casm-infile ${source_file_name%.*}.mach -casm-outfile ${source_file_name%.*}.s && gcc @@BRIDGE_COMPILEDEFS_WITH_PREFIX@@ -m32 -c ${var_bridge_include_dirs_with_prefix} ${source_file_name%.*}.s -o ${source_file_name%.*}.o ; done"
+                    ]
+                }
+
+
+            ]
+
+    }
+
 
 
 .. note::   Variables within ``@@`` are special bridge environment variables that are pre-populated by 

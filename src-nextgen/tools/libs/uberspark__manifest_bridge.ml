@@ -13,6 +13,13 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
+type json_node_uberspark_bridge_target_t =
+{
+	mutable input : string;
+	mutable output : string;
+	mutable cmd: string list;
+};;
+
 
 (* bridge-hdr json node type *)
 type json_node_uberspark_bridge_t = {
@@ -20,6 +27,7 @@ type json_node_uberspark_bridge_t = {
 	mutable category : string;
 	mutable container_build_filename: string;
 	mutable bridge_cmd : string list;
+	mutable targets : (string * json_node_uberspark_bridge_target_t) list;
 }
 ;;
 
@@ -64,6 +72,54 @@ let json_node_bridge_hdr_to_var
 ;;
 
 
+(*--------------------------------------------------------------------------*)
+(* parse manifest json node "uberspark.bridge.targets" into var *)
+(* return: *)
+(* on success: true; association list of type (string * json_node_uberspark_uobj_uobjrtl_t) *)
+(* on failure: false; null list *)
+(*--------------------------------------------------------------------------*)
+let json_node_uberspark_bridge_targets_to_var
+	(mf_json : Yojson.Basic.t)
+	: bool *  ((string * json_node_uberspark_bridge_target_t) list)
+=
+		
+	let retval = ref true in
+	let bridge_targets_assoc_list : (string * json_node_uberspark_bridge_target_t) list ref = ref [] in 
+
+	try
+		let open Yojson.Basic.Util in
+			let bridge_targets_json = mf_json |> member "uberspark.bridge.targets" in
+				if bridge_targets_json != `Null then
+					begin
+
+						let bridge_targets_list = Yojson.Basic.Util.to_list bridge_targets_json in
+							
+							List.iter (fun x ->
+								let f_target_element : json_node_uberspark_bridge_target_t = 
+									{ input = ""; output = ""; cmd = []; } in
+								
+								f_target_element.input <- Yojson.Basic.Util.to_string (x |> member "input");
+								f_target_element.output <- Yojson.Basic.Util.to_string (x |> member "output");
+								f_target_element.cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "cmd" x));
+
+								let l_key = (f_target_element.input ^ "__" ^ f_target_element.output) in 
+								Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "bridge manifest targets: l_key=%s" l_key;
+								bridge_targets_assoc_list := !bridge_targets_assoc_list @ [ (l_key, f_target_element) ];
+													
+								()
+							) bridge_targets_list;
+
+					end
+				;
+														
+	with Yojson.Basic.Util.Type_error _ -> 
+			retval := false;
+	;
+
+							
+	(!retval, !bridge_targets_assoc_list)
+;;
+
 
 
 (*--------------------------------------------------------------------------*)
@@ -81,14 +137,16 @@ let json_node_uberspark_bridge_to_var
 
 	try
 		let open Yojson.Basic.Util in
-			let rval = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_var in
+			let rval1 = json_node_bridge_hdr_to_var mf_json json_node_uberspark_bridge_var in
+			let (rval2, json_node_uberspark_bridge_targets_var) = (json_node_uberspark_bridge_targets_to_var mf_json) in
 
-				if rval then begin
-					if (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json) <> `Null then
-						json_node_uberspark_bridge_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
+			if rval2 then
+				json_node_uberspark_bridge_var.targets <- json_node_uberspark_bridge_targets_var;
 
-					retval := true;
-				end;
+			if (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json) <> `Null then
+				json_node_uberspark_bridge_var.bridge_cmd <- json_list_to_string_list ( Yojson.Basic.Util.to_list (Yojson.Basic.Util.member "uberspark.bridge.bridge_cmd" mf_json));
+
+			retval := true;
 
 	with Yojson.Basic.Util.Type_error _ -> 
 			retval := false;
@@ -114,6 +172,7 @@ let json_node_uberspark_bridge_var_copy
 	output.category <- input.category; 
 	output.container_build_filename <- input.container_build_filename ; 
 	output.bridge_cmd <- input.bridge_cmd; 
+	output.targets <- input.targets;
 
 	()
 ;;
@@ -129,6 +188,7 @@ let json_node_uberspark_bridge_var_default_value ()
 		category = "";
 		container_build_filename = "";
 		bridge_cmd = [];
+		targets = [];
 	}
 ;;
 

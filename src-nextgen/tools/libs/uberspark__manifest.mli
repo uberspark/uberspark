@@ -19,8 +19,9 @@ type json_node_uberspark_manifest_actions_t =
 	mutable category : string;
 
 	(* if category == translation *)
-	mutable input : string list;
-	mutable output : string list;
+	mutable input : string;
+	mutable output : string;
+  mutable filter : bool;
 	mutable bridge_namespace: string; 
 	mutable bridge_cmd : string list; 
 	
@@ -72,12 +73,20 @@ module Bridge : sig
   (* manifest node types *)
   (****************************************************************************)
 
+  type json_node_uberspark_bridge_target_t =
+  {
+    mutable input : string;
+    mutable output : string;
+    mutable cmd: string list;
+  };;
+
   (* bridge-hdr json node type *)
   type json_node_uberspark_bridge_t = {
     mutable namespace : string;
     mutable category : string;
     mutable container_build_filename: string;
     mutable bridge_cmd : string list;
+    mutable targets: (string * json_node_uberspark_bridge_target_t) list;
   }
 
   val json_node_uberspark_bridge_to_var : Yojson.Basic.t -> json_node_uberspark_bridge_t -> bool
@@ -384,6 +393,14 @@ type json_node_uberspark_hwm_cpu_modules_spec_t =
 	mutable fn_decls : json_node_uberspark_hwm_cpu_modules_spec_module_funcdecls_t list;
 }
 
+type json_node_uberspark_hwm_cpu_casm_instruction_t =
+{
+	mutable casm_mnemonic : string;
+	mutable casm_total_operands : int;
+	mutable output_assembly : string list;
+	mutable casm_implementation : string list;
+}
+
 
 type json_node_uberspark_hwm_cpu_t = 
 {
@@ -393,7 +410,7 @@ type json_node_uberspark_hwm_cpu_t =
 	mutable model : string;
 
 	mutable sources: json_node_uberspark_hwm_cpu_modules_spec_t list;
-
+	mutable casm_instructions: (string * json_node_uberspark_hwm_cpu_casm_instruction_t) list;
 }
 
 type json_node_uberspark_hwm_t = 

@@ -26,23 +26,23 @@ test bridges when contributing bridges to the framework.
 The |uspark| bridge namespace for containerized bridges has
 the following format:
 
-``uberspark/bridges/<type>/container/<devenv-arch>/<arch>/<cpu>/<name>/<version>/``
+``uberspark/bridges/container/<devenv-arch>/<type>/<arch>/<cpu>/<name>/<version>/``
 
 and the corresponding bridge *manifest* and source files
 that describes the bridge details are housed within the following 
 framework source directory:
 
-``src-nextgen/bridges/<type>/container/<devenv-arch>/<arch>/<cpu>/<name>/<version>/``
+``src-nextgen/bridges/container/<devenv-arch>/<type>/<arch>/<cpu>/<name>/<version>/``
 
 
 Similarly, for |uspark| native bridges the namespace is as below:
 
-``uberspark/bridges/<type>/native/<arch>/<cpu>/<name>/<version>/``
+``uberspark/bridges/native/<type>/<arch>/<cpu>/<name>/<version>/``
 
 and the corresponding bridge *manifest* and source files are
 are housed within the following framework source directory:
 
-``src-nextgen/bridges/<type>/native/<arch>/<cpu>/<name>/<version>/``
+``src-nextgen/bridges/native/<type>/<arch>/<cpu>/<name>/<version>/``
 
 The following is a description of the various placeholders
 within the aforementioned namespace and source directory layout:
@@ -110,7 +110,7 @@ to the framework source:
                for the specific container architecture and distribution.
                Templates for Ubuntu and Alpine distributions for
                ``amd64`` architecture can be found within:
-               ``src-nextgen/bridges/common/container/amd64``. 
+               ``src-nextgen/bridges/container/amd64/common``. 
                Copy the relevant ``.template`` file to the bridge 
                |ubersparkbridgedff| and customize sections labeled
                as *CUSTOMIZABLE* with the bridge specific details
@@ -124,7 +124,7 @@ to the framework source:
 Removing a Bridge
 -----------------
 
-1. Identify the `<type>` of bridge you want to add. See 
+1. Identify the `<type>` of bridge you want to remove. See 
    :ref:`contrib-guide-bridges-nsdirlayout` to see the current
    bridge types supported.
 
@@ -143,16 +143,16 @@ Building/Testing a Bridge
 -------------------------
 
 Briges supported by containers can be built and tested via
-the commaldn line tool interface (see :ref:`frontend-cli-intro`) as below:
+the command line tool interface (see :ref:`frontend-cli-intro`) as below:
 
-``uberspark bridge config --cc-bridge --build <bridge-ns>``
+``uberspark bridge config --build <bridge-ns>``
 
 where `<bridge-ns>` is the bridge namespace as described in
-:ref:`contrib-guide-bridges-nsdirlayout` without the `container` prefix.
+:ref:`contrib-guide-bridges-nsdirlayout`.
 
 The following example builds the Compcert v3.1 compiler bridge:
 
-``uberspark bridge config --cc-bridge --build amd64/x86_32/generic/compcert/v3.1``
+``uberspark bridge config --build uberspark/bridges/container/amd64/cc-bridge/x86_32/generic/compcert/v3.1``
 
 ..  note::  The above command uses `--cc-bridge` to identify a 
             compiler bridge. See and |reference-manifest-ref|:::ref:`frontend-cli-bridges`

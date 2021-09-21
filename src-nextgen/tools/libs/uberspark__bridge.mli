@@ -72,7 +72,8 @@ object
 	(*method store : unit -> bool*)
 	method build : unit -> bool
 	method invoke :
-	?context_path_builddir:string -> 
+	?context_path_builddir:string ->
+	string list -> 
 	(string * string) list ->
 	bool
 

@@ -5,13 +5,6 @@ open Uberspark
 open Cmdliner
 
 type opts = { 
-  ar_bridge: bool;
-  as_bridge: bool;
-  cc_bridge: bool;
-  ld_bridge: bool;
-  pp_bridge: bool;
-  vf_bridge: bool;
-  loader_bridge: bool;
   build: bool;
   output_directory: string option;
   bridge_exectype : string option;
@@ -19,24 +12,12 @@ type opts = {
 
 (* fold all bridges options into type opts *)
 let cmd_bridge_opts_handler 
-  (ar_bridge: bool)
-  (as_bridge: bool)
-  (cc_bridge: bool)
-  (ld_bridge: bool)
-  (pp_bridge: bool)
-  (vf_bridge: bool)
-  (loader_bridge: bool)
   (build : bool)
   (output_directory: string option)
   (bridge_exectype : string option)
   : opts = 
-  { ar_bridge=ar_bridge;
-    as_bridge=as_bridge;
-    cc_bridge=cc_bridge;
-    ld_bridge=ld_bridge;
-    pp_bridge=pp_bridge;
-    vf_bridge=vf_bridge;
-    loader_bridge=loader_bridge;
+  { 
+    
     build=build;
     output_directory=output_directory;
     bridge_exectype=bridge_exectype;
@@ -47,40 +28,6 @@ let cmd_bridge_opts_handler
 let cmd_bridge_opts_t =
   let docs = "ACTION OPTIONS" in
   
-  let ar_bridge =
-  let doc = "Select archiver (ar) bridge namespace prefix." in
-  Arg.(value & flag & info ["ar"; "ar-bridge"] ~doc ~docs)
-  in
-
-  let as_bridge =
-  let doc = "Select assembler (as) bridge namespace prefix." in
-  Arg.(value & flag & info ["as"; "as-bridge"] ~doc ~docs)
-  in
-
-  let cc_bridge =
-  let doc = "Select compiler (cc) bridge namespace prefix." in
-  Arg.(value & flag & info ["cc"; "cc-bridge"] ~doc ~docs)
-  in
-
-  let ld_bridge =
-  let doc = "Select linker (ld) bridge namespace prefix." in
-  Arg.(value & flag & info ["ld"; "ld-bridge"] ~doc ~docs)
-  in
-
-  let pp_bridge =
-  let doc = "Select pre-processor (pp) bridge namespace prefix." in
-  Arg.(value & flag & info ["pp"; "pp-bridge"] ~doc ~docs)
-  in
-
-  let vf_bridge =
-  let doc = "Select verification (vf) bridge namespace prefix." in
-  Arg.(value & flag & info ["vf"; "vf-bridge"] ~doc ~docs)
-  in
-
-  let loader_bridge =
-  let doc = "Select loader bridge namespace prefix." in
-  Arg.(value & flag & info ["loader"; "loader-bridge"] ~doc ~docs)
-  in
 
   let build =
   let doc = "Build the bridge if bridge execution type is 'container'" in
@@ -98,7 +45,7 @@ let cmd_bridge_opts_t =
   in
 
 
-  Term.(const cmd_bridge_opts_handler $ ar_bridge $ as_bridge $ cc_bridge $ ld_bridge $ pp_bridge $ vf_bridge $ loader_bridge $ build $ output_directory $ bridge_exectype)
+  Term.(const cmd_bridge_opts_handler $ build $ output_directory $ bridge_exectype)
 
 
 
@@ -201,6 +148,26 @@ let handler_bridges_action_config
         begin
           l_path_ns := path_ns_qname;
 
+          let l_bridge_object : Uberspark.Bridge.bridge_object = new Uberspark.Bridge.bridge_object in
+          let l_rval = (l_bridge_object#load !l_path_ns) in
+
+  				if l_rval then begin
+
+            (* if bridge cateogory is container, then build the bridge *)
+            if (l_bridge_object#get_json_node_uberspark_bridge_var).category = "container" then begin
+              if not (l_bridge_object#build ()) then begin
+                retval := `Error (false, "could not build bridge!");
+              end else begin
+                retval := `Ok();
+              end;
+            end;
+ 
+          end else begin
+            retval := `Error (false, "unable to load bridge manifest!");
+          end
+          ;  
+
+
           (* 
             TBD: use the namespace and Uberspark.Bridge. to create
             a new bridge object, load and build the container 
@@ -282,26 +249,32 @@ let handler_bridge
 
   let retval : [> `Error of bool * string | `Ok of unit ] ref = ref (`Ok ()) in
 
-  match action with
-    | `Config -> 
- 
-      retval := handler_bridges_action_config p_copts cmd_bridges_opts path_ns;
+  (* initialize operation context *)
+  if (Common.initialize_operation_context p_copts) then begin
+  
+    match action with
+      | `Config -> 
+  
+        retval := handler_bridges_action_config p_copts cmd_bridges_opts path_ns;
 
-    | `Create -> 
-      retval := handler_bridges_action_create p_copts cmd_bridges_opts path_ns;
+      | `Create -> 
+        retval := handler_bridges_action_create p_copts cmd_bridges_opts path_ns;
 
-    | `Dump ->
+      | `Dump ->
 
-      retval := handler_bridges_action_dump p_copts cmd_bridges_opts path_ns;
+        retval := handler_bridges_action_dump p_copts cmd_bridges_opts path_ns;
 
 
-    | `Remove -> 
+      | `Remove -> 
 
-      retval := handler_bridges_action_remove p_copts cmd_bridges_opts path_ns;
+        retval := handler_bridges_action_remove p_copts cmd_bridges_opts path_ns;
 
-  ;
+    ;
 
-    (!retval)
+  end else begin
+    retval := `Error (false, "unable to initialize operation context!");
+  end;
 
+  (!retval)
 
 ;;

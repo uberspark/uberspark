@@ -49,8 +49,10 @@
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
 
-val process_uobjcoll_manifest : ?p_in_order:bool -> string -> string list -> (string * string) list -> bool
-val initialize : ?p_log_level:int -> ?p_print_banner:bool -> string list -> unit
+val get_hwm_manifest_var_cpu : unit -> Uberspark.Manifest.uberspark_manifest_var_t 
+val get_hwm_manifest_var_assoc_list : unit -> (string * Uberspark.Manifest.uberspark_manifest_var_t) list 
+val process_uobjcoll_manifest : ?p_in_order:bool -> ?p_only_stateinit:bool -> string -> string list -> (string * string) list -> bool
+val initialize : ?p_log_level:int -> ?p_print_banner:bool -> string -> string -> string -> string list -> unit
 
 
 

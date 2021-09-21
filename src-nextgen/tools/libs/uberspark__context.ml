@@ -67,7 +67,7 @@ let d_uobj_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_mani
 let d_uobjrtl_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
 
 (* hash table of hwm manifest variables: maps hwm namespace to hwm manifest variable *)
-let d_hwm_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
+let d_hwm_manifest_var_assoc_list : (string * Uberspark.Manifest.uberspark_manifest_var_t) list ref = ref [];;
 
 (* hash table of loader manifest variables: maps loader namespace to loader manifest variable *)
 let d_loader_manifest_var_hashtbl = ((Hashtbl.create 32) : ((string, Uberspark.Manifest.uberspark_manifest_var_t)  Hashtbl.t));;
@@ -97,6 +97,28 @@ let d_sentinel_info_for_codegen_list : Uberspark.Codegen.Uobjcoll.sentinel_info_
 (* interface definitions *)
 (*---------------------------------------------------------------------------*)
 (*---------------------------------------------------------------------------*)
+
+
+(*--------------------------------------------------------------------------*)
+(* 
+	return the hwm manifest var hashtable data structure
+*)
+(*--------------------------------------------------------------------------*)
+let get_hwm_manifest_var_assoc_list ()
+	: (string * Uberspark.Manifest.uberspark_manifest_var_t) list = 
+	(!d_hwm_manifest_var_assoc_list)
+;;
+
+(*--------------------------------------------------------------------------*)
+(* 
+	return the cpu hwm manifest var, which is always the 0th entry
+*)
+(*--------------------------------------------------------------------------*)
+let get_hwm_manifest_var_cpu ()
+	: Uberspark.Manifest.uberspark_manifest_var_t = 
+	let (l_cpu_hwm_ns, l_cpu_hwm_manifest_var) = List.nth !d_hwm_manifest_var_assoc_list 0 in
+		(l_cpu_hwm_manifest_var)
+;;
 
 
 (*--------------------------------------------------------------------------*)
@@ -145,7 +167,7 @@ let create_hwm_manifest_var_hashtbl
 		Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "length(uberspark.hwm.cpu.sources)=%u" 
 			(List.length l_hwm_cpu_manifest_var.hwm.cpu.sources);
 
-		Hashtbl.add d_hwm_manifest_var_hashtbl l_hwm_cpu_namespace l_hwm_cpu_manifest_var;						
+		d_hwm_manifest_var_assoc_list := !d_hwm_manifest_var_assoc_list @ [ (l_hwm_cpu_namespace, l_hwm_cpu_manifest_var)]; 
 	end;
 
 	(!rval)
@@ -902,9 +924,13 @@ let initialize_uobjcoll_sources
 
 
 
-
+(* process uobjcoll manifest and carry out required actions. 
+	actions are suppressed if p_only_stateinit is true
+	we are already within the uobjcoll staging directory when this is called
+*)
 let process_uobjcoll_manifest
 	?(p_in_order = true) 
+	?(p_only_stateinit = false) 
 	(p_uobjcoll_ns : string)
 	(p_targets : string list)
 	(p_options : (string * string)list )
@@ -912,6 +938,7 @@ let process_uobjcoll_manifest
 
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "process_manifest_common (p_uobjcoll_ns=%s)..." p_uobjcoll_ns;
 
+(*
 	(* get current working directory *)
 	let l_cwd = Uberspark.Osservices.getcurdir() in
 
@@ -924,17 +951,21 @@ let process_uobjcoll_manifest
 		(false) 
 	end else
 
+
 	(* announce working directory and store in triage dir prefix*)
 	let l_dummy=0 in begin
 	d_uobjcoll_staging_dir_prefix := l_cwd_abs;
 	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "current working directory: %s" !d_uobjcoll_staging_dir_prefix;
 	end;
 
-	(* announce staging directory and store in staging dir prefix*)
+	(* announce root directory and store in root dir prefix*)
 	let l_dummy=0 in begin
 	d_namespace_root_dir_prefix := Uberspark.Namespace.get_namespace_root_dir_prefix ();
-	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_namespace_root_dir_prefix;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "root-directory directory: %s" !d_namespace_root_dir_prefix;
 	end;
+*)
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "root-directory directory: %s" !d_namespace_root_dir_prefix;
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging directory: %s" !d_uobjcoll_staging_dir_prefix;
 
 	(* read manifest file into manifest variable *)
 	let abspath_mf_filename = (!d_uobjcoll_staging_dir_prefix ^ "/" ^ p_uobjcoll_ns ^ "/" ^ Uberspark.Namespace.namespace_root_mf_filename) in 
@@ -1075,7 +1106,7 @@ let process_uobjcoll_manifest
 
 			(* iterate through uobjrtl list and copy uobjrtl sources to triage area *)
 			let l_dummy=0 in begin
-			retval := copy_uobjrtl_to_triage ();
+			if p_only_stateinit = false then retval := copy_uobjrtl_to_triage ();
 			end;
 
 			if (!retval) == false then
@@ -1084,7 +1115,7 @@ let process_uobjcoll_manifest
 
 			(* iterate through loader list and copy loader sources to triage area *)
 			let l_dummy=0 in begin
-			retval := copy_loaders_to_triage ();
+			if p_only_stateinit = false then retval := copy_loaders_to_triage ();
 			end;
 
 			if (!retval) == false then
@@ -1094,7 +1125,7 @@ let process_uobjcoll_manifest
 
 			(* generate sentinels for uobjcoll methods *)
 			let l_dummy=0 in begin
-			retval := generate_sentinels_for_uobjcoll_methods ();
+			if p_only_stateinit = false then retval := generate_sentinels_for_uobjcoll_methods ();
 			end;
 
 			if (!retval) == false then
@@ -1104,7 +1135,7 @@ let process_uobjcoll_manifest
 
 			(* generate uobjcoll header file *)
 			let l_dummy=0 in begin
-			retval := generate_uobjcoll_header_file ();
+			if p_only_stateinit = false then retval := generate_uobjcoll_header_file ();
 			end;
 
 			if (!retval) == false then
@@ -1113,7 +1144,7 @@ let process_uobjcoll_manifest
 
 			(* generate header files for uobjs *)
 			let l_dummy=0 in begin
-			retval := generate_header_files_for_uobjs ();
+			if p_only_stateinit = false then retval := generate_header_files_for_uobjs ();
 			end;
 
 			if (!retval) == false then
@@ -1131,7 +1162,7 @@ let process_uobjcoll_manifest
 
 			(* generate uobjcoll linker script *)
 			let l_dummy=0 in begin
-			retval := generate_uobjcoll_linker_script ();
+			if p_only_stateinit = false then retval := generate_uobjcoll_linker_script ();
 			end;
 
 			if (!retval) == false then
@@ -1140,11 +1171,11 @@ let process_uobjcoll_manifest
 
 			(* initialize actions *)
 			let l_dummy=0 in begin
-			retval := (Uberspark.Actions.initialize 
+			if p_only_stateinit = false then retval := (Uberspark.Actions.initialize 
 				d_uberspark_manifest_var
 				d_uobjcoll_platform_manifest_var
 				!d_uobj_manifest_var_assoc_list
-				d_hwm_manifest_var_hashtbl
+				!d_hwm_manifest_var_assoc_list
 				d_uobjrtl_manifest_var_hashtbl
 				d_loader_manifest_var_hashtbl
 				!d_uobjcoll_staging_dir_prefix
@@ -1159,7 +1190,7 @@ let process_uobjcoll_manifest
 
 			(* process actions *)
 			let l_dummy=0 in begin
-			retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets p_options;
+			if p_only_stateinit = false then retval := Uberspark.Actions.process_actions ~p_in_order:p_in_order p_targets p_options;
 			end;
 
 			if (!retval) == false then
@@ -1188,12 +1219,18 @@ let process_uobjcoll_manifest
 (*--------------------------------------------------------------------------*)
 (* 
   initialize operating context
+
+  takes in root directory --> where uberspark is installed and
+  staging directory --> where uobjcoll build and verification is staged
 *)
 (*--------------------------------------------------------------------------*)
 
 let initialize
 	?(p_log_level = (Uberspark.Logger.ord Info)) 
-  ?(p_print_banner = true)
+	?(p_print_banner = true)
+	(p_root_dir : string)
+	(p_staging_dir : string)
+	(p_platform : string)
 	(p_banner : string list)
   : unit =
 
@@ -1210,43 +1247,32 @@ let initialize
     ) p_banner;
   end;
 
-  let l_json_node_uberspark_manifest_var : Uberspark.Manifest.uberspark_manifest_var_t = 
-		  (Uberspark.Manifest.uberspark_manifest_var_default_value ()) in
-
-  (* setup namespace root directory *)
-  (* we open the installation manifest to figure out the root directory *)
-  let installation_manifest_filename = Uberspark.Namespace.namespace_installation_configdir ^ "/" ^
-        Uberspark.Namespace.namespace_root_mf_filename in
+	(* setup namespace root directory and uobjcoll staging directory *)
+	d_namespace_root_dir_prefix := p_root_dir;
+	d_uobjcoll_staging_dir_prefix := p_staging_dir;
 
 
-  let (rval, mf_json) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var installation_manifest_filename l_json_node_uberspark_manifest_var) in
-        if rval then begin
-          Uberspark.Namespace.set_namespace_root_dir_prefix l_json_node_uberspark_manifest_var.installation.root_directory;
+	(* update namespace module variables*)
+	Uberspark.Namespace.set_namespace_root_dir_prefix !d_namespace_root_dir_prefix;
 
-        end else begin
-          Uberspark.Logger.log ~lvl:Uberspark.Logger.Error "Malformed installation configuration manifest at: %s" installation_manifest_filename;
-          ignore (exit 1);
-        end;
-
-  
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
-  Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "default platform=%s" (l_json_node_uberspark_manifest_var.installation.default_platform);
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "namespace root dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "staging dir prefix=%s" (Uberspark.Namespace.get_namespace_root_dir_prefix ());
+	Uberspark.Logger.log ~lvl:Uberspark.Logger.Debug "platform=%s" p_platform;
  
-  Uberspark.Logger.log ~crlf:false "Loading current configuration...";
+	Uberspark.Logger.log ~crlf:false "Loading current configuration...";
 
 	let (l_rval, _) = (Uberspark.Manifest.manifest_file_to_uberspark_manifest_var
-  	((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
-	  l_json_node_uberspark_manifest_var.installation.default_platform ^ "/" ^ 
-	  Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
-  if not l_rval then 
-    begin
-      Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
-      ignore ( exit 1);
-    end
-  ;
+		((Uberspark.Namespace.get_namespace_root_dir_prefix ()) ^ "/" ^ 
+		p_platform ^ "/" ^ 
+		Uberspark.Namespace.namespace_root_mf_filename)) d_uobjcoll_platform_manifest_var in
+	if not l_rval then 
+		begin
+		Uberspark.Logger.log ~tag:"" "[ERROR - exiting]";
+		ignore ( exit 1);
+		end
+	;
 
-  Uberspark.Logger.log ~tag:"" "[OK]";
+	  Uberspark.Logger.log ~tag:"" "[OK]";
 
-  ()
+  	()
 ;;
