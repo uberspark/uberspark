@@ -309,7 +309,7 @@
             "casm_mnemonic" : "__casm__add_sp_sp_imm",
             "casm_total_operands" : "1",
             "output_assembly" : [
-                "add sp, sp, #1:
+                "add sp, sp, #1"
             ],
             "casm_implementation" : [
                 "_impl__casm__add_sp_sp_imm(#1)"
@@ -320,7 +320,7 @@
             "casm_mnemonic" : "__casm__and_imm_r7_r7",
             "casm_total_operands" : "1",
             "output_assembly" : [
-                "and r7, r7, #1
+                "and r7, r7, #1"
             ],
             "casm_implementation" : [
                 "_impl__casm__and_imm_r7_r7(#1)"
