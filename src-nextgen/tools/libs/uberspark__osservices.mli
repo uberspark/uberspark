@@ -27,6 +27,8 @@ val getcurdir : unit -> string
 
 val file_copy : string -> string -> unit
 
+val file_append: string -> string -> unit
+
 val cp  : ?recurse:bool -> ?force:bool -> ?parents:bool -> string -> string -> unit
 
 
