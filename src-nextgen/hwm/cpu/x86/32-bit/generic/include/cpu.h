@@ -2644,807 +2644,806 @@ extern void _impl__casm__addl_ecx_eax(void);
 
 
 
-////// branch instructions
+  
+/* // direct jump to local function label */
+/* #define __casm__jmplabel(x) \ */
+/* 	__builtin_annot("jmp "#x" "); \ */
+/* 	if(1) goto x; \ */
 
-// direct jump to local function label
-#define __casm__jmplabel(x) \
-	__builtin_annot("jmp "#x" "); \
-	if(1) goto x; \
+/* // conditional jump (on carry) to local function label */
+/* #define __casm__jc(x) \ */
+/* 	__builtin_annot("jc "#x" "); \ */
+/* 	if(hwm_cpu_eflags & EFLAGS_CF) goto x; \ */
+
+/* // conditional jump (on NOT carry) to local function label */
+/* #define __casm__jnc(x) \ */
+/* 	__builtin_annot("jnc "#x" "); \ */
+/* 	if(!(hwm_cpu_eflags & EFLAGS_CF)) goto x; \ */
 
-// conditional jump (on carry) to local function label
-#define __casm__jc(x) \
-	__builtin_annot("jc "#x" "); \
-	if(hwm_cpu_eflags & EFLAGS_CF) goto x; \
+/* // conditional jump (on zero) to local function label */
+/* #define __casm__jz(x) \ */
+/* 	__builtin_annot("jz "#x" "); \ */
+/* 	if((hwm_cpu_eflags & EFLAGS_ZF)) goto x; \ */
 
-// conditional jump (on NOT carry) to local function label
-#define __casm__jnc(x) \
-	__builtin_annot("jnc "#x" "); \
-	if(!(hwm_cpu_eflags & EFLAGS_CF)) goto x; \
+/* // conditional jump (on NOT zero) to local function label */
+/* #define __casm__jnz(x) \ */
+/* 	__builtin_annot("jnz "#x" "); \ */
+/* 	if(!(hwm_cpu_eflags & EFLAGS_ZF)) goto x; \ */
+
+/* // conditional jump (on equal) to local function label */
+/* #define __casm__je(x) \ */
+/* 	__builtin_annot("je "#x" "); \ */
+/* 	if(hwm_cpu_eflags & EFLAGS_ZF) goto x; \ */
 
-// conditional jump (on zero) to local function label
-#define __casm__jz(x) \
-	__builtin_annot("jz "#x" "); \
-	if((hwm_cpu_eflags & EFLAGS_ZF)) goto x; \
+/* // conditional jump (on below or equal) to local function label */
+/* #define __casm__jbe(x) \ */
+/* 	__builtin_annot("jbe "#x" "); \ */
+/* 	if((hwm_cpu_eflags & EFLAGS_ZF) && (hwm_cpu_eflags & EFLAGS_CF)) goto x; \ */
+
+/* // conditional jump (on above) to local function label */
+/* #define __casm__ja(x) \ */
+/* 	__builtin_annot("ja "#x" "); \ */
+/* 	if(!(hwm_cpu_eflags & EFLAGS_ZF) && !(hwm_cpu_eflags & EFLAGS_CF)) goto x; \ */
 
-// conditional jump (on NOT zero) to local function label
-#define __casm__jnz(x) \
-	__builtin_annot("jnz "#x" "); \
-	if(!(hwm_cpu_eflags & EFLAGS_ZF)) goto x; \
+
+/* #define __casm__call(x) __builtin_annot("call "#x" "); */
+
+/* #define __casm__call_c(fn_name) \ */
+/* 	__builtin_annot("call "#fn_name" "); \ */
+/* 	_impl__casm__pushl_mem(CASM_RET_EIP); \ */
+/* 	fn_name(); \ */
+
+/* #define __casm__call_c_1p(fn_name, fn_p1_type) \ */
+/* 	__builtin_annot("call "#fn_name" "); \ */
+/* 	_impl__casm__pushl_mem(CASM_RET_EIP); \ */
+/* 	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_esp+4)) ); \ */
+
+/* #define __casm__call_c_2p(fn_name, fn_p1_type, fn_p2_type) \ */
+/* 	__builtin_annot("call "#fn_name" "); \ */
+/* 	_impl__casm__pushl_mem(CASM_RET_EIP); \ */
+/* 	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_esp+4)) , (fn_p2_type) *((uint32_t *)(hwm_cpu_gprs_esp+8)) ); \ */
+
+
+
+
+/* #define __casm__ret() \ */
+/* 	__builtin_annot("ret "); \ */
+/*         hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/* 	return; \ */
+
+/* #define __casm__retu32() \ */
+/* 	__builtin_annot("ret "); \ */
+/*         hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/* 	return hwm_cpu_gprs_eax; \ */
+
+/* #define __casm__retu64() \ */
+/* 	__builtin_annot("ret "); \ */
+/*         hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/* 	return (uint64_t)(((uint64_t)hwm_cpu_gprs_edx << 32) | hwm_cpu_gprs_eax); \ */
+
+/* #define __casm__lret() \ */
+/* 	__builtin_annot("lret "); \ */
+/*         hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/*         hwm_cpu_cs_selector = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/* 	return; \ */
+
+
+
+
+
+/* #define __casm__jmpapentry() \ */
+/* 	__builtin_annot("jmpl *%eax "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_vdriver_apentry(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+/* #define __casm__jmpsmpcommon() \ */
+/* 	__builtin_annot("jmp gp_s5_entry "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_vdriver_smpcommon(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+
+/* #define __casm__jmpsentinel() \ */
+/* 	__builtin_annot("movl $0x02400000, %eax"); \ */
+/* 	__builtin_annot("jmpl *%eax "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_vdriver_sentinel(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+
+/* #define __casm__jmpslabep() \ */
+/* 	__builtin_annot("jmpl *%eax "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_cpu_gprs_eip = hwm_cpu_gprs_eax; \ */
+/* 	hwm_vdriver_slabep(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+
+/* #define __casm__jmpvhslabretaddr() \ */
+/* 	__builtin_annot("ret "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \ */
+/* 	hwm_cpu_gprs_esp += sizeof(uint32_t); \ */
+/* 	hwm_vdriver_vhslabretaddr(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+
+/* #define __casm__jmpuhslabretaddr() \ */
+/* 	__builtin_annot("sysexit "); \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	hwm_cpu_gprs_eip = hwm_cpu_gprs_edx; \ */
+/* 	hwm_cpu_gprs_esp = hwm_cpu_gprs_ecx; \ */
+/* 	hwm_vdriver_uhslabretaddr(); \ */
+/* 	_impl__casm__hlt(); \ */
+
+
+/* ////// */
+/* // load/store instructions */
+/* ////// */
+/* #define __casm__cld() \ */
+/* 	__builtin_annot("cld"); \ */
+/* 	_impl__casm__cld(); \ */
+
+/* #define __casm__rep_movsb() \ */
+/* 	__builtin_annot("rep movsb"); \ */
+/* 	_impl__casm__rep_movsb(); \ */
+
+/* #define __casm__rep_movsb_sys2obj() \ */
+/* 	__builtin_annot("rep movsb"); \ */
+/* 	_impl__casm__rep_movsb_sysmem(SYSMEMCOPYSYS2OBJ); \ */
+
+/* #define __casm__rep_movsb_obj2sys() \ */
+/* 	__builtin_annot("rep movsb"); \ */
+/* 	_impl__casm__rep_movsb_sysmem(SYSMEMCOPYOBJ2SYS); \ */
+
+/* #define __casm__movl_imm_eax(x) \ */
+/* 	__builtin_annot("movl $"#x", %eax"); \ */
+/* 	_impl__casm__movl_imm_eax(x); \ */
+
+/* #define __casm__movl_imm_esp(x) \ */
+/* 	__builtin_annot("movl $"#x", %esp"); \ */
+/* 	_impl__casm__movl_imm_esp(x); \ */
+
+/* #define __casm__movl_imm_esi(x) \ */
+/* 	__builtin_annot("movl $"#x", %esi"); \ */
+/* 	_impl__casm__movl_imm_esi(x); \ */
+
+/* #define __casm__movl_imm_ebx(x) \ */
+/* 	__builtin_annot("movl $"#x", %ebx"); \ */
+/* 	_impl__casm__movl_imm_ebx(x); \ */
+
+/* #define __casm__movl_imm_ecx(x) \ */
+/* 	__builtin_annot("movl $"#x", %ecx"); \ */
+/* 	_impl__casm__movl_imm_ecx(x); \ */
+
+/* #define __casm__movl_imm_edx(x) \ */
+/* 	__builtin_annot("movl $"#x", %edx"); \ */
+/* 	_impl__casm__movl_imm_edx(x); \ */
+
+/* #define __casm__movl_imm_edi(x) \ */
+/* 	__builtin_annot("movl $"#x", %edi"); \ */
+/* 	_impl__casm__movl_imm_edi(x); \ */
+
+/* #define __casm__movw_imm_ax(x) \ */
+/* 	__builtin_annot("movw $"#x", %ax"); \ */
+/* 	_impl__casm__movw_imm_ax(x); \ */
+
+/* #define __casm__movl_imm_mesp(x,y) \ */
+/* 	__builtin_annot("movl $"#x", "#y"(%esp) "); \ */
+/* 	_impl__casm__movl_imm_mesp(x,y); \ */
+
+/* #define __casm__movl_imm_meax(x,y) \ */
+/* 	__builtin_annot("movl $"#x", "#y"(%eax) "); \ */
+/* 	_impl__casm__movl_imm_meax(x,y); \ */
+
+/* #define __casm__cmpl_imm_meax(x,y) \ */
+/* 	__builtin_annot("cmpl $"#x", "#y"(%eax) "); \ */
+/* 	_impl__casm__cmpl_imm_meax(x,y); \ */
+
+/* #define __casm__movl_ecx_meax(x) \ */
+/* 	__builtin_annot("movl %ecx, "#x"(%eax) "); \ */
+/* 	_impl__casm__movl_ecx_meax(x); \ */
+
+/* #define __casm__movl_edx_meax(x) \ */
+/* 	__builtin_annot("movl %edx, "#x"(%eax) "); \ */
+/*         _impl__casm__movl_edx_meax(x); \ */
+
+/* #define __casm__movl_eax_mesp(x) \ */
+/* 	__builtin_annot("movl %eax, "#x"(%esp) "); \ */
+/* 	_impl__casm__movl_eax_mesp(x); \ */
+
+/* #define __casm__movl_eax_esp() \ */
+/* 	__builtin_annot("movl %eax, %esp "); \ */
+/* 	_impl__casm__movl_eax_esp(); \ */
+
+/* #define __casm__movl_edx_esp() \ */
+/* 	__builtin_annot("movl %edx, %esp "); \ */
+/*         _impl__casm__movl_edx_esp(); \ */
+
+/* #define __casm__movl_mesp_eax(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %eax "); \ */
+/* 	_impl__casm__movl_mesp_eax(x); \ */
+
+/* #define __casm__movw_mesp_ax(x) \ */
+/* 	__builtin_annot("movw "#x"(%esp), %ax ");\ */
+/* 	_impl__casm__movw_mesp_ax(x); \ */
+
+/* #define __casm__movl_mesp_ebx(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %ebx "); \ */
+/* 	_impl__casm__movl_mesp_ebx(x); \ */
+
+/* #define __casm__movl_mesp_ecx(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %ecx "); \ */
+/* 	_impl__casm__movl_mesp_ecx(x); \ */
+
+/* #define __casm__movl_mesp_edx(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %edx "); \ */
+/* 	_impl__casm__movl_mesp_edx(x); \ */
+
+/* #define __casm__movl_eax_ebx() \ */
+/* 	__builtin_annot("movl %eax, %ebx "); \ */
+/* 	_impl__casm__movl_eax_ebx(); \ */
+
+/* #define __casm__movl_eax_edi() \ */
+/* 	__builtin_annot("movl %eax, %edi "); \ */
+/* 	_impl__casm__movl_eax_edi(); \ */
+
+/* #define __casm__movl_mesp_esi(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %esi "); \ */
+/* 	_impl__casm__movl_mesp_esi(x); \ */
+
+/* #define __casm__movl_mesp_edi(x) \ */
+/* 	__builtin_annot("movl "#x"(%esp), %edi "); \ */
+/* 	_impl__casm__movl_mesp_edi(x); \ */
+
+/* #define __casm__movl_mecx_eax(x) \ */
+/* 	__builtin_annot("movl "#x"(%ecx), %eax "); \ */
+/* 	_impl__casm__movl_mecx_eax(x); \ */
+
+/* #define __casm__movl_mecx_edx(x) \ */
+/* 	__builtin_annot("movl "#x"(%ecx), %edx "); \ */
+/* 	_impl__casm__movl_mecx_edx(x); \ */
+
+/* #define __casm__movl_eax_mesi(x) \ */
+/* 	__builtin_annot("movl %eax, "#x"(%esi) "); \ */
+/* 	_impl__casm__movl_eax_mesi(x); \ */
+
+/* #define __casm__movl_ebx_mesi(x) \ */
+/* 	__builtin_annot("movl %ebx, "#x"(%esi) "); \ */
+/* 	_impl__casm__movl_ebx_mesi(x); \ */
+
+/* #define __casm__movl_ecx_mesi(x) \ */
+/* 	__builtin_annot("movl %ecx, "#x"(%esi) "); \ */
+/* 	_impl__casm__movl_ecx_mesi(x); \ */
+
+/* #define __casm__movl_edx_mesi(x) \ */
+/* 	__builtin_annot("movl %edx, "#x"(%esi) "); \ */
+/* 	_impl__casm__movl_edx_mesi(x); \ */
+
+/* #define __casm__movl_meax_eax(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %eax "); \ */
+/*         _impl__casm__movl_meax_eax(x); \ */
+
+/* #define __casm__movl_meax_ebx(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %ebx "); \ */
+/* 	_impl__casm__movl_meax_ebx(x); \ */
+
+/* #define __casm__movl_meax_ecx(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %ecx "); \ */
+/* 	_impl__casm__movl_meax_ecx(x); \ */
+
+/* #define __casm__movl_meax_edx(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %edx "); \ */
+/* 	_impl__casm__movl_meax_edx(x); \ */
+
+/* #define __casm__movl_meax_edi(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %edi "); \ */
+/* 	_impl__casm__movl_meax_edi(x); \ */
+
+/* #define __casm__movl_meax_esi(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %esi "); \ */
+/* 	_impl__casm__movl_meax_esi(x); \ */
+
+/* #define __casm__movl_meax_ebp(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %ebp "); \ */
+/*         _impl__casm__movl_meax_ebp(x); \ */
+
+/* #define __casm__movl_meax_esp(x) \ */
+/* 	__builtin_annot("movl "#x"(%eax), %esp "); \ */
+/*         _impl__casm__movl_meax_esp(x); \ */
+
+/* #define __casm__movl_mebx_ebx(x) \ */
+/* 	__builtin_annot("movl "#x"(%ebx), %ebx "); \ */
+/* 	_impl__casm__movl_mebx_ebx(x); \ */
+
+/* #define __casm__movl_mecx_ecx(x) \ */
+/* 	__builtin_annot("movl "#x"(%ecx), %ecx "); \ */
+/* 	_impl__casm__movl_mecx_ecx(x); \ */
+
+/* #define __casm__movl_medx_edx(x) \ */
+/* 	__builtin_annot("movl "#x"(%edx), %edx "); \ */
+/* 	_impl__casm__movl_medx_edx(x); \ */
+
+/* #define __casm__movl_mesi_eax(x) \ */
+/* 	__builtin_annot("movl "#x"(%esi), %eax "); \ */
+/* 	_impl__casm__movl_mesi_eax(x); \ */
+
+/* #define __casm__movl_mesi_edx(x) \ */
+/* 	__builtin_annot("movl "#x"(%esi), %edx "); \ */
+/* 	_impl__casm__movl_mesi_edx(x); \ */
+
+/* #define	__casm__movb_al_mesi(x) \ */
+/* 	__builtin_annot("movb %al,"#x"(%esi)"); \ */
+/* 	_impl__casm__movb_al_mesi(x); \ */
+
+/* #define	__casm__movw_ax_mesi(x) \ */
+/* 	__builtin_annot("movw %ax,"#x"(%esi)"); \ */
+/* 	_impl__casm__movw_ax_mesi(x); \ */
+
+/* #define __casm__movl_edx_ecx() \ */
+/* 	__builtin_annot("movl %edx, %ecx "); \ */
+/* 	_impl__casm__movl_edx_ecx(); \ */
+
+/* #define __casm__movl_eax_ecx() \ */
+/* 	__builtin_annot("movl %eax, %ecx "); \ */
+/* 	_impl__casm__movl_eax_ecx(); \ */
 
-// conditional jump (on equal) to local function label
-#define __casm__je(x) \
-	__builtin_annot("je "#x" "); \
-	if(hwm_cpu_eflags & EFLAGS_ZF) goto x; \
+/* #define __casm__movl_esp_eax() \ */
+/* 	__builtin_annot("movl %esp, %eax "); \ */
+/* 	_impl__casm__movl_esp_eax(); \ */
 
-// conditional jump (on below or equal) to local function label
-#define __casm__jbe(x) \
-	__builtin_annot("jbe "#x" "); \
-	if((hwm_cpu_eflags & EFLAGS_ZF) && (hwm_cpu_eflags & EFLAGS_CF)) goto x; \
+/* #define __casm__movl_esp_ecx() \ */
+/* 	__builtin_annot("movl %esp, %ecx "); \ */
+/* 	_impl__casm__movl_esp_ecx(); \ */
 
-// conditional jump (on above) to local function label
-#define __casm__ja(x) \
-	__builtin_annot("ja "#x" "); \
-	if(!(hwm_cpu_eflags & EFLAGS_ZF) && !(hwm_cpu_eflags & EFLAGS_CF)) goto x; \
+/* #define __casm__movl_esp_edx() \ */
+/* 	__builtin_annot("movl %esp, %edx "); \ */
+/* 	_impl__casm__movl_esp_edx(); \ */
 
+/* #define __casm__pushl_ebp() \ */
+/* 	__builtin_annot("pushl %ebp "); \ */
+/* 	_impl__casm__pushl_ebp(); \ */
 
-#define __casm__call(x) __builtin_annot("call "#x" ");
+/* #define __casm__pushl_edi() \ */
+/* 	__builtin_annot("pushl %edi "); \ */
+/* 	_impl__casm__pushl_edi(); \ */
 
-#define __casm__call_c(fn_name) \
-	__builtin_annot("call "#fn_name" "); \
-	_impl__casm__pushl_mem(CASM_RET_EIP); \
-	fn_name(); \
-
-#define __casm__call_c_1p(fn_name, fn_p1_type) \
-	__builtin_annot("call "#fn_name" "); \
-	_impl__casm__pushl_mem(CASM_RET_EIP); \
-	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_esp+4)) ); \
-
-#define __casm__call_c_2p(fn_name, fn_p1_type, fn_p2_type) \
-	__builtin_annot("call "#fn_name" "); \
-	_impl__casm__pushl_mem(CASM_RET_EIP); \
-	fn_name( (fn_p1_type) *((uint32_t *)(hwm_cpu_gprs_esp+4)) , (fn_p2_type) *((uint32_t *)(hwm_cpu_gprs_esp+8)) ); \
+/* #define __casm__pushl_esi() \ */
+/* 	__builtin_annot("pushl %esi "); \ */
+/*         _impl__casm__pushl_esi(); \ */
 
+/* #define __casm__pushl_eax() \ */
+/* 	__builtin_annot("pushl %eax "); \ */
+/* 	_impl__casm__pushl_eax(); \ */
 
-
-
-#define __casm__ret() \
-	__builtin_annot("ret "); \
-        hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-	return; \
+/* #define __casm__pushl_ebx() \ */
+/* 	__builtin_annot("pushl %ebx "); \ */
+/* 	_impl__casm__pushl_ebx(); \ */
 
-#define __casm__retu32() \
-	__builtin_annot("ret "); \
-        hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-	return hwm_cpu_gprs_eax; \
-
-#define __casm__retu64() \
-	__builtin_annot("ret "); \
-        hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-	return (uint64_t)(((uint64_t)hwm_cpu_gprs_edx << 32) | hwm_cpu_gprs_eax); \
+/* #define __casm__pushl_ecx() \ */
+/* 	__builtin_annot("pushl %ecx "); \ */
+/* 	_impl__casm__pushl_ecx(); \ */
 
-#define __casm__lret() \
-	__builtin_annot("lret "); \
-        hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-        hwm_cpu_cs_selector = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-	return; \
+/* #define __casm__pushl_edx() \ */
+/* 	__builtin_annot("pushl %edx "); \ */
+/* 	_impl__casm__pushl_edx(); \ */
 
-
-
+/* #define __casm__pushl_esp() \ */
+/* 	__builtin_annot("pushl %esp "); \ */
+/* 	_impl__casm__pushl_esp(); \ */
 
+/* #define __casm__pushl_mesp(x) \ */
+/* 	__builtin_annot("pushl "#x"(%esp) ");\ */
+/* 	_impl__casm__pushl_mesp(x);\ */
 
-#define __casm__jmpapentry() \
-	__builtin_annot("jmpl *%eax "); \
-	__builtin_annot("hlt "); \
-	hwm_vdriver_apentry(); \
-	_impl__casm__hlt(); \
-
-#define __casm__jmpsmpcommon() \
-	__builtin_annot("jmp gp_s5_entry "); \
-	__builtin_annot("hlt "); \
-	hwm_vdriver_smpcommon(); \
-	_impl__casm__hlt(); \
-
-
-#define __casm__jmpsentinel() \
-	__builtin_annot("movl $0x02400000, %eax"); \
-	__builtin_annot("jmpl *%eax "); \
-	__builtin_annot("hlt "); \
-	hwm_vdriver_sentinel(); \
-	_impl__casm__hlt(); \
-
-
-#define __casm__jmpslabep() \
-	__builtin_annot("jmpl *%eax "); \
-	__builtin_annot("hlt "); \
-	hwm_cpu_gprs_eip = hwm_cpu_gprs_eax; \
-	hwm_vdriver_slabep(); \
-	_impl__casm__hlt(); \
-
-
-#define __casm__jmpvhslabretaddr() \
-	__builtin_annot("ret "); \
-	__builtin_annot("hlt "); \
-	hwm_cpu_gprs_eip = *(uint32_t *)hwm_cpu_gprs_esp; \
-	hwm_cpu_gprs_esp += sizeof(uint32_t); \
-	hwm_vdriver_vhslabretaddr(); \
-	_impl__casm__hlt(); \
-
-
-#define __casm__jmpuhslabretaddr() \
-	__builtin_annot("sysexit "); \
-	__builtin_annot("hlt "); \
-	hwm_cpu_gprs_eip = hwm_cpu_gprs_edx; \
-	hwm_cpu_gprs_esp = hwm_cpu_gprs_ecx; \
-	hwm_vdriver_uhslabretaddr(); \
-	_impl__casm__hlt(); \
-
-
-//////
-// load/store instructions
-//////
-#define __casm__cld() \
-	__builtin_annot("cld"); \
-	_impl__casm__cld(); \
-
-#define __casm__rep_movsb() \
-	__builtin_annot("rep movsb"); \
-	_impl__casm__rep_movsb(); \
-
-#define __casm__rep_movsb_sys2obj() \
-	__builtin_annot("rep movsb"); \
-	_impl__casm__rep_movsb_sysmem(SYSMEMCOPYSYS2OBJ); \
-
-#define __casm__rep_movsb_obj2sys() \
-	__builtin_annot("rep movsb"); \
-	_impl__casm__rep_movsb_sysmem(SYSMEMCOPYOBJ2SYS); \
-
-#define __casm__movl_imm_eax(x) \
-	__builtin_annot("movl $"#x", %eax"); \
-	_impl__casm__movl_imm_eax(x); \
-
-#define __casm__movl_imm_esp(x) \
-	__builtin_annot("movl $"#x", %esp"); \
-	_impl__casm__movl_imm_esp(x); \
-
-#define __casm__movl_imm_esi(x) \
-	__builtin_annot("movl $"#x", %esi"); \
-	_impl__casm__movl_imm_esi(x); \
-
-#define __casm__movl_imm_ebx(x) \
-	__builtin_annot("movl $"#x", %ebx"); \
-	_impl__casm__movl_imm_ebx(x); \
-
-#define __casm__movl_imm_ecx(x) \
-	__builtin_annot("movl $"#x", %ecx"); \
-	_impl__casm__movl_imm_ecx(x); \
-
-#define __casm__movl_imm_edx(x) \
-	__builtin_annot("movl $"#x", %edx"); \
-	_impl__casm__movl_imm_edx(x); \
-
-#define __casm__movl_imm_edi(x) \
-	__builtin_annot("movl $"#x", %edi"); \
-	_impl__casm__movl_imm_edi(x); \
-
-#define __casm__movw_imm_ax(x) \
-	__builtin_annot("movw $"#x", %ax"); \
-	_impl__casm__movw_imm_ax(x); \
-
-#define __casm__movl_imm_mesp(x,y) \
-	__builtin_annot("movl $"#x", "#y"(%esp) "); \
-	_impl__casm__movl_imm_mesp(x,y); \
-
-#define __casm__movl_imm_meax(x,y) \
-	__builtin_annot("movl $"#x", "#y"(%eax) "); \
-	_impl__casm__movl_imm_meax(x,y); \
-
-#define __casm__cmpl_imm_meax(x,y) \
-	__builtin_annot("cmpl $"#x", "#y"(%eax) "); \
-	_impl__casm__cmpl_imm_meax(x,y); \
-
-#define __casm__movl_ecx_meax(x) \
-	__builtin_annot("movl %ecx, "#x"(%eax) "); \
-	_impl__casm__movl_ecx_meax(x); \
-
-#define __casm__movl_edx_meax(x) \
-	__builtin_annot("movl %edx, "#x"(%eax) "); \
-        _impl__casm__movl_edx_meax(x); \
-
-#define __casm__movl_eax_mesp(x) \
-	__builtin_annot("movl %eax, "#x"(%esp) "); \
-	_impl__casm__movl_eax_mesp(x); \
-
-#define __casm__movl_eax_esp() \
-	__builtin_annot("movl %eax, %esp "); \
-	_impl__casm__movl_eax_esp(); \
-
-#define __casm__movl_edx_esp() \
-	__builtin_annot("movl %edx, %esp "); \
-        _impl__casm__movl_edx_esp(); \
-
-#define __casm__movl_mesp_eax(x) \
-	__builtin_annot("movl "#x"(%esp), %eax "); \
-	_impl__casm__movl_mesp_eax(x); \
-
-#define __casm__movw_mesp_ax(x) \
-	__builtin_annot("movw "#x"(%esp), %ax ");\
-	_impl__casm__movw_mesp_ax(x); \
-
-#define __casm__movl_mesp_ebx(x) \
-	__builtin_annot("movl "#x"(%esp), %ebx "); \
-	_impl__casm__movl_mesp_ebx(x); \
-
-#define __casm__movl_mesp_ecx(x) \
-	__builtin_annot("movl "#x"(%esp), %ecx "); \
-	_impl__casm__movl_mesp_ecx(x); \
-
-#define __casm__movl_mesp_edx(x) \
-	__builtin_annot("movl "#x"(%esp), %edx "); \
-	_impl__casm__movl_mesp_edx(x); \
-
-#define __casm__movl_eax_ebx() \
-	__builtin_annot("movl %eax, %ebx "); \
-	_impl__casm__movl_eax_ebx(); \
-
-#define __casm__movl_eax_edi() \
-	__builtin_annot("movl %eax, %edi "); \
-	_impl__casm__movl_eax_edi(); \
-
-#define __casm__movl_mesp_esi(x) \
-	__builtin_annot("movl "#x"(%esp), %esi "); \
-	_impl__casm__movl_mesp_esi(x); \
-
-#define __casm__movl_mesp_edi(x) \
-	__builtin_annot("movl "#x"(%esp), %edi "); \
-	_impl__casm__movl_mesp_edi(x); \
-
-#define __casm__movl_mecx_eax(x) \
-	__builtin_annot("movl "#x"(%ecx), %eax "); \
-	_impl__casm__movl_mecx_eax(x); \
-
-#define __casm__movl_mecx_edx(x) \
-	__builtin_annot("movl "#x"(%ecx), %edx "); \
-	_impl__casm__movl_mecx_edx(x); \
-
-#define __casm__movl_eax_mesi(x) \
-	__builtin_annot("movl %eax, "#x"(%esi) "); \
-	_impl__casm__movl_eax_mesi(x); \
-
-#define __casm__movl_ebx_mesi(x) \
-	__builtin_annot("movl %ebx, "#x"(%esi) "); \
-	_impl__casm__movl_ebx_mesi(x); \
-
-#define __casm__movl_ecx_mesi(x) \
-	__builtin_annot("movl %ecx, "#x"(%esi) "); \
-	_impl__casm__movl_ecx_mesi(x); \
-
-#define __casm__movl_edx_mesi(x) \
-	__builtin_annot("movl %edx, "#x"(%esi) "); \
-	_impl__casm__movl_edx_mesi(x); \
-
-#define __casm__movl_meax_eax(x) \
-	__builtin_annot("movl "#x"(%eax), %eax "); \
-        _impl__casm__movl_meax_eax(x); \
-
-#define __casm__movl_meax_ebx(x) \
-	__builtin_annot("movl "#x"(%eax), %ebx "); \
-	_impl__casm__movl_meax_ebx(x); \
-
-#define __casm__movl_meax_ecx(x) \
-	__builtin_annot("movl "#x"(%eax), %ecx "); \
-	_impl__casm__movl_meax_ecx(x); \
-
-#define __casm__movl_meax_edx(x) \
-	__builtin_annot("movl "#x"(%eax), %edx "); \
-	_impl__casm__movl_meax_edx(x); \
-
-#define __casm__movl_meax_edi(x) \
-	__builtin_annot("movl "#x"(%eax), %edi "); \
-	_impl__casm__movl_meax_edi(x); \
-
-#define __casm__movl_meax_esi(x) \
-	__builtin_annot("movl "#x"(%eax), %esi "); \
-	_impl__casm__movl_meax_esi(x); \
-
-#define __casm__movl_meax_ebp(x) \
-	__builtin_annot("movl "#x"(%eax), %ebp "); \
-        _impl__casm__movl_meax_ebp(x); \
-
-#define __casm__movl_meax_esp(x) \
-	__builtin_annot("movl "#x"(%eax), %esp "); \
-        _impl__casm__movl_meax_esp(x); \
-
-#define __casm__movl_mebx_ebx(x) \
-	__builtin_annot("movl "#x"(%ebx), %ebx "); \
-	_impl__casm__movl_mebx_ebx(x); \
-
-#define __casm__movl_mecx_ecx(x) \
-	__builtin_annot("movl "#x"(%ecx), %ecx "); \
-	_impl__casm__movl_mecx_ecx(x); \
-
-#define __casm__movl_medx_edx(x) \
-	__builtin_annot("movl "#x"(%edx), %edx "); \
-	_impl__casm__movl_medx_edx(x); \
-
-#define __casm__movl_mesi_eax(x) \
-	__builtin_annot("movl "#x"(%esi), %eax "); \
-	_impl__casm__movl_mesi_eax(x); \
-
-#define __casm__movl_mesi_edx(x) \
-	__builtin_annot("movl "#x"(%esi), %edx "); \
-	_impl__casm__movl_mesi_edx(x); \
-
-#define	__casm__movb_al_mesi(x) \
-	__builtin_annot("movb %al,"#x"(%esi)"); \
-	_impl__casm__movb_al_mesi(x); \
-
-#define	__casm__movw_ax_mesi(x) \
-	__builtin_annot("movw %ax,"#x"(%esi)"); \
-	_impl__casm__movw_ax_mesi(x); \
-
-#define __casm__movl_edx_ecx() \
-	__builtin_annot("movl %edx, %ecx "); \
-	_impl__casm__movl_edx_ecx(); \
-
-#define __casm__movl_eax_ecx() \
-	__builtin_annot("movl %eax, %ecx "); \
-	_impl__casm__movl_eax_ecx(); \
+/* #define __casm__popl_eax() \ */
+/* 	__builtin_annot("popl %eax "); \ */
+/*         _impl__casm__popl_eax(); \ */
 
-#define __casm__movl_esp_eax() \
-	__builtin_annot("movl %esp, %eax "); \
-	_impl__casm__movl_esp_eax(); \
+/* #define __casm__popl_ebx() \ */
+/* 	__builtin_annot("popl %ebx "); \ */
+/*         _impl__casm__popl_ebx(); \ */
 
-#define __casm__movl_esp_ecx() \
-	__builtin_annot("movl %esp, %ecx "); \
-	_impl__casm__movl_esp_ecx(); \
+/* #define __casm__popl_edx() \ */
+/* 	__builtin_annot("popl %edx "); \ */
+/*         _impl__casm__popl_edx(); \ */
 
-#define __casm__movl_esp_edx() \
-	__builtin_annot("movl %esp, %edx "); \
-	_impl__casm__movl_esp_edx(); \
+/* #define __casm__popl_esi() \ */
+/* 	__builtin_annot("popl %esi "); \ */
+/*         _impl__casm__popl_esi(); \ */
 
-#define __casm__pushl_ebp() \
-	__builtin_annot("pushl %ebp "); \
-	_impl__casm__pushl_ebp(); \
+/* #define __casm__popl_edi() \ */
+/* 	__builtin_annot("popl %edi "); \ */
+/*         _impl__casm__popl_edi(); \ */
 
-#define __casm__pushl_edi() \
-	__builtin_annot("pushl %edi "); \
-	_impl__casm__pushl_edi(); \
+/* #define __casm__popl_ebp() \ */
+/* 	__builtin_annot("popl %ebp "); \ */
+/* 	_impl__casm__popl_ebp(); \ */
 
-#define __casm__pushl_esi() \
-	__builtin_annot("pushl %esi "); \
-        _impl__casm__pushl_esi(); \
+/* #define __casm__pushl_imm(x) \ */
+/* 	__builtin_annot("pushl $"#x" "); \ */
+/* 	_impl__casm__pushl_imm(x); \ */
 
-#define __casm__pushl_eax() \
-	__builtin_annot("pushl %eax "); \
-	_impl__casm__pushl_eax(); \
+/* #define __casm__pushl_mem(x) \ */
+/* 	__builtin_annot("pushl "#x" "); \ */
+/* 	_impl__casm__pushl_mem(x);\ */
 
-#define __casm__pushl_ebx() \
-	__builtin_annot("pushl %ebx "); \
-	_impl__casm__pushl_ebx(); \
+/* #define __casm__popl_mem(x) \ */
+/* 	__builtin_annot("popl "#x" "); \ */
+/* 	x = _impl__casm__popl_mem();\ */
 
-#define __casm__pushl_ecx() \
-	__builtin_annot("pushl %ecx "); \
-	_impl__casm__pushl_ecx(); \
+/* #define __casm__pushfl() \ */
+/* 	__builtin_annot("pushfl "); \ */
+/* 	_impl__casm__pushfl(); \ */
 
-#define __casm__pushl_edx() \
-	__builtin_annot("pushl %edx "); \
-	_impl__casm__pushl_edx(); \
+/* #define __casm__popfl() \ */
+/* 	__builtin_annot("popfl "); \ */
+/* 	_impl__casm__popfl(); \ */
 
-#define __casm__pushl_esp() \
-	__builtin_annot("pushl %esp "); \
-	_impl__casm__pushl_esp(); \
+/* #define __casm__pushal() \ */
+/* 	__builtin_annot("pushal "); \ */
+/* 	_impl__casm__pushal(); \ */
 
-#define __casm__pushl_mesp(x) \
-	__builtin_annot("pushl "#x"(%esp) ");\
-	_impl__casm__pushl_mesp(x);\
 
-#define __casm__popl_eax() \
-	__builtin_annot("popl %eax "); \
-        _impl__casm__popl_eax(); \
 
-#define __casm__popl_ebx() \
-	__builtin_annot("popl %ebx "); \
-        _impl__casm__popl_ebx(); \
 
-#define __casm__popl_edx() \
-	__builtin_annot("popl %edx "); \
-        _impl__casm__popl_edx(); \
+/* ////// */
+/* // arithmetic/logical */
+/* ////// */
+/* #define __casm__xorl_eax_eax() \ */
+/* 	__builtin_annot("xorl %eax, %eax "); \ */
+/* 	_impl__casm__xorl_eax_eax(); \ */
 
-#define __casm__popl_esi() \
-	__builtin_annot("popl %esi "); \
-        _impl__casm__popl_esi(); \
+/* #define __casm__xorl_edx_edx() \ */
+/* 	__builtin_annot("xorl %edx, %edx "); \ */
+/* 	_impl__casm__xorl_edx_edx(); \ */
 
-#define __casm__popl_edi() \
-	__builtin_annot("popl %edi "); \
-        _impl__casm__popl_edi(); \
+/* #define __casm__addl_imm_esp(x) \ */
+/* 	__builtin_annot("addl $"#x", %esp "); \ */
+/* 	_impl__casm__addl_imm_esp(x); \ */
 
-#define __casm__popl_ebp() \
-	__builtin_annot("popl %ebp "); \
-	_impl__casm__popl_ebp(); \
+/* #define __casm__subl_imm_esp(x) \ */
+/* 	__builtin_annot("subl $"#x", %esp "); \ */
+/* 	_impl__casm__subl_imm_esp(x); \ */
 
-#define __casm__pushl_imm(x) \
-	__builtin_annot("pushl $"#x" "); \
-	_impl__casm__pushl_imm(x); \
+/* #define __casm__addl_eax_ecx() \ */
+/* 	__builtin_annot("addl %eax, %ecx"); \ */
+/* 	_impl__casm__addl_eax_ecx(); \ */
 
-#define __casm__pushl_mem(x) \
-	__builtin_annot("pushl "#x" "); \
-	_impl__casm__pushl_mem(x);\
+/* #define __casm__addl_eax_esp() \ */
+/* 	__builtin_annot("addl %eax, %esp"); \ */
+/* 	_impl__casm__addl_eax_esp(); \ */
 
-#define __casm__popl_mem(x) \
-	__builtin_annot("popl "#x" "); \
-	x = _impl__casm__popl_mem();\
+/* #define __casm__addl_ecx_eax() \ */
+/* 	__builtin_annot("addl %ecx, %eax"); \ */
+/* 	_impl__casm__addl_ecx_eax(); \ */
 
-#define __casm__pushfl() \
-	__builtin_annot("pushfl "); \
-	_impl__casm__pushfl(); \
+/* #define __casm__addl_imm_ecx(x) \ */
+/* 	__builtin_annot("addl $"#x", %ecx "); \ */
+/* 	_impl__casm__addl_imm_ecx(x); \ */
 
-#define __casm__popfl() \
-	__builtin_annot("popfl "); \
-	_impl__casm__popfl(); \
+/* #define __casm__addl_imm_eax(x) \ */
+/* 	__builtin_annot("addl $"#x", %eax "); \ */
+/*         _impl__casm__addl_imm_eax(x); \ */
 
-#define __casm__pushal() \
-	__builtin_annot("pushal "); \
-	_impl__casm__pushal(); \
+/* #define __casm__andl_imm_edx(x) \ */
+/* 	__builtin_annot("andl $"#x", %edx "); \ */
+/* 	_impl__casm__andl_imm_edx(x); \ */
 
+/* #define __casm__andl_imm_ecx(x) \ */
+/* 	__builtin_annot("andl $"#x", %ecx "); \ */
+/* 	_impl__casm__andl_imm_ecx(x); \ */
 
+/* #define __casm__andl_imm_eax(x) \ */
+/* 	__builtin_annot("andl $"#x", %eax "); \ */
+/* 	_impl__casm__andl_imm_eax(x); \ */
 
+/* #define __casm__shl_imm_ecx(x) \ */
+/* 	__builtin_annot("shl $"#x", %ecx "); \ */
+/* 	_impl__casm__shl_imm_ecx(x); \ */
 
-//////
-// arithmetic/logical
-//////
-#define __casm__xorl_eax_eax() \
-	__builtin_annot("xorl %eax, %eax "); \
-	_impl__casm__xorl_eax_eax(); \
+/* #define __casm__shr_imm_eax(x) \ */
+/* 	__builtin_annot("shr $"#x", %eax "); \ */
+/* 	_impl__casm__shr_imm_eax(x); \ */
 
-#define __casm__xorl_edx_edx() \
-	__builtin_annot("xorl %edx, %edx "); \
-	_impl__casm__xorl_edx_edx(); \
+/* #define __casm__orl_ecx_eax() \ */
+/* 	__builtin_annot("orl %ecx, %eax "); \ */
+/* 	_impl__casm__orl_ecx_eax(); \ */
 
-#define __casm__addl_imm_esp(x) \
-	__builtin_annot("addl $"#x", %esp "); \
-	_impl__casm__addl_imm_esp(x); \
+/* #define __casm__orl_edx_eax() \ */
+/* 	__builtin_annot("orl %edx, %eax "); \ */
+/* 	_impl__casm__orl_edx_eax(); \ */
 
-#define __casm__subl_imm_esp(x) \
-	__builtin_annot("subl $"#x", %esp "); \
-	_impl__casm__subl_imm_esp(x); \
+/* #define __casm__orl_imm_eax(x) \ */
+/* 	__builtin_annot("orl $"#x", %eax "); \ */
+/* 	_impl__casm__orl_imm_eax(x); \ */
 
-#define __casm__addl_eax_ecx() \
-	__builtin_annot("addl %eax, %ecx"); \
-	_impl__casm__addl_eax_ecx(); \
+/* #define __casm__btl_imm_mecx(x,y) \ */
+/* 	__builtin_annot("btl $"#x", "#y"(%ecx) "); \ */
+/* 	_impl__casm__btl_imm_mecx(x,y); \ */
 
-#define __casm__addl_eax_esp() \
-	__builtin_annot("addl %eax, %esp"); \
-	_impl__casm__addl_eax_esp(); \
+/* #define __casm__btrl_imm_mecx(x,y) \ */
+/* 	__builtin_annot("btrl $"#x", "#y"(%ecx) "); \ */
+/* 	_impl__casm__btrl_imm_mecx(x,y); \ */
 
-#define __casm__addl_ecx_eax() \
-	__builtin_annot("addl %ecx, %eax"); \
-	_impl__casm__addl_ecx_eax(); \
+/* #define __casm__btsl_imm_mecx(x,y) \ */
+/* 	__builtin_annot("btsl $"#x", "#y"(%ecx) "); \ */
+/* 	_impl__casm__btsl_imm_mecx(x,y); \ */
 
-#define __casm__addl_imm_ecx(x) \
-	__builtin_annot("addl $"#x", %ecx "); \
-	_impl__casm__addl_imm_ecx(x); \
+/* #define __casm__bsrl_mesp_eax(x) \ */
+/* 	__builtin_annot("bsrl "#x"(%esp), %eax "); \ */
+/* 	_impl__casm__bsrl_mesp_eax(x); \ */
 
-#define __casm__addl_imm_eax(x) \
-	__builtin_annot("addl $"#x", %eax "); \
-        _impl__casm__addl_imm_eax(x); \
+/* #define __casm__mull_ecx() \ */
+/* 	__builtin_annot("mull %ecx "); \ */
+/* 	_impl__casm__mull_ecx(); \ */
 
-#define __casm__andl_imm_edx(x) \
-	__builtin_annot("andl $"#x", %edx "); \
-	_impl__casm__andl_imm_edx(x); \
 
-#define __casm__andl_imm_ecx(x) \
-	__builtin_annot("andl $"#x", %ecx "); \
-	_impl__casm__andl_imm_ecx(x); \
 
-#define __casm__andl_imm_eax(x) \
-	__builtin_annot("andl $"#x", %eax "); \
-	_impl__casm__andl_imm_eax(x); \
 
-#define __casm__shl_imm_ecx(x) \
-	__builtin_annot("shl $"#x", %ecx "); \
-	_impl__casm__shl_imm_ecx(x); \
+/* ////// */
+/* //instructions involving segment register load/stores */
+/* ////// */
+/* #define __casm__movl_cs_eax() \ */
+/* 	__builtin_annot("movl %cs, %eax "); \ */
+/* 	_impl__casm__movl_cs_eax(); \ */
 
-#define __casm__shr_imm_eax(x) \
-	__builtin_annot("shr $"#x", %eax "); \
-	_impl__casm__shr_imm_eax(x); \
+/* #define __casm__movl_ds_eax() \ */
+/* 	__builtin_annot("movl %ds, %eax "); \ */
+/* 	_impl__casm__movl_ds_eax(); \ */
 
-#define __casm__orl_ecx_eax() \
-	__builtin_annot("orl %ecx, %eax "); \
-	_impl__casm__orl_ecx_eax(); \
+/* #define __casm__movl_es_eax() \ */
+/* 	__builtin_annot("movl %es, %eax "); \ */
+/* 	_impl__casm__movl_es_eax(); \ */
 
-#define __casm__orl_edx_eax() \
-	__builtin_annot("orl %edx, %eax "); \
-	_impl__casm__orl_edx_eax(); \
+/* #define __casm__movl_fs_eax() \ */
+/* 	__builtin_annot("movl %fs, %eax "); \ */
+/* 	_impl__casm__movl_fs_eax(); \ */
 
-#define __casm__orl_imm_eax(x) \
-	__builtin_annot("orl $"#x", %eax "); \
-	_impl__casm__orl_imm_eax(x); \
+/* #define __casm__movl_gs_eax() \ */
+/* 	__builtin_annot("movl %gs, %eax "); \ */
+/* 	_impl__casm__movl_gs_eax(); \ */
 
-#define __casm__btl_imm_mecx(x,y) \
-	__builtin_annot("btl $"#x", "#y"(%ecx) "); \
-	_impl__casm__btl_imm_mecx(x,y); \
+/* #define __casm__movl_ss_eax() \ */
+/* 	__builtin_annot("movl %ss, %eax "); \ */
+/* 	_impl__casm__movl_ss_eax(); \ */
 
-#define __casm__btrl_imm_mecx(x,y) \
-	__builtin_annot("btrl $"#x", "#y"(%ecx) "); \
-	_impl__casm__btrl_imm_mecx(x,y); \
+/* #define __casm__movw_ds_ax() \ */
+/* 	__builtin_annot("movw %ds, %ax "); \ */
+/*         _impl__casm__movw_ds_ax(); \ */
 
-#define __casm__btsl_imm_mecx(x,y) \
-	__builtin_annot("btsl $"#x", "#y"(%ecx) "); \
-	_impl__casm__btsl_imm_mecx(x,y); \
+/* #define __casm__movw_ax_ds() \ */
+/* 	__builtin_annot("movw %ax, %ds "); \ */
+/*         _impl__casm__movw_ax_ds(); \ */
 
-#define __casm__bsrl_mesp_eax(x) \
-	__builtin_annot("bsrl "#x"(%esp), %eax "); \
-	_impl__casm__bsrl_mesp_eax(x); \
+/* #define __casm__movw_ax_es() \ */
+/* 	__builtin_annot("movw %ax, %es "); \ */
+/*         _impl__casm__movw_ax_es(); \ */
 
-#define __casm__mull_ecx() \
-	__builtin_annot("mull %ecx "); \
-	_impl__casm__mull_ecx(); \
+/* #define __casm__movw_ax_fs() \ */
+/* 	__builtin_annot("movw %ax, %fs "); \ */
+/*         _impl__casm__movw_ax_fs(); \ */
 
+/* #define __casm__movw_ax_gs() \ */
+/* 	__builtin_annot("movw %ax, %gs "); \ */
+/*         _impl__casm__movw_ax_gs(); \ */
 
+/* #define __casm__movw_ax_ss() \ */
+/* 	__builtin_annot("movw %ax, %ss "); \ */
+/*         _impl__casm__movw_ax_ss(); \ */
 
 
-//////
-//instructions involving segment register load/stores
-//////
-#define __casm__movl_cs_eax() \
-	__builtin_annot("movl %cs, %eax "); \
-	_impl__casm__movl_cs_eax(); \
 
-#define __casm__movl_ds_eax() \
-	__builtin_annot("movl %ds, %eax "); \
-	_impl__casm__movl_ds_eax(); \
 
-#define __casm__movl_es_eax() \
-	__builtin_annot("movl %es, %eax "); \
-	_impl__casm__movl_es_eax(); \
+/* ////// */
+/* //instructions involving control register load/stores */
+/* ////// */
+/* #define __casm__movl_cr0_eax() \ */
+/* 	__builtin_annot("movl %cr0, %eax "); \ */
+/* 	_impl__casm__movl_cr0_eax(); \ */
 
-#define __casm__movl_fs_eax() \
-	__builtin_annot("movl %fs, %eax "); \
-	_impl__casm__movl_fs_eax(); \
+/* #define __casm__movl_eax_cr0() \ */
+/* 	__builtin_annot("movl %eax, %cr0 "); \ */
+/* 	_impl__casm__movl_eax_cr0(); \ */
 
-#define __casm__movl_gs_eax() \
-	__builtin_annot("movl %gs, %eax "); \
-	_impl__casm__movl_gs_eax(); \
+/* #define __casm__movl_cr2_eax() \ */
+/* 	__builtin_annot("movl %cr2, %eax "); \ */
+/* 	_impl__casm__movl_cr2_eax(); \ */
 
-#define __casm__movl_ss_eax() \
-	__builtin_annot("movl %ss, %eax "); \
-	_impl__casm__movl_ss_eax(); \
+/* #define __casm__movl_cr3_eax() \ */
+/* 	__builtin_annot("movl %cr3, %eax "); \ */
+/* 	_impl__casm__movl_cr3_eax(); \ */
 
-#define __casm__movw_ds_ax() \
-	__builtin_annot("movw %ds, %ax "); \
-        _impl__casm__movw_ds_ax(); \
+/* #define __casm__movl_eax_cr3() \ */
+/* 	__builtin_annot("movl %eax, %cr3 "); \ */
+/* 	_impl__casm__movl_eax_cr3(); \ */
 
-#define __casm__movw_ax_ds() \
-	__builtin_annot("movw %ax, %ds "); \
-        _impl__casm__movw_ax_ds(); \
+/* #define __casm__movl_ebx_cr3() \ */
+/* 	__builtin_annot("movl %ebx, %cr3 "); \ */
+/* 	_impl__casm__movl_ebx_cr3(); \ */
 
-#define __casm__movw_ax_es() \
-	__builtin_annot("movw %ax, %es "); \
-        _impl__casm__movw_ax_es(); \
+/* #define __casm__movl_cr4_eax() \ */
+/* 	__builtin_annot("movl %cr4, %eax "); \ */
+/* 	_impl__casm__movl_cr4_eax(); \ */
 
-#define __casm__movw_ax_fs() \
-	__builtin_annot("movw %ax, %fs "); \
-        _impl__casm__movw_ax_fs(); \
+/* #define __casm__movl_eax_cr4() \ */
+/* 	__builtin_annot("movl %eax, %cr4 "); \ */
+/* 	_impl__casm__movl_eax_cr4(); \ */
 
-#define __casm__movw_ax_gs() \
-	__builtin_annot("movw %ax, %gs "); \
-        _impl__casm__movw_ax_gs(); \
 
-#define __casm__movw_ax_ss() \
-	__builtin_annot("movw %ax, %ss "); \
-        _impl__casm__movw_ax_ss(); \
 
+/* ////// */
+/* //other instructions */
+/* ////// */
+/* #define __casm__pause() \ */
+/* 	__builtin_annot("pause "); \ */
+/* 	_impl__casm__pause(); \ */
 
+/* #define __casm__cpuid() \ */
+/* 	__builtin_annot("cpuid "); \ */
+/* 	_impl__casm__cpuid(); \ */
 
+/* #define __casm__rdtsc() \ */
+/* 	__builtin_annot("rdtsc "); \ */
+/* 	_impl__casm__rdtsc(); \ */
 
-//////
-//instructions involving control register load/stores
-//////
-#define __casm__movl_cr0_eax() \
-	__builtin_annot("movl %cr0, %eax "); \
-	_impl__casm__movl_cr0_eax(); \
 
-#define __casm__movl_eax_cr0() \
-	__builtin_annot("movl %eax, %cr0 "); \
-	_impl__casm__movl_eax_cr0(); \
 
-#define __casm__movl_cr2_eax() \
-	__builtin_annot("movl %cr2, %eax "); \
-	_impl__casm__movl_cr2_eax(); \
 
-#define __casm__movl_cr3_eax() \
-	__builtin_annot("movl %cr3, %eax "); \
-	_impl__casm__movl_cr3_eax(); \
+/* ////// */
+/* // system instructions */
+/* ////// */
+/* #define __casm__hlt() \ */
+/* 	__builtin_annot("hlt "); \ */
+/* 	_impl__casm__hlt() \ */
 
-#define __casm__movl_eax_cr3() \
-	__builtin_annot("movl %eax, %cr3 "); \
-	_impl__casm__movl_eax_cr3(); \
+/* #define __casm__cli() \ */
+/* 	__builtin_annot("cli "); \ */
+/* 	_impl__casm__cli(); \ */
 
-#define __casm__movl_ebx_cr3() \
-	__builtin_annot("movl %ebx, %cr3 "); \
-	_impl__casm__movl_ebx_cr3(); \
+/* #define __casm__sti() \ */
+/* 	__builtin_annot("sti "); \ */
+/* 	_impl__casm__sti(); \ */
 
-#define __casm__movl_cr4_eax() \
-	__builtin_annot("movl %cr4, %eax "); \
-	_impl__casm__movl_cr4_eax(); \
+/* #define __casm__inb_dx_al() \ */
+/* 	__builtin_annot("inb %dx, %al "); \ */
+/* 	_impl__casm__inb_dx_al(); \ */
 
-#define __casm__movl_eax_cr4() \
-	__builtin_annot("movl %eax, %cr4 "); \
-	_impl__casm__movl_eax_cr4(); \
+/* #define __casm__inw_dx_ax() \ */
+/* 	__builtin_annot("inw %dx, %ax "); \ */
+/* 	_impl__casm__inw_dx_ax(); \ */
 
+/* #define __casm__inl_dx_eax() \ */
+/* 	__builtin_annot("inl %dx, %eax "); \ */
+/* 	_impl__casm__inl_dx_eax(); \ */
 
+/* #define __casm__outb_al_dx() \ */
+/* 	__builtin_annot("outb %al, %dx "); \ */
+/* 	_impl__casm__outb_al_dx(); \ */
 
-//////
-//other instructions
-//////
-#define __casm__pause() \
-	__builtin_annot("pause "); \
-	_impl__casm__pause(); \
+/* #define __casm__outw_ax_dx() \ */
+/* 	__builtin_annot("outw %ax, %dx "); \ */
+/* 	_impl__casm__outw_ax_dx(); \ */
 
-#define __casm__cpuid() \
-	__builtin_annot("cpuid "); \
-	_impl__casm__cpuid(); \
+/* #define __casm__outl_eax_dx() \ */
+/* 	__builtin_annot("outl %eax, %dx "); \ */
+/* 	_impl__casm__outl_eax_dx(); \ */
 
-#define __casm__rdtsc() \
-	__builtin_annot("rdtsc "); \
-	_impl__casm__rdtsc(); \
+/* #define __casm__rdmsr() \ */
+/* 	__builtin_annot("rdmsr "); \ */
+/* 	_impl__casm__rdmsr(); \ */
 
+/* #define __casm__wrmsr() \ */
+/* 	__builtin_annot("wrmsr "); \ */
+/* 	_impl__casm__wrmsr(); \ */
 
+/* #define __casm__wbinvd() \ */
+/* 	__builtin_annot("wbinvd "); \ */
+/* 	_impl__casm__wbinvd(); \ */
 
+/* #define __casm__sgdt_mesp(x) \ */
+/* 	__builtin_annot("sgdt "#x"(%esp) "); \ */
+/* 	_impl__casm__sgdt_mesp(x); \ */
 
-//////
-// system instructions
-//////
-#define __casm__hlt() \
-	__builtin_annot("hlt "); \
-	_impl__casm__hlt() \
+/* #define __casm__str_ax() \ */
+/* 	__builtin_annot("str %ax "); \ */
+/* 	_impl__casm__str_ax(); \ */
 
-#define __casm__cli() \
-	__builtin_annot("cli "); \
-	_impl__casm__cli(); \
+/* #define __casm__sidt_mesp(x) \ */
+/* 	__builtin_annot("sidt "#x"(%esp) "); \ */
+/* 	_impl__casm__sidt_mesp(x); \ */
 
-#define __casm__sti() \
-	__builtin_annot("sti "); \
-	_impl__casm__sti(); \
+/* #define __casm__lidt_mecx(x) \ */
+/* 	__builtin_annot("lidt "#x"(%ecx) "); \ */
+/* 	_impl__casm__lidt_mecx(x); \ */
 
-#define __casm__inb_dx_al() \
-	__builtin_annot("inb %dx, %al "); \
-	_impl__casm__inb_dx_al(); \
+/* #define __casm__ltr_ax() \ */
+/* 	__builtin_annot("ltr %ax "); \ */
+/* 	_impl__casm__ltr_ax(); \ */
 
-#define __casm__inw_dx_ax() \
-	__builtin_annot("inw %dx, %ax "); \
-	_impl__casm__inw_dx_ax(); \
+/* #define __casm__lgdt_mecx(x) \ */
+/* 	__builtin_annot("lgdt "#x"(%ecx) "); \ */
+/* 	_impl__casm__lgdt_mecx(x); \ */
 
-#define __casm__inl_dx_eax() \
-	__builtin_annot("inl %dx, %eax "); \
-	_impl__casm__inl_dx_eax(); \
+/* #define __casm__lock() \ */
+/* 	__builtin_annot("lock "); \ */
 
-#define __casm__outb_al_dx() \
-	__builtin_annot("outb %al, %dx "); \
-	_impl__casm__outb_al_dx(); \
+/* #define __casm__xsetbv() \ */
+/* 	__builtin_annot("xsetbv "); \ */
+/* 	_impl__casm__xsetbv(); \ */
 
-#define __casm__outw_ax_dx() \
-	__builtin_annot("outw %ax, %dx "); \
-	_impl__casm__outw_ax_dx(); \
+/* #define __casm__xgetbv() \ */
+/* 	__builtin_annot("xgetbv "); \ */
+/* 	_impl__casm__xgetbv(); \ */
 
-#define __casm__outl_eax_dx() \
-	__builtin_annot("outl %eax, %dx "); \
-	_impl__casm__outl_eax_dx(); \
+/* #define __casm__iretl() \ */
+/* 	__builtin_annot("iretl "); \ */
+/* 	_impl__casm__iretl(); */
 
-#define __casm__rdmsr() \
-	__builtin_annot("rdmsr "); \
-	_impl__casm__rdmsr(); \
+/* #define __casm__sysenter() \ */
+/* 	__builtin_annot("sysenter "); \ */
 
-#define __casm__wrmsr() \
-	__builtin_annot("wrmsr "); \
-	_impl__casm__wrmsr(); \
 
-#define __casm__wbinvd() \
-	__builtin_annot("wbinvd "); \
-	_impl__casm__wbinvd(); \
 
-#define __casm__sgdt_mesp(x) \
-	__builtin_annot("sgdt "#x"(%esp) "); \
-	_impl__casm__sgdt_mesp(x); \
 
-#define __casm__str_ax() \
-	__builtin_annot("str %ax "); \
-	_impl__casm__str_ax(); \
+/* ////// */
+/* //TXT instructions */
+/* ////// */
+/* #define __casm__getsec() \ */
+/* 	__builtin_annot(IA32_GETSEC_OPCODE); \ */
+/* 	_impl__casm__getsec(); \ */
 
-#define __casm__sidt_mesp(x) \
-	__builtin_annot("sidt "#x"(%esp) "); \
-	_impl__casm__sidt_mesp(x); \
 
-#define __casm__lidt_mecx(x) \
-	__builtin_annot("lidt "#x"(%ecx) "); \
-	_impl__casm__lidt_mecx(x); \
 
-#define __casm__ltr_ax() \
-	__builtin_annot("ltr %ax "); \
-	_impl__casm__ltr_ax(); \
 
-#define __casm__lgdt_mecx(x) \
-	__builtin_annot("lgdt "#x"(%ecx) "); \
-	_impl__casm__lgdt_mecx(x); \
+/* ////// */
+/* // VMX instructions */
+/* ////// */
+/* #define __casm__vmlaunch() \ */
+/* 	__builtin_annot("vmlaunch "); \ */
+/*         _impl__casm__vmlaunch(); \ */
 
-#define __casm__lock() \
-	__builtin_annot("lock "); \
+/* #define __casm__vmxon_mesp(x) \ */
+/* 	__builtin_annot("vmxon "#x"(%esp) "); \ */
+/* 	_impl__casm__vmxon_mesp(x); \ */
 
-#define __casm__xsetbv() \
-	__builtin_annot("xsetbv "); \
-	_impl__casm__xsetbv(); \
+/* #define __casm__vmwrite_eax_ecx() \ */
+/* 	__builtin_annot("vmwrite %eax, %ecx "); \ */
+/* 	_impl__casm__vmwrite_eax_ecx(); \ */
 
-#define __casm__xgetbv() \
-	__builtin_annot("xgetbv "); \
-	_impl__casm__xgetbv(); \
+/* #define __casm__vmread_ecx_eax() \ */
+/* 	__builtin_annot("vmread %ecx, %eax"); \ */
+/*         _impl__casm__vmread_ecx_eax(); \ */
 
-#define __casm__iretl() \
-	__builtin_annot("iretl "); \
-	_impl__casm__iretl();
+/* #define __casm__vmclear_mesp(x) \ */
+/* 	__builtin_annot("vmclear "#x"(%esp) "); \ */
+/* 	_impl__casm__vmclear_mesp(x); \ */
 
-#define __casm__sysenter() \
-	__builtin_annot("sysenter "); \
+/* #define __casm__vmptrld_mesp(x) \ */
+/* 	__builtin_annot("vmptrld "#x"(%esp) "); \ */
+/* 	_impl__casm__vmptrld_mesp(x); \ */
 
+/* #define __casm__invvpid_mesp_ecx(x) \ */
+/* 	__builtin_annot("invvpid "#x"(%esp), %ecx"); \ */
+/* 	_impl__casm__invvpid_mesp_ecx(x); \ */
 
+/* #define __casm__invept_mesp_edx(x) \ */
+/* 	__builtin_annot("invept "#x"(%esp), %edx "); \ */
+/* 	_impl__casm__invept_mesp_edx(x); \ */
 
+/* #define __casm__invvpid_mesp_edx(x) \ */
+/* 	__builtin_annot("invvpid "#x"(%esp), %edx "); \ */
+/* 	_impl__casm__invvpid_mesp_edx(x); \ */
 
-//////
-//TXT instructions
-//////
-#define __casm__getsec() \
-	__builtin_annot(IA32_GETSEC_OPCODE); \
-	_impl__casm__getsec(); \
-
-
-
-
-//////
-// VMX instructions
-//////
-#define __casm__vmlaunch() \
-	__builtin_annot("vmlaunch "); \
-        _impl__casm__vmlaunch(); \
-
-#define __casm__vmxon_mesp(x) \
-	__builtin_annot("vmxon "#x"(%esp) "); \
-	_impl__casm__vmxon_mesp(x); \
-
-#define __casm__vmwrite_eax_ecx() \
-	__builtin_annot("vmwrite %eax, %ecx "); \
-	_impl__casm__vmwrite_eax_ecx(); \
-
-#define __casm__vmread_ecx_eax() \
-	__builtin_annot("vmread %ecx, %eax"); \
-        _impl__casm__vmread_ecx_eax(); \
-
-#define __casm__vmclear_mesp(x) \
-	__builtin_annot("vmclear "#x"(%esp) "); \
-	_impl__casm__vmclear_mesp(x); \
-
-#define __casm__vmptrld_mesp(x) \
-	__builtin_annot("vmptrld "#x"(%esp) "); \
-	_impl__casm__vmptrld_mesp(x); \
-
-#define __casm__invvpid_mesp_ecx(x) \
-	__builtin_annot("invvpid "#x"(%esp), %ecx"); \
-	_impl__casm__invvpid_mesp_ecx(x); \
-
-#define __casm__invept_mesp_edx(x) \
-	__builtin_annot("invept "#x"(%esp), %edx "); \
-	_impl__casm__invept_mesp_edx(x); \
-
-#define __casm__invvpid_mesp_edx(x) \
-	__builtin_annot("invvpid "#x"(%esp), %edx "); \
-	_impl__casm__invvpid_mesp_edx(x); \
-
-#define __casm__vmresume() \
-	__builtin_annot("vmresume "); \
-        _impl__casm__vmresume(); \
+/* #define __casm__vmresume() \ */
+/* 	__builtin_annot("vmresume "); \ */
+/*         _impl__casm__vmresume(); \ */
 
 
 
