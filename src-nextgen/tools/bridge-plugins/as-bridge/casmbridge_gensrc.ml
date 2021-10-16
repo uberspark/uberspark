@@ -71,9 +71,15 @@ class gen_out out c_or_asm = object
   inherit Visitor.frama_c_inplace
 
   method! vfile _ = 
-    Format.pp_print_string out "#include <uberspark/include/uberspark.h>\n";
-    Format.pp_print_string out "#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>\n";
-    Cil.DoChildren
+    (* frama-c will complaint if not include the header files this is a temporary that only works for x86 *)
+    match c_or_asm with
+    | Genc ->
+      (*could probably get archtecture as input and generate appropriate includes*)
+      Format.pp_print_string out "#include <uberspark/include/uberspark.h>\n";
+      Format.pp_print_string out "#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>\n";
+      Cil.DoChildren
+    | Genasm ->
+      Cil.DoChildren
 
   method! vglob_aux g =
     match g with
@@ -137,8 +143,7 @@ class gen_out out c_or_asm = object
          )
       )
     | _ ->
-      Format.fprintf out "/*Not CASM function definition*/\n";
-      (* remove the line above will result an empty output file, very weird *)
+      ();
       Cil.SkipChildren
 
   method! vstmt_aux s =
@@ -185,7 +190,7 @@ class gen_out out c_or_asm = object
           | Genasm ->
             let out_sl = jnode.output_assembly in
             let out_sl' = List.map (fun x -> insert_args x assoc_list_args) out_sl in 
-            List.iter (fun x -> Format.fprintf out "%a;\n" Format.pp_print_string x;) out_sl';
+            List.iter (fun x -> Format.fprintf out "%a\n" Format.pp_print_string x;) out_sl';
             Cil.DoChildren
           )
         | None -> (*print the stmt if not found*)
@@ -194,8 +199,7 @@ class gen_out out c_or_asm = object
           Cil.DoChildren
        )
       | _ ->  
-        Format.fprintf out "%a\n"
-          Printer.pp_stmt s;
+        if c_or_asm = Genc then Format.fprintf out "%a\n" Printer.pp_stmt s;
         Cil.DoChildren
 end    		
 
@@ -204,10 +208,13 @@ let casm_extract
     (output_file : string)
     : unit =
 		Uberspark.Logger.log "Starting CASM extraction to assembly...\n";
-		ucasm_process input_file output_file;
+		(* ucasm_process input_file output_file; *)
+    let chan = open_out output_file in
+    let fmt = Format.formatter_of_out_channel chan in
+    Visitor.visitFramacFileSameGlobals (new gen_out fmt Genasm) (Ast.get ());
+    close_out chan;
 		Uberspark.Logger.log "Done.\n";
 		()
-
 
 let casm_genc 
     (input_file : string)
@@ -217,10 +224,10 @@ let casm_genc
     (* for now just copy input file to output file *)
     (* Uberspark.Osservices.file_copy input_file output_file; *)
     (* dump AST to file *)
-    let ast_chan = open_out "ast.c" in
-    let ast_fmt = Format.formatter_of_out_channel ast_chan in
-    Printer.pp_file ast_fmt (Ast.get ());
-    close_out ast_chan;
+    (* let ast_chan = open_out "ast.c" in
+     * let ast_fmt = Format.formatter_of_out_channel ast_chan in
+     * Printer.pp_file ast_fmt (Ast.get ());
+     * close_out ast_chan; *)
     (* go thru the AST of casm file to generate corresponding c file  *)
     let chan = open_out output_file in
     let fmt = Format.formatter_of_out_channel chan in
