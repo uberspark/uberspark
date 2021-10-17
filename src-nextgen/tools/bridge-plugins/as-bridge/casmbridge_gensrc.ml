@@ -70,17 +70,6 @@ type output = Genc | Genasm ;;
 class gen_out out c_or_asm = object 
   inherit Visitor.frama_c_inplace
 
-  method! vfile _ = 
-    (* frama-c will complaint if not include the header files this is a temporary that only works for x86 *)
-    match c_or_asm with
-    | Genc ->
-      (*could probably get archtecture as input and generate appropriate includes*)
-      Format.pp_print_string out "#include <uberspark/include/uberspark.h>\n";
-      Format.pp_print_string out "#include <uberspark/hwm/cpu/x86/32-bit/generic/include/hwm.h>\n";
-      Cil.DoChildren
-    | Genasm ->
-      Cil.DoChildren
-
   method! vglob_aux g =
     match g with
     | GFun(f,_) ->
@@ -228,11 +217,22 @@ let casm_genc
      * let ast_fmt = Format.formatter_of_out_channel ast_chan in
      * Printer.pp_file ast_fmt (Ast.get ());
      * close_out ast_chan; *)
+    (*read input file and insert the #include to output file*)
+    let chan_in = open_in input_file in 
+    let chan_out = open_out output_file in
+    let include_regexp = Str.regexp "#include" in
+    try
+      while true do
+        let line = String.trim (input_line chan_in) in
+        if Str.string_match include_regexp line 0 then
+          Printf.fprintf chan_out "%s\n" line;
+      done;
+    with End_of_file ->
+      close_in chan_in;
     (* go thru the AST of casm file to generate corresponding c file  *)
-    let chan = open_out output_file in
-    let fmt = Format.formatter_of_out_channel chan in
+    let fmt = Format.formatter_of_out_channel chan_out in
     Visitor.visitFramacFileSameGlobals (new gen_out fmt Genc) (Ast.get ());
-    close_out chan;
+    close_out chan_out;
 		Uberspark.Logger.log "Done.\n";
 		()
 
