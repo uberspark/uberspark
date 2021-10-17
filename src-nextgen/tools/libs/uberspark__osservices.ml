@@ -21,18 +21,6 @@ open Sys
 		()
 	;;
 
-	let file_append output_name input_str =
-	  let fd_out = openfile output_name [O_WRONLY; O_CREAT; O_APPEND] 0o666 in
-    let len = String.length input_str in 
-    let rec write_string_loop pos r = match write_substring fd_out input_str pos (len-r) with
-      | 0 -> ()
-      | n -> write_string_loop (pos+n) (r+n)
-    in
-    write_string_loop 0 0;
-	  close fd_out;
-		()
-	;;
-
 	let file_exists 
 		(filename : string)
 		: bool = 
