@@ -108,7 +108,9 @@ class gen_out out c_or_asm = object
                   (match pl with
                    | AStr s::[] -> 
                      Format.fprintf out ".section %s\n" s
-                   | _ -> raise (Failure "Error parsing section attribute"))
+                   | _ ->
+		                 Uberspark.Logger.log "Error parsing section attribute";
+                     raise (Failure "Error parsing section attribute"))
                 | _ -> find_sec_attr al)
           in
           let rec find_ali_attr = function
@@ -119,7 +121,9 @@ class gen_out out c_or_asm = object
                  (match pl with
                   | AInt n::[] -> 
                     Format.fprintf out ".balign %s\n" (Integer.to_string n)
-                  | _ -> raise (Failure "Error parsing alignment attribute"))
+                  | _ ->
+		                Uberspark.Logger.log "Error parsing alignment attribute";
+                    raise (Failure "Error parsing alignment attribute"))
                | _ -> find_ali_attr al)
           in
           (* output assembler function definition prologue*)
@@ -144,8 +148,20 @@ class gen_out out c_or_asm = object
             Some v.vorig_name 
           | _ -> None
         in
+        let rec econst exp=
+          match exp.enode with
+          | Const (CInt64 (i,ik,Some s)) -> 
+            Some s
+          | CastE (t,e) ->
+            econst e
+          (* | Lval _ ->
+           *   raise (Failure "Error: directly referencing formal parameter variable name within the CASM instruction.") *)
+          | _ ->
+		        Uberspark.Logger.log "Error: unsupported parameter passing to CASM instructions";
+            raise (Failure "Error: unsupported parameter passing to CASM instructions")
+        in
         let casm_instr = ename e in 
-        let casm_instr_args = List.filter_map ename e_list in
+        let casm_instr_args = List.filter_map econst e_list in
         (*creat a association list*)
         let rec zip_with_num n = function 
           | [] -> []
