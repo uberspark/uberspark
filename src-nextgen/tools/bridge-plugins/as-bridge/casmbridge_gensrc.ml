@@ -204,8 +204,10 @@ class gen_out out c_or_asm = object
           Cil.DoChildren
        )
       | _ ->  
-        if c_or_asm = Genc then Format.fprintf out "%a\n" Printer.pp_stmt s;
-        Cil.DoChildren
+        ();
+        Cil.SkipChildren
+        (* if c_or_asm = Genc then Format.fprintf out "%a\n" Printer.pp_stmt s;
+         * Cil.DoChildren *)
 end    		
 
 let casm_extract 
