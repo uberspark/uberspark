@@ -664,7 +664,108 @@ let ast_manipulation_main
 ;;
 
 
+class global_function_visitor = object(self)
+  inherit Visitor.frama_c_inplace
 
+	val varsize_tbl = ((Hashtbl.create 10) : ((string, int)  Hashtbl.t)) ;
+  method get_varsize_tbl = varsize_tbl;
+
+	val call_tbl = ((Hashtbl.create 10) : ((string, string list)  Hashtbl.t)) ;
+  method get_call_tbl = call_tbl;
+
+  method! vfunc (fdec : Cil_types.fundec) =
+    (* fdec.svar is varinfo type as in frama-c-api/html/Cil_types.html#TYPElocation *)
+    let is_hwm_func name = 
+      let hwm_func_prefix = Str.regexp "_impl\|hwm\|xmhfhwm" in 
+      Str.string_match hwm_func_prefix name 0 
+    in
+    let func_size sl = 
+      let stmt_size n s = 
+        match s.skind with
+        | Instr (Local_init (varinfo,local_init,loca)) -> 
+          n + (bytesSizeOf varinfo.vtype)
+        | _ -> n
+      in
+      List.fold_left stmt_size 0 sl
+    in
+    let func_calls sl = 
+      let is_call s = 
+        match s.skind with 
+        | Instr (Call (lv_opt, e, e_list, loc)) ->
+          (match e.enode with 
+           | Lval (Var (v), _) ->
+             if is_hwm_func v.vorig_name then None else Some v.vorig_name
+           | _ -> None)
+        | _ -> None
+      in
+      List.filter_map is_call sl 
+    in
+    if not (is_hwm_func fdec.svar.vname) then
+      begin
+        Hashtbl.add call_tbl fdec.svar.vname (func_calls fdec.sallstmts);
+        Hashtbl.add varsize_tbl fdec.svar.vname (func_size fdec.sallstmts);
+      end
+      ;
+    (Cil.DoChildren)
+  ;
+
+end;;
+
+let ast_global_function_call_stack (p_ast_file :  Cil_types.file) max_stack_size : unit =
+  let l_visitor = new global_function_visitor in
+  Visitor.visitFramacFileSameGlobals (l_visitor:>Visitor.frama_c_visitor) p_ast_file;
+  let call_tbl = l_visitor#get_call_tbl in
+  let varsize_tbl = l_visitor#get_varsize_tbl in 
+  let rec all_paths tbl root = 
+    let nodes = Hashtbl.find tbl root in 
+    match nodes with 
+    | [] -> [[root]]
+    | nodes -> 
+      List.map (fun xs ->  root :: xs) @@ 
+      List.concat @@
+      List.map (all_paths tbl) nodes 
+  in
+  let call_paths = all_paths call_tbl "main" in 
+  let rec log_call_path = function
+    | [] -> ()
+    | e :: l -> 
+      Uberspark.Logger.log "%s" e; log_call_path l 
+  in
+  let rec log_call_paths = function
+    | [] -> ()
+    | e :: l ->
+      Uberspark.Logger.log "*";
+      log_call_path e;
+      log_call_paths l
+  in
+  Hashtbl.iter
+    (fun k v -> 
+      Uberspark.Logger.log "Local variable definition size (in bytes) of global function %s: %s" k (string_of_int v))
+    varsize_tbl;
+  Uberspark.Logger.log "All call paths from main:";
+  Uberspark.Logger.log "-------------------------";
+  log_call_paths call_paths;
+  Uberspark.Logger.log "-------------------------";
+  let call_stack_size = List.map (List.fold_left (fun acc x -> acc + (Hashtbl.find varsize_tbl  x)) 0) call_paths in 
+  let max_call_stack_size = List.fold_left max 0 call_stack_size in
+  Uberspark.Logger.log "Max call stack size: %d" max_call_stack_size;
+  if max_call_stack_size > max_stack_size then
+    begin 
+      Uberspark.Logger.log "Error: exceed max stack size";
+      ignore(exit 1);
+    end
+;;
+
+let ast_check_main 
+  ()
+  : unit = 
+    let file = Ast.get () in
+	  Uberspark.Logger.log "Starting AST check...";
+   (* constant max stack size for now*)
+    ast_global_function_call_stack file 100;
+	  Uberspark.Logger.log "AST check Done...";
+   ()
+;;
 
 (* dump AST of the source files provided *)    		
 let ast_dump 
@@ -678,6 +779,8 @@ let ast_dump
         (fun prj -> new Visitor.frama_c_copy prj) in
     
     Project.on l_project ast_manipulation_main ();
+
+    Project.on l_project ast_check_main ();
 
     (* recompute CFG for value analysis *)
     Cfg.clearFileCFG ~clear_id:false (Ast.get());
