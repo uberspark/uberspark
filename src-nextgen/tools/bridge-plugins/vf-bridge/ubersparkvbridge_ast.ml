@@ -76,9 +76,8 @@ let is_casm_func_call e =
   | Lval (lh, _) ->
     (match lh with 
      | Var (v) ->
-       if (String.length v.vorig_name) < 5 then false
-       else if String.sub v.vorig_name 0 5 = "casm_" then true 
-       else false
+       let casm_prefix = Str.regexp "casm_" in
+       Str.string_match casm_prefix v.vorig_name 0
      | _ -> false)
   | _ -> false
 ;;
