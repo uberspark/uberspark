@@ -1070,7 +1070,7 @@ static bool xmhfhwm_sysmemaccess_checkextents(uint32_t addr_start, uint32_t size
 	return within_extents;
 }
 
-static unsigned char *rep_movsb_memcpy(unsigned char *dst, const unsigned char *src, size_t n)
+static unsigned char *hwm_cpu_rep_movsb_memcpy(unsigned char *dst, const unsigned char *src, size_t n)
 {
 	const unsigned char *p = src;
 	unsigned char *q = dst;
@@ -1093,7 +1093,7 @@ void _impl_xmhfhwm_cpu_insn_rep_movsb(void){
 						xmhfhwm_cpu_gprs_ecx)){
 			//copy to sysmem is havoc
 		}else{
-			rep_movsb_memcpy(xmhfhwm_cpu_gprs_edi, xmhfhwm_cpu_gprs_esi,
+			hwm_cpu_rep_movsb_memcpy(xmhfhwm_cpu_gprs_edi, xmhfhwm_cpu_gprs_esi,
 				xmhfhwm_cpu_gprs_ecx);
 		}
                 xmhfhwm_cpu_gprs_edi += xmhfhwm_cpu_gprs_ecx;
