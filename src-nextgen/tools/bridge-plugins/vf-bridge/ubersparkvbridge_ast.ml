@@ -748,6 +748,7 @@ let ast_global_function_call_stack (p_ast_file :  Cil_types.file) max_stack_size
   Uberspark.Logger.log "-------------------------";
   let call_stack_size = List.map (List.fold_left (fun acc x -> acc + (Hashtbl.find varsize_tbl  x)) 0) call_paths in 
   let max_call_stack_size = List.fold_left max 0 call_stack_size in
+  Uberspark.Logger.log "Max stack size: %d" max_stack_size;
   Uberspark.Logger.log "Max call stack size: %d" max_call_stack_size;
   if max_call_stack_size > max_stack_size then
     begin 
