@@ -679,14 +679,8 @@ class global_function_visitor = object(self)
       let hwm_func_prefix = Str.regexp "_impl\|hwm\|xmhfhwm" in 
       Str.string_match hwm_func_prefix name 0 
     in
-    let func_size sl = 
-      let stmt_size n s = 
-        match s.skind with
-        | Instr (Local_init (varinfo,local_init,loca)) -> 
-          n + (bytesSizeOf varinfo.vtype)
-        | _ -> n
-      in
-      List.fold_left stmt_size 0 sl
+    let func_size slocals = 
+      List.fold_left (fun n x -> n + (bytesSizeOf x.vtype)) 0 slocals
     in
     let func_calls sl = 
       let is_call s = 
@@ -703,7 +697,7 @@ class global_function_visitor = object(self)
     if not (is_hwm_func fdec.svar.vname) then
       begin
         Hashtbl.add call_tbl fdec.svar.vname (func_calls fdec.sallstmts);
-        Hashtbl.add varsize_tbl fdec.svar.vname (func_size fdec.sallstmts);
+        Hashtbl.add varsize_tbl fdec.svar.vname (func_size fdec.slocals);
       end
       ;
     (Cil.DoChildren)
