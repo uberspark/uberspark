@@ -59,16 +59,16 @@
 #define XMHFHWM_MEM_X86SMP_APBOOTSTRAP_CODESEG_SIZE	PAGE_SIZE_4K
 
 
-extern u8 xmhfhwm_mem_region_apbootstrap_dataseg[XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
+extern uint8_t xmhfhwm_mem_region_apbootstrap_dataseg[XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
 
 
-extern void xmhfhwm_vdriver_mem_copy_to_apbootstrap_codeseg(u32 sourceaddr);
+extern void xmhfhwm_vdriver_mem_copy_to_apbootstrap_codeseg(uint32_t sourceaddr);
 
 
-bool _impl_xmhfhwm_mem_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result);
-bool _impl_xmhfhwm_mem_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value);
+bool _impl_xmhfhwm_mem_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_xmhfhwm_mem_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
 bool _impl_xmhfhwm_mem_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size);
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size);
 
 
 

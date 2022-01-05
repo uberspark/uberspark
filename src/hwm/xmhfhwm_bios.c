@@ -52,7 +52,7 @@
 
 #include <uberspark.h>
 
-u16 xmhfhwm_bios_ebdaseg = (XMHFHWM_BIOS_EBDA_BASE >> 4);
+uint16_t xmhfhwm_bios_ebdaseg = (XMHFHWM_BIOS_EBDA_BASE >> 4);
 ACPI_RSDP xmhfhwm_bios_acpi_rsdp = {
 	0x2052545020445352ULL,
 	0x10,
@@ -78,7 +78,7 @@ ACPI_RSDT xmhfhwm_bios_acpi_rsdt = {
 	0x00010013UL,
 };
 
-u32 xmhfhwm_bios_acpi_rsdtentries[] ={
+uint32_t xmhfhwm_bios_acpi_rsdtentries[] ={
 	XMHFHWM_BIOS_VTDDMARTABLEBASE
 };
 
@@ -99,12 +99,12 @@ VTD_DMAR xmhfhwm_bios_vtd_dmar = {
 	{0x49, 0x4e, 0x54, 0x45, 0x4c, 0x20, 0x48, 0x53, 0x57, 0x20},
 };
 
-  u16 type;
-  u16 length;
-  u8 flags;
-  u8 rsvdz0;
-  u16 pcisegment;
-  u64 regbaseaddr;
+  uint16_t type;
+  uint16_t length;
+  uint8_t flags;
+  uint8_t rsvdz0;
+  uint16_t pcisegment;
+  uint64_t regbaseaddr;
 
 
 VTD_DMAR_DRHD xmhfhwm_bios_vtd_dmar_drhd[] = {
@@ -153,12 +153,12 @@ static unsigned char *xmhfhwm_bios_memcpy(unsigned char *dst, const unsigned cha
 }
 
 
-bool _impl_xmhfhwm_bios_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result){
+bool _impl_xmhfhwm_bios_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result){
 	bool retval = true;
 
 	if(sysmemaddr == (XMHFHWM_BIOS_BDA_BASE+0xE)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = (u64)xmhfhwm_bios_ebdaseg;
+		*read_result = (uint64_t)xmhfhwm_bios_ebdaseg;
 	}else{
 		retval= false;
 	}
@@ -166,7 +166,7 @@ bool _impl_xmhfhwm_bios_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_r
 	return retval;
 }
 
-bool _impl_xmhfhwm_bios_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value){
+bool _impl_xmhfhwm_bios_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value){
 	bool retval = false;
 
 	if(sysmemaddr == XMHFHWM_BIOS_VTDDMARTABLEBASE){
@@ -180,7 +180,7 @@ bool _impl_xmhfhwm_bios_write(u32 sysmemaddr, sysmem_write_t writesize, u64 writ
 		 	 	    ||
 				  ( (writesize == SYSMEMWRITEU16) &&
 		 	 	    (sysmemaddr >= XMHFHWM_BIOS_BDA_BASE) &&
-		 	 	    (sysmemaddr < (XMHFHWM_BIOS_BDA_BASE+XMHFHWM_BIOS_BDA_SIZE-sizeof(u16))) )
+		 	 	    (sysmemaddr < (XMHFHWM_BIOS_BDA_BASE+XMHFHWM_BIOS_BDA_SIZE-sizeof(uint16_t))) )
 		 	 	    ;
 		 */
 		retval = true;
@@ -194,7 +194,7 @@ bool _impl_xmhfhwm_bios_write(u32 sysmemaddr, sysmem_write_t writesize, u64 writ
 
 
 bool _impl_xmhfhwm_bios_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size){
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size){
 	bool retval = true;
 
 	if(sysmemcopy_type == SYSMEMCOPYSYS2OBJ){
@@ -237,19 +237,19 @@ bool _impl_xmhfhwm_bios_sysmemcopy(sysmem_copy_t sysmemcopy_type,
 			(srcaddr+size-1) < (XMHFHWM_BIOS_ACPIRSDTENTRIESBASE+sizeof(xmhfhwm_bios_acpi_rsdtentries))){
 			//@assert \valid((unsigned char *)dstaddr + (0..(size-1)));
 			xmhfhwm_bios_memcpy((unsigned char *)dstaddr,
-					((u32)&xmhfhwm_bios_acpi_rsdtentries+(srcaddr - XMHFHWM_BIOS_ACPIRSDTENTRIESBASE)), size);
+					((uint32_t)&xmhfhwm_bios_acpi_rsdtentries+(srcaddr - XMHFHWM_BIOS_ACPIRSDTENTRIESBASE)), size);
 
 		}else if(srcaddr >= XMHFHWM_BIOS_VTDDMARTABLEBASE &&
 			(srcaddr+size-1) < (XMHFHWM_BIOS_VTDDMARTABLEBASE+sizeof(xmhfhwm_bios_vtd_dmar))){
 			//@assert \valid((unsigned char *)dstaddr + (0..(size-1)));
 			xmhfhwm_bios_memcpy((unsigned char *)dstaddr,
-					((u32)&xmhfhwm_bios_vtd_dmar+(srcaddr - XMHFHWM_BIOS_VTDDMARTABLEBASE)), size);
+					((uint32_t)&xmhfhwm_bios_vtd_dmar+(srcaddr - XMHFHWM_BIOS_VTDDMARTABLEBASE)), size);
 
 		}else if(srcaddr >= XMHFHWM_BIOS_VTDDMARTABLEREMAPPINGSTRUCTBASE &&
 			(srcaddr+size-1) < (XMHFHWM_BIOS_VTDDMARTABLEREMAPPINGSTRUCTBASE+sizeof(xmhfhwm_bios_vtd_dmar_drhd))){
 			//@assert \valid((unsigned char *)dstaddr + (0..(size-1)));
 			xmhfhwm_bios_memcpy((unsigned char *)dstaddr,
-					((u32)&xmhfhwm_bios_vtd_dmar_drhd+(srcaddr - XMHFHWM_BIOS_VTDDMARTABLEREMAPPINGSTRUCTBASE)), size);
+					((uint32_t)&xmhfhwm_bios_vtd_dmar_drhd+(srcaddr - XMHFHWM_BIOS_VTDDMARTABLEREMAPPINGSTRUCTBASE)), size);
 
 		}else{
 			retval = false;

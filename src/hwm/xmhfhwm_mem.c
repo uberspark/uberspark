@@ -52,7 +52,7 @@
 
 #include <uberspark.h>
 
-u8 xmhfhwm_mem_region_apbootstrap_dataseg[XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
+uint8_t xmhfhwm_mem_region_apbootstrap_dataseg[XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE];
 
 static unsigned char *xmhfhwm_mem_memcpy(unsigned char *dst, const unsigned char *src, size_t n)
 {
@@ -68,25 +68,25 @@ static unsigned char *xmhfhwm_mem_memcpy(unsigned char *dst, const unsigned char
 }
 
 
-bool _impl_xmhfhwm_mem_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result){
+bool _impl_xmhfhwm_mem_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result){
 	bool retval = false;
 
 	if(sysmemaddr == (XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE + 0)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = *((u32 *)((u32)&xmhfhwm_mem_region_apbootstrap_dataseg + 0));
+		*read_result = *((uint32_t *)((uint32_t)&xmhfhwm_mem_region_apbootstrap_dataseg + 0));
 		retval = true;
 
 	} else if(sysmemaddr == (XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE + 8)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = *((u32 *)((u32)&xmhfhwm_mem_region_apbootstrap_dataseg + 8));
+		*read_result = *((uint32_t *)((uint32_t)&xmhfhwm_mem_region_apbootstrap_dataseg + 8));
 		retval = true;
 
 	} else if(sysmemaddr == (XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE + 32)){
 		//@assert (readsize == SYSMEMREADU32);
-		*read_result = *((u32 *)((u32)&xmhfhwm_mem_region_apbootstrap_dataseg + 32));
+		*read_result = *((uint32_t *)((uint32_t)&xmhfhwm_mem_region_apbootstrap_dataseg + 32));
 		retval = true;
 
-	} else if(sysmemaddr >= 0x0 && sysmemaddr < (1024-sizeof(u32))){ //guest IVT
+	} else if(sysmemaddr >= 0x0 && sysmemaddr < (1024-sizeof(uint32_t))){ //guest IVT
 		//@assert (readsize == SYSMEMREADU32);
 		*read_result = 0; //TODO: nondet
 		retval = true;
@@ -98,10 +98,10 @@ bool _impl_xmhfhwm_mem_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_re
 	return retval;
 }
 
-bool _impl_xmhfhwm_mem_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value){
+bool _impl_xmhfhwm_mem_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value){
 	bool retval = false;
 
-	if(sysmemaddr >= 0x0 && sysmemaddr < (1024-sizeof(u32))){ //guest IVT
+	if(sysmemaddr >= 0x0 && sysmemaddr < (1024-sizeof(uint32_t))){ //guest IVT
 		//@assert (writesize == SYSMEMWRITEU16);
 		retval = true;
 
@@ -114,7 +114,7 @@ bool _impl_xmhfhwm_mem_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write
 
 
 bool _impl_xmhfhwm_mem_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size){
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size){
 	bool retval = false;
 
 	if(sysmemcopy_type == SYSMEMCOPYOBJ2SYS){
@@ -122,8 +122,8 @@ bool _impl_xmhfhwm_mem_sysmemcopy(sysmem_copy_t sysmemcopy_type,
 		//srcaddr = object address space
                 if(dstaddr >= XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE &&
 			(dstaddr+size-1) < (XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE + XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_SIZE)){
-                        //@assert \valid((u8 *)srcaddr + (0..(size-1)) );
-                        xmhfhwm_mem_memcpy( ((u32)&xmhfhwm_mem_region_apbootstrap_dataseg+(dstaddr - XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE)),
+                        //@assert \valid((uint8_t *)srcaddr + (0..(size-1)) );
+                        xmhfhwm_mem_memcpy( ((uint32_t)&xmhfhwm_mem_region_apbootstrap_dataseg+(dstaddr - XMHFHWM_MEM_X86SMP_APBOOTSTRAP_DATASEG_BASE)),
 					srcaddr, size);
                         retval = true;
 

@@ -51,17 +51,26 @@
 #ifndef __XMHF_HWM_H__
 #define __XMHF_HWM_H__
 
+#ifndef __ASSEMBLY__
+
 #define __CASMFNDEF__(x) __attribute__((naked))
 #define __CASMFNCALL__(x) (x);
+
+#endif // __ASSEMBLY__
+
 
 
 #if defined(__XMHF_TARGET_TRIAD_X86_VMX_X86PC__)
 
+#define	MAX_PLATFORM_CPUS					(256)
+
+
 #ifndef __ASSEMBLY__
+
 	typedef struct {
-		u32 addr_start;
-		u32 addr_end;
-		u32 protection;
+		uint32_t addr_start;
+		uint32_t addr_end;
+		uint32_t protection;
 	} physmem_extent_t;
 
 	typedef enum {
@@ -87,9 +96,12 @@
 
 #endif // __ASSEMBLY__
 
+
     #include <xmhfhwm_casm.h>  			//CPU
     #include <xmhfhwm_e1000.h>			//e1000 network card
-    #include <xmhfhwm_cpu.h>  			//CPU
+
+
+	#include <xmhfhwm_cpu.h>  			//CPU
     #include <xmhfhwm_txt.h>			//TXT
     #include <xmhfhwm_pci.h>        		//PCI bus glue
     #include <xmhfhwm_pit.h>        		//PIT
