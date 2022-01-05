@@ -57,7 +57,7 @@
 
 typedef struct {
     mtrr_def_type_t	    mtrr_def_type;
-    u32	                num_var_mtrrs;
+    uint32_t	                num_var_mtrrs;
     mtrr_physbase_t     mtrr_physbases[MAX_VARIABLE_MTRRS];
     mtrr_physmask_t     mtrr_physmasks[MAX_VARIABLE_MTRRS];
 } __attribute__((packed)) mtrr_state_t;
@@ -122,8 +122,8 @@ typedef struct {
 }__attribute__((packed)) vtd_slpgtbl_t;
 
 typedef struct {
-    u64 addr_vtd_pml4t;
-    u64 addr_vtd_pdpt;
+    uint64_t addr_vtd_pml4t;
+    uint64_t addr_vtd_pdpt;
 }__attribute__((packed)) vtd_slpgtbl_handle_t;
 
 #endif //__ASSEMBLY__
@@ -179,7 +179,7 @@ void __getsec_wakeup(void);
 /*@
   assigns \nothing;
 @*/
-u32 xmhf_baseplatform_arch_getcpuvendor(void);
+uint32_t xmhf_baseplatform_arch_getcpuvendor(void);
 
 
 /*@
@@ -211,7 +211,7 @@ void xmhfhw_cpu_x86_restore_mtrrs(mtrr_state_t *saved_state);
 void xmhfhw_cpu_x86_save_mtrrs(mtrr_state_t *saved_state);
 
 
-bool set_mem_type(u32 base, uint32_t size, uint32_t mem_type);
+bool set_mem_type(uint32_t base, uint32_t size, uint32_t mem_type);
 
 /*@
 	requires \valid(saved_state);
@@ -227,52 +227,52 @@ bool validate_mtrrs(mtrr_state_t *saved_state);
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_bios_data_size(u32 heap_memaddr, uint32_t heap_size);
+uint64_t get_bios_data_size(uint32_t heap_memaddr, uint32_t heap_size);
 
 
 /*@
 	assigns \nothing;
 @*/
-u32 get_bios_data_start(u32 heap_memaddr, uint32_t heap_size);
+uint32_t get_bios_data_start(uint32_t heap_memaddr, uint32_t heap_size);
 
 
 
 /*@
 	assigns \nothing;
 @*/
-u32 get_txt_heap(void);
+uint32_t get_txt_heap(void);
 
 
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_os_mle_data_size(u32 heap_memaddr, uint32_t heap_size);
+uint64_t get_os_mle_data_size(uint32_t heap_memaddr, uint32_t heap_size);
 
 
 /*@
 	assigns \nothing;
 @*/
-u32 get_os_mle_data_start(u32 heap_memaddr, uint32_t heap_size);
+uint32_t get_os_mle_data_start(uint32_t heap_memaddr, uint32_t heap_size);
 
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_os_sinit_data_size(u32 heap_memaddr, uint32_t heap_size);
+uint64_t get_os_sinit_data_size(uint32_t heap_memaddr, uint32_t heap_size);
 
 /*@
 	assigns \nothing;
 @*/
-u32 get_os_sinit_data_start(u32 heap_memaddr, uint32_t heap_size);
+uint32_t get_os_sinit_data_start(uint32_t heap_memaddr, uint32_t heap_size);
 
 /*@
 	assigns \nothing;
 @*/
-uint64_t get_sinit_mle_data_size(u32 heap_memaddr, uint32_t heap_size);
+uint64_t get_sinit_mle_data_size(uint32_t heap_memaddr, uint32_t heap_size);
 
 /*@
 	assigns \nothing;
 @*/
-u32 get_sinit_mle_data_start(u32 heap_memaddr, uint32_t heap_size);
+uint32_t get_sinit_mle_data_start(uint32_t heap_memaddr, uint32_t heap_size);
 
 /*@
 	assigns \nothing;
@@ -313,7 +313,7 @@ void xmhf_baseplatform_arch_x86_reboot(void);
 /*@
 	assigns \nothing;
 @*/
-u32 xmhf_baseplatform_arch_x86_getcpulapicid(void);
+uint32_t xmhf_baseplatform_arch_x86_getcpulapicid(void);
 
 
 /*@
@@ -334,25 +334,25 @@ bool xmhfhw_platform_bus_init(void);
 	assigns *value;
 	ensures 0 <= (*value) <= 0xFFFFFFFFUL;
 @*/
-void xmhf_baseplatform_arch_x86_pci_type1_read(u32 bus, u32 device, u32 function, u32 index, u32 len, u32 *value);
+void xmhf_baseplatform_arch_x86_pci_type1_read(uint32_t bus, uint32_t device, uint32_t function, uint32_t index, uint32_t len, uint32_t *value);
 
 /*@
 	assigns \nothing;
 @*/
-void xmhf_baseplatform_arch_x86_pci_type1_write(u32 bus, u32 device, u32 function, u32 index, u32 len, u32 value);
+void xmhf_baseplatform_arch_x86_pci_type1_write(uint32_t bus, uint32_t device, uint32_t function, uint32_t index, uint32_t len, uint32_t value);
 
 
 /*@
 	assigns \nothing;
 @*/
-void xmhf_baseplatform_arch_x86_udelay(u32 usecs);
+void xmhf_baseplatform_arch_x86_udelay(uint32_t usecs);
 
 
 /*@
 	requires \valid(rsdp);
 	assigns \nothing;
 @*/
-u32 xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp);
+uint32_t xmhfhw_platform_x86pc_acpi_getRSDP(ACPI_RSDP *rsdp);
 
 
 /*@
@@ -389,31 +389,31 @@ bool xmhfhw_platform_x86pc_vtd_drhd_invalidatecaches(VTD_DRHD *drhd);
 	requires \valid(dmardevice);
 	assigns \nothing;
 @*/
-u64 _vtd_reg_read(VTD_DRHD *dmardevice, u32 reg);
+uint64_t _vtd_reg_read(VTD_DRHD *dmardevice, uint32_t reg);
 
 /*@
 	requires \valid(drhd);
 	assigns \nothing;
 @*/
-void xmhfhw_platform_x86pc_vtd_drhd_set_phm_base_and_limit(VTD_DRHD *drhd, u64 base, u64 limit);
+void xmhfhw_platform_x86pc_vtd_drhd_set_phm_base_and_limit(VTD_DRHD *drhd, uint64_t base, uint64_t limit);
 
 /*@
 	requires \valid(drhd);
 	assigns \nothing;
 @*/
-void xmhfhw_platform_x86pc_vtd_drhd_set_plm_base_and_limit(VTD_DRHD *drhd, u32 base, u32 limit);
+void xmhfhw_platform_x86pc_vtd_drhd_set_plm_base_and_limit(VTD_DRHD *drhd, uint32_t base, uint32_t limit);
 
 /*@
 	requires \valid(drhd);
 	assigns \nothing;
 @*/
-bool xmhfhw_platform_x86pc_vtd_drhd_set_root_entry_table(VTD_DRHD *drhd,  u64 ret_addr);
+bool xmhfhw_platform_x86pc_vtd_drhd_set_root_entry_table(VTD_DRHD *drhd,  uint64_t ret_addr);
 
 /*@
 	requires \valid(dmardevice);
 	assigns \nothing;
 @*/
-void _vtd_reg_write(VTD_DRHD *dmardevice, u32 reg, u64 value);
+void _vtd_reg_write(VTD_DRHD *dmardevice, uint32_t reg, uint64_t value);
 
 
 
@@ -438,7 +438,7 @@ CASM_FUNCDECL(uint32_t bsrl(uint32_t mask));
 	assigns *ecx;
 	assigns *edx;
 @*/
-CASM_FUNCDECL(void xmhfhw_cpu_getsec(u32 *eax, u32 *ebx, u32 *ecx, u32 *edx));
+CASM_FUNCDECL(void xmhfhw_cpu_getsec(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx));
 
 
 /*@
@@ -451,80 +451,80 @@ CASM_FUNCDECL(void xmhfhw_cpu_getsec(u32 *eax, u32 *ebx, u32 *ecx, u32 *edx));
 	assigns *ecx;
 	assigns *edx;
 @*/
-CASM_FUNCDECL(void xmhfhw_cpu_cpuid(u32 op, u32 *eax, u32 *ebx, u32 *ecx, u32 *edx));
+CASM_FUNCDECL(void xmhfhw_cpu_cpuid(uint32_t op, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void wrmsr64(u32 msr, u32 newval_lo, u32 newval_hi));
+CASM_FUNCDECL(void wrmsr64(uint32_t msr, uint32_t newval_lo, uint32_t newval_hi));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u64 rdmsr64(u32 msr));
+CASM_FUNCDECL(uint64_t rdmsr64(uint32_t msr));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u8 xmhfhw_sysmemaccess_readu8(u32 addr));
+CASM_FUNCDECL(uint8_t xmhfhw_sysmemaccess_readu8(uint32_t addr));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u16 xmhfhw_sysmemaccess_readu16(u32 addr));
+CASM_FUNCDECL(uint16_t xmhfhw_sysmemaccess_readu16(uint32_t addr));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u32 xmhfhw_sysmemaccess_readu32(u32 addr));
+CASM_FUNCDECL(uint32_t xmhfhw_sysmemaccess_readu32(uint32_t addr));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u64 xmhfhw_sysmemaccess_readu64(u32 addr));
+CASM_FUNCDECL(uint64_t xmhfhw_sysmemaccess_readu64(uint32_t addr));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu8(u32 addr, u8 val));
+CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu8(uint32_t addr, uint8_t val));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu16(u32 addr, u16 val));
+CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu16(uint32_t addr, uint16_t val));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu32(u32 addr, u32 val));
+CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu32(uint32_t addr, uint32_t val));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu64(u32 addr, u32 val_lo, u32 val_hi));
-
-
-/*@
-  assigns \nothing;
-@*/
-CASM_FUNCDECL(void xmhfhw_sysmemaccess_copy(u8 *dest, u8 *src, u32 size));
+CASM_FUNCDECL(void xmhfhw_sysmemaccess_writeu64(uint32_t addr, uint32_t val_lo, uint32_t val_hi));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmem_copy_sys2obj(u8 *objdst, u8 *syssrc, u32 size));
+CASM_FUNCDECL(void xmhfhw_sysmemaccess_copy(uint8_t *dest, uint8_t *src, uint32_t size));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void xmhfhw_sysmem_copy_obj2sys(u8 *sysdst, u8 *objsrc, u32 size));
+CASM_FUNCDECL(void xmhfhw_sysmem_copy_sys2obj(uint8_t *objdst, uint8_t *syssrc, uint32_t size));
+
+
+/*@
+  assigns \nothing;
+@*/
+CASM_FUNCDECL(void xmhfhw_sysmem_copy_obj2sys(uint8_t *sysdst, uint8_t *objsrc, uint32_t size));
 
 
 /*@
@@ -543,34 +543,34 @@ CASM_FUNCDECL(void write_config_reg(uint32_t config_regs_base, uint32_t reg, uin
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void outl(u32 val, u32 port));
+CASM_FUNCDECL(void outl(uint32_t val, uint32_t port));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void outw (u32 value, u32 port));
+CASM_FUNCDECL(void outw (uint32_t value, uint32_t port));
 
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(void outb (u32 value, u32 port));
+CASM_FUNCDECL(void outb (uint32_t value, uint32_t port));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u32 inl(u32 port));
+CASM_FUNCDECL(uint32_t inl(uint32_t port));
 
 /*@
   assigns \nothing;
 @*/
-CASM_FUNCDECL(u16 inw (u32 port));
+CASM_FUNCDECL(uint16_t inw (uint32_t port));
 
 /*@
   assigns \nothing;
   ensures 0 <= \result <= 255;
 @*/
-CASM_FUNCDECL(u8 inb (u32 port));
+CASM_FUNCDECL(uint8_t inb (uint32_t port));
 
 
 
@@ -578,9 +578,9 @@ CASM_FUNCDECL(u8 inb (u32 port));
 
 CASM_FUNCDECL(void xmhfhw_cpu_disable_intr(void *noparam));
 CASM_FUNCDECL(void enable_intr(void *noparam));
-CASM_FUNCDECL(u32 xmhf_baseplatform_arch_x86_getgdtbase(void *noparam));
-CASM_FUNCDECL(u32 xmhf_baseplatform_arch_x86_getidtbase(void *noparam));
-CASM_FUNCDECL(u64  xmhf_baseplatform_arch_x86_gettssbase(void *noparam));
+CASM_FUNCDECL(uint32_t xmhf_baseplatform_arch_x86_getgdtbase(void *noparam));
+CASM_FUNCDECL(uint32_t xmhf_baseplatform_arch_x86_getidtbase(void *noparam));
+CASM_FUNCDECL(uint64_t  xmhf_baseplatform_arch_x86_gettssbase(void *noparam));
 
 
 /*@
@@ -594,65 +594,65 @@ CASM_FUNCDECL(void cpu_relax(void *noparam));
 
 
 CASM_FUNCDECL(uint64_t rdtsc64(void *noparam));
-CASM_FUNCDECL(u32 read_eflags(void *noparam));
+CASM_FUNCDECL(uint32_t read_eflags(void *noparam));
 
-CASM_FUNCDECL(void write_eflags(u32 eflags));
+CASM_FUNCDECL(void write_eflags(uint32_t eflags));
 
-CASM_FUNCDECL(u64 read_cr0(void *noparam));
+CASM_FUNCDECL(uint64_t read_cr0(void *noparam));
 
-CASM_FUNCDECL(void write_cr0(u32 val));
+CASM_FUNCDECL(void write_cr0(uint32_t val));
 
-CASM_FUNCDECL(u32 read_cr2(void *noparam));
-CASM_FUNCDECL(u64 read_cr3(void *noparam));
-CASM_FUNCDECL(u64 read_rsp(void *noparam));
-CASM_FUNCDECL(u32 read_esp(void *noparam));
+CASM_FUNCDECL(uint32_t read_cr2(void *noparam));
+CASM_FUNCDECL(uint64_t read_cr3(void *noparam));
+CASM_FUNCDECL(uint64_t read_rsp(void *noparam));
+CASM_FUNCDECL(uint32_t read_esp(void *noparam));
 
-CASM_FUNCDECL(void write_cr3(u32 val));
+CASM_FUNCDECL(void write_cr3(uint32_t val));
 
-CASM_FUNCDECL(u64 read_cr4(void *noparam));
+CASM_FUNCDECL(uint64_t read_cr4(void *noparam));
 
-CASM_FUNCDECL(void write_cr4(u32 val));
+CASM_FUNCDECL(void write_cr4(uint32_t val));
 //void skinit(unsigned long eax));
 
-CASM_FUNCDECL(u32 read_segreg_cs(void *noparam));
-CASM_FUNCDECL(u32 read_segreg_ds(void *noparam));
-CASM_FUNCDECL(u32 read_segreg_es(void *noparam));
-CASM_FUNCDECL(u32 read_segreg_fs(void *noparam));
-CASM_FUNCDECL(u32 read_segreg_gs(void *noparam));
-CASM_FUNCDECL(u32 read_segreg_ss(void *noparam));
-CASM_FUNCDECL(u32 read_tr_sel(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_cs(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_ds(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_es(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_fs(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_gs(void *noparam));
+CASM_FUNCDECL(uint32_t read_segreg_ss(void *noparam));
+CASM_FUNCDECL(uint32_t read_tr_sel(void *noparam));
 
 CASM_FUNCDECL(void wbinvd(void *noparam));
 
 
 
-CASM_FUNCDECL(u64 xgetbv(u32 xcr_reg));
-CASM_FUNCDECL(void xsetbv(u32 xcr_reg, u32 value_lo, u32 value_hi));
-//void sysexitq(u64 rip, u64 rsp));
+CASM_FUNCDECL(uint64_t xgetbv(uint32_t xcr_reg));
+CASM_FUNCDECL(void xsetbv(uint32_t xcr_reg, uint32_t value_lo, uint32_t value_hi));
+//void sysexitq(uint64_t rip, uint64_t rsp));
 
 /*@
   requires \valid(lock);
   assigns *lock;
 @*/
-CASM_FUNCDECL(void spin_lock(volatile u32 *lock));
+CASM_FUNCDECL(void spin_lock(volatile uint32_t *lock));
 
 /*@
   requires \valid(lock);
   assigns *lock;
 @*/
-CASM_FUNCDECL(void spin_unlock(volatile u32 *lock));
+CASM_FUNCDECL(void spin_unlock(volatile uint32_t *lock));
 
 CASM_FUNCDECL(void xmhfhw_cpu_loadGDT(arch_x86_gdtdesc_t *gdt_addr));
-CASM_FUNCDECL(void xmhfhw_cpu_loadTR(u32 tr_selector));
+CASM_FUNCDECL(void xmhfhw_cpu_loadTR(uint32_t tr_selector));
 CASM_FUNCDECL(void xmhfhw_cpu_loadIDT(arch_x86_idtdesc_t *idt_addr));
 
 
 
-u32 xmhf_baseplatform_arch_getcpuvendor(void);
+uint32_t xmhf_baseplatform_arch_getcpuvendor(void);
 
 
-CASM_FUNCDECL(void xmhfhw_cpu_reloadcs(u32 cs_sel));
-CASM_FUNCDECL(void xmhfhw_cpu_reloaddsregs(u32 ds_sel));
+CASM_FUNCDECL(void xmhfhw_cpu_reloadcs(uint32_t cs_sel));
+CASM_FUNCDECL(void xmhfhw_cpu_reloaddsregs(uint32_t ds_sel));
 
 
 
@@ -668,7 +668,7 @@ CASM_FUNCDECL(void xmhfhw_cpu_reloaddsregs(u32 ds_sel));
 #ifndef __ASSEMBLY__
 
 CASM_FUNCDECL(void cache_wbinvd(void *noparam));
-CASM_FUNCDECL(void tlb_invlpg(u64 addr));
+CASM_FUNCDECL(void tlb_invlpg(uint64_t addr));
 
 #endif //__ASSEMBLY__
 
@@ -680,19 +680,19 @@ CASM_FUNCDECL(void tlb_invlpg(u64 addr));
 
 #ifndef __ASSEMBLY__
 
-CASM_FUNCDECL(bool __vmx_vmxon(u64 vmxonregion_paddr));
-CASM_FUNCDECL(void xmhfhw_cpu_x86vmx_vmwrite(u32 encoding, u32 value));
-CASM_FUNCDECL(u32 xmhfhw_cpu_x86vmx_vmread(u32 encoding));
-CASM_FUNCDECL(u32 __vmx_vmclear(u64 vmcs));
-CASM_FUNCDECL(u32 __vmx_vmptrld(u64 vmcs));
+CASM_FUNCDECL(bool __vmx_vmxon(uint64_t vmxonregion_paddr));
+CASM_FUNCDECL(void xmhfhw_cpu_x86vmx_vmwrite(uint32_t encoding, uint32_t value));
+CASM_FUNCDECL(uint32_t xmhfhw_cpu_x86vmx_vmread(uint32_t encoding));
+CASM_FUNCDECL(uint32_t __vmx_vmclear(uint64_t vmcs));
+CASM_FUNCDECL(uint32_t __vmx_vmptrld(uint64_t vmcs));
 
 
-CASM_FUNCDECL(void xmhfhw_cpu_invvpid(u32 invalidation_type, u32 vpid, u32 linear_addr_lo, u32 linear_addr_hi));
+CASM_FUNCDECL(void xmhfhw_cpu_invvpid(uint32_t invalidation_type, uint32_t vpid, uint32_t linear_addr_lo, uint32_t linear_addr_hi));
 
 /*@
 	assigns \nothing;
 @*/
-CASM_FUNCDECL(u32 __vmx_invept(u32 invalidation_type_lo, u32 invalidation_type_hi, u32 eptp_lo, u32 eptp_hi));
+CASM_FUNCDECL(uint32_t __vmx_invept(uint32_t invalidation_type_lo, uint32_t invalidation_type_hi, uint32_t eptp_lo, uint32_t eptp_hi));
 
 #endif //__ASSEMBLY__
 

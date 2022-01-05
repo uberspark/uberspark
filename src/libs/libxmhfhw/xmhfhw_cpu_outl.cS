@@ -59,6 +59,6 @@ CASM_FUNCDEF(void, outl,
     xmhfhwm_cpu_insn_outl_eax_dx();  //output eax to dx
     xmhfhwm_cpu_insn_ret();
 },
-u32 val,
-u32 port)
+uint32_t val,
+uint32_t port)
 

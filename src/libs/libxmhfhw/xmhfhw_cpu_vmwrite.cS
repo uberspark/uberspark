@@ -59,7 +59,7 @@ CASM_FUNCDEF(void, xmhfhw_cpu_x86vmx_vmwrite,
   xmhfhwm_cpu_insn_vmwrite_eax_ecx();
   xmhfhwm_cpu_insn_ret();
 },
-u32 encoding,
-u32 value)
+uint32_t encoding,
+uint32_t value)
 
 

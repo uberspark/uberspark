@@ -76,10 +76,10 @@ CASM_FUNCDEF(void, xmhfhw_cpu_cpuid,
     xmhfhwm_cpu_insn_popl_esi();
     xmhfhwm_cpu_insn_ret();
 },
-u32 op,
-u32 *eax,
-u32 *ebx,
-u32 *ecx,
-u32 *edx)
+uint32_t op,
+uint32_t *eax,
+uint32_t *ebx,
+uint32_t *ecx,
+uint32_t *edx)
 
 

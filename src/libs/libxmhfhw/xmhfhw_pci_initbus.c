@@ -161,7 +161,7 @@
 	assigns \nothing;
 @*/
 bool xmhfhw_platform_bus_init(void){
-	u32 tmp;
+	uint32_t tmp;
 	bool result=true;
 
 	//save value at PCI_CONFIG_ADDR_PORT

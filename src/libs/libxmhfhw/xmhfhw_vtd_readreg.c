@@ -55,9 +55,9 @@
 	requires \valid(dmardevice);
 	assigns \nothing;
 @*/
-u64 _vtd_reg_read(VTD_DRHD *dmardevice, u32 reg){
-    u32 regtype=VTD_REG_32BITS, regaddr=0;
-    u64 retval=0;
+uint64_t _vtd_reg_read(VTD_DRHD *dmardevice, uint32_t reg){
+    uint32_t regtype=VTD_REG_32BITS, regaddr=0;
+    uint64_t retval=0;
 
 	//obtain register type and base address
   switch(reg){

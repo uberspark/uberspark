@@ -50,7 +50,7 @@
 #include <uberspark.h>
 #include <xmhfhw.h>
 
-CASM_FUNCDEF(u8, inb,
+CASM_FUNCDEF(uint8_t, inb,
 {
     xmhfhwm_cpu_insn_movl_mesp_edx(0x4); //edx = port
     xmhfhwm_cpu_insn_xorl_eax_eax();
@@ -58,5 +58,5 @@ CASM_FUNCDEF(u8, inb,
     xmhfhwm_cpu_insn_xorl_edx_edx();
     xmhfhwm_cpu_insn_retu32();
 },
-u32 port)
+uint32_t port)
 
