@@ -58,5 +58,5 @@ CASM_FUNCDEF(void, xmhfhw_cpu_reloadcs,
     xmhfhwm_cpu_insn_pushl_eax();
     xmhfhwm_cpu_insn_lret();
 },
-u32 cs_sel)
+uint32_t cs_sel)
 

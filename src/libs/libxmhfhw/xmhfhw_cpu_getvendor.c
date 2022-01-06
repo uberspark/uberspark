@@ -50,9 +50,9 @@
 #include <xmhfhw.h>
 
 
-u32 xmhf_baseplatform_arch_getcpuvendor(void){
-	u32 reserved, vendor_dword1, vendor_dword2, vendor_dword3;
-	u32 cpu_vendor;
+uint32_t xmhf_baseplatform_arch_getcpuvendor(void){
+	uint32_t reserved, vendor_dword1, vendor_dword2, vendor_dword3;
+	uint32_t cpu_vendor;
 
 	CASM_FUNCCALL(xmhfhw_cpu_cpuid,0, &reserved, &vendor_dword1, &vendor_dword3, &vendor_dword2);
 

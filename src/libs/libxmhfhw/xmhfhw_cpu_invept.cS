@@ -54,8 +54,8 @@
 
 // VMX instruction INVEPT
 //		Invalidate Translations Derived from EPT
-//__attribute__((naked)) void __vmx_invept(u64 invalidation_type, u64 eptp)
-CASM_FUNCDEF(u32, __vmx_invept,
+//__attribute__((naked)) void __vmx_invept(uint64_t invalidation_type, uint64_t eptp)
+CASM_FUNCDEF(uint32_t, __vmx_invept,
 {
     xmhfhwm_cpu_insn_subl_imm_esp(0x10);
     xmhfhwm_cpu_insn_movl_mesp_edx(0x14);	//edx = invalidation_type_lo
@@ -78,8 +78,8 @@ CASM_LABEL(__epilogue);
     xmhfhwm_cpu_insn_addl_imm_esp(0x10);
     xmhfhwm_cpu_insn_retu32();
 },
-u32 invalidation_type_lo,
-u32 invalidation_type_hi,
-u32 eptp_lo,
-u32 eptp_hi)
+uint32_t invalidation_type_lo,
+uint32_t invalidation_type_hi,
+uint32_t eptp_lo,
+uint32_t eptp_hi)
 

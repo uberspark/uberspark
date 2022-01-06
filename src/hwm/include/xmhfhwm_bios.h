@@ -91,68 +91,68 @@
 
 //ACPI GAS, Generic Address Structure
 typedef struct {
-	u8 address_space_id;
-	u8 register_bit_width;
-	u8 register_bit_offset;
-	u8 access_size;
-	u64 address;
+	uint8_t address_space_id;
+	uint8_t register_bit_width;
+	uint8_t register_bit_offset;
+	uint8_t access_size;
+	uint64_t address;
 } __attribute__ ((packed)) ACPI_GAS;
 
 
 //ACPI RSDP structure
 typedef struct {
-  u64 signature;
-  u8 checksum;
-  u8 oemid[6];
-  u8 revision;
-  u32 rsdtaddress;
-  u32 length;
-  u64 xsdtaddress;
-  u8 xchecksum;
-  u8 rsvd0[3];
+  uint64_t signature;
+  uint8_t checksum;
+  uint8_t oemid[6];
+  uint8_t revision;
+  uint32_t rsdtaddress;
+  uint32_t length;
+  uint64_t xsdtaddress;
+  uint8_t xchecksum;
+  uint8_t rsvd0[3];
 } __attribute__ ((packed)) ACPI_RSDP;
 
 //ACPI XSDT structure
 typedef struct {
-	u32 signature;
-	u32 length;
-	u8 revision;
-	u8 checksum;
-	u8 oemid[6];
-	u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
+	uint32_t signature;
+	uint32_t length;
+	uint8_t revision;
+	uint8_t checksum;
+	uint8_t oemid[6];
+	uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
 } __attribute__ ((packed)) ACPI_XSDT;
 
 
 //ACPI RSDT structure
 typedef struct {
-	u32 signature;
-	u32 length;
-	u8 revision;
-	u8 checksum;
-	u8 oemid[6];
-	u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
+	uint32_t signature;
+	uint32_t length;
+	uint8_t revision;
+	uint8_t checksum;
+	uint8_t oemid[6];
+	uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
 } __attribute__ ((packed)) ACPI_RSDT;
 
 
 /*
 //ACPI RSDT structure for hwm
 typedef struct {
-	u32 signature;
-	u32 length;
-	u8 revision;
-	u8 checksum;
-	u8 oemid[6];
-	u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
-	u32 entries[ACPI_MAX_RSDT_ENTRIES];
+	uint32_t signature;
+	uint32_t length;
+	uint8_t revision;
+	uint8_t checksum;
+	uint8_t oemid[6];
+	uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
+	uint32_t entries[ACPI_MAX_RSDT_ENTRIES];
 } __attribute__ ((packed)) ACPI_RSDT_HWM;
 */
 
@@ -160,90 +160,90 @@ typedef struct {
 
 //ACPI MADT structure
 typedef struct {
-  u32 signature;
-  u32 length;
-  u8 revision;
-  u8 checksum;
-  u8 oemid[6];
-  u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
-	u32 lapicaddress;
-	u32 mapicflags;
+  uint32_t signature;
+  uint32_t length;
+  uint8_t revision;
+  uint8_t checksum;
+  uint8_t oemid[6];
+  uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
+	uint32_t lapicaddress;
+	uint32_t mapicflags;
 } __attribute__ ((packed)) ACPI_MADT;
 
 //ACPI MADT APIC structure
 typedef struct {
-	u8 type;
-	u8 length;
-	u8 procid;
-	u8 lapicid;
-	u32 flags;
+	uint8_t type;
+	uint8_t length;
+	uint8_t procid;
+	uint8_t lapicid;
+	uint32_t flags;
 } __attribute__ ((packed)) ACPI_MADT_APIC;
 
 //FADT structure
 typedef struct{
-  u32 signature;
-  u32 length;
-  u8 revision;
-  u8 checksum;
-  u8 oemid[6];
-  u64 oemtableid;
-	u32 oemrevision;
-	u32 creatorid;
-	u32 creatorrevision;
-	u32 firmware_ctrl;
-	u32 dsdt;
-	u8 rsvd0;
-	u8 preferred_pm_profile;
-	u16 sci_int;
-	u32 smi_cmd;
-	u8 acpi_enable;
-	u8 acpi_disable;
-	u8 s4bios_req;
-	u8 pstate_cnt;
-	u32 pm1a_evt_blk;
-	u32 pm1b_evt_blk;
-	u32 pm1a_cnt_blk;
-	u32 pm1b_cnt_blk;
-	u32 pm2_cnt_blk;
-	u32 pm_tmr_blk;
-	u32 gpe0_blk;
-	u32 gpe1_blk;
-	u8 pm1_evt_len;
-	u8 pm1_cnt_len;
-	u8 pm2_cnt_len;
-	u8 pm_tmr_len;
-	u8 gpe0_blk_len;
-	u8 gpe1_blk_len;
-	u8 gpe1_base;
-	u8 cst_cnt;
-	u16 p_lvl2_lat;
-	u16 p_lvl3_lat;
-	u16 flushsize;
-	u16 flushstride;
-	u8 duty_offset;
-	u8 duty_width;
-	u8 day_alrm;
-	u8 mon_alrm;
-	u8 century;
-	u16 iapc_boot_arch;
-	u8 rsvd1;
-	u32 flags;
-	u8 reset_reg[12];
-	u8 reset_value;
-	u8 rsvd2[3];
-	u64 x_firmware_ctrl;
-	u64 x_dsdt;
-	u8 x_pm1a_evt_blk[12];
-	u8 x_pm1b_evt_blk[12];
-	u8 x_pm1a_cnt_blk[12];
-	u8 x_pm1b_cnt_blk[12];
-	u8 x_pm2_cnt_blk[12];
-	u8 x_pm_tmr_blk[12];
-	u8 x_gpe0_blk[12];
-	u8 x_gpe1_blk[12];
+  uint32_t signature;
+  uint32_t length;
+  uint8_t revision;
+  uint8_t checksum;
+  uint8_t oemid[6];
+  uint64_t oemtableid;
+	uint32_t oemrevision;
+	uint32_t creatorid;
+	uint32_t creatorrevision;
+	uint32_t firmware_ctrl;
+	uint32_t dsdt;
+	uint8_t rsvd0;
+	uint8_t preferred_pm_profile;
+	uint16_t sci_int;
+	uint32_t smi_cmd;
+	uint8_t acpi_enable;
+	uint8_t acpi_disable;
+	uint8_t s4bios_req;
+	uint8_t pstate_cnt;
+	uint32_t pm1a_evt_blk;
+	uint32_t pm1b_evt_blk;
+	uint32_t pm1a_cnt_blk;
+	uint32_t pm1b_cnt_blk;
+	uint32_t pm2_cnt_blk;
+	uint32_t pm_tmr_blk;
+	uint32_t gpe0_blk;
+	uint32_t gpe1_blk;
+	uint8_t pm1_evt_len;
+	uint8_t pm1_cnt_len;
+	uint8_t pm2_cnt_len;
+	uint8_t pm_tmr_len;
+	uint8_t gpe0_blk_len;
+	uint8_t gpe1_blk_len;
+	uint8_t gpe1_base;
+	uint8_t cst_cnt;
+	uint16_t p_lvl2_lat;
+	uint16_t p_lvl3_lat;
+	uint16_t flushsize;
+	uint16_t flushstride;
+	uint8_t duty_offset;
+	uint8_t duty_width;
+	uint8_t day_alrm;
+	uint8_t mon_alrm;
+	uint8_t century;
+	uint16_t iapc_boot_arch;
+	uint8_t rsvd1;
+	uint32_t flags;
+	uint8_t reset_reg[12];
+	uint8_t reset_value;
+	uint8_t rsvd2[3];
+	uint64_t x_firmware_ctrl;
+	uint64_t x_dsdt;
+	uint8_t x_pm1a_evt_blk[12];
+	uint8_t x_pm1b_evt_blk[12];
+	uint8_t x_pm1a_cnt_blk[12];
+	uint8_t x_pm1b_cnt_blk[12];
+	uint8_t x_pm2_cnt_blk[12];
+	uint8_t x_pm_tmr_blk[12];
+	uint8_t x_gpe0_blk[12];
+	uint8_t x_gpe1_blk[12];
 }__attribute__ ((packed)) ACPI_FADT;
 
 
@@ -260,49 +260,49 @@ typedef struct{
 #define MPCONFTABLE_SIGNATURE 			(0x504D4350UL)  //"PCMP"
 
 typedef struct {
-  u32 signature;
-  u32 paddrpointer;
-  u8 length;
-  u8 spec_rev;
-  u8 checksum;
-  u8 mpfeatureinfo1;
-  u8 mpfeatureinfo2;
-  u8 mpfeatureinfo3;
-  u8 mpfeatureinfo4;
-  u8 mpfeatureinfo5;
+  uint32_t signature;
+  uint32_t paddrpointer;
+  uint8_t length;
+  uint8_t spec_rev;
+  uint8_t checksum;
+  uint8_t mpfeatureinfo1;
+  uint8_t mpfeatureinfo2;
+  uint8_t mpfeatureinfo3;
+  uint8_t mpfeatureinfo4;
+  uint8_t mpfeatureinfo5;
 } __attribute__ ((packed)) MPFP;
 
 typedef struct{
-  u32 signature;
-  u16 length;
-  u8 spec_rev;
-  u8 checksum;
-  u8 oemid[8];
-  u8 productid[12];
-  u32 oemtableptr;
-  u16 oemtablesize;
-  u16 entrycount;
-  u32 lapicaddr;
-  u16 exttablelength;
-  u16 exttablechecksum;
+  uint32_t signature;
+  uint16_t length;
+  uint8_t spec_rev;
+  uint8_t checksum;
+  uint8_t oemid[8];
+  uint8_t productid[12];
+  uint32_t oemtableptr;
+  uint16_t oemtablesize;
+  uint16_t entrycount;
+  uint32_t lapicaddr;
+  uint16_t exttablelength;
+  uint16_t exttablechecksum;
 } __attribute__ ((packed)) MPCONFTABLE;
 
 typedef struct {
-  u8 entrytype;
-  u8 lapicid;
-  u8 lapicver;
-  u8 cpuflags;
-  u32 cpusig;
-  u32 featureflags;
-  u32 res0;
-  u32 res1;
+  uint8_t entrytype;
+  uint8_t lapicid;
+  uint8_t lapicver;
+  uint8_t cpuflags;
+  uint32_t cpusig;
+  uint32_t featureflags;
+  uint32_t res0;
+  uint32_t res1;
 } __attribute__ ((packed)) MPENTRYCPU;
 
 
-bool _impl_xmhfhwm_bios_read(u32 sysmemaddr, sysmem_read_t readsize, u64 *read_result);
-bool _impl_xmhfhwm_bios_write(u32 sysmemaddr, sysmem_write_t writesize, u64 write_value);
+bool _impl_xmhfhwm_bios_read(uint32_t sysmemaddr, sysmem_read_t readsize, uint64_t *read_result);
+bool _impl_xmhfhwm_bios_write(uint32_t sysmemaddr, sysmem_write_t writesize, uint64_t write_value);
 bool _impl_xmhfhwm_bios_sysmemcopy(sysmem_copy_t sysmemcopy_type,
-				u32 dstaddr, u32 srcaddr, u32 size);
+				uint32_t dstaddr, uint32_t srcaddr, uint32_t size);
 
 
 

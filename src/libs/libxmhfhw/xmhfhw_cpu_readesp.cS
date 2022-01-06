@@ -50,7 +50,7 @@
 #include <xmhfhw.h>
 
 
-CASM_FUNCDEF(u32, read_esp,
+CASM_FUNCDEF(uint32_t, read_esp,
 {
     xmhfhwm_cpu_insn_movl_esp_eax();
     xmhfhwm_cpu_insn_retu32();

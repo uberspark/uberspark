@@ -48,7 +48,7 @@
 #include <string.h>
 
 
-/*void *memcpy(void * to, const void * from, u32 n)
+/*void *memcpy(void * to, const void * from, uint32_t n)
 {
   size_t i;
   for(i=0; i<n; i++) {

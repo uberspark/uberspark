@@ -48,11 +48,11 @@
 #include <string.h>
 
 /*
-u32 strnlen(const char * s, u32 count){
+uint32_t strnlen(const char * s, uint32_t count){
 	const char *sc;
 
 	for (sc = s; count-- && *sc != '\0'; ++sc);
-	return (u32)(sc - s);
+	return (uint32_t)(sc - s);
 }*/
 
 /*@

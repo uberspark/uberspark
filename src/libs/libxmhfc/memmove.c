@@ -48,7 +48,7 @@
 #include <string.h>
 
 /*
-void *memmove(void *dst_void, const void *src_void, u32 length){
+void *memmove(void *dst_void, const void *src_void, uint32_t length){
   char *dst = dst_void;
   const char *src = src_void;
 

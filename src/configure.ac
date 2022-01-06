@@ -1,4 +1,4 @@
-AC_INIT([uberspark], [2.0])
+AC_INIT([uberspark], [5.0])
 
 # simple configuration of tools. (just looks for matching binary on PATH)
 AC_CHECK_PROG([MAKE], [make], [make])
@@ -50,6 +50,7 @@ AC_SUBST([ubersparkhwmincludedir], ['/hwm/include'])
 AC_SUBST([ubersparklibsdir], ['/libs'])
 AC_SUBST([ubersparklibsincludesdir], ['/libs/include'])
 AC_SUBST([ubersparktoolsdir], ['/tools'])
+
 
 AC_CONFIG_FILES(
 			[uberspark-common.mk]

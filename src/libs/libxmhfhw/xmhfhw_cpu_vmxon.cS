@@ -62,5 +62,5 @@ CASM_FUNCDEF(bool, __vmx_vmxon,
 	CASM_LABEL(vo_success);
     xmhfhwm_cpu_insn_retu32();
 },
-u64 vmxonregion_paddr)
+uint64_t vmxonregion_paddr)
 

@@ -54,9 +54,9 @@
 /*@
 	assigns \nothing;
 @*/
-void xmhf_baseplatform_arch_x86_udelay(u32 usecs){
-	u8 val, latchstatus=0;
-	u32 latchregval;
+void xmhf_baseplatform_arch_x86_udelay(uint32_t usecs){
+	uint8_t val, latchstatus=0;
+	uint32_t latchregval;
 
 	//enable 8254 ch-2 counter
 	val = CASM_FUNCCALL(inb,0x61);
@@ -74,9 +74,9 @@ void xmhf_baseplatform_arch_x86_udelay(u32 usecs){
 	latchregval = (1193182 / 1000000) * usecs;
 
 	//write latch register to ch-2
-	val = (u8)latchregval;
+	val = (uint8_t)latchregval;
 	CASM_FUNCCALL(outb,val, 0x42);
-	val = (u8)((u32)latchregval >> (u32)8);
+	val = (uint8_t)((uint32_t)latchregval >> (uint32_t)8);
 	CASM_FUNCCALL(outb,val , 0x42);
 
 	//while(!(inb(0x61) & 0x20));
