@@ -5,9 +5,9 @@
 
 * Version 5.0 (Release Series: Chase)
 	* move to Ubuntu 16.04.x LTS VM/WSL development environment
+	* converted documentation to reST format
 	* fixed software dependency documentation
 	* migrated general purpose uobject info-table and debug libraries into core framework
-	* added foundation for next generation uobject-collection/uobject  toolchain
 	
 * Version 4.1 (Eject)
 	* add libusmf to deal with JSON based manifest parsing
